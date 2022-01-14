@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig",
+  "references": [
+    { "path": "../chat-react-hooks" },
+    { "path": "../uikit-react-core" }
+  ],
+  "compilerOptions": {
+    "outDir": "./lib/typescript"
+  }
+}

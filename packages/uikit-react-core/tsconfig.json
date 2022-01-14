@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig",
+  "references": [
+    { "path": "../chat-react-hooks" }
+  ],
+  "compilerOptions": {
+    "outDir": "./lib/typescript"
+  }
+}

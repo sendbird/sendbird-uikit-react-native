@@ -1,0 +1,28 @@
+{
+  "name": "sendbird-uikit-react-native",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:sendbird/sendbird-uikit-react-native.git",
+  "author": "Airen <airen.kang@sendbird.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "w": "sh -c 'yarn workspace ${0} ${1} ${2} ${3}'",
+    "w:create": "npx create-react-native-library"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.4.0",
+    "@typescript-eslint/eslint-plugin": "^5.9.1",
+    "@typescript-eslint/parser": "^5.9.1",
+    "eslint": "^8.6.0",
+    "eslint-config-prettier": "^8.3.0",
+    "lerna": "^4.0.0",
+    "prettier": "^2.5.1",
+    "react-native-builder-bob": "^0.18.2",
+    "typescript": "^4.5.4"
+  },
+  "dependencies": {}
+}

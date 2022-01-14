@@ -1,0 +1,17 @@
+.idea
+.expo
+.gradle
+.classpath
+.project
+.DS_Store
+
+yarn-error.log
+node_modules
+dist
+lib
+build
+
+/coverage/
+/types/
+/dist/
+/lib/
