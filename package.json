@@ -3,10 +3,22 @@
   "author": "Airen <airen.kang@sendbird.com>",
   "license": "MIT",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "sample"
+    ],
+    "nohoist": [
+      "**/react",
+      "**/react-dom",
+      "**/react-native",
+      "**/react-native/**",
+      "**/react-native-dev-menu",
+      "**/react-native-codegen"
+    ]
+  },
   "scripts": {
+    "reset": "find . -type dir -name node_modules | xargs rm -rf && rm -rf yarn.lock",
     "w": "sh -c 'yarn workspace ${0} ${1} ${2} ${3}'",
     "w:create": "npx create-react-native-library",
     "w:clean": "lerna run clean",
@@ -22,6 +34,7 @@
     "lerna": "^4.0.0",
     "prettier": "^2.5.1",
     "react-native-builder-bob": "^0.18.2",
+    "react-native-monorepo-tools": "^1.1.4",
     "typescript": "^4.5.4"
   },
   "dependencies": {}
