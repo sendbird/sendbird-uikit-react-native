@@ -4,7 +4,7 @@
   "description": "SendbirdUIKit Core utilities for building UIKit",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
-  "types": "lib/typescript/index.d.ts",
+  "types": "lib/typescript/src/index.d.ts",
   "react-native": "src/index",
   "source": "src/index",
   "files": [
@@ -14,7 +14,8 @@
   ],
   "scripts": {
     "test": "jest",
-    "prepare": "bob build"
+    "prepare": "bob build",
+    "clean": "del lib"
   },
   "keywords": [
     "react",
@@ -33,6 +34,9 @@
   "homepage": "https://github.com/sendbird/sendbird-uikit-react-native.git#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "@sendbird/chat-react-hooks": "0.1.0"
   },
   "devDependencies": {
     "@types/react": "^16.9.19",
