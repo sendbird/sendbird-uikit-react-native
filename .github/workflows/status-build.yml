@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main
+concurrency:
+  group: status-build-${{ github.head_ref }}
+  cancel-in-progress: true
 jobs:
   run-build:
     runs-on: ubuntu-latest
