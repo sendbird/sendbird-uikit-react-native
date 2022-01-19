@@ -18,13 +18,17 @@
     ]
   },
   "scripts": {
-    "reset": "find . -type dir -name node_modules | xargs rm -rf && rm -rf yarn.lock",
     "w": "sh -c 'yarn workspace ${0} ${1} ${2} ${3}'",
     "w:create": "npx create-react-native-library",
     "w:clean": "lerna run clean",
     "w:build": "lerna run prepare",
-    "w:lint:eslint": "eslint packages/**/src --ext ts,tsx ",
-    "w:lint:prettier": "prettier --check packages/**/src/**/*.{ts,tsx}",
+    "w:test": "lerna run test",
+    "test": "jest .",
+    "reset": "find . -type dir -name node_modules | xargs rm -rf",
+    "lint": "yarn lint:eslint && yarn lint:prettier",
+    "fix": "yarn fix:eslint && yarn fix:prettier",
+    "lint:eslint": "eslint sample packages/**/src --ext ts,tsx -c ./.eslintrc.js",
+    "lint:prettier": "prettier --check sample/src/**.{ts,tsx} packages/**/src/**/*.{ts,tsx}",
     "fix:eslint": "eslint --fix sample packages/**/src --ext ts,tsx -c ./.eslintrc.js",
     "fix:prettier": "prettier --write sample/src/**.{ts,tsx} packages/**/src/**/*.{ts,tsx}"
   },
@@ -37,6 +41,7 @@
     "esbuild": "^0.14.11",
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.3.0",
+    "jest": "^27.4.7",
     "lerna": "^4.0.0",
     "metro-minify-esbuild": "^0.1.0",
     "prettier": "^2.5.1",
@@ -44,5 +49,15 @@
     "react-native-monorepo-tools": "^1.1.4",
     "typescript": "^4.5.4"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "jest": {
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "testRegex": "/__tests__/.*\\.(test|spec)\\.(js|tsx?)$",
+    "moduleNameMapper": {
+      "@sendbird/([^/]+)": "<rootDir>/packages/$1/src"
+    }
+  }
 }

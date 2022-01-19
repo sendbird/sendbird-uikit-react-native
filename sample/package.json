@@ -41,6 +41,9 @@
       "jsx",
       "json",
       "node"
-    ]
+    ],
+    "moduleNameMapper": {
+      "@sendbird/([^/]+)": "<rootDir>/../packages/$1/src"
+    }
   }
 }
