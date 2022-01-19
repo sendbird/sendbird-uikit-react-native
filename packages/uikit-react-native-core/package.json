@@ -1,5 +1,5 @@
 {
-  "name": "@sendbird/uikit-react-core",
+  "name": "@sendbird/uikit-react-native-core",
   "version": "0.1.0",
   "description": "SendbirdUIKit Core utilities for building UIKit",
   "main": "lib/commonjs/index",
@@ -12,6 +12,7 @@
     "lib",
     "!**/__tests__"
   ],
+  "sideEffects": false,
   "scripts": {
     "test": "jest",
     "prepare": "bob build",

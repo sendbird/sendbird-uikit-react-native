@@ -5,18 +5,16 @@
       "path": "../packages/chat-react-hooks"
     },
     {
-      "path": "../packages/uikit-react-core"
+      "path": "../packages/uikit-react-native"
     },
     {
-      "path": "../packages/uikit-react-native"
+      "path": "../packages/uikit-react-native-core"
     }
   ],
   "compilerOptions": {
     "target": "esnext",
     "module": "commonjs",
-    "lib": [
-      "es2017"
-    ],
+    "lib": ["es2017"],
     "allowJs": false,
     "jsx": "react-native",
     "noEmit": true,
@@ -29,6 +27,8 @@
     "resolveJsonModule": true
   },
   "exclude": [
+    "../packages/*/lib",
+    "@sendbird/*/lib",
     "node_modules",
     "babel.config.js",
     "metro.config.js",

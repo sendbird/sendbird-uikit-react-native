@@ -12,6 +12,7 @@
     "lib",
     "!**/__tests__"
   ],
+  "sideEffects": false,
   "scripts": {
     "test": "jest",
     "prepare": "bob build",
@@ -34,6 +35,9 @@
   "homepage": "https://github.com/sendbird/sendbird-uikit-react-native.git#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "@sendbird/uikit-react-native-core": "0.1.0"
   },
   "devDependencies": {
     "@types/react": "^16.9.19",

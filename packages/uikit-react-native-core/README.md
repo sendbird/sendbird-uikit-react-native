@@ -5,13 +5,13 @@ react-native-uikit
 ## Installation
 
 ```sh
-npm install @sendbird/uikit-react-core
+npm install @sendbird/uikit-react-native-core
 ```
 
 ## Usage
 
 ```js
-import { multiply } from "@sendbird/uikit-react-core";
+import { multiply } from "@sendbird/uikit-react-native-core";
 
 // ...
 

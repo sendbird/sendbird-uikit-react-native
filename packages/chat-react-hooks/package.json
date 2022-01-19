@@ -12,6 +12,7 @@
     "lib",
     "!**/__tests__"
   ],
+  "sideEffects": false,
   "scripts": {
     "test": "jest",
     "prepare": "bob build",
