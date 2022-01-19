@@ -1,7 +1,5 @@
 {
   "repository": "git@github.com:sendbird/sendbird-uikit-react-native.git",
-  "author": "Airen <airen.kang@sendbird.com>",
-  "license": "MIT",
   "private": true,
   "workspaces": {
     "packages": [

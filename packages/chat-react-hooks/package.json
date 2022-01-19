@@ -27,8 +27,8 @@
     "url": "https://github.com/sendbird/sendbird-uikit-react-native.git",
     "directory": "packages/chat-react-hooks"
   },
-  "author": "Airen Kang <airen.kang@sendbird.com> (https://github.com/bang9)",
-  "license": "MIT",
+  "author": "Sendbird <support@sendbird.com>",
+  "license": "SEE LICENSE IN LICENSE.md",
   "bugs": {
     "url": "https://github.com/sendbird/sendbird-uikit-react-native.git/issues"
   },
