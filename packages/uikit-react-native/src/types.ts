@@ -28,16 +28,18 @@ export type UIKitColors = {
   error: string;
   ui: {
     input: {
-      text: string;
-      background: string;
-      placeholder: Record<InputState, string>;
+      typeDefault: {
+        text: string;
+        background: string;
+        placeholder: Record<InputState, string>;
+      };
     };
     button: {
-      contained: {
+      typeContain: {
         background: Record<ButtonState, string>;
         text: Record<ButtonState, string>;
       };
-      text: {
+      typeText: {
         background: Record<ButtonState, string>;
         text: Record<ButtonState, string>;
       };

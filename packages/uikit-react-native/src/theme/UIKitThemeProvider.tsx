@@ -5,7 +5,7 @@ import LightUIKitTheme from './LightUIKitTheme';
 import UIKitThemeContext from './UIKitThemeContext';
 
 type Props = {
-  value: UIKitTheme;
+  value?: UIKitTheme;
 };
 
 const UIKitThemeProvider: React.FC<Props> = ({ children, value = LightUIKitTheme }) => {

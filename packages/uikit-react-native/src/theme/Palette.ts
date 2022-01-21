@@ -11,7 +11,7 @@ const Palette = {
   secondary400: '#027D69',
   secondary500: '#066858',
 
-  error100: '#DE360B',
+  error100: '#FDAAAA',
   error200: '#F66161',
   error300: '#DE360B',
   error400: '#BF0711',
@@ -29,7 +29,8 @@ const Palette = {
   overlay01: 'rgba(0,0,0,0.55)',
   overlay02: 'rgba(0,0,0,0.32)',
 
-  information: '#B2D9FF',
+  information: '#ADC9FF',
+  highlight: '#FFF2B6',
   transparent: 'transparent',
 
   onBackgroundLight01: 'rgba(0,0,0,0.88)',

@@ -1,7 +1,5 @@
 {
-  "packages": [
-    "packages/*"
-  ],
+  "packages": ["packages/*", "sample"],
   "npmClient": "yarn",
   "useWorkspaces": true,
   "version": "independent",
@@ -11,10 +9,7 @@
       "conventionalCommits": true,
       "createRelease": "github",
       "message": "chore: publish",
-      "ignoreChanges": [
-        "**/__tests__/**",
-        "**/*.md"
-      ]
+      "ignoreChanges": ["**/__tests__/**", "**/*.md"]
     }
   }
 }

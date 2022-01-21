@@ -37,7 +37,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@sendbird/chat-react-hooks": "0.1.0"
+    "@sendbird/chat-react-hooks": "^0.1.0"
   },
   "devDependencies": {
     "@types/react": "^16.9.19",

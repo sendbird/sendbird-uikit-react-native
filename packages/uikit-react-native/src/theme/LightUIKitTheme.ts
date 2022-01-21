@@ -26,15 +26,17 @@ const LightUIKitTheme: UIKitTheme = {
     error: Palette.error300,
     ui: {
       input: {
-        text: Palette.onBackgroundLight01,
-        background: Palette.background100,
-        placeholder: {
-          active: Palette.onBackgroundLight03,
-          disabled: Palette.onBackgroundLight04,
+        typeDefault: {
+          text: Palette.onBackgroundLight01,
+          background: Palette.background100,
+          placeholder: {
+            active: Palette.onBackgroundLight03,
+            disabled: Palette.onBackgroundLight04,
+          },
         },
       },
       button: {
-        contained: {
+        typeContain: {
           background: {
             enabled: Palette.primary300,
             pressed: Palette.primary500,
@@ -46,7 +48,7 @@ const LightUIKitTheme: UIKitTheme = {
             disabled: Palette.onBackgroundDark04,
           },
         },
-        text: {
+        typeText: {
           background: {
             enabled: Palette.transparent,
             pressed: Palette.background100,
