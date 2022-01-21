@@ -60,5 +60,5 @@ export type UIKitColors = {
 };
 
 export interface AppearanceHelper {
-  select<T>(options: { light: T; dark: T; default?: T }): T;
+  select<T>(options: { light?: T; dark?: T; default?: T }): T;
 }

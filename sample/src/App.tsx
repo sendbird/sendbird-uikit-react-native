@@ -15,7 +15,7 @@ const HomeScreen: React.FC = () => {
   const navigation = useNavigation<{ navigate: (route: string) => void }>();
   return (
     <SafeAreaView>
-      <ScrollView>
+      <ScrollView style={{ paddingVertical: 12 }}>
         {screenMap.map(([name]) => {
           return (
             <TouchableOpacity key={name} style={styles.btn} onPress={() => navigation.navigate(name)}>
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 12,
-    marginVertical: 12,
+    marginBottom: 12,
   },
   btnTitle: {
     color: 'white',
