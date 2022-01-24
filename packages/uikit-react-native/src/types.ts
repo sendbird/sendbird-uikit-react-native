@@ -1,14 +1,21 @@
+import type { TextStyle } from 'react-native';
+
 import type Palette from './theme/Palette';
 
-export type InputState = 'active' | 'disabled';
-export type ButtonState = 'enabled' | 'pressed' | 'disabled';
+export type TypoName = `h${1 | 2}` | `subtitle${1 | 2}` | `body${1 | 2 | 3}` | 'button' | `caption${1 | 2 | 3 | 4}`;
+export type FontAttributes = Pick<TextStyle, 'fontFamily' | 'fontSize' | 'lineHeight' | 'letterSpacing' | 'fontWeight'>;
+export type Typography = Record<TypoName, FontAttributes>;
 
+export type UIKitAppearance = 'light' | 'dark';
 export interface UIKitTheme extends AppearanceHelper {
   appearance: UIKitAppearance;
   colors: UIKitColors;
   palette: typeof Palette;
+  typography: Typography;
 }
-export type UIKitAppearance = 'light' | 'dark';
+
+export type InputState = 'active' | 'disabled';
+export type ButtonState = 'enabled' | 'pressed' | 'disabled';
 export type UIKitColors = {
   primary: string;
   background: string;
@@ -60,5 +67,5 @@ export type UIKitColors = {
 };
 
 export interface AppearanceHelper {
-  select<T>(options: { light?: T; dark?: T; default?: T }): T;
+  select<T>(options: { light?: T; dark: T; default?: T } | { light: T; dark?: T; default?: T }): T;
 }

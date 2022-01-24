@@ -1,10 +1,12 @@
 import type { UIKitTheme } from '../types';
-import appearanceHelperFactory from '../utils/appearanceHelper';
+import createAppearanceHelper from '../utils/appearanceHelper';
 import Palette from './Palette';
+import { defaultTypography } from './Typography';
 
 const appearance = 'dark';
 const DarkUIKitTheme: UIKitTheme = {
-  ...appearanceHelperFactory(appearance),
+  ...createAppearanceHelper(appearance),
+  typography: defaultTypography,
   appearance,
   palette: Palette,
   colors: {
