@@ -1,10 +1,12 @@
 import type { UIKitTheme } from '../types';
-import appearanceHelperFactory from '../utils/appearanceHelper';
+import createAppearanceHelper from '../utils/appearanceHelper';
 import Palette from './Palette';
+import { defaultTypography } from './Typography';
 
 const appearance = 'dark';
 const DarkUIKitTheme: UIKitTheme = {
-  ...appearanceHelperFactory(appearance),
+  ...createAppearanceHelper(appearance),
+  typography: defaultTypography,
   appearance,
   palette: Palette,
   colors: {
@@ -26,15 +28,17 @@ const DarkUIKitTheme: UIKitTheme = {
     error: Palette.error200,
     ui: {
       input: {
-        text: Palette.onBackgroundDark01,
-        background: Palette.background400,
-        placeholder: {
-          active: Palette.onBackgroundDark03,
-          disabled: Palette.onBackgroundDark04,
+        typeDefault: {
+          text: Palette.onBackgroundDark01,
+          background: Palette.background400,
+          placeholder: {
+            active: Palette.onBackgroundDark03,
+            disabled: Palette.onBackgroundDark04,
+          },
         },
       },
       button: {
-        contained: {
+        typeContain: {
           background: {
             enabled: Palette.primary200,
             pressed: Palette.primary300,
@@ -46,7 +50,7 @@ const DarkUIKitTheme: UIKitTheme = {
             disabled: Palette.onBackgroundDark04,
           },
         },
-        text: {
+        typeText: {
           background: {
             enabled: Palette.transparent,
             pressed: Palette.background500,

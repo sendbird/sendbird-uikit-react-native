@@ -1,25 +1,64 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
+import { DarkTheme, DefaultTheme, NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { SafeAreaView, Text } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-import { DarkUIKitTheme, UIKitThemeProvider } from '@sendbird/uikit-react-native';
+import { DarkUIKitTheme, LightUIKitTheme, UIKitThemeProvider } from '@sendbird/uikit-react-native';
 
-const App = () => {
+import useAppearance from './hooks/useAppearance';
+import * as screens from './screens';
+
+const screenMap = Object.entries(screens);
+const Stack = createNativeStackNavigator();
+
+const HomeScreen: React.FC = () => {
+  const navigation = useNavigation<{ navigate: (route: string) => void }>();
   return (
-    <UIKitThemeProvider value={DarkUIKitTheme}>
-      <SafeAreaView style={{ flex: 1 }}>
-        <Text>{'Hello world - '}</Text>
-      </SafeAreaView>
-    </UIKitThemeProvider>
+    <SafeAreaView>
+      <ScrollView style={{ paddingVertical: 12 }}>
+        {screenMap.map(([name]) => {
+          return (
+            <TouchableOpacity key={name} style={styles.btn} onPress={() => navigation.navigate(name)}>
+              <Text style={styles.btnTitle}>{name}</Text>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
+const App = () => {
+  const appearance = useAppearance();
+  const isLightTheme = appearance === 'light';
+  return (
+    <NavigationContainer theme={isLightTheme ? DefaultTheme : DarkTheme}>
+      <UIKitThemeProvider value={isLightTheme ? LightUIKitTheme : DarkUIKitTheme}>
+        <Stack.Navigator>
+          <Stack.Screen name={'Home'} component={HomeScreen} />
+          {screenMap.map(([name, screen]) => {
+            return <Stack.Screen key={name} name={name} component={screen} />;
+          })}
+        </Stack.Navigator>
+      </UIKitThemeProvider>
+    </NavigationContainer>
+  );
+};
+
+const styles = StyleSheet.create({
+  btn: {
+    width: '90%',
+    backgroundColor: '#68a8ff',
+    alignSelf: 'center',
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 12,
+    marginBottom: 12,
+  },
+  btnTitle: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+});
 export default App;
