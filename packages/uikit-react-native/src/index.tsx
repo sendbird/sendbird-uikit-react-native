@@ -4,6 +4,8 @@ export { default as DarkUIKitTheme } from './theme/DarkUIKitTheme';
 export { default as Palette } from './theme/Palette';
 export { default as useUIKitTheme } from './theme/useUIKitTheme';
 
+export { default as SendbirdUIKitContainer } from './SendbirdUIKitContainer';
+
 export type {
   AppearanceHelper,
   UIKitColors,

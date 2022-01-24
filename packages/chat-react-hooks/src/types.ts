@@ -7,6 +7,8 @@ export type FilterByValueType<T extends object, Type> = {
 export interface GroupChannelListHook {
   groupChannels: Sendbird.GroupChannel[];
   update: (channel: Sendbird.GroupChannel) => void;
-  loadPrev: () => Promise<void>;
+  loadMore: () => Promise<void>;
   refresh: () => Promise<void>;
 }
+
+export type SendbirdChatSDK = Sendbird.SendBirdInstance;

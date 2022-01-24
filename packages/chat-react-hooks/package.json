@@ -38,12 +38,12 @@
   },
   "devDependencies": {
     "@types/react": "^16.9.19",
-    "react": "16.13.1",
+    "react": "^16.13.1",
     "react-native-builder-bob": "^0.18.0",
     "typescript": "^4.1.3"
   },
   "peerDependencies": {
-    "react": "*"
+    "react": ">=16.13.1"
   },
   "react-native-builder-bob": {
     "source": "src",
