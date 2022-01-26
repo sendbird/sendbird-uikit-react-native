@@ -1,21 +1,18 @@
 /* eslint-disable no-console */
-export enum LogLevel {
-  'none',
-  'log',
-  'error',
-  'warn',
-  'info',
-  'debug',
-}
-export const createLogger = (lv: LogLevel | 0 | 1 | 2 | 3 | 4 | 5 = 3) => {
-  let _logLevel: LogLevel = lv;
+
+const LogLevelEnum = {
+  'none': 0,
+  'log': 1,
+  'error': 2,
+  'warn': 3,
+  'info': 4,
+  'debug': 5,
+};
+type LogLevel = keyof typeof LogLevelEnum;
+
+export const createLogger = (lv: LogLevel = 'warn') => {
+  let _logLevel = lv;
   let _title = '[SendbirdUIKit]';
-  const base = {
-    log: (...args: unknown[]) => console.log(_title, ...args),
-    error: (...args: unknown[]) => console.error(_title, ...args),
-    warn: (...args: unknown[]) => console.warn(_title, ...args),
-    info: (...args: unknown[]) => console.info(_title, ...args),
-  };
 
   return {
     setTitle(title: string) {
@@ -28,29 +25,35 @@ export const createLogger = (lv: LogLevel | 0 | 1 | 2 | 3 | 4 | 5 = 3) => {
       return _logLevel;
     },
     log(...args: unknown[]) {
-      if (_logLevel < LogLevel.log) return;
-      base.log(...args);
+      if (LogLevelEnum[_logLevel] < LogLevelEnum.log) return LogLevelEnum.none;
+      console.log(_title, ...args);
+      return LogLevelEnum[_logLevel];
     },
     error(...args: unknown[]) {
-      if (_logLevel < LogLevel.error) return;
-      base.error(...args);
+      if (LogLevelEnum[_logLevel] < LogLevelEnum.error) return LogLevelEnum.none;
+      console.error(_title, ...args);
+      return LogLevelEnum[_logLevel];
     },
     warn(...args: unknown[]) {
-      if (_logLevel < LogLevel.warn) return;
-      base.warn(...args);
+      if (LogLevelEnum[_logLevel] < LogLevelEnum.warn) return LogLevelEnum.none;
+      console.warn(_title, ...args);
+      return LogLevelEnum[_logLevel];
     },
     info(...args: unknown[]) {
-      if (_logLevel < LogLevel.info) return;
-      base.info(...args);
+      if (LogLevelEnum[_logLevel] < LogLevelEnum.info) return LogLevelEnum.none;
+      console.info(_title, ...args);
+      return LogLevelEnum[_logLevel];
     },
     debug(...args: unknown[]) {
-      if (_logLevel < LogLevel.debug) return;
-      base.log(...args);
+      if (LogLevelEnum[_logLevel] < LogLevelEnum.debug) return LogLevelEnum.none;
+      console.log(_title, ...args);
+      return LogLevelEnum[_logLevel];
     },
   };
 };
 
 export const Logger = {
   ...createLogger(),
+  LogLevelEnum,
   create: createLogger,
 };
