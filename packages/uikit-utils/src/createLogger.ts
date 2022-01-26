@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 export enum LogLevel {
   'none',
   'log',
@@ -6,7 +7,6 @@ export enum LogLevel {
   'info',
   'debug',
 }
-
 export const createLogger = (lv: LogLevel | 0 | 1 | 2 | 3 | 4 | 5 = 3) => {
   let _logLevel: LogLevel = lv;
   let _title = '[SendbirdUIKit]';

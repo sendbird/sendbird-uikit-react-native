@@ -25,9 +25,9 @@
     "reset": "find . -type dir -name node_modules | xargs rm -rf",
     "lint": "yarn lint:eslint && yarn lint:prettier",
     "fix": "yarn fix:eslint && yarn fix:prettier",
-    "lint:eslint": "eslint sample packages/**/src --ext ts,tsx -c ./.eslintrc.js",
+    "lint:eslint": "eslint packages/**/src --ext ts,tsx -c ./.eslintrc.js",
     "lint:prettier": "prettier --check sample/src/**.{ts,tsx} packages/**/src/**/*.{ts,tsx}",
-    "fix:eslint": "eslint --fix sample packages/**/src --ext ts,tsx -c ./.eslintrc.js",
+    "fix:eslint": "eslint --fix packages/**/src --ext ts,tsx -c ./.eslintrc.js",
     "fix:prettier": "prettier --write sample/src/**.{ts,tsx} packages/**/src/**/*.{ts,tsx}"
   },
   "devDependencies": {
