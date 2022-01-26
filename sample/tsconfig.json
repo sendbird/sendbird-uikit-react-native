@@ -9,6 +9,9 @@
     },
     {
       "path": "../packages/uikit-react-native-core"
+    },
+    {
+      "path": "../packages/uikit-utils"
     }
   ]
 }

@@ -21,4 +21,4 @@ jobs:
       - name: Run Test
         run: |
           yarn install
-          yarn w:test
+          yarn test --verbose

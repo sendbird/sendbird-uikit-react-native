@@ -33,7 +33,7 @@ const App = () => {
   const isLightTheme = appearance === 'light';
   return (
     <NavigationContainer theme={isLightTheme ? DefaultTheme : DarkTheme}>
-      <UIKitThemeProvider value={isLightTheme ? LightUIKitTheme : DarkUIKitTheme}>
+      <UIKitThemeProvider theme={isLightTheme ? LightUIKitTheme : DarkUIKitTheme}>
         <Stack.Navigator>
           <Stack.Screen name={'Home'} component={HomeScreen} />
           {screenMap.map(([name, screen]) => {

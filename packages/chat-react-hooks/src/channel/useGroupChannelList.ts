@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type Sendbird from 'sendbird';
 
+import { arrayToMap } from '@sendbird/uikit-utils';
+
 import type { GroupChannelListHook } from '../types';
-import { arrayToMap } from '../utils';
 
 type GroupChannelMap = Record<string, Sendbird.GroupChannel>;
 type Options = {
@@ -22,14 +23,14 @@ const createDefaultGroupChannelListQuery = (sdk: Sendbird.SendBirdInstance) => {
 
 const useGroupChannelList = (
   sdk: Sendbird.SendBirdInstance,
-  userId: string,
+  userId: string | null,
   options?: Options,
 ): GroupChannelListHook => {
   const queryRef = useRef(options?.query);
   const [groupChannelMap, setGroupChannelMap] = useState<GroupChannelMap>({});
 
   const init = useCallback(
-    async (uid: string) => {
+    async (uid: string | null) => {
       if (uid) {
         let groupQuery = options?.query;
         if (!groupQuery) groupQuery = createDefaultGroupChannelListQuery(sdk);
@@ -67,7 +68,7 @@ const useGroupChannelList = (
     [sdk],
   );
 
-  const loadPrev = useCallback(async () => {
+  const loadMore = useCallback(async () => {
     if (queryRef.current?.hasNext) {
       const channels = await queryRef.current.next();
       setGroupChannelMap((prev) => ({
@@ -77,7 +78,7 @@ const useGroupChannelList = (
       channels.forEach((channel) => sdk.markAsDelivered(channel.url));
     }
   }, [sdk]);
-  return { groupChannels, update, refresh, loadPrev };
+  return { groupChannels, update, refresh, loadMore };
 };
 
 export default useGroupChannelList;
