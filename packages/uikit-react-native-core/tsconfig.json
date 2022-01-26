@@ -4,7 +4,9 @@
     {
       "path": "../chat-react-hooks"
     },
-    { "path": "../uikit-utils" }
+    {
+      "path": "../uikit-utils"
+    }
   ],
   "compilerOptions": {
     "outDir": "./lib/typescript"

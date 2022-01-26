@@ -4,7 +4,9 @@
     {
       "path": "../chat-react-hooks"
     },
-    { "path": "../uikit-react-native-core" }
+    {
+      "path": "../uikit-react-native-core"
+    }
   ],
   "compilerOptions": {
     "outDir": "./lib/typescript"
