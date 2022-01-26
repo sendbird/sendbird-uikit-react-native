@@ -34,4 +34,4 @@ jobs:
       - name: Run Test
         run: |
           yarn install
-          yarn test
+          yarn test --verbose
