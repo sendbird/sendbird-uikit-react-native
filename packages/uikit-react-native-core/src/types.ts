@@ -1,14 +1,12 @@
 import type React from 'react';
 
+import type { OmittedValues, UnionToIntersection } from '@sendbird/uikit-utils';
+
 export type CommonComponent<P = {}> = (props: P) => React.ReactNode;
 
-export type GroupChannelListProps = {
-  Header: {};
-  List: {};
-  Fragment: {};
+export type DomainFragmentProps<T> = Partial<UnionToIntersection<OmittedValues<T, 'Fragment'>>>;
+export type BaseHeaderProps = {
+  title?: ((props: { children: string }) => React.ReactNode) | string;
+  left?: () => React.ReactNode;
+  right?: () => React.ReactNode;
 };
-export interface GroupChannelListModule {
-  Header: CommonComponent<GroupChannelListProps['Header']>;
-  List: CommonComponent<GroupChannelListProps['List']>;
-}
-export type GroupChannelListFragment = React.FC<GroupChannelListProps['Fragment']> & GroupChannelListModule;

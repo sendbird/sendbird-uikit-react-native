@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type Sendbird from 'sendbird';
 
+import { arrayToMap } from '@sendbird/uikit-utils';
+
 import type { GroupChannelListHook } from '../types';
-import { arrayToMap } from '../utils';
 
 type GroupChannelMap = Record<string, Sendbird.GroupChannel>;
 type Options = {

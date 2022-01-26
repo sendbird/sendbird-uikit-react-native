@@ -1,17 +1,17 @@
 import type { FilterByValueType } from './types';
 
-export function arrayToMap<T extends Record<K, unknown>, K extends keyof T = keyof T>(
+export default function arrayToMap<T extends Record<K, unknown>, K extends keyof T = keyof T>(
   arr: T[],
   selector: K,
   fallbackSelector: K,
 ): Record<string, T>;
 
-export function arrayToMap<T extends Record<K, unknown>, K extends keyof T = keyof T>(
+export default function arrayToMap<T extends Record<K, unknown>, K extends keyof T = keyof T>(
   arr: T[],
   selector: keyof FilterByValueType<T, string | number>,
 ): Record<string, T>;
 
-export function arrayToMap<T extends Record<K, unknown>, K extends keyof T = keyof T>(
+export default function arrayToMap<T extends Record<K, unknown>, K extends keyof T = keyof T>(
   arr: T[],
   selector: K,
   fallbackSelector?: K,

@@ -29,7 +29,7 @@ const SendbirdUIKitContainer: React.FC<Props> = ({
   children,
 }) => {
   return (
-    <UIKitThemeProvider value={theme}>
+    <UIKitThemeProvider theme={theme}>
       <SendbirdChatProvider userId={userId} appId={appId} localCacheEnabled={localCacheEnabled}>
         <PlatformServiceProvider filePickerService={services.filePicker} notificationService={services.notification}>
           {children}

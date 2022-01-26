@@ -1,10 +1,6 @@
 {
   "extends": "../../tsconfig",
-  "references": [
-    {
-      "path": "../uikit-utils"
-    }
-  ],
+  "references": [],
   "compilerOptions": {
     "outDir": "./lib/typescript"
   }
