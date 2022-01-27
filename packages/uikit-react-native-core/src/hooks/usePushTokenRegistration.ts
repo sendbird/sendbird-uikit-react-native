@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useRef } from 'react';
 import { Platform } from 'react-native';
 
-import { usePlatformService } from '../context/PlatformService';
-import { useSendbirdChat } from '../context/SendbirdChat';
+import { usePlatformService } from '../contexts/PlatformService';
+import { useSendbirdChat } from '../contexts/SendbirdChat';
 
 const usePushTokenRegistration = () => {
   const { sdk } = useSendbirdChat();

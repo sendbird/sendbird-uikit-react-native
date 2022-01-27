@@ -18,7 +18,18 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Run Build
-        run: |
-          yarn install
-          yarn w:build
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: YARN-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: YARN-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: yarn install
+      - name: Run build
+        run: yarn w:build --stream

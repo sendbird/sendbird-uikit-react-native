@@ -1,6 +1,6 @@
-import { Logger } from '@sendbird/uikit-utils';
+import { Logger } from '../createLogger';
 
-describe('Logger', function () {
+describe('createLogger/Logger', function () {
   const spies = {
     log: jest.spyOn(global.console, 'log').mockImplementation(() => true),
     error: jest.spyOn(global.console, 'error').mockImplementation(() => true),
