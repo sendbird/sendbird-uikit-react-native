@@ -20,9 +20,11 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-          path: ~/.npm
-          key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: yarn-${{ runner.os }}-
+          path: |
+            node_modules
+            */*/node_modules
+          key: YARN-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: YARN-${{ runner.os }}-
 
       - name: Install dependencies
         run: yarn install
@@ -45,9 +47,11 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-          path: ~/.npm
-          key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: yarn-${{ runner.os }}-
+          path: |
+            node_modules
+            */*/node_modules
+          key: YARN-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: YARN-${{ runner.os }}-
 
       - name: Install dependencies
         run: yarn install
@@ -70,9 +74,11 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-          path: ~/.npm
-          key: PR-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: PR-${{ runner.os }}-
+          path: |
+            node_modules
+            */*/node_modules
+          key: YARN-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: YARN-${{ runner.os }}-
 
       - name: Install dependencies
         run: yarn install

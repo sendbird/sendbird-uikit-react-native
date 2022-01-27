@@ -23,9 +23,11 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-          path: ~/.npm
-          key: STATUS-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: STATUS-${{ runner.os }}-
+          path: |
+            node_modules
+            */*/node_modules
+          key: YARN-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: YARN-${{ runner.os }}-
 
       - name: Install dependencies
         run: yarn install
