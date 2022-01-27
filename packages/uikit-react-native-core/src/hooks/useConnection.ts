@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 
 import { Logger } from '@sendbird/uikit-utils';
 
-import { useSendbirdChat } from '../context/SendbirdChat';
+import { useSendbirdChat } from '../contexts/SendbirdChat';
 import usePushTokenRegistration from './usePushTokenRegistration';
 
 type Options = {

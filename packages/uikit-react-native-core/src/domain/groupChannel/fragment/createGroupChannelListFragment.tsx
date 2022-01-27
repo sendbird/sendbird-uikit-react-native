@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useGroupChannelList } from '@sendbird/chat-react-hooks';
 
-import { useSendbirdChat } from '../../../context/SendbirdChat';
+import { useSendbirdChat } from '../../../contexts/SendbirdChat';
 import createGroupChannelListModule from '../module/createGroupChannelListModule';
 import type { GroupChannelListFragment, GroupChannelListModule } from '../types';
 

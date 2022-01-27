@@ -1,13 +1,16 @@
 import React from 'react';
 
 import {
-  FilePickerServiceInterface,
-  NotificationServiceInterface,
+  LanguageEn,
+  LanguageProvider,
   PlatformServiceProvider,
   SendbirdChatProvider,
 } from '@sendbird/uikit-react-native-core';
+import type { FilePickerServiceInterface, NotificationServiceInterface } from '@sendbird/uikit-react-native-core';
 
-import { LightUIKitTheme, UIKitTheme, UIKitThemeProvider } from './index';
+import LightUIKitTheme from './theme/LightUIKitTheme';
+import UIKitThemeProvider from './theme/UIKitThemeProvider';
+import type { UIKitTheme } from './types';
 
 type Props = {
   userId: string | null;
@@ -30,11 +33,13 @@ const SendbirdUIKitContainer: React.FC<Props> = ({
 }) => {
   return (
     <UIKitThemeProvider theme={theme}>
-      <SendbirdChatProvider userId={userId} appId={appId} localCacheEnabled={localCacheEnabled}>
-        <PlatformServiceProvider filePickerService={services.filePicker} notificationService={services.notification}>
-          {children}
-        </PlatformServiceProvider>
-      </SendbirdChatProvider>
+      <LanguageProvider defaultLocale={'en'} languageSet={{ en: LanguageEn }}>
+        <SendbirdChatProvider userId={userId} appId={appId} localCacheEnabled={localCacheEnabled}>
+          <PlatformServiceProvider filePickerService={services.filePicker} notificationService={services.notification}>
+            {children}
+          </PlatformServiceProvider>
+        </SendbirdChatProvider>
+      </LanguageProvider>
     </UIKitThemeProvider>
   );
 };
