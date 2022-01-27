@@ -57,8 +57,6 @@ jobs:
           path: ${{ env.CACHE_NODE_MODULES_PATH }}
           key: ${{ needs.prepare.outputs.cache_node_modules_key }}
 
-      - name: Install dependencies
-        run: yarn install
       - name: Run lint
         run: yarn lint
 
@@ -81,8 +79,6 @@ jobs:
           path: ${{ env.CACHE_NODE_MODULES_PATH }}
           key: ${{ needs.prepare.outputs.cache_node_modules_key }}
 
-      - name: Install dependencies
-        run: yarn install
       - name: Run test
         run: yarn test --verbose
 
@@ -105,7 +101,5 @@ jobs:
           path: ${{ env.CACHE_NODE_MODULES_PATH }}
           key: ${{ needs.prepare.outputs.cache_node_modules_key }}
 
-      - name: Install dependencies
-        run: yarn install
       - name: Run build
         run: yarn w:build --stream
