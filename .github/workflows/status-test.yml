@@ -18,7 +18,16 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Run Test
-        run: |
-          yarn install
-          yarn test --verbose
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: STATUS-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: STATUS-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: yarn install
+      - name: Run test
+        run: yarn test --verbose
