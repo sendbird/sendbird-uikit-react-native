@@ -3,8 +3,13 @@ on:
   pull_request:
     branches:
       - develop
+env:
+  CACHE_NODE_MODULES_PATH: |
+    node_modules
+    */*/node_modules
+
 jobs:
-  run-lint:
+  prepare:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -15,16 +20,42 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Cache node modules
+
+      - name: Get lockfile hash
+        id: lockfile_hash
+        run: echo "::set-output name=hash::${{ hashFiles('**/yarn.lock') }}"
+
+      - name: Check cached node_modules
+        id: check_cache
         uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
         with:
-          path: |
-            node_modules
-            */*/node_modules
-          key: YARN-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: YARN-${{ runner.os }}-
+          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+          key: ${{ steps.lockfile_hash.outputs.hash }}
+
+      - name: Install dependencies
+        if: steps.check_cache.outputs.cache-hit == ''
+        run: yarn install
+    outputs:
+      cache_node_modules_key: ${{ steps.lockfile_hash.outputs.hash }}
+
+  run-lint:
+    needs: prepare
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Check cached node_modules
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+          key: ${{ needs.prepare.outputs.cache_node_modules_key }}
 
       - name: Install dependencies
         run: yarn install
@@ -32,6 +63,7 @@ jobs:
         run: yarn lint
 
   run-test:
+    needs: prepare
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -42,16 +74,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Cache node modules
+
+      - name: Check cached node_modules
         uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
         with:
-          path: |
-            node_modules
-            */*/node_modules
-          key: YARN-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: YARN-${{ runner.os }}-
+          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+          key: ${{ needs.prepare.outputs.cache_node_modules_key }}
 
       - name: Install dependencies
         run: yarn install
@@ -59,6 +87,7 @@ jobs:
         run: yarn test --verbose
 
   run-build:
+    needs: prepare
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -69,16 +98,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Cache node modules
+
+      - name: Check cached node_modules
         uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
         with:
-          path: |
-            node_modules
-            */*/node_modules
-          key: YARN-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: YARN-${{ runner.os }}-
+          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+          key: ${{ needs.prepare.outputs.cache_node_modules_key }}
 
       - name: Install dependencies
         run: yarn install
