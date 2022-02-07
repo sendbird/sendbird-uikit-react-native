@@ -5,6 +5,7 @@ import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 're
 
 import { DarkUIKitTheme, LightUIKitTheme, UIKitThemeProvider } from '@sendbird/uikit-react-native';
 
+import StorybookUIRoot from '../storybook';
 import useAppearance from './hooks/useAppearance';
 import * as screens from './screens';
 
@@ -16,6 +17,9 @@ const HomeScreen: React.FC = () => {
   return (
     <SafeAreaView>
       <ScrollView style={{ paddingVertical: 12 }}>
+        <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Storybook')}>
+          <Text style={styles.btnTitle}>{'Storybook'}</Text>
+        </TouchableOpacity>
         {screenMap.map(([name]) => {
           return (
             <TouchableOpacity key={name} style={styles.btn} onPress={() => navigation.navigate(name)}>
@@ -36,6 +40,8 @@ const App = () => {
       <UIKitThemeProvider theme={isLightTheme ? LightUIKitTheme : DarkUIKitTheme}>
         <Stack.Navigator>
           <Stack.Screen name={'Home'} component={HomeScreen} />
+          <Stack.Screen name={'Storybook'} component={StorybookUIRoot} />
+
           {screenMap.map(([name, screen]) => {
             return <Stack.Screen key={name} name={name} component={screen} />;
           })}

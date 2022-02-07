@@ -20,5 +20,5 @@ uikit
 
 ### Package dependencies
 
-- add: `lerna add some-package --scope=@sendbird/package`
-- remove: `yarn w:remove some-package --scope=@sendbird/package`
+- add: `yarn workspace @sendbird/package add some-package`
+- remove: `yarn workspace @sendbird/package remove some-package`
