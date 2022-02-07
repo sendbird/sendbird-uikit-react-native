@@ -4,3 +4,8 @@ export const truncate = (str: string, maxLen = 40, separator = '...'): string =>
   const trail = Math.floor(maxLen / 2);
   return str.slice(0, lead) + separator + str.slice(-trail);
 };
+
+export const truncatedBadgeCount = (count: number, MAX = 99) => {
+  if (count >= MAX) return `${MAX}+`;
+  return `${count}`;
+};

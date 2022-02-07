@@ -6,6 +6,10 @@ export { default as useUIKitTheme } from './theme/useUIKitTheme';
 
 export { default as SendbirdUIKitContainer } from './SendbirdUIKitContainer';
 
+export { default as SBIcon } from './ui/SBIcon';
+export { default as SBText } from './ui/SBText';
+export { default as GroupChannelPreview } from './ui/GroupChannelPreview';
+
 export type {
   AppearanceHelper,
   UIKitColors,

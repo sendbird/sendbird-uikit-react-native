@@ -1,7 +1,7 @@
 import type { AppearanceHelper, UIKitAppearance } from '../types';
 
 /**
- * Factory function
+ * Appearance helper factory function
  * Return a function that returns a value matching with the current appearance among the input values.
  * @param appearance
  * @return AppearanceHelper
