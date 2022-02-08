@@ -1,3 +1,2 @@
-import './GroupChannelPreview.stories';
-import './SBIcon.stories';
-import './SBText.stories';
+import './0_SendbirdBase.stories';
+import './1_GroupChannel.stories';
