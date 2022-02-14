@@ -43,27 +43,39 @@
   },
   "devDependencies": {
     "@react-native-async-storage/async-storage": "^1.15.16",
-    "@types/react": "^16.9.19",
-    "@types/react-native": "^0.63.x",
+    "@react-native-firebase/messaging": "^14.4.0",
+    "@types/react": "17.0.2",
+    "@types/react-native": "^0.66.15",
     "chalk": "4.x",
+    "expo-image-picker": "^12.0.2",
+    "expo-notifications": "^0.14.1",
     "glob": "^7.2.0",
     "inquirer": "^8.2.0",
     "js-convert-case": "^4.2.0",
-    "react": "^16.13.1",
-    "react-native": "^0.63.3",
+    "react": "17.0.2",
+    "react-native": "0.66.4",
     "react-native-builder-bob": "^0.18.0",
     "react-native-image-picker": "^4.7.1",
     "react-native-permissions": "^3.2.0",
     "typescript": "^4.1.3"
   },
   "peerDependencies": {
-    "@react-native-async-storage/async-storage": ">=1.15.16",
+    "@react-native-async-storage/async-storage": "^1.15.16",
+    "@react-native-firebase/messaging": "^14.4.0",
+    "expo-image-picker": ">=12.0.2",
+    "expo-notifications": ">=0.14.1",
     "react": ">=16.13.1",
     "react-native": ">=0.63.3",
     "react-native-image-picker": "^4.7.1",
     "react-native-permissions": "^3.2.0"
   },
   "peerDependenciesMeta": {
+    "@react-native-async-storage/async-storage": {
+      "optional": true
+    },
+    "@react-native-firebase/messaging": {
+      "optional": true
+    },
     "react-native-image-picker": {
       "optional": true
     },

@@ -28,4 +28,7 @@ export type {
   GroupChannelListProps,
   GroupChannelListModule,
   GroupChannelListFragment,
+  GroupChannelListHeaderProps,
 } from './domain/groupChannel/types';
+
+export type { BaseHeaderProps } from './types';

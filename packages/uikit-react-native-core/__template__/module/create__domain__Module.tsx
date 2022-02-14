@@ -1,10 +1,22 @@
-import __domain__Header from '../component/__domain__Header';
-import __domain__View from '../component/__domain__View';
-import type { __domain__Module } from '../types';
+import React, { createContext, useState } from 'react';
 
-const create__domain__Module = (module?: Partial<__domain__Module>): __domain__Module => {
-  const { Header = __domain__Header, View = __domain__View } = module ?? {};
-  return { ...module, Header, View };
+import __domain__View from '../component/__domain__View';
+import type { __domain__Context, __domain__Module } from '../types';
+
+export const DomainContext = createContext<__domain__Context>({});
+
+const __domain__ModuleProvider: React.FC = ({ children }) => {
+  const [state] = useState<{}>({});
+  return <DomainContext.Provider value={state}>{children}</DomainContext.Provider>;
+};
+
+const create__domain__Module = ({
+  View = __domain__View,
+  Provider = __domain__ModuleProvider,
+  Context = DomainContext,
+  ...module
+}: Partial<__domain__Module> = {}): __domain__Module => {
+  return { View, Provider, Context, ...module };
 };
 
 export default create__domain__Module;

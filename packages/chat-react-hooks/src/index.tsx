@@ -1,3 +1,3 @@
 export { default as useGroupChannelList } from './channel/useGroupChannelList';
 
-export { SendbirdChatSDK, GroupChannelListHook } from './types';
+export type { SendbirdChatSDK, GroupChannelListHook } from './types';

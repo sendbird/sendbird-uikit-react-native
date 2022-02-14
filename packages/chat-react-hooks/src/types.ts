@@ -9,6 +9,7 @@ export interface GroupChannelListHook {
   update: (channel: Sendbird.GroupChannel) => void;
   loadMore: () => Promise<void>;
   refresh: () => Promise<void>;
+  refreshing: boolean;
 }
 
 export type SendbirdChatSDK = Sendbird.SendBirdInstance;

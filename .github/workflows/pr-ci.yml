@@ -102,4 +102,4 @@ jobs:
           key: ${{ needs.prepare.outputs.cache_node_modules_key }}
 
       - name: Run build
-        run: yarn w:build --stream
+        run: yarn build --stream

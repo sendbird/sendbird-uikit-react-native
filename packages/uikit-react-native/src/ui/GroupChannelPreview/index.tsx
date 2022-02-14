@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, Pressable, View } from 'react-native';
 
-import { truncatedBadgeCount } from '@sendbird/uikit-utils';
+import { truncate, truncatedBadgeCount } from '@sendbird/uikit-utils';
 
 import type SBIconAssets from '../../assets/icon';
 import useUIKitTheme from '../../theme/useUIKitTheme';
@@ -25,6 +25,7 @@ type Props = {
   frozen?: boolean;
   muted?: boolean;
 };
+
 const GroupChannelPreview: React.FC<Props> = ({
   onPress,
   coverUrl,
@@ -50,7 +51,7 @@ const GroupChannelPreview: React.FC<Props> = ({
         <View style={styles.rightTopSection}>
           <View style={styles.channelInfo}>
             <SBText subtitle1 style={styles.title}>
-              {title}
+              {truncate(title, { mode: 'tail', maxLen: 15 })}
             </SBText>
             {Boolean(memberCount) && (
               <SBText caption1 style={styles.memberCount} color={colors.onBackground02}>
