@@ -15,3 +15,5 @@ build
 /types/
 /dist/
 /lib/
+
+env.ts

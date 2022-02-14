@@ -27,19 +27,19 @@ export const getGroupChannelPreviewTime = (channel: Sendbird.GroupChannel, local
   return format(timestamp, 'MMM dd', { locale });
 };
 
-export const getGroupChannelLastMessage = (channel: Sendbird.GroupChannel, EMPTY_MESSAGE = '') => {
+export const getGroupChannelLastMessage = (channel: Sendbird.GroupChannel, EMPTY_MESSAGE = '', MAX_LEN = 15) => {
   const message = channel.lastMessage;
   if (!message) return EMPTY_MESSAGE;
 
   if (message.isFileMessage()) {
-    const extensionIndex = message.name.lastIndexOf('.');
-    if (extensionIndex > -1) {
-      const file = message.name.slice(0, extensionIndex);
-      const ext = message.name.slice(extensionIndex);
-      return truncate(file) + ext;
+    const extIdx = message.name.lastIndexOf('.');
+    if (extIdx > -1) {
+      const file = message.name.slice(0, extIdx);
+      const ext = message.name.slice(extIdx);
+      return truncate(file, { maxLen: MAX_LEN }) + ext;
     }
 
-    return truncate(message.name, 15);
+    return truncate(message.name, { maxLen: MAX_LEN });
   }
 
   return message.message ?? EMPTY_MESSAGE;

@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 import type ImagePicker from 'react-native-image-picker';
-import type * as Permissions from 'react-native-permissions';
+import type Permissions from 'react-native-permissions';
+import type { Permission } from 'react-native-permissions';
 
 import fileTypeGuard from '../utils/fileTypeGuard';
 import nativePermissionGranted from '../utils/nativePermissionGranted';
@@ -12,7 +13,7 @@ const createFilePickerServiceNative = (
 ): FilePickerServiceInterface => {
   return {
     async hasCameraPermission(): Promise<boolean> {
-      const permission: Permissions.Permission[] = Platform.select({
+      const permission: Permission[] = Platform.select({
         ios: [permissionModule.PERMISSIONS.IOS.CAMERA],
         android: [permissionModule.PERMISSIONS.ANDROID.CAMERA],
         default: [],
@@ -21,7 +22,7 @@ const createFilePickerServiceNative = (
       return nativePermissionGranted(status);
     },
     async requestCameraPermission(): Promise<boolean> {
-      const permission: Permissions.Permission[] = Platform.select({
+      const permission: Permission[] = Platform.select({
         ios: [permissionModule.PERMISSIONS.IOS.CAMERA],
         android: [permissionModule.PERMISSIONS.ANDROID.CAMERA],
         default: [],
@@ -47,7 +48,7 @@ const createFilePickerServiceNative = (
     },
 
     async hasMediaLibraryPermission(): Promise<boolean> {
-      const permission: Permissions.Permission[] = Platform.select({
+      const permission: Permission[] = Platform.select({
         ios: [permissionModule.PERMISSIONS.IOS.MEDIA_LIBRARY, permissionModule.PERMISSIONS.IOS.PHOTO_LIBRARY],
         android: [
           permissionModule.PERMISSIONS.ANDROID.ACCESS_MEDIA_LOCATION,
@@ -59,7 +60,7 @@ const createFilePickerServiceNative = (
       return nativePermissionGranted(status);
     },
     async requestMediaLibraryPermission(): Promise<boolean> {
-      const permission: Permissions.Permission[] = Platform.select({
+      const permission: Permission[] = Platform.select({
         ios: [permissionModule.PERMISSIONS.IOS.MEDIA_LIBRARY, permissionModule.PERMISSIONS.IOS.PHOTO_LIBRARY],
         android: [
           permissionModule.PERMISSIONS.ANDROID.ACCESS_MEDIA_LOCATION,

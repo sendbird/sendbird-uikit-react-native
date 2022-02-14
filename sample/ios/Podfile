@@ -12,10 +12,9 @@ target 'SendbirdUIKitSample' do
     :hermes_enabled => false
   )
 
-  target 'SendbirdUIKitSampleTests' do
-    inherit! :complete
-    # Pods for testing
-  end
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
+  pod 'Permission-MediaLibrary', :path => "#{permissions_path}/MediaLibrary"
 
   # Enables Flipper.
   #

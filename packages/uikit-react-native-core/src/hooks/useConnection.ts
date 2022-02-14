@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 
 import { Logger } from '@sendbird/uikit-utils';
 
@@ -6,18 +6,20 @@ import { useSendbirdChat } from '../contexts/SendbirdChat';
 import usePushTokenRegistration from './usePushTokenRegistration';
 
 type Options = {
-  autoConnection?: boolean;
+  // autoConnection?: boolean;
   autoPushTokenRegistration?: boolean;
 };
 
 const useConnection = (opts?: Options) => {
-  const { sdk, userId, accessToken } = useSendbirdChat();
+  const { sdk, setCurrentUser } = useSendbirdChat();
   const { registerPushTokenForCurrentUser, unregisterPushTokenForCurrentUser } = usePushTokenRegistration();
 
   const connect = useCallback(
     async (userId: string, accessToken?: string) => {
       if (accessToken) await sdk.connect(userId, accessToken);
       else await sdk.connect(userId);
+
+      setCurrentUser(sdk.currentUser);
 
       try {
         if (opts?.autoPushTokenRegistration) await registerPushTokenForCurrentUser();
@@ -37,14 +39,15 @@ const useConnection = (opts?: Options) => {
     }
 
     await sdk.disconnect();
+    setCurrentUser(undefined);
   }, [sdk]);
 
-  useEffect(() => {
-    if (!opts?.autoConnection) return;
-
-    if (userId) connect(userId, accessToken);
-    else disconnect();
-  }, [opts?.autoConnection, userId, accessToken, connect, disconnect]);
+  // useEffect(() => {
+  //   if (!opts?.autoConnection) return;
+  //
+  //   if (userId) connect(userId, accessToken);
+  //   else disconnect();
+  // }, [opts?.autoConnection, userId, accessToken, connect, disconnect]);
 
   return { connect, disconnect, reconnect: sdk.reconnect };
 };

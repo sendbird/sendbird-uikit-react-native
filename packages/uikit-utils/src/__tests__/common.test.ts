@@ -9,19 +9,19 @@ describe('ui-format/common', function () {
     const str0 = truncate(testStr);
     expect(str0).toBe(testStr);
 
-    const str1 = truncate(testStr, 100);
+    const str1 = truncate(testStr, { maxLen: 100 });
     expect(str1).toBe(testStr);
 
-    const str2 = truncate(testStr, 6);
+    const str2 = truncate(testStr, { maxLen: 6 });
     expect(str2).toBe('123...890');
 
-    const str3 = truncate(testStr, 7);
+    const str3 = truncate(testStr, { maxLen: 7 });
     expect(str3).toBe('1234...890');
 
-    const str4 = truncate(testStr, 6, '???');
+    const str4 = truncate(testStr, { maxLen: 6, separator: '???' });
     expect(str4).toBe('123???890');
 
-    const str5 = truncate(testStr, testMaxLen, testSeparator);
+    const str5 = truncate(testStr, { maxLen: testMaxLen, separator: testSeparator });
     expect(str5).toBe('12' + testSeparator + '0');
     expect(str5).toHaveLength(testMaxLen + testSeparator.length);
   });
