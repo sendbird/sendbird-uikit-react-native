@@ -4,15 +4,14 @@ import __domain__View from '../component/__domain__View';
 import type { __domain__Context, __domain__Module } from '../types';
 
 export const DomainContext = createContext<__domain__Context>({});
-
-const __domain__ModuleProvider: React.FC = ({ children }) => {
+const DomainProvider: React.FC = ({ children }) => {
   const [state] = useState<{}>({});
   return <DomainContext.Provider value={state}>{children}</DomainContext.Provider>;
 };
 
 const create__domain__Module = ({
   View = __domain__View,
-  Provider = __domain__ModuleProvider,
+  Provider = DomainProvider,
   Context = DomainContext,
   ...module
 }: Partial<__domain__Module> = {}): __domain__Module => {

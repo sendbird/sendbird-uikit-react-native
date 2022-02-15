@@ -1,10 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useLayoutEffect } from 'react';
-import { Pressable } from 'react-native';
 
-import { SBIcon, createGroupChannelListFragment } from '@sendbird/uikit-react-native';
+import { Header, Icon, createGroupChannelListFragment } from '@sendbird/uikit-react-native';
 import { useConnection } from '@sendbird/uikit-react-native-core';
-import SBHeader from '@sendbird/uikit-react-native/src/ui/SBHeader';
 import { Logger } from '@sendbird/uikit-utils';
 
 const GroupChannelListFragment = createGroupChannelListFragment();
@@ -13,27 +11,18 @@ const GroupChannelListScreen = () => {
   const { setOptions, goBack } = useNavigation();
   const { disconnect } = useConnection();
 
+  const onBack = () => {
+    goBack();
+    disconnect();
+  };
+
   useLayoutEffect(() => {
     setOptions({ headerShown: false });
   }, []);
+
   return (
     <GroupChannelListFragment
-      Header={({ title, right }) =>
-        SBHeader({
-          title,
-          left: (
-            <Pressable
-              onPress={() => {
-                goBack();
-                disconnect();
-              }}
-            >
-              <SBIcon icon={'arrow-left'}>{'Logout'}</SBIcon>
-            </Pressable>
-          ),
-          right,
-        })
-      }
+      Header={(props) => <Header {...props} onPressLeft={onBack} left={<Icon icon={'arrow-left'}>{'Logout'}</Icon>} />}
       onPressCreateChannel={() => {
         Logger.log('channel create');
       }}

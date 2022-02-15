@@ -1,4 +1,4 @@
-const SBIconAssets = {
+const IconAssets = {
   'chat-hide': require('./ic-chat-hide.png'),
   'chat-show': require('./ic-chat-show.png'),
   'add': require('./icon-add.png'),
@@ -60,4 +60,4 @@ const SBIconAssets = {
   'unarchive': require('./icon-unarchive.png'),
   'user': require('./icon-user.png'),
 };
-export default SBIconAssets;
+export default IconAssets;

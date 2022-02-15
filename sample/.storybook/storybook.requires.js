@@ -21,8 +21,8 @@ argsEnhancers.forEach((enhancer) => addArgsEnhancer(enhancer));
 const getStories = () => {
   return [
     require('../stories/GroupChannelPreview.stories.tsx'),
-    require('../stories/SBIcon.stories.tsx'),
-    require('../stories/SBText.stories.tsx'),
+    require('../stories/Icon.stories.tsx'),
+    require('../stories/Text.stories.tsx'),
   ];
 };
 

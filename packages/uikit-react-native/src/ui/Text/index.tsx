@@ -1,23 +1,22 @@
 import React, { useMemo } from 'react';
-import { Text, TextProps } from 'react-native';
+import { Text as RNText, TextProps as RNTextProps } from 'react-native';
 
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import type { TypoName, UIKitTheme } from '../../types';
 
 // TODO: check re-render performance
-
 type TypographyProps = Partial<Record<TypoName, boolean>>;
-type Props = TextProps & TypographyProps & { color?: ((colors: UIKitTheme['colors']) => string) | string };
-const SBText: React.FC<Props> = ({ children, color, style, ...props }) => {
+export type TextProps = RNTextProps & TypographyProps & { color?: ((colors: UIKitTheme['colors']) => string) | string };
+const Text: React.FC<TextProps> = ({ children, color, style, ...props }) => {
   const { colors } = useUIKitTheme();
   const typoStyles = useTypographyFilter(props);
   return (
-    <Text
+    <RNText
       style={[{ color: typeof color === 'string' ? color : color?.(colors) ?? colors.text }, ...typoStyles, style]}
       {...props}
     >
       {children}
-    </Text>
+    </RNText>
   );
 };
 
@@ -76,4 +75,4 @@ const useTypographyFilter = ({
   );
 };
 
-export default SBText;
+export default Text;

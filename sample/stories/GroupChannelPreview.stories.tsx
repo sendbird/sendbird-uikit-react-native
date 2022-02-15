@@ -3,7 +3,7 @@ import React from 'react';
 import { Alert } from 'react-native';
 
 import { GroupChannelPreview as GroupChannelPreviewComponent } from '@sendbird/uikit-react-native';
-import SBIconAssets from '@sendbird/uikit-react-native/src/assets/icon';
+import IconAssets from '@sendbird/uikit-react-native/src/assets/icon';
 
 const GroupChannelPreviewMeta: ComponentMeta<typeof GroupChannelPreviewComponent> = {
   title: 'GroupChannelPreview',
@@ -27,7 +27,7 @@ const GroupChannelPreviewMeta: ComponentMeta<typeof GroupChannelPreviewComponent
     },
     bodyIcon: {
       name: 'Body Icon',
-      options: Object.keys(SBIconAssets),
+      options: Object.keys(IconAssets),
       control: { type: 'select' },
     },
     memberCount: {

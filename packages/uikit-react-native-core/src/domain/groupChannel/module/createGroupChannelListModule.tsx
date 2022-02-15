@@ -1,18 +1,22 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext } from 'react';
 
+import { useLocalization } from '../../../contexts/Localization';
 import GroupChannelListList from '../component/GroupChannelListList';
 import type { GroupChannelListContext, GroupChannelListModule } from '../types';
 
-const DomainContext = createContext<GroupChannelListContext>({});
-
-const GroupChannelListModuleProvider: React.FC = ({ children }) => {
-  const [state] = useState<{}>({});
-  return <DomainContext.Provider value={state}>{children}</DomainContext.Provider>;
+const DomainContext = createContext<GroupChannelListContext>({ header: { title: '' } });
+const DomainProvider: React.FC = ({ children }) => {
+  const { LABEL } = useLocalization();
+  return (
+    <DomainContext.Provider value={{ header: { title: LABEL.GROUP_CHANNEL.LIST.HEADER_TITLE } }}>
+      {children}
+    </DomainContext.Provider>
+  );
 };
 
 const createGroupChannelListModule = ({
   List = GroupChannelListList,
-  Provider = GroupChannelListModuleProvider,
+  Provider = DomainProvider,
   Context = DomainContext,
   ...module
 }: Partial<GroupChannelListModule> = {}): GroupChannelListModule => {

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Image, ImageStyle, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
-import SBIconAssets from '../../assets/icon';
+import IconAssets from '../../assets/icon';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import createStyleSheet from '../../utils/createStyleSheet';
 
-type IconNames = keyof typeof SBIconAssets;
+type IconNames = keyof typeof IconAssets;
 type SizeFactor = keyof typeof sizeStyles;
 
 type Props = {
@@ -16,14 +16,14 @@ type Props = {
   containerStyle?: StyleProp<ViewStyle>;
 };
 
-const SBIcon: React.FC<Props> = ({ icon, color, size = 24, containerStyle, style }) => {
+const Icon: React.FC<Props> = ({ icon, color, size = 24, containerStyle, style }) => {
   const sizeStyle = sizeStyles[size as SizeFactor] ?? { width: size, height: size };
   const { colors } = useUIKitTheme();
   return (
     <View style={[containerStyle, containerStyles.container]}>
       <Image
         resizeMode={'contain'}
-        source={SBIconAssets[icon]}
+        source={IconAssets[icon]}
         style={[{ tintColor: color ?? colors.primary }, sizeStyle, style]}
       />
     </View>
@@ -59,4 +59,4 @@ const sizeStyles = createStyleSheet({
     height: 32,
   },
 });
-export default SBIcon;
+export default Icon;

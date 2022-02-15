@@ -1,11 +1,11 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
 import React from 'react';
 
-import { SBText as SBTextComponent } from '@sendbird/uikit-react-native';
+import { Text as TextComponent } from '@sendbird/uikit-react-native';
 
-const SBTextMeta: ComponentMeta<typeof SBTextComponent> = {
-  title: 'SBText',
-  component: SBTextComponent,
+const TextMeta: ComponentMeta<typeof TextComponent> = {
+  title: 'Text',
+  component: TextComponent,
   argTypes: {
     children: {
       name: 'Text',
@@ -17,10 +17,10 @@ const SBTextMeta: ComponentMeta<typeof SBTextComponent> = {
   },
 };
 
-export default SBTextMeta;
+export default TextMeta;
 
-type SBTextStory = ComponentStory<typeof SBTextComponent>;
-export const Default: SBTextStory = (args) => (
+type TextStory = ComponentStory<typeof TextComponent>;
+export const Default: TextStory = (args) => (
   <>
     {[
       'h1',
@@ -37,9 +37,9 @@ export const Default: SBTextStory = (args) => (
       'caption4',
     ].map((typo) => {
       return (
-        <SBTextComponent key={typo} {...{ [typo]: true }} style={{ marginBottom: 12 }}>
+        <TextComponent key={typo} {...{ [typo]: true }} style={{ marginBottom: 12 }}>
           {`${typo.toUpperCase()}-${args.children}`}
-        </SBTextComponent>
+        </TextComponent>
       );
     })}
   </>

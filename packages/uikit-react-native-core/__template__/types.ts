@@ -3,12 +3,13 @@ import type React from 'react';
 // @ts-ignore - !!REMOVE
 import type { BaseHeaderProps, CommonComponent } from '../../types';
 
+type FragmentHeaderProps = BaseHeaderProps<{ title: string; left: React.ReactElement; onPressLeft: () => void }>;
 export type __domain__Props = {
   View: {
     domainViewProp?: string;
   };
   Fragment: {
-    Header?: CommonComponent<BaseHeaderProps<{ title: string; left: React.ReactElement }>>;
+    Header?: null | ((props: FragmentHeaderProps) => null | JSX.Element);
     onPressHeaderLeft?: () => void;
   };
 };

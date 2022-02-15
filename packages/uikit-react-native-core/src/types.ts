@@ -9,7 +9,13 @@ export type DomainFragmentProps<T extends { Fragment: unknown }> = Partial<
 >;
 
 type HeaderElement = string | ReactElement | null;
-type HeaderPartProps = { title?: HeaderElement; right?: HeaderElement; left?: HeaderElement };
+type HeaderPartProps = {
+  title?: HeaderElement;
+  right?: HeaderElement;
+  left?: HeaderElement;
+  onPressLeft?: () => void;
+  onPressRight?: () => void;
+};
 export type BaseHeaderProps<HeaderParts extends HeaderPartProps = {}, AdditionalProps = {}> = {
   titleAlign?: 'left' | 'center' | 'right';
 } & HeaderParts &

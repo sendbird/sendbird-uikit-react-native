@@ -3,11 +3,11 @@ import { Image, Pressable, View } from 'react-native';
 
 import { truncate, truncatedBadgeCount } from '@sendbird/uikit-utils';
 
-import type SBIconAssets from '../../assets/icon';
+import type IconAssets from '../../assets/icon';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import createStyleSheet from '../../utils/createStyleSheet';
-import SBIcon from '../SBIcon';
-import SBText from '../SBText';
+import Icon from '../Icon';
+import Text from '../Text';
 
 type Props = {
   onPress?: () => void;
@@ -16,7 +16,7 @@ type Props = {
 
   title: string;
   titleCaption: string;
-  bodyIcon?: keyof typeof SBIconAssets;
+  bodyIcon?: keyof typeof IconAssets;
   body: string;
 
   memberCount?: number;
@@ -50,28 +50,28 @@ const GroupChannelPreview: React.FC<Props> = ({
       <View style={styles.rightSection}>
         <View style={styles.rightTopSection}>
           <View style={styles.channelInfo}>
-            <SBText subtitle1 style={styles.title}>
+            <Text subtitle1 style={styles.title}>
               {truncate(title, { mode: 'tail', maxLen: 15 })}
-            </SBText>
+            </Text>
             {Boolean(memberCount) && (
-              <SBText caption1 style={styles.memberCount} color={colors.onBackground02}>
+              <Text caption1 style={styles.memberCount} color={colors.onBackground02}>
                 {memberCount}
-              </SBText>
+              </Text>
             )}
-            {frozen && <SBIcon size={16} icon={'freeze'} color={colors.primary} containerStyle={styles.frozen} />}
-            {muted && <SBIcon size={16} icon={'notifications-off-filled'} color={colors.onBackground03} />}
+            {frozen && <Icon size={16} icon={'freeze'} color={colors.primary} containerStyle={styles.frozen} />}
+            {muted && <Icon size={16} icon={'notifications-off-filled'} color={colors.onBackground03} />}
           </View>
           <View style={styles.titleCaption}>
-            <SBText caption2 color={colors.onBackground03}>
+            <Text caption2 color={colors.onBackground03}>
               {titleCaption}
-            </SBText>
+            </Text>
           </View>
         </View>
 
         <View style={styles.rightBottomSection}>
           <View style={styles.body}>
             {bodyIcon && (
-              <SBIcon
+              <Icon
                 size={18}
                 icon={bodyIcon}
                 color={colors.onBackground02}
@@ -81,9 +81,9 @@ const GroupChannelPreview: React.FC<Props> = ({
                 ]}
               />
             )}
-            <SBText body3 numberOfLines={1} style={styles.bodyText} color={colors.onBackground03}>
+            <Text body3 numberOfLines={1} style={styles.bodyText} color={colors.onBackground03}>
               {body}
-            </SBText>
+            </Text>
           </View>
           {badgeCount > 0 && (
             <View
@@ -92,9 +92,9 @@ const GroupChannelPreview: React.FC<Props> = ({
                 { backgroundColor: colors.primary, paddingTop: 2, paddingHorizontal: badgeCount >= 10 ? 8 : 0 },
               ]}
             >
-              <SBText caption1 color={colors.background}>
+              <Text caption1 color={colors.background}>
                 {truncatedBadgeCount(badgeCount)}
-              </SBText>
+              </Text>
             </View>
           )}
         </View>

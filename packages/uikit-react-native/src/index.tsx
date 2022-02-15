@@ -6,8 +6,9 @@ export { default as Palette } from './theme/Palette';
 export { default as useUIKitTheme } from './theme/useUIKitTheme';
 
 /** UI **/
-export { default as SBIcon } from './ui/SBIcon';
-export { default as SBText } from './ui/SBText';
+export { default as Icon } from './ui/Icon';
+export { default as Text } from './ui/Text';
+export { default as Header } from './ui/Header';
 export { default as GroupChannelPreview } from './ui/GroupChannelPreview';
 
 /** Fragments **/

@@ -19,7 +19,7 @@ const serializedIcons = JSON.stringify(icons, null, 4).replace(
   /("require\()('.+')(\)")/g,
   (_, a, b, c) => a.replace('"', '') + b + c.replace('"', ''),
 );
-const exportString = `const SBIconAssets = ${serializedIcons}; export default SBIconAssets`;
+const exportString = `const IconAssets = ${serializedIcons}; export default IconAssets`;
 
 fs.writeFileSync(
   path.join(iconPath, 'index.ts'),

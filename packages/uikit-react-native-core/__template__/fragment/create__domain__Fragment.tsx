@@ -1,33 +1,36 @@
-import React, { useContext } from "react";
-import { Pressable, Text } from "react-native";
+//TODO: move to @sendbird/uikit-react-native/fragments
+import React, { useContext } from 'react';
+import { Pressable, Text } from 'react-native';
 
 // @ts-ignore - !!REMOVE
-import type { __domain__HeaderProps } from "@sendbird/uikit-react-native-core";
+import type { __domain__Fragment, __domain__HeaderProps, __domain__Module } from '@sendbird/uikit-react-native-core';
+// @ts-ignore - !!REMOVE
+import { create__domain__Module } from '@sendbird/uikit-react-native-core';
 
-//TODO: move to @sendbird/uikit-react-native/fragments
-import create__domain__Module from "../module/create__domain__Module";
-import type { __domain__Fragment, __domain__Module } from "../types";
+// @ts-ignore - !!REMOVE
+import DefaultHeader from '../ui/Header';
 
 const create__domain__Fragment = (initModule?: __domain__Module): __domain__Fragment => {
-  const module = create__domain__Module(initModule);
+  const __domain__Module = create__domain__Module(initModule);
 
-  return ({ Header }) => {
+  return ({ Header = DefaultHeader }) => {
     // const fragmentHook  = use__domain__();
     return (
-      <module.Provider>
-        <HeaderRenderer Header={Header} Context={module.Context} />
-        {module.View({})}
-      </module.Provider>
+      <__domain__Module.Provider>
+        <__domain__FragmentHeader Header={Header} Context={__domain__Module.Context} />
+        {__domain__Module.View({})}
+      </__domain__Module.Provider>
     );
   };
 };
 
-const HeaderRenderer: React.FC<__domain__HeaderProps> = ({ Header, Context, onPressHeaderLeft }) => {
+const __domain__FragmentHeader: React.FC<__domain__HeaderProps> = ({ Header, Context, onPressHeaderLeft }) => {
+  // const { LABEL } = useLocalization();
   const {} = useContext(Context);
   if (!Header) return null;
   return (
     <Header
-      title={'__domain__Fragment'}
+      title={'LABEL.__domain__.HEADER_TITLE'}
       left={
         <Pressable onPress={onPressHeaderLeft}>
           <Text>{'LEFT'}</Text>

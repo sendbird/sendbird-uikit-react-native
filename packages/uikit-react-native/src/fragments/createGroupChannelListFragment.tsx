@@ -1,5 +1,4 @@
-import React, { useCallback } from 'react';
-import { Pressable } from 'react-native';
+import React, { useCallback, useContext } from 'react';
 import type Sendbird from 'sendbird';
 
 import { useGroupChannelList } from '@sendbird/chat-react-hooks';
@@ -12,17 +11,13 @@ import { createGroupChannelListModule, useLocalization, useSendbirdChat } from '
 import { Logger } from '@sendbird/uikit-utils';
 
 import GroupChannelPreviewUI from '../ui/GroupChannelPreview';
-import SBHeader from '../ui/SBHeader';
-import SBIcon from '../ui/SBIcon';
+import DefaultHeader from '../ui/Header';
+import Icon from '../ui/Icon';
 
 const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListModule>): GroupChannelListFragment => {
-  const module = createGroupChannelListModule(initModule);
+  const GroupChannelListModule = createGroupChannelListModule(initModule);
 
-  return ({
-    Header = ({ title, right }) => SBHeader({ title, left: null, right }),
-    onPressChannel,
-    onPressCreateChannel,
-  }) => {
+  return ({ Header = DefaultHeader, onPressChannel, onPressCreateChannel }) => {
     const { sdk, currentUser } = useSendbirdChat();
     const { groupChannels, refresh, refreshing, loadMore } = useGroupChannelList(sdk, currentUser?.userId);
 
@@ -39,33 +34,32 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     }
 
     return (
-      <module.Provider>
-        <HeaderRenderer Header={Header} Context={module.Context} onPressCreateChannel={onPressCreateChannel} />
-        <module.List
+      <GroupChannelListModule.Provider>
+        <GroupChannelListFragmentHeader
+          Header={Header}
+          Context={GroupChannelListModule.Context}
+          onPressCreateChannel={onPressCreateChannel}
+        />
+        <GroupChannelListModule.List
           refreshing={refreshing}
           renderGroupChannelPreview={renderGroupChannelPreview}
           groupChannels={groupChannels}
           onLoadMore={loadMore}
           onRefresh={refresh}
         />
-      </module.Provider>
+      </GroupChannelListModule.Provider>
     );
   };
 };
 
-const HeaderRenderer: React.FC<GroupChannelListHeaderProps> = ({ Header, onPressCreateChannel }) => {
-  const { LABEL } = useLocalization();
+export const GroupChannelListFragmentHeader: React.FC<GroupChannelListHeaderProps> = ({
+  Header,
+  Context,
+  onPressCreateChannel,
+}) => {
+  const { header } = useContext(Context);
   if (!Header) return null;
-  return (
-    <Header
-      title={LABEL.GROUP_CHANNEL.LIST.HEADER_TITLE}
-      right={
-        <Pressable onPress={onPressCreateChannel}>
-          <SBIcon icon={'create'} />
-        </Pressable>
-      }
-    />
-  );
+  return <Header title={header.title} right={<Icon icon={'create'} />} onPressRight={onPressCreateChannel} />;
 };
 
 const GroupChannelPreview: React.FC<{
