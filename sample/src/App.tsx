@@ -4,6 +4,7 @@ import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import Permissions from 'react-native-permissions';
+import SendBird from 'sendbird';
 
 import { DarkUIKitTheme, LightUIKitTheme, SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
 import { createFilePickerServiceNative, useConnection } from '@sendbird/uikit-react-native-core';
@@ -47,6 +48,7 @@ const HomeScreen: React.FC = () => {
     </SafeAreaView>
   );
 };
+const sdkInstance = new SendBird({ appId: APP_ID });
 
 const App = () => {
   const appearance = useAppearance();
@@ -55,9 +57,9 @@ const App = () => {
 
   return (
     <SendbirdUIKitContainer
-      appId={APP_ID}
+      chat={{ sdkInstance }}
       services={{ filePicker, notification: {} as any }}
-      theme={isLightTheme ? LightUIKitTheme : DarkUIKitTheme}
+      styles={{ theme: isLightTheme ? LightUIKitTheme : DarkUIKitTheme }}
     >
       <NavigationContainer theme={isLightTheme ? DefaultTheme : DarkTheme}>
         <Stack.Navigator>

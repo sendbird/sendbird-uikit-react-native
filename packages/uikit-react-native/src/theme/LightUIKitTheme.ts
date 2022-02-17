@@ -12,9 +12,7 @@ const LightUIKitTheme: UIKitTheme = {
   colors: {
     primary: Palette.primary300,
     background: Palette.background50,
-    card: Palette.background50,
     text: Palette.onBackgroundLight01,
-    border: Palette.onBackgroundLight04,
     notification: Palette.error300,
     onBackground01: Palette.onBackgroundLight01,
     onBackground02: Palette.onBackgroundLight02,
@@ -27,6 +25,10 @@ const LightUIKitTheme: UIKitTheme = {
     secondary: Palette.secondary300,
     error: Palette.error300,
     ui: {
+      header: {
+        background: Palette.background50,
+        borderBottom: Palette.onBackgroundLight04,
+      },
       input: {
         typeDefault: {
           text: Palette.onBackgroundLight01,
