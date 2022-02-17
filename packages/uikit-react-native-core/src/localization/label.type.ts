@@ -10,33 +10,33 @@ export type LabelLocale = 'en';
  * Do not configure over 3 depths (for overrides easy)
  * */
 export interface LabelSet {
-  GROUP_CHANNEL: {
-    LIST: {
-      /** @domain GroupChannelList > Header > Title */
+  GROUP_CHANNEL_LIST: {
+    FRAGMENT: {
+      /** @domain GroupChannelList > Fragment > Header > Title */
       HEADER_TITLE: string;
-      /** @domain GroupChannelList > Preview > Title */
+      /** @domain GroupChannelList > Fragment > Preview > Title */
       PREVIEW_TITLE: (currentUserId: string, channel: Sendbird.GroupChannel) => string;
-      /** @domain GroupChannelList > Preview > TitleCaption */
+      /** @domain GroupChannelList > Fragment > Preview > TitleCaption */
       PREVIEW_TITLE_CAPTION: (channel: Sendbird.GroupChannel) => string;
-      /** @domain GroupChannelList > Preview > Message */
+      /** @domain GroupChannelList > Fragment > Preview > Message */
       PREVIEW_BODY: (channel: Sendbird.GroupChannel) => string;
     };
-    CREATE_SELECT_TYPE: {
-      /** @domain GroupChannelListCreate > Header > Title */
+    TYPE_SELECTOR: {
+      /** @domain GroupChannelList > TypeSelector > Header > Title */
       HEADER_TITLE: string;
-      /** @domain GroupChannelListCreate > TypeSelector > Group */
-      SELECTOR_GROUP: string;
-      /** @domain GroupChannelListCreate > TypeSelector > SuperGroup */
-      SELECTOR_SUPER_GROUP: string;
-      /** @domain GroupChannelListCreate > TypeSelector > Broadcast */
-      SELECTOR_BROADCAST: string;
+      /** @domain GroupChannelList > TypeSelector > Group */
+      GROUP: string;
+      /** @domain GroupChannelList > TypeSelector > SuperGroup */
+      SUPER_GROUP: string;
+      /** @domain GroupChannelList > TypeSelector > Broadcast */
+      BROADCAST: string;
     };
-    CREATE_SELECT_MEMBER: {
-      /** @domain GroupChannelListCreate > Header > Title */
-      HEADER_TITLE: string;
-      /** @domain GroupChannelListCreate > Header > Right */
-      HEADER_RIGHT: (params: { selectedMembers: Array<Sendbird.Member | Sendbird.User> }) => string;
-    };
+  };
+  INVITE_MEMBERS: {
+    /** @domain InviteMembers > Header > Title */
+    HEADER_TITLE: string;
+    /** @domain InviteMembers > Header > Right */
+    HEADER_RIGHT: <T>(params: { selectedUsers: Array<T> }) => string;
   };
 }
 
@@ -46,29 +46,29 @@ type LabelCreateOptions = {
 };
 
 export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): LabelSet => ({
-  GROUP_CHANNEL: {
-    LIST: {
+  GROUP_CHANNEL_LIST: {
+    FRAGMENT: {
       HEADER_TITLE: 'Channels',
       PREVIEW_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel),
       PREVIEW_TITLE_CAPTION: (channel) => getGroupChannelPreviewTime(channel, dateLocale),
       PREVIEW_BODY: (channel) => getGroupChannelLastMessage(channel),
-      ...overrides?.GROUP_CHANNEL?.LIST,
+      ...overrides?.GROUP_CHANNEL_LIST?.FRAGMENT,
     },
-    CREATE_SELECT_TYPE: {
+    TYPE_SELECTOR: {
       HEADER_TITLE: 'Channel type',
-      SELECTOR_GROUP: 'Group',
-      SELECTOR_SUPER_GROUP: 'Super group',
-      SELECTOR_BROADCAST: 'Broadcast',
-      ...overrides?.GROUP_CHANNEL?.CREATE_SELECT_TYPE,
+      GROUP: 'Group',
+      SUPER_GROUP: 'Super group',
+      BROADCAST: 'Broadcast',
+      ...overrides?.GROUP_CHANNEL_LIST?.TYPE_SELECTOR,
     },
-    CREATE_SELECT_MEMBER: {
-      HEADER_TITLE: 'Select members',
-      HEADER_RIGHT: ({ selectedMembers }) => {
-        const len = selectedMembers.length;
-        if (len === 0) return 'Create';
-        return `${len} Create`;
-      },
-      ...overrides?.GROUP_CHANNEL?.CREATE_SELECT_TYPE,
+  },
+  INVITE_MEMBERS: {
+    HEADER_TITLE: 'Select members',
+    HEADER_RIGHT: ({ selectedUsers }) => {
+      const len = selectedUsers.length;
+      if (len === 0) return 'Create';
+      return `${len} Create`;
     },
+    ...overrides?.INVITE_MEMBERS,
   },
 });

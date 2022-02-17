@@ -1,6 +1,5 @@
 import React from 'react';
 import { TouchableOpacity, TouchableOpacityProps, View, useWindowDimensions } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { BaseHeaderProps } from '@sendbird/uikit-react-native-core';
 
@@ -20,7 +19,8 @@ type HeaderProps = BaseHeaderProps<{
 }>;
 
 const AlignMapper = { left: 'flex-start', center: 'center', right: 'flex-end' } as const;
-const Header: React.FC<HeaderProps> & { Button: typeof HeaderButton } = ({
+const Header: React.FC<HeaderProps> = ({
+  children,
   titleAlign = 'left',
   title = null,
   left = null,
@@ -28,15 +28,12 @@ const Header: React.FC<HeaderProps> & { Button: typeof HeaderButton } = ({
   onPressLeft,
   onPressRight,
 }) => {
-  const { statusBarTranslucent } = useHeaderStyle();
+  const { topInset } = useHeaderStyle();
   const { width, height } = useWindowDimensions();
-  const { top } = useSafeAreaInsets();
   const { colors } = useUIKitTheme();
 
-  const TOP_INSET = statusBarTranslucent ? top : 0;
-
   if (!title && !left && !right) {
-    return <View style={{ paddingTop: TOP_INSET, backgroundColor: colors.background }} />;
+    return <View style={{ paddingTop: topInset, backgroundColor: colors.ui.header.background }} />;
   }
 
   return (
@@ -44,26 +41,28 @@ const Header: React.FC<HeaderProps> & { Button: typeof HeaderButton } = ({
       style={[
         styles.container,
         {
-          height: getDefaultHeaderHeight(width > height) + TOP_INSET,
-          paddingTop: TOP_INSET,
-          backgroundColor: colors.background,
-          borderBottomColor: colors.onBackground04,
+          paddingTop: topInset,
+          backgroundColor: colors.ui.header.background,
+          borderBottomColor: colors.ui.header.borderBottom,
         },
       ]}
     >
-      {left && (
-        <View style={styles.left}>
-          <HeaderButton onPress={onPressLeft}>{left}</HeaderButton>
+      <View style={[styles.header, { height: getDefaultHeaderHeight(width > height) }]}>
+        {left && (
+          <View style={styles.left}>
+            <HeaderButton onPress={onPressLeft}>{left}</HeaderButton>
+          </View>
+        )}
+        <View style={[styles.title, { alignItems: AlignMapper[titleAlign] }]}>
+          {typeof title === 'string' ? <Text h1>{title}</Text> : { title }}
         </View>
-      )}
-      <View style={[styles.title, { alignItems: AlignMapper[titleAlign] }]}>
-        {typeof title === 'string' ? <Text h1>{title}</Text> : { title }}
+        {right && (
+          <View style={styles.right}>
+            <HeaderButton onPress={onPressRight}>{right}</HeaderButton>
+          </View>
+        )}
       </View>
-      {right && (
-        <View style={styles.right}>
-          <HeaderButton onPress={onPressRight}>{right}</HeaderButton>
-        </View>
-      )}
+      {children}
     </View>
   );
 };
@@ -82,13 +81,13 @@ const HeaderButton: React.FC<TouchableOpacityProps> = ({ children, disabled, onP
   );
 };
 
-Header.Button = HeaderButton;
-
 const styles = createStyleSheet({
   container: {
     paddingHorizontal: 12,
-    flexDirection: 'row',
     borderBottomWidth: 1,
+  },
+  header: {
+    flexDirection: 'row',
   },
   title: {
     flex: 1,

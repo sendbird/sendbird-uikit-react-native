@@ -1,9 +1,9 @@
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import type Sendbird from 'sendbird';
 
 import type {
   FilePickerServiceInterface,
-  LabelLocale,
   LabelSet,
   NotificationServiceInterface,
 } from '@sendbird/uikit-react-native-core';
@@ -19,40 +19,40 @@ import LightUIKitTheme from './theme/LightUIKitTheme';
 import UIKitThemeProvider from './theme/UIKitThemeProvider';
 import type { UIKitTheme } from './types';
 
-type Props<T extends string = LabelLocale> = {
-  appId: string;
-  localCacheEnabled?: boolean;
-  theme?: UIKitTheme;
+type Props<Locale extends string> = {
+  children?: React.ReactNode;
+  chat: {
+    sdkInstance: Sendbird.SendBirdInstance;
+  };
   services: {
     filePicker: FilePickerServiceInterface;
     notification: NotificationServiceInterface;
   };
   localization?: {
-    defaultLocale?: T;
-    labelSet?: Record<T, LabelSet>;
+    defaultLocale?: Locale;
+    labelSet?: Record<Locale, LabelSet>;
   };
   styles?: {
+    theme?: UIKitTheme;
     statusBarTranslucent?: boolean;
   };
 };
 
-const SendbirdUIKitContainer: React.FC<Props> = ({
-  appId,
-  localCacheEnabled,
-  theme,
+const SendbirdUIKitContainer = <Locale extends string>({
+  chat,
   services,
   localization,
   styles,
   children,
-}) => {
+}: Props<Locale>) => {
   return (
     <SafeAreaProvider>
-      <SendbirdChatProvider appId={appId} localCacheEnabled={localCacheEnabled}>
-        <UIKitThemeProvider theme={theme ?? LightUIKitTheme}>
+      <SendbirdChatProvider sdkInstance={chat.sdkInstance}>
+        <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
           <HeaderStyleProvider statusBarTranslucent={styles?.statusBarTranslucent ?? true}>
             <LocalizationProvider
-              defaultLocale={localization?.defaultLocale ?? 'en'}
-              labelSet={localization?.labelSet ?? { en: LabelEn }}
+              defaultLocale={(localization?.defaultLocale ?? 'en') as 'en'}
+              labelSet={(localization?.labelSet ?? { en: LabelEn }) as { en: LabelSet }}
             >
               <PlatformServiceProvider
                 filePickerService={services.filePicker}

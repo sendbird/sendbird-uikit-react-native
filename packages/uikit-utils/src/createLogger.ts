@@ -11,8 +11,8 @@ const LogLevelEnum = {
 type LogLevel = keyof typeof LogLevelEnum;
 
 export const createLogger = (lv: LogLevel = 'warn') => {
-  let _logLevel = lv;
-  let _title = '[SendbirdUIKit]';
+  let _logLevel = __DEV__ ? lv : 'none';
+  let _title = '[UIKit]';
 
   return {
     setTitle(title: string) {

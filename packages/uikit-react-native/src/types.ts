@@ -19,9 +19,7 @@ export type ButtonState = 'enabled' | 'pressed' | 'disabled';
 export type UIKitColors = {
   primary: string;
   background: string;
-  card: string;
   text: string;
-  border: string;
   notification: string;
   onBackground01: string;
   onBackground02: string;
@@ -34,6 +32,10 @@ export type UIKitColors = {
   secondary: string;
   error: string;
   ui: {
+    header: {
+      background: string;
+      borderBottom: string;
+    };
     input: {
       typeDefault: {
         text: string;

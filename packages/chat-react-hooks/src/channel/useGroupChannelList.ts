@@ -4,58 +4,30 @@ import type Sendbird from 'sendbird';
 import { arrayToMap } from '@sendbird/uikit-utils';
 
 import useChannelHandler from '../handler/useChannelHandler';
-import type { GroupChannelListHook } from '../types';
+import type { UseGroupChannelList, UseGroupChannelListOptions } from '../types';
 
 type GroupChannelMap = Record<string, Sendbird.GroupChannel>;
-type Options = {
-  comparator?: (a: Sendbird.GroupChannel, b: Sendbird.GroupChannel) => number;
-  query?: Partial<{
-    userIdsExactFilter: Array<string>;
-    userIdsIncludeFilter: Array<string>;
-    userIdsIncludeFilterQueryType: 'AND' | 'OR';
-    nicknameContainsFilter: string;
-    channelNameContainsFilter: string;
-    customTypeFilter: string;
-    customTypesFilter: Array<string>;
-    customTypeStartsWithFilter: string;
-    channelUrlsFilter: Array<string>;
-    superChannelFilter: 'all' | 'super' | 'nonsuper' | 'broadcast_only';
-    publicChannelFilter: 'all' | 'public' | 'private';
-    metadataOrderKeyFilter: string;
-    metadataKey: string;
-    metadataValues: Array<string>;
-    metadataValueStartsWith: string;
-    memberStateFilter: 'all' | 'joined_only' | 'invited_only' | 'invited_by_friend' | 'invited_by_non_friend';
-    hiddenChannelFilter: 'unhidden_only' | 'hidden_only' | 'hidden_allow_auto_unhide' | 'hidden_prevent_auto_unhide';
-    unreadChannelFilter: 'all' | 'unread_message';
-    includeFrozen: boolean;
-    includeEmpty: boolean;
-    order: 'latest_last_message' | 'chronological' | 'channel_name_alphabetical' | 'metadata_value_alphabetical';
-    limit: number;
-  }>;
-};
 
-const createGroupChannelListQuery = (sdk: Sendbird.SendBirdInstance, queryOption?: Options['query']) => {
-  const query = sdk.GroupChannel.createMyGroupChannelListQuery();
+const createGroupChannelListQuery = (
+  sdk: Sendbird.SendBirdInstance,
+  queryCreator: UseGroupChannelListOptions['queryFactory'],
+) => {
+  const passedQuery = queryCreator?.();
+  if (passedQuery) return passedQuery;
 
-  if (queryOption) {
-    //@ts-ignore
-    Object.entries(queryOption).forEach(([key, val]) => (query[key] = val));
-  } else {
-    query.memberStateFilter = 'all';
-    query.order = 'latest_last_message';
-    query.includeEmpty = true;
-    query.limit = 10;
-  }
-
-  return query;
+  const defaultQuery = sdk.GroupChannel.createMyGroupChannelListQuery();
+  defaultQuery.memberStateFilter = 'all';
+  defaultQuery.order = 'latest_last_message';
+  defaultQuery.includeEmpty = true;
+  defaultQuery.limit = 10;
+  return defaultQuery;
 };
 
 const useGroupChannelList = (
   sdk: Sendbird.SendBirdInstance,
   userId?: string,
-  options?: Options,
-): GroupChannelListHook => {
+  options?: UseGroupChannelListOptions,
+): UseGroupChannelList => {
   const queryRef = useRef<Sendbird.GroupChannelListQuery>();
   const [groupChannelMap, setGroupChannelMap] = useState<GroupChannelMap>({});
   const [refreshing, setRefreshing] = useState(false);
@@ -63,7 +35,7 @@ const useGroupChannelList = (
   const init = useCallback(
     async (uid?: string) => {
       if (uid) {
-        queryRef.current = createGroupChannelListQuery(sdk, options?.query);
+        queryRef.current = createGroupChannelListQuery(sdk, options?.queryFactory);
 
         const channels: Sendbird.GroupChannel[] = await queryRef.current.next();
         setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(channels, 'url') }));
@@ -72,7 +44,7 @@ const useGroupChannelList = (
         setGroupChannelMap({});
       }
     },
-    [sdk, options?.query],
+    [sdk, options?.queryFactory],
   );
 
   const isTargetChannel = (
@@ -115,8 +87,8 @@ const useGroupChannelList = (
   }, [init, userId]);
 
   const groupChannels = useMemo(
-    () => Object.values(groupChannelMap).sort(options?.comparator),
-    [groupChannelMap, options?.comparator],
+    () => Object.values(groupChannelMap).sort(options?.sortComparator),
+    [groupChannelMap, options?.sortComparator],
   );
 
   const refresh = useCallback(async () => {

@@ -23,12 +23,20 @@ export type {
 } from './platform/types';
 
 /** Domain **/
-export * from './domain/groupChannel';
+export * from './domain/groupChannelList';
+export * from './domain/inviteMembers';
 export type {
+  GroupChannelType,
   GroupChannelListProps,
   GroupChannelListModule,
   GroupChannelListFragment,
-  GroupChannelListHeaderProps,
-} from './domain/groupChannel/types';
+  GroupChannelListContextType,
+} from './domain/groupChannelList/types';
+export type {
+  InviteMembersProps,
+  InviteMembersModule,
+  InviteMembersFragment,
+  InviteMembersContextType,
+} from './domain/inviteMembers/types';
 
 export type { BaseHeaderProps } from './types';

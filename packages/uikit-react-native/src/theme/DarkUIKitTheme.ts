@@ -12,9 +12,7 @@ const DarkUIKitTheme: UIKitTheme = {
   colors: {
     primary: Palette.primary200,
     background: Palette.background600,
-    card: Palette.background400,
     text: Palette.onBackgroundDark01,
-    border: Palette.onBackgroundDark04,
     notification: Palette.error200,
     onBackground01: Palette.onBackgroundDark01,
     onBackground02: Palette.onBackgroundDark02,
@@ -27,6 +25,10 @@ const DarkUIKitTheme: UIKitTheme = {
     secondary: Palette.secondary200,
     error: Palette.error200,
     ui: {
+      header: {
+        background: Palette.background500,
+        borderBottom: Palette.onBackgroundDark04,
+      },
       input: {
         typeDefault: {
           text: Palette.onBackgroundDark01,
