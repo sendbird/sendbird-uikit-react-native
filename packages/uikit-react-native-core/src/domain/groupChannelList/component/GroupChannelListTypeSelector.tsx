@@ -11,11 +11,11 @@ import type { GroupChannelListProps, GroupChannelType } from '../types';
 const TYPES: GroupChannelType[] = ['GROUP', 'SUPER_GROUP', 'BROADCAST'];
 const groupChannelTypeIconMap = { 'GROUP': 'chat', 'SUPER_GROUP': 'supergroup', 'BROADCAST': 'broadcast' } as const;
 
-export const DefaultTypeIcon: React.FC<{ type: GroupChannelType }> = ({ type }) => {
+const DefaultTypeIcon: React.FC<{ type: GroupChannelType }> = ({ type }) => {
   return <Icon size={24} icon={groupChannelTypeIconMap[type]} containerStyle={{ marginBottom: 8 }} />;
 };
 
-export const DefaultTypeText: React.FC<{ type: GroupChannelType }> = ({ type }) => {
+const DefaultTypeText: React.FC<{ type: GroupChannelType }> = ({ type }) => {
   const { LABEL } = useLocalization();
   const { colors } = useUIKitTheme();
   return (

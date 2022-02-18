@@ -15,7 +15,7 @@ import {
   useSendbirdChat,
 } from '@sendbird/uikit-react-native-core';
 import { Header, Icon, useHeaderStyle, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { Logger, channelComparator } from '@sendbird/uikit-utils';
+import { EmptyFunction, Logger, channelComparator } from '@sendbird/uikit-utils';
 
 import GroupChannelPreview from '../ui/GroupChannelPreview';
 
@@ -70,7 +70,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
 
     const renderGroupChannelPreview = useCallback(
       (channel: Sendbird.GroupChannel) => (
-        <Pressable onPress={() => onPressChannel(channel)} onLongPress={() => {}}>
+        <Pressable onPress={() => onPressChannel(channel)} onLongPress={EmptyFunction}>
           <GroupChannelPreview
             coverUrl={channel.coverUrl}
             title={LABEL.GROUP_CHANNEL_LIST.FRAGMENT.PREVIEW_TITLE(currentUser?.userId ?? '', channel)}

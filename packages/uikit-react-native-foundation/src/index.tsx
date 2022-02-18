@@ -30,5 +30,4 @@ export type {
   TypoName,
   FontAttributes,
   BaseHeaderProps,
-
 } from './types';
