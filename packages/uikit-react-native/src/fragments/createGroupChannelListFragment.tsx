@@ -7,7 +7,6 @@ import type {
   GroupChannelListFragment,
   GroupChannelListModule,
   GroupChannelListProps,
-  GroupChannelType,
 } from '@sendbird/uikit-react-native-core';
 import {
   GroupChannelListContext,
@@ -15,28 +14,10 @@ import {
   useLocalization,
   useSendbirdChat,
 } from '@sendbird/uikit-react-native-core';
+import { Header, Icon, useHeaderStyle, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { Logger, channelComparator } from '@sendbird/uikit-utils';
 
-import useHeaderStyle from '../styles/useHeaderStyle';
-import useUIKitTheme from '../theme/useUIKitTheme';
 import GroupChannelPreview from '../ui/GroupChannelPreview';
-import DefaultHeader from '../ui/Header';
-import Icon from '../ui/Icon';
-import Text from '../ui/Text';
-
-const groupChannelTypeIconMap = { 'GROUP': 'chat', 'SUPER_GROUP': 'supergroup', 'BROADCAST': 'broadcast' } as const;
-export const DefaultTypeIcon: React.FC<{ type: GroupChannelType }> = ({ type }) => {
-  return <Icon size={24} icon={groupChannelTypeIconMap[type]} containerStyle={{ marginBottom: 8 }} />;
-};
-export const DefaultTypeText: React.FC<{ type: GroupChannelType }> = ({ type }) => {
-  const { LABEL } = useLocalization();
-  const { colors } = useUIKitTheme();
-  return (
-    <Text caption2 color={colors.onBackground01}>
-      {LABEL.GROUP_CHANNEL_LIST.TYPE_SELECTOR[type]}
-    </Text>
-  );
-};
 
 export const DefaultFragmentHeader: React.FC<{ Header: GroupChannelListProps['Fragment']['FragmentHeader'] }> = ({
   Header,
@@ -69,8 +50,8 @@ export const DefaultTypeSelectorHeader: React.FC<{
 const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListModule>): GroupChannelListFragment => {
   const GroupChannelListModule = createGroupChannelListModule(initModule);
   return ({
-    FragmentHeader = DefaultHeader,
-    TypeSelectorHeader = DefaultHeader,
+    FragmentHeader = Header,
+    TypeSelectorHeader = Header,
     onPressChannel,
     onPressCreateChannel,
     queryFactory,
@@ -89,7 +70,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
 
     const renderGroupChannelPreview = useCallback(
       (channel: Sendbird.GroupChannel) => (
-        <Pressable onPress={() => onPressChannel(channel)}>
+        <Pressable onPress={() => onPressChannel(channel)} onLongPress={() => {}}>
           <GroupChannelPreview
             coverUrl={channel.coverUrl}
             title={LABEL.GROUP_CHANNEL_LIST.FRAGMENT.PREVIEW_TITLE(currentUser?.userId ?? '', channel)}
@@ -125,8 +106,6 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
           Header={({ children }) => (
             <DefaultTypeSelectorHeader Header={TypeSelectorHeader}>{children}</DefaultTypeSelectorHeader>
           )}
-          TypeText={DefaultTypeText}
-          TypeIcon={DefaultTypeIcon}
           topInset={topInset}
           skipTypeSelection={skipTypeSelection}
           statusBarTranslucent={statusBarTranslucent}

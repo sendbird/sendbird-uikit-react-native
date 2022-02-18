@@ -38,5 +38,3 @@ export type {
   InviteMembersFragment,
   InviteMembersContextType,
 } from './domain/inviteMembers/types';
-
-export type { BaseHeaderProps } from './types';

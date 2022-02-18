@@ -7,10 +7,8 @@ import type {
   InviteMembersProps,
 } from '@sendbird/uikit-react-native-core';
 import { InviteMembersContext, createInviteMembersModule, useLocalization } from '@sendbird/uikit-react-native-core';
+import { Header as DefaultHeader, Icon } from '@sendbird/uikit-react-native-foundation';
 import { AsyncEmptyFunction } from '@sendbird/uikit-utils';
-
-import DefaultHeader from '../ui/Header';
-import Icon from '../ui/Icon';
 
 const FragmentDefaultHeader = <T,>({
   Header,

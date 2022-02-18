@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
-import { useUIKitTheme } from '@sendbird/uikit-react-native';
+import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 import { getContrastColor } from '../../utils';
 

@@ -2,8 +2,9 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useLayoutEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import { Header, Icon, createGroupChannelListFragment } from '@sendbird/uikit-react-native';
+import { createGroupChannelListFragment } from '@sendbird/uikit-react-native';
 import { GroupChannelListContext, useConnection } from '@sendbird/uikit-react-native-core';
+import { Header, Icon } from '@sendbird/uikit-react-native-foundation';
 import { Logger } from '@sendbird/uikit-utils';
 
 const GroupChannelListFragment = createGroupChannelListFragment();

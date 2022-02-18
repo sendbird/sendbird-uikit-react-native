@@ -6,8 +6,9 @@ import ImagePicker from 'react-native-image-picker';
 import Permissions from 'react-native-permissions';
 import SendBird from 'sendbird';
 
-import { DarkUIKitTheme, LightUIKitTheme, SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
+import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
 import { createFilePickerServiceNative, useConnection } from '@sendbird/uikit-react-native-core';
+import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 import { APP_ID, USER_ID } from './env';
 import useAppearance from './hooks/useAppearance';

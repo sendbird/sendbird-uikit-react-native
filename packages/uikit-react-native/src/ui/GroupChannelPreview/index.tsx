@@ -1,13 +1,10 @@
 import React from 'react';
 import { Image, View } from 'react-native';
 
+import type { IconAssets } from '@sendbird/uikit-react-native-foundation';
+import { Icon, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import createStyleSheet from '@sendbird/uikit-react-native-foundation/src/utils/createStyleSheet';
 import { truncate, truncatedBadgeCount } from '@sendbird/uikit-utils';
-
-import type IconAssets from '../../assets/icon';
-import useUIKitTheme from '../../theme/useUIKitTheme';
-import createStyleSheet from '../../utils/createStyleSheet';
-import Icon from '../Icon';
-import Text from '../Text';
 
 type Props = {
   coverUrl: string;

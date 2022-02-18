@@ -2,8 +2,9 @@ import type React from 'react';
 import type Sendbird from 'sendbird';
 
 import type { UseGroupChannelListOptions } from '@sendbird/chat-react-hooks';
+import type { BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
 
-import type { BaseHeaderProps, CommonComponent } from '../../types';
+import type { CommonComponent } from '../../types';
 
 /** Specific props type for creating fragment header **/
 type FragmentHeaderProps = BaseHeaderProps<{ title: string; right: React.ReactElement; onPressRight: () => void }>;
@@ -18,8 +19,6 @@ export type GroupChannelListProps = {
   };
   TypeSelector: {
     Header: React.FC;
-    TypeIcon: CommonComponent<{ type: GroupChannelType }>;
-    TypeText: CommonComponent<{ type: GroupChannelType }>;
     skipTypeSelection: boolean;
     statusBarTranslucent: boolean;
     topInset: number;

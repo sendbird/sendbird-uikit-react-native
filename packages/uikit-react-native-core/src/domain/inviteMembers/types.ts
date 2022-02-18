@@ -1,6 +1,8 @@
 import type React from 'react';
 
-import type { BaseHeaderProps, CommonComponent } from '../../types';
+import type { BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
+
+import type { CommonComponent } from '../../types';
 
 /** Specific props type for creating fragment header **/
 type FragmentHeaderProps<User> = BaseHeaderProps<{

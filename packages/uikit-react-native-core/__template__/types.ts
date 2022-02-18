@@ -1,7 +1,9 @@
 import type React from 'react';
 
+import type { BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
+
 // @ts-ignore - !!REMOVE
-import type { BaseHeaderProps, CommonComponent } from '../../types';
+import type { CommonComponent } from '../../types';
 
 /** Specific props type for creating fragment header **/
 type FragmentHeaderProps = BaseHeaderProps<{ title: string; left: React.ReactElement; onPressLeft: () => void }>;
