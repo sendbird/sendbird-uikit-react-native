@@ -1,20 +1,25 @@
+import type { TextStyle } from 'react-native';
+
 import type Palette from './theme/Palette';
 
-export type InputState = 'active' | 'disabled';
-export type ButtonState = 'enabled' | 'pressed' | 'disabled';
+export type TypoName = `h${1 | 2}` | `subtitle${1 | 2}` | `body${1 | 2 | 3}` | 'button' | `caption${1 | 2 | 3 | 4}`;
+export type FontAttributes = Pick<TextStyle, 'fontFamily' | 'fontSize' | 'lineHeight' | 'letterSpacing' | 'fontWeight'>;
+export type Typography = Record<TypoName, FontAttributes>;
 
+export type UIKitAppearance = 'light' | 'dark';
 export interface UIKitTheme extends AppearanceHelper {
   appearance: UIKitAppearance;
   colors: UIKitColors;
   palette: typeof Palette;
+  typography: Typography;
 }
-export type UIKitAppearance = 'light' | 'dark';
+
+export type InputState = 'active' | 'disabled';
+export type ButtonState = 'enabled' | 'pressed' | 'disabled';
 export type UIKitColors = {
   primary: string;
   background: string;
-  card: string;
   text: string;
-  border: string;
   notification: string;
   onBackground01: string;
   onBackground02: string;
@@ -27,17 +32,23 @@ export type UIKitColors = {
   secondary: string;
   error: string;
   ui: {
-    input: {
-      text: string;
+    header: {
       background: string;
-      placeholder: Record<InputState, string>;
+      borderBottom: string;
+    };
+    input: {
+      typeDefault: {
+        text: string;
+        background: string;
+        placeholder: Record<InputState, string>;
+      };
     };
     button: {
-      contained: {
+      typeContain: {
         background: Record<ButtonState, string>;
         text: Record<ButtonState, string>;
       };
-      text: {
+      typeText: {
         background: Record<ButtonState, string>;
         text: Record<ButtonState, string>;
       };
@@ -58,5 +69,5 @@ export type UIKitColors = {
 };
 
 export interface AppearanceHelper {
-  select<T>(options: { light: T; dark: T; default?: T }): T;
+  select<T>(options: { light?: T; dark: T; default?: T } | { light: T; dark?: T; default?: T }): T;
 }

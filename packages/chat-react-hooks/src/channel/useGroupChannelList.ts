@@ -1,63 +1,96 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type Sendbird from 'sendbird';
 
-import type { GroupChannelListHook } from '../types';
-import { arrayToMap } from '../utils';
+import { arrayToMap } from '@sendbird/uikit-utils';
+
+import useChannelHandler from '../handler/useChannelHandler';
+import type { UseGroupChannelList, UseGroupChannelListOptions } from '../types';
 
 type GroupChannelMap = Record<string, Sendbird.GroupChannel>;
-type Options = {
-  comparator: (a: Sendbird.GroupChannel, b: Sendbird.GroupChannel) => number;
-  query: Sendbird.GroupChannelListQuery;
-};
 
-const createDefaultGroupChannelListQuery = (sdk: Sendbird.SendBirdInstance) => {
-  const query = sdk.GroupChannel.createMyGroupChannelListQuery();
-  query.memberStateFilter = 'all';
-  query.order = 'latest_last_message';
-  query.includeEmpty = true;
-  query.limit = 10;
+const createGroupChannelListQuery = (
+  sdk: Sendbird.SendBirdInstance,
+  queryCreator: UseGroupChannelListOptions['queryFactory'],
+) => {
+  const passedQuery = queryCreator?.();
+  if (passedQuery) return passedQuery;
 
-  return query;
+  const defaultQuery = sdk.GroupChannel.createMyGroupChannelListQuery();
+  defaultQuery.memberStateFilter = 'all';
+  defaultQuery.order = 'latest_last_message';
+  defaultQuery.includeEmpty = true;
+  defaultQuery.limit = 10;
+  return defaultQuery;
 };
 
 const useGroupChannelList = (
   sdk: Sendbird.SendBirdInstance,
-  userId: string,
-  options?: Options,
-): GroupChannelListHook => {
-  const queryRef = useRef(options?.query);
+  userId?: string,
+  options?: UseGroupChannelListOptions,
+): UseGroupChannelList => {
+  const queryRef = useRef<Sendbird.GroupChannelListQuery>();
   const [groupChannelMap, setGroupChannelMap] = useState<GroupChannelMap>({});
+  const [refreshing, setRefreshing] = useState(false);
 
   const init = useCallback(
-    async (uid: string) => {
+    async (uid?: string) => {
       if (uid) {
-        let groupQuery = options?.query;
-        if (!groupQuery) groupQuery = createDefaultGroupChannelListQuery(sdk);
-        queryRef.current = groupQuery;
+        queryRef.current = createGroupChannelListQuery(sdk, options?.queryFactory);
 
-        const channels = await groupQuery.next();
-        setGroupChannelMap((prev) => ({
-          ...prev,
-          ...arrayToMap(channels, 'url'),
-        }));
+        const channels: Sendbird.GroupChannel[] = await queryRef.current.next();
+        setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(channels, 'url') }));
         channels.forEach((channel) => sdk.markAsDelivered(channel.url));
       } else {
         setGroupChannelMap({});
       }
     },
-    [sdk, options?.query],
+    [sdk, options?.queryFactory],
+  );
+
+  const updateChannel = (channel: Sendbird.OpenChannel | Sendbird.GroupChannel) => {
+    if (channel.isGroupChannel()) update(channel);
+  };
+
+  useChannelHandler(
+    sdk,
+    'useGroupChannelList',
+    {
+      onChannelChanged: updateChannel,
+      onChannelFrozen: updateChannel,
+      onChannelUnfrozen: updateChannel,
+      onChannelDeleted(channelUrl: string) {
+        if (!groupChannelMap[channelUrl]) return;
+        setGroupChannelMap((prevState) => {
+          delete prevState[channelUrl];
+          return { ...prevState };
+        });
+      },
+      onChannelMemberCountChanged(channels: Array<Sendbird.GroupChannel>) {
+        const validChannels = channels.filter((channel) => channel.isGroupChannel() && groupChannelMap[channel.url]);
+        setGroupChannelMap((prevState) => {
+          validChannels.forEach((channel) => (prevState[channel.url] = channel));
+          return { ...prevState };
+        });
+      },
+    },
+    [groupChannelMap],
   );
 
   useEffect(() => {
     init(userId);
   }, [init, userId]);
 
-  const groupChannels = useMemo(
-    () => Object.values(groupChannelMap).sort(options?.comparator),
-    [groupChannelMap, options?.comparator],
-  );
+  const groupChannels = useMemo(() => {
+    const channels = Object.values(groupChannelMap);
+    if (options?.queryFactory) return channels.sort(options?.sortComparator);
+    return channels;
+  }, [groupChannelMap, options?.sortComparator]);
 
-  const refresh = useCallback(() => init(userId), [init, userId]);
+  const refresh = useCallback(async () => {
+    setRefreshing(true);
+    await init(userId);
+    setRefreshing(false);
+  }, [init, userId]);
 
   const update = useCallback(
     (channel: Sendbird.GroupChannel) => {
@@ -67,17 +100,15 @@ const useGroupChannelList = (
     [sdk],
   );
 
-  const loadPrev = useCallback(async () => {
+  const loadMore = useCallback(async () => {
     if (queryRef.current?.hasNext) {
       const channels = await queryRef.current.next();
-      setGroupChannelMap((prev) => ({
-        ...prev,
-        ...arrayToMap(channels, 'url'),
-      }));
+      setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(channels, 'url') }));
       channels.forEach((channel) => sdk.markAsDelivered(channel.url));
     }
   }, [sdk]);
-  return { groupChannels, update, refresh, loadPrev };
+
+  return { groupChannels, update, refresh, refreshing, loadMore };
 };
 
 export default useGroupChannelList;

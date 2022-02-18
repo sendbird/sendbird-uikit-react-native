@@ -1,18 +1,18 @@
 import type { UIKitTheme } from '../types';
-import appearanceHelperFactory from '../utils/appearanceHelper';
+import createAppearanceHelper from '../utils/appearanceHelper';
 import Palette from './Palette';
+import { defaultTypography } from './Typography';
 
 const appearance = 'dark';
 const DarkUIKitTheme: UIKitTheme = {
-  ...appearanceHelperFactory(appearance),
+  ...createAppearanceHelper(appearance),
+  typography: defaultTypography,
   appearance,
   palette: Palette,
   colors: {
     primary: Palette.primary200,
     background: Palette.background600,
-    card: Palette.background400,
     text: Palette.onBackgroundDark01,
-    border: Palette.onBackgroundDark04,
     notification: Palette.error200,
     onBackground01: Palette.onBackgroundDark01,
     onBackground02: Palette.onBackgroundDark02,
@@ -25,16 +25,22 @@ const DarkUIKitTheme: UIKitTheme = {
     secondary: Palette.secondary200,
     error: Palette.error200,
     ui: {
+      header: {
+        background: Palette.background500,
+        borderBottom: Palette.onBackgroundDark04,
+      },
       input: {
-        text: Palette.onBackgroundDark01,
-        background: Palette.background400,
-        placeholder: {
-          active: Palette.onBackgroundDark03,
-          disabled: Palette.onBackgroundDark04,
+        typeDefault: {
+          text: Palette.onBackgroundDark01,
+          background: Palette.background400,
+          placeholder: {
+            active: Palette.onBackgroundDark03,
+            disabled: Palette.onBackgroundDark04,
+          },
         },
       },
       button: {
-        contained: {
+        typeContain: {
           background: {
             enabled: Palette.primary200,
             pressed: Palette.primary300,
@@ -46,7 +52,7 @@ const DarkUIKitTheme: UIKitTheme = {
             disabled: Palette.onBackgroundDark04,
           },
         },
-        text: {
+        typeText: {
           background: {
             enabled: Palette.transparent,
             pressed: Palette.background500,

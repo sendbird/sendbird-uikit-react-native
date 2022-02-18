@@ -1,8 +1,30 @@
-export { default as UIKitThemeContext } from './theme/UIKitThemeContext';
+/** Theme **/
 export { default as UIKitThemeProvider } from './theme/UIKitThemeProvider';
-export { default as useUIKitTheme } from './theme/useUIKitTheme';
 export { default as LightUIKitTheme } from './theme/LightUIKitTheme';
 export { default as DarkUIKitTheme } from './theme/DarkUIKitTheme';
 export { default as Palette } from './theme/Palette';
+export { default as useUIKitTheme } from './theme/useUIKitTheme';
 
-export type { AppearanceHelper, UIKitColors, UIKitTheme, UIKitAppearance, InputState, ButtonState } from './types';
+/** UI **/
+export { default as Icon } from './ui/Icon';
+export { default as Text } from './ui/Text';
+export { default as Header } from './ui/Header';
+export { default as GroupChannelPreview } from './ui/GroupChannelPreview';
+
+/** Fragments **/
+export { default as createGroupChannelListFragment } from './fragments/createGroupChannelListFragment';
+
+/** Types **/
+export type {
+  AppearanceHelper,
+  UIKitColors,
+  UIKitTheme,
+  UIKitAppearance,
+  InputState,
+  ButtonState,
+  Typography,
+  TypoName,
+  FontAttributes,
+} from './types';
+
+export { default as SendbirdUIKitContainer } from './SendbirdUIKitContainer';

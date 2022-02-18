@@ -16,46 +16,58 @@
     ]
   },
   "scripts": {
-    "w": "sh -c 'yarn workspace ${0} ${1} ${2} ${3}'",
-    "w:create": "npx create-react-native-library",
-    "w:clean": "lerna run clean",
-    "w:build": "lerna run prepare",
-    "w:test": "lerna run test",
-    "test": "jest .",
     "reset": "find . -type dir -name node_modules | xargs rm -rf",
+    "clean": "lerna run clean",
+    "build": "lerna run prepare",
+    "test": "jest --verbose",
+    "test:build": "yarn build --stream && yarn clean --stream",
     "lint": "yarn lint:eslint && yarn lint:prettier",
     "fix": "yarn fix:eslint && yarn fix:prettier",
-    "lint:eslint": "eslint sample packages/**/src --ext ts,tsx -c ./.eslintrc.js",
-    "lint:prettier": "prettier --check sample/src/**.{ts,tsx} packages/**/src/**/*.{ts,tsx}",
-    "fix:eslint": "eslint --fix sample packages/**/src --ext ts,tsx -c ./.eslintrc.js",
-    "fix:prettier": "prettier --write sample/src/**.{ts,tsx} packages/**/src/**/*.{ts,tsx}"
+    "lint:eslint": "eslint packages/*/src --ext ts,tsx -c ./.eslintrc.js",
+    "lint:prettier": "prettier --check \"sample/src/**/*.{ts,tsx}\" \"packages/*/src/**/*.{ts,tsx}\"",
+    "fix:eslint": "eslint --fix packages/*/src --ext ts,tsx -c ./.eslintrc.js",
+    "fix:prettier": "prettier --write \"sample/src/**/*.{ts,tsx}\" \"packages/*/src/**/*.{ts,tsx}\"",
+    "sample:ios": "cd sample && yarn ios",
+    "sample:android": "cd sample && yarn android"
   },
   "devDependencies": {
+    "@testing-library/react-native": "^9.0.0",
     "@trivago/prettier-plugin-sort-imports": "^3.1.1",
     "@types/jest": "^27.4.0",
     "@typescript-eslint/eslint-plugin": "^5.9.1",
     "@typescript-eslint/parser": "^5.9.1",
+    "babel-jest": "^27.4.6",
     "del-cli": "^4.0.1",
     "esbuild": "^0.14.11",
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.3.0",
     "jest": "^27.4.7",
     "lerna": "^4.0.0",
-    "metro-minify-esbuild": "^0.1.0",
     "prettier": "^2.5.1",
+    "react": "17.0.2",
+    "react-native": "0.66.4",
     "react-native-builder-bob": "^0.18.2",
-    "react-native-monorepo-tools": "^1.1.4",
+    "react-native-safe-area-context": "^3.3.2",
+    "react-test-renderer": "^17.0.2",
     "typescript": "^4.5.4"
   },
   "dependencies": {},
   "jest": {
     "testEnvironment": "node",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ],
     "testPathIgnorePatterns": [
       "/node_modules/"
     ],
     "testRegex": "/__tests__/.*\\.(test|spec)\\.(js|tsx?)$",
     "moduleNameMapper": {
       "@sendbird/([^/]+)": "<rootDir>/packages/$1/src"
-    }
+    },
+    "preset": "react-native"
   }
 }

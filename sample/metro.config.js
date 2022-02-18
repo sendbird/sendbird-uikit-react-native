@@ -17,18 +17,19 @@ module.exports = {
     getTransformOptions: async () => ({
       transform: {
         experimentalImportSupport: false,
-        inlineRequires: false
-      }
-    })
+        inlineRequires: false,
+      },
+    }),
   },
   server: {
-    enhanceMiddleware: middleware => {
+    enhanceMiddleware: (middleware) => {
       return androidAssetsResolutionFix.applyMiddleware(middleware);
-    }
+    },
   },
   watchFolders: monorepoMetroTools.watchFolders,
   resolver: {
     blockList: exclusionList(monorepoMetroTools.blockList),
-    extraNodeModules: monorepoMetroTools.extraNodeModules
-  }
+    extraNodeModules: monorepoMetroTools.extraNodeModules,
+    resolverMainFields: ['sbmodern', 'react-native', 'browser', 'main'],
+  },
 };

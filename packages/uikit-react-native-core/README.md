@@ -1,27 +1,34 @@
-# @sendbird/uikit-react-core
+# @sendbird/uikit-react-native-core
 
 react-native-uikit
 
 ## Installation
 
+### React-Native-Cli
+
 ```sh
-npm install @sendbird/uikit-react-native-core
+npm install @sendbird/uikit-react-native-core \
+            react-native-image-picker \
+            react-native-permissions \
+            @react-native-firebase/messaging
 ```
 
-## Usage
+(optional) Install `AsyncStorage` if you want to enable Local Caching
 
-```js
-import { multiply } from "@sendbird/uikit-react-native-core";
-
-// ...
-
-const result = await multiply(3, 7);
+```sh
+npm install @react-native-async-storage/async-storage
 ```
 
-## Contributing
+### Expo
 
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+```sh
+expo install @sendbird/uikit-react-native-core \
+             expo-image-picker \
+             expo-notifications
+```
 
-## License
+(optional) Install `AsyncStorage` if you want to enable Local Caching
 
-MIT
+```sh
+expo install @react-native-async-storage/async-storage
+```

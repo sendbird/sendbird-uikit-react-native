@@ -1,5 +1,5 @@
 {
-  "name": "@sendbird/rn-uikit-sample",
+  "name": "@sendbird/sample",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -7,11 +7,29 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "get-stories": "sb-rn-get-stories",
+    "storybook-watcher": "sb-rn-watcher"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.15.17",
+    "@react-native-community/datetimepicker": "^5.1.0",
+    "@react-native-community/slider": "^4.2.0",
+    "@react-navigation/native": "^6.0.6",
+    "@react-navigation/native-stack": "^6.2.5",
+    "@storybook/addon-actions": "^6.4.19",
+    "@storybook/addon-controls": "^6.4.19",
+    "@storybook/addon-ondevice-actions": "^6.0.1-alpha.7",
+    "@storybook/addon-ondevice-backgrounds": "^6.0.1-alpha.7",
+    "@storybook/addon-ondevice-controls": "^6.0.1-alpha.7",
+    "@storybook/addon-ondevice-notes": "^6.0.1-alpha.7",
+    "@storybook/react-native": "^6.0.1-alpha.7",
     "react": "17.0.2",
-    "react-native": "0.66.4"
+    "react-native": "0.66.4",
+    "react-native-image-picker": "^4.7.3",
+    "react-native-permissions": "^3.2.0",
+    "react-native-safe-area-context": "^3.3.2",
+    "react-native-screens": "^3.10.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -23,9 +41,13 @@
     "@typescript-eslint/eslint-plugin": "^5.7.0",
     "@typescript-eslint/parser": "^5.7.0",
     "babel-jest": "^26.6.3",
+    "babel-loader": "^8.2.3",
     "eslint": "^7.14.0",
     "jest": "^26.6.3",
+    "metro-minify-esbuild": "^0.1.0",
     "metro-react-native-babel-preset": "^0.66.2",
+    "react-dom": "17.0.2",
+    "react-native-monorepo-tools": "^1.1.4",
     "react-test-renderer": "17.0.2",
     "typescript": "^4.4.4"
   },

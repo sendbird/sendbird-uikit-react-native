@@ -1,12 +1,12 @@
 module.exports = {
   'env': {
-    'es2021': true
+    'es2021': true,
   },
   'extends': ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
   'parser': '@typescript-eslint/parser',
   'parserOptions': {
     'ecmaVersion': 12,
-    'sourceType': 'module'
+    'sourceType': 'module',
   },
   'plugins': ['@typescript-eslint'],
   'rules': {
@@ -20,6 +20,8 @@ module.exports = {
     'multiline-ternary': [1, 'always-multiline'],
     'no-nested-ternary': 1,
     'comma-dangle': [1, 'always-multiline'],
-    '@typescript-eslint/ban-types': 0
-  }
+    '@typescript-eslint/ban-types': 0,
+    '@typescript-eslint/ban-ts-comment': 0,
+    '@typescript-eslint/no-var-requires': 0,
+  },
 };

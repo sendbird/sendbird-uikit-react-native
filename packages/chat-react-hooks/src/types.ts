@@ -1,12 +1,15 @@
 import type Sendbird from 'sendbird';
 
-export type FilterByValueType<T extends object, Type> = {
-  [K in keyof T as T[K] extends Type ? K : never]: T[K];
-};
-
-export interface GroupChannelListHook {
+export interface UseGroupChannelList {
   groupChannels: Sendbird.GroupChannel[];
   update: (channel: Sendbird.GroupChannel) => void;
-  loadPrev: () => Promise<void>;
+  loadMore: () => Promise<void>;
   refresh: () => Promise<void>;
+  refreshing: boolean;
 }
+export type UseGroupChannelListOptions = {
+  sortComparator?: (a: Sendbird.GroupChannel, b: Sendbird.GroupChannel) => number;
+  queryFactory?: () => Sendbird.GroupChannelListQuery;
+};
+
+export type SendbirdChatSDK = Sendbird.SendBirdInstance;
