@@ -1,6 +1,8 @@
 import { useCallback, useMemo, useRef } from 'react';
 import { Platform } from 'react-native';
 
+import { Logger } from '@sendbird/uikit-utils';
+
 import { usePlatformService } from '../contexts/PlatformService';
 import { useSendbirdChat } from '../contexts/SendbirdChat';
 
@@ -30,8 +32,10 @@ const usePushTokenRegistration = () => {
     // Check and request push permission
     if (!(await notificationService.hasPushPermission())) {
       const pushPermission = await notificationService.requestPushPermission();
-      // TODO: implement logger
-      if (!pushPermission) return; //logger.log('[usePushTokenRegistration]', 'Not granted push permission');
+      if (!pushPermission) {
+        Logger.warn('[usePushTokenRegistration]', 'Not granted push permission');
+        return;
+      }
     }
 
     // Register device token

@@ -1,4 +1,3 @@
-//TODO: move to @sendbird/uikit-react-native/fragments
 import React, { useContext } from 'react';
 
 import type {

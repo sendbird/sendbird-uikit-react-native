@@ -1,5 +1,5 @@
 import React, { useCallback, useContext } from 'react';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import type Sendbird from 'sendbird';
 
 import { useGroupChannelList } from '@sendbird/chat-react-hooks';
@@ -15,7 +15,7 @@ import {
   useLocalization,
   useSendbirdChat,
 } from '@sendbird/uikit-react-native-core';
-import { Logger } from '@sendbird/uikit-utils';
+import { Logger, channelComparator } from '@sendbird/uikit-utils';
 
 import useHeaderStyle from '../styles/useHeaderStyle';
 import useUIKitTheme from '../theme/useUIKitTheme';
@@ -37,28 +37,6 @@ export const DefaultTypeText: React.FC<{ type: GroupChannelType }> = ({ type }) 
     </Text>
   );
 };
-export const DefaultGroupChannelPreview: React.FC<{
-  channel: Sendbird.GroupChannel;
-  onPress: (channel: Sendbird.GroupChannel) => void;
-  currentUserId: string;
-}> = React.memo(({ channel, onPress, currentUserId }) => {
-  const { LABEL } = useLocalization();
-
-  return (
-    <GroupChannelPreview
-      onPress={() => onPress(channel)}
-      coverUrl={channel.coverUrl}
-      title={LABEL.GROUP_CHANNEL_LIST.FRAGMENT.PREVIEW_TITLE(currentUserId, channel)}
-      titleCaption={LABEL.GROUP_CHANNEL_LIST.FRAGMENT.PREVIEW_TITLE_CAPTION(channel)}
-      body={LABEL.GROUP_CHANNEL_LIST.FRAGMENT.PREVIEW_BODY(channel)}
-      badgeCount={channel.unreadMessageCount}
-      frozen={channel.isFrozen}
-      bodyIcon={channel.lastMessage?.isFileMessage() ? 'file-document' : undefined}
-      muted={channel.myMutedState === 'muted'}
-      memberCount={channel.memberCount}
-    />
-  );
-});
 
 export const DefaultFragmentHeader: React.FC<{ Header: GroupChannelListProps['Fragment']['FragmentHeader'] }> = ({
   Header,
@@ -96,7 +74,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     onPressChannel,
     onPressCreateChannel,
     queryFactory,
-    sortComparator,
+    sortComparator = channelComparator,
     skipTypeSelection = true,
     children,
   }) => {
@@ -106,17 +84,26 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
       sortComparator,
     });
 
+    const { LABEL } = useLocalization();
     const { statusBarTranslucent, topInset } = useHeaderStyle();
 
     const renderGroupChannelPreview = useCallback(
       (channel: Sendbird.GroupChannel) => (
-        <DefaultGroupChannelPreview
-          currentUserId={currentUser?.userId || ''}
-          channel={channel}
-          onPress={onPressChannel}
-        />
+        <Pressable onPress={() => onPressChannel(channel)}>
+          <GroupChannelPreview
+            coverUrl={channel.coverUrl}
+            title={LABEL.GROUP_CHANNEL_LIST.FRAGMENT.PREVIEW_TITLE(currentUser?.userId ?? '', channel)}
+            titleCaption={LABEL.GROUP_CHANNEL_LIST.FRAGMENT.PREVIEW_TITLE_CAPTION(channel)}
+            body={LABEL.GROUP_CHANNEL_LIST.FRAGMENT.PREVIEW_BODY(channel)}
+            badgeCount={channel.unreadMessageCount}
+            frozen={channel.isFrozen}
+            bodyIcon={channel.lastMessage?.isFileMessage() ? 'file-document' : undefined}
+            muted={channel.myMutedState === 'muted'}
+            memberCount={channel.memberCount}
+          />
+        </Pressable>
       ),
-      [onPressChannel, currentUser?.userId],
+      [LABEL, onPressChannel, currentUser?.userId],
     );
 
     if (!currentUser) {

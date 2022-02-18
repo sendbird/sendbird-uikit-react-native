@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Pressable, View } from 'react-native';
+import { Image, View } from 'react-native';
 
 import { truncate, truncatedBadgeCount } from '@sendbird/uikit-utils';
 
@@ -10,8 +10,6 @@ import Icon from '../Icon';
 import Text from '../Text';
 
 type Props = {
-  onPress?: () => void;
-
   coverUrl: string;
 
   title: string;
@@ -27,7 +25,6 @@ type Props = {
 };
 
 const GroupChannelPreview: React.FC<Props> = ({
-  onPress,
   coverUrl,
   memberCount,
   badgeCount,
@@ -41,7 +38,7 @@ const GroupChannelPreview: React.FC<Props> = ({
   const { colors, select, palette } = useUIKitTheme();
 
   return (
-    <Pressable onPress={() => onPress?.()} style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Image
         resizeMode={'cover'}
         style={[styles.channelCover, { backgroundColor: colors.onBackground04 }]}
@@ -100,7 +97,7 @@ const GroupChannelPreview: React.FC<Props> = ({
         </View>
       </View>
       <Separator />
-    </Pressable>
+    </View>
   );
 };
 
@@ -186,4 +183,4 @@ const styles = createStyleSheet({
   },
 });
 
-export default GroupChannelPreview;
+export default React.memo(GroupChannelPreview);

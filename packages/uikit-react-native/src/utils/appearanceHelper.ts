@@ -4,7 +4,7 @@ import type { AppearanceHelper, UIKitAppearance } from '../types';
  * Appearance helper factory function
  * Return a function that returns a value matching with the current appearance among the input values.
  * @param appearance
- * @return AppearanceHelper
+ * @returns AppearanceHelper
  * */
 const createAppearanceHelper = (appearance: UIKitAppearance): AppearanceHelper => ({
   select(options) {

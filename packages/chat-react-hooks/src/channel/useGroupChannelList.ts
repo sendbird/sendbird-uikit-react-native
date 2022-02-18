@@ -47,49 +47,44 @@ const useGroupChannelList = (
     [sdk, options?.queryFactory],
   );
 
-  const isTargetChannel = (
-    channelOrChannelUrl: Sendbird.OpenChannel | Sendbird.GroupChannel | string,
-  ): channelOrChannelUrl is Sendbird.GroupChannel => {
-    if (typeof channelOrChannelUrl === 'string') return Boolean(groupChannelMap[channelOrChannelUrl]);
-    return channelOrChannelUrl.isGroupChannel() && Boolean(groupChannelMap[channelOrChannelUrl.url]);
+  const updateChannel = (channel: Sendbird.OpenChannel | Sendbird.GroupChannel) => {
+    if (channel.isGroupChannel()) update(channel);
   };
 
-  const replaceChannel = (channel: Sendbird.OpenChannel | Sendbird.GroupChannel) => {
-    if (!isTargetChannel(channel)) return;
-    setGroupChannelMap((prevState) => {
-      prevState[channel.url] = channel;
-      return { ...prevState };
-    });
-  };
-
-  useChannelHandler(sdk, 'useGroupChannelList', {
-    onChannelChanged: replaceChannel,
-    onChannelFrozen: replaceChannel,
-    onChannelUnfrozen: replaceChannel,
-    onChannelDeleted(channelUrl: string) {
-      if (!groupChannelMap[channelUrl]) return;
-      setGroupChannelMap((prevState) => {
-        delete prevState[channelUrl];
-        return { ...prevState };
-      });
+  useChannelHandler(
+    sdk,
+    'useGroupChannelList',
+    {
+      onChannelChanged: updateChannel,
+      onChannelFrozen: updateChannel,
+      onChannelUnfrozen: updateChannel,
+      onChannelDeleted(channelUrl: string) {
+        if (!groupChannelMap[channelUrl]) return;
+        setGroupChannelMap((prevState) => {
+          delete prevState[channelUrl];
+          return { ...prevState };
+        });
+      },
+      onChannelMemberCountChanged(channels: Array<Sendbird.GroupChannel>) {
+        const validChannels = channels.filter((channel) => channel.isGroupChannel() && groupChannelMap[channel.url]);
+        setGroupChannelMap((prevState) => {
+          validChannels.forEach((channel) => (prevState[channel.url] = channel));
+          return { ...prevState };
+        });
+      },
     },
-    onChannelMemberCountChanged(channels: Array<Sendbird.GroupChannel>) {
-      const validChannels = channels.filter(isTargetChannel);
-      setGroupChannelMap((prevState) => {
-        validChannels.forEach((channel) => (prevState[channel.url] = channel));
-        return { ...prevState };
-      });
-    },
-  });
+    [groupChannelMap],
+  );
 
   useEffect(() => {
     init(userId);
   }, [init, userId]);
 
-  const groupChannels = useMemo(
-    () => Object.values(groupChannelMap).sort(options?.sortComparator),
-    [groupChannelMap, options?.sortComparator],
-  );
+  const groupChannels = useMemo(() => {
+    const channels = Object.values(groupChannelMap);
+    if (options?.queryFactory) return channels.sort(options?.sortComparator);
+    return channels;
+  }, [groupChannelMap, options?.sortComparator]);
 
   const refresh = useCallback(async () => {
     setRefreshing(true);

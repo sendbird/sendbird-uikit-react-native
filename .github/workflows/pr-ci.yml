@@ -80,7 +80,7 @@ jobs:
           key: ${{ needs.prepare.outputs.cache_node_modules_key }}
 
       - name: Run test
-        run: yarn test --verbose
+        run: yarn test
 
   run-build:
     needs: prepare
@@ -102,4 +102,4 @@ jobs:
           key: ${{ needs.prepare.outputs.cache_node_modules_key }}
 
       - name: Run build
-        run: yarn build --stream
+        run: yarn test:build

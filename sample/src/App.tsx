@@ -1,6 +1,6 @@
 import { DarkTheme, DefaultTheme, NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import Permissions from 'react-native-permissions';
@@ -9,7 +9,6 @@ import SendBird from 'sendbird';
 import { DarkUIKitTheme, LightUIKitTheme, SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
 import { createFilePickerServiceNative, useConnection } from '@sendbird/uikit-react-native-core';
 
-import StorybookUIRoot from '../stories';
 import { APP_ID, USER_ID } from './env';
 import useAppearance from './hooks/useAppearance';
 import * as themeScreens from './screens/theme';
@@ -17,16 +16,22 @@ import * as uikitScreens from './screens/uikit-app';
 
 const Stack = createNativeStackNavigator();
 
+const StorybookScreen = () => {
+  const [screen, setScreen] = useState<JSX.Element | null>(null);
+  useEffect(() => {
+    const StorybookUI = require('../stories').default;
+    setScreen(<StorybookUI />);
+  }, []);
+  if (!screen) return null;
+  return <>{screen}</>;
+};
+
 const HomeScreen: React.FC = () => {
   const navigation = useNavigation<{ navigate: (route: string) => void }>();
   const { connect } = useConnection();
   return (
     <SafeAreaView>
       <ScrollView style={{ paddingVertical: 12 }}>
-        <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Storybook')}>
-          <Text style={styles.btnTitle}>{'Storybook'}</Text>
-        </TouchableOpacity>
-
         <TouchableOpacity
           style={styles.btn}
           onPress={async () => {
@@ -34,13 +39,17 @@ const HomeScreen: React.FC = () => {
             navigation.navigate('GroupChannelListScreen');
           }}
         >
-          <Text style={styles.btnTitle}>{'UIKit App'}</Text>
+          <Text style={styles.btnTitle}>{'APP_Sample'}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Storybook')}>
+          <Text style={styles.btnTitle}>{'APP_Storybook'}</Text>
         </TouchableOpacity>
 
         {Object.entries(themeScreens).map(([name]) => {
           return (
             <TouchableOpacity key={name} style={styles.btn} onPress={() => navigation.navigate(name)}>
-              <Text style={styles.btnTitle}>{name}</Text>
+              <Text style={styles.btnTitle}>{'TEMPLATE_' + name}</Text>
             </TouchableOpacity>
           );
         })}
@@ -64,7 +73,7 @@ const App = () => {
       <NavigationContainer theme={isLightTheme ? DefaultTheme : DarkTheme}>
         <Stack.Navigator>
           <Stack.Screen name={'Home'} component={HomeScreen} />
-          <Stack.Screen name={'Storybook'} component={StorybookUIRoot} />
+          <Stack.Screen name={'Storybook'} component={StorybookScreen} />
 
           {Object.entries(themeScreens).map(([name, screen]) => {
             return <Stack.Screen key={name} name={name} component={screen} />;

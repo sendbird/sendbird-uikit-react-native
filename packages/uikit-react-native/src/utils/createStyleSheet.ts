@@ -35,7 +35,7 @@ const preProcessorLen = preProcessorKeys.length;
  * Create StyleSheet with customized pre-processor
  * Return a StyleSheet that pre-processed
  * @param styles
- * @return StyleSheet
+ * @returns StyleSheet
  * */
 const createStyleSheet = <T extends StyleSheet.NamedStyles<T>>(styles: T | StyleSheet.NamedStyles<T>): T => {
   Object.values(styles).forEach((style) => {

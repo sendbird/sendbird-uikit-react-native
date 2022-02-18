@@ -1,6 +1,5 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
 import React from 'react';
-import { Alert } from 'react-native';
 
 import { GroupChannelPreview as GroupChannelPreviewComponent } from '@sendbird/uikit-react-native';
 import IconAssets from '@sendbird/uikit-react-native/src/assets/icon';
@@ -49,7 +48,6 @@ const GroupChannelPreviewMeta: ComponentMeta<typeof GroupChannelPreviewComponent
   },
   args: {
     coverUrl: 'https://static.sendbird.com/sample/cover/cover_15.jpg',
-    onPress: () => Alert.alert('Pressed'),
     title: 'Title',
     titleCaption: 'Title caption',
     body: 'Body',
