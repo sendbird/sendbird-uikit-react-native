@@ -1,9 +1,9 @@
 /** Theme **/
-export { default as UIKitThemeProvider } from './theme/UIKitThemeProvider';
-export { default as LightUIKitTheme } from './theme/LightUIKitTheme';
-export { default as DarkUIKitTheme } from './theme/DarkUIKitTheme';
 export { default as Palette } from './theme/Palette';
 export { default as useUIKitTheme } from './theme/useUIKitTheme';
+export { default as DarkUIKitTheme } from './theme/DarkUIKitTheme';
+export { default as LightUIKitTheme } from './theme/LightUIKitTheme';
+export { default as UIKitThemeProvider } from './theme/UIKitThemeProvider';
 
 /** UI **/
 export { default as Icon } from './ui/Icon';
@@ -16,18 +16,21 @@ export { default as IconAssets } from './assets/icon/index';
 /** Styles **/
 export { default as useHeaderStyle } from './styles/useHeaderStyle';
 export { default as getDefaultHeaderHeight } from './styles/getDefaultHeaderHeight';
+export { default as appearanceHelper } from './styles/appearanceHelper';
+export { default as scaleFactor } from './styles/scaleFactor';
+export { default as createStyleSheet } from './styles/createStyleSheet';
 export { HeaderStyleContext, HeaderStyleProvider } from './styles/HeaderStyleContext';
 
 /** Types **/
 export type {
-  AppearanceHelper,
-  UIKitColors,
-  UIKitTheme,
-  UIKitAppearance,
-  InputState,
-  ButtonState,
-  Typography,
   TypoName,
+  UIKitTheme,
+  InputState,
+  Typography,
+  UIKitColors,
+  ButtonState,
   FontAttributes,
   BaseHeaderProps,
+  UIKitAppearance,
+  AppearanceHelper,
 } from './types';

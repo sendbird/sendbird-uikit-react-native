@@ -2,8 +2,8 @@ import React from 'react';
 import { Image, ImageStyle, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
 import IconAssets from '../../assets/icon';
+import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
-import createStyleSheet from '../../utils/createStyleSheet';
 
 type IconNames = keyof typeof IconAssets;
 type SizeFactor = keyof typeof sizeStyles;

@@ -1,8 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { Modal, Pressable, TouchableOpacity, View } from 'react-native';
 
-import { Icon, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import createStyleSheet from '@sendbird/uikit-react-native-foundation/src/utils/createStyleSheet';
+import { Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 import { useLocalization } from '../../../contexts/Localization';
 import { GroupChannelListContext } from '../module/moduleContext';

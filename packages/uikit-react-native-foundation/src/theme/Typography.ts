@@ -1,5 +1,5 @@
+import { defaultScaleFactor } from '../styles/scaleFactor';
 import type { Typography } from '../types';
-import { defaultScaleFactor } from '../utils/scaleFactor';
 
 export const createTypography = (overrides: Partial<Typography> = {}, scaleFactor = defaultScaleFactor): Typography => {
   return {

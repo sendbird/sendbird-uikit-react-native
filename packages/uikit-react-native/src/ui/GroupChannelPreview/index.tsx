@@ -2,8 +2,7 @@ import React from 'react';
 import { Image, View } from 'react-native';
 
 import type { IconAssets } from '@sendbird/uikit-react-native-foundation';
-import { Icon, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import createStyleSheet from '@sendbird/uikit-react-native-foundation/src/utils/createStyleSheet';
+import { Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { truncate, truncatedBadgeCount } from '@sendbird/uikit-utils';
 
 type Props = {

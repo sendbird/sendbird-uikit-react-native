@@ -1,11 +1,11 @@
 import React from 'react';
 import { TouchableOpacity, TouchableOpacityProps, View, useWindowDimensions } from 'react-native';
 
+import createStyleSheet from '../../styles/createStyleSheet';
 import getDefaultHeaderHeight from '../../styles/getDefaultHeaderHeight';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import type { BaseHeaderProps } from '../../types';
-import createStyleSheet from '../../utils/createStyleSheet';
 import Text from '../Text';
 
 type HeaderElement = string | React.ReactElement | null;
