@@ -7,10 +7,20 @@ import type { BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
 
 import type { CommonComponent } from '../../types';
 
-/** Specific props type for creating fragment header **/
+/** Specific props type for creating header **/
 type FragmentHeaderProps = BaseHeaderProps<{ title: string; right: React.ReactElement; onPressRight: () => void }>;
 type TypeSelectorHeaderProps = BaseHeaderProps<{ title: string; right: React.ReactElement; onPressRight: () => void }>;
 export type GroupChannelListProps = {
+  Fragment: {
+    Header?: null | CommonComponent<FragmentHeaderProps>;
+    TypeSelectorHeader?: null | CommonComponent<TypeSelectorHeaderProps>;
+    skipTypeSelection?: boolean;
+    onPressChannel: (channel: Sendbird.GroupChannel) => void;
+    onPressCreateChannel: (channelType: GroupChannelType) => void;
+    queryCreator?: UseGroupChannelListOptions['queryCreator'];
+    sortComparator?: UseGroupChannelListOptions['sortComparator'];
+    flatListProps?: GroupChannelListProps['List']['flatListProps'];
+  };
   Header: {
     Header: GroupChannelListProps['Fragment']['Header'];
   };
@@ -26,16 +36,6 @@ export type GroupChannelListProps = {
     Header: GroupChannelListProps['Fragment']['TypeSelectorHeader'];
     skipTypeSelection: boolean;
     onSelectType: (type: GroupChannelType) => void;
-  };
-  Fragment: {
-    Header?: null | CommonComponent<FragmentHeaderProps>;
-    TypeSelectorHeader?: null | CommonComponent<TypeSelectorHeaderProps>;
-    skipTypeSelection?: boolean;
-    onPressChannel: (channel: Sendbird.GroupChannel) => void;
-    onPressCreateChannel: (channelType: GroupChannelType) => void;
-    queryCreator?: UseGroupChannelListOptions['queryCreator'];
-    sortComparator?: UseGroupChannelListOptions['sortComparator'];
-    flatListProps?: GroupChannelListProps['List']['flatListProps'];
   };
 };
 
