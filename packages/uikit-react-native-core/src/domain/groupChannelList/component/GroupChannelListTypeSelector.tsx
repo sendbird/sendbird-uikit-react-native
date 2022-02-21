@@ -55,9 +55,9 @@ const GroupChannelListTypeSelector: React.FC<GroupChannelListProps['TypeSelector
     </View>
   );
 
-  return (
-    <Modal visible={visible} animationType={'fade'} transparent statusBarTranslucent={statusBarTranslucent}>
-      {Header ? (
+  const renderHeader = () => {
+    if (Header) {
+      return (
         <Header
           title={typeSelector.headerTitle}
           right={<Icon icon={'close'} color={colors.onBackground01} />}
@@ -65,11 +65,19 @@ const GroupChannelListTypeSelector: React.FC<GroupChannelListProps['TypeSelector
         >
           {renderButtons()}
         </Header>
-      ) : (
-        <DefaultHeader title={null} right={null} left={null}>
-          {renderButtons()}
-        </DefaultHeader>
-      )}
+      );
+    }
+
+    return (
+      <DefaultHeader title={null} right={null} left={null}>
+        {renderButtons()}
+      </DefaultHeader>
+    );
+  };
+
+  return (
+    <Modal visible={visible} animationType={'fade'} transparent statusBarTranslucent={statusBarTranslucent}>
+      {renderHeader()}
       <Pressable style={{ flex: 1 }} onPress={hide} />
     </Modal>
   );

@@ -15,7 +15,6 @@ const InviteMembersHeader = <T,>({
     InviteMembersContext as Context<InviteMembersContextType<T>>,
   );
   const canPress = selectedUsers.length > 0;
-  console.log(canPress);
   if (!Header) return null;
   return (
     <Header
