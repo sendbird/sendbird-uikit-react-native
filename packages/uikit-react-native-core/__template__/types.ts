@@ -5,11 +5,15 @@ import type { BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
 
 import type { CommonComponent } from '../../types';
 
-/** Specific props type for creating header **/
-type FragmentHeaderProps = BaseHeaderProps<{ title: string; left: React.ReactElement; onPressLeft: () => void }>;
 export type __domain__Props = {
   Fragment: {
-    Header?: null | CommonComponent<FragmentHeaderProps>;
+    Header?: null | CommonComponent<
+      BaseHeaderProps<{
+        title: string;
+        left: React.ReactElement;
+        onPressLeft: () => void;
+      }>
+    >;
     onPressHeaderLeft?: () => void;
   };
   Header: {

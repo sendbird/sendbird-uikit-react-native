@@ -48,7 +48,7 @@ export const createTypography = (overrides: Partial<Typography> = {}, scaleFacto
       ...overrides.body3,
     },
     button: {
-      fontWeight: 'normal',
+      fontWeight: 'bold',
       fontSize: scaleFactor(14),
       lineHeight: scaleFactor(16),
       letterSpacing: scaleFactor(0.4),
