@@ -84,6 +84,7 @@ const DefaultGroupChannelListScreen = () => {
 
   return (
     <DefaultGroupChannelListFragment
+      skipTypeSelection={false}
       onPressCreateChannel={(channelType) => navigate('InviteMembersScreen', { channelType })}
       onPressChannel={(channel) => {
         // Navigate to GroupChannelFragment

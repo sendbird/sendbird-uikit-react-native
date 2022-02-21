@@ -1,13 +1,20 @@
 import React from 'react';
-import { ModalProps, Modal as RNModal, StyleProp, View, ViewStyle } from 'react-native';
+import { ModalProps, Modal as RNModal, StyleProp, TouchableWithoutFeedback, View, ViewStyle } from 'react-native';
 
 import createStyleSheet from '../../styles/createStyleSheet';
 
-type Props = { backgroundStyle?: StyleProp<ViewStyle> } & ModalProps;
-const Modal: React.FC<Props> = ({ children, backgroundStyle, ...props }) => {
+type Props = { backgroundStyle?: StyleProp<ViewStyle>; onPressBackground?: () => void } & ModalProps;
+const Modal: React.FC<Props> = ({ children, backgroundStyle, onPressBackground, ...props }) => {
   return (
-    <RNModal {...props}>
-      <View style={[styles.background, backgroundStyle]}>{children}</View>
+    <RNModal
+      transparent
+      supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
+      animationType={'fade'}
+      {...props}
+    >
+      <TouchableWithoutFeedback onPress={onPressBackground}>
+        <View style={[styles.background, backgroundStyle]}>{children}</View>
+      </TouchableWithoutFeedback>
     </RNModal>
   );
 };

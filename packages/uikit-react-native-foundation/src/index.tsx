@@ -10,6 +10,7 @@ export { default as Icon } from './ui/Icon';
 export { default as Text } from './ui/Text';
 export { default as Modal } from './ui/Modal';
 export { default as Header } from './ui/Header';
+export { default as Dialogue } from './ui/Dialogue';
 
 /** Styles **/
 export { default as useHeaderStyle } from './styles/useHeaderStyle';
