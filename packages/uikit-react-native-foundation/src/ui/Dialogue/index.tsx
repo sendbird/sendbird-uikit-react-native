@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ActivityIndicator, Pressable, StyleProp, View, ViewStyle } from 'react-native';
 
 import createStyleSheet from '../../styles/createStyleSheet';
+import useHeaderStyle from '../../styles/useHeaderStyle';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import Modal from '../Modal';
 import Text from '../Text';
@@ -20,6 +21,7 @@ type Props = {
   items: DialogueItems[];
 };
 const Dialogue: React.FC<Props> = ({ containerStyle, visible, onHide, onError, title, items, children }) => {
+  const { statusBarTranslucent } = useHeaderStyle();
   const { colors } = useUIKitTheme();
   const [pending, setPending] = useState(false);
 
@@ -29,6 +31,7 @@ const Dialogue: React.FC<Props> = ({ containerStyle, visible, onHide, onError, t
   return (
     <>
       <Modal
+        statusBarTranslucent={statusBarTranslucent}
         visible={visible}
         onPressBackground={_onHide}
         backgroundStyle={{ alignItems: 'center', justifyContent: 'center' }}

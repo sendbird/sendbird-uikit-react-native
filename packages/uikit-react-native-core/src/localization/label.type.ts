@@ -31,6 +31,14 @@ export interface LabelSet {
       /** @domain GroupChannelList > TypeSelector > Broadcast */
       BROADCAST: string;
     };
+    CHANNEL_MENU: {
+      /** @domain GroupChannelList > ChannelMenu > Title */
+      TITLE: (currentUserId: string, channel: Sendbird.GroupChannel) => string;
+      /** @domain GroupChannelList > ChannelMenu > Menu */
+      MENU_NOTIFICATIONS: (channel?: Sendbird.GroupChannel) => string;
+      /** @domain GroupChannelList > ChannelMenu > Menu */
+      MENU_LEAVE_CHANNEL: string;
+    };
   };
   INVITE_MEMBERS: {
     /** @domain InviteMembers > Header > Title */
@@ -60,6 +68,15 @@ export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): 
       SUPER_GROUP: 'Super group',
       BROADCAST: 'Broadcast',
       ...overrides?.GROUP_CHANNEL_LIST?.TYPE_SELECTOR,
+    },
+    CHANNEL_MENU: {
+      TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel),
+      MENU_NOTIFICATIONS: (channel) => {
+        if (!channel) return '';
+        if (channel.myPushTriggerOption === 'off') return 'Turn on notifications';
+        return 'Turn off notifications';
+      },
+      MENU_LEAVE_CHANNEL: 'Leave channel',
     },
   },
   INVITE_MEMBERS: {

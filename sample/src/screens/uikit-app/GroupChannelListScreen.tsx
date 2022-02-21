@@ -14,7 +14,8 @@ import { Logger } from '@sendbird/uikit-utils';
 // const UseNavigationHeader = () => {
 //   const { setOptions, goBack } = useNavigation();
 //   const { disconnect } = useConnection();
-//   const { fragment, typeSelector } = useContext(GroupChannelListContext);
+//   const fragment = useContext(GroupChannelListContext.Fragment);
+//   const typeSelector = useContext(GroupChannelListContext.TypeSelector);
 //
 //   const onBack = () => {
 //     goBack();
@@ -60,7 +61,8 @@ import { Logger } from '@sendbird/uikit-utils';
 const DisconnectionHeader = () => {
   const { goBack, setOptions } = useNavigation<any>();
   const { disconnect } = useConnection();
-  const { fragment, typeSelector } = useContext(GroupChannelListContext);
+  const fragment = useContext(GroupChannelListContext.Fragment);
+  const typeSelector = useContext(GroupChannelListContext.TypeSelector);
   useLayoutEffect(() => {
     setOptions({ headerShown: false });
   }, []);

@@ -5,7 +5,7 @@ import type Sendbird from 'sendbird';
 import { useGroupChannelList } from '@sendbird/chat-react-hooks';
 import type { GroupChannelListFragment, GroupChannelListModule } from '@sendbird/uikit-react-native-core';
 import { createGroupChannelListModule, useLocalization, useSendbirdChat } from '@sendbird/uikit-react-native-core';
-import { EmptyFunction, Logger, channelComparator } from '@sendbird/uikit-utils';
+import { Logger, channelComparator } from '@sendbird/uikit-utils';
 
 import GroupChannelPreview from '../ui/GroupChannelPreview';
 
@@ -31,8 +31,8 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     const { LABEL } = useLocalization();
 
     const renderGroupChannelPreview = useCallback(
-      (channel: Sendbird.GroupChannel) => (
-        <Pressable onPress={() => onPressChannel(channel)} onLongPress={EmptyFunction}>
+      (channel: Sendbird.GroupChannel, selectChannel) => (
+        <Pressable onPress={() => onPressChannel(channel)} onLongPress={() => selectChannel(channel)}>
           <GroupChannelPreview
             coverUrl={channel.coverUrl}
             title={LABEL.GROUP_CHANNEL_LIST.FRAGMENT.PREVIEW_TITLE(currentUser?.userId ?? '', channel)}
@@ -70,6 +70,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
           skipTypeSelection={skipTypeSelection}
           onSelectType={onPressCreateChannel}
         />
+        <GroupChannelListModule.ChannelMenu />
         {children}
       </GroupChannelListModule.Provider>
     );

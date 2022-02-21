@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { FlatList } from 'react-native';
 
+import { GroupChannelListContext } from '../module/moduleContext';
 import type { GroupChannelListProps } from '../types';
 
 const GroupChannelListList: React.FC<GroupChannelListProps['List']> = ({
@@ -11,12 +12,13 @@ const GroupChannelListList: React.FC<GroupChannelListProps['List']> = ({
   onRefresh,
   flatListProps,
 }) => {
+  const channelMenu = useContext(GroupChannelListContext.ChannelMenu);
   return (
     <FlatList
       data={groupChannels}
       refreshing={refreshing}
       onRefresh={onRefresh}
-      renderItem={({ item }) => renderGroupChannelPreview?.(item)}
+      renderItem={({ item }) => renderGroupChannelPreview?.(item, channelMenu.selectChannel)}
       onEndReached={onLoadMore}
       {...flatListProps}
     />

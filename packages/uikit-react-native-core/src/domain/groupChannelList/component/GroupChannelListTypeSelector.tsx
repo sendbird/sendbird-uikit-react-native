@@ -29,7 +29,7 @@ const GroupChannelListTypeSelector: React.FC<GroupChannelListProps['TypeSelector
 }) => {
   const { statusBarTranslucent } = useHeaderStyle();
   const { colors } = useUIKitTheme();
-  const { typeSelector } = useContext(GroupChannelListContext);
+  const typeSelector = useContext(GroupChannelListContext.TypeSelector);
   const { visible, hide } = typeSelector;
   const createOnPressType = (type: GroupChannelType) => () => {
     hide();
