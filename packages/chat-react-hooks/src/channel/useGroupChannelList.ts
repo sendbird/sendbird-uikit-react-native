@@ -84,7 +84,7 @@ const useGroupChannelList = (
 
   const groupChannels = useMemo(() => {
     const channels = Object.values(groupChannelMap);
-    if (options?.queryCreator) return channels.sort(options?.sortComparator);
+    if (options?.sortComparator) return channels.sort(options?.sortComparator);
     return channels;
   }, [groupChannelMap, options?.sortComparator]);
 
