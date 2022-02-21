@@ -8,10 +8,8 @@ export { default as UIKitThemeProvider } from './theme/UIKitThemeProvider';
 /** UI **/
 export { default as Icon } from './ui/Icon';
 export { default as Text } from './ui/Text';
+export { default as Modal } from './ui/Modal';
 export { default as Header } from './ui/Header';
-
-/** Assets **/
-export { default as IconAssets } from './assets/icon/index';
 
 /** Styles **/
 export { default as useHeaderStyle } from './styles/useHeaderStyle';

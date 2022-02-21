@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { FlatListProps } from 'react-native';
 import type Sendbird from 'sendbird';
 
 import type { UseGroupChannelListOptions } from '@sendbird/chat-react-hooks';
@@ -10,28 +11,31 @@ import type { CommonComponent } from '../../types';
 type FragmentHeaderProps = BaseHeaderProps<{ title: string; right: React.ReactElement; onPressRight: () => void }>;
 type TypeSelectorHeaderProps = BaseHeaderProps<{ title: string; right: React.ReactElement; onPressRight: () => void }>;
 export type GroupChannelListProps = {
+  Header: {
+    Header: GroupChannelListProps['Fragment']['Header'];
+  };
   List: {
     groupChannels: Sendbird.GroupChannel[];
     renderGroupChannelPreview: (channel: Sendbird.GroupChannel) => React.ReactElement | null;
     onLoadMore: () => Promise<void>;
     onRefresh?: () => Promise<void>;
     refreshing?: boolean;
+    flatListProps?: Omit<FlatListProps<Sendbird.GroupChannel>, 'data' | 'renderItem'>;
   };
   TypeSelector: {
-    Header: React.FC;
+    Header: GroupChannelListProps['Fragment']['TypeSelectorHeader'];
     skipTypeSelection: boolean;
-    statusBarTranslucent: boolean;
-    topInset: number;
     onSelectType: (type: GroupChannelType) => void;
   };
   Fragment: {
-    FragmentHeader?: null | CommonComponent<FragmentHeaderProps>;
+    Header?: null | CommonComponent<FragmentHeaderProps>;
     TypeSelectorHeader?: null | CommonComponent<TypeSelectorHeaderProps>;
     skipTypeSelection?: boolean;
     onPressChannel: (channel: Sendbird.GroupChannel) => void;
     onPressCreateChannel: (channelType: GroupChannelType) => void;
-    queryFactory?: UseGroupChannelListOptions['queryFactory'];
+    queryCreator?: UseGroupChannelListOptions['queryCreator'];
     sortComparator?: UseGroupChannelListOptions['sortComparator'];
+    flatListProps?: GroupChannelListProps['List']['flatListProps'];
   };
 };
 
@@ -53,6 +57,7 @@ export type GroupChannelListContextType = {
 };
 export interface GroupChannelListModule {
   Provider: React.FC;
+  Header: CommonComponent<GroupChannelListProps['Header']>;
   List: CommonComponent<GroupChannelListProps['List']>;
   TypeSelector: CommonComponent<GroupChannelListProps['TypeSelector']>;
 }

@@ -81,9 +81,9 @@ type HeaderPartProps = {
   left?: HeaderElement;
   onPressLeft?: (...params: any[]) => any;
   onPressRight?: (...params: any[]) => any;
-  children?: ReactNode;
 };
 export type BaseHeaderProps<HeaderParts extends HeaderPartProps = {}, AdditionalProps = {}> = {
   titleAlign?: 'left' | 'center' | 'right';
+  children?: ReactNode;
 } & HeaderParts &
   AdditionalProps;

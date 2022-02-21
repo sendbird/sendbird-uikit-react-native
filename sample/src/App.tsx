@@ -17,47 +17,6 @@ import * as uikitScreens from './screens/uikit-app';
 
 const Stack = createNativeStackNavigator();
 
-const StorybookScreen = () => {
-  const [screen, setScreen] = useState<JSX.Element | null>(null);
-  useEffect(() => {
-    const StorybookUI = require('../stories').default;
-    setScreen(<StorybookUI />);
-  }, []);
-  if (!screen) return null;
-  return <>{screen}</>;
-};
-
-const HomeScreen: React.FC = () => {
-  const navigation = useNavigation<{ navigate: (route: string) => void }>();
-  const { connect } = useConnection();
-  return (
-    <SafeAreaView>
-      <ScrollView style={{ paddingVertical: 12 }}>
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={async () => {
-            await connect(USER_ID);
-            navigation.navigate('GroupChannelListScreen');
-          }}
-        >
-          <Text style={styles.btnTitle}>{'APP_Sample'}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Storybook')}>
-          <Text style={styles.btnTitle}>{'APP_Storybook'}</Text>
-        </TouchableOpacity>
-
-        {Object.entries(themeScreens).map(([name]) => {
-          return (
-            <TouchableOpacity key={name} style={styles.btn} onPress={() => navigation.navigate(name)}>
-              <Text style={styles.btnTitle}>{'TEMPLATE_' + name}</Text>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
 const sdkInstance = new SendBird({ appId: APP_ID });
 
 const App = () => {
@@ -75,16 +34,53 @@ const App = () => {
         <Stack.Navigator>
           <Stack.Screen name={'Home'} component={HomeScreen} />
           <Stack.Screen name={'Storybook'} component={StorybookScreen} />
-
-          {Object.entries(themeScreens).map(([name, screen]) => {
-            return <Stack.Screen key={name} name={name} component={screen} />;
-          })}
-          {Object.entries(uikitScreens).map(([name, screen]) => {
-            return <Stack.Screen key={name} name={name} component={screen} />;
-          })}
+          {[...Object.entries(themeScreens), ...Object.entries(uikitScreens)].map(([name, screen]) => (
+            <Stack.Screen key={name} name={name} component={screen} />
+          ))}
         </Stack.Navigator>
       </NavigationContainer>
     </SendbirdUIKitContainer>
+  );
+};
+
+const StorybookScreen = () => {
+  const [screen, setScreen] = useState<JSX.Element | null>(null);
+  useEffect(() => {
+    const StorybookUI = require('../stories').default;
+    setScreen(<StorybookUI />);
+  }, []);
+  return <>{screen}</>;
+};
+
+const HomeScreen: React.FC = () => {
+  const navigation = useNavigation<{ navigate: (route: string) => void }>();
+  const { connect } = useConnection();
+
+  const onNavigateToApp = async () => {
+    await connect(USER_ID);
+    navigation.navigate('GroupChannelListScreen');
+  };
+
+  return (
+    <SafeAreaView>
+      <ScrollView style={{ paddingVertical: 12 }}>
+        <TouchableOpacity style={styles.btn} onPress={onNavigateToApp}>
+          <Text style={styles.btnTitle}>{'APP_Sample'}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Storybook')}>
+          <Text style={styles.btnTitle}>{'APP_Storybook'}</Text>
+        </TouchableOpacity>
+
+        {Object.entries(themeScreens).map(([name]) => {
+          return (
+            <TouchableOpacity key={name} style={styles.btn} onPress={() => navigation.navigate(name)}>
+              <Text style={styles.btnTitle}>{'TEMPLATE_' + name}</Text>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

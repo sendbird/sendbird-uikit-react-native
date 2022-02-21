@@ -1,11 +1,11 @@
 import React from 'react';
 import { TouchableOpacity, TouchableOpacityProps, View, useWindowDimensions } from 'react-native';
 
+import type { BaseHeaderProps } from '../../index';
 import createStyleSheet from '../../styles/createStyleSheet';
 import getDefaultHeaderHeight from '../../styles/getDefaultHeaderHeight';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import useUIKitTheme from '../../theme/useUIKitTheme';
-import type { BaseHeaderProps } from '../../types';
 import Text from '../Text';
 
 type HeaderElement = string | React.ReactElement | null;
@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({
   const { colors } = useUIKitTheme();
 
   if (!title && !left && !right) {
-    return <View style={{ paddingTop: topInset, backgroundColor: colors.ui.header.background }} />;
+    return <View style={{ paddingTop: topInset, backgroundColor: colors.ui.header.background }}>{children}</View>;
   }
 
   return (
@@ -53,7 +53,7 @@ const Header: React.FC<HeaderProps> = ({
           </View>
         )}
         <View style={[styles.title, { alignItems: AlignMapper[titleAlign] }]}>
-          {typeof title === 'string' ? <Text h1>{title}</Text> : { title }}
+          {typeof title === 'string' ? <Text h1>{title}</Text> : title}
         </View>
         {right && (
           <View style={styles.right}>

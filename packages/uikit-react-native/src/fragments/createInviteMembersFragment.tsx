@@ -36,20 +36,22 @@ const FragmentDefaultHeader = <T,>({
   );
 };
 
-const createInviteMembersFragment = <T,>(initModule?: InviteMembersModule<T>): InviteMembersFragment<T> => {
-  const InviteMembersModule = createInviteMembersModule<T>(initModule);
+const createInviteMembersFragment = <UserType,>(
+  initModule?: InviteMembersModule<UserType>,
+): InviteMembersFragment<UserType> => {
+  const InviteMembersModule = createInviteMembersModule<UserType>(initModule);
 
   // TODO: createUserQuery from @sendbird/chat-react-hooks
 
   return ({
-    Header = DefaultHeader as InviteMembersProps<T>['Fragment']['Header'],
+    Header = DefaultHeader as InviteMembersProps<UserType>['Fragment']['Header'],
     onPressHeaderLeft,
     onPressInviteMembers,
     children,
   }) => {
     return (
       <InviteMembersModule.Provider>
-        <FragmentDefaultHeader<T>
+        <FragmentDefaultHeader<UserType>
           Header={Header}
           onPressHeaderLeft={onPressHeaderLeft}
           onPressInviteMembers={onPressInviteMembers}

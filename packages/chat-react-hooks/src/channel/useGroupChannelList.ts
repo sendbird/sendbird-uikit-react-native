@@ -10,7 +10,7 @@ type GroupChannelMap = Record<string, Sendbird.GroupChannel>;
 
 const createGroupChannelListQuery = (
   sdk: Sendbird.SendBirdInstance,
-  queryCreator: UseGroupChannelListOptions['queryFactory'],
+  queryCreator: UseGroupChannelListOptions['queryCreator'],
 ) => {
   const passedQuery = queryCreator?.();
   if (passedQuery) return passedQuery;
@@ -32,10 +32,12 @@ const useGroupChannelList = (
   const [groupChannelMap, setGroupChannelMap] = useState<GroupChannelMap>({});
   const [refreshing, setRefreshing] = useState(false);
 
+  sdk.GroupChannel.createGroupChannelCollection();
+
   const init = useCallback(
     async (uid?: string) => {
       if (uid) {
-        queryRef.current = createGroupChannelListQuery(sdk, options?.queryFactory);
+        queryRef.current = createGroupChannelListQuery(sdk, options?.queryCreator);
 
         const channels: Sendbird.GroupChannel[] = await queryRef.current.next();
         setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(channels, 'url') }));
@@ -44,7 +46,7 @@ const useGroupChannelList = (
         setGroupChannelMap({});
       }
     },
-    [sdk, options?.queryFactory],
+    [sdk, options?.queryCreator],
   );
 
   const updateChannel = (channel: Sendbird.OpenChannel | Sendbird.GroupChannel) => {
@@ -82,7 +84,7 @@ const useGroupChannelList = (
 
   const groupChannels = useMemo(() => {
     const channels = Object.values(groupChannelMap);
-    if (options?.queryFactory) return channels.sort(options?.sortComparator);
+    if (options?.queryCreator) return channels.sort(options?.sortComparator);
     return channels;
   }, [groupChannelMap, options?.sortComparator]);
 

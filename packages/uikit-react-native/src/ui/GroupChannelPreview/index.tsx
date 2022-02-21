@@ -1,7 +1,6 @@
 import React from 'react';
 import { Image, View } from 'react-native';
 
-import type { IconAssets } from '@sendbird/uikit-react-native-foundation';
 import { Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { truncate, truncatedBadgeCount } from '@sendbird/uikit-utils';
 
@@ -10,7 +9,7 @@ type Props = {
 
   title: string;
   titleCaption: string;
-  bodyIcon?: keyof typeof IconAssets;
+  bodyIcon?: keyof typeof Icon.Assets;
   body: string;
 
   memberCount?: number;

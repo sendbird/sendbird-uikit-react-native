@@ -43,12 +43,15 @@ const UseNavigationHeader = () => {
 const CustomGroupChannelListScreen = () => {
   return (
     <GroupChannelListFragment
-      FragmentHeader={UseNavigationHeader}
+      Header={UseNavigationHeader}
+      TypeSelectorHeader={null}
       skipTypeSelection={false}
       onPressCreateChannel={(channelType) => {
-        Logger.log('channel create', channelType);
+        // Navigate to InviteMembersFragment
+        Logger.log('channel create pressed', channelType);
       }}
       onPressChannel={(channel) => {
+        // Navigate to GroupChannelFragment
         Logger.log('channel pressed', channel.url);
       }}
     />
@@ -71,7 +74,7 @@ const DefaultGroupChannelListScreen = () => {
 
   return (
     <GroupChannelListFragment
-      FragmentHeader={(props) => <Header {...props} onPressLeft={onBack} left={<Icon icon={'arrow-left'} />} />}
+      Header={(props) => <Header {...props} onPressLeft={onBack} left={<Icon icon={'arrow-left'} />} />}
       skipTypeSelection={false}
       onPressCreateChannel={(channelType) => {
         Logger.log('channel create', channelType);
