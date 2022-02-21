@@ -1,1 +1,1 @@
-it.todo('write a test');
+it.todo('@sendbird/uikit-react-native-core');

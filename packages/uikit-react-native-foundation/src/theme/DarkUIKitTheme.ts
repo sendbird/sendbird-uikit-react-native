@@ -1,5 +1,5 @@
+import createAppearanceHelper from '../styles/appearanceHelper';
 import type { UIKitTheme } from '../types';
-import createAppearanceHelper from '../utils/appearanceHelper';
 import Palette from './Palette';
 import { defaultTypography } from './Typography';
 

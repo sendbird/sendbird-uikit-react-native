@@ -2,7 +2,7 @@ import { withBackgrounds } from '@storybook/addon-ondevice-backgrounds';
 import React from 'react';
 import { View } from 'react-native';
 
-import { Palette } from '@sendbird/uikit-react-native/src';
+import { Palette } from '@sendbird/uikit-react-native-foundation';
 
 export const decorators = [
   (story) => {

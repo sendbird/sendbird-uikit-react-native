@@ -6,6 +6,9 @@
     },
     {
       "path": "../uikit-react-native-core"
+    },
+    {
+      "path": "../uikit-react-native-foundation"
     }
   ],
   "compilerOptions": {

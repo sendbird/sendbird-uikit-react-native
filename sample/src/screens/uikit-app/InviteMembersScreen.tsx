@@ -1,20 +1,17 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useLayoutEffect } from 'react';
+import type Sendbird from 'sendbird';
 
-import { Header, Icon } from '@sendbird/uikit-react-native';
-import { createInviteMembersFragment, useConnection } from '@sendbird/uikit-react-native-core';
+import { createInviteMembersFragment } from '@sendbird/uikit-react-native';
 import { Logger } from '@sendbird/uikit-utils';
 
-const InviteMembersFragment = createInviteMembersFragment();
+const InviteMembersFragment = createInviteMembersFragment<Sendbird.User>();
 
 const InviteMembersScreen: React.FC = () => {
   const { setOptions, goBack } = useNavigation();
-  const { disconnect } = useConnection();
+  const { params } = useRoute();
 
-  const onBack = () => {
-    goBack();
-    disconnect();
-  };
+  Logger.log('navigationParams', params);
 
   useLayoutEffect(() => {
     setOptions({ headerShown: false });
@@ -22,9 +19,12 @@ const InviteMembersScreen: React.FC = () => {
 
   return (
     <InviteMembersFragment
-      Header={(props) => <Header {...props} onPressLeft={onBack} left={<Icon icon={'arrow-left'}>{'Logout'}</Icon>} />}
+      onPressInviteMembers={async (users) => {
+        Logger.log('invite pressed:', users.length);
+      }}
       onPressHeaderLeft={() => {
-        Logger.log('channel pressed');
+        Logger.log('header left pressed');
+        goBack();
       }}
     />
   );

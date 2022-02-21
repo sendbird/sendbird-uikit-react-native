@@ -9,6 +9,7 @@ const GroupChannelListList: React.FC<GroupChannelListProps['List']> = ({
   onLoadMore,
   refreshing,
   onRefresh,
+  flatListProps,
 }) => {
   return (
     <FlatList
@@ -17,6 +18,7 @@ const GroupChannelListList: React.FC<GroupChannelListProps['List']> = ({
       onRefresh={onRefresh}
       renderItem={({ item }) => renderGroupChannelPreview?.(item)}
       onEndReached={onLoadMore}
+      {...flatListProps}
     />
   );
 };

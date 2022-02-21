@@ -1,20 +1,15 @@
 import React from 'react';
 import { Image, View } from 'react-native';
 
+import { Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { truncate, truncatedBadgeCount } from '@sendbird/uikit-utils';
-
-import type IconAssets from '../../assets/icon';
-import useUIKitTheme from '../../theme/useUIKitTheme';
-import createStyleSheet from '../../utils/createStyleSheet';
-import Icon from '../Icon';
-import Text from '../Text';
 
 type Props = {
   coverUrl: string;
 
   title: string;
   titleCaption: string;
-  bodyIcon?: keyof typeof IconAssets;
+  bodyIcon?: keyof typeof Icon.Assets;
   body: string;
 
   memberCount?: number;

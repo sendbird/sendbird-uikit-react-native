@@ -2,8 +2,8 @@ import React from 'react';
 import { Image, ImageStyle, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
 import IconAssets from '../../assets/icon';
+import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
-import createStyleSheet from '../../utils/createStyleSheet';
 
 type IconNames = keyof typeof IconAssets;
 type SizeFactor = keyof typeof sizeStyles;
@@ -16,7 +16,7 @@ type Props = {
   containerStyle?: StyleProp<ViewStyle>;
 };
 
-const Icon: React.FC<Props> = ({ icon, color, size = 24, containerStyle, style }) => {
+const Icon: React.FC<Props> & { Assets: typeof IconAssets } = ({ icon, color, size = 24, containerStyle, style }) => {
   const sizeStyle = sizeStyles[size as SizeFactor] ?? { width: size, height: size };
   const { colors } = useUIKitTheme();
   return (
@@ -59,4 +59,6 @@ const sizeStyles = createStyleSheet({
     height: 32,
   },
 });
+
+Icon.Assets = IconAssets;
 export default Icon;

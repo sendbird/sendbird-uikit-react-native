@@ -1,5 +1,5 @@
 {
-  "name": "@sendbird/uikit-react-native",
+  "name": "@sendbird/uikit-react-native-foundation",
   "version": "0.1.0",
   "description": "react-native-uikit",
   "main": "lib/commonjs/index",
@@ -25,7 +25,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/sendbird/sendbird-uikit-react-native.git",
-    "directory": "packages/uikit-react-native"
+    "directory": "packages/uikit-react-native-foundation"
   },
   "author": "Sendbird <support@sendbird.com>",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -36,10 +36,7 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "dependencies": {
-    "@sendbird/uikit-react-native-core": "^0.1.0",
-    "@sendbird/uikit-react-native-foundation": "0.1.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/react": "17.0.2",
     "@types/react-native": "^0.66.15",

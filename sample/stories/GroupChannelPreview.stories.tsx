@@ -2,7 +2,7 @@ import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
 import React from 'react';
 
 import { GroupChannelPreview as GroupChannelPreviewComponent } from '@sendbird/uikit-react-native';
-import IconAssets from '@sendbird/uikit-react-native/src/assets/icon';
+import { Icon } from '@sendbird/uikit-react-native-foundation';
 
 const GroupChannelPreviewMeta: ComponentMeta<typeof GroupChannelPreviewComponent> = {
   title: 'GroupChannelPreview',
@@ -26,7 +26,7 @@ const GroupChannelPreviewMeta: ComponentMeta<typeof GroupChannelPreviewComponent
     },
     bodyIcon: {
       name: 'Body Icon',
-      options: Object.keys(IconAssets),
+      options: Object.keys(Icon.Assets),
       control: { type: 'select' },
     },
     memberCount: {

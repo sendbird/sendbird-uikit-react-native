@@ -1,5 +1,5 @@
+import { defaultScaleFactor } from '../styles/scaleFactor';
 import type { Typography } from '../types';
-import { defaultScaleFactor } from '../utils/scaleFactor';
 
 export const createTypography = (overrides: Partial<Typography> = {}, scaleFactor = defaultScaleFactor): Typography => {
   return {
@@ -48,7 +48,7 @@ export const createTypography = (overrides: Partial<Typography> = {}, scaleFacto
       ...overrides.body3,
     },
     button: {
-      fontWeight: 'normal',
+      fontWeight: 'bold',
       fontSize: scaleFactor(14),
       lineHeight: scaleFactor(16),
       letterSpacing: scaleFactor(0.4),

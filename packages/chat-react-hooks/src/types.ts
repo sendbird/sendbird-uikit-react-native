@@ -9,7 +9,7 @@ export interface UseGroupChannelList {
 }
 export type UseGroupChannelListOptions = {
   sortComparator?: (a: Sendbird.GroupChannel, b: Sendbird.GroupChannel) => number;
-  queryFactory?: () => Sendbird.GroupChannelListQuery;
+  queryCreator?: () => Sendbird.GroupChannelListQuery;
 };
 
 export type SendbirdChatSDK = Sendbird.SendBirdInstance;

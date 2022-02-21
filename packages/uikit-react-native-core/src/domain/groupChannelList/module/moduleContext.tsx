@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useCallback, useState } from 'react';
 
 import { EmptyFunction } from '@sendbird/uikit-utils';
 
@@ -18,17 +18,14 @@ export const GroupChannelListContext = createContext<GroupChannelListContextType
 export const GroupChannelListContextProvider: React.FC = ({ children }) => {
   const { LABEL } = useLocalization();
   const [visible, setVisible] = useState(false);
+  const show = useCallback(() => setVisible(true), []);
+  const hide = useCallback(() => setVisible(false), []);
 
   return (
     <GroupChannelListContext.Provider
       value={{
         fragment: { headerTitle: LABEL.GROUP_CHANNEL_LIST.FRAGMENT.HEADER_TITLE },
-        typeSelector: {
-          headerTitle: LABEL.GROUP_CHANNEL_LIST.TYPE_SELECTOR.HEADER_TITLE,
-          visible,
-          show: () => setVisible(true),
-          hide: () => setVisible(false),
-        },
+        typeSelector: { headerTitle: LABEL.GROUP_CHANNEL_LIST.TYPE_SELECTOR.HEADER_TITLE, visible, show, hide },
       }}
     >
       {children}

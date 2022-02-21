@@ -13,11 +13,8 @@ import {
   PlatformServiceProvider,
   SendbirdChatProvider,
 } from '@sendbird/uikit-react-native-core';
-
-import { HeaderStyleProvider } from './styles/HeaderStyleContext';
-import LightUIKitTheme from './theme/LightUIKitTheme';
-import UIKitThemeProvider from './theme/UIKitThemeProvider';
-import type { UIKitTheme } from './types';
+import type { UIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { HeaderStyleProvider, LightUIKitTheme, UIKitThemeProvider } from '@sendbird/uikit-react-native-foundation';
 
 type Props<Locale extends string> = {
   children?: React.ReactNode;
