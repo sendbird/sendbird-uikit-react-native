@@ -1,122 +1,17 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type Sendbird from 'sendbird';
 
-import { arrayToMap } from '@sendbird/uikit-utils';
+import type { UseGroupChannelListOptions } from '../types';
+import { useGroupChannelListWithCollection } from './useGroupChannelListWithCollection';
+import { useGroupChannelListWithQuery } from './useGroupChannelListWithQuery';
 
-import useChannelHandler from '../handler/useChannelHandler';
-import type { UseGroupChannelList, UseGroupChannelListOptions } from '../types';
-
-type GroupChannelMap = Record<string, Sendbird.GroupChannel>;
-
-const createGroupChannelListQuery = (
-  sdk: Sendbird.SendBirdInstance,
-  queryCreator: UseGroupChannelListOptions['queryCreator'],
-) => {
-  const passedQuery = queryCreator?.();
-  if (passedQuery) return passedQuery;
-
-  const defaultQuery = sdk.GroupChannel.createMyGroupChannelListQuery();
-  defaultQuery.memberStateFilter = 'all';
-  defaultQuery.order = 'latest_last_message';
-  defaultQuery.includeEmpty = true;
-  defaultQuery.limit = 10;
-  return defaultQuery;
-};
-
-const useGroupChannelList = (
+export const useGroupChannelList = (
   sdk: Sendbird.SendBirdInstance,
   userId?: string,
   options?: UseGroupChannelListOptions,
-): UseGroupChannelList => {
-  const queryRef = useRef<Sendbird.GroupChannelListQuery>();
-  const [groupChannelMap, setGroupChannelMap] = useState<GroupChannelMap>({});
-  const [refreshing, setRefreshing] = useState(false);
-
-  sdk.GroupChannel.createGroupChannelCollection();
-
-  const init = useCallback(
-    async (uid?: string) => {
-      if (uid) {
-        queryRef.current = createGroupChannelListQuery(sdk, options?.queryCreator);
-
-        const channels: Sendbird.GroupChannel[] = await queryRef.current.next();
-        setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(channels, 'url') }));
-        channels.forEach((channel) => sdk.markAsDelivered(channel.url));
-      } else {
-        setGroupChannelMap({});
-      }
-    },
-    [sdk, options?.queryCreator],
-  );
-
-  const updateChannel = (channel: Sendbird.OpenChannel | Sendbird.GroupChannel) => {
-    if (channel.isGroupChannel()) update(channel);
-  };
-  const deleteChannel = (channelUrl: string) => {
-    if (!groupChannelMap[channelUrl]) return;
-    setGroupChannelMap((prevState) => {
-      delete prevState[channelUrl];
-      return { ...prevState };
-    });
-  };
-
-  useChannelHandler(
-    sdk,
-    'useGroupChannelList',
-    {
-      onUserLeft(channel, user) {
-        const isMe = user.userId === sdk.currentUser.userId;
-        if (isMe) deleteChannel(channel.url);
-        else updateChannel(channel);
-      },
-      onChannelChanged: updateChannel,
-      onChannelFrozen: updateChannel,
-      onChannelUnfrozen: updateChannel,
-      onChannelDeleted: deleteChannel,
-      onChannelMemberCountChanged(channels: Array<Sendbird.GroupChannel>) {
-        const validChannels = channels.filter((channel) => channel.isGroupChannel() && groupChannelMap[channel.url]);
-        setGroupChannelMap((prevState) => {
-          validChannels.forEach((channel) => (prevState[channel.url] = channel));
-          return { ...prevState };
-        });
-      },
-    },
-    [groupChannelMap],
-  );
-
-  useEffect(() => {
-    init(userId);
-  }, [init, userId]);
-
-  const groupChannels = useMemo(() => {
-    const channels = Object.values(groupChannelMap);
-    if (options?.sortComparator) return channels.sort(options?.sortComparator);
-    return channels;
-  }, [groupChannelMap, options?.sortComparator]);
-
-  const refresh = useCallback(async () => {
-    setRefreshing(true);
-    await init(userId);
-    setRefreshing(false);
-  }, [init, userId]);
-
-  const update = useCallback(
-    (channel: Sendbird.GroupChannel) => {
-      sdk.markAsDelivered(channel.url);
-      setGroupChannelMap((prev) => ({ ...prev, [channel.url]: channel }));
-    },
-    [sdk],
-  );
-
-  const loadMore = useCallback(async () => {
-    if (queryRef.current?.hasNext) {
-      const channels = await queryRef.current.next();
-      setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(channels, 'url') }));
-      channels.forEach((channel) => sdk.markAsDelivered(channel.url));
-    }
-  }, [sdk]);
-
-  return { groupChannels, update, refresh, refreshing, loadMore };
+) => {
+  if (sdk.isCacheEnabled) {
+    return useGroupChannelListWithQuery(sdk, userId, options);
+  } else {
+    return useGroupChannelListWithCollection(sdk, userId, options);
+  }
 };
-
-export default useGroupChannelList;

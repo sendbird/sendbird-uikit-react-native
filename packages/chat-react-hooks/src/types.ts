@@ -1,5 +1,11 @@
 import type Sendbird from 'sendbird';
 
+declare module 'sendbird' {
+  interface SendBirdInstance {
+    get isCacheEnabled(): boolean;
+  }
+}
+
 export interface UseGroupChannelList {
   groupChannels: Sendbird.GroupChannel[];
   update: (channel: Sendbird.GroupChannel) => void;
@@ -10,6 +16,7 @@ export interface UseGroupChannelList {
 export type UseGroupChannelListOptions = {
   sortComparator?: (a: Sendbird.GroupChannel, b: Sendbird.GroupChannel) => number;
   queryCreator?: () => Sendbird.GroupChannelListQuery;
+  collectionCreator?: () => Sendbird.GroupChannelCollection;
 };
 
 export type SendbirdChatSDK = Sendbird.SendBirdInstance;
