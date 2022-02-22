@@ -62,7 +62,10 @@ export type GroupChannelListProps = {
   };
   List: {
     groupChannels: Sendbird.GroupChannel[];
-    renderGroupChannelPreview: (channel: Sendbird.GroupChannel) => React.ReactElement | null;
+    renderGroupChannelPreview: (
+      channel: Sendbird.GroupChannel,
+      selectChannel: (channel: Sendbird.GroupChannel) => void,
+    ) => React.ReactElement | null;
     onLoadMore: () => Promise<void>;
     onRefresh?: () => Promise<void>;
     refreshing?: boolean;
@@ -73,6 +76,7 @@ export type GroupChannelListProps = {
     skipTypeSelection: boolean;
     onSelectType: (type: GroupChannelType) => void;
   };
+  ChannelMenu: {};
 };
 
 /**
@@ -81,14 +85,18 @@ export type GroupChannelListProps = {
  * with getting data from the domain context
  * */
 export type GroupChannelListContextType = {
-  fragment: {
+  Fragment: {
     headerTitle: string;
   };
-  typeSelector: {
+  TypeSelector: {
     visible: boolean;
     show: () => void;
     hide: () => void;
     headerTitle: string;
+  };
+  ChannelMenu: {
+    selectedChannel?: Sendbird.GroupChannel;
+    selectChannel: (channel?: Sendbird.GroupChannel) => void;
   };
 };
 export interface GroupChannelListModule {
@@ -96,6 +104,7 @@ export interface GroupChannelListModule {
   Header: CommonComponent<GroupChannelListProps['Header']>;
   List: CommonComponent<GroupChannelListProps['List']>;
   TypeSelector: CommonComponent<GroupChannelListProps['TypeSelector']>;
+  ChannelMenu: CommonComponent<GroupChannelListProps['ChannelMenu']>;
 }
 
 export type GroupChannelListFragment = React.FC<GroupChannelListProps['Fragment']>;

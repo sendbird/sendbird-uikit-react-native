@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { Pressable, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
 import {
   Header as DefaultHeader,
@@ -29,7 +29,7 @@ const GroupChannelListTypeSelector: React.FC<GroupChannelListProps['TypeSelector
 }) => {
   const { statusBarTranslucent } = useHeaderStyle();
   const { colors } = useUIKitTheme();
-  const { typeSelector } = useContext(GroupChannelListContext);
+  const typeSelector = useContext(GroupChannelListContext.TypeSelector);
   const { visible, hide } = typeSelector;
   const createOnPressType = (type: GroupChannelType) => () => {
     hide();
@@ -76,9 +76,8 @@ const GroupChannelListTypeSelector: React.FC<GroupChannelListProps['TypeSelector
   };
 
   return (
-    <Modal visible={visible} animationType={'fade'} transparent statusBarTranslucent={statusBarTranslucent}>
+    <Modal visible={visible} onPressBackground={hide} statusBarTranslucent={statusBarTranslucent}>
       {renderHeader()}
-      <Pressable style={{ flex: 1 }} onPress={hide} />
     </Modal>
   );
 };

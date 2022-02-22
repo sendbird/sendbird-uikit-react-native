@@ -52,21 +52,27 @@ const useGroupChannelList = (
   const updateChannel = (channel: Sendbird.OpenChannel | Sendbird.GroupChannel) => {
     if (channel.isGroupChannel()) update(channel);
   };
+  const deleteChannel = (channelUrl: string) => {
+    if (!groupChannelMap[channelUrl]) return;
+    setGroupChannelMap((prevState) => {
+      delete prevState[channelUrl];
+      return { ...prevState };
+    });
+  };
 
   useChannelHandler(
     sdk,
     'useGroupChannelList',
     {
+      onUserLeft(channel, user) {
+        const isMe = user.userId === sdk.currentUser.userId;
+        if (isMe) deleteChannel(channel.url);
+        else updateChannel(channel);
+      },
       onChannelChanged: updateChannel,
       onChannelFrozen: updateChannel,
       onChannelUnfrozen: updateChannel,
-      onChannelDeleted(channelUrl: string) {
-        if (!groupChannelMap[channelUrl]) return;
-        setGroupChannelMap((prevState) => {
-          delete prevState[channelUrl];
-          return { ...prevState };
-        });
-      },
+      onChannelDeleted: deleteChannel,
       onChannelMemberCountChanged(channels: Array<Sendbird.GroupChannel>) {
         const validChannels = channels.filter((channel) => channel.isGroupChannel() && groupChannelMap[channel.url]);
         setGroupChannelMap((prevState) => {
