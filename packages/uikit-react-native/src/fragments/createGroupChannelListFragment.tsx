@@ -23,7 +23,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     children,
   }) => {
     const { sdk, currentUser } = useSendbirdChat();
-    const { groupChannels, refresh, refreshing, loadMore } = useGroupChannelList(sdk, currentUser?.userId, {
+    const { groupChannels, refresh, refreshing, next } = useGroupChannelList(sdk, currentUser?.userId, {
       queryCreator,
       sortComparator,
     });
@@ -61,7 +61,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
           refreshing={refreshing}
           renderGroupChannelPreview={renderGroupChannelPreview}
           groupChannels={groupChannels}
-          onLoadMore={loadMore}
+          onLoadNext={next}
           onRefresh={refresh}
           flatListProps={flatListProps}
         />

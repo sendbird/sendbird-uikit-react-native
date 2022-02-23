@@ -26,7 +26,7 @@ const createInviteMembersFragment = <UserType,>(
           onPressInviteMembers={onPressInviteMembers}
         />
         <InviteMembersModule.List
-          onLoadMore={AsyncEmptyFunction}
+          onLoadNext={AsyncEmptyFunction}
           users={[]}
           renderUser={() => null}
           onRefresh={AsyncEmptyFunction}

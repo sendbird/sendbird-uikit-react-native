@@ -8,7 +8,7 @@ const InviteMembersList = <T,>({
   onRefresh,
   refreshing,
   renderUser,
-  onLoadMore,
+  onLoadNext,
 }: InviteMembersProps<T>['List']) => {
   return (
     <FlatList
@@ -16,7 +16,7 @@ const InviteMembersList = <T,>({
       refreshing={refreshing}
       onRefresh={onRefresh}
       renderItem={({ item }) => renderUser?.(item)}
-      onEndReached={onLoadMore}
+      onEndReached={onLoadNext}
     />
   );
 };

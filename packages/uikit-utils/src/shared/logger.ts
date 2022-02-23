@@ -10,7 +10,7 @@ const LogLevelEnum = {
 };
 type LogLevel = keyof typeof LogLevelEnum;
 
-export const createLogger = (lv: LogLevel = 'warn') => {
+const logger = (lv: LogLevel = 'warn') => {
   let _logLevel = __DEV__ ? lv : 'none';
   let _title = '[UIKit]';
 
@@ -53,7 +53,7 @@ export const createLogger = (lv: LogLevel = 'warn') => {
 };
 
 export const Logger = {
-  ...createLogger(),
+  ...logger(),
   LogLevelEnum,
-  create: createLogger,
+  create: logger,
 };

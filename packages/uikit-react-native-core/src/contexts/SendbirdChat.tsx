@@ -1,21 +1,17 @@
 import React, { useContext, useState } from 'react';
 import type Sendbird from 'sendbird';
 
+import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
+
 type Props = {
-  sdkInstance: Sendbird.SendBirdInstance;
+  sdkInstance: SendbirdChatSDK;
 };
 
 type Context = {
-  sdk: Sendbird.SendBirdInstance;
+  sdk: SendbirdChatSDK;
   currentUser?: Sendbird.User;
   setCurrentUser: React.Dispatch<React.SetStateAction<Sendbird.User | undefined>>;
 };
-
-declare module 'sendbird' {
-  interface SendBirdInstance {
-    get isCacheEnabled(): boolean;
-  }
-}
 
 export const SendbirdChatContext = React.createContext<Context | null>(null);
 export const SendbirdChatProvider: React.FC<Props> = ({ children, sdkInstance }) => {

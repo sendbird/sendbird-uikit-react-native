@@ -1,7 +1,7 @@
 import type Sendbird from 'sendbird';
 
 import { getGroupChannelLastMessage, getGroupChannelPreviewTime, getGroupChannelTitle } from '@sendbird/uikit-utils';
-import type { PartialDeep } from '@sendbird/uikit-utils/src/types';
+import type { PartialDeep } from '@sendbird/uikit-utils';
 
 export type LabelLocale = 'en';
 

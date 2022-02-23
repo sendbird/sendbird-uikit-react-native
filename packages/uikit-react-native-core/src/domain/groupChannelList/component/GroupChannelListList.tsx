@@ -7,7 +7,7 @@ import type { GroupChannelListProps } from '../types';
 const GroupChannelListList: React.FC<GroupChannelListProps['List']> = ({
   renderGroupChannelPreview,
   groupChannels,
-  onLoadMore,
+  onLoadNext,
   refreshing,
   onRefresh,
   flatListProps,
@@ -19,7 +19,7 @@ const GroupChannelListList: React.FC<GroupChannelListProps['List']> = ({
       refreshing={refreshing}
       onRefresh={onRefresh}
       renderItem={({ item }) => renderGroupChannelPreview?.(item, channelMenu.selectChannel)}
-      onEndReached={onLoadMore}
+      onEndReached={onLoadNext}
       {...flatListProps}
     />
   );

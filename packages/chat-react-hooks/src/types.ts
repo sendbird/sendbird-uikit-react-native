@@ -1,15 +1,83 @@
 import type Sendbird from 'sendbird';
 
+import type { SendbirdMessage } from '@sendbird/uikit-utils';
+
+declare module 'sendbird' {
+  interface SendBirdInstance {
+    get isCacheEnabled(): boolean;
+  }
+}
+
+export interface CustomQueryInterface<Data> {
+  isLoading: boolean;
+  next: () => Promise<Data[]>;
+  hasNext: boolean;
+}
+export interface CustomBidirectionalQueryInterface<Data> {
+  isLoading: boolean;
+  next: () => Promise<Data[]>;
+  hasNext: () => boolean;
+  prev: () => Promise<Data[]>;
+  hasPrev: () => boolean;
+}
+
+// useGroupChannelList
 export interface UseGroupChannelList {
-  groupChannels: Sendbird.GroupChannel[];
-  update: (channel: Sendbird.GroupChannel) => void;
-  loadMore: () => Promise<void>;
-  refresh: () => Promise<void>;
+  loading: boolean;
+
   refreshing: boolean;
+  refresh: () => Promise<void>;
+
+  update: (channel: Sendbird.GroupChannel) => void;
+  groupChannels: Sendbird.GroupChannel[];
+  next: () => Promise<void>;
 }
 export type UseGroupChannelListOptions = {
   sortComparator?: (a: Sendbird.GroupChannel, b: Sendbird.GroupChannel) => number;
   queryCreator?: () => Sendbird.GroupChannelListQuery;
+  collectionCreator?: () => Sendbird.GroupChannelCollection;
 };
 
-export type SendbirdChatSDK = Sendbird.SendBirdInstance;
+// useGroupChannelMessages
+export interface UseGroupChannelMessages {
+  loading: boolean;
+
+  refreshing: boolean;
+  refresh: () => Promise<void>;
+
+  messages: SendbirdMessage[];
+  prev: () => Promise<void>;
+
+  nextMessages: SendbirdMessage[];
+  newMessagesFromNext: SendbirdMessage[];
+  next: () => Promise<void>;
+
+  sendFileMessage: (
+    params: Sendbird.FileMessageParams,
+    onSent?: (message: Sendbird.FileMessage, error?: Sendbird.SendBirdError) => void,
+  ) => Sendbird.FileMessage;
+  sendUserMessage: (
+    params: Sendbird.UserMessageParams,
+    onSent?: (message: Sendbird.UserMessage, error?: Sendbird.SendBirdError) => void,
+  ) => Sendbird.UserMessage;
+}
+export type UseGroupChannelMessagesOptions = {
+  sortComparator?: (a: SendbirdMessage, b: SendbirdMessage) => number;
+  queryCreator?: () => Sendbird.PreviousMessageListQuery;
+  collectionCreator?: () => Sendbird.MessageCollection;
+};
+
+// useUserList
+export interface UseUserList<User> {
+  loading: boolean;
+
+  refreshing: boolean;
+  refresh: () => Promise<void>;
+
+  users: User[];
+  next: () => Promise<void>;
+}
+export type UseUserListOptions<User> = {
+  sortComparator?: (a: User, b: User) => number;
+  queryCreator?: () => CustomQueryInterface<User>;
+};
