@@ -1,9 +1,9 @@
-# @sendbird/uikit-react-native
+# @sendbird/uikit-react-native-foundation
 
-react-native-uikit
+react-native-uikit-foundation
 
 ## Installation
 
 ```sh
-npm install @sendbird/uikit-react-native react-native-safe-area-context
+npm install @sendbird/uikit-react-native-foundation react-native-safe-area-context
 ```
