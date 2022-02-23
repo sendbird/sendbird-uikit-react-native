@@ -1,4 +1,4 @@
-import { Logger } from '../createLogger';
+import { Logger } from '../shared/logger';
 
 describe('createLogger/Logger', function () {
   const spies = {

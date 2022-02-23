@@ -45,7 +45,7 @@ export type InviteMembersProps<User> = {
   List: {
     users: User[];
     renderUser: (user: User) => React.ReactElement | null;
-    onLoadMore: () => Promise<void>;
+    onLoadNext: () => Promise<void>;
     onRefresh?: () => Promise<void>;
     refreshing?: boolean;
   };

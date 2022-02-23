@@ -1,6 +1,5 @@
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import type Sendbird from 'sendbird';
 
 import type {
   FilePickerServiceInterface,
@@ -15,11 +14,12 @@ import {
 } from '@sendbird/uikit-react-native-core';
 import type { UIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { HeaderStyleProvider, LightUIKitTheme, UIKitThemeProvider } from '@sendbird/uikit-react-native-foundation';
+import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 
 type Props<Locale extends string> = {
   children?: React.ReactNode;
   chat: {
-    sdkInstance: Sendbird.SendBirdInstance;
+    sdkInstance: SendbirdChatSDK;
   };
   services: {
     filePicker: FilePickerServiceInterface;

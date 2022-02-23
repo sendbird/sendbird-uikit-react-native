@@ -66,7 +66,7 @@ export type GroupChannelListProps = {
       channel: Sendbird.GroupChannel,
       selectChannel: (channel: Sendbird.GroupChannel) => void,
     ) => React.ReactElement | null;
-    onLoadMore: () => Promise<void>;
+    onLoadNext: () => Promise<void>;
     onRefresh?: () => Promise<void>;
     refreshing?: boolean;
     flatListProps?: Omit<FlatListProps<Sendbird.GroupChannel>, 'data' | 'renderItem'>;

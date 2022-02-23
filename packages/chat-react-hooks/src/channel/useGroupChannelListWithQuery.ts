@@ -1,15 +1,16 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import type Sendbird from 'sendbird';
 
-import type { UseGroupChannelList, UseGroupChannelListOptions } from '@sendbird/chat-react-hooks';
-import { arrayToMap } from '@sendbird/uikit-utils';
+import type { SendbirdChannel, SendbirdChatSDK } from '@sendbird/uikit-utils';
+import { arrayToMap, useAsyncEffect } from '@sendbird/uikit-utils';
 
 import useChannelHandler from '../handler/useChannelHandler';
+import type { UseGroupChannelList, UseGroupChannelListOptions } from '../types';
 
 type GroupChannelMap = Record<string, Sendbird.GroupChannel>;
 
 const createGroupChannelListQuery = (
-  sdk: Sendbird.SendBirdInstance,
+  sdk: SendbirdChatSDK,
   queryCreator: UseGroupChannelListOptions['queryCreator'],
 ) => {
   const passedQuery = queryCreator?.();
@@ -24,74 +25,76 @@ const createGroupChannelListQuery = (
 };
 
 export const useGroupChannelListWithQuery = (
-  sdk: Sendbird.SendBirdInstance,
+  sdk: SendbirdChatSDK,
   userId?: string,
   options?: UseGroupChannelListOptions,
 ): UseGroupChannelList => {
   const queryRef = useRef<Sendbird.GroupChannelListQuery>();
-  const [groupChannelMap, setGroupChannelMap] = useState<GroupChannelMap>({});
+  const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
-  const init = useCallback(
-    async (uid?: string) => {
-      if (uid) {
-        queryRef.current = createGroupChannelListQuery(sdk, options?.queryCreator);
-
-        const channels: Sendbird.GroupChannel[] = await queryRef.current.next();
-        setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(channels, 'url') }));
-        channels.forEach((channel) => sdk.markAsDelivered(channel.url));
-      } else {
-        setGroupChannelMap({});
-      }
-    },
-    [sdk, options?.queryCreator],
-  );
-
-  const updateChannel = (channel: Sendbird.OpenChannel | Sendbird.GroupChannel) => {
-    if (channel.isGroupChannel()) update(channel);
-  };
-  const deleteChannel = (channelUrl: string) => {
-    if (!groupChannelMap[channelUrl]) return;
-    setGroupChannelMap((prevState) => {
-      delete prevState[channelUrl];
-      return { ...prevState };
-    });
-  };
-
-  useChannelHandler(
-    sdk,
-    'useGroupChannelListWithQuery',
-    {
-      onUserLeft(channel, user) {
-        const isMe = user.userId === sdk.currentUser.userId;
-        if (isMe) deleteChannel(channel.url);
-        else updateChannel(channel);
-      },
-      onChannelChanged: updateChannel,
-      onChannelFrozen: updateChannel,
-      onChannelUnfrozen: updateChannel,
-      onChannelDeleted: deleteChannel,
-      onChannelMemberCountChanged(channels: Array<Sendbird.GroupChannel>) {
-        const validChannels = channels.filter((channel) => channel.isGroupChannel() && groupChannelMap[channel.url]);
-        setGroupChannelMap((prevState) => {
-          validChannels.forEach((channel) => (prevState[channel.url] = channel));
-          return { ...prevState };
-        });
-      },
-    },
-    [groupChannelMap],
-  );
-
-  useEffect(() => {
-    init(userId);
-  }, [init, userId]);
-
+  const [groupChannelMap, setGroupChannelMap] = useState<GroupChannelMap>({});
   const groupChannels = useMemo(() => {
     const channels = Object.values(groupChannelMap);
     if (options?.sortComparator) return channels.sort(options?.sortComparator);
     return channels;
   }, [groupChannelMap, options?.sortComparator]);
 
+  // ---------- internal methods ---------- //
+  const updateChannels = (channels: SendbirdChannel[]) => {
+    const groupChannels = channels.filter((c): c is Sendbird.GroupChannel => c.isGroupChannel());
+    setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(groupChannels, 'url') }));
+    groupChannels.forEach((channel) => sdk.markAsDelivered(channel.url));
+  };
+  const deleteChannels = (channelUrls: string[]) => {
+    setGroupChannelMap(({ ...draft }) => {
+      channelUrls.forEach((url) => delete draft[url]);
+      return draft;
+    });
+  };
+  const clearChannels = () => {
+    setGroupChannelMap({});
+  };
+  const init = useCallback(
+    async (uid?: string) => {
+      clearChannels();
+      if (uid) {
+        queryRef.current = createGroupChannelListQuery(sdk, options?.queryCreator);
+        await next();
+      }
+    },
+    [sdk, options?.queryCreator],
+  );
+  // ---------- internal methods ends ---------- //
+
+  // ---------- internal hooks ---------- //
+  useAsyncEffect(async () => {
+    setLoading(true);
+    await init(userId);
+    setLoading(false);
+  }, [init, userId]);
+
+  useChannelHandler(
+    sdk,
+    'useGroupChannelListWithQuery',
+    {
+      onChannelChanged: (channel) => updateChannels([channel]),
+      onChannelFrozen: (channel) => updateChannels([channel]),
+      onChannelUnfrozen: (channel) => updateChannels([channel]),
+      onChannelMemberCountChanged: (channels) => updateChannels(channels),
+      onChannelDeleted: (url) => deleteChannels([url]),
+      onUserJoined: (channel) => updateChannels([channel]),
+      onUserLeft: (channel, user) => {
+        const isMe = user.userId === userId;
+        if (isMe) deleteChannels([channel.url]);
+        else updateChannels([channel]);
+      },
+    },
+    [sdk, userId],
+  );
+  // ---------- internal hooks ends ---------- //
+
+  // ---------- returns methods ---------- //
   const refresh = useCallback(async () => {
     setRefreshing(true);
     await init(userId);
@@ -106,13 +109,14 @@ export const useGroupChannelListWithQuery = (
     [sdk],
   );
 
-  const loadMore = useCallback(async () => {
+  const next = useCallback(async () => {
     if (queryRef.current?.hasNext) {
       const channels = await queryRef.current.next();
       setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(channels, 'url') }));
       channels.forEach((channel) => sdk.markAsDelivered(channel.url));
     }
   }, [sdk]);
+  // ---------- returns methods ends ---------- //
 
-  return { groupChannels, update, refresh, refreshing, loadMore };
+  return { loading, groupChannels, update, refresh, refreshing, next };
 };
