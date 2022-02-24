@@ -12,6 +12,7 @@
     "storybook-watcher": "sb-rn-watcher"
   },
   "dependencies": {
+    "@faker-js/faker": "^6.0.0-alpha.7",
     "@react-native-async-storage/async-storage": "^1.15.17",
     "@react-native-community/datetimepicker": "^5.1.0",
     "@react-native-community/slider": "^4.2.0",

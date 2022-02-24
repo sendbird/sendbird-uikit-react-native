@@ -4,7 +4,19 @@ import type { TextStyle } from 'react-native';
 
 import type Palette from './theme/Palette';
 
-export type TypoName = `h${1 | 2}` | `subtitle${1 | 2}` | `body${1 | 2 | 3}` | 'button' | `caption${1 | 2 | 3 | 4}`;
+export type TypoName =
+  | 'h1'
+  | 'h2'
+  | 'subtitle1'
+  | 'subtitle2'
+  | 'body1'
+  | 'body2'
+  | 'body3'
+  | 'button'
+  | 'caption1'
+  | 'caption2'
+  | 'caption3'
+  | 'caption4';
 export type FontAttributes = Pick<TextStyle, 'fontFamily' | 'fontSize' | 'lineHeight' | 'letterSpacing' | 'fontWeight'>;
 export type Typography = Record<TypoName, FontAttributes>;
 
@@ -38,6 +50,7 @@ export type UIKitColors = {
       background: string;
       borderBottom: string;
     };
+
     input: {
       typeDefault: {
         text: string;
