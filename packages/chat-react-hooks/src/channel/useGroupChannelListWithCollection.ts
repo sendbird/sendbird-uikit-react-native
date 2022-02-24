@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type Sendbird from 'sendbird';
 
 import type { SendbirdChannel, SendbirdChatSDK } from '@sendbird/uikit-utils';
-import { arrayToMap, useAsyncEffect } from '@sendbird/uikit-utils';
+import { Logger, arrayToMap, useAsyncEffect } from '@sendbird/uikit-utils';
 
 import useInternalPubSub from '../common/useInternalPubSub';
 import useChannelHandler from '../handler/useChannelHandler';
@@ -27,6 +27,8 @@ const createGroupChannelListCollection = (
     .setOrder(sdk.GroupChannelCollection.GroupChannelOrder.LATEST_LAST_MESSAGE)
     .build();
 };
+
+const hookName = 'useGroupChannelListWithCollection';
 
 export const useGroupChannelListWithCollection = (
   sdk: SendbirdChatSDK,
@@ -100,12 +102,22 @@ export const useGroupChannelListWithCollection = (
 
   useEffect(() => {
     const unsubscribes = [
-      subscribe(events.ChannelUpdated, ({ channel }) => {
-        updateChannels([channel]);
-      }),
-      subscribe(events.ChannelDeleted, ({ channelUrl }) => {
-        deleteChannels([channelUrl]);
-      }),
+      subscribe(
+        events.ChannelUpdated,
+        ({ channel }, err) => {
+          if (err) Logger.warn(hookName, 'Cannot update channels', err);
+          else updateChannels([channel]);
+        },
+        hookName,
+      ),
+      subscribe(
+        events.ChannelDeleted,
+        ({ channelUrl }, err) => {
+          if (err) Logger.warn(hookName, 'Cannot delete channels', err);
+          else deleteChannels([channelUrl]);
+        },
+        hookName,
+      ),
     ];
 
     return () => {
@@ -115,7 +127,7 @@ export const useGroupChannelListWithCollection = (
 
   useChannelHandler(
     sdk,
-    'useGroupChannelListWithCollection',
+    hookName,
     {
       onChannelChanged: (channel) => updateChannels([channel]),
       onChannelFrozen: (channel) => updateChannels([channel]),

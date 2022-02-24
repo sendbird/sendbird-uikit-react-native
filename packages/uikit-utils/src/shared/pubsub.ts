@@ -21,7 +21,7 @@ type EventParamsUnion =
 
 type ExtractParams<E extends PubSubEvent, U extends EventParamsUnion> = U extends { event: E } ? U['params'] : never;
 type EventParams<E extends PubSubEvent> = ExtractParams<E, EventParamsUnion>;
-type EventListener<E extends PubSubEvent> = (params: EventParams<E>) => void;
+type EventListener<E extends PubSubEvent> = (params: EventParams<E>, err?: unknown) => void;
 
 export const createPubSub = () => {
   const listeners: Record<PubSubEvent, Record<symbol, EventListener<PubSubEvent>>> = {
@@ -30,20 +30,28 @@ export const createPubSub = () => {
   };
 
   return {
-    subscribe: <E extends PubSubEvent>(event: E, listener: EventListener<E>) => {
-      const sym = Symbol();
+    subscribe: <E extends PubSubEvent>(event: E, listener: EventListener<E>, subscriber = '') => {
+      const name = `pubsub_${event}_${subscriber}`;
+      const id = Symbol(name);
 
       const eventListenerPool = listeners[event] as unknown as Record<symbol, EventListener<E>>;
-      eventListenerPool[sym] = listener;
+      eventListenerPool[id] = listener;
 
       return () => {
-        delete listeners[event][sym];
+        delete listeners[event][id];
       };
     },
-    publish: <E extends PubSubEvent = PubSubEvent>(event: E, params: EventParams<E>) => {
+    publish: <E extends PubSubEvent = PubSubEvent>(event: E, params: EventParams<E>, publisher = '') => {
       const eventListenerPool = listeners[event];
-      const fns = Object.values(eventListenerPool) as EventListener<E>[];
-      fns.forEach((fn) => fn(params));
+      const ids = Object.getOwnPropertySymbols(eventListenerPool);
+      ids.forEach((id) => {
+        try {
+          eventListenerPool[id](params);
+        } catch (err: unknown) {
+          (err as Error).stack += `\npubsub error: ${id.description}, ${publisher}`;
+          eventListenerPool[id](null as any, err);
+        }
+      });
     },
   };
 };

@@ -18,6 +18,8 @@ const createMessageCollection = (
   return collection.setLimit(50).setStartingPoint(Date.now()).setFilter(filter).build();
 };
 
+const hookName = 'useGroupChannelMessagesWithCollection';
+
 export const useGroupChannelMessagesWithCollection = (
   sdk: SendbirdChatSDK,
   channel: Sendbird.GroupChannel,
@@ -83,11 +85,11 @@ export const useGroupChannelMessagesWithCollection = (
         collectionRef.current
           .initialize(sdk.MessageCollection.MessageCollectionInitPolicy.CACHE_AND_REPLACE_BY_API)
           .onCacheResult((err, messages) => {
-            if (err) Logger.error('[useGroupChannelMessagesWithCollection/onCacheResult]', err);
+            if (err) Logger.error(`[${hookName}/onCacheResult]`, err);
             else updateMessages(messages);
           })
           .onApiResult((err, messages) => {
-            if (err) Logger.error('[useGroupChannelMessagesWithCollection/onApiResult]', err);
+            if (err) Logger.error(`[${hookName}/onApiResult]`, err);
             else updateMessages(messages);
           });
 
@@ -105,10 +107,10 @@ export const useGroupChannelMessagesWithCollection = (
             deleteNextMessages(messages);
           },
           onChannelDeleted(_, channelUrl) {
-            publish(events.ChannelDeleted, { channelUrl });
+            publish(events.ChannelDeleted, { channelUrl }, hookName);
           },
           onChannelUpdated(_, channel) {
-            publish(events.ChannelUpdated, { channel });
+            publish(events.ChannelUpdated, { channel }, hookName);
           },
           onHugeGapDetected() {
             init(uid);
