@@ -32,7 +32,9 @@ const Header: React.FC<HeaderProps> = ({
   const { colors } = useUIKitTheme();
 
   if (!title && !left && !right) {
-    return <View style={{ paddingTop: topInset, backgroundColor: colors.ui.header.background }}>{children}</View>;
+    return (
+      <View style={{ paddingTop: topInset, backgroundColor: colors.ui.header.nav.none.background }}>{children}</View>
+    );
   }
 
   return (
@@ -41,8 +43,8 @@ const Header: React.FC<HeaderProps> = ({
         styles.container,
         {
           paddingTop: topInset,
-          backgroundColor: colors.ui.header.background,
-          borderBottomColor: colors.ui.header.borderBottom,
+          backgroundColor: colors.ui.header.nav.none.background,
+          borderBottomColor: colors.ui.header.nav.none.borderBottom,
         },
       ]}
     >

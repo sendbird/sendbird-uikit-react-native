@@ -9,9 +9,12 @@ export { default as UIKitThemeProvider } from './theme/UIKitThemeProvider';
 export { default as Icon } from './ui/Icon';
 export { default as Text } from './ui/Text';
 export { default as Modal } from './ui/Modal';
+export { default as Alert } from './ui/Alert';
+export { default as Button } from './ui/Button';
 export { default as Header } from './ui/Header';
 export { default as Avatar } from './ui/Avatar';
-export { default as Dialogue } from './ui/Dialogue';
+export { default as ActionMenu } from './ui/ActionMenu';
+export { DialogProvider, useDialog, useAlert, useActionMenu } from './ui/Dialog';
 
 /** Styles **/
 export { default as useHeaderStyle } from './styles/useHeaderStyle';
@@ -25,12 +28,11 @@ export { HeaderStyleContext, HeaderStyleProvider } from './styles/HeaderStyleCon
 export type {
   TypoName,
   UIKitTheme,
-  InputState,
   Typography,
-  UIKitColors,
-  ButtonState,
   FontAttributes,
   BaseHeaderProps,
   UIKitAppearance,
   AppearanceHelper,
+  UIKitColors,
+  ComponentColorTree,
 } from './types';

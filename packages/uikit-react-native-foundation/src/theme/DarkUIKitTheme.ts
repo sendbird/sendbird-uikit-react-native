@@ -26,45 +26,64 @@ const DarkUIKitTheme: UIKitTheme = {
     error: Palette.error200,
     ui: {
       header: {
-        background: Palette.background500,
-        borderBottom: Palette.onBackgroundDark04,
-      },
-      input: {
-        typeDefault: {
-          text: Palette.onBackgroundDark01,
-          background: Palette.background400,
-          placeholder: {
-            active: Palette.onBackgroundDark03,
-            disabled: Palette.onBackgroundDark04,
+        nav: {
+          none: {
+            background: Palette.background500,
+            borderBottom: Palette.onBackgroundDark04,
           },
         },
       },
       button: {
-        typeContain: {
-          background: {
-            enabled: Palette.primary200,
-            pressed: Palette.primary300,
-            disabled: Palette.background500,
+        contained: {
+          enabled: {
+            background: Palette.primary200,
+            content: Palette.onBackgroundLight01,
           },
-          text: {
-            enabled: Palette.onBackgroundLight01,
-            pressed: Palette.onBackgroundLight01,
-            disabled: Palette.onBackgroundDark04,
+          pressed: {
+            background: Palette.primary300,
+            content: Palette.onBackgroundLight01,
+          },
+          disabled: {
+            background: Palette.background500,
+            content: Palette.onBackgroundDark04,
           },
         },
-        typeText: {
-          background: {
-            enabled: Palette.transparent,
-            pressed: Palette.background500,
-            disabled: Palette.transparent,
+        text: {
+          enabled: {
+            background: Palette.transparent,
+            content: Palette.primary200,
           },
-          text: {
-            enabled: Palette.primary200,
-            pressed: Palette.primary200,
-            disabled: Palette.onBackgroundDark04,
+          pressed: {
+            background: Palette.background400,
+            content: Palette.primary200,
+          },
+          disabled: {
+            background: Palette.transparent,
+            content: Palette.onBackgroundDark04,
           },
         },
       },
+      dialog: {
+        default: {
+          none: {
+            background: Palette.background500,
+            text: Palette.onBackgroundDark01,
+            message: Palette.onBackgroundDark02,
+            highlight: Palette.primary200,
+            destructive: Palette.error300,
+          },
+        },
+      },
+      // input: {
+      //   typeDefault: {
+      //     text: Palette.onBackgroundDark01,
+      //     background: Palette.background400,
+      //     placeholder: {
+      //       active: Palette.onBackgroundDark03,
+      //       disabled: Palette.onBackgroundDark04,
+      //     },
+      //   },
+      // },
     },
   },
 };

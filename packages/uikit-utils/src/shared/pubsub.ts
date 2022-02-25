@@ -49,7 +49,7 @@ export const createPubSub = () => {
           eventListenerPool[id](params);
         } catch (err: unknown) {
           (err as Error).stack += `\npubsub error: ${id.description}, ${publisher}`;
-          eventListenerPool[id](null as any, err);
+          eventListenerPool[id](null as unknown as EventParams<E>, err);
         }
       });
     },

@@ -28,8 +28,49 @@ export interface UIKitTheme extends AppearanceHelper {
   typography: Typography;
 }
 
-export type InputState = 'active' | 'disabled';
-export type ButtonState = 'enabled' | 'pressed' | 'disabled';
+type Component = 'Header' | 'Button' | 'Dialog';
+type GetColorTree<
+  Tree extends {
+    Variant: {
+      [key in Component]: string;
+    };
+    State: {
+      [key in Component]: string;
+    };
+    ColorPart: {
+      [key in Component]: string;
+    };
+  },
+> = Tree;
+
+export type ComponentColorTree = GetColorTree<{
+  Variant: {
+    Header: 'nav';
+    Button: 'contained' | 'text';
+    Dialog: 'default';
+    Input: 'default';
+  };
+  State: {
+    Header: 'none';
+    Button: 'enabled' | 'pressed' | 'disabled';
+    Dialog: 'none';
+    Input: 'active' | 'disabled';
+  };
+  ColorPart: {
+    Header: 'background' | 'borderBottom';
+    Button: 'background' | 'content';
+    Dialog: 'background' | 'text' | 'message' | 'highlight' | 'destructive';
+    Input: 'text' | 'background' | 'placeholder';
+  };
+}>;
+type ComponentColors<T extends Component> = {
+  [key in ComponentColorTree['Variant'][T]]: {
+    [key in ComponentColorTree['State'][T]]: {
+      [key in ComponentColorTree['ColorPart'][T]]: string;
+    };
+  };
+};
+
 export type UIKitColors = {
   primary: string;
   background: string;
@@ -45,41 +86,20 @@ export type UIKitColors = {
   onBackgroundReverse04: string;
   secondary: string;
   error: string;
+  /**
+   * UI Colors has below structure
+   * Component.{Variant}.{State}.{ColorPart}
+   * @example
+   * ```
+   *  const { colors } = useUIKitTheme();
+   *  colors.button.contained.disabled.backgroundColor
+   * ```
+   * */
   ui: {
-    header: {
-      background: string;
-      borderBottom: string;
-    };
-
-    input: {
-      typeDefault: {
-        text: string;
-        background: string;
-        placeholder: Record<InputState, string>;
-      };
-    };
-    button: {
-      typeContain: {
-        background: Record<ButtonState, string>;
-        text: Record<ButtonState, string>;
-      };
-      typeText: {
-        background: Record<ButtonState, string>;
-        text: Record<ButtonState, string>;
-      };
-    };
-  };
-  msg?: {
-    bubble: {
-      incoming: {
-        default: string;
-        pressed: string;
-      };
-      outgoing: {
-        default: string;
-        pressed: string;
-      };
-    };
+    header: ComponentColors<'Header'>;
+    button: ComponentColors<'Button'>;
+    dialog: ComponentColors<'Dialog'>;
+    // input: ComponentColors<'Input'>;
   };
 };
 

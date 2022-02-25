@@ -29,7 +29,8 @@ argsEnhancers.forEach((enhancer) => addArgsEnhancer(enhancer));
 const getStories = () => {
   return [
     require("../stories/Avatar.stories.tsx"),
-    require("../stories/Dialogue.stories.tsx"),
+    require("../stories/Button.stories.tsx"),
+    require("../stories/Dialog.stories.tsx"),
     require("../stories/GroupChannelPreview.stories.tsx"),
     require("../stories/Icon.stories.tsx"),
     require("../stories/Text.stories.tsx"),
