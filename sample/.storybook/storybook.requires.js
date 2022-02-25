@@ -30,6 +30,7 @@ const getStories = () => {
   return [
     require("../stories/ActionMenu.stories.tsx"),
     require("../stories/Avatar.stories.tsx"),
+    require("../stories/Button.stories.tsx"),
     require("../stories/GroupChannelPreview.stories.tsx"),
     require("../stories/Icon.stories.tsx"),
     require("../stories/Text.stories.tsx"),
