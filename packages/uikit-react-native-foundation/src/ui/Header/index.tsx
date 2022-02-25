@@ -33,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({
 
   if (!title && !left && !right) {
     return (
-      <View style={{ paddingTop: topInset, backgroundColor: colors.ui.header.nav.default.background }}>{children}</View>
+      <View style={{ paddingTop: topInset, backgroundColor: colors.ui.header.nav.none.background }}>{children}</View>
     );
   }
 
@@ -43,8 +43,8 @@ const Header: React.FC<HeaderProps> = ({
         styles.container,
         {
           paddingTop: topInset,
-          backgroundColor: colors.ui.header.nav.default.background,
-          borderBottomColor: colors.ui.header.nav.default.borderBottom,
+          backgroundColor: colors.ui.header.nav.none.background,
+          borderBottomColor: colors.ui.header.nav.none.borderBottom,
         },
       ]}
     >

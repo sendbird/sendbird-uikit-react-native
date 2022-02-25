@@ -4,7 +4,7 @@ import { ActivityIndicator, Pressable, View } from 'react-native';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import useUIKitTheme from '../../theme/useUIKitTheme';
-import DialogBox from '../DialogBox';
+import DialogBox from '../Dialog/DialogBox';
 import Modal from '../Modal';
 import Text from '../Text';
 
@@ -16,11 +16,12 @@ type Props = {
   visible: boolean;
   onHide: () => void;
   onError?: (error: unknown) => void;
+  onDismiss?: () => void;
 
   title?: string;
   items: ActionMenuItem[];
 };
-const ActionMenu: React.FC<Props> = ({ visible, onHide, onError, title, items }) => {
+const ActionMenu: React.FC<Props> = ({ visible, onHide, onError, onDismiss, title, items }) => {
   const { statusBarTranslucent } = useHeaderStyle();
   const { colors } = useUIKitTheme();
   const [pending, setPending] = useState(false);
@@ -31,6 +32,7 @@ const ActionMenu: React.FC<Props> = ({ visible, onHide, onError, title, items })
 
   return (
     <Modal
+      onDismiss={onDismiss}
       statusBarTranslucent={statusBarTranslucent}
       visible={visible}
       onRequestClose={_onHide}
@@ -39,11 +41,20 @@ const ActionMenu: React.FC<Props> = ({ visible, onHide, onError, title, items })
     >
       <DialogBox>
         <View style={styles.title}>
-          <Text h1 color={colors.onBackground01} numberOfLines={1} style={{ maxWidth: pending ? '86%' : '100%' }}>
+          <Text
+            h1
+            color={colors.ui.dialog.default.none.text}
+            numberOfLines={1}
+            style={{ maxWidth: pending ? '86%' : '100%' }}
+          >
             {title}
           </Text>
           {pending && (
-            <ActivityIndicator size={'small'} color={colors.primary} style={{ width: '10%', marginLeft: '4%' }} />
+            <ActivityIndicator
+              size={'small'}
+              color={colors.ui.dialog.default.none.highlight}
+              style={{ width: '10%', marginLeft: '4%' }}
+            />
           )}
         </View>
         <View style={styles.buttonContainer}>
@@ -65,7 +76,7 @@ const ActionMenu: React.FC<Props> = ({ visible, onHide, onError, title, items })
                   }
                 }}
               >
-                <Text subtitle2 color={colors.onBackground01} numberOfLines={1}>
+                <Text subtitle2 color={colors.ui.dialog.default.none.text} numberOfLines={1}>
                   {title}
                 </Text>
               </Pressable>

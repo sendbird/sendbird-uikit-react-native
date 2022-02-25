@@ -12,8 +12,19 @@ type Props = {
   variant?: 'contained' | 'text';
   disabled?: boolean;
   onPress?: () => void;
+  buttonColor?: string;
+  contentColor?: string;
 };
-const Button: React.FC<Props> = ({ icon, variant = 'contained', disabled, onPress, style, children }) => {
+const Button: React.FC<Props> = ({
+  icon,
+  variant = 'contained',
+  buttonColor,
+  contentColor,
+  disabled,
+  onPress,
+  style,
+  children,
+}) => {
   const { colors } = useUIKitTheme();
 
   const getStateColor = (pressed: boolean, disabled?: boolean) => {
@@ -29,7 +40,7 @@ const Button: React.FC<Props> = ({ icon, variant = 'contained', disabled, onPres
       onPress={onPress}
       style={({ pressed }) => {
         const stateColor = getStateColor(pressed, disabled);
-        return [{ backgroundColor: stateColor.background }, styles.container, style];
+        return [{ backgroundColor: buttonColor ?? stateColor.background }, styles.container, style];
       }}
     >
       {({ pressed }) => {
@@ -38,7 +49,7 @@ const Button: React.FC<Props> = ({ icon, variant = 'contained', disabled, onPres
         return (
           <>
             {icon && <Icon size={24} icon={icon} color={stateColor.content} containerStyle={styles.icon} />}
-            <Text button color={stateColor.content} style={styles.text}>
+            <Text button color={contentColor ?? stateColor.content} style={styles.text}>
               {children}
             </Text>
           </>

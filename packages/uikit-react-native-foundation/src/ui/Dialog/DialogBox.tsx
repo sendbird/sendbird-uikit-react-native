@@ -9,7 +9,11 @@ type Props = {
 };
 const DialogBox: React.FC<Props> = ({ style, children }) => {
   const { colors } = useUIKitTheme();
-  return <View style={[styles.container, { backgroundColor: colors.background }, style]}>{children}</View>;
+  return (
+    <View style={[styles.container, { backgroundColor: colors.ui.dialog.default.none.background }, style]}>
+      {children}
+    </View>
+  );
 };
 
 const styles = createStyleSheet({

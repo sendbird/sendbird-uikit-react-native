@@ -27,7 +27,7 @@ const LightUIKitTheme: UIKitTheme = {
     ui: {
       header: {
         nav: {
-          default: {
+          none: {
             background: Palette.background50,
             borderBottom: Palette.onBackgroundLight04,
           },
@@ -63,8 +63,18 @@ const LightUIKitTheme: UIKitTheme = {
           },
         },
       },
+      dialog: {
+        default: {
+          none: {
+            background: Palette.background50,
+            text: Palette.onBackgroundLight01,
+            message: Palette.onBackgroundLight02,
+            highlight: Palette.primary300,
+            destructive: Palette.error300,
+          },
+        },
+      },
     },
-
     //   input: {
     //     typeDefault: {
     //       text: Palette.onBackgroundLight01,
@@ -75,23 +85,6 @@ const LightUIKitTheme: UIKitTheme = {
     //       },
     //     },
     //   },
-
-    //   {
-    //   button: {
-    //     typeText: {
-    //       background: {
-    //         enabled: Palette.transparent,
-    //         pressed: Palette.background100,
-    //         disabled: Palette.transparent,
-    //       },
-    //       text: {
-    //         enabled: Palette.primary300,
-    //         pressed: Palette.primary300,
-    //         disabled: Palette.onBackgroundLight04,
-    //       },
-    //     },
-    //   },
-    // },
   },
 };
 

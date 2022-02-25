@@ -28,7 +28,7 @@ export interface UIKitTheme extends AppearanceHelper {
   typography: Typography;
 }
 
-type Component = 'Header' | 'Button';
+type Component = 'Header' | 'Button' | 'Dialog';
 type GetColorTree<
   Tree extends {
     Variant: {
@@ -47,16 +47,19 @@ export type ComponentColorTree = GetColorTree<{
   Variant: {
     Header: 'nav';
     Button: 'contained' | 'text';
-    Input: 'message';
+    Dialog: 'default';
+    Input: 'default';
   };
   State: {
-    Header: 'default';
+    Header: 'none';
     Button: 'enabled' | 'pressed' | 'disabled';
+    Dialog: 'none';
     Input: 'active' | 'disabled';
   };
   ColorPart: {
     Header: 'background' | 'borderBottom';
     Button: 'background' | 'content';
+    Dialog: 'background' | 'text' | 'message' | 'highlight' | 'destructive';
     Input: 'text' | 'background' | 'placeholder';
   };
 }>;
@@ -95,6 +98,7 @@ export type UIKitColors = {
   ui: {
     header: ComponentColors<'Header'>;
     button: ComponentColors<'Button'>;
+    dialog: ComponentColors<'Dialog'>;
     // input: ComponentColors<'Input'>;
   };
 };

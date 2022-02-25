@@ -27,7 +27,7 @@ const DarkUIKitTheme: UIKitTheme = {
     ui: {
       header: {
         nav: {
-          default: {
+          none: {
             background: Palette.background500,
             borderBottom: Palette.onBackgroundDark04,
           },
@@ -63,17 +63,28 @@ const DarkUIKitTheme: UIKitTheme = {
           },
         },
       },
+      dialog: {
+        default: {
+          none: {
+            background: Palette.background500,
+            text: Palette.onBackgroundDark01,
+            message: Palette.onBackgroundDark02,
+            highlight: Palette.primary200,
+            destructive: Palette.error300,
+          },
+        },
+      },
+      // input: {
+      //   typeDefault: {
+      //     text: Palette.onBackgroundDark01,
+      //     background: Palette.background400,
+      //     placeholder: {
+      //       active: Palette.onBackgroundDark03,
+      //       disabled: Palette.onBackgroundDark04,
+      //     },
+      //   },
+      // },
     },
-    // input: {
-    //   typeDefault: {
-    //     text: Palette.onBackgroundDark01,
-    //     background: Palette.background400,
-    //     placeholder: {
-    //       active: Palette.onBackgroundDark03,
-    //       disabled: Palette.onBackgroundDark04,
-    //     },
-    //   },
-    // },
   },
 };
 
