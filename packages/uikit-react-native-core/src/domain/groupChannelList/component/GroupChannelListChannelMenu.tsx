@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { Dialogue } from '@sendbird/uikit-react-native-foundation';
+import { ActionMenu } from '@sendbird/uikit-react-native-foundation';
 
 import { useLocalization } from '../../../contexts/Localization';
 import { useSendbirdChat } from '../../../contexts/SendbirdChat';
@@ -13,7 +13,7 @@ const GroupChannelListChannelMenu: React.FC<GroupChannelListProps['ChannelMenu']
   const { currentUser } = useSendbirdChat();
 
   return (
-    <Dialogue
+    <ActionMenu
       visible={Boolean(channelMenu.selectedChannel)}
       onHide={channelMenu.selectChannel}
       title={

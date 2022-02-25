@@ -11,7 +11,7 @@ export { default as Text } from './ui/Text';
 export { default as Modal } from './ui/Modal';
 export { default as Header } from './ui/Header';
 export { default as Avatar } from './ui/Avatar';
-export { default as Dialogue } from './ui/Dialogue';
+export { default as ActionMenu } from './ui/ActionMenu';
 
 /** Styles **/
 export { default as useHeaderStyle } from './styles/useHeaderStyle';
