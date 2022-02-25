@@ -1,7 +1,7 @@
 import { DarkTheme, DefaultTheme, NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import Permissions from 'react-native-permissions';
 import SendBird from 'sendbird';
@@ -15,10 +15,9 @@ import useAppearance from './hooks/useAppearance';
 import * as themeScreens from './screens/theme';
 import * as uikitScreens from './screens/uikit-app';
 
+Platform.OS === 'android' && StatusBar.setTranslucent(false);
 const Stack = createNativeStackNavigator();
-
 const sdkInstance = new SendBird({ appId: APP_ID });
-
 const App = () => {
   const appearance = useAppearance();
   const isLightTheme = appearance === 'light';
@@ -28,7 +27,10 @@ const App = () => {
     <SendbirdUIKitContainer
       chat={{ sdkInstance }}
       services={{ filePicker, notification: {} as any }}
-      styles={{ theme: isLightTheme ? LightUIKitTheme : DarkUIKitTheme }}
+      styles={{
+        theme: isLightTheme ? LightUIKitTheme : DarkUIKitTheme,
+        statusBarTranslucent: Platform.select({ ios: true, android: false }),
+      }}
     >
       <NavigationContainer theme={isLightTheme ? DefaultTheme : DarkTheme}>
         <Stack.Navigator>
