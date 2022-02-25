@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ActivityIndicator, Pressable, View } from 'react-native';
+import React from 'react';
+import { Pressable, View } from 'react-native';
 
 import createStyleSheet from '../../styles/createStyleSheet';
 import useHeaderStyle from '../../styles/useHeaderStyle';
@@ -24,19 +24,17 @@ type Props = {
 const ActionMenu: React.FC<Props> = ({ visible, onHide, onError, onDismiss, title, items }) => {
   const { statusBarTranslucent } = useHeaderStyle();
   const { colors } = useUIKitTheme();
-  const [pending, setPending] = useState(false);
-
-  const _onHide = () => {
-    if (!pending) onHide();
-  };
+  // const [pending, setPending] = useState(false);
+  // const _onHide = () => {
+  //   if (!pending) onHide();
+  // };
 
   return (
     <Modal
+      onClose={onHide}
       onDismiss={onDismiss}
       statusBarTranslucent={statusBarTranslucent}
       visible={visible}
-      onRequestClose={_onHide}
-      onPressBackground={_onHide}
       backgroundStyle={{ alignItems: 'center', justifyContent: 'center' }}
     >
       <DialogBox>
@@ -45,17 +43,18 @@ const ActionMenu: React.FC<Props> = ({ visible, onHide, onError, onDismiss, titl
             h1
             color={colors.ui.dialog.default.none.text}
             numberOfLines={1}
-            style={{ maxWidth: pending ? '86%' : '100%' }}
+            style={{ flex: 1 }}
+            // style={{ maxWidth: pending ? '86%' : '100%' }}
           >
             {title}
           </Text>
-          {pending && (
+          {/*{pending && (
             <ActivityIndicator
               size={'small'}
               color={colors.ui.dialog.default.none.highlight}
               style={{ width: '10%', marginLeft: '4%' }}
             />
-          )}
+          )}*/}
         </View>
         <View style={styles.buttonContainer}>
           {items.map(({ title, onPress }, index) => {
@@ -63,17 +62,24 @@ const ActionMenu: React.FC<Props> = ({ visible, onHide, onError, onDismiss, titl
               <Pressable
                 key={title + index}
                 style={styles.button}
-                disabled={pending}
+                // disabled={pending}
                 onPress={async () => {
-                  setPending(true);
                   try {
-                    await onPress?.();
-                    onHide();
-                  } catch (e: unknown) {
+                    onPress?.();
+                  } catch (e) {
                     onError?.(e);
                   } finally {
-                    setPending(false);
+                    onHide();
                   }
+                  // setPending(true);
+                  // try {
+                  //   await onPress?.();
+                  //   onHide();
+                  // } catch (e: unknown) {
+                  //   onError?.(e);
+                  // } finally {
+                  //   setPending(false);
+                  // }
                 }}
               >
                 <Text subtitle2 color={colors.ui.dialog.default.none.text} numberOfLines={1}>

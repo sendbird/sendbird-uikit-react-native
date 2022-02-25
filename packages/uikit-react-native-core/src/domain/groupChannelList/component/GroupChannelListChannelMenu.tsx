@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { ActionMenu } from '@sendbird/uikit-react-native-foundation';
 
@@ -12,10 +12,17 @@ const GroupChannelListChannelMenu: React.FC<GroupChannelListProps['ChannelMenu']
   const { LABEL } = useLocalization();
   const { currentUser } = useSendbirdChat();
 
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (channelMenu.selectedChannel) setVisible(true);
+  }, [channelMenu.selectedChannel]);
+
   return (
     <ActionMenu
-      visible={Boolean(channelMenu.selectedChannel)}
-      onHide={channelMenu.selectChannel}
+      visible={visible}
+      onHide={() => setVisible(false)}
+      onDismiss={channelMenu.selectChannel}
       title={
         channelMenu.selectedChannel &&
         LABEL.GROUP_CHANNEL_LIST.CHANNEL_MENU.TITLE(currentUser?.userId ?? '', channelMenu.selectedChannel)

@@ -18,10 +18,10 @@ export type AlertItem = {
 type Props = {
   visible: boolean;
   onHide: () => void;
+  onDismiss?: () => void;
   title: AlertItem['title'];
   message: AlertItem['message'];
   buttons: AlertItem['buttons'];
-  onDismiss?: () => void;
 };
 const Alert: React.FC<Props> = ({
   onDismiss,
@@ -36,11 +36,10 @@ const Alert: React.FC<Props> = ({
 
   return (
     <Modal
+      onClose={onHide}
       onDismiss={onDismiss}
       statusBarTranslucent={statusBarTranslucent}
       visible={visible}
-      onRequestClose={onHide}
-      onPressBackground={onHide}
       backgroundStyle={{ alignItems: 'center', justifyContent: 'center' }}
     >
       <DialogBox style={styles.container}>

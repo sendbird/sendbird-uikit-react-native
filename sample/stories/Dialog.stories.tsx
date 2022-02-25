@@ -38,12 +38,8 @@ const WrappedActionMenu: React.FC = () => {
             items: [
               { title: 'Loooooooooooong ActionMenu button title', onPress: () => {} },
               {
-                title: 'Close after 3 seconds',
-                onPress: () => {
-                  return new Promise((resolve) => {
-                    setTimeout(() => resolve(0), 3000);
-                  });
-                },
+                title: 'Close',
+                onPress: () => {},
               },
             ],
           })
@@ -54,7 +50,7 @@ const WrappedActionMenu: React.FC = () => {
         title={'Open multiple times (Queued)'}
         onPress={() =>
           openMenu({
-            title: 'Action Menu',
+            title: 'Action Menu Title title title title title title',
             items: [
               {
                 title: 'Open menu 2 times',
