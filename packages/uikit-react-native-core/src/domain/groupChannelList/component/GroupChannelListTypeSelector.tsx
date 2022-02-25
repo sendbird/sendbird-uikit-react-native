@@ -76,7 +76,7 @@ const GroupChannelListTypeSelector: React.FC<GroupChannelListProps['TypeSelector
   };
 
   return (
-    <Modal visible={visible} onPressBackground={hide} statusBarTranslucent={statusBarTranslucent}>
+    <Modal visible={visible} onPressBackground={hide} onRequestClose={hide} statusBarTranslucent={statusBarTranslucent}>
       {renderHeader()}
     </Modal>
   );

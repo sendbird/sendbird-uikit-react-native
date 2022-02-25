@@ -5,6 +5,9 @@ import { Avatar as AvatarComponent, useUIKitTheme } from '@sendbird/uikit-react-
 
 import { getMockImage } from './constant';
 
+const margin = { marginBottom: 12 };
+
+type AvatarStory = ComponentStory<typeof AvatarComponent>;
 const AvatarMeta: ComponentMeta<typeof AvatarComponent> = {
   title: 'Avatar',
   component: AvatarComponent,
@@ -14,12 +17,8 @@ const AvatarMeta: ComponentMeta<typeof AvatarComponent> = {
 
 export default AvatarMeta;
 
-type AvatarStory = ComponentStory<typeof AvatarComponent>;
 export const Avatar: AvatarStory = () => <DefaultAvatar />;
 export const AvatarGroup: AvatarStory = () => <GroupedAvatar />;
-
-const margin = { marginBottom: 12 };
-
 const DefaultAvatar: React.FC = () => {
   const { colors } = useUIKitTheme();
 

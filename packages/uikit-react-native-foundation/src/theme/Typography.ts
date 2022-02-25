@@ -96,4 +96,6 @@ export const createTypography = (overrides: TypographyOverrides = {}, scaleFacto
   };
 };
 
-export const defaultTypography = createTypography();
+export const defaultTypography = createTypography({
+  shared: { fontFamily: 'System' },
+});

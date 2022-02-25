@@ -33,6 +33,7 @@ const Dialogue: React.FC<Props> = ({ containerStyle, visible, onHide, onError, t
       <Modal
         statusBarTranslucent={statusBarTranslucent}
         visible={visible}
+        onRequestClose={_onHide}
         onPressBackground={_onHide}
         backgroundStyle={{ alignItems: 'center', justifyContent: 'center' }}
       >
