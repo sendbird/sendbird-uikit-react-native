@@ -44,8 +44,9 @@ export const useGroupChannelMessagesWithQuery = (
   });
 
   // ---------- internal methods ------------ //
-  const updateMessages = (messages: Sendbird.BaseMessageInstance[]) => {
-    setMessageMap((prev) => ({ ...prev, ...arrayToMap(messages, 'reqId', 'messageId') }));
+  const updateMessages = (messages: Sendbird.BaseMessageInstance[], clearPrev: boolean) => {
+    if (clearPrev) setMessageMap(arrayToMap(messages, 'reqId', 'messageId'));
+    else setMessageMap((prev) => ({ ...prev, ...arrayToMap(messages, 'reqId', 'messageId') }));
   };
   const deleteMessage = (messageId: number) => {
     setMessageMap(({ ...draft }) => {
@@ -57,8 +58,9 @@ export const useGroupChannelMessagesWithQuery = (
       return draft;
     });
   };
-  const updateNextMessages = (messages: Sendbird.BaseMessageInstance[]) => {
-    setNextMessageMap((prev) => ({ ...prev, ...arrayToMap(messages, 'reqId', 'messageId') }));
+  const updateNextMessages = (messages: Sendbird.BaseMessageInstance[], clearPrev: boolean) => {
+    if (clearPrev) setNextMessageMap(arrayToMap(messages, 'reqId', 'messageId'));
+    else setNextMessageMap((prev) => ({ ...prev, ...arrayToMap(messages, 'reqId', 'messageId') }));
   };
   const deleteNextMessages = (messageId: number) => {
     setNextMessageMap(({ ...draft }) => {
@@ -70,17 +72,15 @@ export const useGroupChannelMessagesWithQuery = (
       return draft;
     });
   };
-  const clearAllMessages = () => {
-    setMessageMap({});
-    setNextMessageMap({});
-  };
   const init = useCallback(
     async (uid?: string) => {
-      clearAllMessages();
-
       if (uid) {
         queryRef.current = createMessageQuery(channel, options?.queryCreator);
-        await prev();
+        if (queryRef.current?.hasMore) {
+          const list = await queryRef.current?.load();
+          updateMessages(list, true);
+        }
+        updateNextMessages([], true);
       }
     },
     [sdk, channel, options?.queryCreator],
@@ -101,11 +101,11 @@ export const useGroupChannelMessagesWithQuery = (
         if (isDifferentChannel(channel, eventChannel)) return;
         sdk.markAsDelivered(channel.url);
         sdk.markAsReadWithChannelUrls([channel.url]);
-        updateNextMessages([message]);
+        updateNextMessages([message], false);
       },
       onMessageUpdated(eventChannel, message) {
         if (isDifferentChannel(channel, eventChannel)) return;
-        updateNextMessages([message]);
+        updateNextMessages([message], false);
       },
       onMessageDeleted(eventChannel, messageId) {
         if (isDifferentChannel(channel, eventChannel)) return;
@@ -127,13 +127,13 @@ export const useGroupChannelMessagesWithQuery = (
   const prev = useCallback(async () => {
     if (queryRef.current && queryRef.current?.hasMore) {
       const list = await queryRef.current?.load();
-      updateMessages(list);
+      updateMessages(list, false);
     }
   }, []);
 
   const next = useCallback(async () => {
     if (nextMessages.length > 0) {
-      updateMessages(nextMessages);
+      updateMessages(nextMessages, false);
     }
   }, [nextMessages.length]);
 
@@ -142,11 +142,11 @@ export const useGroupChannelMessagesWithQuery = (
       const pendingMessage = channel.sendUserMessage(params, (message, error) => {
         onSent?.(pendingMessage, error);
         if (!error && message) {
-          updateNextMessages([message]);
+          updateNextMessages([message], false);
           next();
         }
       });
-      updateNextMessages([pendingMessage]);
+      updateNextMessages([pendingMessage], false);
       next();
 
       return pendingMessage;
@@ -158,11 +158,11 @@ export const useGroupChannelMessagesWithQuery = (
       const pendingMessage = channel.sendFileMessage(params, (message, error) => {
         onSent?.(pendingMessage, error);
         if (!error && message) {
-          updateNextMessages([message]);
+          updateNextMessages([message], false);
           next();
         }
       });
-      updateNextMessages([pendingMessage]);
+      updateNextMessages([pendingMessage], false);
       next();
 
       return pendingMessage;

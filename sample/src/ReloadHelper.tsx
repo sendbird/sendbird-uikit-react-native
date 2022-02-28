@@ -35,7 +35,7 @@ const ReloadHelper: React.FC<{ DEFAULT_VISIBLE?: boolean }> = ({ children, DEFAU
   );
 };
 
-export const withReload = (Component: () => JSX.Element, DEFAULT_VISIBLE?: boolean) =>
+export const withReload = (Component: (props: object) => JSX.Element, DEFAULT_VISIBLE?: boolean) =>
   function Reloadable(props: object) {
     if (__DEV__) {
       return (

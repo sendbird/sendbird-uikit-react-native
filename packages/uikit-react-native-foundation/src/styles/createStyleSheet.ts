@@ -26,6 +26,10 @@ const preProcessor: Partial<StylePreprocessor> = {
   'marginBottom': SCALE_FACTOR_WITH_STR,
   'marginLeft': SCALE_FACTOR_WITH_STR,
   'marginRight': SCALE_FACTOR_WITH_STR,
+  'left': SCALE_FACTOR_WITH_STR,
+  'right': SCALE_FACTOR_WITH_STR,
+  'top': SCALE_FACTOR_WITH_STR,
+  'bottom': SCALE_FACTOR_WITH_STR,
 };
 
 const preProcessorKeys = Object.keys(preProcessor);

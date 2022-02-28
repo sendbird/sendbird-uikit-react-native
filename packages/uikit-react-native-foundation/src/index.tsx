@@ -13,6 +13,7 @@ export { default as Badge } from './ui/Badge';
 export { default as BottomSheet } from './ui/BottomSheet';
 export { default as Button } from './ui/Button';
 export { DialogProvider, useActionMenu, useAlert, usePrompt } from './ui/Dialog';
+export { default as Divider } from './ui/Divider';
 export { default as Header } from './ui/Header';
 export { default as Icon } from './ui/Icon';
 export { default as Modal } from './ui/Modal';
