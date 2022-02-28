@@ -61,9 +61,10 @@ export const useGroupChannelListWithQuery = (
       clearChannels();
       if (uid) {
         queryRef.current = createGroupChannelListQuery(sdk, options?.queryCreator);
-
-        const channels = await queryRef.current.next();
-        updateChannels(channels, true);
+        if (queryRef.current?.hasNext) {
+          const channels = await queryRef.current.next();
+          updateChannels(channels, true);
+        }
       }
     },
     [sdk, options?.queryCreator],
