@@ -104,6 +104,14 @@ const LightUIKitTheme: UIKitTheme = {
           },
         },
       },
+      badge: {
+        default: {
+          none: {
+            text: Palette.background50,
+            background: Palette.primary300,
+          },
+        },
+      },
     },
   },
 };

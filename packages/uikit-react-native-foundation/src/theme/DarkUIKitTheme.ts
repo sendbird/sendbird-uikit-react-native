@@ -74,7 +74,6 @@ const DarkUIKitTheme: UIKitTheme = {
           },
         },
       },
-
       input: {
         default: {
           active: {
@@ -102,6 +101,14 @@ const DarkUIKitTheme: UIKitTheme = {
             placeholder: Palette.onBackgroundDark04,
             background: Palette.transparent,
             highlight: Palette.onBackgroundDark04,
+          },
+        },
+      },
+      badge: {
+        default: {
+          none: {
+            text: Palette.background600,
+            background: Palette.primary200,
           },
         },
       },
