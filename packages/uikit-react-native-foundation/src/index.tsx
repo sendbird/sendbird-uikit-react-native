@@ -14,7 +14,7 @@ export { default as Button } from './ui/Button';
 export { default as Header } from './ui/Header';
 export { default as Avatar } from './ui/Avatar';
 export { default as ActionMenu } from './ui/ActionMenu';
-export { DialogProvider, useDialog, useAlert, useActionMenu } from './ui/Dialog';
+export { DialogProvider, useActionMenu, useAlert, usePrompt } from './ui/Dialog';
 
 /** Styles **/
 export { default as useHeaderStyle } from './styles/useHeaderStyle';

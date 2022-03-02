@@ -9,19 +9,20 @@ import Modal from '../Modal';
 import Text from '../Text';
 
 export type ActionMenuItem = {
-  title: string;
-  onPress?: () => void;
+  title?: string;
+  menuItems: { title: string; onPress?: () => void }[];
 };
+
 type Props = {
   visible: boolean;
   onHide: () => void;
   onError?: (error: unknown) => void;
   onDismiss?: () => void;
 
-  title?: string;
-  items: ActionMenuItem[];
+  title?: ActionMenuItem['title'];
+  menuItems: ActionMenuItem['menuItems'];
 };
-const ActionMenu: React.FC<Props> = ({ visible, onHide, onError, onDismiss, title, items }) => {
+const ActionMenu: React.FC<Props> = ({ visible, onHide, onError, onDismiss, title, menuItems }) => {
   const { statusBarTranslucent } = useHeaderStyle();
   const { colors } = useUIKitTheme();
   // const [pending, setPending] = useState(false);
@@ -57,7 +58,7 @@ const ActionMenu: React.FC<Props> = ({ visible, onHide, onError, onDismiss, titl
           )}*/}
         </View>
         <View style={styles.buttonContainer}>
-          {items.map(({ title, onPress }, index) => {
+          {menuItems.map(({ title, onPress }, index) => {
             return (
               <Pressable
                 key={title + index}

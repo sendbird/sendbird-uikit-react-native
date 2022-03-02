@@ -74,17 +74,37 @@ const LightUIKitTheme: UIKitTheme = {
           },
         },
       },
+      input: {
+        default: {
+          active: {
+            text: Palette.onBackgroundLight01,
+            placeholder: Palette.onBackgroundLight03,
+            background: Palette.background100,
+            highlight: Palette.transparent,
+          },
+          disabled: {
+            text: Palette.onBackgroundLight04,
+            placeholder: Palette.onBackgroundLight04,
+            background: Palette.background100,
+            highlight: Palette.transparent,
+          },
+        },
+        underline: {
+          active: {
+            text: Palette.onBackgroundLight01,
+            placeholder: Palette.onBackgroundLight03,
+            background: Palette.transparent,
+            highlight: Palette.primary300,
+          },
+          disabled: {
+            text: Palette.onBackgroundLight04,
+            placeholder: Palette.onBackgroundLight04,
+            background: Palette.transparent,
+            highlight: Palette.onBackgroundLight04,
+          },
+        },
+      },
     },
-    //   input: {
-    //     typeDefault: {
-    //       text: Palette.onBackgroundLight01,
-    //       background: Palette.background100,
-    //       placeholder: {
-    //         active: Palette.onBackgroundLight03,
-    //         disabled: Palette.onBackgroundLight04,
-    //       },
-    //     },
-    //   },
   },
 };
 

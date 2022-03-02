@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   Animated,
   Dimensions,
+  KeyboardAvoidingView,
   ModalProps,
   PanResponder,
   Platform,
@@ -14,12 +15,16 @@ import {
 } from 'react-native';
 
 import createStyleSheet from '../../styles/createStyleSheet';
+import useHeaderStyle from '../../styles/useHeaderStyle';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 
-type Props = { type?: 'slide' | 'fade'; onClose: () => void; backgroundStyle?: StyleProp<ViewStyle> } & Omit<
-  ModalProps,
-  'animationType' | 'onRequestClose'
->;
+type Props = {
+  type?: 'slide' | 'fade';
+  onClose: () => void;
+  backgroundStyle?: StyleProp<ViewStyle>;
+  disableBackgroundClose?: boolean;
+  enableKeyboardAvoid?: boolean;
+} & Omit<ModalProps, 'animationType' | 'onRequestClose'>;
 
 /**
  * Modal Open: Triggered by Modal.props.visible state changed to true
@@ -35,11 +40,15 @@ const Modal: React.FC<Props> = ({
   onDismiss,
   type = 'fade',
   visible = false,
+  disableBackgroundClose = false,
+  enableKeyboardAvoid = false,
+  statusBarTranslucent,
   ...props
 }) => {
   const { palette } = useUIKitTheme();
   const { content, backdrop, showTransition, hideTransition } = useModalAnimation(type);
   const panResponder = useModalPanResponder(type, content.translateY, showTransition, onClose);
+  const { topInset } = useHeaderStyle();
 
   const [modalVisible, setModalVisible] = useState(false);
   const showAction = () => setModalVisible(true);
@@ -64,23 +73,31 @@ const Modal: React.FC<Props> = ({
       animationType={'none'}
       {...props}
     >
-      <TouchableWithoutFeedback onPress={onClose}>
+      <TouchableWithoutFeedback onPress={disableBackgroundClose ? undefined : onClose}>
         <Animated.View
           style={[StyleSheet.absoluteFill, { opacity: backdrop.opacity, backgroundColor: palette.onBackgroundLight03 }]}
         />
       </TouchableWithoutFeedback>
-      <Animated.View
-        style={[
-          styles.background,
-          backgroundStyle,
-          { opacity: content.opacity, transform: [{ translateY: content.translateY }] },
-        ]}
+      <KeyboardAvoidingView
+        enabled={enableKeyboardAvoid}
+        style={styles.background}
+        behavior={Platform.select({ ios: 'padding', default: 'height' })}
         pointerEvents={'box-none'}
-        {...panResponder.panHandlers}
+        keyboardVerticalOffset={enableKeyboardAvoid && statusBarTranslucent ? -topInset : 0}
       >
-        {/* NOTE: https://github.com/facebook/react-native/issues/14295 */}
-        <Pressable>{children}</Pressable>
-      </Animated.View>
+        <Animated.View
+          style={[
+            styles.background,
+            backgroundStyle,
+            { opacity: content.opacity, transform: [{ translateY: content.translateY }] },
+          ]}
+          pointerEvents={'box-none'}
+          {...panResponder.panHandlers}
+        >
+          {/* NOTE: https://github.com/facebook/react-native/issues/14295 */}
+          <Pressable>{children}</Pressable>
+        </Animated.View>
+      </KeyboardAvoidingView>
     </RNModal>
   );
 };

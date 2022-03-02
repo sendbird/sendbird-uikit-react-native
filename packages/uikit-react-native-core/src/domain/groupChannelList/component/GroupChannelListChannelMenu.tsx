@@ -27,7 +27,7 @@ const GroupChannelListChannelMenu: React.FC<GroupChannelListProps['ChannelMenu']
         channelMenu.selectedChannel &&
         LABEL.GROUP_CHANNEL_LIST.CHANNEL_MENU.TITLE(currentUser?.userId ?? '', channelMenu.selectedChannel)
       }
-      items={[
+      menuItems={[
         {
           title: LABEL.GROUP_CHANNEL_LIST.CHANNEL_MENU.MENU_NOTIFICATIONS(channelMenu.selectedChannel),
           onPress: async () => {

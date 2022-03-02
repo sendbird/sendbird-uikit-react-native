@@ -74,16 +74,37 @@ const DarkUIKitTheme: UIKitTheme = {
           },
         },
       },
-      // input: {
-      //   typeDefault: {
-      //     text: Palette.onBackgroundDark01,
-      //     background: Palette.background400,
-      //     placeholder: {
-      //       active: Palette.onBackgroundDark03,
-      //       disabled: Palette.onBackgroundDark04,
-      //     },
-      //   },
-      // },
+
+      input: {
+        default: {
+          active: {
+            text: Palette.onBackgroundDark01,
+            placeholder: Palette.onBackgroundDark03,
+            background: Palette.background400,
+            highlight: Palette.transparent,
+          },
+          disabled: {
+            text: Palette.onBackgroundDark04,
+            placeholder: Palette.onBackgroundDark04,
+            background: Palette.background400,
+            highlight: Palette.transparent,
+          },
+        },
+        underline: {
+          active: {
+            text: Palette.onBackgroundDark01,
+            placeholder: Palette.onBackgroundDark03,
+            background: Palette.transparent,
+            highlight: Palette.primary200,
+          },
+          disabled: {
+            text: Palette.onBackgroundDark04,
+            placeholder: Palette.onBackgroundDark04,
+            background: Palette.transparent,
+            highlight: Palette.onBackgroundDark04,
+          },
+        },
+      },
     },
   },
 };
