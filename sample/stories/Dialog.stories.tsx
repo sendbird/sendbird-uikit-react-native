@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from 'react-native';
 
 import { DialogProvider, useActionMenu, useAlert, usePrompt } from '@sendbird/uikit-react-native-foundation';
+import { useBottomSheet } from '@sendbird/uikit-react-native-foundation/src/ui/Dialog';
 
 import { loremIpsum } from './constant';
 
@@ -28,6 +29,11 @@ export const Alert: DialogStory = () => (
 export const Prompt: DialogStory = () => (
   <DialogProvider>
     <WrappedPrompt />
+  </DialogProvider>
+);
+export const BottomSheet: DialogStory = () => (
+  <DialogProvider>
+    <WrappedBottomSheet />
   </DialogProvider>
 );
 
@@ -154,6 +160,39 @@ const WrappedPrompt: React.FC = () => {
             onSubmit: (text) => {
               alert({ title: 'Received text from prompt', message: text });
             },
+          });
+        }}
+      />
+    </>
+  );
+};
+
+const WrappedBottomSheet: React.FC = () => {
+  const { openSheet } = useBottomSheet();
+  const { alert } = useAlert();
+  return (
+    <>
+      <Button
+        title={'Open BottomSheet Text only'}
+        onPress={() => {
+          openSheet({
+            sheetItems: [
+              { title: 'Title 1', onPress: () => alert({ title: 'Item 1 selected' }) },
+              { title: 'Title 2', onPress: () => alert({ title: 'Item 2 selected' }) },
+              { title: 'Title 3', onPress: () => alert({ title: 'Item 3 selected' }) },
+            ],
+          });
+        }}
+      />
+      <Button
+        title={'Open BottomSheet Text+Icon'}
+        onPress={() => {
+          openSheet({
+            sheetItems: [
+              { title: 'Camera', icon: 'camera', onPress: () => alert({ title: 'Camera selected' }) },
+              { title: 'Photo', icon: 'photo', onPress: () => alert({ title: 'Photo selected' }) },
+              { title: 'Document', icon: 'file-document', onPress: () => alert({ title: 'Document selected' }) },
+            ],
           });
         }}
       />

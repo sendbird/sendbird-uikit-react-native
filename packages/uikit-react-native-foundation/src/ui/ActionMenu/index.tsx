@@ -18,10 +18,7 @@ type Props = {
   onHide: () => void;
   onError?: (error: unknown) => void;
   onDismiss?: () => void;
-
-  title?: ActionMenuItem['title'];
-  menuItems: ActionMenuItem['menuItems'];
-};
+} & ActionMenuItem;
 const ActionMenu: React.FC<Props> = ({ visible, onHide, onError, onDismiss, title, menuItems }) => {
   const { statusBarTranslucent } = useHeaderStyle();
   const { colors } = useUIKitTheme();

@@ -10,6 +10,7 @@ export { default as ActionMenu } from './ui/ActionMenu';
 export { default as Alert } from './ui/Alert';
 export { default as Avatar } from './ui/Avatar';
 export { default as Badge } from './ui/Badge';
+export { default as BottomSheet } from './ui/BottomSheet';
 export { default as Button } from './ui/Button';
 export { DialogProvider, useActionMenu, useAlert, usePrompt } from './ui/Dialog';
 export { default as Header } from './ui/Header';

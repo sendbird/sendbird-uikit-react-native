@@ -9,12 +9,12 @@ import SendBird from 'sendbird';
 import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
 import { createFilePickerServiceNative, useConnection } from '@sendbird/uikit-react-native-core';
 import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 
 import { APP_ID, USER_ID } from './env';
 import useAppearance from './hooks/useAppearance';
 import * as themeScreens from './screens/theme';
 import * as uikitScreens from './screens/uikit-app';
-import type { SendbirdChatSDK } from "@sendbird/uikit-utils";
 
 Platform.OS === 'android' && StatusBar.setTranslucent(false);
 const Stack = createNativeStackNavigator();

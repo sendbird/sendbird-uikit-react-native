@@ -93,7 +93,7 @@ const Prompt: React.FC<Props> = ({
                 variant={'text'}
                 style={styles.button}
                 contentColor={colors.ui.dialog.default.none.highlight}
-                onPress={async () => {
+                onPress={() => {
                   try {
                     onPress?.();
                   } finally {

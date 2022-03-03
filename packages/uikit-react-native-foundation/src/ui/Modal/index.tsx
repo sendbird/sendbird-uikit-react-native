@@ -83,7 +83,7 @@ const Modal: React.FC<Props> = ({
       </TouchableWithoutFeedback>
       <KeyboardAvoidingView
         // NOTE: This is trick for Android.
-        //  When orientation is changed on Android, the offset is not updated normally.
+        //  When orientation is changed on Android, the offset that to avoid soft-keyboard is not updated normally.
         key={`${width}-${height}`}
         enabled={enableKeyboardAvoid}
         style={styles.background}
@@ -100,14 +100,21 @@ const Modal: React.FC<Props> = ({
           pointerEvents={'box-none'}
           {...panResponder.panHandlers}
         >
-          {/* NOTE: https://github.com/facebook/react-native/issues/14295 */}
-          <Pressable>{children}</Pressable>
+          <Pressable
+          // NOTE: https://github.com/facebook/react-native/issues/14295
+          //  Due to 'Pressable', the width of the children must be explicitly specified as a number.
+          >
+            {children}
+          </Pressable>
         </Animated.View>
       </KeyboardAvoidingView>
     </RNModal>
   );
 };
 
+const isHideGesture = (distanceY: number, velocityY: number) => {
+  return distanceY > 125 || (distanceY > 0 && velocityY > 0.1);
+};
 const useModalPanResponder = (
   type: 'slide' | 'fade',
   translateY: Animated.Value,
@@ -120,10 +127,9 @@ const useModalPanResponder = (
       onMoveShouldSetPanResponderCapture: (_, { dy }) => dy > 8,
       // @ts-ignore
       onPanResponderGrant: () => translateY.setOffset(translateY.__getValue()),
-      onPanResponderMove: Animated.event([null, { dy: translateY }], { useNativeDriver: false }),
+      onPanResponderMove: (_, { dy }) => dy >= 0 && translateY.setValue(dy), // Animated.event([null, { dy: translateY }], { useNativeDriver: false }),
       onPanResponderRelease: (_, { dy, vy }) => {
-        const isHideGesture = dy > 125 || (dy > 0 && vy > 0.1);
-        if (isHideGesture) hide();
+        if (isHideGesture(dy, vy)) hide();
         else show();
       },
     }),
@@ -132,18 +138,18 @@ const useModalPanResponder = (
 
 const useModalAnimation = (type: 'slide' | 'fade') => {
   const initialY = type === 'slide' ? Dimensions.get('window').height : 0;
-  const baseAnimationVal = useRef(new Animated.Value(0)).current;
-  const baseTranslateVal = useRef(new Animated.Value(initialY)).current;
+  const baseAnimBackground = useRef(new Animated.Value(0)).current;
+  const baseAnimContent = useRef(new Animated.Value(initialY)).current;
 
   const content = {
-    opacity: baseAnimationVal.interpolate({
+    opacity: baseAnimBackground.interpolate({
       inputRange: [0, 1],
       outputRange: [type === 'slide' ? 1 : 0, 1],
     }),
-    translateY: baseTranslateVal,
+    translateY: baseAnimContent,
   };
   const backdrop = {
-    opacity: baseAnimationVal.interpolate({
+    opacity: baseAnimBackground.interpolate({
       inputRange: [0, 1],
       outputRange: [0, 1],
     }),
@@ -151,8 +157,8 @@ const useModalAnimation = (type: 'slide' | 'fade') => {
   const createTransition = (toValue: 0 | 1) => {
     const config = { duration: 250, useNativeDriver: false };
     return Animated.parallel([
-      Animated.timing(baseAnimationVal, { toValue, ...config }),
-      Animated.timing(baseTranslateVal, { toValue: toValue === 0 ? initialY : 0, ...config }),
+      Animated.timing(baseAnimBackground, { toValue, ...config }),
+      Animated.timing(baseAnimContent, { toValue: toValue === 0 ? initialY : 0, ...config }),
     ]).start;
   };
   return {
