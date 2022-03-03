@@ -12,6 +12,7 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   ViewStyle,
+  useWindowDimensions,
 } from 'react-native';
 
 import createStyleSheet from '../../styles/createStyleSheet';
@@ -54,6 +55,8 @@ const Modal: React.FC<Props> = ({
   const showAction = () => setModalVisible(true);
   const hideAction = () => hideTransition(() => setModalVisible(false));
 
+  const { width, height } = useWindowDimensions();
+
   useEffect(() => {
     if (visible) showAction();
     else hideAction();
@@ -79,6 +82,9 @@ const Modal: React.FC<Props> = ({
         />
       </TouchableWithoutFeedback>
       <KeyboardAvoidingView
+        // NOTE: This is trick for Android.
+        //  When orientation is changed on Android, the offset is not updated normally.
+        key={`${width}-${height}`}
         enabled={enableKeyboardAvoid}
         style={styles.background}
         behavior={Platform.select({ ios: 'padding', default: 'height' })}
