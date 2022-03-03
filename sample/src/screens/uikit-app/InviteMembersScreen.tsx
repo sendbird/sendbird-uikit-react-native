@@ -13,7 +13,7 @@ const InviteMembersScreen: React.FC = () => {
   const { setOptions, goBack } = navigation;
 
   useLayoutEffect(() => {
-    console.log('route params', params);
+    Logger.log('channel type', params.channelType);
     setOptions({ headerShown: false });
   }, []);
 

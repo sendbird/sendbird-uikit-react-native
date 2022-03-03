@@ -71,7 +71,7 @@ type ScreenPropsRoute<T extends Routes> = RouteProps<T>['route'];
 
 export const useRouteParams = <T extends Routes>() => {
   const { params } = useRoute<ScreenPropsRoute<T>>();
-  return params;
+  return params as NonNullable<typeof params>;
 };
 
 export const useAppNavigation = <T extends Routes>() => {
