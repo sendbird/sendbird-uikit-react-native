@@ -14,10 +14,11 @@ import { APP_ID, USER_ID } from './env';
 import useAppearance from './hooks/useAppearance';
 import * as themeScreens from './screens/theme';
 import * as uikitScreens from './screens/uikit-app';
+import type { SendbirdChatSDK } from "@sendbird/uikit-utils";
 
 Platform.OS === 'android' && StatusBar.setTranslucent(false);
 const Stack = createNativeStackNavigator();
-const sdkInstance = new SendBird({ appId: APP_ID });
+const sdkInstance = new SendBird({ appId: APP_ID }) as SendbirdChatSDK;
 const App = () => {
   const appearance = useAppearance();
   const isLightTheme = appearance === 'light';
