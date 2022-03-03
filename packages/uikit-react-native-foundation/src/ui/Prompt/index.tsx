@@ -1,5 +1,7 @@
-import React from 'react';
-import { AlertButton, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { TextInput as RNTextIput, View } from 'react-native';
+
+import { EmptyFunction } from '@sendbird/uikit-utils';
 
 import createStyleSheet from '../../styles/createStyleSheet';
 import useHeaderStyle from '../../styles/useHeaderStyle';
@@ -8,33 +10,57 @@ import Button from '../Button';
 import DialogBox from '../Dialog/DialogBox';
 import Modal from '../Modal';
 import Text from '../Text';
+import TextInput from '../TextInput';
 
-export type AlertItem = {
-  title?: string;
-  message?: string;
-  buttons?: AlertButton[];
+export type PromptItem = {
+  title: string;
+  onSubmit?: (text: string) => void;
+  submitLabel?: string;
+  onCancel?: () => void;
+  cancelLabel?: string;
 };
 
 type Props = {
   visible: boolean;
   onHide: () => void;
   onDismiss?: () => void;
-} & AlertItem;
-const Alert: React.FC<Props> = ({
+  autoFocus?: boolean;
+} & PromptItem;
+const Prompt: React.FC<Props> = ({
   onDismiss,
   visible,
   onHide,
-  title = '',
-  message = '',
-  buttons = [{ text: 'OK' }],
+  autoFocus = true,
+  title,
+  onSubmit = EmptyFunction,
+  onCancel = EmptyFunction,
+  submitLabel = 'Submit',
+  cancelLabel = 'Cancel',
 }) => {
   const { statusBarTranslucent } = useHeaderStyle();
   const { colors } = useUIKitTheme();
+  const inputRef = useRef<RNTextIput>(null);
+
+  const buttons = [
+    { text: cancelLabel, onPress: onCancel },
+    { text: submitLabel, onPress: () => onSubmit(text) },
+  ];
+
+  const [text, setText] = useState('');
+
+  useEffect(() => {
+    autoFocus && visible && setTimeout(() => inputRef.current?.focus(), 250);
+  }, [autoFocus, visible]);
 
   return (
     <Modal
+      enableKeyboardAvoid
+      disableBackgroundClose
       onClose={onHide}
-      onDismiss={onDismiss}
+      onDismiss={() => {
+        setText('');
+        onDismiss?.();
+      }}
       statusBarTranslucent={statusBarTranslucent}
       visible={visible}
       backgroundStyle={{ alignItems: 'center', justifyContent: 'center' }}
@@ -48,38 +74,32 @@ const Alert: React.FC<Props> = ({
           </View>
         )}
 
-        <View style={styles.messageContainer}>
-          {Boolean(message) && (
-            <Text
-              subtitle2={!title}
-              body3={Boolean(title)}
-              color={!title ? colors.ui.dialog.default.none.text : colors.ui.dialog.default.none.message}
-              numberOfLines={3}
-            >
-              {message}
-            </Text>
-          )}
+        <View style={styles.inputContainer}>
+          <TextInput
+            ref={inputRef}
+            placeholder={'Enter'}
+            variant={'underline'}
+            value={text}
+            onChangeText={setText}
+            style={{ paddingHorizontal: 0, paddingVertical: 10 }}
+          />
         </View>
 
         <View style={styles.buttonContainer}>
-          {buttons.map(({ text = 'OK', style = 'default', onPress }, index) => {
+          {buttons.map(({ text, onPress }, index) => {
             return (
               <Button
                 key={text + index}
                 variant={'text'}
                 style={styles.button}
-                onPress={async () => {
+                contentColor={colors.ui.dialog.default.none.highlight}
+                onPress={() => {
                   try {
                     onPress?.();
                   } finally {
                     onHide();
                   }
                 }}
-                contentColor={
-                  style === 'destructive'
-                    ? colors.ui.dialog.default.none.destructive
-                    : colors.ui.dialog.default.none.highlight
-                }
               >
                 {text}
               </Button>
@@ -93,20 +113,18 @@ const Alert: React.FC<Props> = ({
 
 const styles = createStyleSheet({
   container: {
-    paddingTop: 20,
+    paddingTop: 8,
   },
   titleContainer: {
-    paddingBottom: 16,
+    marginBottom: 12,
+    paddingVertical: 12,
     paddingHorizontal: 24,
     flexDirection: 'row',
     alignItems: 'center',
   },
-  messageContainer: {
+  inputContainer: {
     paddingHorizontal: 24,
     marginBottom: 12,
-  },
-  button: {
-    marginLeft: 8,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -114,6 +132,9 @@ const styles = createStyleSheet({
     justifyContent: 'flex-end',
     padding: 12,
   },
+  button: {
+    marginLeft: 8,
+  },
 });
 
-export default Alert;
+export default Prompt;

@@ -2,7 +2,8 @@ import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
 import React from 'react';
 import { Button } from 'react-native';
 
-import { DialogProvider, useDialog } from '@sendbird/uikit-react-native-foundation';
+import { DialogProvider, useActionMenu, useAlert, usePrompt } from '@sendbird/uikit-react-native-foundation';
+import { useBottomSheet } from '@sendbird/uikit-react-native-foundation/src/ui/Dialog';
 
 import { loremIpsum } from './constant';
 
@@ -25,9 +26,19 @@ export const Alert: DialogStory = () => (
     <WrappedAlert />
   </DialogProvider>
 );
+export const Prompt: DialogStory = () => (
+  <DialogProvider>
+    <WrappedPrompt />
+  </DialogProvider>
+);
+export const BottomSheet: DialogStory = () => (
+  <DialogProvider>
+    <WrappedBottomSheet />
+  </DialogProvider>
+);
 
 const WrappedActionMenu: React.FC = () => {
-  const { openMenu } = useDialog();
+  const { openMenu } = useActionMenu();
   return (
     <>
       <Button
@@ -35,16 +46,9 @@ const WrappedActionMenu: React.FC = () => {
         onPress={() =>
           openMenu({
             title: 'Action Menu',
-            items: [
+            menuItems: [
               { title: 'Loooooooooooong ActionMenu button title', onPress: () => {} },
-              {
-                title: 'Close after 3 seconds',
-                onPress: () => {
-                  return new Promise((resolve) => {
-                    setTimeout(() => resolve(0), 3000);
-                  });
-                },
-              },
+              { title: 'Close', onPress: () => {} },
             ],
           })
         }
@@ -54,13 +58,13 @@ const WrappedActionMenu: React.FC = () => {
         title={'Open multiple times (Queued)'}
         onPress={() =>
           openMenu({
-            title: 'Action Menu',
-            items: [
+            title: 'Action Menu Title title title title title title',
+            menuItems: [
               {
                 title: 'Open menu 2 times',
                 onPress: () => {
-                  openMenu({ title: 'Menu1', items: [{ title: 'Hello' }] });
-                  openMenu({ title: 'Menu2', items: [{ title: 'Hello' }] });
+                  openMenu({ title: 'Menu1', menuItems: [{ title: 'Hello' }] });
+                  openMenu({ title: 'Menu2', menuItems: [{ title: 'Hello' }] });
                 },
               },
               {
@@ -69,9 +73,9 @@ const WrappedActionMenu: React.FC = () => {
                   return new Promise((resolve) => {
                     setTimeout(() => {
                       resolve(0);
-                      openMenu({ title: 'Menu1', items: [{ title: 'Hello' }] });
-                      openMenu({ title: 'Menu2', items: [{ title: 'Hello' }] });
-                      openMenu({ title: 'Menu3', items: [{ title: 'Hello' }] });
+                      openMenu({ title: 'Menu1', menuItems: [{ title: 'Hello' }] });
+                      openMenu({ title: 'Menu2', menuItems: [{ title: 'Hello' }] });
+                      openMenu({ title: 'Menu3', menuItems: [{ title: 'Hello' }] });
                     }, 1000);
                   });
                 },
@@ -85,7 +89,7 @@ const WrappedActionMenu: React.FC = () => {
 };
 
 const WrappedAlert: React.FC = () => {
-  const { alert } = useDialog();
+  const { alert } = useAlert();
   return (
     <>
       <Button title={'Open title only'} onPress={() => alert({ title: 'Title only' })} />
@@ -134,6 +138,60 @@ const WrappedAlert: React.FC = () => {
                   alert({ title: 'Alert3' });
                 },
               },
+            ],
+          });
+        }}
+      />
+    </>
+  );
+};
+
+const WrappedPrompt: React.FC = () => {
+  const { prompt } = usePrompt();
+  const { alert } = useAlert();
+  return (
+    <>
+      <Button
+        title={'Open Prompt'}
+        onPress={() => {
+          prompt({
+            title: 'Input your text',
+            submitLabel: 'Save',
+            onSubmit: (text) => {
+              alert({ title: 'Received text from prompt', message: text });
+            },
+          });
+        }}
+      />
+    </>
+  );
+};
+
+const WrappedBottomSheet: React.FC = () => {
+  const { openSheet } = useBottomSheet();
+  const { alert } = useAlert();
+  return (
+    <>
+      <Button
+        title={'Open BottomSheet Text only'}
+        onPress={() => {
+          openSheet({
+            sheetItems: [
+              { title: 'Title 1', onPress: () => alert({ title: 'Item 1 selected' }) },
+              { title: 'Title 2', onPress: () => alert({ title: 'Item 2 selected' }) },
+              { title: 'Title 3', onPress: () => alert({ title: 'Item 3 selected' }) },
+            ],
+          });
+        }}
+      />
+      <Button
+        title={'Open BottomSheet Text+Icon'}
+        onPress={() => {
+          openSheet({
+            sheetItems: [
+              { title: 'Camera', icon: 'camera', onPress: () => alert({ title: 'Camera selected' }) },
+              { title: 'Photo', icon: 'photo', onPress: () => alert({ title: 'Photo selected' }) },
+              { title: 'Document', icon: 'file-document', onPress: () => alert({ title: 'Document selected' }) },
             ],
           });
         }}

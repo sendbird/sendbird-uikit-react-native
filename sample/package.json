@@ -8,6 +8,7 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "adb:reverse": "adb start-server && adb reverse tcp:8081 tcp:8081",
     "get-stories": "sb-rn-get-stories",
     "storybook-watcher": "sb-rn-watcher"
   },

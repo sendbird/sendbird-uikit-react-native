@@ -18,7 +18,9 @@ export type PartialDeep<T> = T extends object
       }
   : T;
 
-export type SendbirdChatSDK = Sendbird.SendBirdInstance;
+export type Optional<T> = T | undefined;
+
+export type SendbirdChatSDK = Sendbird.SendBirdInstance & { get isCacheEnabled(): boolean };
 export type SendbirdMessage =
   | Sendbird.BaseMessageInstance
   | Sendbird.FileMessage

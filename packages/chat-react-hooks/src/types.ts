@@ -2,12 +2,6 @@ import type Sendbird from 'sendbird';
 
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
 
-declare module 'sendbird' {
-  interface SendBirdInstance {
-    get isCacheEnabled(): boolean;
-  }
-}
-
 export interface CustomQueryInterface<Data> {
   isLoading: boolean;
   next: () => Promise<Data[]>;

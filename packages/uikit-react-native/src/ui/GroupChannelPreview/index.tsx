@@ -1,8 +1,8 @@
 import React from 'react';
 import { Image, View } from 'react-native';
 
-import { Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { truncate, truncatedBadgeCount } from '@sendbird/uikit-utils';
+import { Badge, Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { truncate } from '@sendbird/uikit-utils';
 
 type Props = {
   coverUrl: string;
@@ -19,6 +19,7 @@ type Props = {
   muted?: boolean;
 };
 
+//TODO: Extract colors to theme color-set
 const GroupChannelPreview: React.FC<Props> = ({
   coverUrl,
   memberCount,
@@ -77,18 +78,7 @@ const GroupChannelPreview: React.FC<Props> = ({
               {body}
             </Text>
           </View>
-          {badgeCount > 0 && (
-            <View
-              style={[
-                styles.unreadBadge,
-                { backgroundColor: colors.primary, paddingTop: 2, paddingHorizontal: badgeCount >= 10 ? 8 : 0 },
-              ]}
-            >
-              <Text caption1 color={colors.background}>
-                {truncatedBadgeCount(badgeCount)}
-              </Text>
-            </View>
-          )}
+          {badgeCount > 0 && <Badge count={badgeCount} />}
         </View>
       </View>
       <Separator />

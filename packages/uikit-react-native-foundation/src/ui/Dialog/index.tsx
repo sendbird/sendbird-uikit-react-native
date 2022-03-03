@@ -6,38 +6,53 @@ import type { ActionMenuItem } from '../ActionMenu';
 import ActionMenu from '../ActionMenu';
 import type { AlertItem } from '../Alert';
 import Alert from '../Alert';
+import type { BottomSheetItem } from '../BottomSheet';
+import BottomSheet from '../BottomSheet';
+import type { PromptItem } from '../Prompt';
+import Prompt from '../Prompt';
 
-type JobInterface =
+type DialogJob =
   | {
       type: 'ActionMenu';
-      props: {
-        title?: string;
-        items: ActionMenuItem[];
-      };
+      props: ActionMenuItem;
     }
   | {
       type: 'Alert';
       props: AlertItem;
+    }
+  | {
+      type: 'Prompt';
+      props: PromptItem;
+    }
+  | {
+      type: 'BottomSheet';
+      props: BottomSheetItem;
     };
 
-type SelectJobProps<T extends JobInterface['type'], U extends JobInterface = JobInterface> = U extends { type: T }
+type DialogPropsBy<T extends DialogJob['type'], U extends DialogJob = DialogJob> = U extends { type: T }
   ? U['props']
   : never;
 
 type DialogContextType = {
-  alert: (props: SelectJobProps<'Alert'>) => void;
-  openMenu: (props: SelectJobProps<'ActionMenu'>) => void;
+  openMenu: (props: DialogPropsBy<'ActionMenu'>) => void;
+  alert: (props: DialogPropsBy<'Alert'>) => void;
+  prompt: (props: DialogPropsBy<'Prompt'>) => void;
+  openSheet: (props: DialogPropsBy<'BottomSheet'>) => void;
 };
-const DialogContext = React.createContext<DialogContextType | null>(null);
+
+const ActionMenuContext = React.createContext<Pick<DialogContextType, 'openMenu'> | null>(null);
+const AlertContext = React.createContext<Pick<DialogContextType, 'alert'> | null>(null);
+const PromptContext = React.createContext<Pick<DialogContextType, 'prompt'> | null>(null);
+const BottomSheetContext = React.createContext<Pick<DialogContextType, 'openSheet'> | null>(null);
 
 export const DialogProvider: React.FC = ({ children }) => {
   const render = useForceUpdate();
 
-  const queue = useRef<JobInterface[]>([]);
-  const workingJob = useRef<JobInterface>();
+  const dialogQueue = useRef<DialogJob[]>([]);
+  const workingDialogJob = useRef<DialogJob>();
   const visibleState = useRef(false);
 
-  const isProcessing = () => Boolean(workingJob.current);
+  const isProcessing = () => Boolean(workingDialogJob.current);
   const updateToShow = useCallback(() => {
     visibleState.current = true;
     render();
@@ -46,66 +61,100 @@ export const DialogProvider: React.FC = ({ children }) => {
     visibleState.current = false;
     render();
   }, []);
-
   const consumeQueue = useCallback(() => {
-    const job = queue.current.shift();
+    const job = dialogQueue.current.shift();
     if (job) {
-      workingJob.current = job;
+      workingDialogJob.current = job;
       updateToShow();
     } else {
-      workingJob.current = undefined;
+      workingDialogJob.current = undefined;
     }
   }, []);
 
   const createJob =
-    <T extends JobInterface['type']>(type: T) =>
-    (props: SelectJobProps<T>) => {
-      const jobItem = { type, props } as JobInterface;
-      if (isProcessing()) queue.current.push(jobItem);
+    <T extends DialogJob['type']>(type: T) =>
+    (props: DialogPropsBy<T>) => {
+      const jobItem = { type, props } as DialogJob;
+      if (isProcessing()) dialogQueue.current.push(jobItem);
       else {
-        workingJob.current = jobItem;
+        workingDialogJob.current = jobItem;
         updateToShow();
       }
     };
 
-  const alert = useCallback(createJob('Alert'), []);
   const openMenu = useCallback(createJob('ActionMenu'), []);
+  const alert = useCallback(createJob('Alert'), []);
+  const prompt = useCallback(createJob('Prompt'), []);
+  const openSheet = useCallback(createJob('BottomSheet'), []);
 
   return (
-    <DialogContext.Provider value={{ alert, openMenu }}>
-      {children}
-      {workingJob.current?.type === 'ActionMenu' && (
-        <ActionMenu
-          onDismiss={consumeQueue}
-          visible={visibleState.current}
-          onHide={updateToHide}
-          title={workingJob.current.props.title}
-          items={workingJob.current.props.items}
-        />
-      )}
-      {workingJob.current?.type === 'Alert' && (
-        <Alert
-          onDismiss={consumeQueue}
-          visible={visibleState.current}
-          onHide={updateToHide}
-          title={workingJob.current.props.title}
-          message={workingJob.current.props.message}
-          buttons={workingJob.current.props.buttons}
-        />
-      )}
-    </DialogContext.Provider>
+    <AlertContext.Provider value={{ alert }}>
+      <ActionMenuContext.Provider value={{ openMenu }}>
+        <PromptContext.Provider value={{ prompt }}>
+          <BottomSheetContext.Provider value={{ openSheet }}>
+            {children}
+            {workingDialogJob.current?.type === 'ActionMenu' && (
+              <ActionMenu
+                onDismiss={consumeQueue}
+                visible={visibleState.current}
+                onHide={updateToHide}
+                title={workingDialogJob.current.props.title}
+                menuItems={workingDialogJob.current.props.menuItems}
+              />
+            )}
+            {workingDialogJob.current?.type === 'Alert' && (
+              <Alert
+                onDismiss={consumeQueue}
+                visible={visibleState.current}
+                onHide={updateToHide}
+                title={workingDialogJob.current.props.title}
+                message={workingDialogJob.current.props.message}
+                buttons={workingDialogJob.current.props.buttons}
+              />
+            )}
+            {workingDialogJob.current?.type === 'Prompt' && (
+              <Prompt
+                onDismiss={consumeQueue}
+                visible={visibleState.current}
+                onHide={updateToHide}
+                title={workingDialogJob.current.props.title}
+                onSubmit={workingDialogJob.current.props.onSubmit}
+                submitLabel={workingDialogJob.current.props.submitLabel}
+                cancelLabel={workingDialogJob.current.props.cancelLabel}
+              />
+            )}
+            {workingDialogJob.current?.type === 'BottomSheet' && (
+              <BottomSheet
+                onDismiss={consumeQueue}
+                visible={visibleState.current}
+                onHide={updateToHide}
+                sheetItems={workingDialogJob.current.props.sheetItems}
+              />
+            )}
+          </BottomSheetContext.Provider>
+        </PromptContext.Provider>
+      </ActionMenuContext.Provider>
+    </AlertContext.Provider>
   );
 };
-export const useDialog = () => {
-  const context = useContext(DialogContext);
-  if (!context) throw new Error('DialogProvider is not provided');
+
+export const useActionMenu = () => {
+  const context = useContext(ActionMenuContext);
+  if (!context) throw new Error('ActionMenuContext is not provided');
   return context;
 };
 export const useAlert = () => {
-  const { alert } = useDialog();
-  return { alert };
+  const context = useContext(AlertContext);
+  if (!context) throw new Error('AlertContext is not provided');
+  return context;
 };
-export const useActionMenu = () => {
-  const { openMenu } = useDialog();
-  return { show: openMenu };
+export const usePrompt = () => {
+  const context = useContext(PromptContext);
+  if (!context) throw new Error('PromptContext is not provided');
+  return context;
+};
+export const useBottomSheet = () => {
+  const context = useContext(BottomSheetContext);
+  if (!context) throw new Error('BottomSheetContext is not provided');
+  return context;
 };

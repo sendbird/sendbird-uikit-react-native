@@ -28,7 +28,7 @@ export interface UIKitTheme extends AppearanceHelper {
   typography: Typography;
 }
 
-type Component = 'Header' | 'Button' | 'Dialog';
+type Component = 'Header' | 'Button' | 'Dialog' | 'Input' | 'Badge';
 type GetColorTree<
   Tree extends {
     Variant: {
@@ -48,19 +48,22 @@ export type ComponentColorTree = GetColorTree<{
     Header: 'nav';
     Button: 'contained' | 'text';
     Dialog: 'default';
-    Input: 'default';
+    Input: 'default' | 'underline';
+    Badge: 'default';
   };
   State: {
     Header: 'none';
     Button: 'enabled' | 'pressed' | 'disabled';
     Dialog: 'none';
     Input: 'active' | 'disabled';
+    Badge: 'none';
   };
   ColorPart: {
     Header: 'background' | 'borderBottom';
     Button: 'background' | 'content';
     Dialog: 'background' | 'text' | 'message' | 'highlight' | 'destructive';
-    Input: 'text' | 'background' | 'placeholder';
+    Input: 'text' | 'placeholder' | 'background' | 'highlight';
+    Badge: 'text' | 'background';
   };
 }>;
 type ComponentColors<T extends Component> = {
@@ -99,7 +102,8 @@ export type UIKitColors = {
     header: ComponentColors<'Header'>;
     button: ComponentColors<'Button'>;
     dialog: ComponentColors<'Dialog'>;
-    // input: ComponentColors<'Input'>;
+    input: ComponentColors<'Input'>;
+    badge: ComponentColors<'Badge'>;
   };
 };
 
