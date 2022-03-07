@@ -12,11 +12,14 @@ import SettingsScreen from './SettingsScreen';
 const Tab = createBottomTabNavigator();
 
 const GroupChannelTabs = () => {
-  const { colors } = useUIKitTheme();
+  const { colors, typography } = useUIKitTheme();
   const { sdk } = useSendbirdChat();
   const totalUnreadMessages = useTotalUnreadMessageCount(sdk);
   return (
-    <Tab.Navigator initialRouteName={Routes.GroupChannelList} screenOptions={{ tabBarActiveTintColor: colors.primary }}>
+    <Tab.Navigator
+      initialRouteName={Routes.GroupChannelList}
+      screenOptions={{ tabBarActiveTintColor: colors.primary, tabBarLabelStyle: typography.caption2 }}
+    >
       <Tab.Screen
         name={Routes.GroupChannelList}
         component={GroupChannelListScreen}

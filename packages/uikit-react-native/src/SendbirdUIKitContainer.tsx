@@ -13,7 +13,12 @@ import {
   SendbirdChatProvider,
 } from '@sendbird/uikit-react-native-core';
 import type { UIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { HeaderStyleProvider, LightUIKitTheme, UIKitThemeProvider } from '@sendbird/uikit-react-native-foundation';
+import {
+  DialogProvider,
+  HeaderStyleProvider,
+  LightUIKitTheme,
+  UIKitThemeProvider,
+} from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 
 type Props<Locale extends string> = {
@@ -55,7 +60,7 @@ const SendbirdUIKitContainer = <Locale extends string>({
                 filePickerService={services.filePicker}
                 notificationService={services.notification}
               >
-                {children}
+                <DialogProvider>{children}</DialogProvider>
               </PlatformServiceProvider>
             </LocalizationProvider>
           </HeaderStyleProvider>

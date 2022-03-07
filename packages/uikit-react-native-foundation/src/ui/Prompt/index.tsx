@@ -14,6 +14,7 @@ import TextInput from '../TextInput';
 
 export type PromptItem = {
   title: string;
+  placeholder?: string;
   onSubmit?: (text: string) => void;
   submitLabel?: string;
   onCancel?: () => void;
@@ -32,6 +33,7 @@ const Prompt: React.FC<Props> = ({
   onHide,
   autoFocus = true,
   title,
+  placeholder = 'Enter',
   onSubmit = EmptyFunction,
   onCancel = EmptyFunction,
   submitLabel = 'Submit',
@@ -77,7 +79,7 @@ const Prompt: React.FC<Props> = ({
         <View style={styles.inputContainer}>
           <TextInput
             ref={inputRef}
-            placeholder={'Enter'}
+            placeholder={placeholder}
             variant={'underline'}
             value={text}
             onChangeText={setText}
