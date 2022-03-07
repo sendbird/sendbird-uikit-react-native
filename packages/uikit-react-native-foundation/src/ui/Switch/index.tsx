@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, Pressable } from 'react-native';
+import { Animated, Platform, Pressable } from 'react-native';
 
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
@@ -73,12 +73,17 @@ const styles = createStyleSheet({
     width: OFFSET.W,
     height: OFFSET.W,
     borderRadius: OFFSET.W / 2,
-    backgroundColor: 'green',
-    elevation: 1,
-    shadowColor: 'black',
-    shadowRadius: 1,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 3,
+    ...Platform.select({
+      android: {
+        elevation: 2,
+      },
+      ios: {
+        shadowColor: 'black',
+        shadowRadius: 1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.4,
+      },
+    }),
   },
   thumbOn: {
     left: OFFSET.H / 2,

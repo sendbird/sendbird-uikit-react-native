@@ -34,17 +34,14 @@ const SettingsScreen = () => {
   const { prompt } = usePrompt();
   const { openMenu } = useActionMenu();
 
-  useLayoutEffect(() => {
-    navigation.setOptions({ headerShown: false });
-  }, []);
-
   const onChangeNickname = () => {
     prompt({
       title: 'Change nickname',
-      placeholder: 'Enter name',
       submitLabel: 'Save',
+      placeholder: 'Enter name',
+      defaultValue: currentUser?.nickname ?? '',
       onSubmit: async (nickname) => {
-        const user = await sdk.updateCurrentUserInfo(nickname, sdk.currentUser.profileUrl);
+        const user = await sdk.updateCurrentUserInfo(nickname, sdk.currentUser.plainProfileUrl);
         setCurrentUser(user);
       },
     });
@@ -56,13 +53,21 @@ const SettingsScreen = () => {
         {
           title: 'Take photo',
           onPress: async () => {
-            filePickerService.openCamera();
+            const file = await filePickerService.openCamera();
+            if (!file) return;
+
+            const user = await sdk.updateCurrentUserInfoWithProfileImage(sdk.currentUser.nickname, file);
+            setCurrentUser(user);
           },
         },
         {
           title: 'Choose photo',
           onPress: async () => {
-            filePickerService.openMediaLibrary();
+            const files = await filePickerService.openMediaLibrary({ selectionLimit: 3 });
+            if (!files || !files[0]) return;
+
+            const user = await sdk.updateCurrentUserInfoWithProfileImage(sdk.currentUser.nickname, files[0]);
+            setCurrentUser(user);
           },
         },
       ],
@@ -113,6 +118,10 @@ const SettingsScreen = () => {
     },
   ];
 
+  useLayoutEffect(() => {
+    navigation.setOptions({ headerShown: false });
+  }, []);
+
   if (!currentUser) return null;
 
   return (
@@ -124,7 +133,7 @@ const SettingsScreen = () => {
       />
       <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={styles.viewContainer}>
         <View style={styles.userInfoContainer}>
-          <Avatar uri={currentUser.profileUrl} size={80} containerStyle={styles.avatarContainer} />
+          <Avatar uri={currentUser.plainProfileUrl} size={80} containerStyle={styles.avatarContainer} />
           <Text h1 numberOfLines={1}>
             {currentUser.nickname}
           </Text>

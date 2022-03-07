@@ -2,7 +2,7 @@ import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import { Platform, StatusBar } from 'react-native';
-import ImagePicker from 'react-native-image-picker';
+import * as ImagePicker from 'react-native-image-picker';
 import Permissions from 'react-native-permissions';
 import SendBird from 'sendbird';
 
@@ -18,12 +18,12 @@ import { GroupChannelTabs, HomeScreen, InviteMembersScreen, PaletteScreen, Theme
 
 Platform.OS === 'android' && StatusBar.setTranslucent(false);
 const sdkInstance = new SendBird({ appId: APP_ID }) as SendbirdChatSDK;
+const filePicker = createFilePickerServiceNative(ImagePicker, Permissions);
 const RootStack = createNativeStackNavigator();
 
 const App = () => {
   const { scheme } = useAppearance();
   const isLightTheme = scheme === 'light';
-  const filePicker = createFilePickerServiceNative(ImagePicker, Permissions);
 
   return (
     <SendbirdUIKitContainer

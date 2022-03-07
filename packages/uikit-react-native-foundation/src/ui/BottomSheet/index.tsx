@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, useWindowDimensions } from 'react-native';
+import { TouchableOpacity, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import useHeaderStyle from '../../styles/useHeaderStyle';
@@ -37,7 +37,8 @@ const BottomSheet: React.FC<Props> = ({ onDismiss, onHide, visible, sheetItems }
     >
       <DialogSheet style={{ width, paddingBottom: bottom }}>
         {sheetItems.map(({ onPress, ...props }, idx) => (
-          <Pressable
+          <TouchableOpacity
+            activeOpacity={0.75}
             key={props.title + idx}
             style={{ paddingLeft: left, paddingRight: right }}
             onPress={() => {
@@ -49,7 +50,7 @@ const BottomSheet: React.FC<Props> = ({ onDismiss, onHide, visible, sheetItems }
             }}
           >
             <DialogSheet.Item {...props} />
-          </Pressable>
+          </TouchableOpacity>
         ))}
       </DialogSheet>
     </Modal>
