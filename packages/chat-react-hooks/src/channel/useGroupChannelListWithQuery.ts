@@ -41,9 +41,10 @@ export const useGroupChannelListWithQuery = (
   }, [groupChannelMap, options?.sortComparator]);
 
   // ---------- internal methods ---------- //
-  const updateChannels = (channels: SendbirdChannel[]) => {
+  const updateChannels = (channels: SendbirdChannel[], clearPrev: boolean) => {
     const groupChannels = channels.filter((c): c is Sendbird.GroupChannel => c.isGroupChannel());
-    setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(groupChannels, 'url') }));
+    if (clearPrev) setGroupChannelMap(arrayToMap(groupChannels, 'url'));
+    else setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(groupChannels, 'url') }));
     groupChannels.forEach((channel) => sdk.markAsDelivered(channel.url));
   };
   const deleteChannels = (channelUrls: string[]) => {
@@ -60,7 +61,10 @@ export const useGroupChannelListWithQuery = (
       clearChannels();
       if (uid) {
         queryRef.current = createGroupChannelListQuery(sdk, options?.queryCreator);
-        await next();
+        if (queryRef.current?.hasNext) {
+          const channels = await queryRef.current.next();
+          updateChannels(channels, true);
+        }
       }
     },
     [sdk, options?.queryCreator],
@@ -78,16 +82,16 @@ export const useGroupChannelListWithQuery = (
     sdk,
     'useGroupChannelListWithQuery',
     {
-      onChannelChanged: (channel) => updateChannels([channel]),
-      onChannelFrozen: (channel) => updateChannels([channel]),
-      onChannelUnfrozen: (channel) => updateChannels([channel]),
-      onChannelMemberCountChanged: (channels) => updateChannels(channels),
+      onChannelChanged: (channel) => updateChannels([channel], false),
+      onChannelFrozen: (channel) => updateChannels([channel], false),
+      onChannelUnfrozen: (channel) => updateChannels([channel], false),
+      onChannelMemberCountChanged: (channels) => updateChannels(channels, false),
       onChannelDeleted: (url) => deleteChannels([url]),
-      onUserJoined: (channel) => updateChannels([channel]),
+      onUserJoined: (channel) => updateChannels([channel], false),
       onUserLeft: (channel, user) => {
         const isMe = user.userId === userId;
         if (isMe) deleteChannels([channel.url]);
-        else updateChannels([channel]);
+        else updateChannels([channel], false);
       },
     },
     [sdk, userId],

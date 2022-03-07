@@ -1,19 +1,19 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useLayoutEffect } from 'react';
 import type Sendbird from 'sendbird';
 
 import { createInviteMembersFragment } from '@sendbird/uikit-react-native';
 import { Logger } from '@sendbird/uikit-utils';
 
+import { Routes, useAppNavigation } from '../../hooks/useAppNavigation';
+
 const InviteMembersFragment = createInviteMembersFragment<Sendbird.User>();
 
 const InviteMembersScreen: React.FC = () => {
-  const { setOptions, goBack } = useNavigation();
-  const { params } = useRoute();
-
-  Logger.log('navigationParams', params);
+  const { navigation, params } = useAppNavigation<Routes.InviteMembers>();
+  const { setOptions, goBack } = navigation;
 
   useLayoutEffect(() => {
+    Logger.log('channel type', params.channelType);
     setOptions({ headerShown: false });
   }, []);
 

@@ -10,8 +10,8 @@ export const useGroupChannelList = (
   options?: UseGroupChannelListOptions,
 ): UseGroupChannelList => {
   if (sdk.isCacheEnabled) {
-    return useGroupChannelListWithQuery(sdk, userId, options);
-  } else {
     return useGroupChannelListWithCollection(sdk, userId, options);
+  } else {
+    return useGroupChannelListWithQuery(sdk, userId, options);
   }
 };

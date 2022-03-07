@@ -14,6 +14,7 @@ type Props = {
 
   memberCount?: number;
   badgeCount: number;
+  maxBadgeCount?: number;
 
   frozen?: boolean;
   muted?: boolean;
@@ -24,6 +25,7 @@ const GroupChannelPreview: React.FC<Props> = ({
   coverUrl,
   memberCount,
   badgeCount,
+  maxBadgeCount,
   body,
   bodyIcon,
   title,
@@ -78,7 +80,7 @@ const GroupChannelPreview: React.FC<Props> = ({
               {body}
             </Text>
           </View>
-          {badgeCount > 0 && <Badge count={badgeCount} />}
+          {badgeCount > 0 && <Badge count={badgeCount} maxCount={maxBadgeCount} />}
         </View>
       </View>
       <Separator />

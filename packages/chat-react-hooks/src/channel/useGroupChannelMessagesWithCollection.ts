@@ -47,8 +47,9 @@ export const useGroupChannelMessagesWithCollection = (
   });
 
   // ---------- internal methods ------------ //
-  const updateMessages = (messages: Sendbird.BaseMessageInstance[]) => {
-    setMessageMap((prev) => ({ ...prev, ...arrayToMap(messages, 'reqId', 'messageId') }));
+  const updateMessages = (messages: Sendbird.BaseMessageInstance[], clearPrev: boolean) => {
+    if (clearPrev) setMessageMap(arrayToMap(messages, 'reqId', 'messageId'));
+    else setMessageMap((prev) => ({ ...prev, ...arrayToMap(messages, 'reqId', 'messageId') }));
   };
   const deleteMessages = (messages: SendbirdMessage[]) => {
     setMessageMap(({ ...draft }) => {
@@ -59,8 +60,9 @@ export const useGroupChannelMessagesWithCollection = (
       return draft;
     });
   };
-  const updateNextMessages = (messages: Sendbird.BaseMessageInstance[]) => {
-    setNextMessageMap((prev) => ({ ...prev, ...arrayToMap(messages, 'reqId', 'messageId') }));
+  const updateNextMessages = (messages: Sendbird.BaseMessageInstance[], clearPrev: boolean) => {
+    if (clearPrev) setNextMessageMap(arrayToMap(messages, 'reqId', 'messageId'));
+    else setNextMessageMap((prev) => ({ ...prev, ...arrayToMap(messages, 'reqId', 'messageId') }));
   };
   const deleteNextMessages = (messages: SendbirdMessage[]) => {
     setNextMessageMap(({ ...draft }) => {
@@ -71,36 +73,37 @@ export const useGroupChannelMessagesWithCollection = (
       return draft;
     });
   };
-  const clearAllMessages = () => {
-    setMessageMap({});
-    setNextMessageMap({});
-  };
   const init = useCallback(
     async (uid?: string) => {
       if (collectionRef.current) collectionRef.current?.dispose();
-      clearAllMessages();
 
       if (uid) {
         collectionRef.current = createMessageCollection(sdk, channel, options?.collectionCreator);
+        if (collectionRef.current?.hasPrevious) {
+          const list = await collectionRef.current?.loadPrevious();
+          updateMessages(list, true);
+        }
+        updateNextMessages([], true);
+
         collectionRef.current
           .initialize(sdk.MessageCollection.MessageCollectionInitPolicy.CACHE_AND_REPLACE_BY_API)
           .onCacheResult((err, messages) => {
             if (err) Logger.error(`[${hookName}/onCacheResult]`, err);
-            else updateMessages(messages);
+            else updateMessages(messages, false);
           })
           .onApiResult((err, messages) => {
             if (err) Logger.error(`[${hookName}/onApiResult]`, err);
-            else updateMessages(messages);
+            else updateMessages(messages, false);
           });
 
         collectionRef.current.setMessageCollectionHandler({
           onMessagesAdded(_, __, messages) {
             sdk.markAsDelivered(channel.url);
             sdk.markAsReadWithChannelUrls([channel.url]);
-            updateNextMessages(messages);
+            updateNextMessages(messages, false);
           },
           onMessagesUpdated(_, __, messages) {
-            updateNextMessages(messages);
+            updateNextMessages(messages, false);
           },
           onMessagesDeleted(_, __, messages) {
             deleteMessages(messages);
@@ -116,8 +119,6 @@ export const useGroupChannelMessagesWithCollection = (
             init(uid);
           },
         });
-
-        await prev();
       }
     },
     [sdk, channel, options?.collectionCreator],
@@ -147,7 +148,7 @@ export const useGroupChannelMessagesWithCollection = (
   const prev = useCallback(async () => {
     if (collectionRef.current && collectionRef.current?.hasPrevious) {
       const list = await collectionRef.current?.loadPrevious();
-      updateMessages(list);
+      updateMessages(list, false);
     }
   }, []);
 
@@ -161,7 +162,7 @@ export const useGroupChannelMessagesWithCollection = (
       list.push(...nextMessages);
     }
     if (list.length > 0) {
-      updateMessages(list);
+      updateMessages(list, false);
     }
   }, []);
 
@@ -170,11 +171,11 @@ export const useGroupChannelMessagesWithCollection = (
       const pendingMessage = channel.sendUserMessage(params, (message, error) => {
         onSent?.(pendingMessage, error);
         if (!error && message) {
-          updateNextMessages([message]);
+          updateNextMessages([message], false);
           next();
         }
       });
-      updateNextMessages([pendingMessage]);
+      updateNextMessages([pendingMessage], false);
       next();
 
       return pendingMessage;
@@ -186,11 +187,11 @@ export const useGroupChannelMessagesWithCollection = (
       const pendingMessage = channel.sendFileMessage(params, (message, error) => {
         onSent?.(pendingMessage, error);
         if (!error && message) {
-          updateNextMessages([message]);
+          updateNextMessages([message], false);
           next();
         }
       });
-      updateNextMessages([pendingMessage]);
+      updateNextMessages([pendingMessage], false);
       next();
 
       return pendingMessage;

@@ -118,6 +118,8 @@ export const DialogProvider: React.FC = ({ children }) => {
                 visible={visibleState.current}
                 onHide={updateToHide}
                 title={workingDialogJob.current.props.title}
+                placeholder={workingDialogJob.current.props.placeholder}
+                defaultValue={workingDialogJob.current.props.defaultValue}
                 onSubmit={workingDialogJob.current.props.onSubmit}
                 submitLabel={workingDialogJob.current.props.submitLabel}
                 cancelLabel={workingDialogJob.current.props.cancelLabel}

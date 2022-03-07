@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type Sendbird from 'sendbird';
 
 import type { SendbirdChannel, SendbirdChatSDK } from '@sendbird/uikit-utils';
-import { Logger, arrayToMap, useAsyncEffect } from '@sendbird/uikit-utils';
+import { Logger, arrayToMap, useAsyncEffect, useUniqId } from '@sendbird/uikit-utils';
 
 import useInternalPubSub from '../common/useInternalPubSub';
 import useChannelHandler from '../handler/useChannelHandler';
@@ -28,13 +28,14 @@ const createGroupChannelListCollection = (
     .build();
 };
 
-const hookName = 'useGroupChannelListWithCollection';
+const HOOK_NAME = 'useGroupChannelListWithCollection';
 
 export const useGroupChannelListWithCollection = (
   sdk: SendbirdChatSDK,
   userId?: string,
   options?: UseGroupChannelListOptions,
 ): UseGroupChannelList => {
+  const id = useUniqId(HOOK_NAME);
   const { events, subscribe } = useInternalPubSub();
 
   const collectionRef = useRef<Sendbird.GroupChannelCollection>();
@@ -49,9 +50,10 @@ export const useGroupChannelListWithCollection = (
   }, [groupChannelMap, options?.sortComparator]);
 
   // ---------- internal methods ---------- //
-  const updateChannels = (channels: SendbirdChannel[]) => {
+  const updateChannels = (channels: SendbirdChannel[], clearPrev: boolean) => {
     const groupChannels = channels.filter((c): c is Sendbird.GroupChannel => c.isGroupChannel());
-    setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(groupChannels, 'url') }));
+    if (clearPrev) setGroupChannelMap(arrayToMap(groupChannels, 'url'));
+    else setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(groupChannels, 'url') }));
     groupChannels.forEach((channel) => sdk.markAsDelivered(channel.url));
   };
   const deleteChannels = (channelUrls: string[]) => {
@@ -60,28 +62,27 @@ export const useGroupChannelListWithCollection = (
       return draft;
     });
   };
-  const clearChannels = () => {
-    setGroupChannelMap({});
-  };
   const init = useCallback(
     async (uid?: string) => {
       if (collectionRef.current) collectionRef.current?.dispose();
-      clearChannels();
 
       if (uid) {
         collectionRef.current = createGroupChannelListCollection(sdk, options?.collectionCreator);
+        if (collectionRef.current?.hasMore) {
+          updateChannels(await collectionRef.current?.loadMore(), true);
+        }
+
         collectionRef.current?.setGroupChannelCollectionHandler({
           onChannelsAdded(_, channels) {
-            updateChannels(channels);
+            updateChannels(channels, false);
           },
           onChannelsUpdated(_, channels) {
-            updateChannels(channels);
+            updateChannels(channels, false);
           },
           onChannelsDeleted(_, channelUrls) {
             deleteChannels(channelUrls);
           },
         });
-        updateChannels(await collectionRef.current?.loadMore());
       }
     },
     [sdk, options?.collectionCreator],
@@ -105,18 +106,18 @@ export const useGroupChannelListWithCollection = (
       subscribe(
         events.ChannelUpdated,
         ({ channel }, err) => {
-          if (err) Logger.warn(hookName, 'Cannot update channels', err);
-          else updateChannels([channel]);
+          if (err) Logger.warn(HOOK_NAME, 'Cannot update channels', err);
+          else updateChannels([channel], false);
         },
-        hookName,
+        HOOK_NAME,
       ),
       subscribe(
         events.ChannelDeleted,
         ({ channelUrl }, err) => {
-          if (err) Logger.warn(hookName, 'Cannot delete channels', err);
+          if (err) Logger.warn(HOOK_NAME, 'Cannot delete channels', err);
           else deleteChannels([channelUrl]);
         },
-        hookName,
+        HOOK_NAME,
       ),
     ];
 
@@ -127,18 +128,18 @@ export const useGroupChannelListWithCollection = (
 
   useChannelHandler(
     sdk,
-    hookName,
+    HOOK_NAME + id,
     {
-      onChannelChanged: (channel) => updateChannels([channel]),
-      onChannelFrozen: (channel) => updateChannels([channel]),
-      onChannelUnfrozen: (channel) => updateChannels([channel]),
-      onChannelMemberCountChanged: (channels) => updateChannels(channels),
+      onChannelChanged: (channel) => updateChannels([channel], false),
+      onChannelFrozen: (channel) => updateChannels([channel], false),
+      onChannelUnfrozen: (channel) => updateChannels([channel], false),
+      onChannelMemberCountChanged: (channels) => updateChannels(channels, false),
       onChannelDeleted: (url) => deleteChannels([url]),
-      onUserJoined: (channel) => updateChannels([channel]),
+      onUserJoined: (channel) => updateChannels([channel], false),
       onUserLeft: (channel, user) => {
         const isMe = user.userId === userId;
         if (isMe) deleteChannels([channel.url]);
-        else updateChannels([channel]);
+        else updateChannels([channel], false);
       },
     },
     [sdk, userId],

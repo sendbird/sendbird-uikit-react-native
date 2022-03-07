@@ -1,10 +1,9 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useLayoutEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 
 import { createGroupChannelListFragment } from '@sendbird/uikit-react-native';
-import { GroupChannelListContext, useConnection } from '@sendbird/uikit-react-native-core';
-import { Header, Icon } from '@sendbird/uikit-react-native-foundation';
 import { Logger } from '@sendbird/uikit-utils';
+
+import { Routes, useAppNavigation } from '../../../hooks/useAppNavigation';
 
 /**
  * Example for customizing navigation header with DomainContext
@@ -12,7 +11,8 @@ import { Logger } from '@sendbird/uikit-utils';
  * */
 // import { TouchableOpacity } from 'react-native';
 // const UseNavigationHeader = () => {
-//   const { setOptions, goBack } = useNavigation();
+//   const { navigation } = useAppNavigation<Routes.GroupChannelList>();
+//   const { goBack, setOptions } = navigation;
 //   const { disconnect } = useConnection();
 //   const fragment = useContext(GroupChannelListContext.Fragment);
 //   const typeSelector = useContext(GroupChannelListContext.TypeSelector);
@@ -42,13 +42,13 @@ import { Logger } from '@sendbird/uikit-utils';
 //
 // const CustomGroupChannelListFragment = createGroupChannelListFragment({ Header: UseNavigationHeader });
 // const CustomGroupChannelListScreen = () => {
-//   const { navigate } = useNavigation<any>();
+//   const { navigation } = useAppNavigation<Routes.GroupChannelList>();
 //
 //   return (
 //     <CustomGroupChannelListFragment
 //       TypeSelectorHeader={null}
 //       skipTypeSelection={false}
-//       onPressCreateChannel={(channelType) => navigate('InviteMembersScreen', { channelType })}
+//       onPressCreateChannel={(channelType) => navigation.navigate(Routes.InviteMembers, { channelType })}
 //       onPressChannel={(channel) => {
 //         // Navigate to GroupChannelFragment
 //         Logger.log('channel pressed', channel.url);
@@ -57,37 +57,43 @@ import { Logger } from '@sendbird/uikit-utils';
 //   );
 // };
 
-// replace whole header from module
-const DisconnectionHeader = () => {
-  const { goBack, setOptions } = useNavigation<any>();
-  const { disconnect } = useConnection();
-  const fragment = useContext(GroupChannelListContext.Fragment);
-  const typeSelector = useContext(GroupChannelListContext.TypeSelector);
-  useLayoutEffect(() => {
-    setOptions({ headerShown: false });
-  }, []);
-  const onBack = () => {
-    goBack();
-    disconnect();
-  };
-  return (
-    <Header
-      title={fragment.headerTitle}
-      right={<Icon icon={'create'} />}
-      onPressRight={typeSelector.show}
-      left={<Icon icon={'arrow-left'} />}
-      onPressLeft={onBack}
-    />
-  );
-};
-const DefaultGroupChannelListFragment = createGroupChannelListFragment({ Header: DisconnectionHeader });
+// replace the whole header from module
+// const DisconnectionHeader = () => {
+//   const { navigation } = useAppNavigation<Routes.GroupChannelList>();
+//   const { goBack, setOptions } = navigation;
+//   const { disconnect } = useConnection();
+//   const fragment = useContext(GroupChannelListContext.Fragment);
+//   const typeSelector = useContext(GroupChannelListContext.TypeSelector);
+//   useLayoutEffect(() => {
+//     setOptions({ headerShown: false });
+//   }, []);
+//   const onBack = () => {
+//     goBack();
+//     disconnect();
+//   };
+//   return (
+//     <Header
+//       title={fragment.headerTitle}
+//       right={<Icon icon={'create'} />}
+//       onPressRight={typeSelector.show}
+//       left={<Icon icon={'arrow-left'} />}
+//       onPressLeft={onBack}
+//     />
+//   );
+// };
+// const DefaultGroupChannelListFragment = createGroupChannelListFragment({ Header: DisconnectionHeader });
+
+const DefaultGroupChannelListFragment = createGroupChannelListFragment();
 const DefaultGroupChannelListScreen = () => {
-  const { navigate } = useNavigation<any>();
+  const { navigation } = useAppNavigation<Routes.GroupChannelList>();
+  useLayoutEffect(() => {
+    navigation.setOptions({ headerShown: false });
+  }, []);
 
   return (
     <DefaultGroupChannelListFragment
       skipTypeSelection={false}
-      onPressCreateChannel={(channelType) => navigate('InviteMembersScreen', { channelType })}
+      onPressCreateChannel={(channelType) => navigation.navigate(Routes.InviteMembers, { channelType })}
       onPressChannel={(channel) => {
         // Navigate to GroupChannelFragment
         Logger.log('channel pressed', channel.url);

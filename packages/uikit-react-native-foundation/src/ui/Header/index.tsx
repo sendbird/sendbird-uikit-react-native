@@ -18,7 +18,7 @@ type HeaderProps = BaseHeaderProps<{
 }>;
 
 const AlignMapper = { left: 'flex-start', center: 'center', right: 'flex-end' } as const;
-const Header: React.FC<HeaderProps> = ({
+const Header: React.FC<HeaderProps> & { Button: typeof HeaderButton } = ({
   children,
   titleAlign = 'left',
   title = null,
@@ -68,7 +68,13 @@ const Header: React.FC<HeaderProps> = ({
   );
 };
 
-const HeaderButton: React.FC<TouchableOpacityProps> = ({ children, disabled, onPress, ...props }) => {
+const HeaderButton: React.FC<TouchableOpacityProps & { color?: string }> = ({
+  children,
+  disabled,
+  onPress,
+  color,
+  ...props
+}) => {
   return (
     <TouchableOpacity
       style={styles.button}
@@ -77,7 +83,13 @@ const HeaderButton: React.FC<TouchableOpacityProps> = ({ children, disabled, onP
       onPress={(e) => onPress?.(e)}
       activeOpacity={0.7}
     >
-      {(typeof children).match(/string|number/) ? <Text button>{children}</Text> : children}
+      {(typeof children).match(/string|number/) ? (
+        <Text button color={color}>
+          {children}
+        </Text>
+      ) : (
+        children
+      )}
     </TouchableOpacity>
   );
 };
@@ -114,4 +126,5 @@ const styles = createStyleSheet({
   },
 });
 
+Header.Button = HeaderButton;
 export default Header;

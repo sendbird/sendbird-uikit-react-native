@@ -14,6 +14,8 @@ import TextInput from '../TextInput';
 
 export type PromptItem = {
   title: string;
+  placeholder?: string;
+  defaultValue?: string;
   onSubmit?: (text: string) => void;
   submitLabel?: string;
   onCancel?: () => void;
@@ -32,6 +34,8 @@ const Prompt: React.FC<Props> = ({
   onHide,
   autoFocus = true,
   title,
+  defaultValue = '',
+  placeholder = 'Enter',
   onSubmit = EmptyFunction,
   onCancel = EmptyFunction,
   submitLabel = 'Submit',
@@ -46,7 +50,7 @@ const Prompt: React.FC<Props> = ({
     { text: submitLabel, onPress: () => onSubmit(text) },
   ];
 
-  const [text, setText] = useState('');
+  const [text, setText] = useState(defaultValue);
 
   useEffect(() => {
     autoFocus && visible && setTimeout(() => inputRef.current?.focus(), 250);
@@ -77,7 +81,7 @@ const Prompt: React.FC<Props> = ({
         <View style={styles.inputContainer}>
           <TextInput
             ref={inputRef}
-            placeholder={'Enter'}
+            placeholder={placeholder}
             variant={'underline'}
             value={text}
             onChangeText={setText}

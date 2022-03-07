@@ -10,11 +10,14 @@ export interface NotificationServiceInterface {
 export interface FilePickerServiceInterface {
   hasMediaLibraryPermission(): Promise<boolean>;
   requestMediaLibraryPermission(): Promise<boolean>;
-  openMediaLibrary(): Promise<FilePickerResponse>;
+  openMediaLibrary(options?: {
+    selectionLimit?: number;
+    mediaType?: 'photo' | 'video';
+  }): Promise<null | FilePickerResponse[]>;
 
   hasCameraPermission(): Promise<boolean>;
   requestCameraPermission(): Promise<boolean>;
-  openCamera(): Promise<FilePickerResponse>;
+  openCamera(options?: { cameraType?: 'front' | 'back'; mediaType?: 'photo' | 'video' }): Promise<FilePickerResponse>;
 
   hasStoragePermission?(): Promise<boolean>;
   requestStoragePermission?(): Promise<boolean>;
