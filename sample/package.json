@@ -8,13 +8,16 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "adb:reverse": "adb start-server && adb reverse tcp:8081 tcp:8081",
     "get-stories": "sb-rn-get-stories",
     "storybook-watcher": "sb-rn-watcher"
   },
   "dependencies": {
+    "@faker-js/faker": "^6.0.0-alpha.7",
     "@react-native-async-storage/async-storage": "^1.15.17",
     "@react-native-community/datetimepicker": "^5.1.0",
     "@react-native-community/slider": "^4.2.0",
+    "@react-navigation/bottom-tabs": "^6.2.0",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.5",
     "@storybook/addon-actions": "^6.4.19",

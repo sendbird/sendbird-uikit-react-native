@@ -19,6 +19,7 @@ module.exports = {
     'eol-last': [1, 'always'],
     'multiline-ternary': [1, 'always-multiline'],
     'no-nested-ternary': 1,
+    'no-empty': [1, { 'allowEmptyCatch': true }],
     'comma-dangle': [1, 'always-multiline'],
     '@typescript-eslint/ban-types': 0,
     '@typescript-eslint/ban-ts-comment': 0,

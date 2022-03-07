@@ -11,6 +11,9 @@
       "path": "../packages/uikit-react-native-core"
     },
     {
+      "path": "../packages/uikit-react-native-foundation"
+    },
+    {
       "path": "../packages/uikit-utils"
     }
   ]

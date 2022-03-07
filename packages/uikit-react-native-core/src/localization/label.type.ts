@@ -1,7 +1,7 @@
 import type Sendbird from 'sendbird';
 
 import { getGroupChannelLastMessage, getGroupChannelPreviewTime, getGroupChannelTitle } from '@sendbird/uikit-utils';
-import type { PartialDeep } from '@sendbird/uikit-utils/src/types';
+import type { PartialDeep } from '@sendbird/uikit-utils';
 
 export type LabelLocale = 'en';
 
@@ -30,6 +30,14 @@ export interface LabelSet {
       SUPER_GROUP: string;
       /** @domain GroupChannelList > TypeSelector > Broadcast */
       BROADCAST: string;
+    };
+    CHANNEL_MENU: {
+      /** @domain GroupChannelList > ChannelMenu > Title */
+      TITLE: (currentUserId: string, channel: Sendbird.GroupChannel) => string;
+      /** @domain GroupChannelList > ChannelMenu > Menu */
+      MENU_NOTIFICATIONS: (channel?: Sendbird.GroupChannel) => string;
+      /** @domain GroupChannelList > ChannelMenu > Menu */
+      MENU_LEAVE_CHANNEL: string;
     };
   };
   INVITE_MEMBERS: {
@@ -60,6 +68,15 @@ export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): 
       SUPER_GROUP: 'Super group',
       BROADCAST: 'Broadcast',
       ...overrides?.GROUP_CHANNEL_LIST?.TYPE_SELECTOR,
+    },
+    CHANNEL_MENU: {
+      TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel),
+      MENU_NOTIFICATIONS: (channel) => {
+        if (!channel) return '';
+        if (channel.myPushTriggerOption === 'off') return 'Turn on notifications';
+        return 'Turn off notifications';
+      },
+      MENU_LEAVE_CHANNEL: 'Leave channel',
     },
   },
   INVITE_MEMBERS: {

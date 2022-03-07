@@ -1,3 +1,5 @@
+import type Sendbird from 'sendbird';
+
 export type FilterByValueType<T extends object, Type> = {
   [K in keyof T as T[K] extends Type ? K : never]: T[K];
 };
@@ -15,3 +17,13 @@ export type PartialDeep<T> = T extends object
         [P in keyof T]?: PartialDeep<T[P]>;
       }
   : T;
+
+export type Optional<T> = T | undefined;
+
+export type SendbirdChatSDK = Sendbird.SendBirdInstance & { get isCacheEnabled(): boolean };
+export type SendbirdMessage =
+  | Sendbird.BaseMessageInstance
+  | Sendbird.FileMessage
+  | Sendbird.UserMessage
+  | Sendbird.AdminMessage;
+export type SendbirdChannel = Sendbird.BaseChannel | Sendbird.GroupChannel | Sendbird.OpenChannel;

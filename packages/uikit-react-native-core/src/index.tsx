@@ -1,4 +1,4 @@
-export * from '@sendbird/chat-react-hooks';
+// export * from '@sendbird/chat-react-hooks';
 
 /** Context **/
 export { SendbirdChatContext, SendbirdChatProvider, useSendbirdChat } from './contexts/SendbirdChat';
@@ -38,5 +38,3 @@ export type {
   InviteMembersFragment,
   InviteMembersContextType,
 } from './domain/inviteMembers/types';
-
-export type { BaseHeaderProps } from './types';

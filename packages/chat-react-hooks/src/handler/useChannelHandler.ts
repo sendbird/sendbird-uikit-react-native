@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import type Sendbird from 'sendbird';
 
-import { Logger } from '@sendbird/uikit-utils';
+import { Logger, SendbirdChatSDK } from '@sendbird/uikit-utils';
 
 const useChannelHandler = (
-  sdk: Sendbird.SendBirdInstance,
+  sdk: SendbirdChatSDK,
   handlerId: string,
   hookHandler: Partial<Sendbird.ChannelHandler>,
   deps: React.DependencyList = [],

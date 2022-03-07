@@ -1,8 +1,7 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
 import React from 'react';
 
-import { Icon as IconComponent, Palette } from '@sendbird/uikit-react-native';
-import IconAssets from '@sendbird/uikit-react-native/src/assets/icon';
+import { Icon as IconComponent, Palette } from '@sendbird/uikit-react-native-foundation';
 
 const IconMeta: ComponentMeta<typeof IconComponent> = {
   title: 'Icon',
@@ -10,7 +9,7 @@ const IconMeta: ComponentMeta<typeof IconComponent> = {
   argTypes: {
     icon: {
       name: 'Icon',
-      options: Object.keys(IconAssets),
+      options: Object.keys(IconComponent.Assets),
       control: { type: 'select' },
     },
     sizes: {

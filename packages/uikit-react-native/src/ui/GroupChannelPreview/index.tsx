@@ -1,33 +1,31 @@
 import React from 'react';
 import { Image, View } from 'react-native';
 
-import { truncate, truncatedBadgeCount } from '@sendbird/uikit-utils';
-
-import type IconAssets from '../../assets/icon';
-import useUIKitTheme from '../../theme/useUIKitTheme';
-import createStyleSheet from '../../utils/createStyleSheet';
-import Icon from '../Icon';
-import Text from '../Text';
+import { Badge, Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { truncate } from '@sendbird/uikit-utils';
 
 type Props = {
   coverUrl: string;
 
   title: string;
   titleCaption: string;
-  bodyIcon?: keyof typeof IconAssets;
+  bodyIcon?: keyof typeof Icon.Assets;
   body: string;
 
   memberCount?: number;
   badgeCount: number;
+  maxBadgeCount?: number;
 
   frozen?: boolean;
   muted?: boolean;
 };
 
+//TODO: Extract colors to theme color-set
 const GroupChannelPreview: React.FC<Props> = ({
   coverUrl,
   memberCount,
   badgeCount,
+  maxBadgeCount,
   body,
   bodyIcon,
   title,
@@ -82,18 +80,7 @@ const GroupChannelPreview: React.FC<Props> = ({
               {body}
             </Text>
           </View>
-          {badgeCount > 0 && (
-            <View
-              style={[
-                styles.unreadBadge,
-                { backgroundColor: colors.primary, paddingTop: 2, paddingHorizontal: badgeCount >= 10 ? 8 : 0 },
-              ]}
-            >
-              <Text caption1 color={colors.background}>
-                {truncatedBadgeCount(badgeCount)}
-              </Text>
-            </View>
-          )}
+          {badgeCount > 0 && <Badge count={badgeCount} maxCount={maxBadgeCount} />}
         </View>
       </View>
       <Separator />

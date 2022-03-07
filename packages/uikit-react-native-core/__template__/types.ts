@@ -1,17 +1,27 @@
+// @ts-nocheck - !!REMOVE
 import type React from 'react';
 
-// @ts-ignore - !!REMOVE
-import type { BaseHeaderProps, CommonComponent } from '../../types';
+import type { BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
 
-/** Specific props type for creating fragment header **/
-type FragmentHeaderProps = BaseHeaderProps<{ title: string; left: React.ReactElement; onPressLeft: () => void }>;
+import type { CommonComponent } from '../../types';
+
 export type __domain__Props = {
+  Fragment: {
+    Header?: null | CommonComponent<
+      BaseHeaderProps<{
+        title: string;
+        left: React.ReactElement;
+        onPressLeft: () => void;
+      }>
+    >;
+    onPressHeaderLeft?: () => void;
+  };
+  Header: {
+    Header?: __domain__Props['Fragment']['Header'];
+    onPressHeaderLeft: __domain__Props['Fragment']['onPressHeaderLeft'];
+  };
   View: {
     domainViewProp?: string;
-  };
-  Fragment: {
-    Header?: null | ((props: FragmentHeaderProps) => null | JSX.Element);
-    onPressHeaderLeft?: () => void;
   };
 };
 
@@ -25,6 +35,7 @@ export type __domain__ContextType = {
 };
 export interface __domain__Module {
   Provider: React.FC;
+  Header: CommonComponent<__domain__Props['Header']>;
   View: CommonComponent<__domain__Props['View']>;
 }
 

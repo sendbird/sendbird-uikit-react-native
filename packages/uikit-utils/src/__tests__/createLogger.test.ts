@@ -1,5 +1,6 @@
-import { Logger } from '../createLogger';
+import { Logger } from '../shared/logger';
 
+// FIXME: spy isolation
 describe('createLogger/Logger', function () {
   const spies = {
     log: jest.spyOn(global.console, 'log').mockImplementation(() => true),

@@ -65,5 +65,5 @@ function domainReplacer(str, __domain__) {
 }
 
 function ignoreReplacer(str) {
-  return str.replace(/\/\/ @ts-ignore - !!REMOVE\n/g, '');
+  return str.replace(/\/\/ @ts-nocheck - !!REMOVE\n/g, '');
 }
