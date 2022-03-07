@@ -16,7 +16,7 @@ import { Routes } from './hooks/useAppNavigation';
 import useAppearance from './hooks/useAppearance';
 import { GroupChannelTabs, HomeScreen, InviteMembersScreen, PaletteScreen, ThemeColorsScreen } from './screens';
 
-Platform.OS === 'android' && StatusBar.setTranslucent(false);
+Platform.OS === 'android' && StatusBar.setTranslucent(true);
 const sdkInstance = new SendBird({ appId: APP_ID }) as SendbirdChatSDK;
 const filePicker = createFilePickerServiceNative(ImagePicker, Permissions);
 const RootStack = createNativeStackNavigator();
@@ -31,7 +31,7 @@ const App = () => {
       services={{ filePicker, notification: {} as any }}
       styles={{
         theme: isLightTheme ? LightUIKitTheme : DarkUIKitTheme,
-        statusBarTranslucent: Platform.select({ ios: true, android: false }),
+        statusBarTranslucent: Platform.select({ ios: true, android: true }),
       }}
     >
       <NavigationContainer theme={isLightTheme ? DefaultTheme : DarkTheme}>

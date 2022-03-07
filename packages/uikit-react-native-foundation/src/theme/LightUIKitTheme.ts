@@ -1,7 +1,7 @@
-import createAppearanceHelper from '../styles/appearanceHelper';
-import type { UIKitTheme } from '../types';
-import Palette from './Palette';
-import { defaultTypography } from './Typography';
+import createAppearanceHelper from "../styles/appearanceHelper";
+import type { UIKitTheme } from "../types";
+import Palette from "./Palette";
+import { defaultTypography } from "./Typography";
 
 const appearance = 'light';
 const LightUIKitTheme: UIKitTheme = {
@@ -109,6 +109,14 @@ const LightUIKitTheme: UIKitTheme = {
           none: {
             text: Palette.background50,
             background: Palette.primary300,
+          },
+        },
+      },
+      placeholder: {
+        default: {
+          none: {
+            content: Palette.onBackgroundLight03,
+            highlight: Palette.primary300,
           },
         },
       },

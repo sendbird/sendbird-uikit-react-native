@@ -34,6 +34,7 @@ const getStories = () => {
     require("../stories/Dialog.stories.tsx"),
     require("../stories/GroupChannelPreview.stories.tsx"),
     require("../stories/Icon.stories.tsx"),
+    require("../stories/Placeholder.stories.tsx"),
     require("../stories/Text.stories.tsx"),
   ];
 };

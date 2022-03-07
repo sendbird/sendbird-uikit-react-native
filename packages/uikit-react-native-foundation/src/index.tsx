@@ -16,7 +16,9 @@ export { DialogProvider, useActionMenu, useAlert, usePrompt } from './ui/Dialog'
 export { default as Divider } from './ui/Divider';
 export { default as Header } from './ui/Header';
 export { default as Icon } from './ui/Icon';
+export { default as LoadingSpinner } from './ui/LoadingSpinner';
 export { default as Modal } from './ui/Modal';
+export { default as Placeholder } from './ui/Placeholder';
 export { default as Prompt } from './ui/Prompt';
 export { default as Switch } from './ui/Switch';
 export { default as Text } from './ui/Text';

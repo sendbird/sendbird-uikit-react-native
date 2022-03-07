@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
 import { Logger } from '@sendbird/uikit-utils';
 
@@ -7,6 +7,7 @@ import createStyleSheet from '../../styles/createStyleSheet';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import DialogBox from '../Dialog/DialogBox';
+import LoadingSpinner from '../LoadingSpinner';
 import Modal from '../Modal';
 import Text from '../Text';
 
@@ -49,8 +50,8 @@ const ActionMenu: React.FC<Props> = ({ visible, onHide, onError, onDismiss, titl
             {title}
           </Text>
           {pending && (
-            <ActivityIndicator
-              size={'small'}
+            <LoadingSpinner
+              size={20}
               color={colors.ui.dialog.default.none.highlight}
               style={{ width: '10%', marginLeft: '4%' }}
             />

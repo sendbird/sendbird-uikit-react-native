@@ -46,6 +46,17 @@ export interface LabelSet {
     /** @domain InviteMembers > Header > Right */
     HEADER_RIGHT: <T>(params: { selectedUsers: Array<T> }) => string;
   };
+  PLACEHOLDER: {
+    NO_BANNED_MEMBERS: string;
+    NO_CHANNELS: string;
+    NO_MESSAGES: string;
+    NO_MUTED_MEMBERS: string;
+    NO_RESULTS_FOUND: string;
+    ERROR_SOMETHING_IS_WRONG: {
+      MESSAGE: string;
+      RETRY_LABEL: string;
+    };
+  };
 }
 
 type LabelCreateOptions = {
@@ -77,6 +88,7 @@ export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): 
         return 'Turn off notifications';
       },
       MENU_LEAVE_CHANNEL: 'Leave channel',
+      ...overrides?.GROUP_CHANNEL_LIST?.CHANNEL_MENU,
     },
   },
   INVITE_MEMBERS: {
@@ -87,5 +99,18 @@ export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): 
       return `${len} Create`;
     },
     ...overrides?.INVITE_MEMBERS,
+  },
+  PLACEHOLDER: {
+    NO_BANNED_MEMBERS: 'No banned members',
+    NO_CHANNELS: 'There are no channels',
+    NO_MESSAGES: 'There are no messages',
+    NO_MUTED_MEMBERS: 'No muted members',
+    NO_RESULTS_FOUND: 'No results found',
+    ...overrides?.PLACEHOLDER,
+    ERROR_SOMETHING_IS_WRONG: {
+      MESSAGE: 'Something is wrong',
+      RETRY_LABEL: 'Retry',
+      ...overrides?.PLACEHOLDER?.ERROR_SOMETHING_IS_WRONG,
+    },
   },
 });
