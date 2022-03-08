@@ -47,7 +47,6 @@ import { Routes, useAppNavigation } from '../../../hooks/useAppNavigation';
 //   return (
 //     <CustomGroupChannelListFragment
 //       TypeSelectorHeader={null}
-//       skipTypeSelection={false}
 //       onPressCreateChannel={(channelType) => navigation.navigate(Routes.InviteMembers, { channelType })}
 //       onPressChannel={(channel) => {
 //         // Navigate to GroupChannelFragment
@@ -92,7 +91,6 @@ const DefaultGroupChannelListScreen = () => {
 
   return (
     <DefaultGroupChannelListFragment
-      skipTypeSelection={false}
       onPressCreateChannel={(channelType) => navigation.navigate(Routes.InviteMembers, { channelType })}
       onPressChannel={(channel) => {
         // Navigate to GroupChannelFragment

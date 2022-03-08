@@ -15,6 +15,7 @@ const GroupChannelTabs = () => {
   const { colors, typography } = useUIKitTheme();
   const { sdk } = useSendbirdChat();
   const totalUnreadMessages = useTotalUnreadMessageCount(sdk);
+
   return (
     <Tab.Navigator
       initialRouteName={Routes.GroupChannelList}
@@ -25,7 +26,7 @@ const GroupChannelTabs = () => {
         component={GroupChannelListScreen}
         options={{
           tabBarLabel: 'Channels',
-          tabBarBadge: totalUnreadMessages || undefined,
+          tabBarBadge: totalUnreadMessages === '0' ? undefined : totalUnreadMessages,
           tabBarIcon: ({ color }) => <Icon icon={'chat-filled'} color={color} />,
         }}
       />

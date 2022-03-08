@@ -1,5 +1,7 @@
 /** UI **/
 export { default as GroupChannelPreview } from './ui/GroupChannelPreview';
+export { default as UserListItem } from './ui/UserListItem';
+export { default as TypedPlaceholder } from './ui/TypedPlaceholder';
 
 /** Fragments **/
 export { default as createGroupChannelListFragment } from './fragments/createGroupChannelListFragment';

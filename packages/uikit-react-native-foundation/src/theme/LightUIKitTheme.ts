@@ -112,6 +112,14 @@ const LightUIKitTheme: UIKitTheme = {
           },
         },
       },
+      placeholder: {
+        default: {
+          none: {
+            content: Palette.onBackgroundLight03,
+            highlight: Palette.primary300,
+          },
+        },
+      },
     },
   },
 };

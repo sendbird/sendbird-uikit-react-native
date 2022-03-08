@@ -112,6 +112,14 @@ const DarkUIKitTheme: UIKitTheme = {
           },
         },
       },
+      placeholder: {
+        default: {
+          none: {
+            content: Palette.onBackgroundDark03,
+            highlight: Palette.primary200,
+          },
+        },
+      },
     },
   },
 };

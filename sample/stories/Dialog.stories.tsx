@@ -68,15 +68,14 @@ const WrappedActionMenu: React.FC = () => {
                 },
               },
               {
-                title: 'Open menu 3 times after 1 sec',
+                title: 'Open menu 2 times after 2 sec',
                 onPress: () => {
                   return new Promise((resolve) => {
                     setTimeout(() => {
                       resolve(0);
                       openMenu({ title: 'Menu1', menuItems: [{ title: 'Hello' }] });
                       openMenu({ title: 'Menu2', menuItems: [{ title: 'Hello' }] });
-                      openMenu({ title: 'Menu3', menuItems: [{ title: 'Hello' }] });
-                    }, 1000);
+                    }, 2000);
                   });
                 },
               },
