@@ -24,7 +24,7 @@ import type { CommonComponent } from '../../types';
  * @type {GroupChannelListProps.List} - Props from Fragment for create List module
  * @property List.groupChannels - GroupChannels from SendbirdChat SDK, We are using '@sendbird/chat-react-hooks'
  * @property List.renderGroupChannelPreview - Method to render GroupChannel preview
- * @property List.onLoadMore - Method to load more data, called with onEndReached of FlatList
+ * @property List.onLoadNext - Method to load more data, called with onEndReached of FlatList
  * @property List.onRefresh - Method to refresh GroupChannels
  * @property List.refreshing - State of refreshing
  * @property List.flatListProps - FlatList props from Fragment {@link Fragment.flatListProps}
@@ -50,7 +50,7 @@ export type GroupChannelListProps = {
         onPressRight: () => void;
       }>
     >;
-    skipTypeSelection?: boolean;
+    // skipTypeSelection?: boolean;
     onPressChannel: (channel: Sendbird.GroupChannel) => void;
     onPressCreateChannel: (channelType: GroupChannelType) => void;
     queryCreator?: UseGroupChannelListOptions['queryCreator'];

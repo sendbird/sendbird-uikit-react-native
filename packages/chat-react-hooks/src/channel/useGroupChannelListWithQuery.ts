@@ -53,12 +53,8 @@ export const useGroupChannelListWithQuery = (
       return draft;
     });
   };
-  const clearChannels = () => {
-    setGroupChannelMap({});
-  };
   const init = useCallback(
     async (uid?: string) => {
-      clearChannels();
       if (uid) {
         queryRef.current = createGroupChannelListQuery(sdk, options?.queryCreator);
         if (queryRef.current?.hasNext) {

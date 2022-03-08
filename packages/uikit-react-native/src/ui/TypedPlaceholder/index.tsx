@@ -19,7 +19,7 @@ const TypedPlaceholder: React.FC<Props> = ({ type }) => {
     case 'no-banned-members':
       return <Placeholder icon={'ban'} message={LABEL.PLACEHOLDER.NO_BANNED_MEMBERS} />;
     case 'no-channels':
-      return <Placeholder icon={'chat'} message={LABEL.PLACEHOLDER.NO_BANNED_MEMBERS} />;
+      return <Placeholder icon={'chat'} message={LABEL.PLACEHOLDER.NO_CHANNELS} />;
     case 'no-messages':
       return <Placeholder icon={'message'} message={LABEL.PLACEHOLDER.NO_BANNED_MEMBERS} />;
     case 'no-muted-members':

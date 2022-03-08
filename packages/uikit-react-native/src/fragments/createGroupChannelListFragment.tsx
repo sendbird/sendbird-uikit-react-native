@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 import type Sendbird from 'sendbird';
 
 import { useGroupChannelList } from '@sendbird/chat-react-hooks';
@@ -8,6 +8,7 @@ import { createGroupChannelListModule, useLocalization, useSendbirdChat } from '
 import { Logger, channelComparator } from '@sendbird/uikit-utils';
 
 import GroupChannelPreview from '../ui/GroupChannelPreview';
+import TypedPlaceholder from '../ui/TypedPlaceholder';
 
 const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListModule>): GroupChannelListFragment => {
   const GroupChannelListModule = createGroupChannelListModule(initModule);
@@ -18,7 +19,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     onPressCreateChannel,
     queryCreator,
     sortComparator = channelComparator,
-    skipTypeSelection = true,
+    // skipTypeSelection = true,
     flatListProps = {},
     children,
   }) => {
@@ -63,11 +64,20 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
           groupChannels={groupChannels}
           onLoadNext={next}
           onRefresh={refresh}
-          flatListProps={flatListProps}
+          flatListProps={{
+            ListEmptyComponent: (
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <TypedPlaceholder type={'no-channels'} />
+              </View>
+            ),
+            contentContainerStyle: { flexGrow: 1 },
+            ...flatListProps,
+          }}
         />
         <GroupChannelListModule.TypeSelector
+          // NOTE: not included in first iteration
+          skipTypeSelection
           Header={TypeSelectorHeader}
-          skipTypeSelection={skipTypeSelection}
           onSelectType={onPressCreateChannel}
         />
         <GroupChannelListModule.ChannelMenu />
