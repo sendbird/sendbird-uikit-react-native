@@ -41,8 +41,8 @@ const GroupChannelPreviewMeta: ComponentMeta<typeof GroupChannelPreviewComponent
       name: 'Frozen',
       control: { type: 'boolean' },
     },
-    muted: {
-      name: 'Muted',
+    notificationOff: {
+      name: 'Notification Status',
       control: { type: 'boolean' },
     },
   },
@@ -55,7 +55,7 @@ const GroupChannelPreviewMeta: ComponentMeta<typeof GroupChannelPreviewComponent
     memberCount: 10,
     badgeCount: 5,
     frozen: true,
-    muted: true,
+    notificationOff: true,
   },
 };
 

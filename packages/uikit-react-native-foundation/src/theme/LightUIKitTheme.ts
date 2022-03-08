@@ -1,7 +1,7 @@
-import createAppearanceHelper from "../styles/appearanceHelper";
-import type { UIKitTheme } from "../types";
-import Palette from "./Palette";
-import { defaultTypography } from "./Typography";
+import createAppearanceHelper from '../styles/appearanceHelper';
+import type { UIKitTheme } from '../types';
+import Palette from './Palette';
+import { defaultTypography } from './Typography';
 
 const appearance = 'light';
 const LightUIKitTheme: UIKitTheme = {

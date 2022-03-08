@@ -21,7 +21,7 @@ export const getGroupChannelTitle = (
 };
 
 export const getGroupChannelPreviewTime = (channel: Sendbird.GroupChannel, locale?: Locale) => {
-  const timestamp = channel.lastMessage?.createdAt || channel.joinedAt || channel.createdAt;
+  const timestamp = channel.lastMessage?.createdAt || channel.joinedAt * 1000 || channel.createdAt;
   if (isToday(timestamp)) return format(timestamp, 'p', { locale });
   if (isYesterday(timestamp)) return 'Yesterday';
   return format(timestamp, 'MMM dd', { locale });

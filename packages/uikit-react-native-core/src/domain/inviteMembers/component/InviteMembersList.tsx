@@ -1,7 +1,8 @@
-import React from 'react';
-import { FlatList } from 'react-native';
+import React, { Context, useCallback, useContext } from 'react';
+import { FlatList, ListRenderItem } from 'react-native';
 
-import type { InviteMembersProps } from '../types';
+import { InviteMembersContext } from '../module/moduleContext';
+import type { InviteMembersContextType, InviteMembersProps } from '../types';
 
 const InviteMembersList = <T,>({
   users,
@@ -10,12 +11,18 @@ const InviteMembersList = <T,>({
   renderUser,
   onLoadNext,
 }: InviteMembersProps<T>['List']) => {
+  const context = useContext<InviteMembersContextType<T>>(InviteMembersContext as Context<InviteMembersContextType<T>>);
+  const renderItem: ListRenderItem<T> = useCallback(
+    ({ item }) => renderUser?.(item, context.selectedUsers, context.setSelectedUsers),
+    [renderUser, context.selectedUsers, context.setSelectedUsers],
+  );
+
   return (
     <FlatList
       data={users}
       refreshing={refreshing}
       onRefresh={onRefresh}
-      renderItem={({ item }) => renderUser?.(item)}
+      renderItem={renderItem}
       onEndReached={onLoadNext}
     />
   );

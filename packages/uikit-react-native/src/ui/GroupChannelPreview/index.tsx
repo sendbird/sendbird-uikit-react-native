@@ -17,7 +17,7 @@ type Props = {
   maxBadgeCount?: number;
 
   frozen?: boolean;
-  muted?: boolean;
+  notificationOff?: boolean;
 };
 
 //TODO: Extract colors to theme color-set
@@ -31,7 +31,7 @@ const GroupChannelPreview: React.FC<Props> = ({
   title,
   titleCaption,
   frozen,
-  muted,
+  notificationOff,
 }) => {
   const { colors, select, palette } = useUIKitTheme();
 
@@ -54,7 +54,7 @@ const GroupChannelPreview: React.FC<Props> = ({
               </Text>
             )}
             {frozen && <Icon size={16} icon={'freeze'} color={colors.primary} containerStyle={styles.frozen} />}
-            {muted && <Icon size={16} icon={'notifications-off-filled'} color={colors.onBackground03} />}
+            {notificationOff && <Icon size={16} icon={'notifications-off-filled'} color={colors.onBackground03} />}
           </View>
           <View style={styles.titleCaption}>
             <Text caption2 color={colors.onBackground03}>
@@ -164,7 +164,6 @@ const styles = createStyleSheet({
     position: 'absolute',
     right: 0,
     bottom: 0,
-    backgroundColor: 'red',
     height: 1,
     width: '84.5%',
   },

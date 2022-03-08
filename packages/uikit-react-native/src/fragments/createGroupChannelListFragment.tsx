@@ -40,9 +40,9 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
             titleCaption={LABEL.GROUP_CHANNEL_LIST.FRAGMENT.PREVIEW_TITLE_CAPTION(channel)}
             body={LABEL.GROUP_CHANNEL_LIST.FRAGMENT.PREVIEW_BODY(channel)}
             badgeCount={channel.unreadMessageCount}
-            frozen={channel.isFrozen}
             bodyIcon={channel.lastMessage?.isFileMessage() ? 'file-document' : undefined}
-            muted={channel.myMutedState === 'muted'}
+            frozen={channel.isFrozen}
+            notificationOff={channel.myPushTriggerOption === 'off'}
             memberCount={channel.memberCount}
           />
         </Pressable>

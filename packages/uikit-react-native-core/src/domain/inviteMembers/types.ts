@@ -1,5 +1,6 @@
 import type React from 'react';
 
+import type { UseUserListOptions } from '@sendbird/chat-react-hooks';
 import type { BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
 
 import type { CommonComponent } from '../../types';
@@ -36,6 +37,9 @@ export type InviteMembersProps<User> = {
     >;
     onPressHeaderLeft: () => void;
     onPressInviteMembers: (users: User[]) => Promise<void>;
+    sortComparator?: UseUserListOptions<User>['sortComparator'];
+    queryCreator?: UseUserListOptions<User>['queryCreator'];
+    renderUser?: InviteMembersProps<User>['List']['renderUser'];
   };
   Header: {
     Header?: InviteMembersProps<User>['Fragment']['Header'];
@@ -44,7 +48,11 @@ export type InviteMembersProps<User> = {
   };
   List: {
     users: User[];
-    renderUser: (user: User) => React.ReactElement | null;
+    renderUser: (
+      user: User,
+      selectedUsers: InviteMembersContextType<User>['selectedUsers'],
+      setSelectedUsers: InviteMembersContextType<User>['setSelectedUsers'],
+    ) => React.ReactElement | null;
     onLoadNext: () => Promise<void>;
     onRefresh?: () => Promise<void>;
     refreshing?: boolean;
