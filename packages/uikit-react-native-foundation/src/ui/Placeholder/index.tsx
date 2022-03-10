@@ -1,6 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 
+import { conditionChaining } from '@sendbird/uikit-utils';
+
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import Button from '../Button';
@@ -20,8 +22,14 @@ type Props = {
 const Placeholder: React.FC<Props> = ({ icon, loading = false, message = '', errorRetryLabel, onPressRetry }) => {
   const { colors } = useUIKitTheme();
 
+  // loading ? styles.containerLoading : errorRetryLabel ? styles.containerError : styles.container
   return (
-    <View style={loading ? styles.containerLoading : errorRetryLabel ? styles.containerError : styles.container}>
+    <View
+      style={conditionChaining(
+        [loading, errorRetryLabel],
+        [styles.containerLoading, styles.containerError, styles.container],
+      )}
+    >
       {loading ? (
         <LoadingSpinner size={64} color={colors.ui.placeholder.default.none.highlight} />
       ) : (

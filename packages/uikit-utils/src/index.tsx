@@ -1,6 +1,7 @@
-export { default as arrayToMap } from './shared/arrayToMap';
 export { Logger } from './shared/logger';
+export { default as arrayToMap } from './shared/arrayToMap';
 export { createPubSub, PubSubEvent } from './shared/pubsub';
+export { default as conditionChaining } from './shared/conditionChaining';
 
 export { useAsyncEffect, useAsyncLayoutEffect, useForceUpdate, useUniqId } from './hooks';
 

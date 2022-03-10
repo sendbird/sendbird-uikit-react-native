@@ -54,6 +54,7 @@ export interface UseGroupChannelMessages {
     params: Sendbird.UserMessageParams,
     onSent?: (message: Sendbird.UserMessage, error?: Sendbird.SendBirdError) => void,
   ) => Sendbird.UserMessage;
+  resendMessage: (failedMessage: Sendbird.FileMessage | Sendbird.UserMessage) => Promise<void>;
 }
 export type UseGroupChannelMessagesOptions = {
   sortComparator?: (a: SendbirdMessage, b: SendbirdMessage) => number;

@@ -2,7 +2,7 @@ import type Sendbird from 'sendbird';
 
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 
-import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../types';
+import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';
 import { useGroupChannelMessagesWithCollection } from './useGroupChannelMessagesWithCollection';
 import { useGroupChannelMessagesWithQuery } from './useGroupChannelMessagesWithQuery';
 
