@@ -1,25 +1,20 @@
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, { useEffect, useState } from 'react';
-import { Platform, StatusBar } from 'react-native';
-import * as ImagePicker from 'react-native-image-picker';
-import Permissions from 'react-native-permissions';
-import SendBird from 'sendbird';
+import React from 'react';
 
 import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
-import { createFilePickerServiceNative } from '@sendbird/uikit-react-native-core';
 import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 
-import { APP_ID } from './env';
+import { FilePickerService, GetTranslucent, NotificationService, RootStack, SendBirdInstance } from './factory';
 import { Routes } from './hooks/useAppNavigation';
 import useAppearance from './hooks/useAppearance';
-import { GroupChannelTabs, HomeScreen, InviteMembersScreen, PaletteScreen, ThemeColorsScreen } from './screens';
-
-Platform.OS === 'android' && StatusBar.setTranslucent(true);
-const sdkInstance = new SendBird({ appId: APP_ID }) as SendbirdChatSDK;
-const filePicker = createFilePickerServiceNative(ImagePicker, Permissions);
-const RootStack = createNativeStackNavigator();
+import {
+  GroupChannelTabs,
+  HomeScreen,
+  InviteMembersScreen,
+  PaletteScreen,
+  StorybookScreen,
+  ThemeColorsScreen,
+} from './screens';
 
 const App = () => {
   const { scheme } = useAppearance();
@@ -27,12 +22,9 @@ const App = () => {
 
   return (
     <SendbirdUIKitContainer
-      chat={{ sdkInstance }}
-      services={{ filePicker, notification: {} as any }}
-      styles={{
-        theme: isLightTheme ? LightUIKitTheme : DarkUIKitTheme,
-        statusBarTranslucent: Platform.select({ ios: true, android: true }),
-      }}
+      chat={{ sdkInstance: SendBirdInstance }}
+      services={{ filePicker: FilePickerService, notification: NotificationService }}
+      styles={{ theme: isLightTheme ? LightUIKitTheme : DarkUIKitTheme, statusBarTranslucent: GetTranslucent() }}
     >
       <NavigationContainer theme={isLightTheme ? DefaultTheme : DarkTheme}>
         <RootStack.Navigator>
@@ -51,15 +43,6 @@ const App = () => {
       </NavigationContainer>
     </SendbirdUIKitContainer>
   );
-};
-
-const StorybookScreen = () => {
-  const [screen, setScreen] = useState<JSX.Element | null>(null);
-  useEffect(() => {
-    const StorybookUI = require('../stories').default;
-    setScreen(<StorybookUI />);
-  }, []);
-  return <>{screen}</>;
 };
 
 export default App;
