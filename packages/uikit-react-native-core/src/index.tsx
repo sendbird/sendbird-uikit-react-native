@@ -23,8 +23,15 @@ export type {
 } from './platform/types';
 
 /** Domain **/
+export * from './domain/groupChannel';
 export * from './domain/groupChannelList';
 export * from './domain/inviteMembers';
+export type {
+  GroupChannelProps,
+  GroupChannelModule,
+  GroupChannelFragment,
+  GroupChannelContextType,
+} from './domain/groupChannel/types';
 export type {
   GroupChannelType,
   GroupChannelListProps,

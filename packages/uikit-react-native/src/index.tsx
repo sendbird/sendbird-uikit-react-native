@@ -4,6 +4,7 @@ export { default as UserListItem } from './ui/UserListItem';
 export { default as TypedPlaceholder } from './ui/TypedPlaceholder';
 
 /** Fragments **/
+export { default as createGroupChannelFragment } from './fragments/createGroupChannelFragment';
 export { default as createGroupChannelListFragment } from './fragments/createGroupChannelListFragment';
 export { default as createInviteMembersFragment } from './fragments/createInviteMembersFragment';
 
