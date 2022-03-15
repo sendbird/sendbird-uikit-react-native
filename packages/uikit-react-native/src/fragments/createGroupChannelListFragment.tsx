@@ -27,6 +27,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     const { groupChannels, refresh, refreshing, next } = useGroupChannelList(sdk, currentUser?.userId, {
       queryCreator,
       sortComparator,
+      enableCollectionWithoutLocalCache: true,
     });
 
     const { LABEL } = useLocalization();

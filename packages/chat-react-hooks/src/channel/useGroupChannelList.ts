@@ -9,7 +9,7 @@ export const useGroupChannelList = (
   userId?: string,
   options?: UseGroupChannelListOptions,
 ): UseGroupChannelList => {
-  if (sdk.isCacheEnabled) {
+  if (sdk.isCacheEnabled || options?.enableCollectionWithoutLocalCache) {
     return useGroupChannelListWithCollection(sdk, userId, options);
   } else {
     return useGroupChannelListWithQuery(sdk, userId, options);

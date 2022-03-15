@@ -12,7 +12,7 @@ export const useGroupChannelMessages = (
   userId?: string,
   options?: UseGroupChannelMessagesOptions,
 ): UseGroupChannelMessages => {
-  if (sdk.isCacheEnabled) {
+  if (sdk.isCacheEnabled || options?.enableCollectionWithoutLocalCache) {
     return useGroupChannelMessagesWithCollection(sdk, channel, userId, options);
   } else {
     return useGroupChannelMessagesWithQuery(sdk, channel, userId, options);
