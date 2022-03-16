@@ -1,4 +1,5 @@
 import type React from 'react';
+import type Sendbird from 'sendbird';
 
 import type { BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
 
@@ -6,18 +7,19 @@ import type { CommonComponent } from '../../types';
 
 export type GroupChannelProps = {
   Fragment: {
+    Header?: GroupChannelProps['Header']['Header'];
+    onPressHeaderLeft: GroupChannelProps['Header']['onPressHeaderLeft'];
+    channel: Sendbird.GroupChannel;
+  };
+  Header: {
     Header?: null | CommonComponent<
       BaseHeaderProps<{
-        title: string;
+        title: React.ReactElement;
         left: React.ReactElement;
         onPressLeft: () => void;
       }>
     >;
-    onPressHeaderLeft?: () => void;
-  };
-  Header: {
-    Header?: GroupChannelProps['Fragment']['Header'];
-    onPressHeaderLeft: GroupChannelProps['Fragment']['onPressHeaderLeft'];
+    onPressHeaderLeft: () => void;
   };
   View: {
     domainViewProp?: string;
@@ -30,10 +32,13 @@ export type GroupChannelProps = {
  * with getting data from the domain context
  * */
 export type GroupChannelContextType = {
-  fragment: { headerTitle: string };
+  Fragment: React.Context<{
+    headerTitle: string;
+    channel: Sendbird.GroupChannel;
+  }>;
 };
 export interface GroupChannelModule {
-  Provider: React.FC;
+  Provider: React.FC<{ channel: Sendbird.GroupChannel }>;
   Header: CommonComponent<GroupChannelProps['Header']>;
   View: CommonComponent<GroupChannelProps['View']>;
 }

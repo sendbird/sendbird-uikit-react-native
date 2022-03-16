@@ -1,4 +1,4 @@
-import React, { Context, useCallback, useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { FlatList, ListRenderItem } from 'react-native';
 
 import { InviteMembersContext } from '../module/moduleContext';
@@ -11,7 +11,7 @@ const InviteMembersList = <T,>({
   renderUser,
   onLoadNext,
 }: InviteMembersProps<T>['List']) => {
-  const context = useContext<InviteMembersContextType<T>>(InviteMembersContext as Context<InviteMembersContextType<T>>);
+  const context = useContext(InviteMembersContext.List as InviteMembersContextType<T>['List']);
   const renderItem: ListRenderItem<T> = useCallback(
     ({ item }) => renderUser?.(item, context.selectedUsers, context.setSelectedUsers),
     [renderUser, context.selectedUsers, context.setSelectedUsers],

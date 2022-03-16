@@ -6,15 +6,17 @@ import { EmptyFunction } from '@sendbird/uikit-utils';
 import { useLocalization } from '../../../contexts/Localization';
 import type { GroupChannelListContextType } from '../types';
 
-export const GroupChannelListContext = {
-  Fragment: createContext<GroupChannelListContextType['Fragment']>({ headerTitle: '' }),
-  TypeSelector: createContext<GroupChannelListContextType['TypeSelector']>({
+export const GroupChannelListContext: GroupChannelListContextType = {
+  Fragment: createContext({
     headerTitle: '',
-    visible: false,
+  }),
+  TypeSelector: createContext({
+    headerTitle: '',
+    visible: Boolean(),
     hide: EmptyFunction,
     show: EmptyFunction,
   }),
-  ChannelMenu: createContext<GroupChannelListContextType['ChannelMenu']>({
+  ChannelMenu: createContext({
     selectChannel: EmptyFunction,
   }),
 };

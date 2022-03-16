@@ -1,7 +1,7 @@
 import { useMemo, useReducer } from 'react';
 import type Sendbird from 'sendbird';
 
-import { SendbirdMessage, arrayToMap } from '@sendbird/uikit-utils';
+import { SendbirdMessage, arrayToMap, isNewMessage } from '@sendbird/uikit-utils';
 
 import type { UseGroupChannelMessagesOptions } from '../../types';
 
@@ -90,12 +90,7 @@ export const useGroupChannelMessagesReducer = (
     return Object.values(messageMap);
   }, [sortComparator, messageMap]);
   const nextMessages = Object.values(nextMessageMap);
-  const newMessagesFromNext = nextMessages.filter((msg) => {
-    const isMyMessage = 'sender' in msg && msg.sender?.userId === userId;
-    if (isMyMessage) return false;
-    if (msg.isAdminMessage()) return false;
-    return msg.updatedAt === 0;
-  });
+  const newMessagesFromNext = nextMessages.filter((msg) => isNewMessage(msg, userId));
 
   return {
     updateLoading,

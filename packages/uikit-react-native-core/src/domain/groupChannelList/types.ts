@@ -85,19 +85,19 @@ export type GroupChannelListProps = {
  * with getting data from the domain context
  * */
 export type GroupChannelListContextType = {
-  Fragment: {
+  Fragment: React.Context<{
     headerTitle: string;
-  };
-  TypeSelector: {
+  }>;
+  TypeSelector: React.Context<{
     visible: boolean;
     show: () => void;
     hide: () => void;
     headerTitle: string;
-  };
-  ChannelMenu: {
+  }>;
+  ChannelMenu: React.Context<{
     selectedChannel?: Sendbird.GroupChannel;
     selectChannel: (channel?: Sendbird.GroupChannel) => void;
-  };
+  }>;
 };
 export interface GroupChannelListModule {
   Provider: React.FC;

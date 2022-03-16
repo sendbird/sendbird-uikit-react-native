@@ -1,17 +1,26 @@
 import React, { createContext } from 'react';
 
-import type { GroupChannelContextType } from '../types';
+import { useLocalization } from '../../../contexts/Localization';
+import { useSendbirdChat } from '../../../contexts/SendbirdChat';
+import type { GroupChannelContextType, GroupChannelModule } from '../types';
 
-export const GroupChannelContext = createContext<GroupChannelContextType>({
-  fragment: { headerTitle: '' },
-});
+export const GroupChannelContext: GroupChannelContextType = {
+  Fragment: createContext({
+    headerTitle: '',
+    channel: {} as any,
+  }),
+};
 
-export const GroupChannelContextProvider: React.FC = ({ children }) => {
-  // const [visible, setVisible] = useState(false);
+export const GroupChannelContextProvider: GroupChannelModule['Provider'] = ({ children, channel }) => {
+  const { LABEL } = useLocalization();
+  const { currentUser } = useSendbirdChat();
+  if (!channel) throw new Error('GroupChannel is not provided to GroupChannelModule');
 
   return (
-    <GroupChannelContext.Provider value={{ fragment: { headerTitle: 'LABEL.DOMAIN.HEADER_TITLE' } }}>
+    <GroupChannelContext.Fragment.Provider
+      value={{ headerTitle: LABEL.GROUP_CHANNEL.FRAGMENT.HEADER_TITLE(currentUser?.userId ?? '', channel), channel }}
+    >
       {children}
-    </GroupChannelContext.Provider>
+    </GroupChannelContext.Fragment.Provider>
   );
 };

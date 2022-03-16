@@ -7,11 +7,11 @@ import { EmptyFunction } from '@sendbird/uikit-utils';
 const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChannelFragment => {
   const GroupChannelModule = createGroupChannelModule(initModule);
 
-  return ({ Header, onPressHeaderLeft = EmptyFunction, children }) => {
+  return ({ Header, onPressHeaderLeft = EmptyFunction, channel, children }) => {
     // const { domainViewProps } = useGroupChannel();
 
     return (
-      <GroupChannelModule.Provider>
+      <GroupChannelModule.Provider channel={channel}>
         <GroupChannelModule.Header Header={Header} onPressHeaderLeft={onPressHeaderLeft} />
         <GroupChannelModule.View domainViewProp={'some-prop'} />
         {children}

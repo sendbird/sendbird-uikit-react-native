@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type React from 'react';
 import type Sendbird from 'sendbird';
 
 export type FilterByValueType<T extends object, Type> = {
@@ -19,6 +21,8 @@ export type PartialDeep<T> = T extends object
   : T;
 
 export type Optional<T> = T | undefined;
+
+export type ContextValue<T extends React.Context<any>> = T extends React.Context<infer V> ? V : never;
 
 export type SendbirdChatSDK = Sendbird.SendBirdInstance & { get isCacheEnabled(): boolean };
 export type SendbirdMessage =

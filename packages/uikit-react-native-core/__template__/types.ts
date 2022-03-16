@@ -7,18 +7,14 @@ import type { CommonComponent } from '../../types';
 
 export type __domain__Props = {
   Fragment: {
-    Header?: null | CommonComponent<
-      BaseHeaderProps<{
-        title: string;
-        left: React.ReactElement;
-        onPressLeft: () => void;
-      }>
-    >;
-    onPressHeaderLeft?: () => void;
+    Header?: __domain__Props['Header']['Header'];
+    onPressHeaderLeft: __domain__Props['Header']['onPressHeaderLeft'];
   };
   Header: {
-    Header?: __domain__Props['Fragment']['Header'];
-    onPressHeaderLeft: __domain__Props['Fragment']['onPressHeaderLeft'];
+    Header?: null | CommonComponent<
+      BaseHeaderProps<{ title: string; left: React.ReactElement; onPressLeft: () => void }>
+    >;
+    onPressHeaderLeft: () => void;
   };
   View: {
     domainViewProp?: string;
@@ -31,7 +27,9 @@ export type __domain__Props = {
  * with getting data from the domain context
  * */
 export type __domain__ContextType = {
-  fragment: { headerTitle: string };
+  Fragment: React.Context<{
+    headerTitle: string;
+  }>;
 };
 export interface __domain__Module {
   Provider: React.FC;

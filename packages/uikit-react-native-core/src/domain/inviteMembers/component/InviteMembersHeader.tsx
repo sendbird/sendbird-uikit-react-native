@@ -1,4 +1,4 @@
-import React, { Context, useContext } from 'react';
+import React, { useContext } from 'react';
 
 import { Header as DefaultHeader, Icon, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
@@ -11,17 +11,17 @@ const InviteMembersHeader = <T,>({
   onPressInviteMembers,
 }: InviteMembersProps<T>['Header']) => {
   const { colors } = useUIKitTheme();
-  const { selectedUsers, fragment } = useContext<InviteMembersContextType<T>>(
-    InviteMembersContext as Context<InviteMembersContextType<T>>,
-  );
+  const { headerRight, headerTitle } = useContext(InviteMembersContext.Fragment);
+
+  const { selectedUsers } = useContext(InviteMembersContext.List as InviteMembersContextType<T>['List']);
   const canPress = selectedUsers.length > 0;
   if (!Header) return null;
   return (
     <Header
-      title={fragment.headerTitle}
+      title={headerTitle}
       right={
         <Text button color={canPress ? colors.primary : colors.onBackground04}>
-          {fragment.headerRight}
+          {headerRight}
         </Text>
       }
       onPressRight={canPress ? () => onPressInviteMembers(selectedUsers) : undefined}

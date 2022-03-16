@@ -1,7 +1,13 @@
+import type { Locale } from 'date-fns';
 import type Sendbird from 'sendbird';
 
-import { getGroupChannelLastMessage, getGroupChannelPreviewTime, getGroupChannelTitle } from '@sendbird/uikit-utils';
 import type { PartialDeep } from '@sendbird/uikit-utils';
+import {
+  dateSeparator,
+  getGroupChannelLastMessage,
+  getGroupChannelPreviewTime,
+  getGroupChannelTitle,
+} from '@sendbird/uikit-utils';
 
 export type LabelLocale = 'en';
 
@@ -10,6 +16,16 @@ export type LabelLocale = 'en';
  * Do not configure over 3 depths (for overrides easy)
  * */
 export interface LabelSet {
+  GROUP_CHANNEL: {
+    FRAGMENT: {
+      /** @domain GroupChannel > Fragment > Header > Title */
+      HEADER_TITLE: (currentUserId: string, channel: Sendbird.GroupChannel) => string;
+      /** @domain GroupChannel > Fragment > List > Banner_Frozen */
+      LIST_BANNER_FROZEN: string;
+      /** @domain GroupChannel > Fragment > List > Date_Separator */
+      LIST_DATE_SEPARATOR: (date: Date, locale?: Locale) => string;
+    };
+  };
   GROUP_CHANNEL_LIST: {
     FRAGMENT: {
       /** @domain GroupChannelList > Fragment > Header > Title */
@@ -64,7 +80,22 @@ type LabelCreateOptions = {
   overrides?: PartialDeep<LabelSet>;
 };
 
+/**
+ * Create label set
+ * You can create localized labels, you should provide locale for date and string as a parameters
+ *
+ * @param {LabelCreateOptions.dateLocale} dateLocale Date locale (from date-fns)
+ * @param {LabelCreateOptions.overrides} [overrides] Localized label strings
+ * */
 export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): LabelSet => ({
+  GROUP_CHANNEL: {
+    FRAGMENT: {
+      HEADER_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel),
+      LIST_BANNER_FROZEN: 'Channel frozen',
+      LIST_DATE_SEPARATOR: (date, locale) => dateSeparator(date, locale),
+      ...overrides?.GROUP_CHANNEL?.FRAGMENT,
+    },
+  },
   GROUP_CHANNEL_LIST: {
     FRAGMENT: {
       HEADER_TITLE: 'Channels',

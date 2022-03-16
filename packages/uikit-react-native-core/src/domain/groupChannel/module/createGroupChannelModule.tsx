@@ -1,11 +1,11 @@
 import GroupChannelHeader from '../component/GroupChannelHeader';
-import GroupChannelView from '../component/GroupChannelView';
+import GroupChannelMessageList from '../component/GroupChannelMessageList';
 import type { GroupChannelModule } from '../types';
 import { GroupChannelContextProvider } from './moduleContext';
 
 const createGroupChannelModule = ({
   Header = GroupChannelHeader,
-  View = GroupChannelView,
+  View = GroupChannelMessageList,
   Provider = GroupChannelContextProvider,
   ...module
 }: Partial<GroupChannelModule> = {}): GroupChannelModule => {

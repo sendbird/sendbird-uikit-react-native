@@ -3,9 +3,11 @@ import React, { createContext } from 'react';
 
 import type { __domain__ContextType } from '../types';
 
-export const __domain__Context = createContext<__domain__ContextType>({
-  fragment: { headerTitle: '' },
-});
+export const __domain__Context: __domain__ContextType = {
+  Fragment: createContext({
+    headerTitle: '',
+  }),
+};
 
 export const __domain__ContextProvider: React.FC = ({ children }) => {
   // const [visible, setVisible] = useState(false);

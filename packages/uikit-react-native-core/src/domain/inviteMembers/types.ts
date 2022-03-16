@@ -2,6 +2,7 @@ import type React from 'react';
 
 import type { UseUserListOptions } from '@sendbird/chat-react-hooks';
 import type { BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
+import type { ContextValue } from '@sendbird/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 
@@ -20,7 +21,7 @@ import type { CommonComponent } from '../../types';
  * @type {InviteMembersProps.List} - Props from Fragment for create List module
  * @property List.users - Users from SendbirdChat SDK or Custom query {@link Fragment.queryCreator}
  * @property List.renderUser - Method to render User preview
- * @property List.onLoadMore - Method to load more data, called with onEndReached of FlatList
+ * @property List.onLoadNext - Method to load more data, called with onEndReached of FlatList
  * @property List.onRefresh - Method to refresh Users
  * @property List.refreshing - State of refreshing
  * */
@@ -50,8 +51,8 @@ export type InviteMembersProps<User> = {
     users: User[];
     renderUser: (
       user: User,
-      selectedUsers: InviteMembersContextType<User>['selectedUsers'],
-      setSelectedUsers: InviteMembersContextType<User>['setSelectedUsers'],
+      selectedUsers: ContextValue<InviteMembersContextType<User>['List']>['selectedUsers'],
+      setSelectedUsers: ContextValue<InviteMembersContextType<User>['List']>['setSelectedUsers'],
     ) => React.ReactElement | null;
     onLoadNext: () => Promise<void>;
     onRefresh?: () => Promise<void>;
@@ -65,9 +66,14 @@ export type InviteMembersProps<User> = {
  * with getting data from the domain context
  * */
 export type InviteMembersContextType<User> = {
-  fragment: { headerTitle: string; headerRight: string };
-  selectedUsers: User[];
-  setSelectedUsers: React.Dispatch<React.SetStateAction<User[]>>;
+  Fragment: React.Context<{
+    headerTitle: string;
+    headerRight: string;
+  }>;
+  List: React.Context<{
+    selectedUsers: User[];
+    setSelectedUsers: React.Dispatch<React.SetStateAction<User[]>>;
+  }>;
 };
 export interface InviteMembersModule<User> {
   Provider: React.FC;
