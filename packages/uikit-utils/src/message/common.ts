@@ -19,3 +19,15 @@ export function isMyMessage(msg: SendbirdMessage, currentUserId = '##__USER_ID_I
 export function messageKeyExtractor(message: SendbirdMessage): string {
   return (('reqId' in message && message.reqId) || message.messageId + '') + '/' + message.createdAt;
 }
+
+// |-------------------|-------------------|-----------------|-------------------|
+// |   sending status  |       reqId       |    messageId    |     createdAt     |
+// |-------------------|-------------------|-----------------|-------------------|
+// |     pending       |    timestamp(A)   |        0        |    timestamp(B)   |
+// |     canceled      |    timestamp(A)   |        0        |         ?         |
+// |     failed        |    timestamp(A)   |        0        |         ?         |
+// |     succeeded     | timestamp(A) / '' |    id from DB   |    timestamp(C)   |
+// |-------------------|-------------------|-----------------|-------------------|
+export function messageComparator<T extends SendbirdMessage>(a: T, b: T) {
+  return b.createdAt - a.createdAt;
+}

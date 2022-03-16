@@ -58,5 +58,5 @@ export const truncatedBadgeCount = (count: number, MAX = 99) => {
  * @returns {string}
  * */
 export const dateSeparator = (date: Date, locale?: Locale): string => {
-  return format(date, 'MMMM dd, yyyy', { locale });
+  return format(date, 'E, LLL dd', { locale });
 };

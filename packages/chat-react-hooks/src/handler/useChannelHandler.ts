@@ -10,7 +10,7 @@ const useChannelHandler = (
   deps: React.DependencyList = [],
 ) => {
   useEffect(() => {
-    Logger.info('[useChannelHandler]', handlerId);
+    Logger.info('[useChannelHandler] hook called by', handlerId);
 
     const handler = new sdk.ChannelHandler();
     const handlerKeys = Object.keys(handler) as (keyof typeof handler)[];

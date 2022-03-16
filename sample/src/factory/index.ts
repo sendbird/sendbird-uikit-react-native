@@ -9,10 +9,12 @@ import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 
 import { APP_ID } from '../env';
 
+export const RootStack = createNativeStackNavigator();
+
 export const SendBirdInstance = new SendBird({ appId: APP_ID }) as SendbirdChatSDK;
 export const FilePickerService = createFilePickerServiceNative(ImagePicker, Permissions);
 export const NotificationService = {} as NotificationServiceInterface;
-export const RootStack = createNativeStackNavigator();
+
 export const GetTranslucent = (state = true) => {
   Platform.OS === 'android' && StatusBar.setTranslucent(state);
   return Platform.select({ ios: state, android: state });

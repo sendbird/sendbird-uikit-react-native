@@ -16,7 +16,7 @@ const createMessageCollection = (
   if (creator) return creator();
   const collection = channel.createMessageCollection();
   const filter = new sdk.MessageFilter();
-  return collection.setLimit(50).setStartingPoint(Date.now()).setFilter(filter).build();
+  return collection.setLimit(100).setStartingPoint(Date.now()).setFilter(filter).build();
 };
 
 const hookName = 'useGroupChannelMessagesWithCollection';
@@ -44,6 +44,15 @@ export const useGroupChannelMessagesWithCollection = (
     updateRefreshing,
   } = useGroupChannelMessagesReducer(userId, options?.sortComparator);
 
+  const channelMarkAs = async () => {
+    try {
+      sdk.markAsDelivered(channel.url);
+      await sdk.markAsReadWithChannelUrls([channel.url]);
+    } catch (e) {
+      Logger.error(`[${hookName}/channelMarkAs]`, e);
+    }
+  };
+
   const init = useCallback(
     async (uid?: string) => {
       if (collectionRef.current) collectionRef.current?.dispose();
@@ -51,11 +60,12 @@ export const useGroupChannelMessagesWithCollection = (
       if (uid) {
         collectionRef.current = createMessageCollection(sdk, channel, options?.collectionCreator);
         updateNextMessages([], true);
+        channelMarkAs();
 
         collectionRef.current
           .initialize(sdk.MessageCollection.MessageCollectionInitPolicy.CACHE_AND_REPLACE_BY_API)
           .onCacheResult((err, messages) => {
-            if (err) Logger.error(`[${hookName}/onCacheResult]`, err);
+            if (err) sdk.isCacheEnabled && Logger.error(`[${hookName}/onCacheResult]`, err);
             else {
               updateMessages(messages, true);
               updateMessages(collectionRef.current?.pendingMessages ?? [], false);
@@ -73,10 +83,7 @@ export const useGroupChannelMessagesWithCollection = (
 
         collectionRef.current.setMessageCollectionHandler({
           onMessagesAdded(_, __, messages) {
-            try {
-              sdk.markAsDelivered(channel.url);
-              sdk.markAsReadWithChannelUrls([channel.url]);
-            } catch {}
+            channelMarkAs();
             updateNextMessages(messages, false);
           },
           onMessagesUpdated(_, __, messages) {
@@ -144,6 +151,7 @@ export const useGroupChannelMessagesWithCollection = (
     }
     if (list.length > 0) {
       updateMessages(list, false);
+      updateNextMessages([], true);
     }
   }, [nextMessages.length]);
 

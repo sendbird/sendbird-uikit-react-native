@@ -1,4 +1,5 @@
 import React, { createContext } from 'react';
+import type Sendbird from 'sendbird';
 
 import { useLocalization } from '../../../contexts/Localization';
 import { useSendbirdChat } from '../../../contexts/SendbirdChat';
@@ -7,7 +8,7 @@ import type { GroupChannelContextType, GroupChannelModule } from '../types';
 export const GroupChannelContext: GroupChannelContextType = {
   Fragment: createContext({
     headerTitle: '',
-    channel: {} as any,
+    channel: {} as Sendbird.GroupChannel,
   }),
 };
 

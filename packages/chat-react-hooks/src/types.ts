@@ -64,6 +64,9 @@ export type UseGroupChannelListOptions = {
 /**
  * @interface UseGroupChannelMessages
  * interface for group channel messages hook
+ * - Receive new messages from other users -> append to state(nextMessages)
+ * - onTopReached -> prev() -> fetch prev messages and append to state(messages)
+ * - onBottomReached -> next() -> nextMessages append to state(messages)
  * */
 export interface UseGroupChannelMessages {
   /**

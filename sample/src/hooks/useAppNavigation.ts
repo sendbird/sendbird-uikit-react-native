@@ -40,7 +40,10 @@ export type RouteParamsUnion =
     }
   | {
       route: Routes.GroupChannel;
-      params: { channelType: GroupChannelType };
+      params: {
+        /** GroupChannel.serialize() */
+        serializedChannel: object;
+      };
     }
   | {
       route: Routes.Settings;
@@ -52,7 +55,7 @@ export type RouteParamsUnion =
     }
   | {
       route: Routes.InviteMembers;
-      params: undefined;
+      params: { channelType: GroupChannelType };
     };
 
 type ExtractParams<R extends Routes, U extends RouteParamsUnion> = U extends { route: R } ? U['params'] : never;
@@ -76,7 +79,7 @@ export const useRouteParams = <T extends Routes>() => {
 
 export const useAppNavigation = <T extends Routes>() => {
   const navigation = useNavigation<ScreenPropsNavigation<T>>();
-  const params = useRouteParams();
+  const params = useRouteParams<T>();
 
   return { navigation, params };
 };

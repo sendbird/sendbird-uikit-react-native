@@ -8,6 +8,7 @@ import { FilePickerService, GetTranslucent, NotificationService, RootStack, Send
 import { Routes } from './hooks/useAppNavigation';
 import useAppearance from './hooks/useAppearance';
 import {
+  GroupChannelScreen,
   GroupChannelTabs,
   HomeScreen,
   InviteMembersScreen,
@@ -24,7 +25,11 @@ const App = () => {
     <SendbirdUIKitContainer
       chat={{ sdkInstance: SendBirdInstance }}
       services={{ filePicker: FilePickerService, notification: NotificationService }}
-      styles={{ theme: isLightTheme ? LightUIKitTheme : DarkUIKitTheme, statusBarTranslucent: GetTranslucent() }}
+      styles={{
+        defaultHeaderTitleAlign: 'left', //'center',
+        theme: isLightTheme ? LightUIKitTheme : DarkUIKitTheme,
+        statusBarTranslucent: GetTranslucent(),
+      }}
     >
       <NavigationContainer theme={isLightTheme ? DefaultTheme : DarkTheme}>
         <RootStack.Navigator>
@@ -38,6 +43,7 @@ const App = () => {
             name={Routes.GroupChannelTabs}
             component={GroupChannelTabs}
           />
+          <RootStack.Screen name={Routes.GroupChannel} component={GroupChannelScreen} />
           <RootStack.Screen name={Routes.InviteMembers} component={InviteMembersScreen} />
         </RootStack.Navigator>
       </NavigationContainer>

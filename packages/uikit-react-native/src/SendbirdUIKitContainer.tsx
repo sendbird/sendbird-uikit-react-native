@@ -37,6 +37,7 @@ type Props<Locale extends string> = {
   styles?: {
     theme?: UIKitTheme;
     statusBarTranslucent?: boolean;
+    defaultHeaderTitleAlign?: 'left' | 'center' | 'right';
   };
 };
 
@@ -51,7 +52,10 @@ const SendbirdUIKitContainer = <Locale extends string>({
     <SafeAreaProvider>
       <SendbirdChatProvider sdkInstance={chat.sdkInstance}>
         <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
-          <HeaderStyleProvider statusBarTranslucent={styles?.statusBarTranslucent ?? true}>
+          <HeaderStyleProvider
+            defaultTitleAlign={styles?.defaultHeaderTitleAlign ?? 'left'}
+            statusBarTranslucent={styles?.statusBarTranslucent ?? true}
+          >
             <LocalizationProvider
               defaultLocale={(localization?.defaultLocale ?? 'en') as 'en'}
               labelSet={(localization?.labelSet ?? { en: LabelEn }) as { en: LabelSet }}

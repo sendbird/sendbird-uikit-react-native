@@ -5,11 +5,11 @@ import { GroupChannelContextProvider } from './moduleContext';
 
 const createGroupChannelModule = ({
   Header = GroupChannelHeader,
-  View = GroupChannelMessageList,
+  MessageList = GroupChannelMessageList,
   Provider = GroupChannelContextProvider,
   ...module
 }: Partial<GroupChannelModule> = {}): GroupChannelModule => {
-  return { Header, View, Provider, ...module };
+  return { Header, MessageList, Provider, ...module };
 };
 
 export default createGroupChannelModule;

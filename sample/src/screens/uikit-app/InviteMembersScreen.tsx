@@ -22,10 +22,13 @@ const InviteMembersScreen: React.FC = () => {
     <InviteMembersFragment
       onPressInviteMembers={async (users) => {
         // Create GroupChannel with invited users
-        const params = new sdk.GroupChannelParams();
-        params.addUserIds(users.map((user) => user.userId));
-        params.isDistinct = false;
-        await sdk.GroupChannel.createChannel(params);
+        const channelParams = new sdk.GroupChannelParams();
+        if (params.channelType === 'BROADCAST') channelParams.isBroadcast = true;
+        if (params.channelType === 'SUPER_GROUP') channelParams.isSuper = true;
+
+        channelParams.isDistinct = false;
+        channelParams.addUserIds(users.map((user) => user.userId));
+        await sdk.GroupChannel.createChannel(channelParams);
 
         navigation.goBack();
       }}

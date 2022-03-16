@@ -42,6 +42,10 @@ const defaultReducer = ({ ...draft }: State, action: Action) => {
       if (action.value.clearPrev) draft[key] = messageMap;
       else draft[key] = { ...draft[key], ...messageMap };
 
+      if (action.type === 'update_messages') {
+        draft['nextMessageMap'] = {};
+      }
+
       return draft;
     }
     case 'delete_messages':
@@ -89,8 +93,8 @@ export const useGroupChannelMessagesReducer = (
     if (sortComparator) return Object.values(messageMap).sort(sortComparator);
     return Object.values(messageMap);
   }, [sortComparator, messageMap]);
-  const nextMessages = Object.values(nextMessageMap);
-  const newMessagesFromNext = nextMessages.filter((msg) => isNewMessage(msg, userId));
+  const nextMessages = useMemo(() => Object.values(nextMessageMap), [nextMessageMap]);
+  const newMessagesFromNext = useMemo(() => nextMessages.filter((msg) => isNewMessage(msg, userId)), [nextMessages]);
 
   return {
     updateLoading,

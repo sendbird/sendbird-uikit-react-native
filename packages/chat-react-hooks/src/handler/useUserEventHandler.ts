@@ -10,7 +10,7 @@ const useUserEventHandler = (
   deps: React.DependencyList = [],
 ) => {
   useEffect(() => {
-    Logger.info('[useUserEventHandler]', handlerId);
+    Logger.info('[useUserEventHandler] hook called by', handlerId);
 
     const handler = new sdk.UserEventHandler();
     const handlerKeys = Object.keys(handler) as (keyof typeof handler)[];
