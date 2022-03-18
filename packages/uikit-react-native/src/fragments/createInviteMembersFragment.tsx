@@ -4,7 +4,7 @@ import type Sendbird from 'sendbird';
 
 import { useUserList } from '@sendbird/chat-react-hooks';
 import type { InviteMembersFragment, InviteMembersModule } from '@sendbird/uikit-react-native-core';
-import { createInviteMembersModule, useSendbirdChat } from '@sendbird/uikit-react-native-core';
+import { createInviteMembersModule, useLocalization, useSendbirdChat } from '@sendbird/uikit-react-native-core';
 
 import UserListItem from '../ui/UserListItem';
 
@@ -15,6 +15,7 @@ const createInviteMembersFragment = <UserType,>(
 
   return ({ Header, onPressHeaderLeft, onPressInviteMembers, sortComparator, queryCreator, renderUser, children }) => {
     const { sdk } = useSendbirdChat();
+    const { LABEL } = useLocalization();
     const { users, refreshing, refresh, next } = useUserList(sdk, {
       queryCreator,
       sortComparator,
@@ -42,7 +43,12 @@ const createInviteMembersFragment = <UserType,>(
               });
             }}
           >
-            <UserListItem uri={sbUser.profileUrl} name={sbUser.nickname || '(No name)'} selected={isSelected} />
+            <UserListItem
+              uri={sbUser.profileUrl}
+              name={sbUser.nickname || LABEL.INVITE_MEMBERS.USER_NO_NAME}
+              selected={isSelected}
+              disabled={false}
+            />
           </Pressable>
         );
       },

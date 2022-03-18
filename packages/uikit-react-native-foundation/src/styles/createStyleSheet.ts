@@ -1,17 +1,18 @@
 import { ImageStyle, StyleSheet, TextStyle, ViewStyle } from 'react-native';
 
-import { defaultScaleFactor } from './scaleFactor';
+import createScaleFactor from './createScaleFactor';
 
 type Styles = ViewStyle | TextStyle | ImageStyle;
 type StylePreprocessor<T extends Styles = Styles> = { [key in keyof T]: (val: NonNullable<T[key]>) => typeof val };
 
-const SCALE_FACTOR = defaultScaleFactor;
-const SCALE_FACTOR_WITH_STR = (val: string | number) => (typeof val === 'string' ? val : SCALE_FACTOR(val));
+let UIKIT_INTERNAL_SCALE_FACTOR = createScaleFactor();
+const SCALE_FACTOR_WITH_STR = (val: string | number) =>
+  typeof val === 'string' ? val : UIKIT_INTERNAL_SCALE_FACTOR(val);
 
 const preProcessor: Partial<StylePreprocessor> = {
-  'fontSize': SCALE_FACTOR,
-  'lineHeight': SCALE_FACTOR,
-  'borderRadius': SCALE_FACTOR,
+  'fontSize': UIKIT_INTERNAL_SCALE_FACTOR,
+  'lineHeight': UIKIT_INTERNAL_SCALE_FACTOR,
+  'borderRadius': UIKIT_INTERNAL_SCALE_FACTOR,
   'minWidth': SCALE_FACTOR_WITH_STR,
   'minHeight': SCALE_FACTOR_WITH_STR,
   'height': SCALE_FACTOR_WITH_STR,
@@ -55,6 +56,10 @@ const createStyleSheet = <T extends StyleSheet.NamedStyles<T>>(styles: T | Style
   });
 
   return StyleSheet.create<T>(styles);
+};
+
+createStyleSheet.updateScaleFactor = (scaleFactor: (dp: number) => number) => {
+  UIKIT_INTERNAL_SCALE_FACTOR = scaleFactor;
 };
 
 export default createStyleSheet;

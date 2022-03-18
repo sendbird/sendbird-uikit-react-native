@@ -45,7 +45,13 @@ const AlertContext = React.createContext<Pick<DialogContextType, 'alert'> | null
 const PromptContext = React.createContext<Pick<DialogContextType, 'prompt'> | null>(null);
 const BottomSheetContext = React.createContext<Pick<DialogContextType, 'openSheet'> | null>(null);
 
-export const DialogProvider: React.FC = ({ children }) => {
+type Props = {
+  defaultLabels?: {
+    alert?: { ok?: string };
+    prompt?: { placeholder?: string; ok?: string; cancel?: string };
+  };
+};
+export const DialogProvider: React.FC<Props> = ({ defaultLabels, children }) => {
   const render = useForceUpdate();
 
   const dialogQueue = useRef<DialogJob[]>([]);
@@ -95,41 +101,41 @@ export const DialogProvider: React.FC = ({ children }) => {
             {children}
             {workingDialogJob.current?.type === 'ActionMenu' && (
               <ActionMenu
+                onHide={updateToHide}
                 onDismiss={consumeQueue}
                 visible={visibleState.current}
-                onHide={updateToHide}
                 title={workingDialogJob.current.props.title}
                 menuItems={workingDialogJob.current.props.menuItems}
               />
             )}
             {workingDialogJob.current?.type === 'Alert' && (
               <Alert
+                onHide={updateToHide}
                 onDismiss={consumeQueue}
                 visible={visibleState.current}
-                onHide={updateToHide}
                 title={workingDialogJob.current.props.title}
                 message={workingDialogJob.current.props.message}
-                buttons={workingDialogJob.current.props.buttons}
+                buttons={workingDialogJob.current.props.buttons ?? [{ text: defaultLabels?.alert?.ok || 'OK' }]}
               />
             )}
             {workingDialogJob.current?.type === 'Prompt' && (
               <Prompt
+                onHide={updateToHide}
                 onDismiss={consumeQueue}
                 visible={visibleState.current}
-                onHide={updateToHide}
                 title={workingDialogJob.current.props.title}
-                placeholder={workingDialogJob.current.props.placeholder}
-                defaultValue={workingDialogJob.current.props.defaultValue}
                 onSubmit={workingDialogJob.current.props.onSubmit}
-                submitLabel={workingDialogJob.current.props.submitLabel}
-                cancelLabel={workingDialogJob.current.props.cancelLabel}
+                defaultValue={workingDialogJob.current.props.defaultValue}
+                submitLabel={workingDialogJob.current.props.submitLabel ?? defaultLabels?.prompt?.ok}
+                cancelLabel={workingDialogJob.current.props.cancelLabel ?? defaultLabels?.prompt?.cancel}
+                placeholder={workingDialogJob.current.props.placeholder ?? defaultLabels?.prompt?.placeholder}
               />
             )}
             {workingDialogJob.current?.type === 'BottomSheet' && (
               <BottomSheet
+                onHide={updateToHide}
                 onDismiss={consumeQueue}
                 visible={visibleState.current}
-                onHide={updateToHide}
                 sheetItems={workingDialogJob.current.props.sheetItems}
               />
             )}

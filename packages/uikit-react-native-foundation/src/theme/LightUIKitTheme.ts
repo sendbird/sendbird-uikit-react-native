@@ -1,127 +1,156 @@
-import createAppearanceHelper from '../styles/appearanceHelper';
-import type { UIKitTheme } from '../types';
+import { themeFactory } from '../styles/themeFactory';
 import Palette from './Palette';
-import { defaultTypography } from './Typography';
 
-const appearance = 'light';
-const LightUIKitTheme: UIKitTheme = {
-  ...createAppearanceHelper(appearance),
-  typography: defaultTypography,
-  appearance,
+const LightUIKitTheme = themeFactory({
+  appearance: 'light',
   palette: Palette,
-  colors: {
-    primary: Palette.primary300,
-    background: Palette.background50,
-    text: Palette.onBackgroundLight01,
-    notification: Palette.error300,
-    onBackground01: Palette.onBackgroundLight01,
-    onBackground02: Palette.onBackgroundLight02,
-    onBackground03: Palette.onBackgroundLight03,
-    onBackground04: Palette.onBackgroundLight04,
-    onBackgroundReverse01: Palette.onBackgroundDark01,
-    onBackgroundReverse02: Palette.onBackgroundDark02,
-    onBackgroundReverse03: Palette.onBackgroundDark03,
-    onBackgroundReverse04: Palette.onBackgroundDark04,
-    secondary: Palette.secondary300,
-    error: Palette.error300,
+  colors: (palette) => ({
+    primary: palette.primary300,
+    background: palette.background50,
+    text: palette.onBackgroundLight01,
+    notification: palette.error300,
+    onBackground01: palette.onBackgroundLight01,
+    onBackground02: palette.onBackgroundLight02,
+    onBackground03: palette.onBackgroundLight03,
+    onBackground04: palette.onBackgroundLight04,
+    onBackgroundReverse01: palette.onBackgroundDark01,
+    onBackgroundReverse02: palette.onBackgroundDark02,
+    onBackgroundReverse03: palette.onBackgroundDark03,
+    onBackgroundReverse04: palette.onBackgroundDark04,
+    secondary: palette.secondary300,
+    error: palette.error300,
     ui: {
       header: {
         nav: {
           none: {
-            background: Palette.background50,
-            borderBottom: Palette.onBackgroundLight04,
+            background: palette.background50,
+            borderBottom: palette.onBackgroundLight04,
           },
         },
       },
       button: {
         contained: {
           enabled: {
-            background: Palette.primary300,
-            content: Palette.onBackgroundDark01,
+            background: palette.primary300,
+            content: palette.onBackgroundDark01,
           },
           pressed: {
-            background: Palette.primary400,
-            content: Palette.onBackgroundDark01,
+            background: palette.primary400,
+            content: palette.onBackgroundDark01,
           },
           disabled: {
-            background: Palette.background100,
-            content: Palette.onBackgroundLight04,
+            background: palette.background100,
+            content: palette.onBackgroundLight04,
           },
         },
         text: {
           enabled: {
-            background: Palette.transparent,
-            content: Palette.primary300,
+            background: palette.transparent,
+            content: palette.primary300,
           },
           pressed: {
-            background: Palette.transparent,
-            content: Palette.primary300,
+            background: palette.transparent,
+            content: palette.primary300,
           },
           disabled: {
-            background: Palette.transparent,
-            content: Palette.onBackgroundLight04,
+            background: palette.transparent,
+            content: palette.onBackgroundLight04,
           },
         },
       },
       dialog: {
         default: {
           none: {
-            background: Palette.background50,
-            text: Palette.onBackgroundLight01,
-            message: Palette.onBackgroundLight02,
-            highlight: Palette.primary300,
-            destructive: Palette.error300,
+            background: palette.background50,
+            text: palette.onBackgroundLight01,
+            message: palette.onBackgroundLight02,
+            highlight: palette.primary300,
+            destructive: palette.error300,
           },
         },
       },
       input: {
         default: {
           active: {
-            text: Palette.onBackgroundLight01,
-            placeholder: Palette.onBackgroundLight03,
-            background: Palette.background100,
-            highlight: Palette.transparent,
+            text: palette.onBackgroundLight01,
+            placeholder: palette.onBackgroundLight03,
+            background: palette.background100,
+            highlight: palette.transparent,
           },
           disabled: {
-            text: Palette.onBackgroundLight04,
-            placeholder: Palette.onBackgroundLight04,
-            background: Palette.background100,
-            highlight: Palette.transparent,
+            text: palette.onBackgroundLight04,
+            placeholder: palette.onBackgroundLight04,
+            background: palette.background100,
+            highlight: palette.transparent,
           },
         },
         underline: {
           active: {
-            text: Palette.onBackgroundLight01,
-            placeholder: Palette.onBackgroundLight03,
-            background: Palette.transparent,
-            highlight: Palette.primary300,
+            text: palette.onBackgroundLight01,
+            placeholder: palette.onBackgroundLight03,
+            background: palette.transparent,
+            highlight: palette.primary300,
           },
           disabled: {
-            text: Palette.onBackgroundLight04,
-            placeholder: Palette.onBackgroundLight04,
-            background: Palette.transparent,
-            highlight: Palette.onBackgroundLight04,
+            text: palette.onBackgroundLight04,
+            placeholder: palette.onBackgroundLight04,
+            background: palette.transparent,
+            highlight: palette.onBackgroundLight04,
           },
         },
       },
       badge: {
         default: {
           none: {
-            text: Palette.background50,
-            background: Palette.primary300,
+            text: palette.background50,
+            background: palette.primary300,
           },
         },
       },
       placeholder: {
         default: {
           none: {
-            content: Palette.onBackgroundLight03,
-            highlight: Palette.primary300,
+            content: palette.onBackgroundLight03,
+            highlight: palette.primary300,
+          },
+        },
+      },
+      message: {
+        incoming: {
+          enabled: {
+            textMsg: palette.onBackgroundLight01,
+            textEdited: palette.onBackgroundLight02,
+            textDate: palette.onBackgroundLight03,
+            textSenderName: palette.onBackgroundLight02,
+            background: palette.background100,
+          },
+          pressed: {
+            textMsg: palette.onBackgroundLight01,
+            textEdited: palette.onBackgroundLight02,
+            textDate: palette.onBackgroundLight03,
+            textSenderName: palette.onBackgroundLight02,
+            background: palette.primary100,
+          },
+        },
+        outgoing: {
+          enabled: {
+            textMsg: palette.onBackgroundDark01,
+            textEdited: palette.onBackgroundDark02,
+            textDate: palette.onBackgroundLight03,
+            textSenderName: palette.transparent,
+            background: palette.primary300,
+          },
+          pressed: {
+            textMsg: palette.onBackgroundDark01,
+            textEdited: palette.onBackgroundDark02,
+            textDate: palette.onBackgroundLight03,
+            textSenderName: palette.transparent,
+            background: palette.primary400,
           },
         },
       },
     },
-  },
-};
+  }),
+});
 
 export default LightUIKitTheme;

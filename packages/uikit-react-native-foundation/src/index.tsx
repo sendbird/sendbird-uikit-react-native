@@ -27,8 +27,8 @@ export { default as TextInput } from './ui/TextInput';
 /** Styles **/
 export { default as useHeaderStyle } from './styles/useHeaderStyle';
 export { default as getDefaultHeaderHeight } from './styles/getDefaultHeaderHeight';
-export { default as appearanceHelper } from './styles/appearanceHelper';
-export { default as scaleFactor } from './styles/scaleFactor';
+export { default as createAppearanceHelper } from './styles/createAppearanceHelper';
+export { default as createScaleFactor } from './styles/createScaleFactor';
 export { default as createStyleSheet } from './styles/createStyleSheet';
 export { HeaderStyleContext, HeaderStyleProvider } from './styles/HeaderStyleContext';
 

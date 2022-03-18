@@ -9,6 +9,4 @@ const createScaleFactor = (deviceWidth = DESIGNED_DEVICE_WIDTH) => {
   return (dp: number) => PixelRatio.roundToNearestPixel(dp * ratio);
 };
 
-export const defaultScaleFactor = createScaleFactor();
-
 export default createScaleFactor;

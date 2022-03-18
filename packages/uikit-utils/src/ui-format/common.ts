@@ -51,7 +51,7 @@ export const truncatedBadgeCount = (count: number, MAX = 99) => {
 };
 
 /**
- * Messages date Separator format
+ * Messages date separator format
  *
  * @param {Date} date
  * @param {Locale} [locale]
@@ -59,4 +59,15 @@ export const truncatedBadgeCount = (count: number, MAX = 99) => {
  * */
 export const dateSeparator = (date: Date, locale?: Locale): string => {
   return format(date, 'E, LLL dd', { locale });
+};
+
+/**
+ * Message time format
+ *
+ * @param {Date} date
+ * @param {Locale} [locale]
+ * @returns {string}
+ * */
+export const messageTime = (date: Date, locale?: Locale): string => {
+  return format(date, 'p', { locale });
 };

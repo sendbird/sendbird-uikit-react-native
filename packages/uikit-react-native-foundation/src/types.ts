@@ -2,7 +2,7 @@
 import type { ReactElement, ReactNode } from 'react';
 import type { TextStyle } from 'react-native';
 
-import type Palette from './theme/Palette';
+import type { PaletteInterface } from './theme/Palette';
 
 export type TypoName =
   | 'h1'
@@ -21,14 +21,18 @@ export type FontAttributes = Pick<TextStyle, 'fontFamily' | 'fontSize' | 'lineHe
 export type Typography = Record<TypoName, FontAttributes>;
 
 export type UIKitAppearance = 'light' | 'dark';
-export interface UIKitTheme extends AppearanceHelper {
+export interface UIKitTheme {
   appearance: UIKitAppearance;
+  select<T>(options: { light?: T; dark: T; default?: T } | { light: T; dark?: T; default?: T }): T;
+
+  palette: PaletteInterface;
   colors: UIKitColors;
-  palette: typeof Palette;
+
   typography: Typography;
+  scaleFactor: (dp: number) => number;
 }
 
-type Component = 'Header' | 'Button' | 'Dialog' | 'Input' | 'Badge' | 'Placeholder';
+type Component = 'Header' | 'Button' | 'Dialog' | 'Input' | 'Badge' | 'Placeholder' | 'Message';
 type GetColorTree<
   Tree extends {
     Variant: {
@@ -51,6 +55,7 @@ export type ComponentColorTree = GetColorTree<{
     Input: 'default' | 'underline';
     Badge: 'default';
     Placeholder: 'default';
+    Message: 'incoming' | 'outgoing';
   };
   State: {
     Header: 'none';
@@ -59,6 +64,7 @@ export type ComponentColorTree = GetColorTree<{
     Input: 'active' | 'disabled';
     Badge: 'none';
     Placeholder: 'none';
+    Message: 'enabled' | 'pressed';
   };
   ColorPart: {
     Header: 'background' | 'borderBottom';
@@ -67,6 +73,7 @@ export type ComponentColorTree = GetColorTree<{
     Input: 'text' | 'placeholder' | 'background' | 'highlight';
     Badge: 'text' | 'background';
     Placeholder: 'content' | 'highlight';
+    Message: 'textMsg' | 'textEdited' | 'textSenderName' | 'textDate' | 'background';
   };
 }>;
 type ComponentColors<T extends Component> = {
@@ -77,7 +84,7 @@ type ComponentColors<T extends Component> = {
   };
 };
 
-export type UIKitColors = {
+export interface UIKitColors {
   primary: string;
   background: string;
   text: string;
@@ -108,11 +115,8 @@ export type UIKitColors = {
     input: ComponentColors<'Input'>;
     badge: ComponentColors<'Badge'>;
     placeholder: ComponentColors<'Placeholder'>;
+    message: ComponentColors<'Message'>;
   };
-};
-
-export interface AppearanceHelper {
-  select<T>(options: { light?: T; dark: T; default?: T } | { light: T; dark?: T; default?: T }): T;
 }
 
 type HeaderElement = string | ReactElement | null;

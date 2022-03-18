@@ -11,6 +11,7 @@ import {
   LocalizationProvider,
   PlatformServiceProvider,
   SendbirdChatProvider,
+  useLocalization,
 } from '@sendbird/uikit-react-native-core';
 import type { UIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import {
@@ -64,13 +65,33 @@ const SendbirdUIKitContainer = <Locale extends string>({
                 filePickerService={services.filePicker}
                 notificationService={services.notification}
               >
-                <DialogProvider>{children}</DialogProvider>
+                <LocalizedDialogProvider>{children}</LocalizedDialogProvider>
               </PlatformServiceProvider>
             </LocalizationProvider>
           </HeaderStyleProvider>
         </UIKitThemeProvider>
       </SendbirdChatProvider>
     </SafeAreaProvider>
+  );
+};
+
+const LocalizedDialogProvider: React.FC = ({ children }) => {
+  const { LABEL } = useLocalization();
+  return (
+    <DialogProvider
+      defaultLabels={{
+        alert: {
+          ok: LABEL.DIALOG.ALERT_DEFAULT_OK,
+        },
+        prompt: {
+          ok: LABEL.DIALOG.PROMPT_DEFAULT_OK,
+          cancel: LABEL.DIALOG.PROMPT_DEFAULT_CANCEL,
+          placeholder: LABEL.DIALOG.PROMPT_DEFAULT_PLACEHOLDER,
+        },
+      }}
+    >
+      {children}
+    </DialogProvider>
   );
 };
 
