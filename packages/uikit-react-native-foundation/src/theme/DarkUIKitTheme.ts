@@ -120,14 +120,14 @@ const DarkUIKitTheme = themeFactory({
           enabled: {
             textMsg: palette.onBackgroundDark01,
             textEdited: palette.onBackgroundDark02,
-            textDate: palette.onBackgroundDark03,
+            textTime: palette.onBackgroundDark03,
             textSenderName: palette.onBackgroundDark02,
             background: palette.background400,
           },
           pressed: {
             textMsg: palette.onBackgroundDark01,
             textEdited: palette.onBackgroundDark02,
-            textDate: palette.onBackgroundDark03,
+            textTime: palette.onBackgroundDark03,
             textSenderName: palette.onBackgroundDark02,
             background: palette.primary500,
           },
@@ -136,16 +136,24 @@ const DarkUIKitTheme = themeFactory({
           enabled: {
             textMsg: palette.onBackgroundLight01,
             textEdited: palette.onBackgroundLight02,
-            textDate: palette.onBackgroundDark03,
+            textTime: palette.onBackgroundDark03,
             textSenderName: palette.transparent,
             background: palette.primary200,
           },
           pressed: {
             textMsg: palette.onBackgroundLight01,
             textEdited: palette.onBackgroundLight02,
-            textDate: palette.onBackgroundDark03,
+            textTime: palette.onBackgroundDark03,
             textSenderName: palette.transparent,
             background: palette.primary300,
+          },
+        },
+      },
+      dateSeparator: {
+        default: {
+          none: {
+            text: palette.onBackgroundDark02,
+            background: palette.overlay02,
           },
         },
       },

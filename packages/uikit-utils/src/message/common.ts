@@ -31,3 +31,9 @@ export function messageKeyExtractor(message: SendbirdMessage): string {
 export function messageComparator<T extends SendbirdMessage>(a: T, b: T) {
   return b.createdAt - a.createdAt;
 }
+
+export function hasSameSender(a?: SendbirdMessage, b?: SendbirdMessage) {
+  if (!a || !b) return false;
+  if ('sender' in a && 'sender' in b) return a.sender?.userId === b.sender?.userId;
+  return false;
+}

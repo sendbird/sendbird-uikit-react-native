@@ -1,18 +1,21 @@
 import React, { useCallback } from 'react';
-import { Image, View } from 'react-native';
 
 import { useGroupChannelMessages } from '@sendbird/chat-react-hooks';
 import type { GroupChannelFragment, GroupChannelModule, GroupChannelProps } from '@sendbird/uikit-react-native-core';
 import { createGroupChannelModule, useSendbirdChat } from '@sendbird/uikit-react-native-core';
-import { Text } from '@sendbird/uikit-react-native-foundation';
 import { EmptyFunction, messageComparator } from '@sendbird/uikit-utils';
+
+import DefaultMessageRenderer from '../ui/MessageRenderer';
+import DefaultNewMessagesTooltip from '../ui/NewMessagesTooltip';
+import DefaultScrollToBottomTooltip from '../ui/ScrollToBottomTooltip';
 
 const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChannelFragment => {
   const GroupChannelModule = createGroupChannelModule(initModule);
 
   return ({
-    MessageRenderer,
-    NewMessageTooltip = null,
+    MessageRenderer = DefaultMessageRenderer,
+    NewMessagesTooltip = DefaultNewMessagesTooltip,
+    ScrollToBottomTooltip = DefaultScrollToBottomTooltip,
     enableMessageGrouping = true,
     Header,
     onPressHeaderLeft = EmptyFunction,
@@ -29,54 +32,18 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
       sdk,
       channel,
       currentUser?.userId,
-      {
-        collectionCreator,
-        queryCreator,
-        sortComparator,
-        enableCollectionWithoutLocalCache: true,
-      },
+      { collectionCreator, queryCreator, sortComparator, enableCollectionWithoutLocalCache: true },
     );
 
     const renderMessages: GroupChannelProps['MessageList']['renderMessage'] = useCallback(
-      (message, prevMessage) => {
-        if (MessageRenderer) {
-          return (
-            <MessageRenderer
-              message={message}
-              prevMessage={prevMessage}
-              enableMessageGrouping={enableMessageGrouping}
-            />
-          );
-        }
-
-        if (message.isAdminMessage()) {
-          return (
-            <View>
-              <Text>{message.message}</Text>
-            </View>
-          );
-        }
-
-        if (message.isUserMessage()) {
-          return (
-            <View>
-              <Text>{message.message}</Text>
-            </View>
-          );
-        }
-
-        if (message.isFileMessage()) {
-          return (
-            <View>
-              <Image style={{ width: 200, height: 200 }} source={{ uri: message.url }} />
-            </View>
-          );
-        }
-
+      (message, prevMessage, nextMessage) => {
         return (
-          <View>
-            <Text>{'Unknown Message'}</Text>
-          </View>
+          <MessageRenderer
+            message={message}
+            prevMessage={prevMessage}
+            nextMessage={nextMessage}
+            enableMessageGrouping={enableMessageGrouping}
+          />
         );
       },
       [MessageRenderer, enableMessageGrouping],
@@ -90,13 +57,15 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
           onPressHeaderRight={onPressHeaderRight}
         />
         <GroupChannelModule.MessageList
+          channel={channel}
           messages={messages}
           renderMessage={renderMessages}
-          NewMessageTooltip={NewMessageTooltip}
           newMessagesFromNext={newMessagesFromNext}
           nextMessages={nextMessages}
           onTopReached={prev}
           onBottomReached={next}
+          NewMessagesTooltip={NewMessagesTooltip}
+          ScrollToBottomTooltip={ScrollToBottomTooltip}
         />
         {children}
       </GroupChannelModule.Provider>

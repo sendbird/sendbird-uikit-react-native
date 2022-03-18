@@ -120,14 +120,14 @@ const LightUIKitTheme = themeFactory({
           enabled: {
             textMsg: palette.onBackgroundLight01,
             textEdited: palette.onBackgroundLight02,
-            textDate: palette.onBackgroundLight03,
+            textTime: palette.onBackgroundLight03,
             textSenderName: palette.onBackgroundLight02,
             background: palette.background100,
           },
           pressed: {
             textMsg: palette.onBackgroundLight01,
             textEdited: palette.onBackgroundLight02,
-            textDate: palette.onBackgroundLight03,
+            textTime: palette.onBackgroundLight03,
             textSenderName: palette.onBackgroundLight02,
             background: palette.primary100,
           },
@@ -136,16 +136,24 @@ const LightUIKitTheme = themeFactory({
           enabled: {
             textMsg: palette.onBackgroundDark01,
             textEdited: palette.onBackgroundDark02,
-            textDate: palette.onBackgroundLight03,
+            textTime: palette.onBackgroundLight03,
             textSenderName: palette.transparent,
             background: palette.primary300,
           },
           pressed: {
             textMsg: palette.onBackgroundDark01,
             textEdited: palette.onBackgroundDark02,
-            textDate: palette.onBackgroundLight03,
+            textTime: palette.onBackgroundLight03,
             textSenderName: palette.transparent,
             background: palette.primary400,
+          },
+        },
+      },
+      dateSeparator: {
+        default: {
+          none: {
+            text: palette.onBackgroundDark01,
+            background: palette.overlay02,
           },
         },
       },

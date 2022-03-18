@@ -17,7 +17,8 @@ export type GroupChannelProps = {
       prevMessage?: SendbirdMessage;
       enableMessageGrouping?: boolean;
     }>;
-    NewMessageTooltip?: GroupChannelProps['MessageList']['NewMessageTooltip'];
+    NewMessagesTooltip?: GroupChannelProps['MessageList']['NewMessagesTooltip'];
+    ScrollToBottomTooltip?: GroupChannelProps['MessageList']['ScrollToBottomTooltip'];
 
     Header?: GroupChannelProps['Header']['Header'];
     onPressHeaderLeft: GroupChannelProps['Header']['onPressHeaderLeft'];
@@ -39,14 +40,27 @@ export type GroupChannelProps = {
     onPressHeaderRight: () => void;
   };
   MessageList: {
+    channel: Sendbird.GroupChannel;
     messages: SendbirdMessage[];
     nextMessages: SendbirdMessage[];
     newMessagesFromNext: SendbirdMessage[];
     onTopReached: () => void;
     onBottomReached: () => void;
 
-    renderMessage: (message: SendbirdMessage, prevMessage?: SendbirdMessage) => React.ReactElement | null;
-    NewMessageTooltip: null | CommonComponent<{ newMessages: SendbirdMessage[] }>;
+    renderMessage: (
+      message: SendbirdMessage,
+      prevMessage?: SendbirdMessage,
+      nextMessage?: SendbirdMessage,
+    ) => React.ReactElement | null;
+    NewMessagesTooltip: null | CommonComponent<{
+      visible: boolean;
+      onPress: () => void;
+      newMessages: SendbirdMessage[];
+    }>;
+    ScrollToBottomTooltip: null | CommonComponent<{
+      visible: boolean;
+      onPress: () => void;
+    }>;
   };
 };
 

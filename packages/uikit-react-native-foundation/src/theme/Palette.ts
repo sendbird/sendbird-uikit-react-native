@@ -1,48 +1,4 @@
-export interface PaletteInterface {
-  primary100: string;
-  primary200: string;
-  primary300: string;
-  primary400: string;
-  primary500: string;
-
-  secondary100: string;
-  secondary200: string;
-  secondary300: string;
-  secondary400: string;
-  secondary500: string;
-
-  error100: string;
-  error200: string;
-  error300: string;
-  error400: string;
-  error500: string;
-
-  background50: string;
-  background100: string;
-  background200: string;
-  background300: string;
-  background400: string;
-  background500: string;
-  background600: string;
-  background700: string;
-
-  overlay01: string;
-  overlay02: string;
-
-  information: string;
-  highlight: string;
-  transparent: 'transparent';
-
-  onBackgroundLight01: string;
-  onBackgroundLight02: string;
-  onBackgroundLight03: string;
-  onBackgroundLight04: string;
-
-  onBackgroundDark01: string;
-  onBackgroundDark02: string;
-  onBackgroundDark03: string;
-  onBackgroundDark04: string;
-}
+import type { PaletteInterface } from '../types';
 
 const Palette: PaletteInterface = {
   primary100: '#DBD1FF',

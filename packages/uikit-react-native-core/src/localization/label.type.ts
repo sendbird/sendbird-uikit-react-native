@@ -53,6 +53,8 @@ export interface LabelSet {
       DIALOG_MESSAGE_COPY: string;
       /** @domain GroupChannel > Fragment > Dialog > Message > Edit */
       DIALOG_MESSAGE_EDIT: string;
+      /** @domain GroupChannel > Fragment > Dialog > Message > Save */
+      DIALOG_MESSAGE_SAVE: string;
       /** @domain GroupChannel > Fragment > Dialog > Message > Delete */
       DIALOG_MESSAGE_DELETE: string;
       /** @domain GroupChannel > Fragment > Dialog > Message > Delete > Confirm title */
@@ -165,6 +167,7 @@ export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): 
 
       DIALOG_MESSAGE_COPY: 'Copy',
       DIALOG_MESSAGE_EDIT: 'Edit',
+      DIALOG_MESSAGE_SAVE: 'Save',
       DIALOG_MESSAGE_DELETE: 'Delete',
       DIALOG_MESSAGE_DELETE_CONFIRM_TITLE: 'Delete message?',
       DIALOG_MESSAGE_DELETE_CONFIRM_OK: 'Delete',

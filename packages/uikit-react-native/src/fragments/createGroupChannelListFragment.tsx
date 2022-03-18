@@ -44,7 +44,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
             bodyIcon={channel.lastMessage?.isFileMessage() ? 'file-document' : undefined}
             frozen={channel.isFrozen}
             notificationOff={channel.myPushTriggerOption === 'off'}
-            memberCount={channel.memberCount}
+            memberCount={channel.memberCount > 2 ? channel.memberCount : undefined}
           />
         </Pressable>
       ),
