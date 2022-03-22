@@ -71,7 +71,7 @@ export const useGroupChannelMessagesWithCollection = (
           .onCacheResult((err, messages) => {
             if (err) sdk.isCacheEnabled && Logger.error(`[${hookName}/onCacheResult]`, err);
             else {
-              Logger.info(`[${hookName}/onCacheResult]`, 'message length:', messages.length);
+              Logger.debug(`[${hookName}/onCacheResult]`, 'message length:', messages.length);
               updateMessages(messages, true);
               updateMessages(collectionRef.current?.pendingMessages ?? [], false);
               updateMessages(collectionRef.current?.failedMessages ?? [], false);
@@ -80,7 +80,7 @@ export const useGroupChannelMessagesWithCollection = (
           .onApiResult((err, messages) => {
             if (err) Logger.error(`[${hookName}/onApiResult]`, err);
             else {
-              Logger.info(`[${hookName}/onApiResult]`, 'message length:', messages.length);
+              Logger.debug(`[${hookName}/onApiResult]`, 'message length:', messages.length);
               updateMessages(messages, true);
               updateMessages(collectionRef.current?.pendingMessages ?? [], false);
               updateMessages(collectionRef.current?.failedMessages ?? [], false);

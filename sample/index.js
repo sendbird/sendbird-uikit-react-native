@@ -8,6 +8,6 @@ import { withReload } from './src/ReloadHelper';
 import { withAppearance } from './src/hooks/useAppearance';
 
 // Sendbird.setLogLevel(Sendbird.LogLevel.DEBUG);
-Logger.setLogLevel('debug');
+Logger.setLogLevel('warn');
 
 AppRegistry.registerComponent(appName, () => withReload(withAppearance(App)));

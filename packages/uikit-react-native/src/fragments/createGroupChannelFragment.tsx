@@ -39,6 +39,7 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
       (message, prevMessage, nextMessage) => {
         return (
           <MessageRenderer
+            currentUserId={currentUser?.userId}
             message={message}
             prevMessage={prevMessage}
             nextMessage={nextMessage}
@@ -46,7 +47,7 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
           />
         );
       },
-      [MessageRenderer, enableMessageGrouping],
+      [currentUser?.userId, MessageRenderer, enableMessageGrouping],
     );
 
     return (

@@ -1,8 +1,7 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
 
-import { useLocalization } from '@sendbird/uikit-react-native-core';
-import { Avatar, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { createStyleSheet } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
 import { calcMessageGrouping, isMyMessage } from '@sendbird/uikit-utils';
 
@@ -10,6 +9,10 @@ import AdminMessage from './AdminMessage';
 import FileMessage from './FileMessage';
 import MessageContainer from './MessageContainer';
 import MessageDateSeparator from './MessageDateSeparator';
+import MessageIncomingAvatar from './MessageIncomingAvatar';
+import MessageIncomingSenderName from './MessageIncomingSenderName';
+import MessageOutgoingStatus from './MessageOutgoingStatus';
+import MessageTime from './MessageTime';
 import UnknownMessage from './UnknownMessage';
 import UserMessage from './UserMessage';
 
@@ -25,14 +28,15 @@ export interface MessageRendererInterface<T = SendbirdMessage> {
 }
 
 type Props = {
+  currentUserId?: string;
   nextMessage?: SendbirdMessage;
   message: SendbirdMessage;
   prevMessage?: SendbirdMessage;
   enableMessageGrouping?: boolean;
 };
 
-const MessageRenderer: React.FC<Props> = ({ message, ...rest }) => {
-  const variant: MessageStyleVariant = isMyMessage(message) ? 'outgoing' : 'incoming';
+const MessageRenderer: React.FC<Props> = ({ currentUserId, message, ...rest }) => {
+  const variant: MessageStyleVariant = isMyMessage(message, currentUserId) ? 'outgoing' : 'incoming';
   const { groupWithPrev, groupWithNext } = calcMessageGrouping(
     Boolean(rest.enableMessageGrouping),
     message,
@@ -69,63 +73,35 @@ const MessageRenderer: React.FC<Props> = ({ message, ...rest }) => {
     );
   };
 
-  const chatAlignment = {
-    incoming: styles.chatIncoming,
-    outgoing: styles.chatOutgoing,
-  };
-
   return (
     <MessageContainer>
       <MessageDateSeparator message={message} prevMessage={rest.prevMessage} />
       {message.isAdminMessage() ? (
         messageComponent()
       ) : (
-        <View style={[chatAlignment[variant], groupWithNext ? styles.chatGroup : styles.chatNonGroup]}>
-          {variant === 'incoming' && <IncomingAvatar message={message} grouping={groupWithNext} />}
+        <View
+          style={[
+            { incoming: styles.chatIncoming, outgoing: styles.chatOutgoing }[variant],
+            groupWithNext ? styles.chatGroup : styles.chatNonGroup,
+          ]}
+        >
+          {variant === 'outgoing' && (
+            <View style={styles.outgoingContainer}>
+              {(message.isFileMessage() || message.isUserMessage()) && <MessageOutgoingStatus message={message} />}
+              <MessageTime message={message} grouping={groupWithNext} style={styles.timeOutgoing} />
+            </View>
+          )}
+          {variant === 'incoming' && <MessageIncomingAvatar message={message} grouping={groupWithNext} />}
           <View>
-            {variant === 'incoming' && <IncomingSenderName message={message} grouping={groupWithPrev} />}
+            {variant === 'incoming' && <MessageIncomingSenderName message={message} grouping={groupWithPrev} />}
             {messageComponent()}
           </View>
-          {variant === 'incoming' && <IncomingTime message={message} grouping={groupWithNext} />}
+          {variant === 'incoming' && (
+            <MessageTime message={message} grouping={groupWithNext} style={styles.timeIncoming} />
+          )}
         </View>
       )}
     </MessageContainer>
-  );
-};
-// TODO: Outgoing types, extract to components
-const IncomingSenderName: React.FC<{ message: SendbirdMessage; grouping: boolean }> = ({ message, grouping }) => {
-  const { colors } = useUIKitTheme();
-
-  if (grouping) return null;
-  return (
-    <View style={styles.sender}>
-      {(message.isFileMessage() || message.isUserMessage()) && (
-        <Text caption1 color={colors.ui.message.incoming.enabled.textSenderName}>
-          {message.sender?.nickname}
-        </Text>
-      )}
-    </View>
-  );
-};
-const IncomingAvatar: React.FC<{ message: SendbirdMessage; grouping: boolean }> = ({ message, grouping }) => {
-  if (grouping) return <View style={styles.avatar} />;
-  return (
-    <View style={styles.avatar}>
-      {(message.isFileMessage() || message.isUserMessage()) && <Avatar size={26} uri={message.sender?.profileUrl} />}
-    </View>
-  );
-};
-const IncomingTime: React.FC<{ message: SendbirdMessage; grouping: boolean }> = ({ message, grouping }) => {
-  const { LABEL } = useLocalization();
-  const { colors } = useUIKitTheme();
-
-  if (grouping) return null;
-  return (
-    <View style={styles.timeIncoming}>
-      <Text caption4 color={colors.ui.message.incoming.enabled.textTime}>
-        {LABEL.GROUP_CHANNEL.FRAGMENT.LIST_MESSAGE_TIME(message)}
-      </Text>
-    </View>
   );
 };
 
@@ -140,8 +116,11 @@ const styles = createStyleSheet({
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
   },
-  msgContainer: {
-    maxWidth: 240,
+  timeIncoming: {
+    marginLeft: 4,
+  },
+  timeOutgoing: {
+    marginRight: 4,
   },
   chatGroup: {
     marginBottom: 2,
@@ -149,17 +128,13 @@ const styles = createStyleSheet({
   chatNonGroup: {
     marginBottom: 16,
   },
-
-  sender: {
-    marginLeft: 12,
-    marginBottom: 4,
+  msgContainer: {
+    maxWidth: 240,
   },
-  avatar: {
-    width: 26,
-    marginRight: 12,
-  },
-  timeIncoming: {
-    marginLeft: 4,
+  outgoingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
