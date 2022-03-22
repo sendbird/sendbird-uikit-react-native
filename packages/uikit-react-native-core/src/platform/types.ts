@@ -23,12 +23,14 @@ export interface FilePickerServiceInterface {
   requestStoragePermission?(): Promise<boolean>;
   openDocument?(): Promise<FilePickerResponse>;
 }
-
 export type FilePickerResponse = FileType | null;
+export type FileType = { uri: string; size: number; name: string; type: string };
 
-export type FileType = {
-  uri: string;
-  size: number;
-  name: string;
-  type: string;
-};
+export interface ClipboardServiceInterface {
+  setString(text: string): void;
+  getString(): Promise<void>;
+}
+
+export interface FileSystemServiceInterface {
+  download(fileUrl: string, downloadPath: string): Promise<void>;
+}

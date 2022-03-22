@@ -32,7 +32,7 @@ export const useTotalUnreadMessageCount = (sdk: SendbirdChatSDK, params?: Params
 
   useUserEventHandler(
     sdk,
-    HOOK_NAME + id,
+    `${HOOK_NAME}_${id}`,
     {
       onTotalUnreadMessageCountUpdated: (totalCount: number) => setUnreadMessageCount(totalCount),
     },

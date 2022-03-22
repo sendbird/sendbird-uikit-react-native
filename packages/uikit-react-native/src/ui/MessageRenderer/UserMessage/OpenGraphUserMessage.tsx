@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, View } from 'react-native';
 import type Sendbird from 'sendbird';
 
-import { Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { Text, URLParsedText, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 import type { UserMessageProps } from './index';
 
@@ -16,9 +16,9 @@ const OpenGraphUserMessage: React.FC<Props> = ({ message, variant, pressed, ogMe
   return (
     <View style={[styles.container, { backgroundColor: color.background }]}>
       <View style={styles.messageContainer}>
-        <Text body3 color={color.textMsg}>
+        <URLParsedText body3 color={color.textMsg}>
           {message.message}
-        </Text>
+        </URLParsedText>
       </View>
       <Image source={{ uri: ogMetaData.defaultImage.url }} style={styles.ogImage} resizeMode={'cover'} />
       <View

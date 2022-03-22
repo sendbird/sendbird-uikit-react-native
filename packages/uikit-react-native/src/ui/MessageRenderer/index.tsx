@@ -4,7 +4,7 @@ import { Pressable, View } from 'react-native';
 import { useLocalization } from '@sendbird/uikit-react-native-core';
 import { Avatar, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
-import { hasSameSender, isMyMessage, messageTime } from '@sendbird/uikit-utils';
+import { calcMessageGrouping, isMyMessage } from '@sendbird/uikit-utils';
 
 import AdminMessage from './AdminMessage';
 import FileMessage from './FileMessage';
@@ -13,7 +13,7 @@ import MessageDateSeparator from './MessageDateSeparator';
 import UnknownMessage from './UnknownMessage';
 import UserMessage from './UserMessage';
 
-export type MessageStyleVariant = 'outgoing' | 'incoming';
+type MessageStyleVariant = 'outgoing' | 'incoming';
 export interface MessageRendererInterface<T = SendbirdMessage> {
   message: T;
   prevMessage?: SendbirdMessage;
@@ -33,24 +33,12 @@ type Props = {
 
 const MessageRenderer: React.FC<Props> = ({ message, ...rest }) => {
   const variant: MessageStyleVariant = isMyMessage(message) ? 'outgoing' : 'incoming';
-
-  const groupWithPrev = (() => {
-    if (!rest.enableMessageGrouping) return false;
-    if (!rest.prevMessage) return false;
-    if (message.isAdminMessage()) return false;
-    if (!hasSameSender(message, rest.prevMessage)) return false;
-    if (messageTime(new Date(message.createdAt)) !== messageTime(new Date(rest.prevMessage.createdAt))) return false;
-    return true;
-  })();
-
-  const groupWithNext = (() => {
-    if (!rest.enableMessageGrouping) return false;
-    if (!rest.nextMessage) return false;
-    if (message.isAdminMessage()) return false;
-    if (!hasSameSender(message, rest.nextMessage)) return false;
-    if (messageTime(new Date(message.createdAt)) !== messageTime(new Date(rest.nextMessage.createdAt))) return false;
-    return true;
-  })();
+  const { groupWithPrev, groupWithNext } = calcMessageGrouping(
+    Boolean(rest.enableMessageGrouping),
+    message,
+    rest.prevMessage,
+    rest.nextMessage,
+  );
 
   const messageComponent = () => {
     const props = { ...rest, variant, groupWithNext, groupWithPrev };

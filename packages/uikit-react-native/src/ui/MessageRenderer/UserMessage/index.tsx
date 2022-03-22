@@ -10,7 +10,6 @@ const UserMessage: React.FC<UserMessageProps> = (props) => {
   if (props.message.ogMetaData) {
     return <OpenGraphUserMessage {...props} ogMetaData={props.message.ogMetaData} />;
   }
-
   return <BaseUserMessage {...props} />;
 };
 

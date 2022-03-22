@@ -1,4 +1,5 @@
 import type { SendbirdMessage } from '../types';
+import { messageTime } from '../ui-format/common';
 
 export function isNewMessage(msg: SendbirdMessage, currentUserId?: string) {
   const myMessage = isMyMessage(msg, currentUserId);
@@ -36,4 +37,31 @@ export function hasSameSender(a?: SendbirdMessage, b?: SendbirdMessage) {
   if (!a || !b) return false;
   if ('sender' in a && 'sender' in b) return a.sender?.userId === b.sender?.userId;
   return false;
+}
+
+export function calcMessageGrouping(
+  groupEnabled: boolean,
+  curr: SendbirdMessage,
+  prev?: SendbirdMessage,
+  next?: SendbirdMessage,
+) {
+  const getPrev = () => {
+    if (!groupEnabled) return false;
+    if (!prev) return false;
+    if (curr.isAdminMessage()) return false;
+    if (!hasSameSender(curr, prev)) return false;
+    if (messageTime(new Date(curr.createdAt)) !== messageTime(new Date(prev.createdAt))) return false;
+    return true;
+  };
+
+  const getNext = () => {
+    if (!groupEnabled) return false;
+    if (!next) return false;
+    if (curr.isAdminMessage()) return false;
+    if (!hasSameSender(curr, next)) return false;
+    if (messageTime(new Date(curr.createdAt)) !== messageTime(new Date(next.createdAt))) return false;
+    return true;
+  };
+
+  return { groupWithPrev: getPrev(), groupWithNext: getNext() };
 }

@@ -64,7 +64,7 @@ export type GroupChannelListProps = {
     groupChannels: Sendbird.GroupChannel[];
     renderGroupChannelPreview: (
       channel: Sendbird.GroupChannel,
-      selectChannel: (channel: Sendbird.GroupChannel) => void,
+      onLongPressChannel: () => void,
     ) => React.ReactElement | null;
     onLoadNext: () => Promise<void>;
     onRefresh?: () => Promise<void>;

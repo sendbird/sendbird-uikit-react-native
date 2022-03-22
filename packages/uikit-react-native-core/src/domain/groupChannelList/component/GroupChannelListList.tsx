@@ -15,7 +15,7 @@ const GroupChannelListList: React.FC<GroupChannelListProps['List']> = ({
 }) => {
   const channelMenu = useContext(GroupChannelListContext.ChannelMenu);
   const renderItem: ListRenderItem<Sendbird.GroupChannel> = useCallback(
-    ({ item }) => renderGroupChannelPreview?.(item, channelMenu.selectChannel),
+    ({ item }) => renderGroupChannelPreview?.(item, () => channelMenu.selectChannel(item)),
     [renderGroupChannelPreview, channelMenu.selectChannel],
   );
   return (

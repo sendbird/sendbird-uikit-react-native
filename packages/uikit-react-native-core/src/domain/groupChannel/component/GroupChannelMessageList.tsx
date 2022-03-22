@@ -27,6 +27,8 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   const [scrollLeaveBottom, setScrollLeaveBottom] = useState(false);
   const scrollRef = useRef<CustomFlatListRef>(null);
 
+  const safeAreaLayout = { paddingLeft: left, paddingRight: right };
+
   // NOTE: Cannot wrap with useCallback, because prevMessage (always getting from fresh messages)
   const renderItem: ListRenderItem<SendbirdMessage> = ({ item, index }) => (
     <View style={{}}>{renderMessage(item, messages[index + 1], messages[index - 1])}</View>
@@ -46,11 +48,12 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   }, []);
 
   return (
-    <View style={{ flex: 1, paddingLeft: left, paddingRight: right }}>
+    <View style={[{ flex: 1 }, safeAreaLayout]}>
       {channel.isFrozen && (
         <ChannelFrozenBanner style={styles.frozenBanner} text={LABEL.GROUP_CHANNEL.FRAGMENT.LIST_BANNER_FROZEN} />
       )}
       <CustomFlatList
+        listKey={`group-channel-messages-${channel.url}`}
         ref={scrollRef}
         data={messages}
         nextMessages={nextMessages}
@@ -62,7 +65,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
         onLeaveScrollBottom={onLeaveScrollBottom}
       />
       {NewMessagesTooltip && (
-        <View style={styles.newMsgTooltip}>
+        <View style={[styles.newMsgTooltip, safeAreaLayout]}>
           <NewMessagesTooltip
             visible={scrollLeaveBottom}
             onPress={() => scrollRef.current?.scrollToBottom(false)}
@@ -71,8 +74,8 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
         </View>
       )}
       {ScrollToBottomTooltip && (
-        <View style={styles.scrollTooltip}>
-          <ScrollToBottomTooltip visible={scrollLeaveBottom} onPress={() => scrollRef.current?.scrollToBottom(true)} />
+        <View style={[styles.scrollTooltip, safeAreaLayout]}>
+          <ScrollToBottomTooltip visible={scrollLeaveBottom} onPress={() => scrollRef.current?.scrollToBottom(false)} />
         </View>
       )}
     </View>
@@ -173,7 +176,7 @@ const styles = createStyleSheet({
   },
   scrollTooltip: {
     position: 'absolute',
-    zIndex: 999,
+    zIndex: 998,
     bottom: 10,
     right: 16,
   },

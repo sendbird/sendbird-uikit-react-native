@@ -34,7 +34,7 @@ const App = () => {
       <NavigationContainer theme={isLightTheme ? DefaultTheme : DarkTheme}>
         <RootStack.Navigator>
           <RootStack.Screen name={Routes.Home} component={HomeScreen} />
-          <RootStack.Screen name={Routes.Storybook} component={StorybookScreen} />
+          {/*<RootStack.Screen name={Routes.Storybook} component={StorybookScreen} />*/}
           <RootStack.Screen name={Routes.ThemeColors} component={ThemeColorsScreen} />
           <RootStack.Screen name={Routes.Palette} component={PaletteScreen} />
 

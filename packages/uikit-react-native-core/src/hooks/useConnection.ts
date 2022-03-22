@@ -16,15 +16,20 @@ const useConnection = (opts?: Options) => {
 
   const connect = useCallback(
     async (userId: string, accessToken?: string) => {
-      if (accessToken) await sdk.connect(userId, accessToken);
-      else await sdk.connect(userId);
+      try {
+        if (accessToken) await sdk.connect(userId, accessToken);
+        else await sdk.connect(userId);
+      } catch (e) {
+        // @ts-ignore
+        Logger.warn('[useConnection]', 'connect failure', e.message, e.code);
+      }
 
       setCurrentUser(sdk.currentUser);
 
       try {
         if (opts?.autoPushTokenRegistration) await registerPushTokenForCurrentUser();
       } catch {
-        Logger.warn('registerPushTokenForCurrentUser failure');
+        Logger.warn('[useConnection]', 'registerPushTokenForCurrentUser failure');
       }
 
       return sdk.currentUser;
@@ -35,7 +40,7 @@ const useConnection = (opts?: Options) => {
     try {
       if (opts?.autoPushTokenRegistration) await unregisterPushTokenForCurrentUser();
     } catch {
-      Logger.warn('unregisterPushTokenForCurrentUser failure');
+      Logger.warn('[useConnection]', 'unregisterPushTokenForCurrentUser failure');
     }
 
     await sdk.disconnect();

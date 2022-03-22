@@ -24,6 +24,7 @@ export { default as Prompt } from './ui/Prompt';
 export { default as Switch } from './ui/Switch';
 export { default as Text } from './ui/Text';
 export { default as TextInput } from './ui/TextInput';
+export { default as URLParsedText } from './ui/URLParsedText';
 
 /** Styles **/
 export { default as createAppearanceHelper } from './styles/createAppearanceHelper';

@@ -45,9 +45,13 @@ export const useGroupChannelMessagesWithQuery = (
   const channelMarkAs = async () => {
     try {
       sdk.markAsDelivered(channel.url);
+    } catch (e) {
+      Logger.error(`[${hookName}/channelMarkAs/Delivered]`, e);
+    }
+    try {
       await sdk.markAsReadWithChannelUrls([channel.url]);
     } catch (e) {
-      Logger.error(`[${hookName}/channelMarkAs]`, e);
+      Logger.error(`[${hookName}/channelMarkAs/Read]`, e);
     }
   };
 

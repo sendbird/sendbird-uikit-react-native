@@ -128,7 +128,7 @@ export const useGroupChannelListWithCollection = (
 
   useChannelHandler(
     sdk,
-    HOOK_NAME + id,
+    `${HOOK_NAME}_${id}`,
     {
       onChannelChanged: (channel) => updateChannels([channel], false),
       onChannelFrozen: (channel) => updateChannels([channel], false),

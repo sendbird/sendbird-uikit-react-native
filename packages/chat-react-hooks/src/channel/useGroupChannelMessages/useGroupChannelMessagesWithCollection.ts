@@ -47,9 +47,13 @@ export const useGroupChannelMessagesWithCollection = (
   const channelMarkAs = async () => {
     try {
       sdk.markAsDelivered(channel.url);
+    } catch (e) {
+      Logger.error(`[${hookName}/channelMarkAs/Delivered]`, e);
+    }
+    try {
       await sdk.markAsReadWithChannelUrls([channel.url]);
     } catch (e) {
-      Logger.error(`[${hookName}/channelMarkAs]`, e);
+      Logger.error(`[${hookName}/channelMarkAs/Read]`, e);
     }
   };
 
@@ -67,6 +71,7 @@ export const useGroupChannelMessagesWithCollection = (
           .onCacheResult((err, messages) => {
             if (err) sdk.isCacheEnabled && Logger.error(`[${hookName}/onCacheResult]`, err);
             else {
+              Logger.info(`[${hookName}/onCacheResult]`, 'message length:', messages.length);
               updateMessages(messages, true);
               updateMessages(collectionRef.current?.pendingMessages ?? [], false);
               updateMessages(collectionRef.current?.failedMessages ?? [], false);
@@ -75,6 +80,7 @@ export const useGroupChannelMessagesWithCollection = (
           .onApiResult((err, messages) => {
             if (err) Logger.error(`[${hookName}/onApiResult]`, err);
             else {
+              Logger.info(`[${hookName}/onApiResult]`, 'message length:', messages.length);
               updateMessages(messages, true);
               updateMessages(collectionRef.current?.pendingMessages ?? [], false);
               updateMessages(collectionRef.current?.failedMessages ?? [], false);
