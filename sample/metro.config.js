@@ -12,7 +12,6 @@ const androidAssetsResolutionFix = getMetroAndroidAssetsResolutionFix();
 
 module.exports = {
   transformer: {
-    minifierPath: 'metro-minify-esbuild',
     publicPath: androidAssetsResolutionFix.publicPath,
     getTransformOptions: async () => ({
       transform: {
