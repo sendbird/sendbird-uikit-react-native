@@ -9,6 +9,8 @@ import { isMyMessage, messageKeyExtractor } from '@sendbird/uikit-utils';
 import { useLocalization } from '../../../contexts/Localization';
 import type { GroupChannelProps } from '../types';
 
+let ANDROID_BUG_ALERT_SHOWED = Platform.OS !== 'android';
+
 const HANDLE_NEXT_MSG_SEPARATELY = Platform.select({ android: true, ios: false });
 const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   channel,
@@ -30,9 +32,8 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   const safeAreaLayout = { paddingLeft: left, paddingRight: right };
 
   // NOTE: Cannot wrap with useCallback, because prevMessage (always getting from fresh messages)
-  const renderItem: ListRenderItem<SendbirdMessage> = ({ item, index }) => (
-    <View style={{}}>{renderMessage(item, messages[index + 1], messages[index - 1])}</View>
-  );
+  const renderItem: ListRenderItem<SendbirdMessage> = ({ item, index }) =>
+    renderMessage(item, messages[index + 1], messages[index - 1]);
 
   const [newMessages, setNewMessages] = useState(() => newMessagesFromNext);
 
@@ -137,6 +138,13 @@ const CustomFlatList = forwardRef<CustomFlatListRef, Props>(function CustomFlatL
     },
     [onScroll, onBottomReached],
   );
+
+  if (__DEV__ && !ANDROID_BUG_ALERT_SHOWED) {
+    ANDROID_BUG_ALERT_SHOWED = true;
+    console.warn(
+      'UIKit Warning: Inverted FlatList has performance issue on Android, Maybe this is a bug please refer link\nhttps://github.com/facebook/react-native/issues/30034',
+    );
+  }
 
   return (
     <FlatList
