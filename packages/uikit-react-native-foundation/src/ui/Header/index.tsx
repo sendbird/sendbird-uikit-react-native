@@ -21,7 +21,11 @@ type HeaderProps = BaseHeaderProps<
 >;
 
 const AlignMapper = { left: 'flex-start', center: 'center', right: 'flex-end' } as const;
-const Header: React.FC<HeaderProps> & { Button: typeof HeaderButton; Title: typeof HeaderTitle } = ({
+const Header: React.FC<HeaderProps> & {
+  Button: typeof HeaderButton;
+  Title: typeof HeaderTitle;
+  SubTitle: typeof HeaderSubTitle;
+} = ({
   children,
   titleAlign,
   title = null,
@@ -103,6 +107,14 @@ const HeaderTitle: React.FC<{ children: string } & TextProps> = ({ children, sty
     </Text>
   );
 };
+const HeaderSubTitle: React.FC<{ children: string } & TextProps> = ({ children, style, ...props }) => {
+  const { colors } = useUIKitTheme();
+  return (
+    <Text color={colors.onBackground03} {...props} caption2 numberOfLines={1} style={style}>
+      {children}
+    </Text>
+  );
+};
 const HeaderButton: React.FC<TouchableOpacityProps & { color?: string }> = ({
   children,
   disabled,
@@ -164,4 +176,5 @@ const styles = createStyleSheet({
 
 Header.Button = HeaderButton;
 Header.Title = HeaderTitle;
+Header.SubTitle = HeaderSubTitle;
 export default Header;

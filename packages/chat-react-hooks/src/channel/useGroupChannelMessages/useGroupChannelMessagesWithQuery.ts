@@ -4,7 +4,7 @@ import type Sendbird from 'sendbird';
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 import { Logger, isDifferentChannel, useAsyncEffect } from '@sendbird/uikit-utils';
 
-import useChannelHandler from '../../handler/useChannelHandler';
+import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';
 import { useGroupChannelMessagesReducer } from './reducer';
 

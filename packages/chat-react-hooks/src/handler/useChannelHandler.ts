@@ -3,7 +3,7 @@ import type Sendbird from 'sendbird';
 
 import { Logger, SendbirdChatSDK } from '@sendbird/uikit-utils';
 
-const useChannelHandler = (
+export const useChannelHandler = (
   sdk: SendbirdChatSDK,
   handlerId: string,
   hookHandler: Partial<Sendbird.ChannelHandler>,
@@ -23,5 +23,3 @@ const useChannelHandler = (
     return () => sdk.removeChannelHandler(handlerId);
   }, [sdk, handlerId, ...deps]);
 };
-
-export default useChannelHandler;

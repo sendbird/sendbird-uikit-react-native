@@ -4,7 +4,7 @@ import type Sendbird from 'sendbird';
 import type { SendbirdChannel, SendbirdChatSDK } from '@sendbird/uikit-utils';
 import { arrayToMap, useAsyncEffect } from '@sendbird/uikit-utils';
 
-import useChannelHandler from '../handler/useChannelHandler';
+import { useChannelHandler } from '../handler/useChannelHandler';
 import type { UseGroupChannelList, UseGroupChannelListOptions } from '../types';
 
 type GroupChannelMap = Record<string, Sendbird.GroupChannel>;

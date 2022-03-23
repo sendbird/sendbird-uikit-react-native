@@ -75,6 +75,10 @@ export interface LabelSet {
       /** @domain GroupChannel > Fragment > Dialog > Attachment > Files */
       DIALOG_ATTACHMENT_FILES: string;
     };
+    TYPING_INDICATOR: {
+      /** @domain GroupChannel > Typing Indicator > Typings */
+      TYPINGS: (users: Sendbird.User[]) => string | undefined;
+    };
   };
   GROUP_CHANNEL_LIST: {
     FRAGMENT: {
@@ -180,6 +184,16 @@ export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): 
       DIALOG_ATTACHMENT_FILES: 'Files',
 
       ...overrides?.GROUP_CHANNEL?.FRAGMENT,
+    },
+    TYPING_INDICATOR: {
+      TYPINGS: (users, NO_NAME = '(No name)') => {
+        const userNames = users.map((u) => u.nickname || NO_NAME);
+        if (userNames.length === 0) return;
+        if (userNames.length === 1) return `${userNames[0]} is typing...`;
+        if (users.length === 2) return `${userNames.join(' and ')} are typing...`;
+        return 'Several people are typing...';
+      },
+      ...overrides?.GROUP_CHANNEL?.TYPING_INDICATOR,
     },
   },
   GROUP_CHANNEL_LIST: {

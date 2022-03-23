@@ -74,6 +74,9 @@ export type GroupChannelContextType = {
     headerTitle: string;
     channel: Sendbird.GroupChannel;
   }>;
+  TypingIndicator: React.Context<{
+    typingUsers: Sendbird.User[];
+  }>;
 };
 export interface GroupChannelModule {
   Provider: React.FC<{ channel: Sendbird.GroupChannel }>;

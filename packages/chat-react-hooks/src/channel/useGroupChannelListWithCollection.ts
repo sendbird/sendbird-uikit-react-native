@@ -5,7 +5,7 @@ import type { SendbirdChannel, SendbirdChatSDK } from '@sendbird/uikit-utils';
 import { Logger, arrayToMap, useAsyncEffect, useUniqId } from '@sendbird/uikit-utils';
 
 import useInternalPubSub from '../common/useInternalPubSub';
-import useChannelHandler from '../handler/useChannelHandler';
+import { useChannelHandler } from '../handler/useChannelHandler';
 import type { UseGroupChannelList, UseGroupChannelListOptions } from '../types';
 
 type GroupChannelMap = Record<string, Sendbird.GroupChannel>;

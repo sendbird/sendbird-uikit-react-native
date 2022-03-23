@@ -4,7 +4,7 @@ import type Sendbird from 'sendbird';
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 import { Logger } from '@sendbird/uikit-utils';
 
-const useUserEventHandler = (
+export const useUserEventHandler = (
   sdk: SendbirdChatSDK,
   handlerId: string,
   hookHandler: Partial<Sendbird.UserEventHandler>,
@@ -24,5 +24,3 @@ const useUserEventHandler = (
     return () => sdk.removeUserEventHandler(handlerId);
   }, [sdk, handlerId, ...deps]);
 };
-
-export default useUserEventHandler;
