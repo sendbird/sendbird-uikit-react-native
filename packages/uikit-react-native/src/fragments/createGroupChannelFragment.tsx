@@ -1,6 +1,7 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import { useGroupChannelMessages } from '@sendbird/chat-react-hooks';
+import useInternalPubSub from '@sendbird/chat-react-hooks/src/common/useInternalPubSub';
 import type { GroupChannelFragment, GroupChannelModule, GroupChannelProps } from '@sendbird/uikit-react-native-core';
 import { createGroupChannelModule, useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { EmptyFunction, messageComparator } from '@sendbird/uikit-utils';
@@ -8,6 +9,8 @@ import { EmptyFunction, messageComparator } from '@sendbird/uikit-utils';
 import DefaultMessageRenderer from '../ui/MessageRenderer';
 import DefaultNewMessagesTooltip from '../ui/NewMessagesTooltip';
 import DefaultScrollToBottomTooltip from '../ui/ScrollToBottomTooltip';
+
+const PassValue = <T,>(v: T) => v;
 
 const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChannelFragment => {
   const GroupChannelModule = createGroupChannelModule(initModule);
@@ -20,25 +23,37 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
     Header,
     onPressHeaderLeft = EmptyFunction,
     onPressHeaderRight = EmptyFunction,
-    channel,
+    onChannelDeleted = EmptyFunction,
+    onBeforeSendFileMessage = PassValue,
+    onBeforeSendUserMessage = PassValue,
+    staleChannel,
     queryCreator,
     collectionCreator,
     sortComparator = messageComparator,
     children,
   }) => {
     const { sdk, currentUser } = useSendbirdChat();
+    const { subscribe, events } = useInternalPubSub();
 
-    const { messages, nextMessages, newMessagesFromNext, next, prev } = useGroupChannelMessages(
-      sdk,
-      channel,
-      currentUser?.userId,
-      { collectionCreator, queryCreator, sortComparator, enableCollectionWithoutLocalCache: true },
-    );
+    const { activeChannel, messages, nextMessages, newMessagesFromNext, next, prev, sendFileMessage, sendUserMessage } =
+      useGroupChannelMessages(sdk, staleChannel, currentUser?.userId, {
+        collectionCreator,
+        queryCreator,
+        sortComparator,
+        enableCollectionWithoutLocalCache: true,
+      });
+
+    useEffect(() => {
+      return subscribe(events.ChannelDeleted, ({ channelUrl }) => {
+        if (channelUrl === staleChannel.url) onChannelDeleted();
+      });
+    }, []);
 
     const renderMessages: GroupChannelProps['MessageList']['renderMessage'] = useCallback(
       (message, prevMessage, nextMessage) => {
         return (
           <MessageRenderer
+            channel={activeChannel}
             currentUserId={currentUser?.userId}
             message={message}
             prevMessage={prevMessage}
@@ -47,18 +62,18 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
           />
         );
       },
-      [currentUser?.userId, MessageRenderer, enableMessageGrouping],
+      [activeChannel, currentUser?.userId, MessageRenderer, enableMessageGrouping],
     );
 
     return (
-      <GroupChannelModule.Provider channel={channel}>
+      <GroupChannelModule.Provider channel={activeChannel}>
         <GroupChannelModule.Header
           Header={Header}
           onPressHeaderLeft={onPressHeaderLeft}
           onPressHeaderRight={onPressHeaderRight}
         />
         <GroupChannelModule.MessageList
-          channel={channel}
+          channel={activeChannel}
           messages={messages}
           renderMessage={renderMessages}
           newMessagesFromNext={newMessagesFromNext}
@@ -67,6 +82,23 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
           onBottomReached={next}
           NewMessagesTooltip={NewMessagesTooltip}
           ScrollToBottomTooltip={ScrollToBottomTooltip}
+        />
+        <GroupChannelModule.Input
+          onSendFileMessage={async (file) => {
+            const params = new sdk.FileMessageParams();
+            params.file = file;
+
+            const processedParams = await onBeforeSendFileMessage(params);
+            sendFileMessage(processedParams);
+          }}
+          onSendUserMessage={async (text) => {
+            const params = new sdk.UserMessageParams();
+            params.message = text;
+
+            const processedParams = await onBeforeSendUserMessage(params);
+            sendUserMessage(processedParams);
+          }}
+          channel={activeChannel}
         />
         {children}
       </GroupChannelModule.Provider>

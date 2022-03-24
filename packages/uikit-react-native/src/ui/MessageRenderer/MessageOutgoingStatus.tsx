@@ -4,17 +4,24 @@ import type Sendbird from 'sendbird';
 import { useChannelHandler } from '@sendbird/chat-react-hooks';
 import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { Icon, LoadingSpinner, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import type { SendbirdMessage } from '@sendbird/uikit-utils';
 
 const SIZE = 16;
 
 type Props = {
-  message: Sendbird.FileMessage | Sendbird.UserMessage;
+  channel: Sendbird.GroupChannel;
+  message: SendbirdMessage;
 };
-const MessageOutgoingStatus: React.FC<Props> = ({ message }) => {
+const MessageOutgoingStatus: React.FC<Props> = ({ channel, message }) => {
+  if (!message.isUserMessage() && !message.isFileMessage()) return null;
+
   const { sdk } = useSendbirdChat();
   const { colors } = useUIKitTheme();
 
-  const [state, setState] = useState({ unreadCount: 0, undeliveredCount: 0 });
+  const [state, setState] = useState(() => ({
+    unreadCount: channel.getUnreadMemberCount(message),
+    undeliveredCount: channel.getUndeliveredMemberCount(message),
+  }));
 
   useChannelHandler(
     sdk,

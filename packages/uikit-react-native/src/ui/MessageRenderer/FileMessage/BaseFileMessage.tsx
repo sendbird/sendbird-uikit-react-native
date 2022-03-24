@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 
+import { useLocalization } from '@sendbird/uikit-react-native-core';
 import { Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 import type { FileMessageProps } from './index';
@@ -13,6 +14,7 @@ const BaseFileMessage: React.FC<FileMessageProps & { type: 'image' | 'audio' | '
   pressed,
   type,
 }) => {
+  const { LABEL } = useLocalization();
   const { colors } = useUIKitTheme();
   const color = colors.ui.message[variant][pressed ? 'pressed' : 'enabled'];
   return (
@@ -23,7 +25,7 @@ const BaseFileMessage: React.FC<FileMessageProps & { type: 'image' | 'audio' | '
         containerStyle={{ backgroundColor: colors.background, padding: 2, borderRadius: 8, marginRight: 8 }}
       />
       <Text numberOfLines={1} body3 color={color.textMsg}>
-        {message.name}
+        {LABEL.GROUP_CHANNEL.FRAGMENT.LIST_MESSAGE_FILE_TITLE(message)}
       </Text>
     </View>
   );

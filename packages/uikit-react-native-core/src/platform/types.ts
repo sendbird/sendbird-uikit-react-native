@@ -19,9 +19,9 @@ export interface FilePickerServiceInterface {
   requestCameraPermission(): Promise<boolean>;
   openCamera(options?: { cameraType?: 'front' | 'back'; mediaType?: 'photo' | 'video' }): Promise<FilePickerResponse>;
 
-  hasStoragePermission?(): Promise<boolean>;
-  requestStoragePermission?(): Promise<boolean>;
-  openDocument?(): Promise<FilePickerResponse>;
+  hasStoragePermission(): Promise<boolean>;
+  requestStoragePermission(): Promise<boolean>;
+  openDocument(): Promise<FilePickerResponse>;
 }
 export type FilePickerResponse = FileType | null;
 export type FileType = { uri: string; size: number; name: string; type: string };

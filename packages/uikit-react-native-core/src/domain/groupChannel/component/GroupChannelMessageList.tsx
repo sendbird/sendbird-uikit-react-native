@@ -10,8 +10,8 @@ import { useLocalization } from '../../../contexts/Localization';
 import type { GroupChannelProps } from '../types';
 
 let ANDROID_BUG_ALERT_SHOWED = Platform.OS !== 'android';
-
 const HANDLE_NEXT_MSG_SEPARATELY = Platform.select({ android: true, ios: false });
+
 const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   channel,
   messages,
@@ -49,7 +49,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   }, []);
 
   return (
-    <View style={[{ flex: 1 }, safeAreaLayout]}>
+    <View style={[{ flex: 1, backgroundColor: colors.background }, safeAreaLayout]}>
       {channel.isFrozen && (
         <ChannelFrozenBanner style={styles.frozenBanner} text={LABEL.GROUP_CHANNEL.FRAGMENT.LIST_BANNER_FROZEN} />
       )}
@@ -62,7 +62,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
         keyExtractor={messageKeyExtractor}
         onBottomReached={onBottomReached}
         onTopReached={onTopReached}
-        contentContainerStyle={[channel.isFrozen && styles.frozenListPadding, { backgroundColor: colors.background }]}
+        contentContainerStyle={channel.isFrozen && styles.frozenListPadding}
         onLeaveScrollBottom={onLeaveScrollBottom}
       />
       {NewMessagesTooltip && (
@@ -76,7 +76,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
       )}
       {ScrollToBottomTooltip && (
         <View style={[styles.scrollTooltip, safeAreaLayout]}>
-          <ScrollToBottomTooltip visible={scrollLeaveBottom} onPress={() => scrollRef.current?.scrollToBottom(false)} />
+          <ScrollToBottomTooltip visible={scrollLeaveBottom} onPress={() => scrollRef.current?.scrollToBottom(true)} />
         </View>
       )}
     </View>
@@ -93,7 +93,8 @@ type Props = Omit<FlatListProps<SendbirdMessage>, 'onEndReached'> & {
   nextMessages: SendbirdMessage[];
   onLeaveScrollBottom: (value: boolean) => void;
 };
-const BOTTOM_DETECT_THRESHOLD = 15;
+const BOTTOM_DETECT_THRESHOLD = 100;
+const AUTO_SCROLL_TO_TOP_THRESHOLD = 15;
 type CustomFlatListRef = { scrollToBottom: (animated?: boolean) => void };
 const CustomFlatList = forwardRef<CustomFlatListRef, Props>(function CustomFlatList(
   { onTopReached, nextMessages, onBottomReached, onLeaveScrollBottom, onScroll, ...props },
@@ -141,8 +142,9 @@ const CustomFlatList = forwardRef<CustomFlatListRef, Props>(function CustomFlatL
 
   if (__DEV__ && !ANDROID_BUG_ALERT_SHOWED) {
     ANDROID_BUG_ALERT_SHOWED = true;
+    // eslint-disable-next-line no-console
     console.warn(
-      'UIKit Warning: Inverted FlatList has performance issue on Android, Maybe this is a bug please refer link\nhttps://github.com/facebook/react-native/issues/30034',
+      'UIKit Warning: Inverted FlatList has a performance issue on Android, Maybe this is a bug please refer link\nhttps://github.com/facebook/react-native/issues/30034',
     );
   }
 
@@ -152,10 +154,9 @@ const CustomFlatList = forwardRef<CustomFlatListRef, Props>(function CustomFlatL
       // FIXME: Inverted FlatList performance issue on Android {@link https://github.com/facebook/react-native/issues/30034}
       inverted
       // FIXME: maintainVisibleContentPosition is not working on Android {@link https://github.com/facebook/react-native/issues/25239}
-      maintainVisibleContentPosition={{ minIndexForVisible: 1, autoscrollToTopThreshold: BOTTOM_DETECT_THRESHOLD - 5 }}
+      maintainVisibleContentPosition={{ minIndexForVisible: 1, autoscrollToTopThreshold: AUTO_SCROLL_TO_TOP_THRESHOLD }}
       ref={scrollRef}
       bounces={false}
-      keyboardDismissMode={'on-drag'}
       indicatorStyle={select({ light: 'black', dark: 'white' })}
       removeClippedSubviews
       onEndReachedThreshold={0.25}

@@ -18,7 +18,7 @@
   "scripts": {
     "reset": "find . -type dir -name node_modules | xargs rm -rf",
     "clean": "lerna run clean",
-    "build": "lerna run prepare",
+    "build": "lerna run build",
     "test": "jest --verbose",
     "test:build": "yarn build --stream && yarn clean --stream",
     "lint": "yarn lint:eslint && yarn lint:prettier",

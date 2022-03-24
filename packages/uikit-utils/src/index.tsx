@@ -4,10 +4,11 @@ export { createPubSub, PubSubEvent } from './shared/pubsub';
 export { default as conditionChaining } from './shared/conditionChaining';
 export { urlRegex, replaceUrlAsComponents, newLineRegex } from './shared/regex';
 
-export { useAsyncEffect, useAsyncLayoutEffect, useForceUpdate, useUniqId } from './hooks';
+export { useAsyncEffect, useAsyncLayoutEffect, useForceUpdate, useUniqId, useIIFE } from './hooks';
 
 export * from './ui-format/groupChannel';
 export * from './ui-format/common';
+export * from './channel/groupChannel';
 export * from './channel/common';
 export * from './message/common';
 
@@ -23,4 +24,5 @@ export type {
   SendbirdMessage,
   SendbirdChatSDK,
   SendbirdChannel,
+  PartialNullable,
 } from './types';

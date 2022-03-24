@@ -1,5 +1,9 @@
 import { Logger } from '../shared/logger';
 
+jest.mock('react-native', () => {
+  return { Platform: { OS: 'android' } };
+});
+
 // FIXME: spy isolation
 describe('createLogger/Logger', function () {
   const spies = {

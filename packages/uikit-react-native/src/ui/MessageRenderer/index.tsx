@@ -1,9 +1,10 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
+import type Sendbird from 'sendbird';
 
 import { createStyleSheet } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
-import { calcMessageGrouping, isMyMessage } from '@sendbird/uikit-utils';
+import { calcMessageGrouping, conditionChaining, isMyMessage, useIIFE } from '@sendbird/uikit-utils';
 
 import AdminMessage from './AdminMessage';
 import FileMessage from './FileMessage';
@@ -28,6 +29,7 @@ export interface MessageRendererInterface<T = SendbirdMessage> {
 }
 
 type Props = {
+  channel: Sendbird.GroupChannel;
   currentUserId?: string;
   nextMessage?: SendbirdMessage;
   message: SendbirdMessage;
@@ -35,8 +37,12 @@ type Props = {
   enableMessageGrouping?: boolean;
 };
 
-const MessageRenderer: React.FC<Props> = ({ currentUserId, message, ...rest }) => {
+const MessageRenderer: React.FC<Props> = ({ currentUserId, channel, message, ...rest }) => {
   const variant: MessageStyleVariant = isMyMessage(message, currentUserId) ? 'outgoing' : 'incoming';
+  const isOutgoing = variant === 'outgoing';
+  const isIncoming = variant === 'incoming';
+  const variantContainerStyle = { incoming: styles.chatIncoming, outgoing: styles.chatOutgoing }[variant];
+
   const { groupWithPrev, groupWithNext } = calcMessageGrouping(
     Boolean(rest.enableMessageGrouping),
     message,
@@ -44,7 +50,7 @@ const MessageRenderer: React.FC<Props> = ({ currentUserId, message, ...rest }) =
     rest.nextMessage,
   );
 
-  const messageComponent = () => {
+  const messageComponent = useIIFE(() => {
     const props = { ...rest, variant, groupWithNext, groupWithPrev };
     if (message.isUserMessage()) {
       return (
@@ -71,34 +77,36 @@ const MessageRenderer: React.FC<Props> = ({ currentUserId, message, ...rest }) =
         {({ pressed }) => <UnknownMessage message={message} pressed={pressed} {...props} />}
       </Pressable>
     );
-  };
+  });
 
   return (
     <MessageContainer>
       <MessageDateSeparator message={message} prevMessage={rest.prevMessage} />
-      {message.isAdminMessage() ? (
-        messageComponent()
-      ) : (
+      {message.isAdminMessage() && messageComponent}
+      {!message.isAdminMessage() && (
         <View
           style={[
-            { incoming: styles.chatIncoming, outgoing: styles.chatOutgoing }[variant],
-            groupWithNext ? styles.chatGroup : styles.chatNonGroup,
+            variantContainerStyle,
+            conditionChaining(
+              [groupWithNext, Boolean(rest.nextMessage)],
+              [styles.chatGroup, styles.chatNonGroup, styles.chatLastMessage],
+            ),
           ]}
         >
-          {variant === 'outgoing' && (
+          {isOutgoing && (
             <View style={styles.outgoingContainer}>
-              {(message.isFileMessage() || message.isUserMessage()) && <MessageOutgoingStatus message={message} />}
+              <MessageOutgoingStatus channel={channel} message={message} />
               <MessageTime message={message} grouping={groupWithNext} style={styles.timeOutgoing} />
             </View>
           )}
-          {variant === 'incoming' && <MessageIncomingAvatar message={message} grouping={groupWithNext} />}
+          {isIncoming && <MessageIncomingAvatar message={message} grouping={groupWithNext} />}
           <View>
-            {variant === 'incoming' && <MessageIncomingSenderName message={message} grouping={groupWithPrev} />}
-            {messageComponent()}
+            {isIncoming && <MessageIncomingSenderName message={message} grouping={groupWithPrev} />}
+            <View style={styles.bubbleContainer}>
+              {messageComponent}
+              {isIncoming && <MessageTime message={message} grouping={groupWithNext} style={styles.timeIncoming} />}
+            </View>
           </View>
-          {variant === 'incoming' && (
-            <MessageTime message={message} grouping={groupWithNext} style={styles.timeIncoming} />
-          )}
         </View>
       )}
     </MessageContainer>
@@ -128,8 +136,15 @@ const styles = createStyleSheet({
   chatNonGroup: {
     marginBottom: 16,
   },
+  chatLastMessage: {
+    marginBottom: 16,
+  },
   msgContainer: {
     maxWidth: 240,
+  },
+  bubbleContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
   },
   outgoingContainer: {
     flexDirection: 'row',

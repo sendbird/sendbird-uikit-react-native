@@ -1,6 +1,7 @@
 import AsyncStorageLib from '@react-native-async-storage/async-storage';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Platform, StatusBar } from 'react-native';
+import * as DocumentPicker from 'react-native-document-picker';
 import * as ImagePicker from 'react-native-image-picker';
 import Permissions from 'react-native-permissions';
 import SendBird from 'sendbird';
@@ -19,7 +20,7 @@ export const SendBirdInstance = new SendBird({
 if (ENABLE_LOCAL_CACHE) SendBirdInstance.useAsyncStorageAsDatabase(AsyncStorageLib);
 
 export const RootStack = createNativeStackNavigator();
-export const FilePickerService = createFilePickerServiceNative(ImagePicker, Permissions);
+export const FilePickerService = createFilePickerServiceNative(ImagePicker, DocumentPicker, Permissions);
 export const NotificationService = {} as NotificationServiceInterface;
 
 export const GetTranslucent = (state = true) => {

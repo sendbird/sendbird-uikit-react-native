@@ -20,6 +20,10 @@ export type PartialDeep<T> = T extends object
       }
   : T;
 
+export type PartialNullable<T> = {
+  [P in keyof T]?: T[P] | null;
+};
+
 export type Optional<T> = T | undefined;
 
 export type ContextValue<T extends React.Context<any>> = T extends React.Context<infer V> ? V : never;

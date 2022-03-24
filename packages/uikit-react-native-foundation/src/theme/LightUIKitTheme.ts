@@ -75,13 +75,13 @@ const LightUIKitTheme = themeFactory({
             text: palette.onBackgroundLight01,
             placeholder: palette.onBackgroundLight03,
             background: palette.background100,
-            highlight: palette.transparent,
+            highlight: palette.primary300,
           },
           disabled: {
             text: palette.onBackgroundLight04,
             placeholder: palette.onBackgroundLight04,
             background: palette.background100,
-            highlight: palette.transparent,
+            highlight: palette.onBackgroundLight04,
           },
         },
         underline: {

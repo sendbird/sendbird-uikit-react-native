@@ -24,6 +24,9 @@ export const useAsyncEffect = (asyncEffect: AsyncEffectCallback, deps?: Dependen
 export const useAsyncLayoutEffect = (asyncEffect: AsyncEffectCallback, deps?: DependencyList) => {
   useLayoutEffect(createAsyncEffectCallback(asyncEffect), deps);
 };
+export const useIIFE = <T extends () => any>(callback: T) => {
+  return iife(callback);
+};
 const iife = <T extends (...args: any[]) => any>(callback: T): ReturnType<T> => callback();
 const createAsyncEffectCallback = (asyncEffect: AsyncEffectCallback) => () => {
   const destructor = iife(asyncEffect);

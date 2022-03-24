@@ -1,4 +1,5 @@
 import { Platform } from 'react-native';
+import type * as DocumentPicker from 'react-native-document-picker';
 import type * as ImagePicker from 'react-native-image-picker';
 import type Permissions from 'react-native-permissions';
 import type { Permission } from 'react-native-permissions';
@@ -8,26 +9,33 @@ import nativePermissionGranted from '../utils/nativePermissionGranted';
 import type { FilePickerResponse, FilePickerServiceInterface } from './types';
 
 const createFilePickerServiceNative = (
-  pickerModule: typeof ImagePicker,
+  imagePickerModule: typeof ImagePicker,
+  documentPickerModule: typeof DocumentPicker,
   permissionModule: typeof Permissions,
 ): FilePickerServiceInterface => {
+  const cameraPermissions: Permission[] = Platform.select({
+    ios: [permissionModule.PERMISSIONS.IOS.CAMERA],
+    android: [permissionModule.PERMISSIONS.ANDROID.CAMERA],
+    default: [],
+  });
+  const mediaLibraryPermissions: Permission[] = Platform.select({
+    ios: [permissionModule.PERMISSIONS.IOS.MEDIA_LIBRARY, permissionModule.PERMISSIONS.IOS.PHOTO_LIBRARY],
+    android: [permissionModule.PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE],
+    default: [],
+  });
+  const documentPermissions: Permission[] = Platform.select({
+    ios: [],
+    android: [permissionModule.PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE],
+    default: [],
+  });
+
   return {
     async hasCameraPermission(): Promise<boolean> {
-      const permission: Permission[] = Platform.select({
-        ios: [permissionModule.PERMISSIONS.IOS.CAMERA],
-        android: [permissionModule.PERMISSIONS.ANDROID.CAMERA],
-        default: [],
-      });
-      const status = await permissionModule.checkMultiple(permission);
+      const status = await permissionModule.checkMultiple(cameraPermissions);
       return nativePermissionGranted(status);
     },
     async requestCameraPermission(): Promise<boolean> {
-      const permission: Permission[] = Platform.select({
-        ios: [permissionModule.PERMISSIONS.IOS.CAMERA],
-        android: [permissionModule.PERMISSIONS.ANDROID.CAMERA],
-        default: [],
-      });
-      const status = await permissionModule.requestMultiple(permission);
+      const status = await permissionModule.requestMultiple(cameraPermissions);
       return nativePermissionGranted(status);
     },
     async openCamera(options): Promise<FilePickerResponse> {
@@ -36,7 +44,7 @@ const createFilePickerServiceNative = (
         if (!granted) return null;
       }
 
-      const response = await pickerModule.launchCamera({
+      const response = await imagePickerModule.launchCamera({
         cameraType: options?.cameraType ?? 'back',
         mediaType: options?.mediaType ?? 'photo',
       });
@@ -48,24 +56,11 @@ const createFilePickerServiceNative = (
     },
 
     async hasMediaLibraryPermission(): Promise<boolean> {
-      const permission: Permission[] = Platform.select({
-        ios: [permissionModule.PERMISSIONS.IOS.MEDIA_LIBRARY, permissionModule.PERMISSIONS.IOS.PHOTO_LIBRARY],
-        android: [
-          permissionModule.PERMISSIONS.ANDROID.ACCESS_MEDIA_LOCATION,
-          permissionModule.PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
-        ],
-        default: [],
-      });
-      const status = await permissionModule.checkMultiple(permission);
+      const status = await permissionModule.checkMultiple(mediaLibraryPermissions);
       return nativePermissionGranted(status);
     },
     async requestMediaLibraryPermission(): Promise<boolean> {
-      const permission: Permission[] = Platform.select({
-        ios: [permissionModule.PERMISSIONS.IOS.MEDIA_LIBRARY, permissionModule.PERMISSIONS.IOS.PHOTO_LIBRARY],
-        android: [permissionModule.PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE],
-        default: [],
-      });
-      const status = await permissionModule.requestMultiple(permission);
+      const status = await permissionModule.requestMultiple(mediaLibraryPermissions);
       return nativePermissionGranted(status);
     },
 
@@ -80,7 +75,7 @@ const createFilePickerServiceNative = (
         if (!granted) return null;
       }
 
-      const response = await pickerModule.launchImageLibrary({
+      const response = await imagePickerModule.launchImageLibrary({
         mediaType: options?.mediaType ?? 'photo',
         selectionLimit,
       });
@@ -90,6 +85,19 @@ const createFilePickerServiceNative = (
       return (response.assets || [])
         .slice(0, selectionLimit)
         .map(({ fileName: name, fileSize: size, type, uri }) => fileTypeGuard({ uri, size, name, type }));
+    },
+
+    async hasStoragePermission(): Promise<boolean> {
+      const status = await permissionModule.checkMultiple(documentPermissions);
+      return nativePermissionGranted(status);
+    },
+    async requestStoragePermission(): Promise<boolean> {
+      const status = await permissionModule.requestMultiple(documentPermissions);
+      return nativePermissionGranted(status);
+    },
+    async openDocument(): Promise<FilePickerResponse> {
+      const { uri, size, name, type } = await documentPickerModule.pickSingle({});
+      return fileTypeGuard({ uri, size, name, type });
     },
   };
 };

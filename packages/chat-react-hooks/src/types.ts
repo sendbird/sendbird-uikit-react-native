@@ -149,6 +149,11 @@ export interface UseGroupChannelMessages {
    * @return {Promise<void>}
    * */
   resendMessage: (failedMessage: Sendbird.FileMessage | Sendbird.UserMessage) => Promise<void>;
+
+  /**
+   * Activated channel
+   * */
+  activeChannel: Sendbird.GroupChannel;
 }
 
 export type UseGroupChannelMessagesOptions = {

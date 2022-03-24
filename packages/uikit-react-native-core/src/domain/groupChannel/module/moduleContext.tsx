@@ -2,7 +2,7 @@ import React, { createContext, useState } from 'react';
 import type Sendbird from 'sendbird';
 
 import { useChannelHandler } from '@sendbird/chat-react-hooks';
-import { isDifferentChannel, useUniqId } from '@sendbird/uikit-utils';
+import { EmptyFunction, isDifferentChannel, useUniqId } from '@sendbird/uikit-utils';
 
 import { useLocalization } from '../../../contexts/Localization';
 import { useSendbirdChat } from '../../../contexts/SendbirdChat';
@@ -12,6 +12,8 @@ export const GroupChannelContext: GroupChannelContextType = {
   Fragment: createContext({
     headerTitle: '',
     channel: {} as Sendbird.GroupChannel,
+    inputMode: 'send' as 'send' | 'edit',
+    setInputMode: EmptyFunction as (val: 'send' | 'edit') => void,
   }),
   TypingIndicator: createContext({
     typingUsers: [] as Sendbird.User[],
@@ -26,6 +28,7 @@ export const GroupChannelContextProvider: GroupChannelModule['Provider'] = ({ ch
   const { currentUser, sdk } = useSendbirdChat();
 
   const [typingUsers, setTypingUsers] = useState<Sendbird.User[]>([]);
+  const [inputMode, setInputMode] = useState<'send' | 'edit'>('send');
 
   useChannelHandler(
     sdk,
@@ -42,7 +45,12 @@ export const GroupChannelContextProvider: GroupChannelModule['Provider'] = ({ ch
 
   return (
     <GroupChannelContext.Fragment.Provider
-      value={{ headerTitle: LABEL.GROUP_CHANNEL.FRAGMENT.HEADER_TITLE(currentUser?.userId ?? '', channel), channel }}
+      value={{
+        headerTitle: LABEL.GROUP_CHANNEL.FRAGMENT.HEADER_TITLE(currentUser?.userId ?? '', channel),
+        channel,
+        inputMode,
+        setInputMode,
+      }}
     >
       <GroupChannelContext.TypingIndicator.Provider value={{ typingUsers }}>
         {children}

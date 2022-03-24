@@ -5,11 +5,22 @@ import type { UseGroupChannelMessagesOptions } from '@sendbird/chat-react-hooks'
 import type { BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
 
+import type { FileType } from '../../platform/types';
 import type { CommonComponent } from '../../types';
 
 export type GroupChannelProps = {
   Fragment: {
-    channel: Sendbird.GroupChannel;
+    onBeforeSendFileMessage?: (
+      params: Sendbird.FileMessageParams,
+    ) => Sendbird.FileMessageParams | Promise<Sendbird.FileMessageParams>;
+    onBeforeSendUserMessage?: (
+      params: Sendbird.UserMessageParams,
+    ) => Sendbird.UserMessageParams | Promise<Sendbird.UserMessageParams>;
+    onChannelDeleted: () => void;
+    onPressHeaderLeft: GroupChannelProps['Header']['onPressHeaderLeft'];
+    onPressHeaderRight: GroupChannelProps['Header']['onPressHeaderRight'];
+
+    staleChannel: Sendbird.GroupChannel;
     enableMessageGrouping?: boolean;
 
     MessageRenderer?: CommonComponent<{
@@ -21,8 +32,6 @@ export type GroupChannelProps = {
     ScrollToBottomTooltip?: GroupChannelProps['MessageList']['ScrollToBottomTooltip'];
 
     Header?: GroupChannelProps['Header']['Header'];
-    onPressHeaderLeft: GroupChannelProps['Header']['onPressHeaderLeft'];
-    onPressHeaderRight: GroupChannelProps['Header']['onPressHeaderRight'];
 
     sortComparator?: UseGroupChannelMessagesOptions['sortComparator'];
     collectionCreator?: UseGroupChannelMessagesOptions['collectionCreator'];
@@ -62,6 +71,11 @@ export type GroupChannelProps = {
       onPress: () => void;
     }>;
   };
+  Input: {
+    channel: Sendbird.GroupChannel;
+    onSendFileMessage: (file: FileType) => void;
+    onSendUserMessage: (text: string) => void;
+  };
 };
 
 /**
@@ -73,6 +87,8 @@ export type GroupChannelContextType = {
   Fragment: React.Context<{
     headerTitle: string;
     channel: Sendbird.GroupChannel;
+    inputMode: 'send' | 'edit';
+    setInputMode: (val: 'send' | 'edit') => void;
   }>;
   TypingIndicator: React.Context<{
     typingUsers: Sendbird.User[];
@@ -82,6 +98,7 @@ export interface GroupChannelModule {
   Provider: React.FC<{ channel: Sendbird.GroupChannel }>;
   Header: CommonComponent<GroupChannelProps['Header']>;
   MessageList: CommonComponent<GroupChannelProps['MessageList']>;
+  Input: CommonComponent<GroupChannelProps['Input']>;
 }
 
 export type GroupChannelFragment = React.FC<GroupChannelProps['Fragment']>;

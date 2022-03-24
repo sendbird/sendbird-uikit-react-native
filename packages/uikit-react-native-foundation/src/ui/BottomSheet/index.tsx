@@ -41,9 +41,9 @@ const BottomSheet: React.FC<Props> = ({ onDismiss, onHide, visible, sheetItems }
             activeOpacity={0.75}
             key={props.title + idx}
             style={{ paddingLeft: left, paddingRight: right }}
-            onPress={() => {
+            onPress={async () => {
               try {
-                onPress();
+                await onPress();
               } finally {
                 onHide();
               }

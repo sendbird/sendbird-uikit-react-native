@@ -75,13 +75,13 @@ const DarkUIKitTheme = themeFactory({
             text: palette.onBackgroundDark01,
             placeholder: palette.onBackgroundDark03,
             background: palette.background400,
-            highlight: palette.transparent,
+            highlight: palette.primary200,
           },
           disabled: {
             text: palette.onBackgroundDark04,
             placeholder: palette.onBackgroundDark04,
             background: palette.background400,
-            highlight: palette.transparent,
+            highlight: palette.onBackgroundDark04,
           },
         },
         underline: {
