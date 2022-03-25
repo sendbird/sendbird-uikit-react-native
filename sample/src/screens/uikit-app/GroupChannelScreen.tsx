@@ -2,6 +2,7 @@ import React, { useLayoutEffect, useMemo } from 'react';
 
 import { createGroupChannelFragment } from '@sendbird/uikit-react-native';
 import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
+import { Logger } from '@sendbird/uikit-utils';
 
 import { Routes, useAppNavigation } from '../../hooks/useAppNavigation';
 
@@ -18,6 +19,10 @@ const GroupChannelScreen: React.FC = () => {
 
   return (
     <GroupChannelFragment
+      onPressImageMessage={(msg, uri) => {
+        // navigate to photo preview
+        Logger.log('file uri', msg.name, uri);
+      }}
       staleChannel={staleChannel}
       onChannelDeleted={() => {
         // navigate to channel list

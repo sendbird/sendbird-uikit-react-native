@@ -4,6 +4,7 @@ import type Sendbird from 'sendbird';
 import { useChannelHandler } from '@sendbird/chat-react-hooks';
 import { EmptyFunction, isDifferentChannel, useUniqId } from '@sendbird/uikit-utils';
 
+import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization } from '../../../contexts/Localization';
 import { useSendbirdChat } from '../../../contexts/SendbirdChat';
 import type { GroupChannelContextType, GroupChannelModule } from '../types';
@@ -12,8 +13,7 @@ export const GroupChannelContext: GroupChannelContextType = {
   Fragment: createContext({
     headerTitle: '',
     channel: {} as Sendbird.GroupChannel,
-    inputMode: 'send' as 'send' | 'edit',
-    setInputMode: EmptyFunction as (val: 'send' | 'edit') => void,
+    setEditMessage: EmptyFunction,
   }),
   TypingIndicator: createContext({
     typingUsers: [] as Sendbird.User[],
@@ -28,7 +28,7 @@ export const GroupChannelContextProvider: GroupChannelModule['Provider'] = ({ ch
   const { currentUser, sdk } = useSendbirdChat();
 
   const [typingUsers, setTypingUsers] = useState<Sendbird.User[]>([]);
-  const [inputMode, setInputMode] = useState<'send' | 'edit'>('send');
+  const [editMessage, setEditMessage] = useState<Sendbird.UserMessage | Sendbird.FileMessage>();
 
   useChannelHandler(
     sdk,
@@ -44,17 +44,19 @@ export const GroupChannelContextProvider: GroupChannelModule['Provider'] = ({ ch
   );
 
   return (
-    <GroupChannelContext.Fragment.Provider
-      value={{
-        headerTitle: LABEL.GROUP_CHANNEL.FRAGMENT.HEADER_TITLE(currentUser?.userId ?? '', channel),
-        channel,
-        inputMode,
-        setInputMode,
-      }}
-    >
-      <GroupChannelContext.TypingIndicator.Provider value={{ typingUsers }}>
-        {children}
-      </GroupChannelContext.TypingIndicator.Provider>
-    </GroupChannelContext.Fragment.Provider>
+    <ProviderLayout>
+      <GroupChannelContext.Fragment.Provider
+        value={{
+          headerTitle: LABEL.GROUP_CHANNEL.FRAGMENT.HEADER_TITLE(currentUser?.userId ?? '', channel),
+          channel,
+          editMessage,
+          setEditMessage,
+        }}
+      >
+        <GroupChannelContext.TypingIndicator.Provider value={{ typingUsers }}>
+          {children}
+        </GroupChannelContext.TypingIndicator.Provider>
+      </GroupChannelContext.Fragment.Provider>
+    </ProviderLayout>
   );
 };

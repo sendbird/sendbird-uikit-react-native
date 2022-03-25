@@ -2,19 +2,14 @@ import React from 'react';
 import { Image } from 'react-native';
 
 import { createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { useIIFE } from '@sendbird/uikit-utils';
+import { getAvailableUriFromFileMessage } from '@sendbird/uikit-utils';
 
 import type { FileMessageProps } from './index';
 
 const ImageFileMessage: React.FC<FileMessageProps> = ({ message }) => {
   const { colors } = useUIKitTheme();
 
-  const fileUrl = useIIFE(() => {
-    if (message.sendingStatus === 'pending' && message.messageParams && 'uri' in message.messageParams.file) {
-      return message.messageParams.file.uri;
-    }
-    return message.url;
-  });
+  const fileUrl = getAvailableUriFromFileMessage(message);
 
   return (
     <Image

@@ -1,8 +1,17 @@
 export { Logger } from './shared/logger';
-export { default as arrayToMap } from './shared/arrayToMap';
+export { default as arrayToMap, arrayToMapWithGetter } from './shared/arrayToMap';
 export { createPubSub, PubSubEvent } from './shared/pubsub';
 export { default as conditionChaining } from './shared/conditionChaining';
-export { urlRegex, replaceUrlAsComponents, newLineRegex } from './shared/regex';
+export {
+  urlRegex,
+  newLineRegex,
+  audioExtRegex,
+  videoExtRegex,
+  imageExtRegex,
+  getFileType,
+  getFileExtension,
+  replaceUrlAsComponents,
+} from './shared/regex';
 
 export { useAsyncEffect, useAsyncLayoutEffect, useForceUpdate, useUniqId, useIIFE } from './hooks';
 

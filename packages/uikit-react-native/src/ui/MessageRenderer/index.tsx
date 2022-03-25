@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
-import type Sendbird from 'sendbird';
 
+import type { GroupChannelProps } from '@sendbird/uikit-react-native-core';
 import { createStyleSheet } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
 import { calcMessageGrouping, conditionChaining, isMyMessage, useIIFE } from '@sendbird/uikit-utils';
@@ -28,16 +28,14 @@ export interface MessageRendererInterface<T = SendbirdMessage> {
   pressed: boolean;
 }
 
-type Props = {
-  channel: Sendbird.GroupChannel;
-  currentUserId?: string;
-  nextMessage?: SendbirdMessage;
-  message: SendbirdMessage;
-  prevMessage?: SendbirdMessage;
-  enableMessageGrouping?: boolean;
-};
-
-const MessageRenderer: React.FC<Props> = ({ currentUserId, channel, message, ...rest }) => {
+const MessageRenderer: GroupChannelProps['Fragment']['MessageRenderer'] = ({
+  currentUserId,
+  channel,
+  message,
+  onLongPressMessage,
+  onPressMessage,
+  ...rest
+}) => {
   const variant: MessageStyleVariant = isMyMessage(message, currentUserId) ? 'outgoing' : 'incoming';
   const isOutgoing = variant === 'outgoing';
   const isIncoming = variant === 'incoming';
@@ -51,10 +49,15 @@ const MessageRenderer: React.FC<Props> = ({ currentUserId, channel, message, ...
   );
 
   const messageComponent = useIIFE(() => {
+    const pressableProps = {
+      style: styles.msgContainer,
+      onPress: onPressMessage,
+      onLongPress: onLongPressMessage,
+    };
     const props = { ...rest, variant, groupWithNext, groupWithPrev };
     if (message.isUserMessage()) {
       return (
-        <Pressable style={styles.msgContainer}>
+        <Pressable {...pressableProps}>
           {({ pressed }) => <UserMessage message={message} pressed={pressed} {...props} />}
         </Pressable>
       );
@@ -62,7 +65,7 @@ const MessageRenderer: React.FC<Props> = ({ currentUserId, channel, message, ...
 
     if (message.isFileMessage()) {
       return (
-        <Pressable style={styles.msgContainer}>
+        <Pressable {...pressableProps}>
           {({ pressed }) => <FileMessage message={message} pressed={pressed} {...props} />}
         </Pressable>
       );
@@ -73,7 +76,7 @@ const MessageRenderer: React.FC<Props> = ({ currentUserId, channel, message, ...
     }
 
     return (
-      <Pressable style={styles.msgContainer}>
+      <Pressable {...pressableProps}>
         {({ pressed }) => <UnknownMessage message={message} pressed={pressed} {...props} />}
       </Pressable>
     );

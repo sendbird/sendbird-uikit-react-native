@@ -21,3 +21,18 @@ export const replaceUrlAsComponents = <T>(originText: string, replacer: (url: st
   });
   return items;
 };
+
+export const imageExtRegex = /jpeg|jpg|png|webp|gif/;
+export const audioExtRegex =
+  /3gp|aa|aac|aax|act|aiff|alac|amr|ape|au|awb|dss|dvf|flac|gsm|m4a|m4b|m4p|tta|wma|mp3|webm|wav/;
+export const videoExtRegex = /mp4|avi/;
+export const getFileType = (ext: string) => {
+  if (ext.match(imageExtRegex)) return 'image';
+  if (ext.match(audioExtRegex)) return 'audio';
+  if (ext.match(videoExtRegex)) return 'video';
+  return 'file';
+};
+export function getFileExtension(filePath: string) {
+  const idx = filePath.lastIndexOf('.');
+  return filePath.slice(idx - filePath.length).toLowerCase();
+}

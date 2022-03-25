@@ -144,11 +144,34 @@ export interface UseGroupChannelMessages {
   ) => Sendbird.UserMessage;
 
   /**
+   * Update file message
+   * @param messageId
+   * @param params file message params
+   * @return updated message
+   * */
+  updateFileMessage: (messageId: number, params: Sendbird.FileMessageParams) => Promise<Sendbird.FileMessage>;
+
+  /**
+   * Update user message
+   * @param messageId
+   * @param params user message params
+   * @return updated message
+   * */
+  updateUserMessage: (messageId: number, params: Sendbird.UserMessageParams) => Promise<Sendbird.UserMessage>;
+
+  /**
    * Resend failed message
    * @param failedMessage failed message to resend
    * @return {Promise<void>}
    * */
   resendMessage: (failedMessage: Sendbird.FileMessage | Sendbird.UserMessage) => Promise<void>;
+
+  /**
+   * Delete message
+   * @param message sent or failed message
+   * @return {Promise<void>}
+   * */
+  deleteMessage: (message: Sendbird.FileMessage | Sendbird.UserMessage) => Promise<void>;
 
   /**
    * Activated channel

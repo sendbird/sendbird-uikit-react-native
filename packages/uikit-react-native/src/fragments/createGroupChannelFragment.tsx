@@ -23,6 +23,7 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
     Header,
     onPressHeaderLeft = EmptyFunction,
     onPressHeaderRight = EmptyFunction,
+    onPressImageMessage = EmptyFunction,
     onChannelDeleted = EmptyFunction,
     onBeforeSendFileMessage = PassValue,
     onBeforeSendUserMessage = PassValue,
@@ -35,13 +36,25 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
     const { sdk, currentUser } = useSendbirdChat();
     const { subscribe, events } = useInternalPubSub();
 
-    const { activeChannel, messages, nextMessages, newMessagesFromNext, next, prev, sendFileMessage, sendUserMessage } =
-      useGroupChannelMessages(sdk, staleChannel, currentUser?.userId, {
-        collectionCreator,
-        queryCreator,
-        sortComparator,
-        enableCollectionWithoutLocalCache: true,
-      });
+    const {
+      activeChannel,
+      messages,
+      nextMessages,
+      newMessagesFromNext,
+      next,
+      prev,
+      sendFileMessage,
+      sendUserMessage,
+      updateFileMessage,
+      updateUserMessage,
+      resendMessage,
+      deleteMessage,
+    } = useGroupChannelMessages(sdk, staleChannel, currentUser?.userId, {
+      collectionCreator,
+      queryCreator,
+      sortComparator,
+      enableCollectionWithoutLocalCache: true,
+    });
 
     useEffect(() => {
       return subscribe(events.ChannelDeleted, ({ channelUrl }) => {
@@ -50,7 +63,7 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
     }, []);
 
     const renderMessages: GroupChannelProps['MessageList']['renderMessage'] = useCallback(
-      (message, prevMessage, nextMessage) => {
+      (message, prevMessage, nextMessage, onPress, onLongPress) => {
         return (
           <MessageRenderer
             channel={activeChannel}
@@ -59,6 +72,8 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
             prevMessage={prevMessage}
             nextMessage={nextMessage}
             enableMessageGrouping={enableMessageGrouping}
+            onPressMessage={onPress}
+            onLongPressMessage={onLongPress}
           />
         );
       },
@@ -73,6 +88,7 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
           onPressHeaderRight={onPressHeaderRight}
         />
         <GroupChannelModule.MessageList
+          currentUserId={currentUser?.userId}
           channel={activeChannel}
           messages={messages}
           renderMessage={renderMessages}
@@ -82,8 +98,12 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
           onBottomReached={next}
           NewMessagesTooltip={NewMessagesTooltip}
           ScrollToBottomTooltip={ScrollToBottomTooltip}
+          onResendFailedMessage={resendMessage}
+          onDeleteMessage={deleteMessage}
+          onPressImageMessage={onPressImageMessage}
         />
         <GroupChannelModule.Input
+          channel={activeChannel}
           onSendFileMessage={async (file) => {
             const params = new sdk.FileMessageParams();
             params.file = file;
@@ -98,7 +118,20 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
             const processedParams = await onBeforeSendUserMessage(params);
             sendUserMessage(processedParams);
           }}
-          channel={activeChannel}
+          onUpdateFileMessage={async (editedFile, message) => {
+            const params = new sdk.FileMessageParams();
+            params.file = editedFile;
+
+            const processedParams = await onBeforeSendFileMessage(params);
+            updateFileMessage(message.messageId, processedParams);
+          }}
+          onUpdateUserMessage={async (editedText, message) => {
+            const params = new sdk.UserMessageParams();
+            params.message = editedText;
+
+            const processedParams = await onBeforeSendUserMessage(params);
+            updateUserMessage(message.messageId, processedParams);
+          }}
         />
         {children}
       </GroupChannelModule.Provider>

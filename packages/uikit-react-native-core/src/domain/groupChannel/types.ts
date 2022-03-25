@@ -19,14 +19,20 @@ export type GroupChannelProps = {
     onChannelDeleted: () => void;
     onPressHeaderLeft: GroupChannelProps['Header']['onPressHeaderLeft'];
     onPressHeaderRight: GroupChannelProps['Header']['onPressHeaderRight'];
+    onPressImageMessage: GroupChannelProps['MessageList']['onPressImageMessage'];
 
     staleChannel: Sendbird.GroupChannel;
     enableMessageGrouping?: boolean;
 
     MessageRenderer?: CommonComponent<{
+      channel: Sendbird.GroupChannel;
+      currentUserId?: string;
+      nextMessage?: SendbirdMessage;
       message: SendbirdMessage;
       prevMessage?: SendbirdMessage;
       enableMessageGrouping?: boolean;
+      onPressMessage?: () => void;
+      onLongPressMessage?: () => void;
     }>;
     NewMessagesTooltip?: GroupChannelProps['MessageList']['NewMessagesTooltip'];
     ScrollToBottomTooltip?: GroupChannelProps['MessageList']['ScrollToBottomTooltip'];
@@ -49,6 +55,7 @@ export type GroupChannelProps = {
     onPressHeaderRight: () => void;
   };
   MessageList: {
+    currentUserId?: string;
     channel: Sendbird.GroupChannel;
     messages: SendbirdMessage[];
     nextMessages: SendbirdMessage[];
@@ -56,10 +63,16 @@ export type GroupChannelProps = {
     onTopReached: () => void;
     onBottomReached: () => void;
 
+    onResendFailedMessage: (failedMessage: Sendbird.UserMessage | Sendbird.FileMessage) => void;
+    onDeleteMessage: (message: Sendbird.UserMessage | Sendbird.FileMessage) => void;
+    onPressImageMessage: (message: Sendbird.FileMessage, uri: string) => void;
+
     renderMessage: (
       message: SendbirdMessage,
       prevMessage?: SendbirdMessage,
       nextMessage?: SendbirdMessage,
+      onPress?: () => void,
+      onLongPress?: () => void,
     ) => React.ReactElement | null;
     NewMessagesTooltip: null | CommonComponent<{
       visible: boolean;
@@ -75,6 +88,8 @@ export type GroupChannelProps = {
     channel: Sendbird.GroupChannel;
     onSendFileMessage: (file: FileType) => void;
     onSendUserMessage: (text: string) => void;
+    onUpdateFileMessage: (editedFile: FileType, message: Sendbird.FileMessage) => void;
+    onUpdateUserMessage: (editedText: string, message: Sendbird.UserMessage) => void;
   };
 };
 
@@ -87,8 +102,8 @@ export type GroupChannelContextType = {
   Fragment: React.Context<{
     headerTitle: string;
     channel: Sendbird.GroupChannel;
-    inputMode: 'send' | 'edit';
-    setInputMode: (val: 'send' | 'edit') => void;
+    editMessage?: Sendbird.UserMessage | Sendbird.FileMessage;
+    setEditMessage: (msg?: Sendbird.UserMessage | Sendbird.FileMessage) => void;
   }>;
   TypingIndicator: React.Context<{
     typingUsers: Sendbird.User[];

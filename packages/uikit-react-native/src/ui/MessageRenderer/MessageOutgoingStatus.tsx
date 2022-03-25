@@ -25,7 +25,7 @@ const MessageOutgoingStatus: React.FC<Props> = ({ channel, message }) => {
 
   useChannelHandler(
     sdk,
-    `MessageOutgoingStatus_${message.reqId}`,
+    `MessageOutgoingStatus_${message.messageId || message.reqId}`,
     {
       onReadReceiptUpdated(channel) {
         if (channel.url === message.channelUrl) {
@@ -36,7 +36,7 @@ const MessageOutgoingStatus: React.FC<Props> = ({ channel, message }) => {
         }
       },
     },
-    [message.reqId],
+    [message.messageId, message.reqId],
   );
 
   if (message.sendingStatus === 'pending') {
@@ -51,15 +51,11 @@ const MessageOutgoingStatus: React.FC<Props> = ({ channel, message }) => {
     return <Icon icon={'done-all'} size={SIZE} color={colors.secondary} style={styles.container} />;
   }
 
-  if (state.undeliveredCount > 0) {
-    return <Icon icon={'done'} size={SIZE} color={colors.onBackground03} style={styles.container} />;
-  }
-
-  if (state.unreadCount > 0) {
+  if (state.undeliveredCount === 0) {
     return <Icon icon={'done-all'} size={SIZE} color={colors.onBackground03} style={styles.container} />;
   }
 
-  return <Icon icon={'done-all'} size={SIZE} color={colors.secondary} style={styles.container} />;
+  return <Icon icon={'done'} size={SIZE} color={colors.onBackground03} style={styles.container} />;
 };
 
 const styles = createStyleSheet({

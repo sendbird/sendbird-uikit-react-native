@@ -3,6 +3,7 @@ import React, { createContext, useState } from 'react';
 import type { ContextValue } from '@sendbird/uikit-utils';
 import { EmptyFunction } from '@sendbird/uikit-utils';
 
+import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization } from '../../../contexts/Localization';
 import type { InviteMembersContextType } from '../types';
 
@@ -22,15 +23,17 @@ export const InviteMembersContextProvider = ({ children }: React.PropsWithChildr
   const [selectedUsers, setSelectedUsers] = useState<unknown[]>([]);
 
   return (
-    <InviteMembersContext.Fragment.Provider
-      value={{
-        headerTitle: LABEL.INVITE_MEMBERS.HEADER_TITLE,
-        headerRight: LABEL.INVITE_MEMBERS.HEADER_RIGHT({ selectedUsers }),
-      }}
-    >
-      <InviteMembersContext.List.Provider value={{ selectedUsers, setSelectedUsers }}>
-        {children}
-      </InviteMembersContext.List.Provider>
-    </InviteMembersContext.Fragment.Provider>
+    <ProviderLayout>
+      <InviteMembersContext.Fragment.Provider
+        value={{
+          headerTitle: LABEL.INVITE_MEMBERS.HEADER_TITLE,
+          headerRight: LABEL.INVITE_MEMBERS.HEADER_RIGHT({ selectedUsers }),
+        }}
+      >
+        <InviteMembersContext.List.Provider value={{ selectedUsers, setSelectedUsers }}>
+          {children}
+        </InviteMembersContext.List.Provider>
+      </InviteMembersContext.Fragment.Provider>
+    </ProviderLayout>
   );
 };

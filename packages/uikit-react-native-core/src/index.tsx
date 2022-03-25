@@ -5,6 +5,9 @@ export { SendbirdChatContext, SendbirdChatProvider, useSendbirdChat } from './co
 export { PlatformServiceContext, PlatformServiceProvider, usePlatformService } from './contexts/PlatformService';
 export { LocalizationContext, LocalizationProvider, useLocalization } from './contexts/Localization';
 
+/** Components **/
+export { default as ChatFlatList } from './components/ChatFlatList';
+
 /** Hooks **/
 export { default as useConnection } from './hooks/useConnection';
 export { default as usePushTokenRegistration } from './hooks/usePushTokenRegistration';
@@ -18,6 +21,8 @@ export { default as createFilePickerServiceNative } from './platform/createFileP
 export type {
   NotificationServiceInterface,
   FilePickerServiceInterface,
+  ClipboardServiceInterface,
+  FileSystemServiceInterface,
   FilePickerResponse,
   FileType,
 } from './platform/types';

@@ -2,7 +2,9 @@ import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import type {
+  ClipboardServiceInterface,
   FilePickerServiceInterface,
+  FileSystemServiceInterface,
   LabelSet,
   NotificationServiceInterface,
 } from '@sendbird/uikit-react-native-core';
@@ -30,6 +32,8 @@ type Props<Locale extends string> = {
   services: {
     filePicker: FilePickerServiceInterface;
     notification: NotificationServiceInterface;
+    clipboard: ClipboardServiceInterface;
+    fileSystem: FileSystemServiceInterface;
   };
   localization?: {
     defaultLocale?: Locale;
@@ -64,6 +68,8 @@ const SendbirdUIKitContainer = <Locale extends string>({
               <PlatformServiceProvider
                 filePickerService={services.filePicker}
                 notificationService={services.notification}
+                clipboardService={services.clipboard}
+                fileSystemService={services.fileSystem}
               >
                 <LocalizedDialogProvider>{children}</LocalizedDialogProvider>
               </PlatformServiceProvider>

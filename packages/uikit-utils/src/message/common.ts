@@ -1,3 +1,5 @@
+import type Sendbird from 'sendbird';
+
 import type { SendbirdMessage } from '../types';
 import { messageTime } from '../ui-format/common';
 
@@ -18,7 +20,7 @@ export function isMyMessage(msg: SendbirdMessage, currentUserId = '##__USER_ID_I
 }
 
 export function messageKeyExtractor(message: SendbirdMessage): string {
-  return (('reqId' in message && message.reqId) || message.messageId + '') + '/' + message.createdAt;
+  return getMessageUniqId(message);
 }
 
 // |-------------------|-------------------|-----------------|-------------------|
@@ -64,4 +66,20 @@ export function calcMessageGrouping(
   };
 
   return { groupWithPrev: getPrev(), groupWithNext: getNext() };
+}
+
+export function getMessageUniqId(msg: SendbirdMessage) {
+  if (msg.isUserMessage() || msg.isFileMessage()) {
+    if (msg.sendingStatus === 'succeeded') return msg.messageId + '';
+    return msg.reqId;
+  }
+
+  return msg.messageId + '';
+}
+
+export function getAvailableUriFromFileMessage(message: Sendbird.FileMessage) {
+  if (message.sendingStatus === 'pending' && message.messageParams && 'uri' in message.messageParams.file) {
+    return message.messageParams.file.uri;
+  }
+  return message.url;
 }
