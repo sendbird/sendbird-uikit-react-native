@@ -3,7 +3,7 @@ import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
-import { getContrastColor } from '../../utils';
+import { getContrastColor } from '../../libs/utils';
 
 const PaletteScreen: React.FC = () => {
   const { palette } = useUIKitTheme();

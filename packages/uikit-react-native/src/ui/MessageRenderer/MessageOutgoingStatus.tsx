@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type Sendbird from 'sendbird';
 
 import { useChannelHandler } from '@sendbird/chat-react-hooks';
@@ -18,22 +18,28 @@ const MessageOutgoingStatus: React.FC<Props> = ({ channel, message }) => {
   const { sdk } = useSendbirdChat();
   const { colors } = useUIKitTheme();
 
+  const update = (channel: Sendbird.GroupChannel) => {
+    setState((prev) => {
+      const unreadCount = channel.getUnreadMemberCount(message);
+      const undeliveredCount = channel.getUndeliveredMemberCount(message);
+      if (prev.undeliveredCount === undeliveredCount && prev.unreadCount === unreadCount) return prev;
+      return { unreadCount, undeliveredCount };
+    });
+  };
+
   const [state, setState] = useState(() => ({
     unreadCount: channel.getUnreadMemberCount(message),
     undeliveredCount: channel.getUndeliveredMemberCount(message),
   }));
+
+  useEffect(() => update(channel), [message.sendingStatus]);
 
   useChannelHandler(
     sdk,
     `MessageOutgoingStatus_${message.messageId || message.reqId}`,
     {
       onReadReceiptUpdated(channel) {
-        if (channel.url === message.channelUrl) {
-          setState({
-            unreadCount: channel.getUnreadMemberCount(message),
-            undeliveredCount: channel.getUndeliveredMemberCount(message),
-          });
-        }
+        if (channel.url === message.channelUrl) update(channel);
       },
     },
     [message.messageId, message.reqId],
@@ -44,7 +50,7 @@ const MessageOutgoingStatus: React.FC<Props> = ({ channel, message }) => {
   }
 
   if (message.sendingStatus === 'failed') {
-    return <Icon icon={'error'} size={SIZE} color={colors.secondary} style={styles.container} />;
+    return <Icon icon={'error'} size={SIZE} color={colors.error} style={styles.container} />;
   }
 
   if (state.unreadCount === 0) {
@@ -64,4 +70,4 @@ const styles = createStyleSheet({
   },
 });
 
-export default MessageOutgoingStatus;
+export default React.memo(MessageOutgoingStatus);

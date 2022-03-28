@@ -29,19 +29,17 @@ export const SendbirdChatProvider: React.FC<Props> = ({ children, sdkInstance })
   useEffect(() => {
     const listener = (status: AppStateStatus) => {
       // 'active' | 'background' | 'inactive' | 'unknown' | 'extension';
-      if (status.match(/background|inactive|unknown/)) sdkInstance.setBackgroundState();
-      if (status.match(/active/)) sdkInstance.setForegroundState();
+      if (status === 'active') sdkInstance.setForegroundState();
+      else sdkInstance.setBackgroundState();
     };
     listener(AppState.currentState);
     const subscriber = AppState.addEventListener('change', listener);
     return () => subscriber.remove();
   }, []);
 
-  return (
-    <SendbirdChatContext.Provider value={{ sdk: sdkInstance, currentUser, setCurrentUser: updateCurrentUser }}>
-      {children}
-    </SendbirdChatContext.Provider>
-  );
+  const value = { sdk: sdkInstance, currentUser, setCurrentUser: updateCurrentUser };
+
+  return <SendbirdChatContext.Provider value={value}>{children}</SendbirdChatContext.Provider>;
 };
 
 export const useSendbirdChat = () => {

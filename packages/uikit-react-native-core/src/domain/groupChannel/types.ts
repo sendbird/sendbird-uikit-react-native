@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { FlatListProps } from 'react-native';
 import type Sendbird from 'sendbird';
 
 import type { UseGroupChannelMessagesOptions } from '@sendbird/chat-react-hooks';
@@ -36,6 +37,7 @@ export type GroupChannelProps = {
     }>;
     NewMessagesTooltip?: GroupChannelProps['MessageList']['NewMessagesTooltip'];
     ScrollToBottomTooltip?: GroupChannelProps['MessageList']['ScrollToBottomTooltip'];
+    flatListProps?: GroupChannelProps['MessageList']['flatListProps'];
 
     Header?: GroupChannelProps['Header']['Header'];
 
@@ -83,6 +85,7 @@ export type GroupChannelProps = {
       visible: boolean;
       onPress: () => void;
     }>;
+    flatListProps?: Omit<FlatListProps<SendbirdMessage>, 'data' | 'renderItem'>;
   };
   Input: {
     channel: Sendbird.GroupChannel;

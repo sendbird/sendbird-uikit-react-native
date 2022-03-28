@@ -86,7 +86,7 @@ export const useGroupChannelMessagesReducer = (
   sortComparator?: UseGroupChannelMessagesOptions['sortComparator'],
 ) => {
   const [{ loading, refreshing, messageMap, nextMessageMap }, dispatch] = useReducer(defaultReducer, {
-    loading: false,
+    loading: true,
     refreshing: false,
     messageMap: {},
     nextMessageMap: {},

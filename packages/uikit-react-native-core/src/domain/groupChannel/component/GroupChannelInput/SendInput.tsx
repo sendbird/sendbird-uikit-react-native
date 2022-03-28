@@ -22,7 +22,7 @@ type SendInputProps = GroupChannelProps['Input'] & {
 const SendInput: React.FC<SendInputProps> = ({ onSendUserMessage, onSendFileMessage, text, setText, disabled }) => {
   const { LABEL } = useLocalization();
   const { openSheet } = useBottomSheet();
-  const { filePickerService } = usePlatformService();
+  const { fileService } = usePlatformService();
   const { colors } = useUIKitTheme();
 
   const onPressSend = () => {
@@ -36,7 +36,7 @@ const SendInput: React.FC<SendInputProps> = ({ onSendUserMessage, onSendFileMess
           title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_ATTACHMENT_CAMERA,
           icon: 'camera',
           onPress: async () => {
-            const photo = await filePickerService.openCamera({ mediaType: 'photo' });
+            const photo = await fileService.openCamera({ mediaType: 'photo' });
             if (photo) onSendFileMessage(photo);
           },
         },
@@ -44,7 +44,7 @@ const SendInput: React.FC<SendInputProps> = ({ onSendUserMessage, onSendFileMess
           title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_ATTACHMENT_PHOTO_LIBRARY,
           icon: 'photo',
           onPress: async () => {
-            const photo = await filePickerService.openMediaLibrary({
+            const photo = await fileService.openMediaLibrary({
               selectionLimit: 1,
               mediaType: 'photo',
             });
@@ -55,7 +55,7 @@ const SendInput: React.FC<SendInputProps> = ({ onSendUserMessage, onSendFileMess
           title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_ATTACHMENT_FILES,
           icon: 'document',
           onPress: async () => {
-            const file = await filePickerService.openDocument();
+            const file = await fileService.openDocument();
             if (file) onSendFileMessage(file);
           },
         },

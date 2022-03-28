@@ -17,9 +17,8 @@ export { useAsyncEffect, useAsyncLayoutEffect, useForceUpdate, useUniqId, useIIF
 
 export * from './ui-format/groupChannel';
 export * from './ui-format/common';
-export * from './channel/groupChannel';
-export * from './channel/common';
-export * from './message/common';
+export * from './sendbird/channel';
+export * from './sendbird/message';
 
 export const EmptyFunction: () => void = () => void 0;
 export const AsyncEmptyFunction = async () => void 0;
@@ -34,4 +33,5 @@ export type {
   SendbirdChatSDK,
   SendbirdChannel,
   PartialNullable,
+  SendbirdDataPayload,
 } from './types';

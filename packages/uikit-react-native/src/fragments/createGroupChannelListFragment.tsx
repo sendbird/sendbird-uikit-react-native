@@ -27,7 +27,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     children,
   }) => {
     const { sdk, currentUser } = useSendbirdChat();
-    const { groupChannels, refresh, refreshing, next } = useGroupChannelList(sdk, currentUser?.userId, {
+    const { groupChannels, refresh, refreshing, next, loading } = useGroupChannelList(sdk, currentUser?.userId, {
       queryCreator,
       sortComparator,
       enableCollectionWithoutLocalCache: true,
@@ -71,7 +71,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
           flatListProps={{
             ListEmptyComponent: (
               <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <TypedPlaceholder type={'no-channels'} />
+                <TypedPlaceholder type={loading ? 'loading' : 'no-channels'} />
               </View>
             ),
             contentContainerStyle: { flexGrow: 1 },

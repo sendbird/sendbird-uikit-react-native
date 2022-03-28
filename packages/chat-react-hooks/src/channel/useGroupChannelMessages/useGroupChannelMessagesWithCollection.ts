@@ -2,7 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type Sendbird from 'sendbird';
 
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
-import { EmptyFunction, Logger, isDifferentChannel, useAsyncEffect, useForceUpdate } from '@sendbird/uikit-utils';
+import { EmptyFunction, Logger, isDifferentChannel, useForceUpdate } from '@sendbird/uikit-utils';
+import { useIsMountedRef } from '@sendbird/uikit-utils/src/hooks';
 
 import useInternalPubSub from '../../common/useInternalPubSub';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';
@@ -27,12 +28,21 @@ export const useGroupChannelMessagesWithCollection = (
   userId?: string,
   options?: UseGroupChannelMessagesOptions,
 ): UseGroupChannelMessages => {
+  // FIXME: MessageCollection event handler bug, initialize(run async addObserver) -> dispose -> removeObserver -> addObserver called
+  const isMounted = useIsMountedRef();
+  const disposeManuallyAfterUnmounted = () => {
+    if (!isMounted.current && collectionRef.current) collectionRef.current.dispose();
+  };
   const { events, publish } = useInternalPubSub();
   const collectionRef = useRef<Sendbird.MessageCollection>();
 
   // NOTE: We cannot determine the channel object of Sendbird SDK is stale or not, so force update after setActiveChannel
   const [activeChannel, setActiveChannel] = useState(() => staleChannel);
   const forceUpdate = useForceUpdate();
+
+  useEffect(() => {
+    setActiveChannel(staleChannel);
+  }, [staleChannel.url]);
 
   const {
     loading,
@@ -93,13 +103,16 @@ export const useGroupChannelMessagesWithCollection = (
 
         collectionRef.current.setMessageCollectionHandler({
           onMessagesAdded(_, __, messages) {
+            disposeManuallyAfterUnmounted();
             channelMarkAs();
             updateNextMessages(messages, false, sdk.currentUser.userId);
           },
           onMessagesUpdated(_, __, messages) {
-            updateNextMessages(messages, false, sdk.currentUser.userId);
+            disposeManuallyAfterUnmounted();
+            updateMessages(messages, false, sdk.currentUser.userId);
           },
           onMessagesDeleted(_, __, messages) {
+            disposeManuallyAfterUnmounted();
             const msgIds = messages.map((m) => m.messageId);
             const reqIds = messages
               .filter((m): m is Sendbird.UserMessage | Sendbird.FileMessage => 'reqId' in m)
@@ -109,9 +122,11 @@ export const useGroupChannelMessagesWithCollection = (
             deleteNextMessages(msgIds, reqIds);
           },
           onChannelDeleted(_, channelUrl) {
+            disposeManuallyAfterUnmounted();
             publish(events.ChannelDeleted, { channelUrl }, hookName);
           },
           onChannelUpdated(_, channel) {
+            disposeManuallyAfterUnmounted();
             if (channel.isGroupChannel() && !isDifferentChannel(channel, activeChannel)) {
               setActiveChannel(channel);
               forceUpdate();
@@ -119,22 +134,28 @@ export const useGroupChannelMessagesWithCollection = (
             publish(events.ChannelUpdated, { channel }, hookName);
           },
           onHugeGapDetected() {
+            disposeManuallyAfterUnmounted();
             init(uid);
           },
         });
       }
     },
-    [sdk, activeChannel, options?.collectionCreator],
+    [sdk, activeChannel.url, options?.collectionCreator],
   );
+
   useEffect(() => {
     return () => {
       if (collectionRef.current) collectionRef.current?.dispose();
     };
   }, []);
-  useAsyncEffect(async () => {
-    updateLoading(true);
-    await init(userId);
-    updateLoading(false);
+
+  useEffect(() => {
+    // NOTE: Cache read is heavy synchronous task, It prevents smooth ui transition
+    setTimeout(async () => {
+      updateLoading(true);
+      await init(userId);
+      updateLoading(false);
+    }, 0);
   }, [init, userId]);
 
   const refresh: UseGroupChannelMessages['refresh'] = useCallback(async () => {
@@ -229,7 +250,11 @@ export const useGroupChannelMessagesWithCollection = (
         if (message.isUserMessage()) await activeChannel.deleteMessage(message);
         if (message.isFileMessage()) await activeChannel.deleteMessage(message);
       } else {
-        deleteMessages([message.messageId], [message.reqId]);
+        try {
+          await collectionRef.current?.removeFailedMessages([message]);
+        } finally {
+          deleteMessages([message.messageId], [message.reqId]);
+        }
       }
     },
     [activeChannel],

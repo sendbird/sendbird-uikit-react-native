@@ -9,13 +9,14 @@ type Props = {
 };
 const AvatarGroup: React.FC<Props> = ({ children, containerStyle, size = 56 }) => {
   const childAmount = React.Children.count(children);
-  if (childAmount === 1) return <View style={containerStyle}>{children}</View>;
 
   const avatars = useMemo(() => {
     return (
       React.Children.map(children, (child, index) => {
         if (index + 1 > MAX) return child;
         if (!React.isValidElement(child)) return child;
+
+        if (childAmount === 1) return React.cloneElement(child, { size, containerStyle });
 
         const top = getTopPoint(index, childAmount) * size;
         const left = getLeftPoint(index) * size;

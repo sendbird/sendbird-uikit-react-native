@@ -17,12 +17,13 @@ export { default as LabelEn } from './localization/label.en';
 export type { LabelSet, LabelLocale } from './localization/label.type';
 
 /** Platform API **/
-export { default as createFilePickerServiceNative } from './platform/createFilePickerService.native';
+export { default as createNativeFileService } from './platform/createFileService.native';
+export { default as createNativeClipboardService } from './platform/createClipboardService.native';
+export { default as createNativeNotificationService } from './platform/createNotificationService.native';
 export type {
-  NotificationServiceInterface,
-  FilePickerServiceInterface,
+  FileServiceInterface,
   ClipboardServiceInterface,
-  FileSystemServiceInterface,
+  NotificationServiceInterface,
   FilePickerResponse,
   FileType,
 } from './platform/types';

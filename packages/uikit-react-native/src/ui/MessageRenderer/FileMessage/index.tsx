@@ -16,4 +16,4 @@ const FileMessage: React.FC<FileMessageProps> = (props) => {
   return <BaseFileMessage {...props} type={fileType} />;
 };
 
-export default FileMessage;
+export default React.memo(FileMessage);

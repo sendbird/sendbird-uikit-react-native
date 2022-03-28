@@ -13,4 +13,4 @@ const UserMessage: React.FC<UserMessageProps> = (props) => {
   return <BaseUserMessage {...props} />;
 };
 
-export default UserMessage;
+export default React.memo(UserMessage);

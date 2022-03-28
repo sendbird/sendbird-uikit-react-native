@@ -12,7 +12,8 @@
       "**/react-native",
       "**/react-native/**",
       "**/react-native-dev-menu",
-      "**/react-native-codegen"
+      "**/react-native-codegen",
+      "**/@react-native-firebase/**"
     ]
   },
   "scripts": {

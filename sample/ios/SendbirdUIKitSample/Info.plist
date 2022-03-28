@@ -8,6 +8,8 @@
 	<string>Permission request for MediaLibrary usage</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Permission request for PhotoLibrary usage</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Permission request for PhotoLibrary Additions usage</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>CFBundleDevelopmentRegion</key>

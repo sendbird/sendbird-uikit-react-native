@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { DependencyList } from 'react';
-import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 type Destructor = () => void;
 type AsyncEffectCallback = () => void | Destructor | Promise<void> | Promise<Destructor>;
@@ -24,7 +24,7 @@ export const useAsyncEffect = (asyncEffect: AsyncEffectCallback, deps?: Dependen
 export const useAsyncLayoutEffect = (asyncEffect: AsyncEffectCallback, deps?: DependencyList) => {
   useLayoutEffect(createAsyncEffectCallback(asyncEffect), deps);
 };
-export const useIIFE = <T extends () => any>(callback: T) => {
+export const useIIFE = <T>(callback: () => T) => {
   return iife(callback);
 };
 const iife = <T extends (...args: any[]) => any>(callback: T): ReturnType<T> => callback();
@@ -42,4 +42,16 @@ const createAsyncEffectCallback = (asyncEffect: AsyncEffectCallback) => () => {
       iife(destructor);
     }
   };
+};
+
+export const useIsMountedRef = () => {
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  return isMounted;
 };

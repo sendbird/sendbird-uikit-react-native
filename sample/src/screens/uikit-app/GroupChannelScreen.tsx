@@ -4,14 +4,18 @@ import { createGroupChannelFragment } from '@sendbird/uikit-react-native';
 import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { Logger } from '@sendbird/uikit-utils';
 
-import { Routes, useAppNavigation } from '../../hooks/useAppNavigation';
+import { useAppNavigation } from '../../hooks/useAppNavigation';
+import { Routes } from '../../libs/navigation';
 
 const GroupChannelFragment = createGroupChannelFragment();
 
 const GroupChannelScreen: React.FC = () => {
   const { navigation, params } = useAppNavigation<Routes.GroupChannel>();
   const { sdk } = useSendbirdChat();
-  const staleChannel = useMemo(() => sdk.GroupChannel.buildFromSerializedData(params.serializedChannel), []);
+  const staleChannel = useMemo(
+    () => sdk.GroupChannel.buildFromSerializedData(params.serializedChannel),
+    [params.serializedChannel],
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({ headerShown: false });

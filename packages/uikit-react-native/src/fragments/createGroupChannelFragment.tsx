@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
+import { View } from 'react-native';
 
 import { useGroupChannelMessages } from '@sendbird/chat-react-hooks';
 import useInternalPubSub from '@sendbird/chat-react-hooks/src/common/useInternalPubSub';
@@ -9,6 +10,7 @@ import { EmptyFunction, messageComparator } from '@sendbird/uikit-utils';
 import DefaultMessageRenderer from '../ui/MessageRenderer';
 import DefaultNewMessagesTooltip from '../ui/NewMessagesTooltip';
 import DefaultScrollToBottomTooltip from '../ui/ScrollToBottomTooltip';
+import TypedPlaceholder from '../ui/TypedPlaceholder';
 
 const PassValue = <T,>(v: T) => v;
 
@@ -31,6 +33,7 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
     queryCreator,
     collectionCreator,
     sortComparator = messageComparator,
+    flatListProps,
     children,
   }) => {
     const { sdk, currentUser } = useSendbirdChat();
@@ -49,6 +52,7 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
       updateUserMessage,
       resendMessage,
       deleteMessage,
+      loading,
     } = useGroupChannelMessages(sdk, staleChannel, currentUser?.userId, {
       collectionCreator,
       queryCreator,
@@ -58,9 +62,9 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
 
     useEffect(() => {
       return subscribe(events.ChannelDeleted, ({ channelUrl }) => {
-        if (channelUrl === staleChannel.url) onChannelDeleted();
+        if (channelUrl === activeChannel.url) onChannelDeleted();
       });
-    }, []);
+    }, [activeChannel.url]);
 
     const renderMessages: GroupChannelProps['MessageList']['renderMessage'] = useCallback(
       (message, prevMessage, nextMessage, onPress, onLongPress) => {
@@ -101,6 +105,15 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
           onResendFailedMessage={resendMessage}
           onDeleteMessage={deleteMessage}
           onPressImageMessage={onPressImageMessage}
+          flatListProps={{
+            ListEmptyComponent: (
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <TypedPlaceholder type={loading ? 'loading' : 'no-messages'} />
+              </View>
+            ),
+            contentContainerStyle: { flexGrow: 1 },
+            ...flatListProps,
+          }}
         />
         <GroupChannelModule.Input
           channel={activeChannel}

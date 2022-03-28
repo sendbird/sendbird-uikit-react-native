@@ -23,7 +23,6 @@ const ImageFileMessage: React.FC<FileMessageProps> = ({ message }) => {
 
 const styles = createStyleSheet({
   image: {
-    borderWidth: 1,
     width: 240,
     maxWidth: 240,
     height: 160,

@@ -1,57 +1,144 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useConnection } from '@sendbird/uikit-react-native-core';
+import { Button, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
-import { USER_ID } from '../env';
-import { Routes, useAppNavigation } from '../hooks/useAppNavigation';
+import HomeListItem from '../components/HomeListItem';
+import { useAppNavigation } from '../hooks/useAppNavigation';
+import { useAppAuth } from '../libs/authentication';
+import { Routes } from '../libs/navigation';
+
+const HomeItems: { title: string; desc?: string; image?: any; route?: Routes }[] = [
+  {
+    image: require('../assets/imgGroupchannel.png'),
+    title: 'Group channel',
+    desc: '1 on 1, Group chat with members',
+    route: Routes.GroupChannelTabs,
+  },
+  {
+    image: require('../assets/imgOpenchannel.png'),
+    title: 'Open channel',
+    desc: 'Live streams, Open community chat',
+    route: undefined,
+  },
+  {
+    title: 'Storybook',
+    route: Routes.Storybook,
+  },
+  {
+    title: 'Palette',
+    route: Routes.Palette,
+  },
+  {
+    title: 'Themed colors',
+    route: Routes.ThemeColors,
+  },
+];
 
 const HomeScreen: React.FC = () => {
+  const { top, bottom, left, right } = useSafeAreaInsets();
   const { navigation } = useAppNavigation();
-  const { connect } = useConnection();
-
-  const onNavigateToApp = async () => {
-    await connect(USER_ID);
-    navigation.navigate(Routes.GroupChannelTabs);
-  };
+  const { signOut } = useAppAuth();
+  const { disconnect } = useConnection({ autoPushTokenRegistration: true });
+  const { select, colors } = useUIKitTheme();
 
   return (
-    <SafeAreaView>
-      <ScrollView style={{ paddingVertical: 12 }}>
-        <TouchableOpacity style={styles.btn} onPress={onNavigateToApp}>
-          <Text style={styles.btnTitle}>{'UIKit Sample App'}</Text>
-        </TouchableOpacity>
+    <FlatList
+      style={{ backgroundColor: select({ light: '#F0F0F0', dark: '#0F0F0F' }), marginTop: top }}
+      contentContainerStyle={{
+        paddingTop: 32,
+        paddingBottom: 32 + bottom,
+        paddingLeft: 24 + left,
+        paddingRight: 24 + right,
+      }}
+      data={HomeItems}
+      keyExtractor={(k) => k.title}
+      ItemSeparatorComponent={() => <View style={styles.separator} />}
+      renderItem={({ item }) => {
+        if (item.image) {
+          return (
+            <HomeListItem
+              image={item.image}
+              title={item.title}
+              desc={item.desc || ''}
+              onPress={() => {
+                if (!item.route) return Alert.alert('Sorry', 'Not implemented yet');
+                navigation.navigate(item.route);
+              }}
+            />
+          );
+        }
 
-        <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate(Routes.Storybook)}>
-          <Text style={styles.btnTitle}>{Routes.Storybook}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate(Routes.ThemeColors)}>
-          <Text style={styles.btnTitle}>{Routes.ThemeColors}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate(Routes.Palette)}>
-          <Text style={styles.btnTitle}>{Routes.Palette}</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </SafeAreaView>
+        return (
+          <Pressable
+            onPress={() => {
+              if (!item.route) return Alert.alert('Sorry', 'Not implemented yet');
+              navigation.navigate(item.route);
+            }}
+            style={[
+              styles.customSampleButton,
+              { backgroundColor: select({ light: colors.background, dark: colors.onBackground04 }) },
+            ]}
+          >
+            <Text h2>{item.title}</Text>
+          </Pressable>
+        );
+      }}
+      ListHeaderComponent={<Text style={styles.screenTitle}>{'Home'}</Text>}
+      ListFooterComponent={
+        <View style={styles.footer}>
+          <View style={styles.divider} />
+          <Button
+            variant={'contained'}
+            style={styles.btn}
+            onPress={async () => {
+              await signOut();
+              await disconnect();
+            }}
+          >
+            {'Sign out'}
+          </Button>
+        </View>
+      }
+    />
   );
 };
 
 const styles = StyleSheet.create({
-  btn: {
-    width: '90%',
-    backgroundColor: '#68a8ff',
-    alignSelf: 'center',
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 12,
-    marginBottom: 12,
+  list: {
+    backgroundColor: 'red',
   },
-  btnTitle: {
-    color: 'white',
+  screenTitle: {
+    fontSize: 24,
     fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  separator: {
+    height: 16,
+  },
+  divider: {
+    marginVertical: 32,
+    height: 1,
+    backgroundColor: 'rgba(122,122,122,0.2)',
+  },
+  customSampleButton: {
+    paddingHorizontal: 24,
+    paddingVertical: 22,
+    elevation: 4,
+    shadowColor: 'black',
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 8 },
+    shadowRadius: 4,
+    borderRadius: 8,
+  },
+  footer: {
+    marginTop: 16,
+  },
+  btn: {
+    width: '100%',
+    paddingVertical: 16,
   },
 });
 

@@ -1,36 +1,22 @@
 import React, { useContext } from 'react';
 
-import type {
-  ClipboardServiceInterface,
-  FilePickerServiceInterface,
-  FileSystemServiceInterface,
-  NotificationServiceInterface,
-} from '../platform/types';
+import type { ClipboardServiceInterface, FileServiceInterface, NotificationServiceInterface } from '../platform/types';
 
 type Props = {
-  notificationService: NotificationServiceInterface;
-  filePickerService: FilePickerServiceInterface;
+  fileService: FileServiceInterface;
   clipboardService: ClipboardServiceInterface;
-  fileSystemService: FileSystemServiceInterface;
+  notificationService: NotificationServiceInterface;
 };
 
 export const PlatformServiceContext = React.createContext<Props | null>(null);
 export const PlatformServiceProvider: React.FC<Props> = ({
   children,
-  notificationService,
-  filePickerService,
+  fileService,
   clipboardService,
-  fileSystemService,
+  notificationService,
 }) => {
   return (
-    <PlatformServiceContext.Provider
-      value={{
-        notificationService,
-        filePickerService,
-        clipboardService,
-        fileSystemService,
-      }}
-    >
+    <PlatformServiceContext.Provider value={{ fileService, clipboardService, notificationService }}>
       {children}
     </PlatformServiceContext.Provider>
   );

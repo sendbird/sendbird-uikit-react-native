@@ -12,7 +12,7 @@ type Options = {
 
 const useConnection = (opts?: Options) => {
   const { sdk, setCurrentUser } = useSendbirdChat();
-  const { registerPushTokenForCurrentUser, unregisterPushTokenForCurrentUser } = usePushTokenRegistration();
+  const { registerPushTokenForCurrentUser, unregisterPushTokenForCurrentUser } = usePushTokenRegistration(true);
 
   const connect = useCallback(
     async (userId: string, accessToken?: string) => {
@@ -28,8 +28,8 @@ const useConnection = (opts?: Options) => {
 
       try {
         if (opts?.autoPushTokenRegistration) await registerPushTokenForCurrentUser();
-      } catch {
-        Logger.warn('[useConnection]', 'registerPushTokenForCurrentUser failure');
+      } catch (e) {
+        Logger.warn('[useConnection]', 'registerPushTokenForCurrentUser failure', e);
       }
 
       return sdk.currentUser;
@@ -39,8 +39,8 @@ const useConnection = (opts?: Options) => {
   const disconnect = useCallback(async () => {
     try {
       if (opts?.autoPushTokenRegistration) await unregisterPushTokenForCurrentUser();
-    } catch {
-      Logger.warn('[useConnection]', 'unregisterPushTokenForCurrentUser failure');
+    } catch (e) {
+      Logger.warn('[useConnection]', 'unregisterPushTokenForCurrentUser failure', e);
     }
 
     await sdk.disconnect();

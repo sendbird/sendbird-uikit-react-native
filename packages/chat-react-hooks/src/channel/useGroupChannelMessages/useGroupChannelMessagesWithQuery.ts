@@ -1,9 +1,10 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type Sendbird from 'sendbird';
 
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 import { Logger, isDifferentChannel, useAsyncEffect, useForceUpdate } from '@sendbird/uikit-utils';
 
+import useInternalPubSub from '../../common/useInternalPubSub';
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';
 import { useGroupChannelMessagesReducer } from './reducer';
@@ -26,11 +27,17 @@ export const useGroupChannelMessagesWithQuery = (
   userId?: string,
   options?: UseGroupChannelMessagesOptions,
 ): UseGroupChannelMessages => {
+  const { events, publish } = useInternalPubSub();
+
   const queryRef = useRef<Sendbird.PreviousMessageListQuery>();
 
   // NOTE: We cannot determine the channel object of Sendbird SDK is stale or not, so force update after setActiveChannel
   const [activeChannel, setActiveChannel] = useState(() => staleChannel);
   const forceUpdate = useForceUpdate();
+
+  useEffect(() => {
+    setActiveChannel(staleChannel);
+  }, [staleChannel.url]);
 
   const {
     loading,
@@ -71,7 +78,7 @@ export const useGroupChannelMessagesWithQuery = (
         updateNextMessages([], true, sdk.currentUser.userId);
       }
     },
-    [sdk, activeChannel, options?.queryCreator],
+    [sdk, activeChannel.url, options?.queryCreator],
   );
   useAsyncEffect(async () => {
     updateLoading(true);
@@ -80,9 +87,11 @@ export const useGroupChannelMessagesWithQuery = (
   }, [init, userId]);
 
   const channelUpdater = (channel: Sendbird.GroupChannel | Sendbird.OpenChannel) => {
-    if (!channel.isGroupChannel() || isDifferentChannel(channel, activeChannel)) return;
-    setActiveChannel(channel);
-    forceUpdate();
+    if (channel.isGroupChannel() && !isDifferentChannel(channel, activeChannel)) {
+      setActiveChannel(channel);
+      forceUpdate();
+    }
+    publish(events.ChannelUpdated, { channel }, hookName);
   };
 
   useChannelHandler(
@@ -96,7 +105,7 @@ export const useGroupChannelMessagesWithQuery = (
       },
       onMessageUpdated(eventChannel, message) {
         if (isDifferentChannel(activeChannel, eventChannel)) return;
-        updateNextMessages([message], false, sdk.currentUser.userId);
+        updateMessages([message], false, sdk.currentUser.userId);
       },
       onMessageDeleted(eventChannel, messageId) {
         if (isDifferentChannel(activeChannel, eventChannel)) return;
@@ -109,6 +118,9 @@ export const useGroupChannelMessagesWithQuery = (
           setActiveChannel(channel);
           forceUpdate();
         }
+      },
+      onChannelDeleted(channelUrl: string) {
+        publish(events.ChannelDeleted, { channelUrl }, hookName);
       },
       onChannelChanged: channelUpdater,
       onChannelFrozen: channelUpdater,

@@ -5,7 +5,8 @@ import { createInviteMembersFragment } from '@sendbird/uikit-react-native';
 import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { Logger } from '@sendbird/uikit-utils';
 
-import { Routes, useAppNavigation } from '../../hooks/useAppNavigation';
+import { useAppNavigation } from '../../hooks/useAppNavigation';
+import { Routes } from '../../libs/navigation';
 
 const InviteMembersFragment = createInviteMembersFragment<Sendbird.User>();
 
@@ -14,7 +15,6 @@ const InviteMembersScreen: React.FC = () => {
   const { sdk } = useSendbirdChat();
 
   useLayoutEffect(() => {
-    Logger.log('channel type', params.channelType);
     navigation.setOptions({ headerShown: false });
   }, []);
 
@@ -28,9 +28,8 @@ const InviteMembersScreen: React.FC = () => {
 
         channelParams.isDistinct = false;
         channelParams.addUserIds(users.map((user) => user.userId));
-        await sdk.GroupChannel.createChannel(channelParams);
-
-        navigation.goBack();
+        const channel = await sdk.GroupChannel.createChannel(channelParams);
+        navigation.replace(Routes.GroupChannel, { serializedChannel: channel.serialize() });
       }}
       onPressHeaderLeft={() => {
         Logger.log('header left pressed');

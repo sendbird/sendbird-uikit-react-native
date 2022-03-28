@@ -13,6 +13,7 @@ import {
 import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation/src/ui/BottomSheet';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
 import {
+  Logger,
   getAvailableUriFromFileMessage,
   getFileExtension,
   getFileType,
@@ -44,6 +45,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   onResendFailedMessage,
   onDeleteMessage,
   onPressImageMessage,
+  flatListProps,
 }) => {
   const { setEditMessage } = useContext(GroupChannelContext.Fragment);
   const { LABEL } = useLocalization();
@@ -57,7 +59,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
 
   const { openSheet } = useBottomSheet();
   const { alert } = useAlert();
-  const { clipboardService, fileSystemService } = usePlatformService();
+  const { clipboardService, fileService } = usePlatformService();
 
   const handleFailedMessage = (message: HandleableMessage) => {
     openSheet({
@@ -138,8 +140,17 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
       const sheetItems: BottomSheetItem['sheetItems'] = [
         {
           icon: 'download',
-          title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_MESSAGE_COPY,
-          onPress: () => fileSystemService.download(msg.url, 'DownloadFolder'),
+          title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_MESSAGE_SAVE,
+          onPress: () => {
+            fileService
+              .save(msg.url, msg.name)
+              .then((response) => {
+                Logger.log('File saved to', response);
+              })
+              .catch((err) => {
+                Logger.log('File save failure', err);
+              });
+          },
         },
       ];
       if (isMyMessage(msg, currentUserId)) {
@@ -197,6 +208,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
         contentContainerStyle={channel.isFrozen && styles.frozenListPadding}
         onLeaveScrollBottom={onLeaveScrollBottom}
         currentUserId={currentUserId}
+        {...flatListProps}
       />
       {NewMessagesTooltip && (
         <View style={[styles.newMsgTooltip, safeAreaLayout]}>

@@ -1,8 +1,10 @@
-import React, { useLayoutEffect } from 'react';
+import React from 'react';
 
 import { createGroupChannelListFragment } from '@sendbird/uikit-react-native';
+import { useAsyncLayoutEffect } from '@sendbird/uikit-utils';
 
-import { Routes, useAppNavigation } from '../../../hooks/useAppNavigation';
+import { useAppNavigation } from '../../../hooks/useAppNavigation';
+import { Routes } from '../../../libs/navigation';
 
 /**
  * Example for customize navigation header with DomainContext
@@ -46,7 +48,7 @@ const GroupChannelListFragment = createGroupChannelListFragment();
 const GroupChannelListScreen = () => {
   const { navigation } = useAppNavigation<Routes.GroupChannelList>();
 
-  useLayoutEffect(() => {
+  useAsyncLayoutEffect(async () => {
     navigation.setOptions({ headerShown: false });
   }, []);
 
