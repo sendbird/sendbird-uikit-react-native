@@ -1,9 +1,12 @@
 import React, { useCallback } from 'react';
 import { Pressable, View } from 'react-native';
-import type Sendbird from 'sendbird';
 
 import { useGroupChannelList } from '@sendbird/chat-react-hooks';
-import type { GroupChannelListFragment, GroupChannelListModule } from '@sendbird/uikit-react-native-core';
+import type {
+  GroupChannelListFragment,
+  GroupChannelListModule,
+  GroupChannelListProps,
+} from '@sendbird/uikit-react-native-core';
 import { createGroupChannelListModule, useLocalization, useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { Logger, channelComparator } from '@sendbird/uikit-utils';
 
@@ -24,7 +27,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     children,
   }) => {
     const { sdk, currentUser } = useSendbirdChat();
-    const { groupChannels, refresh, refreshing, next } = useGroupChannelList(sdk, currentUser?.userId, {
+    const { groupChannels, refresh, refreshing, next, loading } = useGroupChannelList(sdk, currentUser?.userId, {
       queryCreator,
       sortComparator,
       enableCollectionWithoutLocalCache: true,
@@ -32,9 +35,9 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
 
     const { LABEL } = useLocalization();
 
-    const renderGroupChannelPreview = useCallback(
-      (channel: Sendbird.GroupChannel, selectChannel) => (
-        <Pressable onPress={() => onPressChannel(channel)} onLongPress={() => selectChannel(channel)}>
+    const renderGroupChannelPreview: GroupChannelListProps['List']['renderGroupChannelPreview'] = useCallback(
+      (channel, onLongPressChannel) => (
+        <Pressable onPress={() => onPressChannel(channel)} onLongPress={onLongPressChannel}>
           <GroupChannelPreview
             coverUrl={channel.coverUrl}
             title={LABEL.GROUP_CHANNEL_LIST.FRAGMENT.PREVIEW_TITLE(currentUser?.userId ?? '', channel)}
@@ -44,7 +47,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
             bodyIcon={channel.lastMessage?.isFileMessage() ? 'file-document' : undefined}
             frozen={channel.isFrozen}
             notificationOff={channel.myPushTriggerOption === 'off'}
-            memberCount={channel.memberCount}
+            memberCount={channel.memberCount > 2 ? channel.memberCount : undefined}
           />
         </Pressable>
       ),
@@ -68,7 +71,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
           flatListProps={{
             ListEmptyComponent: (
               <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <TypedPlaceholder type={'no-channels'} />
+                <TypedPlaceholder type={loading ? 'loading' : 'no-channels'} />
               </View>
             ),
             contentContainerStyle: { flexGrow: 1 },

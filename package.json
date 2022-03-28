@@ -12,13 +12,14 @@
       "**/react-native",
       "**/react-native/**",
       "**/react-native-dev-menu",
-      "**/react-native-codegen"
+      "**/react-native-codegen",
+      "**/@react-native-firebase/**"
     ]
   },
   "scripts": {
     "reset": "find . -type dir -name node_modules | xargs rm -rf",
     "clean": "lerna run clean",
-    "build": "lerna run prepare",
+    "build": "lerna run build",
     "test": "jest --verbose",
     "test:build": "yarn build --stream && yarn clean --stream",
     "lint": "yarn lint:eslint && yarn lint:prettier",
@@ -38,11 +39,12 @@
     "@typescript-eslint/parser": "^5.9.1",
     "babel-jest": "^27.4.6",
     "del-cli": "^4.0.1",
-    "esbuild": "^0.14.11",
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.3.0",
     "jest": "^27.4.7",
     "lerna": "^4.0.0",
+    "patch-package": "^6.4.7",
+    "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.5.1",
     "react": "17.0.2",
     "react-native": "0.66.4",

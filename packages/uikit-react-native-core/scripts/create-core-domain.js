@@ -6,9 +6,14 @@ const chalk = require('chalk');
 const glob = require('glob');
 const { toCamelCase, toPascalCase } = require('js-convert-case');
 
-const root = path.resolve(__dirname, '..');
-const domainRoot = path.resolve(root, 'src/domain');
-const templateRoot = path.resolve(root, '__template__');
+const packagesRoot = path.resolve(__dirname, '../../');
+
+const sendbirdUIKitRoot = path.resolve(packagesRoot, 'uikit-react-native');
+const fragmentsRoot = path.resolve(sendbirdUIKitRoot, 'src/fragments');
+
+const sendbirdUIKitCoreRoot = path.resolve(packagesRoot, 'uikit-react-native-core');
+const domainRoot = path.resolve(sendbirdUIKitCoreRoot, 'src/domain');
+const templateRoot = path.resolve(sendbirdUIKitCoreRoot, '__template__');
 
 inquirer
   .prompt([
@@ -47,23 +52,36 @@ inquirer
     console.log(chalk.white('Write template files...'));
     const templateFiles = await Promise.all(readPromises);
     const writePromises = templateFiles.map(async ({ filePath, data }) => {
-      const destPath = domainReplacer(templateReplacer(filePath, __domain__), __domain__).replace(root, domainRoot);
-      await fsP.mkdir(path.dirname(destPath), { recursive: true });
-      return fsP.writeFile(destPath, ignoreReplacer(domainReplacer(data, __domain__)));
+      // filePath:        ~/packages/uikit-react-native-core/__template__/**/__domain__
+      // domainFilePath:  ~/packages/uikit-react-native-core/someDomain/**/SomeDomain
+      const domainFilePath = domainReplacer(templateReplacer(filePath, __domain__), __domain__);
+
+      if (isFragmentTemplate(filePath)) {
+        console.log(chalk.white('Write Fragment template...'));
+        const currentDomainRoot = path.resolve(sendbirdUIKitCoreRoot, __domain__);
+        const destPath = domainFilePath.replace(currentDomainRoot, fragmentsRoot);
+        await fsP.mkdir(path.dirname(destPath), { recursive: true });
+        return fsP.writeFile(destPath, ignoreReplacer(domainReplacer(data, __domain__)));
+      } else {
+        console.log(chalk.white('Write Module template...'));
+        const destPath = domainFilePath.replace(sendbirdUIKitCoreRoot, domainRoot);
+        await fsP.mkdir(path.dirname(destPath), { recursive: true });
+        return fsP.writeFile(destPath, ignoreReplacer(domainReplacer(data, __domain__)));
+      }
     });
     await Promise.all(writePromises);
 
     console.log(chalk.green('Finished'));
   });
-
+function isFragmentTemplate(path) {
+  return path.includes('create__domain__Fragment');
+}
 function templateReplacer(str, __domain__) {
   return str.replace(/__template__/g, toCamelCase(__domain__));
 }
-
 function domainReplacer(str, __domain__) {
   return str.replace(/__domain__/g, toPascalCase(__domain__));
 }
-
 function ignoreReplacer(str) {
   return str.replace(/\/\/ @ts-nocheck - !!REMOVE\n/g, '');
 }

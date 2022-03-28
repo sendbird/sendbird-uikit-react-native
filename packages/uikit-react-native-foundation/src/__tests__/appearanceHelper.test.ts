@@ -1,13 +1,13 @@
-import createAppearanceHelper from '../styles/appearanceHelper';
+import createAppearanceHelper from '../styles/createAppearanceHelper';
 
 describe('styles', function () {
   test('createAppearanceHelper', function () {
-    const helper = createAppearanceHelper('light');
-    expect(typeof helper['select']).toBe('function');
+    const select = createAppearanceHelper('light');
+    expect(typeof select).toBe('function');
 
-    const selected1 = helper.select({ light: 'light-value', dark: 'dark-value', default: 'default-value' });
-    const selected2 = helper.select({ light: undefined, dark: 'dark-value' });
-    const selected3 = helper.select({ light: undefined, dark: undefined, default: 'default-value' });
+    const selected1 = select({ light: 'light-value', dark: 'dark-value', default: 'default-value' });
+    const selected2 = select({ light: undefined, dark: 'dark-value' });
+    const selected3 = select({ light: undefined, dark: undefined, default: 'default-value' });
 
     expect(selected1).toBe('light-value');
     expect(selected1).not.toBe('dark-value');
@@ -22,13 +22,13 @@ describe('styles', function () {
     expect(selected3).not.toBe('light-value');
 
     try {
-      helper.select({ light: undefined });
+      select({ light: undefined });
     } catch (err) {
       expect(err).not.toBeUndefined();
     }
 
     try {
-      helper.select({ dark: undefined });
+      select({ dark: undefined });
     } catch (err) {
       expect(err).not.toBeUndefined();
     }

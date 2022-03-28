@@ -9,20 +9,21 @@ const GroupChannelListList: React.FC<GroupChannelListProps['List']> = ({
   renderGroupChannelPreview,
   groupChannels,
   onLoadNext,
-  refreshing,
-  onRefresh,
+  // refreshing,
+  // onRefresh,
   flatListProps,
 }) => {
   const channelMenu = useContext(GroupChannelListContext.ChannelMenu);
   const renderItem: ListRenderItem<Sendbird.GroupChannel> = useCallback(
-    ({ item }) => renderGroupChannelPreview?.(item, channelMenu.selectChannel),
+    ({ item }) => renderGroupChannelPreview?.(item, () => channelMenu.selectChannel(item)),
     [renderGroupChannelPreview, channelMenu.selectChannel],
   );
   return (
     <FlatList
+      bounces={false}
       data={groupChannels}
-      refreshing={refreshing}
-      onRefresh={onRefresh}
+      // refreshing={refreshing}
+      // onRefresh={onRefresh}
       renderItem={renderItem}
       onEndReached={onLoadNext}
       {...flatListProps}

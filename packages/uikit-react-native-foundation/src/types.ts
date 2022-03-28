@@ -2,8 +2,6 @@
 import type { ReactElement, ReactNode } from 'react';
 import type { TextStyle } from 'react-native';
 
-import type Palette from './theme/Palette';
-
 export type TypoName =
   | 'h1'
   | 'h2'
@@ -21,14 +19,18 @@ export type FontAttributes = Pick<TextStyle, 'fontFamily' | 'fontSize' | 'lineHe
 export type Typography = Record<TypoName, FontAttributes>;
 
 export type UIKitAppearance = 'light' | 'dark';
-export interface UIKitTheme extends AppearanceHelper {
+export interface UIKitTheme {
   appearance: UIKitAppearance;
+  select<T>(options: { light?: T; dark: T; default?: T } | { light: T; dark?: T; default?: T }): T;
+
+  palette: PaletteInterface;
   colors: UIKitColors;
-  palette: typeof Palette;
+
   typography: Typography;
+  scaleFactor: (dp: number) => number;
 }
 
-type Component = 'Header' | 'Button' | 'Dialog' | 'Input' | 'Badge' | 'Placeholder';
+type Component = 'Header' | 'Button' | 'Dialog' | 'Input' | 'Badge' | 'Placeholder' | 'Message' | 'DateSeparator';
 type GetColorTree<
   Tree extends {
     Variant: {
@@ -51,6 +53,8 @@ export type ComponentColorTree = GetColorTree<{
     Input: 'default' | 'underline';
     Badge: 'default';
     Placeholder: 'default';
+    Message: 'incoming' | 'outgoing';
+    DateSeparator: 'default';
   };
   State: {
     Header: 'none';
@@ -59,6 +63,8 @@ export type ComponentColorTree = GetColorTree<{
     Input: 'active' | 'disabled';
     Badge: 'none';
     Placeholder: 'none';
+    Message: 'enabled' | 'pressed';
+    DateSeparator: 'none';
   };
   ColorPart: {
     Header: 'background' | 'borderBottom';
@@ -67,6 +73,8 @@ export type ComponentColorTree = GetColorTree<{
     Input: 'text' | 'placeholder' | 'background' | 'highlight';
     Badge: 'text' | 'background';
     Placeholder: 'content' | 'highlight';
+    Message: 'textMsg' | 'textEdited' | 'textSenderName' | 'textTime' | 'background';
+    DateSeparator: 'text' | 'background';
   };
 }>;
 type ComponentColors<T extends Component> = {
@@ -77,7 +85,7 @@ type ComponentColors<T extends Component> = {
   };
 };
 
-export type UIKitColors = {
+export interface UIKitColors {
   primary: string;
   background: string;
   text: string;
@@ -108,11 +116,9 @@ export type UIKitColors = {
     input: ComponentColors<'Input'>;
     badge: ComponentColors<'Badge'>;
     placeholder: ComponentColors<'Placeholder'>;
+    message: ComponentColors<'Message'>;
+    dateSeparator: ComponentColors<'DateSeparator'>;
   };
-};
-
-export interface AppearanceHelper {
-  select<T>(options: { light?: T; dark: T; default?: T } | { light: T; dark?: T; default?: T }): T;
 }
 
 type HeaderElement = string | ReactElement | null;
@@ -128,3 +134,48 @@ export type BaseHeaderProps<HeaderParts extends HeaderPartProps = {}, Additional
   children?: ReactNode;
 } & HeaderParts &
   AdditionalProps;
+export interface PaletteInterface {
+  primary100: string;
+  primary200: string;
+  primary300: string;
+  primary400: string;
+  primary500: string;
+
+  secondary100: string;
+  secondary200: string;
+  secondary300: string;
+  secondary400: string;
+  secondary500: string;
+
+  error100: string;
+  error200: string;
+  error300: string;
+  error400: string;
+  error500: string;
+
+  background50: string;
+  background100: string;
+  background200: string;
+  background300: string;
+  background400: string;
+  background500: string;
+  background600: string;
+  background700: string;
+
+  overlay01: string;
+  overlay02: string;
+
+  information: string;
+  highlight: string;
+  transparent: 'transparent';
+
+  onBackgroundLight01: string;
+  onBackgroundLight02: string;
+  onBackgroundLight03: string;
+  onBackgroundLight04: string;
+
+  onBackgroundDark01: string;
+  onBackgroundDark02: string;
+  onBackgroundDark03: string;
+  onBackgroundDark04: string;
+}

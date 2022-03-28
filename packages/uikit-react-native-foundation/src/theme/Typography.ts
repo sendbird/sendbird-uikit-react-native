@@ -1,10 +1,12 @@
-import { defaultScaleFactor } from '../styles/scaleFactor';
 import type { FontAttributes, Typography } from '../types';
 
 type TypographyOverrides = Partial<Typography> & {
   shared?: Partial<FontAttributes>;
 };
-export const createTypography = (overrides: TypographyOverrides = {}, scaleFactor = defaultScaleFactor): Typography => {
+export const createTypography = (
+  overrides: TypographyOverrides = {},
+  scaleFactor: (dp: number) => number,
+): Typography => {
   return {
     h1: {
       fontWeight: '500',
@@ -95,7 +97,3 @@ export const createTypography = (overrides: TypographyOverrides = {}, scaleFacto
     },
   };
 };
-
-export const defaultTypography = createTypography({
-  shared: { fontFamily: 'System' },
-});

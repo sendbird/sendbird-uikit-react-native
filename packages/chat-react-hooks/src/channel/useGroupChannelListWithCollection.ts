@@ -5,7 +5,7 @@ import type { SendbirdChannel, SendbirdChatSDK } from '@sendbird/uikit-utils';
 import { Logger, arrayToMap, useAsyncEffect, useUniqId } from '@sendbird/uikit-utils';
 
 import useInternalPubSub from '../common/useInternalPubSub';
-import useChannelHandler from '../handler/useChannelHandler';
+import { useChannelHandler } from '../handler/useChannelHandler';
 import type { UseGroupChannelList, UseGroupChannelListOptions } from '../types';
 
 type GroupChannelMap = Record<string, Sendbird.GroupChannel>;
@@ -128,7 +128,7 @@ export const useGroupChannelListWithCollection = (
 
   useChannelHandler(
     sdk,
-    HOOK_NAME + id,
+    `${HOOK_NAME}_${id}`,
     {
       onChannelChanged: (channel) => updateChannels([channel], false),
       onChannelFrozen: (channel) => updateChannels([channel], false),

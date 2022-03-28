@@ -8,15 +8,13 @@ react-native-uikit
 
 ```sh
 npm install @sendbird/uikit-react-native-core \
-            react-native-image-picker \
             react-native-permissions \
-            @react-native-firebase/messaging
-```
-
-(optional) Install `AsyncStorage` if you want to enable Local Caching
-
-```sh
-npm install @react-native-async-storage/async-storage
+            react-native-image-picker \
+            react-native-document-picker \
+            @react-native-community/cameraroll \
+            react-native-fs \
+            @react-native-clipboard/clipboard \
+            @react-native-firebase/messaging @react-native-firebase/app
 ```
 
 ### Expo
@@ -24,11 +22,9 @@ npm install @react-native-async-storage/async-storage
 ```sh
 expo install @sendbird/uikit-react-native-core \
              expo-image-picker \
+             expo-document-picker \
+             expo-media-library \
+             expo-file-system \
+             expo-clipboard \
              expo-notifications
-```
-
-(optional) Install `AsyncStorage` if you want to enable Local Caching
-
-```sh
-expo install @react-native-async-storage/async-storage
 ```

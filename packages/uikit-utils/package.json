@@ -15,7 +15,7 @@
   "sideEffects": false,
   "scripts": {
     "test": "jest",
-    "prepare": "bob build",
+    "build": "bob build",
     "clean": "del lib"
   },
   "keywords": [

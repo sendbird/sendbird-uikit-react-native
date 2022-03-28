@@ -21,11 +21,11 @@ const TypedPlaceholder: React.FC<Props> = ({ type }) => {
     case 'no-channels':
       return <Placeholder icon={'chat'} message={LABEL.PLACEHOLDER.NO_CHANNELS} />;
     case 'no-messages':
-      return <Placeholder icon={'message'} message={LABEL.PLACEHOLDER.NO_BANNED_MEMBERS} />;
+      return <Placeholder icon={'message'} message={LABEL.PLACEHOLDER.NO_MESSAGES} />;
     case 'no-muted-members':
-      return <Placeholder icon={'mute'} message={LABEL.PLACEHOLDER.NO_BANNED_MEMBERS} />;
+      return <Placeholder icon={'mute'} message={LABEL.PLACEHOLDER.NO_MUTED_MEMBERS} />;
     case 'no-results-found':
-      return <Placeholder icon={'search'} message={LABEL.PLACEHOLDER.NO_BANNED_MEMBERS} />;
+      return <Placeholder icon={'search'} message={LABEL.PLACEHOLDER.NO_RESULTS_FOUND} />;
     case 'error-wrong':
       return (
         <Placeholder

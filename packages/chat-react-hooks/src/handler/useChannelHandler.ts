@@ -3,14 +3,14 @@ import type Sendbird from 'sendbird';
 
 import { Logger, SendbirdChatSDK } from '@sendbird/uikit-utils';
 
-const useChannelHandler = (
+export const useChannelHandler = (
   sdk: SendbirdChatSDK,
   handlerId: string,
   hookHandler: Partial<Sendbird.ChannelHandler>,
   deps: React.DependencyList = [],
 ) => {
   useEffect(() => {
-    Logger.info('[useChannelHandler]', handlerId);
+    Logger.debug('[useChannelHandler] hook called by', handlerId);
 
     const handler = new sdk.ChannelHandler();
     const handlerKeys = Object.keys(handler) as (keyof typeof handler)[];
@@ -23,5 +23,3 @@ const useChannelHandler = (
     return () => sdk.removeChannelHandler(handlerId);
   }, [sdk, handlerId, ...deps]);
 };
-
-export default useChannelHandler;

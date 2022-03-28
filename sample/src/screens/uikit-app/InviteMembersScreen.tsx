@@ -5,7 +5,8 @@ import { createInviteMembersFragment } from '@sendbird/uikit-react-native';
 import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { Logger } from '@sendbird/uikit-utils';
 
-import { Routes, useAppNavigation } from '../../hooks/useAppNavigation';
+import { useAppNavigation } from '../../hooks/useAppNavigation';
+import { Routes } from '../../libs/navigation';
 
 const InviteMembersFragment = createInviteMembersFragment<Sendbird.User>();
 
@@ -14,7 +15,6 @@ const InviteMembersScreen: React.FC = () => {
   const { sdk } = useSendbirdChat();
 
   useLayoutEffect(() => {
-    Logger.log('channel type', params.channelType);
     navigation.setOptions({ headerShown: false });
   }, []);
 
@@ -22,12 +22,14 @@ const InviteMembersScreen: React.FC = () => {
     <InviteMembersFragment
       onPressInviteMembers={async (users) => {
         // Create GroupChannel with invited users
-        const params = new sdk.GroupChannelParams();
-        params.addUserIds(users.map((user) => user.userId));
-        params.isDistinct = false;
-        await sdk.GroupChannel.createChannel(params);
+        const channelParams = new sdk.GroupChannelParams();
+        if (params.channelType === 'BROADCAST') channelParams.isBroadcast = true;
+        if (params.channelType === 'SUPER_GROUP') channelParams.isSuper = true;
 
-        navigation.goBack();
+        channelParams.isDistinct = false;
+        channelParams.addUserIds(users.map((user) => user.userId));
+        const channel = await sdk.GroupChannel.createChannel(channelParams);
+        navigation.replace(Routes.GroupChannel, { serializedChannel: channel.serialize() });
       }}
       onPressHeaderLeft={() => {
         Logger.log('header left pressed');

@@ -5,7 +5,7 @@ import { useTotalUnreadMessageCount } from '@sendbird/chat-react-hooks';
 import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { Icon, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
-import { Routes } from '../../../hooks/useAppNavigation';
+import { Routes } from '../../../libs/navigation';
 import GroupChannelListScreen from './GroupChannelListScreen';
 import SettingsScreen from './SettingsScreen';
 

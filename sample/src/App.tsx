@@ -1,18 +1,31 @@
+import Notifee from '@notifee/react-native';
+import messaging from '@react-native-firebase/messaging';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
+import { useSendbirdChat } from '@sendbird/uikit-react-native-core/src/contexts/SendbirdChat';
 import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { Logger, isSendbirdNotification, parseSendbirdNotification } from '@sendbird/uikit-utils';
 
-import { FilePickerService, GetTranslucent, NotificationService, RootStack, SendBirdInstance } from './factory';
-import { Routes } from './hooks/useAppNavigation';
-import useAppearance from './hooks/useAppearance';
 import {
+  ClipboardService,
+  FileService,
+  GetTranslucent,
+  NotificationService,
+  RootStack,
+  SendBirdInstance,
+} from './factory';
+import useAppearance from './hooks/useAppearance';
+import { Routes, navigationRef } from './libs/navigation';
+import { onNotificationEvent } from './libs/notification';
+import {
+  GroupChannelScreen,
   GroupChannelTabs,
   HomeScreen,
   InviteMembersScreen,
   PaletteScreen,
-  StorybookScreen,
+  SignInScreen,
   ThemeColorsScreen,
 } from './screens';
 
@@ -23,25 +36,63 @@ const App = () => {
   return (
     <SendbirdUIKitContainer
       chat={{ sdkInstance: SendBirdInstance }}
-      services={{ filePicker: FilePickerService, notification: NotificationService }}
-      styles={{ theme: isLightTheme ? LightUIKitTheme : DarkUIKitTheme, statusBarTranslucent: GetTranslucent() }}
+      services={{ file: FileService, notification: NotificationService, clipboard: ClipboardService }}
+      styles={{
+        defaultHeaderTitleAlign: 'left', //'center',
+        theme: isLightTheme ? LightUIKitTheme : DarkUIKitTheme,
+        statusBarTranslucent: GetTranslucent(),
+      }}
     >
-      <NavigationContainer theme={isLightTheme ? DefaultTheme : DarkTheme}>
-        <RootStack.Navigator>
-          <RootStack.Screen name={Routes.Home} component={HomeScreen} />
-          <RootStack.Screen name={Routes.Storybook} component={StorybookScreen} />
-          <RootStack.Screen name={Routes.ThemeColors} component={ThemeColorsScreen} />
-          <RootStack.Screen name={Routes.Palette} component={PaletteScreen} />
-
-          <RootStack.Screen
-            options={{ headerShown: false }}
-            name={Routes.GroupChannelTabs}
-            component={GroupChannelTabs}
-          />
-          <RootStack.Screen name={Routes.InviteMembers} component={InviteMembersScreen} />
-        </RootStack.Navigator>
-      </NavigationContainer>
+      <Navigations />
     </SendbirdUIKitContainer>
+  );
+};
+
+const Navigations = () => {
+  const { currentUser, sdk } = useSendbirdChat();
+  const { scheme } = useAppearance();
+  const isLightTheme = scheme === 'light';
+
+  useEffect(() => {
+    const unsubscribes = [
+      messaging().onMessage((message) => {
+        Logger.log('onMessage');
+        if (isSendbirdNotification(message.data)) {
+          sdk.markAsDelivered(parseSendbirdNotification(message.data).channel.channel_url);
+        }
+      }),
+      Notifee.onForegroundEvent(onNotificationEvent),
+    ];
+
+    return () => {
+      unsubscribes.forEach((fn) => fn());
+    };
+  }, []);
+
+  return (
+    <NavigationContainer ref={navigationRef} theme={isLightTheme ? DefaultTheme : DarkTheme}>
+      <RootStack.Navigator>
+        {!currentUser ? (
+          <RootStack.Screen options={{ headerShown: false }} name={Routes.SignIn} component={SignInScreen} />
+        ) : (
+          <>
+            <RootStack.Screen options={{ headerShown: false }} name={Routes.Home} component={HomeScreen} />
+
+            <RootStack.Screen
+              options={{ headerShown: false }}
+              name={Routes.GroupChannelTabs}
+              component={GroupChannelTabs}
+            />
+            <RootStack.Screen name={Routes.GroupChannel} component={GroupChannelScreen} />
+            <RootStack.Screen name={Routes.InviteMembers} component={InviteMembersScreen} />
+
+            <RootStack.Screen name={Routes.ThemeColors} component={ThemeColorsScreen} />
+            <RootStack.Screen name={Routes.Palette} component={PaletteScreen} />
+            {/*<RootStack.Screen name={Routes.Storybook} component={StorybookScreen} />*/}
+          </>
+        )}
+      </RootStack.Navigator>
+    </NavigationContainer>
   );
 };
 

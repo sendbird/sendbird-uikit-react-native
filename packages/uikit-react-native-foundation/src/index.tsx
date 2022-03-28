@@ -12,7 +12,8 @@ export { default as Avatar } from './ui/Avatar';
 export { default as Badge } from './ui/Badge';
 export { default as BottomSheet } from './ui/BottomSheet';
 export { default as Button } from './ui/Button';
-export { DialogProvider, useActionMenu, useAlert, usePrompt } from './ui/Dialog';
+export { default as ChannelFrozenBanner } from './ui/ChannelFrozenBanner';
+export { DialogProvider, useActionMenu, useAlert, usePrompt, useBottomSheet } from './ui/Dialog';
 export { default as Divider } from './ui/Divider';
 export { default as Header } from './ui/Header';
 export { default as Icon } from './ui/Icon';
@@ -23,14 +24,17 @@ export { default as Prompt } from './ui/Prompt';
 export { default as Switch } from './ui/Switch';
 export { default as Text } from './ui/Text';
 export { default as TextInput } from './ui/TextInput';
+export { default as Toast, useToast, ToastProvider } from './ui/Toast';
+export { default as URLParsedText } from './ui/URLParsedText';
 
 /** Styles **/
-export { default as useHeaderStyle } from './styles/useHeaderStyle';
-export { default as getDefaultHeaderHeight } from './styles/getDefaultHeaderHeight';
-export { default as appearanceHelper } from './styles/appearanceHelper';
-export { default as scaleFactor } from './styles/scaleFactor';
+export { default as createAppearanceHelper } from './styles/createAppearanceHelper';
+export { default as createScaleFactor } from './styles/createScaleFactor';
 export { default as createStyleSheet } from './styles/createStyleSheet';
+export { default as getDefaultHeaderHeight } from './styles/getDefaultHeaderHeight';
 export { HeaderStyleContext, HeaderStyleProvider } from './styles/HeaderStyleContext';
+export { themeFactory } from './styles/themeFactory';
+export { default as useHeaderStyle } from './styles/useHeaderStyle';
 
 /** Types **/
 export type {
@@ -40,7 +44,7 @@ export type {
   FontAttributes,
   BaseHeaderProps,
   UIKitAppearance,
-  AppearanceHelper,
   UIKitColors,
   ComponentColorTree,
+  PaletteInterface,
 } from './types';

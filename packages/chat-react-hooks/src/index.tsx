@@ -6,6 +6,10 @@ export { usePushTrigger } from './common/usePushTrigger';
 export { useTotalUnreadMessageCount } from './common/useTotalUnreadMessageCount';
 export { useTotalUnreadChannelCount } from './common/useTotalUnreadChannelCount';
 
+export { useChannelHandler } from './handler/useChannelHandler';
+export { useConnectionHandler } from './handler/useConnectionHandler';
+export { useUserEventHandler } from './handler/useUserEventHandler';
+
 export type {
   UseGroupChannelList,
   UseGroupChannelListOptions,

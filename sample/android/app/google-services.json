@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "69587904705",
+    "project_id": "uikit-react-native",
+    "storage_bucket": "uikit-react-native.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69587904705:android:b8c629cc2e6aa58eaa8c40",
+        "android_client_info": {
+          "package_name": "com.sendbird.uikit.reactnative.sample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "69587904705-entl63rqp228ltjsulcgm4eevjdrlhn2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAc59dY-2F7c10z_Jnzsxby2Ecz4thkxwU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "69587904705-entl63rqp228ltjsulcgm4eevjdrlhn2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "69587904705-59io8kakhgqkmgjl6vts9l61ahpub1vo.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sendbird.uikit.reactnative.sample"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69587904705:android:392d14fffafde6e7aa8c40",
+        "android_client_info": {
+          "package_name": "com.sendbird.uikit.sample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "69587904705-entl63rqp228ltjsulcgm4eevjdrlhn2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAc59dY-2F7c10z_Jnzsxby2Ecz4thkxwU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "69587904705-entl63rqp228ltjsulcgm4eevjdrlhn2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "69587904705-59io8kakhgqkmgjl6vts9l61ahpub1vo.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sendbird.uikit.reactnative.sample"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

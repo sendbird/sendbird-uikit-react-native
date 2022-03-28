@@ -1,7 +1,14 @@
 import type { Permission, PermissionStatus } from 'react-native-permissions';
 
-const nativePermissionGranted = (stats: Record<Permission, PermissionStatus>) => {
-  return Object.values(stats).every((result) => result === 'granted');
+const nativePermissionGranted = (stats: Record<Permission, PermissionStatus>, limitedCallback?: () => void) => {
+  return Object.values(stats).every((result) => {
+    if (result === 'granted') return true;
+    if (result === 'limited') {
+      limitedCallback?.();
+      return true;
+    }
+    return false;
+  });
 };
 
 export default nativePermissionGranted;

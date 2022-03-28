@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
 import type Sendbird from 'sendbird';
 
-import { Logger, SendbirdChatSDK } from '@sendbird/uikit-utils';
+import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
+import { Logger } from '@sendbird/uikit-utils';
 
-const useUserEventHandler = (
+export const useUserEventHandler = (
   sdk: SendbirdChatSDK,
   handlerId: string,
   hookHandler: Partial<Sendbird.UserEventHandler>,
   deps: React.DependencyList = [],
 ) => {
   useEffect(() => {
-    Logger.info('[useUserEventHandler]', handlerId);
+    Logger.debug('[useUserEventHandler] hook called by', handlerId);
 
     const handler = new sdk.UserEventHandler();
     const handlerKeys = Object.keys(handler) as (keyof typeof handler)[];
@@ -23,5 +24,3 @@ const useUserEventHandler = (
     return () => sdk.removeUserEventHandler(handlerId);
   }, [sdk, handlerId, ...deps]);
 };
-
-export default useUserEventHandler;

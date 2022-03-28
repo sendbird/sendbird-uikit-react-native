@@ -64,6 +64,9 @@ export type UseGroupChannelListOptions = {
 /**
  * @interface UseGroupChannelMessages
  * interface for group channel messages hook
+ * - Receive new messages from other users -> append to state(nextMessages)
+ * - onTopReached -> prev() -> fetch prev messages and append to state(messages)
+ * - onBottomReached -> next() -> nextMessages append to state(messages)
  * */
 export interface UseGroupChannelMessages {
   /**
@@ -126,8 +129,8 @@ export interface UseGroupChannelMessages {
    * */
   sendFileMessage: (
     params: Sendbird.FileMessageParams,
-    onSent?: (message: Sendbird.FileMessage, error?: Sendbird.SendBirdError) => void,
-  ) => Sendbird.FileMessage;
+    onPending?: (message: Sendbird.FileMessage, error?: Sendbird.SendBirdError) => void,
+  ) => Promise<Sendbird.FileMessage>;
 
   /**
    * Send user message
@@ -137,8 +140,24 @@ export interface UseGroupChannelMessages {
    * */
   sendUserMessage: (
     params: Sendbird.UserMessageParams,
-    onSent?: (message: Sendbird.UserMessage, error?: Sendbird.SendBirdError) => void,
-  ) => Sendbird.UserMessage;
+    onPending?: (message: Sendbird.UserMessage, error?: Sendbird.SendBirdError) => void,
+  ) => Promise<Sendbird.UserMessage>;
+
+  /**
+   * Update file message
+   * @param messageId
+   * @param params file message params
+   * @return updated message
+   * */
+  updateFileMessage: (messageId: number, params: Sendbird.FileMessageParams) => Promise<Sendbird.FileMessage>;
+
+  /**
+   * Update user message
+   * @param messageId
+   * @param params user message params
+   * @return updated message
+   * */
+  updateUserMessage: (messageId: number, params: Sendbird.UserMessageParams) => Promise<Sendbird.UserMessage>;
 
   /**
    * Resend failed message
@@ -146,6 +165,18 @@ export interface UseGroupChannelMessages {
    * @return {Promise<void>}
    * */
   resendMessage: (failedMessage: Sendbird.FileMessage | Sendbird.UserMessage) => Promise<void>;
+
+  /**
+   * Delete message
+   * @param message sent or failed message
+   * @return {Promise<void>}
+   * */
+  deleteMessage: (message: Sendbird.FileMessage | Sendbird.UserMessage) => Promise<void>;
+
+  /**
+   * Activated channel
+   * */
+  activeChannel: Sendbird.GroupChannel;
 }
 
 export type UseGroupChannelMessagesOptions = {

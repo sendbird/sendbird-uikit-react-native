@@ -8,13 +8,13 @@ import { useGroupChannelMessagesWithQuery } from './useGroupChannelMessagesWithQ
 
 export const useGroupChannelMessages = (
   sdk: SendbirdChatSDK,
-  channel: Sendbird.GroupChannel,
+  staleChannel: Sendbird.GroupChannel,
   userId?: string,
   options?: UseGroupChannelMessagesOptions,
 ): UseGroupChannelMessages => {
   if (sdk.isCacheEnabled || options?.enableCollectionWithoutLocalCache) {
-    return useGroupChannelMessagesWithCollection(sdk, channel, userId, options);
+    return useGroupChannelMessagesWithCollection(sdk, staleChannel, userId, options);
   } else {
-    return useGroupChannelMessagesWithQuery(sdk, channel, userId, options);
+    return useGroupChannelMessagesWithQuery(sdk, staleChannel, userId, options);
   }
 };

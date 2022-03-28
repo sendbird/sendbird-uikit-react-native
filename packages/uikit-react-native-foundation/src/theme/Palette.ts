@@ -1,4 +1,6 @@
-const Palette = {
+import type { PaletteInterface } from '../types';
+
+const Palette: PaletteInterface = {
   primary100: '#DBD1FF',
   primary200: '#C2A9FA',
   primary300: '#742DDD',
@@ -42,6 +44,6 @@ const Palette = {
   onBackgroundDark02: 'rgba(255,255,255,0.50)',
   onBackgroundDark03: 'rgba(255,255,255,0.38)',
   onBackgroundDark04: 'rgba(255,255,255,0.12)',
-} as const;
+};
 
 export default Palette;

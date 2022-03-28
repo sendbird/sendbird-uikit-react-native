@@ -4,7 +4,7 @@ import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 import { truncatedBadgeCount, useAsyncEffect } from '@sendbird/uikit-utils';
 import { useUniqId } from '@sendbird/uikit-utils';
 
-import useUserEventHandler from '../handler/useUserEventHandler';
+import { useUserEventHandler } from '../handler/useUserEventHandler';
 
 type Params = {
   maxCount?: number;

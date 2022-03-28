@@ -1,7 +1,13 @@
 import { useMemo, useReducer } from 'react';
 import type Sendbird from 'sendbird';
 
-import { SendbirdMessage, arrayToMap } from '@sendbird/uikit-utils';
+import {
+  SendbirdMessage,
+  arrayToMapWithGetter,
+  getMessageUniqId,
+  isMyMessage,
+  isNewMessage,
+} from '@sendbird/uikit-utils';
 
 import type { UseGroupChannelMessagesOptions } from '../../types';
 
@@ -12,7 +18,7 @@ type Action =
     }
   | {
       type: 'update_messages' | 'update_next_messages';
-      value: { messages: Sendbird.BaseMessageInstance[]; clearPrev: boolean };
+      value: { messages: Sendbird.BaseMessageInstance[]; clearPrev: boolean; currentUserId?: string };
     }
   | {
       type: 'delete_messages' | 'delete_next_messages';
@@ -38,15 +44,35 @@ const defaultReducer = ({ ...draft }: State, action: Action) => {
     case 'update_messages':
     case 'update_next_messages': {
       const key = action.type === 'update_messages' ? 'messageMap' : 'nextMessageMap';
-      const messageMap = arrayToMap(action.value.messages, 'reqId', 'messageId');
-      if (action.value.clearPrev) draft[key] = messageMap;
-      else draft[key] = { ...draft[key], ...messageMap };
+      const messageMap = arrayToMapWithGetter(action.value.messages, getMessageUniqId);
+      if (action.value.clearPrev) {
+        draft[key] = messageMap;
+      } else {
+        draft[key] = { ...draft[key], ...messageMap };
+
+        // NOTE: Replace pending message to succeeded message
+        action.value.messages
+          .filter((m): m is Sendbird.UserMessage | Sendbird.FileMessage => {
+            return (
+              (m.isFileMessage() || m.isUserMessage()) &&
+              Boolean(draft[key][m.reqId]) &&
+              m.sendingStatus === 'succeeded' &&
+              isMyMessage(m, action.value.currentUserId)
+            );
+          })
+          .forEach((m) => delete draft[key][m.reqId]);
+      }
+
+      if (action.type === 'update_messages') {
+        draft['nextMessageMap'] = {};
+      }
 
       return draft;
     }
     case 'delete_messages':
     case 'delete_next_messages': {
       const key = action.type === 'delete_messages' ? 'messageMap' : 'nextMessageMap';
+      draft[key] = { ...draft[key] };
       action.value.messageIds.forEach((msgId) => delete draft[key][msgId]);
       action.value.reqIds.forEach((reqId) => delete draft[key][reqId]);
 
@@ -60,20 +86,20 @@ export const useGroupChannelMessagesReducer = (
   sortComparator?: UseGroupChannelMessagesOptions['sortComparator'],
 ) => {
   const [{ loading, refreshing, messageMap, nextMessageMap }, dispatch] = useReducer(defaultReducer, {
-    loading: false,
+    loading: true,
     refreshing: false,
     messageMap: {},
     nextMessageMap: {},
   });
 
-  const updateMessages = (messages: Sendbird.BaseMessageInstance[], clearPrev: boolean) => {
-    dispatch({ type: 'update_messages', value: { messages, clearPrev } });
+  const updateMessages = (messages: Sendbird.BaseMessageInstance[], clearPrev: boolean, currentUserId?: string) => {
+    dispatch({ type: 'update_messages', value: { messages, clearPrev, currentUserId } });
   };
   const deleteMessages = (messageIds: number[], reqIds: string[]) => {
     dispatch({ type: 'delete_messages', value: { messageIds, reqIds } });
   };
-  const updateNextMessages = (messages: Sendbird.BaseMessageInstance[], clearPrev: boolean) => {
-    dispatch({ type: 'update_next_messages', value: { messages, clearPrev } });
+  const updateNextMessages = (messages: Sendbird.BaseMessageInstance[], clearPrev: boolean, currentUserId?: string) => {
+    dispatch({ type: 'update_next_messages', value: { messages, clearPrev, currentUserId } });
   };
   const deleteNextMessages = (messageIds: number[], reqIds: string[]) => {
     dispatch({ type: 'delete_next_messages', value: { messageIds, reqIds } });
@@ -89,13 +115,8 @@ export const useGroupChannelMessagesReducer = (
     if (sortComparator) return Object.values(messageMap).sort(sortComparator);
     return Object.values(messageMap);
   }, [sortComparator, messageMap]);
-  const nextMessages = Object.values(nextMessageMap);
-  const newMessagesFromNext = nextMessages.filter((msg) => {
-    const isMyMessage = 'sender' in msg && msg.sender?.userId === userId;
-    if (isMyMessage) return false;
-    if (msg.isAdminMessage()) return false;
-    return msg.updatedAt === 0;
-  });
+  const nextMessages = useMemo(() => Object.values(nextMessageMap), [nextMessageMap]);
+  const newMessagesFromNext = useMemo(() => nextMessages.filter((msg) => isNewMessage(msg, userId)), [nextMessages]);
 
   return {
     updateLoading,
