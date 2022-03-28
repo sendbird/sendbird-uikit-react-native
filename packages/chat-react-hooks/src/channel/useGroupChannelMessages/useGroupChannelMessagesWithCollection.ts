@@ -191,26 +191,36 @@ export const useGroupChannelMessagesWithCollection = (
   }, [nextMessages.length]);
 
   const sendUserMessage: UseGroupChannelMessages['sendUserMessage'] = useCallback(
-    (params, onSent) => {
-      const pendingMessage = activeChannel.sendUserMessage(params, (sentMessage, error) => {
-        onSent?.(pendingMessage, error);
-        if (!error && sentMessage) updateMessages([sentMessage], false, sdk.currentUser.userId);
-      });
-      updateMessages([pendingMessage], false, sdk.currentUser.userId);
+    (params, onPending) => {
+      return new Promise((resolve, reject) => {
+        const pendingMessage = activeChannel.sendUserMessage(params, (sentMessage, error) => {
+          if (error) reject(error);
+          else {
+            updateMessages([sentMessage], false, sdk.currentUser.userId);
+            resolve(sentMessage);
+          }
+        });
 
-      return pendingMessage;
+        onPending?.(pendingMessage);
+        updateMessages([pendingMessage], false, sdk.currentUser.userId);
+      });
     },
     [activeChannel],
   );
   const sendFileMessage: UseGroupChannelMessages['sendFileMessage'] = useCallback(
-    (params, onSent) => {
-      const pendingMessage = activeChannel.sendFileMessage(params, (sentMessage, error) => {
-        onSent?.(pendingMessage, error);
-        if (!error && sentMessage) updateMessages([sentMessage], false, sdk.currentUser.userId);
-      });
-      updateMessages([pendingMessage], false, sdk.currentUser.userId);
+    (params, onPending) => {
+      return new Promise((resolve, reject) => {
+        const pendingMessage = activeChannel.sendFileMessage(params, (sentMessage, error) => {
+          if (error) reject(error);
+          else {
+            updateMessages([sentMessage], false, sdk.currentUser.userId);
+            resolve(sentMessage as Sendbird.FileMessage);
+          }
+        });
 
-      return pendingMessage;
+        updateMessages([pendingMessage], false, sdk.currentUser.userId);
+        onPending?.(pendingMessage);
+      });
     },
     [activeChannel],
   );

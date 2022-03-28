@@ -28,30 +28,24 @@ messaging().setBackgroundMessageHandler(async (message) => {
     try {
       SendBirdInstance.markAsDelivered(sendbird.channel.channel_url);
     } catch {}
-    try {
-      await Notifee.displayNotification({
-        id: String(sendbird.message_id),
-        title: sendbird.channel.name || sendbird.sender?.name || 'Message received',
-        body: sendbird.message,
-        data: message.data,
-        android: {
-          channelId,
-          importance: 4,
-          // smallIcon: 'drawable/icon_push_lollipop',
-          largeIcon: sendbird.sender?.profile_url || sendbird.channel.channel_url,
-          circularLargeIcon: true,
-          pressAction: { id: 'default' },
-          showTimestamp: true,
-          timestamp: sendbird.created_at,
-        },
-        ios: {
-          threadId: sendbird.channel.channel_url,
-        },
-      });
-    } catch (e) {
-      console.log('display failure', e);
-    } finally {
-      console.log('Show');
-    }
+    await Notifee.displayNotification({
+      id: String(sendbird.message_id),
+      title: sendbird.channel.name || sendbird.sender?.name || 'Message received',
+      body: sendbird.message,
+      data: message.data,
+      android: {
+        channelId,
+        importance: 4,
+        // smallIcon: 'drawable/icon_push_lollipop',
+        largeIcon: sendbird.sender?.profile_url || sendbird.channel.channel_url,
+        circularLargeIcon: true,
+        pressAction: { id: 'default' },
+        showTimestamp: true,
+        timestamp: sendbird.created_at,
+      },
+      ios: {
+        threadId: sendbird.channel.channel_url,
+      },
+    });
   }
 });

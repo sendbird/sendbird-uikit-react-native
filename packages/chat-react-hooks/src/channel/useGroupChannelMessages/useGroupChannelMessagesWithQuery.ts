@@ -155,26 +155,34 @@ export const useGroupChannelMessagesWithQuery = (
   }, [nextMessages.length]);
 
   const sendUserMessage: UseGroupChannelMessages['sendUserMessage'] = useCallback(
-    (params, onSent) => {
-      const pendingMessage = activeChannel.sendUserMessage(params, (sentMessage, error) => {
-        onSent?.(pendingMessage, error);
-        if (!error && sentMessage) updateNextMessages([sentMessage], false, sdk.currentUser.userId);
+    (params, onPending) => {
+      return new Promise((resolve, reject) => {
+        const pendingMessage = activeChannel.sendUserMessage(params, (sentMessage, error) => {
+          if (error) reject(error);
+          else {
+            updateNextMessages([sentMessage], false, sdk.currentUser.userId);
+            resolve(sentMessage);
+          }
+        });
+        updateNextMessages([pendingMessage], false, sdk.currentUser.userId);
+        onPending?.(pendingMessage);
       });
-      updateNextMessages([pendingMessage], false, sdk.currentUser.userId);
-
-      return pendingMessage;
     },
     [activeChannel],
   );
   const sendFileMessage: UseGroupChannelMessages['sendFileMessage'] = useCallback(
-    (params, onSent) => {
-      const pendingMessage = activeChannel.sendFileMessage(params, (sentMessage, error) => {
-        onSent?.(pendingMessage, error);
-        if (!error && sentMessage) updateNextMessages([sentMessage], false, sdk.currentUser.userId);
+    (params, onPending) => {
+      return new Promise((resolve, reject) => {
+        const pendingMessage = activeChannel.sendFileMessage(params, (sentMessage, error) => {
+          if (error) reject(error);
+          else {
+            updateNextMessages([sentMessage], false, sdk.currentUser.userId);
+            resolve(sentMessage as Sendbird.FileMessage);
+          }
+        });
+        updateNextMessages([pendingMessage], false, sdk.currentUser.userId);
+        onPending?.(pendingMessage);
       });
-      updateNextMessages([pendingMessage], false, sdk.currentUser.userId);
-
-      return pendingMessage;
     },
     [activeChannel],
   );

@@ -1,22 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Image } from 'react-native';
 
-import { createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { Icon, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { getAvailableUriFromFileMessage } from '@sendbird/uikit-utils';
 
 import type { FileMessageProps } from './index';
 
 const ImageFileMessage: React.FC<FileMessageProps> = ({ message }) => {
   const { colors } = useUIKitTheme();
+  const [imageNotFound, setImageNotFound] = useState(false);
 
   const fileUrl = getAvailableUriFromFileMessage(message);
+  const style = [styles.image, { backgroundColor: colors.onBackground04 }];
+
+  if (imageNotFound) {
+    return <Icon containerStyle={style} icon={'thumbnail-none'} size={48} color={colors.onBackground02} />;
+  }
 
   return (
     <Image
       source={{ uri: fileUrl }}
-      style={[styles.image, { backgroundColor: colors.onBackground04 }]}
+      style={style}
       resizeMode={'cover'}
       resizeMethod={'resize'}
+      onError={() => setImageNotFound(true)}
     />
   );
 };

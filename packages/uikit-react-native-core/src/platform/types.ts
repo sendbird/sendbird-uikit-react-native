@@ -24,15 +24,20 @@ interface FilePickerServiceInterface {
   openMediaLibrary(options?: {
     selectionLimit?: number;
     mediaType?: 'photo' | 'video';
+    onError?: () => void;
   }): Promise<null | FilePickerResponse[]>;
 
   hasCameraPermission(): Promise<boolean>;
   requestCameraPermission(): Promise<boolean>;
-  openCamera(options?: { cameraType?: 'front' | 'back'; mediaType?: 'photo' | 'video' }): Promise<FilePickerResponse>;
+  openCamera(options?: {
+    cameraType?: 'front' | 'back';
+    mediaType?: 'photo' | 'video';
+    onError?: () => void;
+  }): Promise<FilePickerResponse>;
 
   hasStoragePermission(): Promise<boolean>;
   requestStoragePermission(): Promise<boolean>;
-  openDocument(): Promise<FilePickerResponse>;
+  openDocument(options?: { onError?: () => void }): Promise<FilePickerResponse>;
 }
 interface FileSystemServiceInterface {
   save(fileUrl: string, fileName: string): Promise<DownloadedPath | null>;

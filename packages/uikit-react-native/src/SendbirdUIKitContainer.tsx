@@ -19,6 +19,7 @@ import {
   DialogProvider,
   HeaderStyleProvider,
   LightUIKitTheme,
+  ToastProvider,
   UIKitThemeProvider,
 } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
@@ -68,7 +69,9 @@ const SendbirdUIKitContainer = <Locale extends string>({
                 notificationService={services.notification}
                 clipboardService={services.clipboard}
               >
-                <LocalizedDialogProvider>{children}</LocalizedDialogProvider>
+                <LocalizedDialogProvider>
+                  <ToastProvider>{children}</ToastProvider>
+                </LocalizedDialogProvider>
               </PlatformServiceProvider>
             </LocalizationProvider>
           </HeaderStyleProvider>

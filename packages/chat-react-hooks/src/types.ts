@@ -129,8 +129,8 @@ export interface UseGroupChannelMessages {
    * */
   sendFileMessage: (
     params: Sendbird.FileMessageParams,
-    onSent?: (message: Sendbird.FileMessage, error?: Sendbird.SendBirdError) => void,
-  ) => Sendbird.FileMessage;
+    onPending?: (message: Sendbird.FileMessage, error?: Sendbird.SendBirdError) => void,
+  ) => Promise<Sendbird.FileMessage>;
 
   /**
    * Send user message
@@ -140,8 +140,8 @@ export interface UseGroupChannelMessages {
    * */
   sendUserMessage: (
     params: Sendbird.UserMessageParams,
-    onSent?: (message: Sendbird.UserMessage, error?: Sendbird.SendBirdError) => void,
-  ) => Sendbird.UserMessage;
+    onPending?: (message: Sendbird.UserMessage, error?: Sendbird.SendBirdError) => void,
+  ) => Promise<Sendbird.UserMessage>;
 
   /**
    * Update file message

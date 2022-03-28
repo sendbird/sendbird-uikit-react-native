@@ -148,21 +148,21 @@ export const DialogProvider: React.FC<Props> = ({ defaultLabels, children }) => 
 
 export const useActionMenu = () => {
   const context = useContext(ActionMenuContext);
-  if (!context) throw new Error('ActionMenuContext is not provided');
+  if (!context) throw new Error('ActionMenuContext is not provided, wrap your app with DialogProvider');
   return context;
 };
 export const useAlert = () => {
   const context = useContext(AlertContext);
-  if (!context) throw new Error('AlertContext is not provided');
+  if (!context) throw new Error('AlertContext is not provided, wrap your app with DialogProvider');
   return context;
 };
 export const usePrompt = () => {
   const context = useContext(PromptContext);
-  if (!context) throw new Error('PromptContext is not provided');
+  if (!context) throw new Error('PromptContext is not provided, wrap your app with DialogProvider');
   return context;
 };
 export const useBottomSheet = () => {
   const context = useContext(BottomSheetContext);
-  if (!context) throw new Error('BottomSheetContext is not provided');
+  if (!context) throw new Error('BottomSheetContext is not provided, wrap your app with DialogProvider');
   return context;
 };

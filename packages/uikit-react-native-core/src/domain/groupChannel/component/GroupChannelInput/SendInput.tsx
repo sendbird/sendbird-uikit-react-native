@@ -6,6 +6,7 @@ import {
   TextInput,
   createStyleSheet,
   useBottomSheet,
+  useToast,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
 import { conditionChaining } from '@sendbird/uikit-utils';
@@ -24,9 +25,10 @@ const SendInput: React.FC<SendInputProps> = ({ onSendUserMessage, onSendFileMess
   const { openSheet } = useBottomSheet();
   const { fileService } = usePlatformService();
   const { colors } = useUIKitTheme();
+  const toast = useToast();
 
   const onPressSend = () => {
-    onSendUserMessage(text);
+    onSendUserMessage(text).catch(() => toast.show(LABEL.TOAST.SEND_MSG_ERROR, 'error'));
     setText('');
   };
   const onPressAttachment = () => {
@@ -36,8 +38,14 @@ const SendInput: React.FC<SendInputProps> = ({ onSendUserMessage, onSendFileMess
           title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_ATTACHMENT_CAMERA,
           icon: 'camera',
           onPress: async () => {
-            const photo = await fileService.openCamera({ mediaType: 'photo' });
-            if (photo) onSendFileMessage(photo);
+            const photo = await fileService.openCamera({
+              mediaType: 'photo',
+              onError: () => toast.show(LABEL.TOAST.OPEN_CAMERA_ERROR, 'error'),
+            });
+
+            if (photo) {
+              onSendFileMessage(photo).catch(() => toast.show(LABEL.TOAST.SEND_MSG_ERROR, 'error'));
+            }
           },
         },
         {
@@ -47,16 +55,25 @@ const SendInput: React.FC<SendInputProps> = ({ onSendUserMessage, onSendFileMess
             const photo = await fileService.openMediaLibrary({
               selectionLimit: 1,
               mediaType: 'photo',
+              onError: () => toast.show(LABEL.TOAST.OPEN_PHOTO_LIBRARY_ERROR, 'error'),
             });
-            if (photo && photo[0]) onSendFileMessage(photo[0]);
+
+            if (photo && photo[0]) {
+              onSendFileMessage(photo[0]).catch(() => toast.show(LABEL.TOAST.SEND_MSG_ERROR, 'error'));
+            }
           },
         },
         {
           title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_ATTACHMENT_FILES,
           icon: 'document',
           onPress: async () => {
-            const file = await fileService.openDocument();
-            if (file) onSendFileMessage(file);
+            const file = await fileService.openDocument({
+              onError: () => toast.show(LABEL.TOAST.OPEN_FILES_ERROR, 'error'),
+            });
+
+            if (file) {
+              onSendFileMessage(file).catch(() => toast.show(LABEL.TOAST.SEND_MSG_ERROR, 'error'));
+            }
           },
         },
       ],

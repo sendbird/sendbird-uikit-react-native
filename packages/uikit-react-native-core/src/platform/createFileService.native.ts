@@ -59,7 +59,10 @@ const createNativeFileService = ({
       const hasPermission = await this.hasCameraPermission();
       if (!hasPermission) {
         const granted = await this.requestCameraPermission();
-        if (!granted) return null;
+        if (!granted) {
+          options?.onError?.();
+          return null;
+        }
       }
 
       const response = await imagePickerModule.launchCamera({
@@ -67,7 +70,10 @@ const createNativeFileService = ({
         mediaType: options?.mediaType ?? 'photo',
       });
       if (response.didCancel) return null;
-      if (response.errorCode === 'camera_unavailable') return null;
+      if (response.errorCode === 'camera_unavailable') {
+        options?.onError?.();
+        return null;
+      }
 
       const { fileName: name, fileSize: size, type, uri } = response.assets?.[0] ?? {};
       return fileTypeGuard({ uri, size, name, type });
@@ -109,7 +115,10 @@ const createNativeFileService = ({
       const hasPermission = await this.hasMediaLibraryPermission('read');
       if (!hasPermission) {
         const granted = await this.requestMediaLibraryPermission('read');
-        if (!granted) return null;
+        if (!granted) {
+          options?.onError?.();
+          return null;
+        }
       }
 
       const response = await imagePickerModule.launchImageLibrary({
@@ -117,7 +126,10 @@ const createNativeFileService = ({
         selectionLimit,
       });
       if (response.didCancel) return null;
-      if (response.errorCode === 'camera_unavailable') return null;
+      if (response.errorCode === 'camera_unavailable') {
+        options?.onError?.();
+        return null;
+      }
 
       return (response.assets || [])
         .slice(0, selectionLimit)
@@ -132,9 +144,14 @@ const createNativeFileService = ({
       const status = await permissionModule.requestMultiple(documentPermissions);
       return nativePermissionGranted(status);
     },
-    async openDocument(): Promise<FilePickerResponse> {
-      const { uri, size, name, type } = await documentPickerModule.pickSingle({});
-      return fileTypeGuard({ uri, size, name, type });
+    async openDocument(options): Promise<FilePickerResponse> {
+      try {
+        const { uri, size, name, type } = await documentPickerModule.pickSingle({});
+        return fileTypeGuard({ uri, size, name, type });
+      } catch {
+        options?.onError?.();
+        return null;
+      }
     },
 
     async save(fileUrl: string, fileName: string) {

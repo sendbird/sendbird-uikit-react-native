@@ -136,6 +136,19 @@ export interface LabelSet {
     PROMPT_DEFAULT_CANCEL: string;
     PROMPT_DEFAULT_PLACEHOLDER: string;
   };
+  TOAST: {
+    COPY_OK: string;
+    DOWNLOAD_START: string;
+    DOWNLOAD_OK: string;
+    DOWNLOAD_ERROR: string;
+    OPEN_CAMERA_ERROR: string;
+    OPEN_PHOTO_LIBRARY_ERROR: string;
+    OPEN_FILES_ERROR: string;
+    RESEND_MSG_ERROR: string;
+    DELETE_MSG_ERROR: string;
+    SEND_MSG_ERROR: string;
+    UPDATE_MSG_ERROR: string;
+  };
 }
 
 type LabelCreateOptions = {
@@ -251,5 +264,19 @@ export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): 
     PROMPT_DEFAULT_CANCEL: 'Cancel',
     PROMPT_DEFAULT_PLACEHOLDER: 'Enter',
     ...overrides?.DIALOG,
+  },
+  TOAST: {
+    COPY_OK: 'Copied',
+    DOWNLOAD_START: 'Downloading...',
+    DOWNLOAD_OK: 'File saved',
+    DOWNLOAD_ERROR: "Couldn't download file.",
+    OPEN_CAMERA_ERROR: "Couldn't open camera.",
+    OPEN_FILES_ERROR: "Couldn't open files.",
+    OPEN_PHOTO_LIBRARY_ERROR: "Couldn't open photo library.",
+    DELETE_MSG_ERROR: "Couldn't delete message.",
+    RESEND_MSG_ERROR: "Couldn't send message.",
+    SEND_MSG_ERROR: "Couldn't send message.",
+    UPDATE_MSG_ERROR: "Couldn't edit message.",
+    ...overrides?.TOAST,
   },
 });

@@ -65,8 +65,8 @@ export type GroupChannelProps = {
     onTopReached: () => void;
     onBottomReached: () => void;
 
-    onResendFailedMessage: (failedMessage: Sendbird.UserMessage | Sendbird.FileMessage) => void;
-    onDeleteMessage: (message: Sendbird.UserMessage | Sendbird.FileMessage) => void;
+    onResendFailedMessage: (failedMessage: Sendbird.UserMessage | Sendbird.FileMessage) => Promise<void>;
+    onDeleteMessage: (message: Sendbird.UserMessage | Sendbird.FileMessage) => Promise<void>;
     onPressImageMessage: (message: Sendbird.FileMessage, uri: string) => void;
 
     renderMessage: (
@@ -89,10 +89,10 @@ export type GroupChannelProps = {
   };
   Input: {
     channel: Sendbird.GroupChannel;
-    onSendFileMessage: (file: FileType) => void;
-    onSendUserMessage: (text: string) => void;
-    onUpdateFileMessage: (editedFile: FileType, message: Sendbird.FileMessage) => void;
-    onUpdateUserMessage: (editedText: string, message: Sendbird.UserMessage) => void;
+    onSendFileMessage: (file: FileType) => Promise<void>;
+    onSendUserMessage: (text: string) => Promise<void>;
+    onUpdateFileMessage: (editedFile: FileType, message: Sendbird.FileMessage) => Promise<void>;
+    onUpdateUserMessage: (editedText: string, message: Sendbird.UserMessage) => Promise<void>;
   };
 };
 

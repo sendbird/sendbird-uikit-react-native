@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Platform, TextInput as RNTextInput, View } from 'react-native';
 import type Sendbird from 'sendbird';
 
-import { Button, TextInput, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
+import { Button, TextInput, createStyleSheet, useToast } from '@sendbird/uikit-react-native-foundation';
 
 import { useLocalization } from '../../../../contexts/Localization';
 import type { GroupChannelProps } from '../../types';
@@ -18,6 +18,7 @@ const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false }
 const EditInput: React.FC<EditInputProps> = ({ text, setText, editMessage, setEditMessage, onUpdateUserMessage }) => {
   const { LABEL } = useLocalization();
   const inputRef = useRef<RNTextInput>(null);
+  const toast = useToast();
 
   useEffect(() => {
     if (editMessage.isUserMessage()) {
@@ -33,7 +34,9 @@ const EditInput: React.FC<EditInputProps> = ({ text, setText, editMessage, setEd
   };
 
   const onPressSave = () => {
-    editMessage.isUserMessage() && onUpdateUserMessage(text, editMessage);
+    if (editMessage.isUserMessage()) {
+      onUpdateUserMessage(text, editMessage).catch(() => toast.show(LABEL.TOAST.UPDATE_MSG_ERROR, 'error'));
+    }
     setEditMessage();
     setText('');
   };

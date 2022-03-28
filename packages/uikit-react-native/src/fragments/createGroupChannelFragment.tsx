@@ -122,28 +122,28 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
             params.file = file;
 
             const processedParams = await onBeforeSendFileMessage(params);
-            sendFileMessage(processedParams);
+            await sendFileMessage(processedParams);
           }}
           onSendUserMessage={async (text) => {
             const params = new sdk.UserMessageParams();
             params.message = text;
 
             const processedParams = await onBeforeSendUserMessage(params);
-            sendUserMessage(processedParams);
+            await sendUserMessage(processedParams);
           }}
           onUpdateFileMessage={async (editedFile, message) => {
             const params = new sdk.FileMessageParams();
             params.file = editedFile;
 
             const processedParams = await onBeforeSendFileMessage(params);
-            updateFileMessage(message.messageId, processedParams);
+            await updateFileMessage(message.messageId, processedParams);
           }}
           onUpdateUserMessage={async (editedText, message) => {
             const params = new sdk.UserMessageParams();
             params.message = editedText;
 
             const processedParams = await onBeforeSendUserMessage(params);
-            updateUserMessage(message.messageId, processedParams);
+            await updateUserMessage(message.messageId, processedParams);
           }}
         />
         {children}

@@ -8,6 +8,7 @@ import {
   createStyleSheet,
   useAlert,
   useBottomSheet,
+  useToast,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
 import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation/src/ui/BottomSheet';
@@ -31,6 +32,7 @@ import type { GroupChannelProps } from '../types';
 const HANDLE_NEXT_MSG_SEPARATELY = Platform.select({ android: true, ios: false });
 type HandleableMessage = Sendbird.UserMessage | Sendbird.FileMessage;
 
+const toMegabyte = (byte: number) => byte / 1024 / 1024;
 const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   currentUserId,
   channel,
@@ -50,6 +52,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   const { setEditMessage } = useContext(GroupChannelContext.Fragment);
   const { LABEL } = useLocalization();
   const { colors } = useUIKitTheme();
+  const toast = useToast();
   const { left, right } = useSafeAreaInsets();
   const [scrollLeaveBottom, setScrollLeaveBottom] = useState(false);
   const scrollRef = useRef<ChatFlatListRef>(null);
@@ -66,7 +69,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
       sheetItems: [
         {
           title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_MESSAGE_FAILED_RETRY,
-          onPress: () => onResendFailedMessage(message),
+          onPress: () => onResendFailedMessage(message).catch(() => toast.show(LABEL.TOAST.RESEND_MSG_ERROR, 'error')),
         },
         {
           title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_MESSAGE_FAILED_REMOVE,
@@ -86,29 +89,34 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
         {
           text: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_MESSAGE_DELETE_CONFIRM_OK,
           style: 'destructive',
-          onPress: () => onDeleteMessage(message),
+          onPress: () => onDeleteMessage(message).catch(() => toast.show(LABEL.TOAST.DELETE_MSG_ERROR, 'error')),
         },
       ],
     });
   };
 
   const getMessagePress = (msg: SendbirdMessage) => {
-    if (msg.isUserMessage()) {
-      if (msg.sendingStatus === 'failed') {
-        return {
-          onPress: () => handleFailedMessage(msg),
-          onLongPress: undefined,
-        };
-      }
+    if (!msg.isUserMessage() && !msg.isFileMessage()) {
+      return { onPress: undefined, onLongPress: undefined };
+    }
 
-      const sheetItems: BottomSheetItem['sheetItems'] = [
-        {
-          icon: 'copy',
-          title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_MESSAGE_COPY,
-          onPress: () => clipboardService.setString(msg.message || ''),
+    const sheetItems: BottomSheetItem['sheetItems'] = [];
+    const response: { onPress?: () => void; onLongPress?: () => void } = {
+      onPress: undefined,
+      onLongPress: undefined,
+    };
+
+    if (msg.isUserMessage()) {
+      sheetItems.push({
+        icon: 'copy',
+        title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_MESSAGE_COPY,
+        onPress: () => {
+          clipboardService.setString(msg.message || '');
+          toast.show(LABEL.TOAST.COPY_OK, 'success');
         },
-      ];
-      if (isMyMessage(msg, currentUserId)) {
+      });
+
+      if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
         sheetItems.push(
           {
             icon: 'edit',
@@ -122,38 +130,31 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
           },
         );
       }
-
-      return {
-        onPress: undefined,
-        onLongPress: () => openSheet({ sheetItems }),
-      };
     }
 
     if (msg.isFileMessage()) {
-      if (msg.sendingStatus === 'failed') {
-        return {
-          onPress: () => handleFailedMessage(msg),
-          onLongPress: undefined,
-        };
-      }
+      sheetItems.push({
+        icon: 'download',
+        title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_MESSAGE_SAVE,
+        onPress: () => {
+          if (toMegabyte(msg.size) > 4) {
+            toast.show(LABEL.TOAST.DOWNLOAD_START, 'success');
+          }
 
-      const sheetItems: BottomSheetItem['sheetItems'] = [
-        {
-          icon: 'download',
-          title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_MESSAGE_SAVE,
-          onPress: () => {
-            fileService
-              .save(msg.url, msg.name)
-              .then((response) => {
-                Logger.log('File saved to', response);
-              })
-              .catch((err) => {
-                Logger.log('File save failure', err);
-              });
-          },
+          fileService
+            .save(msg.url, msg.name)
+            .then((response) => {
+              toast.show(LABEL.TOAST.DOWNLOAD_OK, 'success');
+              Logger.log('File saved to', response);
+            })
+            .catch((err) => {
+              toast.show(LABEL.TOAST.DOWNLOAD_ERROR, 'error');
+              Logger.log('File save failure', err);
+            });
         },
-      ];
-      if (isMyMessage(msg, currentUserId)) {
+      });
+
+      if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
         sheetItems.push({
           icon: 'delete',
           title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_MESSAGE_DELETE,
@@ -163,15 +164,20 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
 
       const ext = getFileExtension(msg.name);
       const fileType = getFileType(ext);
-
-      return {
-        // if image open modal
-        onPress: fileType === 'image' ? () => onPressImageMessage(msg, getAvailableUriFromFileMessage(msg)) : undefined,
-        onLongPress: () => openSheet({ sheetItems }),
-      };
+      if (fileType === 'image') {
+        response.onPress = () => onPressImageMessage(msg, getAvailableUriFromFileMessage(msg));
+      }
     }
 
-    return { onPress: undefined, onLongPress: undefined };
+    if (msg.sendingStatus === 'failed') {
+      response.onPress = () => handleFailedMessage(msg);
+    }
+
+    if (sheetItems.length > 0) {
+      response.onLongPress = () => openSheet({ sheetItems });
+    }
+
+    return response;
   };
 
   // NOTE: Cannot wrap with useCallback, because prevMessage (always getting from fresh messages)
