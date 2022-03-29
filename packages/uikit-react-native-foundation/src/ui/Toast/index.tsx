@@ -59,7 +59,7 @@ const Toast: React.FC<Props> = ({ visible, type, children, top, bottom }) => {
       {type !== 'normal' && (
         <Icon icon={type === 'success' ? 'done' : 'error'} color={color} containerStyle={styles.icon} />
       )}
-      <Text color={colors.onBackgroundReverse01} body3 numberOfLines={1} style={styles.text}>
+      <Text color={colors.onBackgroundReverse01} body3 numberOfLines={2} style={styles.text}>
         {children}
       </Text>
     </Animated.View>
@@ -81,7 +81,7 @@ export const ToastProvider: React.FC = ({ children }) => {
   });
 
   return (
-    <ToastContext.Provider value={{ show: (text, type = 'normal') => setState({ text, type, visible: true }) }}>
+    <ToastContext.Provider value={{ show: (text, type = 'normal') => text && setState({ text, type, visible: true }) }}>
       {children}
       <Toast type={state.type} visible={state.visible} bottom={bottom + styles.toastPosition.bottom}>
         {state.text}
@@ -111,6 +111,7 @@ const styles = createStyleSheet({
     marginRight: 4,
   },
   text: {
+    maxWidth: 240,
     paddingHorizontal: 4,
   },
   toastPosition: {
