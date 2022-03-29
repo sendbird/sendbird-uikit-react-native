@@ -18,7 +18,7 @@ export type BottomSheetItem = {
 };
 type Props = {
   visible: boolean;
-  onHide: () => void;
+  onHide: () => Promise<void>;
   onError?: (error: unknown) => void;
   onDismiss?: () => void;
 } & BottomSheetItem;
@@ -42,11 +42,10 @@ const BottomSheet: React.FC<Props> = ({ onDismiss, onHide, visible, sheetItems }
             key={props.title + idx}
             style={{ paddingLeft: left, paddingRight: right }}
             onPress={async () => {
+              await onHide();
               try {
-                await onPress();
-              } finally {
-                onHide();
-              }
+                onPress();
+              } catch {}
             }}
           >
             <DialogSheet.Item {...props} />

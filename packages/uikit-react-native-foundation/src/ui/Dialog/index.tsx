@@ -51,9 +51,22 @@ type Props = {
     prompt?: { placeholder?: string; ok?: string; cancel?: string };
   };
 };
+const DISMISS_TIMEOUT = 3000;
 export const DialogProvider: React.FC<Props> = ({ defaultLabels, children }) => {
-  const render = useForceUpdate();
+  const waitDismissTimeout = useRef<NodeJS.Timeout>();
+  const waitDismissPromise = useRef<() => void>();
+  const waitDismiss = useCallback((resolver: () => void) => {
+    waitDismissPromise.current = resolver;
+    waitDismissTimeout.current = setTimeout(completeDismiss, DISMISS_TIMEOUT);
+  }, []);
+  const completeDismiss = useCallback(() => {
+    if (waitDismissTimeout.current) clearTimeout(waitDismissTimeout.current);
+    if (waitDismissPromise.current) waitDismissPromise.current();
+    waitDismissTimeout.current = undefined;
+    waitDismissPromise.current = undefined;
+  }, []);
 
+  const render = useForceUpdate();
   const dialogQueue = useRef<DialogJob[]>([]);
   const workingDialogJob = useRef<DialogJob>();
   const visibleState = useRef(false);
@@ -63,11 +76,15 @@ export const DialogProvider: React.FC<Props> = ({ defaultLabels, children }) => 
     visibleState.current = true;
     render();
   }, []);
-  const updateToHide = useCallback(() => {
-    visibleState.current = false;
-    render();
+  const updateToHide = useCallback((): Promise<void> => {
+    return new Promise((resolve) => {
+      visibleState.current = false;
+      render();
+      waitDismiss(resolve);
+    });
   }, []);
   const consumeQueue = useCallback(() => {
+    completeDismiss();
     const job = dialogQueue.current.shift();
     if (job) {
       workingDialogJob.current = job;

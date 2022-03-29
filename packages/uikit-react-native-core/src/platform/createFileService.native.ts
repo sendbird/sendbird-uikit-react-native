@@ -154,10 +154,13 @@ const createNativeFileService = ({
       }
     },
 
+    // On iOS, You can access the downloaded files by providing options below to info.plist
+    // - Supports opening documents in place
+    // - Application supports iTunes file sharing
     async save(fileUrl: string, fileName: string) {
       const basePath = Platform.select({
         android: fsModule.DownloadDirectoryPath,
-        default: fsModule.LibraryDirectoryPath,
+        default: fsModule.DocumentDirectoryPath,
       });
       const downloadPath = `${basePath}/${fileName}`;
 
