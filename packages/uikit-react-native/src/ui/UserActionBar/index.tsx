@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
 import { Avatar, Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { conditionChaining } from '@sendbird/uikit-utils';
@@ -7,30 +7,26 @@ import { conditionChaining } from '@sendbird/uikit-utils';
 type Props = {
   uri: string;
   name: string;
-  selected: boolean;
+  label?: string;
   disabled: boolean;
+  onPressActionMenu: () => void;
 };
-const UserSelectableBar: React.FC<Props> = ({ uri, name, selected, disabled }) => {
+const UserActionBar: React.FC<Props> = ({ uri, name, disabled, onPressActionMenu, label }) => {
   const { colors } = useUIKitTheme();
 
-  const iconColor = conditionChaining(
-    [disabled, selected],
-    [colors.onBackground04, colors.primary, colors.onBackground03],
-  );
+  const iconColor = conditionChaining([disabled], [colors.onBackground04, colors.onBackground01]);
 
   return (
     <View style={styles.container}>
       <Avatar size={36} uri={uri} containerStyle={styles.avatar} />
       <View style={[styles.infoContainer, { borderBottomColor: colors.onBackground04 }]}>
-        <Text
-          subtitle2
-          style={styles.name}
-          color={colors.onBackground01}
-          // color={disabled ? colors.onBackground04 : colors.onBackground01}
-        >
+        <Text subtitle2 style={styles.name} color={disabled ? colors.onBackground04 : colors.onBackground01}>
           {name}
         </Text>
-        <Icon color={iconColor} size={24} icon={selected ? 'checkbox-on' : 'checkbox-off'} />
+        {Boolean(label) && <Text>{label}</Text>}
+        <TouchableOpacity onPress={onPressActionMenu} disabled={disabled}>
+          <Icon color={iconColor} size={24} icon={'more'} containerStyle={{ padding: 4 }} />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -60,4 +56,4 @@ const styles = createStyleSheet({
   },
 });
 
-export default React.memo(UserSelectableBar);
+export default React.memo(UserActionBar);

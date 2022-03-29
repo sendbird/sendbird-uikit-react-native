@@ -27,3 +27,14 @@ export function isDifferentChannel<T extends Sendbird.BaseChannel>(a?: T, b?: T)
 export const groupChannelChatUnavailable = (channel: Sendbird.GroupChannel) => {
   return channel.myMutedState === 'muted' || (channel.isFrozen && channel.myRole !== 'operator');
 };
+
+export function useDefaultChannelCover(channel: Sendbird.GroupChannel) {
+  if (channel.memberCount > 1) {
+    return !channel.coverUrl.startsWith('https://static.sendbird.com/sample/cover/');
+  }
+  return true;
+}
+
+export function getMembersExcludeMe(channel: Sendbird.GroupChannel, currentUserId?: string) {
+  return channel.members.filter((m) => m.userId !== currentUserId);
+}

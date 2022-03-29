@@ -34,11 +34,11 @@ import { Routes } from '../../../libs/navigation';
  *  const GroupChannelListFragment = createGroupChannelListFragment({ Header: UseReactNavigationHeader });
  *
  *  const CustomGroupChannelListScreen = () => {
- *    const navigateToInviteMembersScreen = (channelType) => { ... };
+ *    const navigateToGroupChannelCreateScreen = (channelType) => { ... };
  *    const navigateToGroupChannelScreen = (channel) => { ... };
  *
  *    return <GroupChannelListFragment
- *             onPressCreateChannel={navigateToInviteMembersScreen}
+ *             onPressCreateChannel={navigateToGroupChannelCreateScreen}
  *             onPressChannel={navigateToGroupChannelScreen}
  *           />
  *  }
@@ -55,7 +55,7 @@ const GroupChannelListScreen = () => {
   return (
     <GroupChannelListFragment
       onPressCreateChannel={(channelType) => {
-        navigation.navigate(Routes.InviteMembers, { channelType });
+        navigation.navigate(Routes.GroupChannelCreate, { channelType });
       }}
       onPressChannel={(channel) => {
         navigation.navigate(Routes.GroupChannel, { serializedChannel: channel.serialize() });

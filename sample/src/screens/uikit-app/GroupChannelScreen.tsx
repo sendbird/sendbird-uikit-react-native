@@ -37,7 +37,8 @@ const GroupChannelScreen: React.FC = () => {
         navigation.goBack();
       }}
       onPressHeaderRight={() => {
-        // navigate to channel settings
+        // navigate to channel information
+        navigation.navigate(Routes.GroupChannelInfo, { serializedChannel: params.serializedChannel });
       }}
     />
   );

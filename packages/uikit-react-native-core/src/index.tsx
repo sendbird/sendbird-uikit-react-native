@@ -30,8 +30,9 @@ export type {
 
 /** Domain **/
 export * from './domain/groupChannel';
+export * from './domain/groupChannelInfo';
 export * from './domain/groupChannelList';
-export * from './domain/inviteMembers';
+export * from './domain/userList';
 export type {
   GroupChannelProps,
   GroupChannelModule,
@@ -39,15 +40,18 @@ export type {
   GroupChannelContextType,
 } from './domain/groupChannel/types';
 export type {
+  GroupChannelInfoProps,
+  GroupChannelInfoModule,
+  GroupChannelInfoFragment,
+  GroupChannelInfoContextType,
+} from './domain/groupChannelInfo/types';
+export type {
   GroupChannelType,
   GroupChannelListProps,
   GroupChannelListModule,
   GroupChannelListFragment,
   GroupChannelListContextType,
 } from './domain/groupChannelList/types';
-export type {
-  InviteMembersProps,
-  InviteMembersModule,
-  InviteMembersFragment,
-  InviteMembersContextType,
-} from './domain/inviteMembers/types';
+
+export type { GroupChannelCreateFragment, GroupChannelInviteFragment } from './domain/groupChannelUserList/types';
+export type { UserListProps, UserListModule, UserListFragment, UserListContextType } from './domain/userList/types';

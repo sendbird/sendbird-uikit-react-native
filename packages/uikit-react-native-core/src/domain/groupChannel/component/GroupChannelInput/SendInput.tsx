@@ -98,10 +98,7 @@ const SendInput: React.FC<SendInputProps> = ({ onSendUserMessage, onSendFileMess
         style={styles.input}
         placeholder={conditionChaining(
           [disabled],
-          [
-            LABEL.GROUP_CHANNEL.INPUT_PLACEHOLDER_DISABLED,
-            LABEL.GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE,
-          ],
+          [LABEL.GROUP_CHANNEL.INPUT_PLACEHOLDER_DISABLED, LABEL.GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE],
         )}
       />
       {Boolean(text) && (

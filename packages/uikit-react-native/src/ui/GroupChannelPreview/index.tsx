@@ -2,9 +2,9 @@ import React from 'react';
 import { Image, View } from 'react-native';
 
 import { Badge, Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { truncate } from '@sendbird/uikit-utils';
 
 type Props = {
+  customCover?: React.ReactElement;
   coverUrl: string;
 
   title: string;
@@ -22,6 +22,7 @@ type Props = {
 
 //TODO: Extract colors to theme color-set
 const GroupChannelPreview: React.FC<Props> = ({
+  customCover,
   coverUrl,
   memberCount,
   badgeCount,
@@ -37,16 +38,22 @@ const GroupChannelPreview: React.FC<Props> = ({
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Image
-        resizeMode={'cover'}
-        style={[styles.channelCover, { backgroundColor: colors.onBackground04 }]}
-        source={{ uri: coverUrl }}
-      />
+      <View style={styles.coverContainer}>
+        {customCover ? (
+          customCover
+        ) : (
+          <Image
+            resizeMode={'cover'}
+            style={[styles.channelCover, { backgroundColor: colors.onBackground04 }]}
+            source={{ uri: coverUrl }}
+          />
+        )}
+      </View>
       <View style={styles.rightSection}>
         <View style={styles.rightTopSection}>
           <View style={styles.channelInfo}>
-            <Text subtitle1 style={styles.title}>
-              {truncate(title, { mode: 'tail', maxLen: 15 })}
+            <Text numberOfLines={1} subtitle1 style={styles.title}>
+              {title}
             </Text>
             {Boolean(memberCount) && (
               <Text caption1 style={styles.memberCount} color={colors.onBackground02}>
@@ -101,11 +108,13 @@ const styles = createStyleSheet({
     paddingVertical: 10,
     alignItems: 'center',
   },
+  coverContainer: {
+    marginRight: 16,
+  },
   channelCover: {
     width: 56,
     height: 56,
     borderRadius: 28,
-    marginRight: 16,
   },
   rightSection: {
     flex: 1,
@@ -121,13 +130,14 @@ const styles = createStyleSheet({
     flexDirection: 'row',
   },
   title: {
+    flexShrink: 1,
     marginRight: 4,
   },
   memberCount: {
     paddingTop: 2,
-    marginRight: 4,
   },
   titleCaption: {
+    marginLeft: 4,
     paddingTop: 2,
   },
   rightBottomSection: {

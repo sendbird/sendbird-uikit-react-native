@@ -7,26 +7,34 @@ import type { ContextValue } from '@sendbird/uikit-utils';
 import type { CommonComponent } from '../../types';
 
 /**
- * @type {InviteMembersProps.Fragment} - Props from developer to create fragment
+ * @type {UserListProps.Fragment} - Props from developer to create fragment
  * @property Fragment.Header - Custom Header for Fragment, Only replace header component not a module
  * @property Fragment.onPressHeaderLeft - Navigate to previous screen
- * @property Fragment.onPressInviteMembers - Method to handle selected invite members. e.g. Create channel with members
+ * @property Fragment.onPressHeaderRight - Method to handle selected members. e.g. Create channel with members
  * @property Fragment.queryCreator - Custom Query creator for users query
  *
- * @type {InviteMembersProps.Header} - Props from Fragment for create Header module
+ * @type {UserListProps.Header} - Props from Fragment for create Header module
  * @property Header.Header - Custom header component from Fragment {@link Fragment.Header}
  * @property Header.onPressHeaderLeft - Method from Fragment {@link Fragment.onPressHeaderLeft}
- * @property Header.onPressInviteMembers - Method from Fragment {@link Fragment.onPressInviteMembers}
+ * @property Header.onPressHeaderRight - Method from Fragment {@link Fragment.onPressHeaderRight}
  *
- * @type {InviteMembersProps.List} - Props from Fragment for create List module
+ * @type {UserListProps.List} - Props from Fragment for create List module
  * @property List.users - Users from SendbirdChat SDK or Custom query {@link Fragment.queryCreator}
  * @property List.renderUser - Method to render User preview
  * @property List.onLoadNext - Method to load more data, called with onEndReached of FlatList
  * @property List.onRefresh - Method to refresh Users
  * @property List.refreshing - State of refreshing
  * */
-export type InviteMembersProps<User> = {
+export type UserListProps<User> = {
   Fragment: {
+    Header?: UserListProps<User>['Header']['Header'];
+    onPressHeaderLeft: UserListProps<User>['Header']['onPressHeaderLeft'];
+    onPressHeaderRight: UserListProps<User>['Header']['onPressHeaderRight'];
+    sortComparator?: UseUserListOptions<User>['sortComparator'];
+    queryCreator?: UseUserListOptions<User>['queryCreator'];
+    renderUser?: UserListProps<User>['List']['renderUser'];
+  };
+  Header: {
     Header?: null | CommonComponent<
       BaseHeaderProps<{
         title: string;
@@ -36,36 +44,34 @@ export type InviteMembersProps<User> = {
         onPressLeft: () => void;
       }>
     >;
+    right?: React.ReactElement;
+    left?: React.ReactElement;
     onPressHeaderLeft: () => void;
-    onPressInviteMembers: (users: User[]) => Promise<void>;
-    sortComparator?: UseUserListOptions<User>['sortComparator'];
-    queryCreator?: UseUserListOptions<User>['queryCreator'];
-    renderUser?: InviteMembersProps<User>['List']['renderUser'];
-  };
-  Header: {
-    Header?: InviteMembersProps<User>['Fragment']['Header'];
-    onPressHeaderLeft: InviteMembersProps<User>['Fragment']['onPressHeaderLeft'];
-    onPressInviteMembers: InviteMembersProps<User>['Fragment']['onPressInviteMembers'];
+    onPressHeaderRight: (users: User[]) => Promise<void>;
   };
   List: {
     users: User[];
     renderUser: (
       user: User,
-      selectedUsers: ContextValue<InviteMembersContextType<User>['List']>['selectedUsers'],
-      setSelectedUsers: ContextValue<InviteMembersContextType<User>['List']>['setSelectedUsers'],
+      selectedUsers: ContextValue<UserListContextType<User>['List']>['selectedUsers'],
+      setSelectedUsers: ContextValue<UserListContextType<User>['List']>['setSelectedUsers'],
     ) => React.ReactElement | null;
     onLoadNext: () => Promise<void>;
     onRefresh?: () => Promise<void>;
     refreshing?: boolean;
   };
+  Provider: {
+    headerTitle: string;
+    headerRight: (selectedUsers: Array<User>) => string;
+  };
 };
 
 /**
- * Internal context for InviteMembers
+ * Internal context for UserList
  * For example, the developer can create a custom header
  * with getting data from the domain context
  * */
-export type InviteMembersContextType<User> = {
+export type UserListContextType<User> = {
   Fragment: React.Context<{
     headerTitle: string;
     headerRight: string;
@@ -75,10 +81,11 @@ export type InviteMembersContextType<User> = {
     setSelectedUsers: React.Dispatch<React.SetStateAction<User[]>>;
   }>;
 };
-export interface InviteMembersModule<User> {
-  Provider: React.FC;
-  Header: CommonComponent<InviteMembersProps<User>['Header']>;
-  List: CommonComponent<InviteMembersProps<User>['List']>;
+
+export interface UserListModule<User> {
+  Provider: React.FC<UserListProps<User>['Provider']>;
+  Header: CommonComponent<UserListProps<User>['Header']>;
+  List: CommonComponent<UserListProps<User>['List']>;
 }
 
-export type InviteMembersFragment<User> = React.FC<InviteMembersProps<User>['Fragment']>;
+export type UserListFragment<User> = React.FC<UserListProps<User>['Fragment']>;

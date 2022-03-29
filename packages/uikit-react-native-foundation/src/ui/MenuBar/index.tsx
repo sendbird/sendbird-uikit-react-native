@@ -1,0 +1,94 @@
+import React from 'react';
+import { Pressable, View } from 'react-native';
+
+import { conditionChaining } from '@sendbird/uikit-utils';
+
+import createStyleSheet from '../../styles/createStyleSheet';
+import useUIKitTheme from '../../theme/useUIKitTheme';
+import Divider from '../Divider';
+import Icon from '../Icon';
+import Text from '../Text';
+
+export type MenuBarProps = {
+  variant?: 'default' | 'contained';
+
+  onPress: () => void;
+  disabled?: boolean;
+
+  icon: keyof typeof Icon.Assets;
+  iconColor?: string;
+  iconBackgroundColor?: string;
+  name: string;
+
+  actionLabel?: string;
+  actionItem?: React.ReactNode;
+};
+const MenuBar: React.FC<MenuBarProps> = ({
+  variant = 'default',
+  disabled,
+  onPress,
+  name,
+  icon,
+  iconColor,
+  iconBackgroundColor,
+  actionLabel,
+  actionItem = null,
+}) => {
+  const { palette, colors } = useUIKitTheme();
+
+  return (
+    <View>
+      <Pressable disabled={disabled} onPress={onPress} style={styles.container}>
+        {icon && (
+          <Icon
+            icon={icon}
+            size={variant === 'contained' ? 16 : 24}
+            color={conditionChaining(
+              [variant === 'contained', iconColor],
+              [palette.background50, iconColor, colors.primary],
+            )}
+            containerStyle={[
+              styles.icon,
+              variant === 'contained' && styles.containedIcon,
+              variant === 'contained' && { backgroundColor: iconBackgroundColor ?? palette.background400 },
+            ]}
+          />
+        )}
+        <Text subtitle2 numberOfLines={1} style={styles.name}>
+          {name}
+        </Text>
+        {Boolean(actionLabel) && (
+          <Text subtitle2 numberOfLines={1} color={colors.onBackground02} style={styles.actionLabel}>
+            {actionLabel}
+          </Text>
+        )}
+        {actionItem}
+      </Pressable>
+      <Divider />
+    </View>
+  );
+};
+
+const styles = createStyleSheet({
+  container: {
+    paddingVertical: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  name: {
+    flex: 1,
+    marginRight: 8,
+  },
+  icon: {
+    marginRight: 16,
+  },
+  containedIcon: {
+    borderRadius: 24,
+    padding: 4,
+  },
+  actionLabel: {
+    marginRight: 4,
+  },
+});
+
+export default MenuBar;

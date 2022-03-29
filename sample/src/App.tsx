@@ -20,10 +20,12 @@ import useAppearance from './hooks/useAppearance';
 import { Routes, navigationRef } from './libs/navigation';
 import { onNotificationEvent } from './libs/notification';
 import {
+  GroupChannelCreateScreen,
+  GroupChannelInfoScreen,
+  GroupChannelInviteScreen,
   GroupChannelScreen,
   GroupChannelTabs,
   HomeScreen,
-  InviteMembersScreen,
   PaletteScreen,
   SignInScreen,
   ThemeColorsScreen,
@@ -84,7 +86,9 @@ const Navigations = () => {
               component={GroupChannelTabs}
             />
             <RootStack.Screen name={Routes.GroupChannel} component={GroupChannelScreen} />
-            <RootStack.Screen name={Routes.InviteMembers} component={InviteMembersScreen} />
+            <RootStack.Screen name={Routes.GroupChannelInfo} component={GroupChannelInfoScreen} />
+            <RootStack.Screen name={Routes.GroupChannelCreate} component={GroupChannelCreateScreen} />
+            <RootStack.Screen name={Routes.GroupChannelInvite} component={GroupChannelInviteScreen} />
 
             <RootStack.Screen name={Routes.ThemeColors} component={ThemeColorsScreen} />
             <RootStack.Screen name={Routes.Palette} component={PaletteScreen} />

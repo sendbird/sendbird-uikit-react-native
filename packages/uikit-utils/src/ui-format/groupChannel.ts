@@ -9,7 +9,7 @@ import { truncate } from './common';
 export const getGroupChannelTitle = (
   currentUserId: string,
   channel: Sendbird.GroupChannel,
-  EMPTY_USERNAME = 'User',
+  EMPTY_USERNAME = '(No name)',
   DEFAULT_CHANNEL_NAME = 'Group Channel',
 ) => {
   if (channel.name !== DEFAULT_CHANNEL_NAME && channel.name !== '') return channel.name;

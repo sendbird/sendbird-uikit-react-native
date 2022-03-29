@@ -1,34 +1,30 @@
 import React, { useLayoutEffect } from 'react';
 import type Sendbird from 'sendbird';
 
-import { createInviteMembersFragment } from '@sendbird/uikit-react-native';
-import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
+import { createGroupChannelCreateFragment } from '@sendbird/uikit-react-native';
 import { Logger } from '@sendbird/uikit-utils';
 
 import { useAppNavigation } from '../../hooks/useAppNavigation';
 import { Routes } from '../../libs/navigation';
 
-const InviteMembersFragment = createInviteMembersFragment<Sendbird.User>();
+const GroupChannelCreateFragment = createGroupChannelCreateFragment<Sendbird.User>();
 
-const InviteMembersScreen: React.FC = () => {
-  const { navigation, params } = useAppNavigation<Routes.InviteMembers>();
-  const { sdk } = useSendbirdChat();
+const GroupChannelCreateScreen: React.FC = () => {
+  const { navigation, params } = useAppNavigation<Routes.GroupChannelCreate>();
 
   useLayoutEffect(() => {
     navigation.setOptions({ headerShown: false });
   }, []);
 
   return (
-    <InviteMembersFragment
-      onPressInviteMembers={async (users) => {
+    <GroupChannelCreateFragment
+      onBeforeCreateChannel={(channelParams) => {
         // Create GroupChannel with invited users
-        const channelParams = new sdk.GroupChannelParams();
         if (params.channelType === 'BROADCAST') channelParams.isBroadcast = true;
         if (params.channelType === 'SUPER_GROUP') channelParams.isSuper = true;
-
-        channelParams.isDistinct = false;
-        channelParams.addUserIds(users.map((user) => user.userId));
-        const channel = await sdk.GroupChannel.createChannel(channelParams);
+        return channelParams;
+      }}
+      onCreateChannel={async (channel) => {
         navigation.replace(Routes.GroupChannel, { serializedChannel: channel.serialize() });
       }}
       onPressHeaderLeft={() => {
@@ -39,4 +35,4 @@ const InviteMembersScreen: React.FC = () => {
   );
 };
 
-export default InviteMembersScreen;
+export default GroupChannelCreateScreen;

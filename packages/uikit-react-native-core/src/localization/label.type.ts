@@ -69,19 +69,17 @@ export interface LabelSet {
     MENU_NOTIFICATION: string;
     MENU_MEMBERS: string;
     MENU_LEAVE_CHANNEL: string;
-  };
-  GROUP_CHANNEL_MEMBERS: {
-    /** GroupChannelMembers > Header */
-    HEADER_TITLE: string;
 
-    /** GroupChannelMembers > UserBar */
-    USER_BAR_ME_POSTFIX: string;
-    USER_BAR_OPERATOR: string;
-
-    /** GroupChannelMembers > Dialog */
-    DIALOG_USER_DISMISS_OPERATOR: string;
-    DIALOG_USER_MUTE: string;
-    DIALOG_USER_BAN: string;
+    /** GroupChannelInfo > Dialog */
+    DIALOG_CHANGE_NAME: string;
+    DIALOG_CHANGE_IMAGE: string;
+    DIALOG_CHANGE_NAME_TITLE: string;
+    DIALOG_CHANGE_NAME_PLACEHOLDER: string;
+    DIALOG_CHANGE_NAME_CANCEL: string;
+    DIALOG_CHANGE_NAME_OK: string;
+    DIALOG_CHANGE_IMAGE_TITLE: string;
+    DIALOG_CHANGE_IMAGE_CAMERA: string;
+    DIALOG_CHANGE_IMAGE_PHOTO_LIBRARY: string;
   };
   GROUP_CHANNEL_LIST: {
     /** GroupChannelList > Header */
@@ -104,8 +102,26 @@ export interface LabelSet {
     DIALOG_CHANNEL_NOTIFICATION: (channel?: Sendbird.GroupChannel) => string;
     DIALOG_CHANNEL_LEAVE: string;
   };
-  INVITE_MEMBERS: {
-    /** InviteMembers > Header */
+  GROUP_CHANNEL_MEMBERS: {
+    /** GroupChannelMembers > Header */
+    HEADER_TITLE: string;
+
+    /** GroupChannelMembers > UserBar */
+    USER_BAR_ME_POSTFIX: string;
+    USER_BAR_OPERATOR: string;
+
+    /** GroupChannelMembers > Dialog */
+    DIALOG_USER_DISMISS_OPERATOR: string;
+    DIALOG_USER_MUTE: string;
+    DIALOG_USER_BAN: string;
+  };
+  GROUP_CHANNEL_INVITE: {
+    /** GroupChannelInvite > Header */
+    HEADER_TITLE: string;
+    HEADER_RIGHT: <T>(params: { selectedUsers: Array<T> }) => string;
+  };
+  GROUP_CHANNEL_CREATE: {
+    /** GroupChannelCreate > Header */
     HEADER_TITLE: string;
     HEADER_RIGHT: <T>(params: { selectedUsers: Array<T> }) => string;
   };
@@ -160,14 +176,14 @@ type LabelCreateOptions = {
  * */
 export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): LabelSet => ({
   GROUP_CHANNEL: {
-    HEADER_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel),
+    HEADER_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel, '(No name)'),
     LIST_BANNER_FROZEN: 'Channel frozen',
     LIST_DATE_SEPARATOR: (date, locale) => dateSeparator(date, locale),
     LIST_TOOLTIP_NEW_MSG: (newMessages) => `${newMessages.length} new messages`,
 
     LIST_MESSAGE_TIME: (message, locale) => messageTime(new Date(message.createdAt), locale),
     LIST_MESSAGE_FILE_TITLE: (message) => truncate(message.name, { mode: 'mid', maxLen: 20 }),
-    LIST_MESSAGE_EDITED_POSTFIX: '(Edited)',
+    LIST_MESSAGE_EDITED_POSTFIX: ' (Edited)',
     LIST_MESSAGE_UNKNOWN_TITLE: () => '(Unknown message type)',
     LIST_MESSAGE_UNKNOWN_DESC: () => 'Cannot read this message.',
 
@@ -197,18 +213,27 @@ export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): 
     MENU_NOTIFICATION: 'Notification',
     MENU_MEMBERS: 'Members',
     MENU_LEAVE_CHANNEL: 'Leave channel',
+    DIALOG_CHANGE_NAME: 'Change channel name',
+    DIALOG_CHANGE_IMAGE: 'Change channel image',
+    DIALOG_CHANGE_IMAGE_TITLE: 'Change channel image',
+    DIALOG_CHANGE_IMAGE_CAMERA: 'Take photo',
+    DIALOG_CHANGE_IMAGE_PHOTO_LIBRARY: 'Choose photo',
+    DIALOG_CHANGE_NAME_TITLE: 'Change name',
+    DIALOG_CHANGE_NAME_PLACEHOLDER: 'Enter name',
+    DIALOG_CHANGE_NAME_OK: 'Save',
+    DIALOG_CHANGE_NAME_CANCEL: 'Cancel',
     ...overrides?.GROUP_CHANNEL_INFO,
   },
   GROUP_CHANNEL_LIST: {
     HEADER_TITLE: 'Channels',
-    PREVIEW_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel),
+    PREVIEW_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel, '(No name)'),
     PREVIEW_TITLE_CAPTION: (channel) => getGroupChannelPreviewTime(channel, dateLocale),
     PREVIEW_BODY: (channel) => getGroupChannelLastMessage(channel),
     TYPE_SELECTOR_HEADER_TITLE: 'Channel type',
     TYPE_SELECTOR_GROUP: 'Group',
     TYPE_SELECTOR_SUPER_GROUP: 'Super group',
     TYPE_SELECTOR_BROADCAST: 'Broadcast',
-    DIALOG_CHANNEL_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel),
+    DIALOG_CHANNEL_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel, '(No name)'),
     DIALOG_CHANNEL_NOTIFICATION: (channel) => {
       if (!channel) return '';
       if (channel.myPushTriggerOption === 'off') return 'Turn on notifications';
@@ -218,27 +243,31 @@ export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): 
     ...overrides?.GROUP_CHANNEL_LIST,
   },
   GROUP_CHANNEL_MEMBERS: {
-    /** GroupChannelMembers > Header > Title */
     HEADER_TITLE: 'Members',
-
-    /** GroupChannelMembers > UserBar */
     USER_BAR_ME_POSTFIX: ' (You)',
     USER_BAR_OPERATOR: 'Operator',
-
-    /** GroupChannelMembers > Dialog */
     DIALOG_USER_DISMISS_OPERATOR: 'Dismiss operator',
     DIALOG_USER_MUTE: 'Mute',
     DIALOG_USER_BAN: 'Ban',
     ...overrides?.GROUP_CHANNEL_MEMBERS,
   },
-  INVITE_MEMBERS: {
+  GROUP_CHANNEL_CREATE: {
     HEADER_TITLE: 'Select members',
     HEADER_RIGHT: ({ selectedUsers }) => {
       const len = selectedUsers.length;
       if (len === 0) return 'Create';
       return `${len} Create`;
     },
-    ...overrides?.INVITE_MEMBERS,
+    ...overrides?.GROUP_CHANNEL_CREATE,
+  },
+  GROUP_CHANNEL_INVITE: {
+    HEADER_TITLE: 'Invite members',
+    HEADER_RIGHT: ({ selectedUsers }) => {
+      const len = selectedUsers.length;
+      if (len === 0) return 'Invite';
+      return `${len} Invite`;
+    },
+    ...overrides?.GROUP_CHANNEL_INVITE,
   },
   STRINGS: {
     USER_NO_NAME: '(No name)',

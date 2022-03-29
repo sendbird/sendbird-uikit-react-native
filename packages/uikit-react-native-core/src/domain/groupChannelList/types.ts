@@ -13,7 +13,7 @@ import type { CommonComponent } from '../../types';
  * @property Fragment.TypeSelectorHeader - Custom Header for TypeSelector, Only replace header component not a module
  * @property Fragment.skipTypeSelection - Skip type selection, When this is set to true 'channelType' only receive 'GROUP' type
  * @property Fragment.onPressChannel - Navigate to GroupChannelFragment
- * @property Fragment.onPressCreateChannel - Navigate to InviteMembersFragment
+ * @property Fragment.onPressCreateChannel - Navigate to GroupChannelCreateFragment
  * @property Fragment.queryCreator - Custom Query creator for channels query
  * @property Fragment.sortComparator - Sort comparator for sort channels
  * @property Fragment.flatListProps - FlatList props
