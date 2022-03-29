@@ -36,11 +36,9 @@ export const GroupChannelListContextProvider: React.FC = ({ children }) => {
   return (
     <ProviderLayout>
       <GroupChannelListContext.TypeSelector.Provider
-        value={{ headerTitle: LABEL.GROUP_CHANNEL_LIST.TYPE_SELECTOR.HEADER_TITLE, visible, show, hide }}
+        value={{ headerTitle: LABEL.GROUP_CHANNEL_LIST.TYPE_SELECTOR_HEADER_TITLE, visible, show, hide }}
       >
-        <GroupChannelListContext.Fragment.Provider
-          value={{ headerTitle: LABEL.GROUP_CHANNEL_LIST.FRAGMENT.HEADER_TITLE }}
-        >
+        <GroupChannelListContext.Fragment.Provider value={{ headerTitle: LABEL.GROUP_CHANNEL_LIST.HEADER_TITLE }}>
           <GroupChannelListContext.ChannelMenu.Provider value={{ selectChannel, selectedChannel }}>
             {children}
           </GroupChannelListContext.ChannelMenu.Provider>

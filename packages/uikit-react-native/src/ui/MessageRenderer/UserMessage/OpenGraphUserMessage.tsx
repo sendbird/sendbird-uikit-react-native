@@ -20,7 +20,7 @@ const OpenGraphUserMessage: React.FC<Props> = ({ message, variant, pressed, ogMe
           {message.message}
           {Boolean(message.updatedAt) && (
             <Text body3 color={color.textEdited}>
-              {' ' + LABEL.GROUP_CHANNEL.FRAGMENT.LIST_MESSAGE_EDITED_POSTFIX}
+              {LABEL.GROUP_CHANNEL.LIST_MESSAGE_EDITED_POSTFIX}
             </Text>
           )}
         </URLParsedText>

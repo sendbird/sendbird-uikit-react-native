@@ -16,7 +16,10 @@ export enum Routes {
   GroupChannelTabs = 'GroupChannelTabs',
   GroupChannelList = 'GroupChannelList',
   GroupChannel = 'GroupChannel',
-  InviteMembers = 'InviteMembers',
+  GroupChannelInfo = 'GroupChannelInfo',
+  GroupChannelCreate = 'GroupChannelCreate',
+  GroupChannelInvite = 'GroupChannelInvite',
+  GroupChannelMembers = 'GroupChannelMembers',
   Settings = 'Settings',
 }
 
@@ -46,11 +49,24 @@ export type RouteParamsUnion =
       params: undefined;
     }
   | {
+      route: Routes.GroupChannelCreate;
+      params: { channelType: GroupChannelType };
+    }
+  | {
       route: Routes.GroupChannel;
-      params: {
-        /** GroupChannel.serialize() */
-        serializedChannel: object;
-      };
+      params: { serializedChannel: object };
+    }
+  | {
+      route: Routes.GroupChannelInfo;
+      params: { serializedChannel: object };
+    }
+  | {
+      route: Routes.GroupChannelMembers;
+      params: { serializedChannel: object };
+    }
+  | {
+      route: Routes.GroupChannelInvite;
+      params: { serializedChannel: object };
     }
   | {
       route: Routes.Settings;
@@ -59,10 +75,6 @@ export type RouteParamsUnion =
   | {
       route: Routes.GroupChannelTabs;
       params: undefined;
-    }
-  | {
-      route: Routes.InviteMembers;
-      params: { channelType: GroupChannelType };
     };
 
 type ExtractParams<R extends Routes, U extends RouteParamsUnion> = U extends { route: R } ? U['params'] : never;

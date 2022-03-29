@@ -25,11 +25,11 @@ const GroupChannelListChannelMenu: React.FC<GroupChannelListProps['ChannelMenu']
       onDismiss={channelMenu.selectChannel}
       title={
         channelMenu.selectedChannel &&
-        LABEL.GROUP_CHANNEL_LIST.CHANNEL_MENU.TITLE(currentUser?.userId ?? '', channelMenu.selectedChannel)
+        LABEL.GROUP_CHANNEL_LIST.DIALOG_CHANNEL_TITLE(currentUser?.userId ?? '', channelMenu.selectedChannel)
       }
       menuItems={[
         {
-          title: LABEL.GROUP_CHANNEL_LIST.CHANNEL_MENU.MENU_NOTIFICATIONS(channelMenu.selectedChannel),
+          title: LABEL.GROUP_CHANNEL_LIST.DIALOG_CHANNEL_NOTIFICATION(channelMenu.selectedChannel),
           onPress: async () => {
             if (channelMenu.selectedChannel?.myPushTriggerOption === 'off') {
               await channelMenu.selectedChannel?.setMyPushTriggerOption('default');
@@ -39,7 +39,7 @@ const GroupChannelListChannelMenu: React.FC<GroupChannelListProps['ChannelMenu']
           },
         },
         {
-          title: LABEL.GROUP_CHANNEL_LIST.CHANNEL_MENU.MENU_LEAVE_CHANNEL,
+          title: LABEL.GROUP_CHANNEL_LIST.DIALOG_CHANNEL_LEAVE,
           onPress: async () => {
             await channelMenu.selectedChannel?.leave();
           },

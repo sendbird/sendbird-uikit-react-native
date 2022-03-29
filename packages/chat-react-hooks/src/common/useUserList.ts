@@ -51,12 +51,16 @@ export const useUserList = <
   }, [users, options?.sortComparator]);
 
   // ---------- internal methods ------------ //
-  const updateUsers = (users: QueriedUser[]) => {
-    setUsers((prev) => prev.concat(users));
+  const updateUsers = (users: QueriedUser[], clearPrev: boolean) => {
+    if (clearPrev) setUsers(users);
+    else setUsers((prev) => prev.concat(users));
   };
   const init = useCallback(async () => {
     query.current = createUserQuery<QueriedUser>(sdk, options?.queryCreator);
-    await next();
+    if (query.current?.hasNext) {
+      const users = await query.current?.next();
+      updateUsers(users, true);
+    }
   }, [sdk, options?.queryCreator]);
   // ---------- internal methods ends ------------ //
 
@@ -77,7 +81,7 @@ export const useUserList = <
 
   const next = useCallback(async () => {
     if (query.current && query.current?.hasNext) {
-      updateUsers(await query.current?.next());
+      updateUsers(await query.current?.next(), false);
     }
   }, []);
   // ---------- returns methods ends ---------- //

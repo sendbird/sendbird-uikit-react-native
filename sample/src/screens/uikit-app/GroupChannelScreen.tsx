@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { createGroupChannelFragment } from '@sendbird/uikit-react-native';
 import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
@@ -17,10 +17,6 @@ const GroupChannelScreen: React.FC = () => {
     [params.serializedChannel],
   );
 
-  useLayoutEffect(() => {
-    navigation.setOptions({ headerShown: false });
-  }, []);
-
   return (
     <GroupChannelFragment
       onPressImageMessage={(msg, uri) => {
@@ -37,7 +33,8 @@ const GroupChannelScreen: React.FC = () => {
         navigation.goBack();
       }}
       onPressHeaderRight={() => {
-        // navigate to channel settings
+        // navigate to channel information
+        navigation.navigate(Routes.GroupChannelInfo, { serializedChannel: params.serializedChannel });
       }}
     />
   );

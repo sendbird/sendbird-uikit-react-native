@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React from 'react';
 import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 
 import { usePushTrigger } from '@sendbird/chat-react-hooks';
@@ -7,6 +7,8 @@ import {
   Avatar,
   Divider,
   Header,
+  MenuBar,
+  MenuBarProps,
   Switch,
   Text,
   useActionMenu,
@@ -15,7 +17,6 @@ import {
 } from '@sendbird/uikit-react-native-foundation';
 import { useBottomSheet } from '@sendbird/uikit-react-native-foundation/src/ui/Dialog';
 
-import MenuBar, { MenuBarProps } from '../../../components/MenuBar';
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
 import useAppearance from '../../../hooks/useAppearance';
 import { Routes } from '../../../libs/navigation';
@@ -63,7 +64,7 @@ const SettingsScreen = () => {
         {
           title: 'Choose photo',
           onPress: async () => {
-            const files = await fileService.openMediaLibrary({ selectionLimit: 3 });
+            const files = await fileService.openMediaLibrary({ selectionLimit: 1 });
             if (!files || !files[0]) return;
 
             const user = await sdk.updateCurrentUserInfoWithProfileImage(sdk.currentUser.nickname, files[0]);
@@ -117,10 +118,6 @@ const SettingsScreen = () => {
     },
   ];
 
-  useLayoutEffect(() => {
-    navigation.setOptions({ headerShown: false });
-  }, []);
-
   if (!currentUser) return null;
 
   return (
@@ -151,6 +148,7 @@ const SettingsScreen = () => {
         {menuItems.map((menu) => {
           return (
             <MenuBar
+              variant={'contained'}
               key={menu.name}
               icon={menu.icon}
               onPress={menu.onPress}

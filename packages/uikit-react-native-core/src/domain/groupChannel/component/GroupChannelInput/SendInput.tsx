@@ -35,7 +35,7 @@ const SendInput: React.FC<SendInputProps> = ({ onSendUserMessage, onSendFileMess
     openSheet({
       sheetItems: [
         {
-          title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_ATTACHMENT_CAMERA,
+          title: LABEL.GROUP_CHANNEL.DIALOG_ATTACHMENT_CAMERA,
           icon: 'camera',
           onPress: async () => {
             const photo = await fileService.openCamera({
@@ -49,7 +49,7 @@ const SendInput: React.FC<SendInputProps> = ({ onSendUserMessage, onSendFileMess
           },
         },
         {
-          title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_ATTACHMENT_PHOTO_LIBRARY,
+          title: LABEL.GROUP_CHANNEL.DIALOG_ATTACHMENT_PHOTO_LIBRARY,
           icon: 'photo',
           onPress: async () => {
             const photo = await fileService.openMediaLibrary({
@@ -64,7 +64,7 @@ const SendInput: React.FC<SendInputProps> = ({ onSendUserMessage, onSendFileMess
           },
         },
         {
-          title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_ATTACHMENT_FILES,
+          title: LABEL.GROUP_CHANNEL.DIALOG_ATTACHMENT_FILES,
           icon: 'document',
           onPress: async () => {
             const file = await fileService.openDocument({
@@ -98,10 +98,7 @@ const SendInput: React.FC<SendInputProps> = ({ onSendUserMessage, onSendFileMess
         style={styles.input}
         placeholder={conditionChaining(
           [disabled],
-          [
-            LABEL.GROUP_CHANNEL.FRAGMENT.INPUT_PLACEHOLDER_DISABLED,
-            LABEL.GROUP_CHANNEL.FRAGMENT.INPUT_PLACEHOLDER_ACTIVE,
-          ],
+          [LABEL.GROUP_CHANNEL.INPUT_PLACEHOLDER_DISABLED, LABEL.GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE],
         )}
       />
       {Boolean(text) && (

@@ -10,7 +10,7 @@ type Props = {
   selected: boolean;
   disabled: boolean;
 };
-const UserListItem: React.FC<Props> = ({ uri, name, selected, disabled }) => {
+const UserSelectableBar: React.FC<Props> = ({ uri, name, selected, disabled }) => {
   const { colors } = useUIKitTheme();
 
   const iconColor = conditionChaining(
@@ -22,7 +22,12 @@ const UserListItem: React.FC<Props> = ({ uri, name, selected, disabled }) => {
     <View style={styles.container}>
       <Avatar size={36} uri={uri} containerStyle={styles.avatar} />
       <View style={[styles.infoContainer, { borderBottomColor: colors.onBackground04 }]}>
-        <Text subtitle2 style={styles.name} color={disabled ? colors.onBackground04 : colors.onBackground01}>
+        <Text
+          subtitle2
+          style={styles.name}
+          color={colors.onBackground01}
+          // color={disabled ? colors.onBackground04 : colors.onBackground01}
+        >
           {name}
         </Text>
         <Icon color={iconColor} size={24} icon={selected ? 'checkbox-on' : 'checkbox-off'} />
@@ -55,4 +60,4 @@ const styles = createStyleSheet({
   },
 });
 
-export default React.memo(UserListItem);
+export default React.memo(UserSelectableBar);

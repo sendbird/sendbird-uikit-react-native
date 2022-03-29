@@ -51,16 +51,16 @@ const EditInput: React.FC<EditInputProps> = ({ text, setText, editMessage, setEd
           value={text}
           onChangeText={setText}
           style={styles.input}
-          placeholder={LABEL.GROUP_CHANNEL.FRAGMENT.INPUT_PLACEHOLDER_ACTIVE}
+          placeholder={LABEL.GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE}
         />
       </View>
       <View style={{ marginTop: 8, flexDirection: 'row' }}>
         <Button variant={'text'} onPress={onPressCancel}>
-          {LABEL.GROUP_CHANNEL.FRAGMENT.INPUT_EDIT_CANCEL}
+          {LABEL.GROUP_CHANNEL.INPUT_EDIT_CANCEL}
         </Button>
         <View style={styles.space} />
         <Button variant={'contained'} onPress={onPressSave}>
-          {LABEL.GROUP_CHANNEL.FRAGMENT.INPUT_EDIT_OK}
+          {LABEL.GROUP_CHANNEL.INPUT_EDIT_OK}
         </Button>
       </View>
     </View>

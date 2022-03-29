@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { createGroupChannelListFragment } from '@sendbird/uikit-react-native';
-import { useAsyncLayoutEffect } from '@sendbird/uikit-utils';
 
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
 import { Routes } from '../../../libs/navigation';
@@ -34,11 +33,11 @@ import { Routes } from '../../../libs/navigation';
  *  const GroupChannelListFragment = createGroupChannelListFragment({ Header: UseReactNavigationHeader });
  *
  *  const CustomGroupChannelListScreen = () => {
- *    const navigateToInviteMembersScreen = (channelType) => { ... };
+ *    const navigateToGroupChannelCreateScreen = (channelType) => { ... };
  *    const navigateToGroupChannelScreen = (channel) => { ... };
  *
  *    return <GroupChannelListFragment
- *             onPressCreateChannel={navigateToInviteMembersScreen}
+ *             onPressCreateChannel={navigateToGroupChannelCreateScreen}
  *             onPressChannel={navigateToGroupChannelScreen}
  *           />
  *  }
@@ -48,14 +47,10 @@ const GroupChannelListFragment = createGroupChannelListFragment();
 const GroupChannelListScreen = () => {
   const { navigation } = useAppNavigation<Routes.GroupChannelList>();
 
-  useAsyncLayoutEffect(async () => {
-    navigation.setOptions({ headerShown: false });
-  }, []);
-
   return (
     <GroupChannelListFragment
       onPressCreateChannel={(channelType) => {
-        navigation.navigate(Routes.InviteMembers, { channelType });
+        navigation.navigate(Routes.GroupChannelCreate, { channelType });
       }}
       onPressChannel={(channel) => {
         navigation.navigate(Routes.GroupChannel, { serializedChannel: channel.serialize() });

@@ -82,7 +82,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   return (
     <View style={[{ flex: 1, backgroundColor: colors.background }, safeAreaLayout]}>
       {channel.isFrozen && (
-        <ChannelFrozenBanner style={styles.frozenBanner} text={LABEL.GROUP_CHANNEL.FRAGMENT.LIST_BANNER_FROZEN} />
+        <ChannelFrozenBanner style={styles.frozenBanner} text={LABEL.GROUP_CHANNEL.LIST_BANNER_FROZEN} />
       )}
       <ChatFlatList
         listKey={`group-channel-messages-${channel.url}`}
@@ -139,11 +139,11 @@ const useGetMessagePressActions = ({
     openSheet({
       sheetItems: [
         {
-          title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_MESSAGE_FAILED_RETRY,
+          title: LABEL.GROUP_CHANNEL.DIALOG_MESSAGE_FAILED_RETRY,
           onPress: () => onResendFailedMessage(message).catch(() => toast.show(LABEL.TOAST.RESEND_MSG_ERROR, 'error')),
         },
         {
-          title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_MESSAGE_FAILED_REMOVE,
+          title: LABEL.GROUP_CHANNEL.DIALOG_MESSAGE_FAILED_REMOVE,
           titleColor: colors.ui.dialog.default.none.destructive,
           onPress: () => confirmDelete(message),
         },
@@ -152,13 +152,13 @@ const useGetMessagePressActions = ({
   };
   const confirmDelete = (message: HandleableMessage) => {
     alert({
-      title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_MESSAGE_DELETE_CONFIRM_TITLE,
+      title: LABEL.GROUP_CHANNEL.DIALOG_MESSAGE_DELETE_CONFIRM_TITLE,
       buttons: [
         {
-          text: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_MESSAGE_DELETE_CONFIRM_CANCEL,
+          text: LABEL.GROUP_CHANNEL.DIALOG_MESSAGE_DELETE_CONFIRM_CANCEL,
         },
         {
-          text: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_MESSAGE_DELETE_CONFIRM_OK,
+          text: LABEL.GROUP_CHANNEL.DIALOG_MESSAGE_DELETE_CONFIRM_OK,
           style: 'destructive',
           onPress: () => onDeleteMessage(message).catch(() => toast.show(LABEL.TOAST.DELETE_MSG_ERROR, 'error')),
         },
@@ -180,7 +180,7 @@ const useGetMessagePressActions = ({
     if (msg.isUserMessage()) {
       sheetItems.push({
         icon: 'copy',
-        title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_MESSAGE_COPY,
+        title: LABEL.GROUP_CHANNEL.DIALOG_MESSAGE_COPY,
         onPress: () => {
           clipboardService.setString(msg.message || '');
           toast.show(LABEL.TOAST.COPY_OK, 'success');
@@ -191,12 +191,12 @@ const useGetMessagePressActions = ({
         sheetItems.push(
           {
             icon: 'edit',
-            title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_MESSAGE_EDIT,
+            title: LABEL.GROUP_CHANNEL.DIALOG_MESSAGE_EDIT,
             onPress: () => setEditMessage(msg),
           },
           {
             icon: 'delete',
-            title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_MESSAGE_DELETE,
+            title: LABEL.GROUP_CHANNEL.DIALOG_MESSAGE_DELETE,
             onPress: () => confirmDelete(msg),
           },
         );
@@ -206,7 +206,7 @@ const useGetMessagePressActions = ({
     if (msg.isFileMessage()) {
       sheetItems.push({
         icon: 'download',
-        title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_MESSAGE_SAVE,
+        title: LABEL.GROUP_CHANNEL.DIALOG_MESSAGE_SAVE,
         onPress: async () => {
           if (toMegabyte(msg.size) > 4) {
             toast.show(LABEL.TOAST.DOWNLOAD_START, 'success');
@@ -228,7 +228,7 @@ const useGetMessagePressActions = ({
       if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
         sheetItems.push({
           icon: 'delete',
-          title: LABEL.GROUP_CHANNEL.FRAGMENT.DIALOG_MESSAGE_DELETE,
+          title: LABEL.GROUP_CHANNEL.DIALOG_MESSAGE_DELETE,
           onPress: () => confirmDelete(msg),
         });
       }

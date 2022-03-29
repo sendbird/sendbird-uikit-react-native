@@ -47,7 +47,7 @@ export const GroupChannelContextProvider: GroupChannelModule['Provider'] = ({ ch
     <ProviderLayout>
       <GroupChannelContext.Fragment.Provider
         value={{
-          headerTitle: LABEL.GROUP_CHANNEL.FRAGMENT.HEADER_TITLE(currentUser?.userId ?? '', channel),
+          headerTitle: LABEL.GROUP_CHANNEL.HEADER_TITLE(currentUser?.userId ?? '', channel),
           channel,
           editMessage,
           setEditMessage,

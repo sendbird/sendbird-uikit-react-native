@@ -24,7 +24,7 @@ const NewMessagesTooltip: React.FC<Props> = ({ newMessages, visible, onPress }) 
       ]}
     >
       <Text button color={colors.primary}>
-        {LABEL.GROUP_CHANNEL.FRAGMENT.LIST_TOOLTIP_NEW_MSG(newMessages)}
+        {LABEL.GROUP_CHANNEL.LIST_TOOLTIP_NEW_MSG(newMessages)}
       </Text>
     </TouchableOpacity>
   );

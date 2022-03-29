@@ -2,7 +2,6 @@ import type { CustomQueryInterface } from '../types';
 
 type ConstructorParams<T> = {
   next: () => Promise<T[]>;
-  prev: () => Promise<T[]>;
   isLoading: () => boolean;
   hasNext: () => boolean;
 };
