@@ -13548,7 +13548,7 @@ send@0.18.0:
     range-parser "~1.2.1"
     statuses "2.0.1"
 
-sendbird@^3.1.7:
+sendbird@^3.1.9:
   version "3.1.9"
   resolved "https://registry.yarnpkg.com/sendbird/-/sendbird-3.1.9.tgz#1dd48beca8d39c2c0df0a550c44d6b5cc8a6e4cd"
   integrity sha512-iLGc35WIYTOdxqBdHoKgIuPm6xEttHr+ife3qke5dhkAV2XjT1cQwFV15tKpWpchbFq0b/ztpILoErzNRusZdg==

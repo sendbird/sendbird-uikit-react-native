@@ -30,7 +30,7 @@ export type Optional<T> = T | undefined;
 
 export type ContextValue<T extends React.Context<any>> = T extends React.Context<infer V> ? V : never;
 
-export type SendbirdChatSDK = Sendbird.SendBirdInstance & { get isCacheEnabled(): boolean };
+export type SendbirdChatSDK = Sendbird.SendBirdInstance;
 export type SendbirdMessage =
   | Sendbird.BaseMessageInstance
   | Sendbird.FileMessage
