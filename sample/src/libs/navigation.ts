@@ -49,16 +49,16 @@ export type RouteParamsUnion =
       params: undefined;
     }
   | {
+      route: Routes.GroupChannelCreate;
+      params: { channelType: GroupChannelType };
+    }
+  | {
       route: Routes.GroupChannel;
       params: { serializedChannel: object };
     }
   | {
       route: Routes.GroupChannelInfo;
       params: { serializedChannel: object };
-    }
-  | {
-      route: Routes.GroupChannelCreate;
-      params: { channelType: GroupChannelType };
     }
   | {
       route: Routes.GroupChannelMembers;

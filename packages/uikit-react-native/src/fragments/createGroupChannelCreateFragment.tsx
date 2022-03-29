@@ -44,7 +44,7 @@ const createGroupChannelCreateFragment = <UserType,>(
     renderUser,
     children,
   }) => {
-    const { sdk } = useSendbirdChat();
+    const { sdk, currentUser } = useSendbirdChat();
     const { LABEL } = useLocalization();
     const { users, refreshing, refresh, next } = useUserList(sdk, {
       queryCreator,
@@ -97,6 +97,7 @@ const createGroupChannelCreateFragment = <UserType,>(
           onPressHeaderLeft={onPressHeaderLeft}
           onPressHeaderRight={async (users) => {
             const params = new sdk.GroupChannelParams();
+            if (currentUser) params.operatorUserIds = [currentUser.userId];
             params.isDistinct = true;
             params.addUserIds(userIdsGenerator(users));
 

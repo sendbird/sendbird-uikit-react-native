@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React from 'react';
 import type Sendbird from 'sendbird';
 
 import { createGroupChannelCreateFragment } from '@sendbird/uikit-react-native';
@@ -11,10 +11,6 @@ const GroupChannelCreateFragment = createGroupChannelCreateFragment<Sendbird.Use
 
 const GroupChannelCreateScreen: React.FC = () => {
   const { navigation, params } = useAppNavigation<Routes.GroupChannelCreate>();
-
-  useLayoutEffect(() => {
-    navigation.setOptions({ headerShown: false });
-  }, []);
 
   return (
     <GroupChannelCreateFragment

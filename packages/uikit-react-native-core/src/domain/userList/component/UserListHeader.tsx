@@ -21,17 +21,18 @@ const UserListHeader = <T,>({
   onPressHeaderRight,
   right,
   left,
+  ignoreActiveOnly = false,
 }: UserListProps<T>['Header']) => {
   const { headerTitle } = useContext(UserListContext.Fragment);
   const { selectedUsers } = useContext(UserListContext.List as UserListContextType<T>['List']);
-  const canPress = selectedUsers.length > 0;
+  const isActive = ignoreActiveOnly || selectedUsers.length > 0;
 
   if (!Header) return null;
   return (
     <Header
       title={headerTitle}
-      right={right ?? <HeaderDefaultRight canPress={canPress} />}
-      onPressRight={canPress ? () => onPressHeaderRight(selectedUsers) : undefined}
+      right={right ?? <HeaderDefaultRight canPress={isActive} />}
+      onPressRight={isActive ? () => onPressHeaderRight(selectedUsers) : undefined}
       left={left ?? <Icon icon={'arrow-left'} />}
       onPressLeft={onPressHeaderLeft}
     />

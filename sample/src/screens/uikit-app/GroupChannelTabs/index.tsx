@@ -19,7 +19,11 @@ const GroupChannelTabs = () => {
   return (
     <Tab.Navigator
       initialRouteName={Routes.GroupChannelList}
-      screenOptions={{ tabBarActiveTintColor: colors.primary, tabBarLabelStyle: typography.caption2 }}
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: colors.primary,
+        tabBarLabelStyle: typography.caption2,
+      }}
     >
       <Tab.Screen
         name={Routes.GroupChannelList}

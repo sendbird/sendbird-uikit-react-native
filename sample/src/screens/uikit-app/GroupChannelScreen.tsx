@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { createGroupChannelFragment } from '@sendbird/uikit-react-native';
 import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
@@ -16,10 +16,6 @@ const GroupChannelScreen: React.FC = () => {
     () => sdk.GroupChannel.buildFromSerializedData(params.serializedChannel),
     [params.serializedChannel],
   );
-
-  useLayoutEffect(() => {
-    navigation.setOptions({ headerShown: false });
-  }, []);
 
   return (
     <GroupChannelFragment

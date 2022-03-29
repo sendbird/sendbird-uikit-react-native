@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React from 'react';
 import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 
 import { usePushTrigger } from '@sendbird/chat-react-hooks';
@@ -117,10 +117,6 @@ const SettingsScreen = () => {
       onPress: onExitToHome,
     },
   ];
-
-  useLayoutEffect(() => {
-    navigation.setOptions({ headerShown: false });
-  }, []);
 
   if (!currentUser) return null;
 

@@ -53,5 +53,9 @@ export type {
   GroupChannelListContextType,
 } from './domain/groupChannelList/types';
 
-export type { GroupChannelCreateFragment, GroupChannelInviteFragment } from './domain/groupChannelUserList/types';
+export type {
+  GroupChannelCreateFragment,
+  GroupChannelInviteFragment,
+  GroupChannelMembersFragment,
+} from './domain/groupChannelUserList/types';
 export type { UserListProps, UserListModule, UserListFragment, UserListContextType } from './domain/userList/types';

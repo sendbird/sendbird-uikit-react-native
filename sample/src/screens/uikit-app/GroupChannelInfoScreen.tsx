@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { createGroupChannelInfoFragment } from '@sendbird/uikit-react-native';
 import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
@@ -12,10 +12,6 @@ const GroupChannelInfoScreen: React.FC = () => {
   const { navigation, params } = useAppNavigation<Routes.GroupChannelInfo>();
   const [channel] = useState(() => sdk.GroupChannel.buildFromSerializedData(params.serializedChannel));
 
-  useLayoutEffect(() => {
-    navigation.setOptions({ headerShown: false });
-  }, []);
-
   return (
     <GroupChannelInfoFragment
       staleChannel={channel}
@@ -25,7 +21,7 @@ const GroupChannelInfoScreen: React.FC = () => {
       }}
       onPressMenuMembers={() => {
         // navigate to group channel members
-        navigation.navigate(Routes.GroupChannelInvite, params);
+        navigation.navigate(Routes.GroupChannelMembers, params);
       }}
       onLeaveChannel={() => {
         // navigate to group channel list

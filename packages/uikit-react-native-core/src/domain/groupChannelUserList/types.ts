@@ -50,3 +50,21 @@ export type GroupChannelInviteFragment<User> = React.FC<{
   queryCreator?: UseUserListOptions<User>['queryCreator'];
   renderUser?: UserListProps<User>['List']['renderUser'];
 }>;
+
+export type GroupChannelMembersFragment<User> = React.FC<{
+  Header?: null | CommonComponent<
+    BaseHeaderProps<{
+      title: string;
+      right: React.ReactElement;
+      onPressRight?: () => void;
+      left: React.ReactElement;
+      onPressLeft: () => void;
+    }>
+  >;
+
+  channel: Sendbird.GroupChannel;
+  onPressHeaderLeft: () => void;
+  onPressHeaderRight: () => void;
+  sortComparator?: UseUserListOptions<User>['sortComparator'];
+  renderUser?: UserListProps<User>['List']['renderUser'];
+}>;

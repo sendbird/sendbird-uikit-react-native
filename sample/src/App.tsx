@@ -23,6 +23,7 @@ import {
   GroupChannelCreateScreen,
   GroupChannelInfoScreen,
   GroupChannelInviteScreen,
+  GroupChannelMembersScreen,
   GroupChannelScreen,
   GroupChannelTabs,
   HomeScreen,
@@ -73,22 +74,19 @@ const Navigations = () => {
 
   return (
     <NavigationContainer ref={navigationRef} theme={isLightTheme ? DefaultTheme : DarkTheme}>
-      <RootStack.Navigator>
+      <RootStack.Navigator screenOptions={{ headerShown: false }}>
         {!currentUser ? (
-          <RootStack.Screen options={{ headerShown: false }} name={Routes.SignIn} component={SignInScreen} />
+          <RootStack.Screen name={Routes.SignIn} component={SignInScreen} />
         ) : (
           <>
-            <RootStack.Screen options={{ headerShown: false }} name={Routes.Home} component={HomeScreen} />
+            <RootStack.Screen name={Routes.Home} component={HomeScreen} />
 
-            <RootStack.Screen
-              options={{ headerShown: false }}
-              name={Routes.GroupChannelTabs}
-              component={GroupChannelTabs}
-            />
+            <RootStack.Screen name={Routes.GroupChannelTabs} component={GroupChannelTabs} />
             <RootStack.Screen name={Routes.GroupChannel} component={GroupChannelScreen} />
             <RootStack.Screen name={Routes.GroupChannelInfo} component={GroupChannelInfoScreen} />
             <RootStack.Screen name={Routes.GroupChannelCreate} component={GroupChannelCreateScreen} />
             <RootStack.Screen name={Routes.GroupChannelInvite} component={GroupChannelInviteScreen} />
+            <RootStack.Screen name={Routes.GroupChannelMembers} component={GroupChannelMembersScreen} />
 
             <RootStack.Screen name={Routes.ThemeColors} component={ThemeColorsScreen} />
             <RootStack.Screen name={Routes.Palette} component={PaletteScreen} />
