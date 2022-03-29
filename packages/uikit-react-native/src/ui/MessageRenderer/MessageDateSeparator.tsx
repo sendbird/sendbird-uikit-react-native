@@ -20,7 +20,7 @@ const MessageDateSeparator: React.FC<Props> = ({ message, prevMessage }) => {
     <View style={styles.container}>
       <View style={[styles.view, { backgroundColor: colors.ui.dateSeparator.default.none.background }]}>
         <Text caption1 color={colors.ui.dateSeparator.default.none.text}>
-          {LABEL.GROUP_CHANNEL.FRAGMENT.LIST_DATE_SEPARATOR(new Date(message.createdAt))}
+          {LABEL.GROUP_CHANNEL.LIST_DATE_SEPARATOR(new Date(message.createdAt))}
         </Text>
       </View>
     </View>

@@ -10,7 +10,7 @@ type Props = {
   selected: boolean;
   disabled: boolean;
 };
-const UserListItem: React.FC<Props> = ({ uri, name, selected, disabled }) => {
+const UserSelectableBar: React.FC<Props> = ({ uri, name, selected, disabled }) => {
   const { colors } = useUIKitTheme();
 
   const iconColor = conditionChaining(
@@ -55,4 +55,4 @@ const styles = createStyleSheet({
   },
 });
 
-export default React.memo(UserListItem);
+export default React.memo(UserSelectableBar);

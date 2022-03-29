@@ -14,10 +14,10 @@ const UnknownMessage: React.FC<UnknownMessageProps> = ({ message, variant, press
   return (
     <View style={[styles.container, { backgroundColor: color.background }]}>
       <Text body3 color={colors.onBackground01}>
-        {LABEL.GROUP_CHANNEL.FRAGMENT.LIST_MESSAGE_UNKNOWN_TITLE(message)}
+        {LABEL.GROUP_CHANNEL.LIST_MESSAGE_UNKNOWN_TITLE(message)}
       </Text>
       <Text body3 color={colors.onBackground02}>
-        {LABEL.GROUP_CHANNEL.FRAGMENT.LIST_MESSAGE_UNKNOWN_DESC(message)}
+        {LABEL.GROUP_CHANNEL.LIST_MESSAGE_UNKNOWN_DESC(message)}
       </Text>
     </View>
   );

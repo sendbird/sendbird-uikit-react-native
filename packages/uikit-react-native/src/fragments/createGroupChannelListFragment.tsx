@@ -40,9 +40,9 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
         <Pressable onPress={() => onPressChannel(channel)} onLongPress={onLongPressChannel}>
           <GroupChannelPreview
             coverUrl={channel.coverUrl}
-            title={LABEL.GROUP_CHANNEL_LIST.FRAGMENT.PREVIEW_TITLE(currentUser?.userId ?? '', channel)}
-            titleCaption={LABEL.GROUP_CHANNEL_LIST.FRAGMENT.PREVIEW_TITLE_CAPTION(channel)}
-            body={LABEL.GROUP_CHANNEL_LIST.FRAGMENT.PREVIEW_BODY(channel)}
+            title={LABEL.GROUP_CHANNEL_LIST.PREVIEW_TITLE(currentUser?.userId ?? '', channel)}
+            titleCaption={LABEL.GROUP_CHANNEL_LIST.PREVIEW_TITLE_CAPTION(channel)}
+            body={LABEL.GROUP_CHANNEL_LIST.PREVIEW_BODY(channel)}
             badgeCount={channel.unreadMessageCount}
             bodyIcon={channel.lastMessage?.isFileMessage() ? 'file-document' : undefined}
             frozen={channel.isFrozen}

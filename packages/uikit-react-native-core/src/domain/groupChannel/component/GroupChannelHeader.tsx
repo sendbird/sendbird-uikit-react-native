@@ -19,7 +19,7 @@ const GroupChannelHeader: React.FC<GroupChannelProps['Header']> = ({
 
   if (!Header) return null;
 
-  const subtitle = LABEL.GROUP_CHANNEL.TYPING_INDICATOR.TYPINGS(typingUsers);
+  const subtitle = LABEL.STRINGS.TYPING_INDICATOR_TYPINGS(typingUsers);
   return (
     <Header
       clearTitleMargin

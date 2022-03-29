@@ -11,7 +11,9 @@ import {
   truncate,
 } from '@sendbird/uikit-utils';
 
-export type LabelLocale = 'en';
+export interface LabelLocale {
+  locale: 'en';
+}
 
 /**
  * LabelSet interface
@@ -19,106 +21,99 @@ export type LabelLocale = 'en';
  * */
 export interface LabelSet {
   GROUP_CHANNEL: {
-    FRAGMENT: {
-      /** @domain GroupChannel > Fragment > Header > Title */
-      HEADER_TITLE: (currentUserId: string, channel: Sendbird.GroupChannel) => string;
-      /** @domain GroupChannel > Fragment > List > Banner frozen */
-      LIST_BANNER_FROZEN: string;
-      /** @domain GroupChannel > Fragment > List > Date separator */
-      LIST_DATE_SEPARATOR: (date: Date, locale?: Locale) => string;
-      /** @domain GroupChannel > Fragment > List > Tooltip > New messages */
-      LIST_TOOLTIP_NEW_MSG: (newMessages: SendbirdMessage[]) => string;
+    /** GroupChannel > Header */
+    HEADER_TITLE: (currentUserId: string, channel: Sendbird.GroupChannel) => string;
 
-      /** @domain GroupChannel > Fragment > List > Message > Time */
-      LIST_MESSAGE_TIME: (message: SendbirdMessage, locale?: Locale) => string;
-      /** @domain GroupChannel > Fragment > List > Message > File title */
-      LIST_MESSAGE_FILE_TITLE: (message: Sendbird.FileMessage) => string;
-      /** @domain GroupChannel > Fragment > List > Message > Edited postfix */
-      LIST_MESSAGE_EDITED_POSTFIX: string;
-      /** @domain GroupChannel > Fragment > List > Message > Unknown title */
-      LIST_MESSAGE_UNKNOWN_TITLE: (message: SendbirdMessage) => string;
-      /** @domain GroupChannel > Fragment > List > Message > Unknown description */
-      LIST_MESSAGE_UNKNOWN_DESC: (message: SendbirdMessage) => string;
+    /** GroupChannel > List */
+    LIST_BANNER_FROZEN: string;
+    LIST_DATE_SEPARATOR: (date: Date, locale?: Locale) => string;
+    LIST_TOOLTIP_NEW_MSG: (newMessages: SendbirdMessage[]) => string;
 
-      /** @domain GroupChannel > Fragment > Input > Placeholder active */
-      INPUT_PLACEHOLDER_ACTIVE: string;
-      /** @domain GroupChannel > Fragment > Input > Placeholder disabled */
-      INPUT_PLACEHOLDER_DISABLED: string;
-      /** @domain GroupChannel > Fragment > Input > Edit ok */
-      INPUT_EDIT_OK: string;
-      /** @domain GroupChannel > Fragment > Input > Edit cancel */
-      INPUT_EDIT_CANCEL: string;
+    /** GroupChannel > List > Message */
+    LIST_MESSAGE_TIME: (message: SendbirdMessage, locale?: Locale) => string;
+    LIST_MESSAGE_FILE_TITLE: (message: Sendbird.FileMessage) => string;
+    LIST_MESSAGE_EDITED_POSTFIX: string;
+    LIST_MESSAGE_UNKNOWN_TITLE: (message: SendbirdMessage) => string;
+    LIST_MESSAGE_UNKNOWN_DESC: (message: SendbirdMessage) => string;
 
-      /** @domain GroupChannel > Fragment > Dialog > Message > Copy */
-      DIALOG_MESSAGE_COPY: string;
-      /** @domain GroupChannel > Fragment > Dialog > Message > Edit */
-      DIALOG_MESSAGE_EDIT: string;
-      /** @domain GroupChannel > Fragment > Dialog > Message > Save */
-      DIALOG_MESSAGE_SAVE: string;
-      /** @domain GroupChannel > Fragment > Dialog > Message > Delete */
-      DIALOG_MESSAGE_DELETE: string;
-      /** @domain GroupChannel > Fragment > Dialog > Message > Delete > Confirm title */
-      DIALOG_MESSAGE_DELETE_CONFIRM_TITLE: string;
-      /** @domain GroupChannel > Fragment > Dialog > Message > Delete > Confirm ok */
-      DIALOG_MESSAGE_DELETE_CONFIRM_OK: string;
-      /** @domain GroupChannel > Fragment > Dialog > Message > Delete > Confirm cancel */
-      DIALOG_MESSAGE_DELETE_CONFIRM_CANCEL: string;
-      /** @domain GroupChannel > Fragment > Dialog > Message > Failed > Retry */
-      DIALOG_MESSAGE_FAILED_RETRY: string;
-      /** @domain GroupChannel > Fragment > Dialog > Message > Failed > Remove */
-      DIALOG_MESSAGE_FAILED_REMOVE: string;
+    /** GroupChannel > Input */
+    INPUT_PLACEHOLDER_ACTIVE: string;
+    INPUT_PLACEHOLDER_DISABLED: string;
+    INPUT_EDIT_OK: string;
+    INPUT_EDIT_CANCEL: string;
 
-      /** @domain GroupChannel > Fragment > Dialog > Attachment > Camera */
-      DIALOG_ATTACHMENT_CAMERA: string;
-      /** @domain GroupChannel > Fragment > Dialog > Attachment > Photo */
-      DIALOG_ATTACHMENT_PHOTO_LIBRARY: string;
-      /** @domain GroupChannel > Fragment > Dialog > Attachment > Files */
-      DIALOG_ATTACHMENT_FILES: string;
-    };
-    TYPING_INDICATOR: {
-      /** @domain GroupChannel > Typing Indicator > Typings */
-      TYPINGS: (users: Sendbird.User[]) => string | undefined;
-    };
+    /** GroupChannel > Dialog > Message */
+    DIALOG_MESSAGE_COPY: string;
+    DIALOG_MESSAGE_EDIT: string;
+    DIALOG_MESSAGE_SAVE: string;
+    DIALOG_MESSAGE_DELETE: string;
+    /** GroupChannel > Dialog > Message > Delete confirm */
+    DIALOG_MESSAGE_DELETE_CONFIRM_TITLE: string;
+    DIALOG_MESSAGE_DELETE_CONFIRM_OK: string;
+    DIALOG_MESSAGE_DELETE_CONFIRM_CANCEL: string;
+    /** GroupChannel > Dialog > Message > Failed */
+    DIALOG_MESSAGE_FAILED_RETRY: string;
+    DIALOG_MESSAGE_FAILED_REMOVE: string;
+
+    /** GroupChannel > Dialog > Attachments */
+    DIALOG_ATTACHMENT_CAMERA: string;
+    DIALOG_ATTACHMENT_PHOTO_LIBRARY: string;
+    DIALOG_ATTACHMENT_FILES: string;
+  };
+  GROUP_CHANNEL_INFO: {
+    /** GroupChannelInfo > Header */
+    HEADER_TITLE: string;
+    HEADER_RIGHT: string;
+
+    /** GroupChannelInfo > Menu */
+    MENU_NOTIFICATION: string;
+    MENU_MEMBERS: string;
+    MENU_LEAVE_CHANNEL: string;
+  };
+  GROUP_CHANNEL_MEMBERS: {
+    /** GroupChannelMembers > Header */
+    HEADER_TITLE: string;
+
+    /** GroupChannelMembers > UserBar */
+    USER_BAR_ME_POSTFIX: string;
+    USER_BAR_OPERATOR: string;
+
+    /** GroupChannelMembers > Dialog */
+    DIALOG_USER_DISMISS_OPERATOR: string;
+    DIALOG_USER_MUTE: string;
+    DIALOG_USER_BAN: string;
   };
   GROUP_CHANNEL_LIST: {
-    FRAGMENT: {
-      /** @domain GroupChannelList > Fragment > Header > Title */
-      HEADER_TITLE: string;
-      /** @domain GroupChannelList > Fragment > Preview > Title */
-      PREVIEW_TITLE: (currentUserId: string, channel: Sendbird.GroupChannel) => string;
-      /** @domain GroupChannelList > Fragment > Preview > TitleCaption */
-      PREVIEW_TITLE_CAPTION: (channel: Sendbird.GroupChannel) => string;
-      /** @domain GroupChannelList > Fragment > Preview > Message */
-      PREVIEW_BODY: (channel: Sendbird.GroupChannel) => string;
-    };
-    TYPE_SELECTOR: {
-      /** @domain GroupChannelList > TypeSelector > Header > Title */
-      HEADER_TITLE: string;
-      /** @domain GroupChannelList > TypeSelector > Group */
-      GROUP: string;
-      /** @domain GroupChannelList > TypeSelector > SuperGroup */
-      SUPER_GROUP: string;
-      /** @domain GroupChannelList > TypeSelector > Broadcast */
-      BROADCAST: string;
-    };
-    CHANNEL_MENU: {
-      /** @domain GroupChannelList > ChannelMenu > Title */
-      TITLE: (currentUserId: string, channel: Sendbird.GroupChannel) => string;
-      /** @domain GroupChannelList > ChannelMenu > Menu */
-      MENU_NOTIFICATIONS: (channel?: Sendbird.GroupChannel) => string;
-      /** @domain GroupChannelList > ChannelMenu > Menu */
-      MENU_LEAVE_CHANNEL: string;
-    };
+    /** GroupChannelList > Header */
+    HEADER_TITLE: string;
+
+    /** GroupChannelList > Preview */
+    PREVIEW_TITLE: (currentUserId: string, channel: Sendbird.GroupChannel) => string;
+    PREVIEW_TITLE_CAPTION: (channel: Sendbird.GroupChannel) => string;
+    PREVIEW_BODY: (channel: Sendbird.GroupChannel) => string;
+
+    /** GroupChannelList > TypeSelector > Header */
+    TYPE_SELECTOR_HEADER_TITLE: string;
+    /** GroupChannelList > TypeSelector > Type string */
+    TYPE_SELECTOR_GROUP: string;
+    TYPE_SELECTOR_SUPER_GROUP: string;
+    TYPE_SELECTOR_BROADCAST: string;
+
+    /** GroupChannelList > Dialog > Channel */
+    DIALOG_CHANNEL_TITLE: (currentUserId: string, channel: Sendbird.GroupChannel) => string;
+    DIALOG_CHANNEL_NOTIFICATION: (channel?: Sendbird.GroupChannel) => string;
+    DIALOG_CHANNEL_LEAVE: string;
   };
   INVITE_MEMBERS: {
-    /** @domain InviteMembers > Header > Title */
+    /** InviteMembers > Header */
     HEADER_TITLE: string;
-    /** @domain InviteMembers > Header > Right */
     HEADER_RIGHT: <T>(params: { selectedUsers: Array<T> }) => string;
-    /** @domain InviteMembers > User > No name */
-    USER_NO_NAME: string;
   };
   // UI
+  STRINGS: {
+    USER_NO_NAME: string;
+    TYPING_INDICATOR_TYPINGS: (users: Sendbird.User[]) => string | undefined;
+  };
   PLACEHOLDER: {
     NO_BANNED_MEMBERS: string;
     NO_CHANNELS: string;
@@ -165,75 +160,76 @@ type LabelCreateOptions = {
  * */
 export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): LabelSet => ({
   GROUP_CHANNEL: {
-    FRAGMENT: {
-      HEADER_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel),
-      LIST_BANNER_FROZEN: 'Channel frozen',
-      LIST_DATE_SEPARATOR: (date, locale) => dateSeparator(date, locale),
-      LIST_TOOLTIP_NEW_MSG: (newMessages) => `${newMessages.length} new messages`,
+    HEADER_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel),
+    LIST_BANNER_FROZEN: 'Channel frozen',
+    LIST_DATE_SEPARATOR: (date, locale) => dateSeparator(date, locale),
+    LIST_TOOLTIP_NEW_MSG: (newMessages) => `${newMessages.length} new messages`,
 
-      LIST_MESSAGE_TIME: (message, locale) => messageTime(new Date(message.createdAt), locale),
-      LIST_MESSAGE_FILE_TITLE: (message) => truncate(message.name, { mode: 'mid', maxLen: 20 }),
-      LIST_MESSAGE_EDITED_POSTFIX: '(Edited)',
-      LIST_MESSAGE_UNKNOWN_TITLE: () => '(Unknown message type)',
-      LIST_MESSAGE_UNKNOWN_DESC: () => 'Cannot read this message.',
+    LIST_MESSAGE_TIME: (message, locale) => messageTime(new Date(message.createdAt), locale),
+    LIST_MESSAGE_FILE_TITLE: (message) => truncate(message.name, { mode: 'mid', maxLen: 20 }),
+    LIST_MESSAGE_EDITED_POSTFIX: '(Edited)',
+    LIST_MESSAGE_UNKNOWN_TITLE: () => '(Unknown message type)',
+    LIST_MESSAGE_UNKNOWN_DESC: () => 'Cannot read this message.',
 
-      INPUT_PLACEHOLDER_ACTIVE: 'Enter message',
-      INPUT_PLACEHOLDER_DISABLED: 'Chat is unavailable in this channel',
-      INPUT_EDIT_OK: 'Save',
-      INPUT_EDIT_CANCEL: 'Cancel',
+    INPUT_PLACEHOLDER_ACTIVE: 'Enter message',
+    INPUT_PLACEHOLDER_DISABLED: 'Chat is unavailable in this channel',
+    INPUT_EDIT_OK: 'Save',
+    INPUT_EDIT_CANCEL: 'Cancel',
 
-      DIALOG_MESSAGE_COPY: 'Copy',
-      DIALOG_MESSAGE_EDIT: 'Edit',
-      DIALOG_MESSAGE_SAVE: 'Save',
-      DIALOG_MESSAGE_DELETE: 'Delete',
-      DIALOG_MESSAGE_DELETE_CONFIRM_TITLE: 'Delete message?',
-      DIALOG_MESSAGE_DELETE_CONFIRM_OK: 'Delete',
-      DIALOG_MESSAGE_DELETE_CONFIRM_CANCEL: 'Cancel',
-      DIALOG_MESSAGE_FAILED_RETRY: 'Retry',
-      DIALOG_MESSAGE_FAILED_REMOVE: 'Remove',
+    DIALOG_MESSAGE_COPY: 'Copy',
+    DIALOG_MESSAGE_EDIT: 'Edit',
+    DIALOG_MESSAGE_SAVE: 'Save',
+    DIALOG_MESSAGE_DELETE: 'Delete',
+    DIALOG_MESSAGE_DELETE_CONFIRM_TITLE: 'Delete message?',
+    DIALOG_MESSAGE_DELETE_CONFIRM_OK: 'Delete',
+    DIALOG_MESSAGE_DELETE_CONFIRM_CANCEL: 'Cancel',
+    DIALOG_MESSAGE_FAILED_RETRY: 'Retry',
+    DIALOG_MESSAGE_FAILED_REMOVE: 'Remove',
 
-      DIALOG_ATTACHMENT_CAMERA: 'Camera',
-      DIALOG_ATTACHMENT_PHOTO_LIBRARY: 'Photo library',
-      DIALOG_ATTACHMENT_FILES: 'Files',
-
-      ...overrides?.GROUP_CHANNEL?.FRAGMENT,
-    },
-    TYPING_INDICATOR: {
-      TYPINGS: (users, NO_NAME = '(No name)') => {
-        const userNames = users.map((u) => u.nickname || NO_NAME);
-        if (userNames.length === 0) return;
-        if (userNames.length === 1) return `${userNames[0]} is typing...`;
-        if (users.length === 2) return `${userNames.join(' and ')} are typing...`;
-        return 'Several people are typing...';
-      },
-      ...overrides?.GROUP_CHANNEL?.TYPING_INDICATOR,
-    },
+    DIALOG_ATTACHMENT_CAMERA: 'Camera',
+    DIALOG_ATTACHMENT_PHOTO_LIBRARY: 'Photo library',
+    DIALOG_ATTACHMENT_FILES: 'Files',
+    ...overrides?.GROUP_CHANNEL,
+  },
+  GROUP_CHANNEL_INFO: {
+    HEADER_TITLE: 'Channel information',
+    HEADER_RIGHT: 'Edit',
+    MENU_NOTIFICATION: 'Notification',
+    MENU_MEMBERS: 'Members',
+    MENU_LEAVE_CHANNEL: 'Leave channel',
+    ...overrides?.GROUP_CHANNEL_INFO,
   },
   GROUP_CHANNEL_LIST: {
-    FRAGMENT: {
-      HEADER_TITLE: 'Channels',
-      PREVIEW_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel),
-      PREVIEW_TITLE_CAPTION: (channel) => getGroupChannelPreviewTime(channel, dateLocale),
-      PREVIEW_BODY: (channel) => getGroupChannelLastMessage(channel),
-      ...overrides?.GROUP_CHANNEL_LIST?.FRAGMENT,
+    HEADER_TITLE: 'Channels',
+    PREVIEW_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel),
+    PREVIEW_TITLE_CAPTION: (channel) => getGroupChannelPreviewTime(channel, dateLocale),
+    PREVIEW_BODY: (channel) => getGroupChannelLastMessage(channel),
+    TYPE_SELECTOR_HEADER_TITLE: 'Channel type',
+    TYPE_SELECTOR_GROUP: 'Group',
+    TYPE_SELECTOR_SUPER_GROUP: 'Super group',
+    TYPE_SELECTOR_BROADCAST: 'Broadcast',
+    DIALOG_CHANNEL_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel),
+    DIALOG_CHANNEL_NOTIFICATION: (channel) => {
+      if (!channel) return '';
+      if (channel.myPushTriggerOption === 'off') return 'Turn on notifications';
+      return 'Turn off notifications';
     },
-    TYPE_SELECTOR: {
-      HEADER_TITLE: 'Channel type',
-      GROUP: 'Group',
-      SUPER_GROUP: 'Super group',
-      BROADCAST: 'Broadcast',
-      ...overrides?.GROUP_CHANNEL_LIST?.TYPE_SELECTOR,
-    },
-    CHANNEL_MENU: {
-      TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel),
-      MENU_NOTIFICATIONS: (channel) => {
-        if (!channel) return '';
-        if (channel.myPushTriggerOption === 'off') return 'Turn on notifications';
-        return 'Turn off notifications';
-      },
-      MENU_LEAVE_CHANNEL: 'Leave channel',
-      ...overrides?.GROUP_CHANNEL_LIST?.CHANNEL_MENU,
-    },
+    DIALOG_CHANNEL_LEAVE: 'Leave channel',
+    ...overrides?.GROUP_CHANNEL_LIST,
+  },
+  GROUP_CHANNEL_MEMBERS: {
+    /** GroupChannelMembers > Header > Title */
+    HEADER_TITLE: 'Members',
+
+    /** GroupChannelMembers > UserBar */
+    USER_BAR_ME_POSTFIX: ' (You)',
+    USER_BAR_OPERATOR: 'Operator',
+
+    /** GroupChannelMembers > Dialog */
+    DIALOG_USER_DISMISS_OPERATOR: 'Dismiss operator',
+    DIALOG_USER_MUTE: 'Mute',
+    DIALOG_USER_BAN: 'Ban',
+    ...overrides?.GROUP_CHANNEL_MEMBERS,
   },
   INVITE_MEMBERS: {
     HEADER_TITLE: 'Select members',
@@ -242,8 +238,18 @@ export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): 
       if (len === 0) return 'Create';
       return `${len} Create`;
     },
-    USER_NO_NAME: '(No name)',
     ...overrides?.INVITE_MEMBERS,
+  },
+  STRINGS: {
+    USER_NO_NAME: '(No name)',
+    TYPING_INDICATOR_TYPINGS: (users, NO_NAME = '(No name)') => {
+      const userNames = users.map((u) => u.nickname || NO_NAME);
+      if (userNames.length === 0) return;
+      if (userNames.length === 1) return `${userNames[0]} is typing...`;
+      if (users.length === 2) return `${userNames.join(' and ')} are typing...`;
+      return 'Several people are typing...';
+    },
+    ...overrides?.STRINGS,
   },
   PLACEHOLDER: {
     NO_BANNED_MEMBERS: 'No banned members',

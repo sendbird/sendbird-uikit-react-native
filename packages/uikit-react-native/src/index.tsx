@@ -2,7 +2,7 @@
 export { default as GroupChannelPreview } from './ui/GroupChannelPreview';
 export { default as MessageRenderer } from './ui/MessageRenderer';
 export { default as TypedPlaceholder } from './ui/TypedPlaceholder';
-export { default as UserListItem } from './ui/UserListItem';
+export { default as UserSelectableBar } from './ui/UserSelectableBar';
 
 /** Fragments **/
 export { default as createGroupChannelFragment } from './fragments/createGroupChannelFragment';

@@ -6,7 +6,7 @@ import { useUserList } from '@sendbird/chat-react-hooks';
 import type { InviteMembersFragment, InviteMembersModule } from '@sendbird/uikit-react-native-core';
 import { createInviteMembersModule, useLocalization, useSendbirdChat } from '@sendbird/uikit-react-native-core';
 
-import UserListItem from '../ui/UserListItem';
+import UserSelectableBar from '../ui/UserSelectableBar';
 
 const createInviteMembersFragment = <UserType,>(
   initModule?: InviteMembersModule<UserType>,
@@ -43,9 +43,9 @@ const createInviteMembersFragment = <UserType,>(
               });
             }}
           >
-            <UserListItem
+            <UserSelectableBar
               uri={sbUser.profileUrl}
-              name={sbUser.nickname || LABEL.INVITE_MEMBERS.USER_NO_NAME}
+              name={sbUser.nickname || LABEL.STRINGS.USER_NO_NAME}
               selected={isSelected}
               disabled={false}
             />
