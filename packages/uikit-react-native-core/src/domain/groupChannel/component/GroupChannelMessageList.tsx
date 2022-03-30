@@ -95,18 +95,22 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
         <ChannelFrozenBanner style={styles.frozenBanner} text={LABEL.GROUP_CHANNEL.LIST_BANNER_FROZEN} />
       )}
       <ChatFlatList
-        listKey={`group-channel-messages-${channel.url}`}
-        ref={scrollRef}
-        data={messages}
         nextMessages={nextMessages}
-        renderItem={renderItem}
-        keyExtractor={messageKeyExtractor}
         onBottomReached={onBottomReached}
         onTopReached={onTopReached}
-        contentContainerStyle={channel.isFrozen && styles.frozenListPadding}
         onLeaveScrollBottom={onLeaveScrollBottom}
         currentUserId={currentUserId}
         {...flatListProps}
+        listKey={`group-channel-messages-${channel.url}`}
+        ref={scrollRef}
+        data={messages}
+        renderItem={renderItem}
+        keyExtractor={messageKeyExtractor}
+        contentContainerStyle={[
+          // { minHeight: '100%', justifyContent: 'flex-end' },
+          channel.isFrozen && styles.frozenListPadding,
+          flatListProps?.contentContainerStyle,
+        ]}
       />
       {NewMessagesTooltip && (
         <View style={[styles.newMsgTooltip, safeAreaLayout]}>

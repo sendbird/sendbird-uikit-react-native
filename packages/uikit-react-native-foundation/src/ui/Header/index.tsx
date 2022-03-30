@@ -1,5 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, TouchableOpacityProps, View, useWindowDimensions } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { conditionChaining } from '@sendbird/uikit-utils';
 
@@ -40,6 +41,7 @@ const Header: React.FC<HeaderProps> & {
   const { topInset, defaultTitleAlign } = useHeaderStyle();
   const { width, height } = useWindowDimensions();
   const { colors } = useUIKitTheme();
+  const { left: paddingLeft, right: paddingRight } = useSafeAreaInsets();
 
   const actualTitleAlign = titleAlign ?? defaultTitleAlign;
 
@@ -54,6 +56,8 @@ const Header: React.FC<HeaderProps> & {
       style={[
         styles.container,
         {
+          paddingLeft: paddingLeft + styles.container.paddingHorizontal,
+          paddingRight: paddingRight + styles.container.paddingHorizontal,
           paddingTop: topInset,
           backgroundColor: colors.ui.header.nav.none.background,
           borderBottomColor: colors.ui.header.nav.none.borderBottom,

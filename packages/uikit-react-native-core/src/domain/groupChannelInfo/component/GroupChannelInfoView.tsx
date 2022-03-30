@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { ScrollView, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
   Avatar,
@@ -30,6 +31,7 @@ const GroupChannelInfoView: React.FC<GroupChannelInfoProps['View']> = ({ onPress
   const { currentUser } = useSendbirdChat();
   const { LABEL } = useLocalization();
   const { colors } = useUIKitTheme();
+  const { left, right } = useSafeAreaInsets();
 
   const toggleNotification = async () => {
     if (channel.myPushTriggerOption === 'off') {
@@ -70,7 +72,13 @@ const GroupChannelInfoView: React.FC<GroupChannelInfoProps['View']> = ({ onPress
   }
 
   return (
-    <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={styles.viewContainer}>
+    <ScrollView
+      style={{ backgroundColor: colors.background }}
+      contentContainerStyle={{
+        paddingLeft: left + styles.viewContainer.paddingHorizontal,
+        paddingRight: right + styles.viewContainer.paddingHorizontal,
+      }}
+    >
       <View style={styles.userInfoContainer}>
         {conditionChaining(
           [useDefaultChannelCover(channel)],

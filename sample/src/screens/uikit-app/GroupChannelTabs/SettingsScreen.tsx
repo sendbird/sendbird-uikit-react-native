@@ -1,5 +1,6 @@
 import React from 'react';
 import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { usePushTrigger } from '@sendbird/chat-react-hooks';
 import { usePlatformService, useSendbirdChat } from '@sendbird/uikit-react-native-core';
@@ -34,6 +35,7 @@ const SettingsScreen = () => {
   const { openSheet } = useBottomSheet();
   const { prompt } = usePrompt();
   const { openMenu } = useActionMenu();
+  const { left, right } = useSafeAreaInsets();
 
   const onChangeNickname = () => {
     prompt({
@@ -127,7 +129,13 @@ const SettingsScreen = () => {
         right={<Header.Button color={colors.primary}>{'Edit'}</Header.Button>}
         onPressRight={onEdit}
       />
-      <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={styles.viewContainer}>
+      <ScrollView
+        style={{ backgroundColor: colors.background }}
+        contentContainerStyle={{
+          paddingLeft: left + styles.viewContainer.paddingHorizontal,
+          paddingRight: right + styles.viewContainer.paddingHorizontal,
+        }}
+      >
         <View style={styles.userInfoContainer}>
           <Avatar uri={currentUser.plainProfileUrl} size={80} containerStyle={styles.avatarContainer} />
           <Text h1 numberOfLines={1}>
