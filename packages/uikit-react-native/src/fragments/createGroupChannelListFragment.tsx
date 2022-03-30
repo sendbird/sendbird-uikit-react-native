@@ -9,7 +9,13 @@ import type {
 } from '@sendbird/uikit-react-native-core';
 import { createGroupChannelListModule, useLocalization, useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { Avatar } from '@sendbird/uikit-react-native-foundation';
-import { Logger, channelComparator, getMembersExcludeMe, useDefaultChannelCover } from '@sendbird/uikit-utils';
+import {
+  Logger,
+  channelComparator,
+  conditionChaining,
+  getMembersExcludeMe,
+  useDefaultChannelCover,
+} from '@sendbird/uikit-utils';
 
 import GroupChannelPreview from '../ui/GroupChannelPreview';
 import TypedPlaceholder from '../ui/TypedPlaceholder';
@@ -40,17 +46,17 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
       (channel, onLongPressChannel) => (
         <Pressable onPress={() => onPressChannel(channel)} onLongPress={onLongPressChannel}>
           <GroupChannelPreview
-            customCover={
-              useDefaultChannelCover(channel) ? (
-                <Avatar uri={channel.coverUrl} size={56} />
-              ) : (
+            customCover={conditionChaining(
+              [useDefaultChannelCover(channel)],
+              [
+                <Avatar uri={channel.coverUrl} size={56} />,
                 <Avatar.Group size={56}>
                   {getMembersExcludeMe(channel, currentUser?.userId).map((m) => (
                     <Avatar key={m.userId} uri={m.profileUrl} />
                   ))}
-                </Avatar.Group>
-              )
-            }
+                </Avatar.Group>,
+              ],
+            )}
             coverUrl={channel.coverUrl}
             title={LABEL.GROUP_CHANNEL_LIST.PREVIEW_TITLE(currentUser?.userId ?? '', channel)}
             titleCaption={LABEL.GROUP_CHANNEL_LIST.PREVIEW_TITLE_CAPTION(channel)}

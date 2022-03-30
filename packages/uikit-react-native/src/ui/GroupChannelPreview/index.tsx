@@ -2,6 +2,7 @@ import React from 'react';
 import { Image, View } from 'react-native';
 
 import { Badge, Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { conditionChaining } from '@sendbird/uikit-utils';
 
 type Props = {
   customCover?: React.ReactElement;
@@ -39,14 +40,16 @@ const GroupChannelPreview: React.FC<Props> = ({
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.coverContainer}>
-        {customCover ? (
-          customCover
-        ) : (
-          <Image
-            resizeMode={'cover'}
-            style={[styles.channelCover, { backgroundColor: colors.onBackground04 }]}
-            source={{ uri: coverUrl }}
-          />
+        {conditionChaining(
+          [Boolean(customCover)],
+          [
+            customCover,
+            <Image
+              resizeMode={'cover'}
+              style={[styles.channelCover, { backgroundColor: colors.onBackground04 }]}
+              source={{ uri: coverUrl }}
+            />,
+          ],
         )}
       </View>
       <View style={styles.rightSection}>

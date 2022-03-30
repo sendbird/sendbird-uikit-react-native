@@ -20,7 +20,11 @@ export const GroupChannelContext: GroupChannelContextType = {
   }),
 };
 
-export const GroupChannelContextProvider: GroupChannelModule['Provider'] = ({ children, channel }) => {
+export const GroupChannelContextProvider: GroupChannelModule['Provider'] = ({
+  children,
+  channel,
+  enableTypingIndicator,
+}) => {
   if (!channel) throw new Error('GroupChannel is not provided to GroupChannelModule');
 
   const id = useUniqId('GroupChannelContextProvider');
@@ -35,12 +39,12 @@ export const GroupChannelContextProvider: GroupChannelModule['Provider'] = ({ ch
     `GroupChannelContextProvider_${id}`,
     {
       onTypingStatusUpdated(eventChannel) {
-        if (isDifferentChannel(channel, eventChannel)) return;
+        if (isDifferentChannel(channel, eventChannel) && !enableTypingIndicator) return;
         const usersWithoutMe = eventChannel.getTypingUsers().filter((u) => u.userId !== currentUser?.userId);
         setTypingUsers(usersWithoutMe);
       },
     },
-    [channel, currentUser?.userId],
+    [channel, currentUser?.userId, enableTypingIndicator],
   );
 
   return (

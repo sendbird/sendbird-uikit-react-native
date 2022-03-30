@@ -1,6 +1,8 @@
 import React from 'react';
 import { TouchableOpacity, TouchableOpacityProps, View, useWindowDimensions } from 'react-native';
 
+import { conditionChaining } from '@sendbird/uikit-utils';
+
 import type { BaseHeaderProps } from '../../index';
 import createStyleSheet from '../../styles/createStyleSheet';
 import getDefaultHeaderHeight from '../../styles/getDefaultHeaderHeight';
@@ -130,12 +132,14 @@ const HeaderButton: React.FC<TouchableOpacityProps & { color?: string }> = ({
       onPress={(e) => onPress?.(e)}
       activeOpacity={0.7}
     >
-      {typeof children === 'string' || typeof children === 'number' ? (
-        <Text button numberOfLines={1} color={color}>
-          {children}
-        </Text>
-      ) : (
-        children
+      {conditionChaining(
+        [typeof children === 'string' || typeof children === 'number'],
+        [
+          <Text button numberOfLines={1} color={color}>
+            {children}
+          </Text>,
+          children,
+        ],
       )}
     </TouchableOpacity>
   );

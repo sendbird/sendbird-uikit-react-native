@@ -40,7 +40,7 @@
     "babel-jest": "^27.4.6",
     "del-cli": "^4.0.1",
     "eslint": "^8.6.0",
-    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-prettier": "^8.5.0",
     "jest": "^27.4.7",
     "lerna": "^4.0.0",
     "patch-package": "^6.4.7",

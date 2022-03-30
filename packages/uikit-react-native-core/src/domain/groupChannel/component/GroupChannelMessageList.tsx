@@ -46,6 +46,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   onDeleteMessage,
   onPressImageMessage,
   flatListProps,
+  enableMessageGrouping,
 }) => {
   const { LABEL } = useLocalization();
   const { colors } = useUIKitTheme();
@@ -65,7 +66,16 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   // NOTE: Cannot wrap with useCallback, because prevMessage (always getting from fresh messages)
   const renderItem: ListRenderItem<SendbirdMessage> = ({ item, index }) => {
     const { onPress, onLongPress } = getMessagePressActions(item);
-    return renderMessage(item, messages[index + 1], messages[index - 1], onPress, onLongPress);
+    return renderMessage({
+      message: item,
+      prevMessage: messages[index + 1],
+      nextMessage: messages[index - 1],
+      onPress,
+      onLongPress,
+      enableMessageGrouping,
+      channel,
+      currentUserId,
+    });
   };
 
   useEffect(() => {
@@ -279,4 +289,4 @@ const styles = createStyleSheet({
   },
 });
 
-export default GroupChannelMessageList;
+export default React.memo(GroupChannelMessageList);

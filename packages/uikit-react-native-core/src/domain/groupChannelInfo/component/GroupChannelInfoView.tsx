@@ -12,7 +12,13 @@ import {
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
 import type { MenuBarProps } from '@sendbird/uikit-react-native-foundation';
-import { Logger, getGroupChannelTitle, getMembersExcludeMe, useDefaultChannelCover } from '@sendbird/uikit-utils';
+import {
+  Logger,
+  conditionChaining,
+  getGroupChannelTitle,
+  getMembersExcludeMe,
+  useDefaultChannelCover,
+} from '@sendbird/uikit-utils';
 
 import { useLocalization } from '../../../contexts/Localization';
 import { useSendbirdChat } from '../../../contexts/SendbirdChat';
@@ -66,14 +72,16 @@ const GroupChannelInfoView: React.FC<GroupChannelInfoProps['View']> = ({ onPress
   return (
     <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={styles.viewContainer}>
       <View style={styles.userInfoContainer}>
-        {useDefaultChannelCover(channel) ? (
-          <Avatar uri={channel.coverUrl} size={80} containerStyle={styles.avatarContainer} />
-        ) : (
-          <Avatar.Group size={80} containerStyle={styles.avatarContainer}>
-            {getMembersExcludeMe(channel, currentUser?.userId).map((m) => (
-              <Avatar key={m.userId} uri={m.profileUrl} />
-            ))}
-          </Avatar.Group>
+        {conditionChaining(
+          [useDefaultChannelCover(channel)],
+          [
+            <Avatar uri={channel.coverUrl} size={80} containerStyle={styles.avatarContainer} />,
+            <Avatar.Group size={80} containerStyle={styles.avatarContainer}>
+              {getMembersExcludeMe(channel, currentUser?.userId).map((m) => (
+                <Avatar key={m.userId} uri={m.profileUrl} />
+              ))}
+            </Avatar.Group>,
+          ],
         )}
         <Text h1 numberOfLines={1}>
           {getGroupChannelTitle(currentUser.userId, channel, LABEL.STRINGS.USER_NO_NAME)}

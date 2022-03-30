@@ -16,15 +16,15 @@ const GroupChannelInfoScreen: React.FC = () => {
     <GroupChannelInfoFragment
       staleChannel={channel}
       onPressHeaderLeft={() => {
-        // navigate to group channel
+        // Navigate back
         navigation.goBack();
       }}
       onPressMenuMembers={() => {
-        // navigate to group channel members
+        // Navigate to group channel members
         navigation.navigate(Routes.GroupChannelMembers, params);
       }}
       onLeaveChannel={() => {
-        // navigate to group channel list
+        // Navigate to group channel list
         navigation.navigate(Routes.GroupChannelList);
       }}
     />

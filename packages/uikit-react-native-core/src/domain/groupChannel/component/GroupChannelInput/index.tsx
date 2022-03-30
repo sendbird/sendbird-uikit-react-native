@@ -66,4 +66,4 @@ const SafeAreaBottom: React.FC<{ height: number }> = ({ height }) => {
   return <View style={{ height }} />;
 };
 
-export default GroupChannelInput;
+export default React.memo(GroupChannelInput);

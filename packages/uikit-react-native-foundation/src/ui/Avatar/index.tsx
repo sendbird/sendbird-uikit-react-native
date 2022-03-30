@@ -1,6 +1,8 @@
 import React from 'react';
 import { Image, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
+import { conditionChaining } from '@sendbird/uikit-utils';
+
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import Icon from '../Icon';
@@ -25,10 +27,12 @@ const Avatar: React.FC<Props> & SubComponents = ({ uri, square, muted = false, s
         containerStyle,
       ]}
     >
-      {uri ? (
-        <Image source={{ uri }} resizeMode={'cover'} style={StyleSheet.absoluteFill} />
-      ) : (
-        <Icon icon={'user'} size={size / 2} color={colors.onBackgroundReverse01} />
+      {conditionChaining(
+        [Boolean(uri)],
+        [
+          <Image source={{ uri }} resizeMode={'cover'} style={StyleSheet.absoluteFill} />,
+          <Icon icon={'user'} size={size / 2} color={colors.onBackgroundReverse01} />,
+        ],
       )}
       {muted && <MutedOverlay size={size} />}
     </View>

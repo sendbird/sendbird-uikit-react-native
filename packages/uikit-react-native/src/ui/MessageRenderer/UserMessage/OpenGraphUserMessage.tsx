@@ -4,6 +4,7 @@ import type Sendbird from 'sendbird';
 
 import { useLocalization } from '@sendbird/uikit-react-native-core';
 import { Icon, Text, URLParsedText, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { conditionChaining } from '@sendbird/uikit-utils';
 
 import type { UserMessageProps } from './index';
 
@@ -32,15 +33,17 @@ const OpenGraphUserMessage: React.FC<Props> = ({ message, variant, pressed, ogMe
             { backgroundColor: select({ dark: palette.background500, light: palette.background200 }) },
           ]}
         >
-          {imageNotFound ? (
-            <Icon containerStyle={styles.ogImage} icon={'thumbnail-none'} size={48} color={colors.onBackground02} />
-          ) : (
-            <Image
-              source={{ uri: ogMetaData.defaultImage.url }}
-              style={styles.ogImage}
-              resizeMode={'cover'}
-              onError={() => setImageNotFound(true)}
-            />
+          {conditionChaining(
+            [imageNotFound],
+            [
+              <Icon containerStyle={styles.ogImage} icon={'thumbnail-none'} size={48} color={colors.onBackground02} />,
+              <Image
+                source={{ uri: ogMetaData.defaultImage.url }}
+                style={styles.ogImage}
+                resizeMode={'cover'}
+                onError={() => setImageNotFound(true)}
+              />,
+            ],
           )}
         </View>
         <View

@@ -84,7 +84,7 @@ const ChatFlatList = forwardRef<ChatFlatListRef, Props>(function CustomFlatList(
       keyboardShouldPersistTaps={'handled'}
       indicatorStyle={select({ light: 'black', dark: 'white' })}
       removeClippedSubviews
-      onEndReachedThreshold={0.25}
+      onEndReachedThreshold={0.5}
       onEndReached={onTopReached}
       onScroll={_onScroll}
     />

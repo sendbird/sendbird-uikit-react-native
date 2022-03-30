@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { View } from 'react-native';
 
 import { Avatar, Header as DefaultHeader, Icon, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
-import { getMembersExcludeMe, truncate, useDefaultChannelCover } from '@sendbird/uikit-utils';
+import { conditionChaining, getMembersExcludeMe, truncate, useDefaultChannelCover } from '@sendbird/uikit-utils';
 
 import { useLocalization } from '../../../contexts/Localization';
 import { useSendbirdChat } from '../../../contexts/SendbirdChat';
@@ -27,14 +27,16 @@ const GroupChannelHeader: React.FC<GroupChannelProps['Header']> = ({
       clearTitleMargin
       title={
         <View style={styles.titleContainer}>
-          {useDefaultChannelCover(channel) ? (
-            <Avatar uri={channel.coverUrl} size={34} containerStyle={styles.avatarGroup} />
-          ) : (
-            <Avatar.Group size={34} containerStyle={styles.avatarGroup}>
-              {getMembersExcludeMe(channel, currentUser?.userId).map((m) => (
-                <Avatar key={m.userId} uri={m.profileUrl} />
-              ))}
-            </Avatar.Group>
+          {conditionChaining(
+            [useDefaultChannelCover(channel)],
+            [
+              <Avatar uri={channel.coverUrl} size={34} containerStyle={styles.avatarGroup} />,
+              <Avatar.Group size={34} containerStyle={styles.avatarGroup}>
+                {getMembersExcludeMe(channel, currentUser?.userId).map((m) => (
+                  <Avatar key={m.userId} uri={m.profileUrl} />
+                ))}
+              </Avatar.Group>,
+            ],
           )}
           <View>
             <DefaultHeader.Title h2>{truncate(headerTitle, { mode: 'tail', maxLen: 25 })}</DefaultHeader.Title>

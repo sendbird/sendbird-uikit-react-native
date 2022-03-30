@@ -30,10 +30,12 @@ const Placeholder: React.FC<Props> = ({ icon, loading = false, message = '', err
         [styles.containerLoading, styles.containerError, styles.container],
       )}
     >
-      {loading ? (
-        <LoadingSpinner size={64} color={colors.ui.placeholder.default.none.highlight} />
-      ) : (
-        <Icon icon={icon} size={64} color={colors.ui.placeholder.default.none.content} />
+      {conditionChaining(
+        [loading],
+        [
+          <LoadingSpinner size={64} color={colors.ui.placeholder.default.none.highlight} />,
+          <Icon icon={icon} size={64} color={colors.ui.placeholder.default.none.content} />,
+        ],
       )}
       {Boolean(message) && !loading && (
         <Text body3 color={colors.ui.placeholder.default.none.content}>

@@ -23,24 +23,14 @@ export type GroupChannelProps = {
     onPressImageMessage: GroupChannelProps['MessageList']['onPressImageMessage'];
 
     staleChannel: Sendbird.GroupChannel;
-    enableMessageGrouping?: boolean;
-
-    MessageRenderer?: CommonComponent<{
-      channel: Sendbird.GroupChannel;
-      currentUserId?: string;
-      nextMessage?: SendbirdMessage;
-      message: SendbirdMessage;
-      prevMessage?: SendbirdMessage;
-      enableMessageGrouping?: boolean;
-      onPressMessage?: () => void;
-      onLongPressMessage?: () => void;
-    }>;
+    renderMessage?: GroupChannelProps['MessageList']['renderMessage'];
     NewMessagesTooltip?: GroupChannelProps['MessageList']['NewMessagesTooltip'];
     ScrollToBottomTooltip?: GroupChannelProps['MessageList']['ScrollToBottomTooltip'];
-    flatListProps?: GroupChannelProps['MessageList']['flatListProps'];
-
     Header?: GroupChannelProps['Header']['Header'];
 
+    enableTypingIndicator?: GroupChannelProps['Provider']['enableTypingIndicator'];
+    enableMessageGrouping?: GroupChannelProps['MessageList']['enableMessageGrouping'];
+    flatListProps?: GroupChannelProps['MessageList']['flatListProps'];
     sortComparator?: UseGroupChannelMessagesOptions['sortComparator'];
     collectionCreator?: UseGroupChannelMessagesOptions['collectionCreator'];
     queryCreator?: UseGroupChannelMessagesOptions['queryCreator'];
@@ -57,6 +47,7 @@ export type GroupChannelProps = {
     onPressHeaderRight: () => void;
   };
   MessageList: {
+    enableMessageGrouping: boolean;
     currentUserId?: string;
     channel: Sendbird.GroupChannel;
     messages: SendbirdMessage[];
@@ -69,13 +60,16 @@ export type GroupChannelProps = {
     onDeleteMessage: (message: Sendbird.UserMessage | Sendbird.FileMessage) => Promise<void>;
     onPressImageMessage: (message: Sendbird.FileMessage, uri: string) => void;
 
-    renderMessage: (
-      message: SendbirdMessage,
-      prevMessage?: SendbirdMessage,
-      nextMessage?: SendbirdMessage,
-      onPress?: () => void,
-      onLongPress?: () => void,
-    ) => React.ReactElement | null;
+    renderMessage: (props: {
+      message: SendbirdMessage;
+      prevMessage?: SendbirdMessage;
+      nextMessage?: SendbirdMessage;
+      onPress?: () => void;
+      onLongPress?: () => void;
+      channel: GroupChannelProps['MessageList']['channel'];
+      currentUserId?: GroupChannelProps['MessageList']['currentUserId'];
+      enableMessageGrouping: GroupChannelProps['MessageList']['enableMessageGrouping'];
+    }) => React.ReactElement | null;
     NewMessagesTooltip: null | CommonComponent<{
       visible: boolean;
       onPress: () => void;
@@ -93,6 +87,10 @@ export type GroupChannelProps = {
     onSendUserMessage: (text: string) => Promise<void>;
     onUpdateFileMessage: (editedFile: FileType, message: Sendbird.FileMessage) => Promise<void>;
     onUpdateUserMessage: (editedText: string, message: Sendbird.UserMessage) => Promise<void>;
+  };
+  Provider: {
+    channel: Sendbird.GroupChannel;
+    enableTypingIndicator: boolean;
   };
 };
 
@@ -113,7 +111,7 @@ export type GroupChannelContextType = {
   }>;
 };
 export interface GroupChannelModule {
-  Provider: React.FC<{ channel: Sendbird.GroupChannel }>;
+  Provider: React.FC<GroupChannelProps['Provider']>;
   Header: CommonComponent<GroupChannelProps['Header']>;
   MessageList: CommonComponent<GroupChannelProps['MessageList']>;
   Input: CommonComponent<GroupChannelProps['Input']>;

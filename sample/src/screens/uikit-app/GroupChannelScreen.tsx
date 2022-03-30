@@ -20,20 +20,20 @@ const GroupChannelScreen: React.FC = () => {
   return (
     <GroupChannelFragment
       onPressImageMessage={(msg, uri) => {
-        // navigate to photo preview
+        // Navigate to photo preview
         Logger.log('file uri', msg.name, uri);
       }}
       staleChannel={staleChannel}
       onChannelDeleted={() => {
-        // navigate to channel list
+        // Navigate to channel list
         navigation.navigate(Routes.GroupChannelList);
       }}
       onPressHeaderLeft={() => {
-        // navigate to channel list
+        // Navigate back
         navigation.goBack();
       }}
       onPressHeaderRight={() => {
-        // navigate to channel information
+        // Navigate to group channel information
         navigation.navigate(Routes.GroupChannelInfo, { serializedChannel: params.serializedChannel });
       }}
     />

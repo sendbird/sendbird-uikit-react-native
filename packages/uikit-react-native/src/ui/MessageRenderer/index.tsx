@@ -28,12 +28,12 @@ export interface MessageRendererInterface<T = SendbirdMessage> {
   pressed: boolean;
 }
 
-const MessageRenderer: GroupChannelProps['Fragment']['MessageRenderer'] = ({
+const MessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
   currentUserId,
   channel,
   message,
-  onLongPressMessage,
-  onPressMessage,
+  onPress,
+  onLongPress,
   ...rest
 }) => {
   const variant: MessageStyleVariant = isMyMessage(message, currentUserId) ? 'outgoing' : 'incoming';
@@ -49,16 +49,13 @@ const MessageRenderer: GroupChannelProps['Fragment']['MessageRenderer'] = ({
   );
 
   const messageComponent = useIIFE(() => {
-    const pressableProps = {
-      style: styles.msgContainer,
-      onPress: onPressMessage,
-      onLongPress: onLongPressMessage,
-    };
-    const props = { ...rest, variant, groupWithNext, groupWithPrev };
+    const pressableProps = { style: styles.msgContainer, onPress, onLongPress };
+    const messageProps = { ...rest, variant, groupWithNext, groupWithPrev };
+
     if (message.isUserMessage()) {
       return (
         <Pressable {...pressableProps}>
-          {({ pressed }) => <UserMessage message={message} pressed={pressed} {...props} />}
+          {({ pressed }) => <UserMessage message={message} pressed={pressed} {...messageProps} />}
         </Pressable>
       );
     }
@@ -66,18 +63,18 @@ const MessageRenderer: GroupChannelProps['Fragment']['MessageRenderer'] = ({
     if (message.isFileMessage()) {
       return (
         <Pressable {...pressableProps}>
-          {({ pressed }) => <FileMessage message={message} pressed={pressed} {...props} />}
+          {({ pressed }) => <FileMessage message={message} pressed={pressed} {...messageProps} />}
         </Pressable>
       );
     }
 
     if (message.isAdminMessage()) {
-      return <AdminMessage message={message} pressed={false} {...props} />;
+      return <AdminMessage message={message} pressed={false} {...messageProps} />;
     }
 
     return (
       <Pressable {...pressableProps}>
-        {({ pressed }) => <UnknownMessage message={message} pressed={pressed} {...props} />}
+        {({ pressed }) => <UnknownMessage message={message} pressed={pressed} {...messageProps} />}
       </Pressable>
     );
   });
