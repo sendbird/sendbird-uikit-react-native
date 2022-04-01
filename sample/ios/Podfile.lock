@@ -420,6 +420,8 @@ PODS:
     - React-Core
   - RNCClipboard (1.8.5):
     - React-Core
+  - RNCPushNotificationIOS (1.10.1):
+    - React-Core
   - RNDateTimePicker (5.1.0):
     - React-Core
   - RNFBApp (14.7.0):
@@ -433,9 +435,10 @@ PODS:
     - React-Core
   - RNNotifee (5.0.3):
     - React-Core
-    - RNNotifee/NotifeeCore (= 5.0.3)
-  - RNNotifee/NotifeeCore (5.0.3):
-    - React-Core
+    - RNNotifeeCore
+  - RNNotifeeCore (5.0.3):
+    - RNNotifeeCore/NotifeeCore (= 5.0.3)
+  - RNNotifeeCore/NotifeeCore (5.0.3)
   - RNPermissions (3.3.1):
     - React-Core
   - RNScreens (3.13.1):
@@ -510,11 +513,13 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
+  - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
   - "RNDateTimePicker (from `../../node_modules/@react-native-community/datetimepicker`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNFS (from `../../node_modules/react-native-fs`)
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
+  - "RNNotifeeCore (from `../node_modules/@notifee/react-native/RNNotifeeCore.podspec`)"
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -630,6 +635,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCClipboard:
     :path: "../node_modules/@react-native-clipboard/clipboard"
+  RNCPushNotificationIOS:
+    :path: "../node_modules/@react-native-community/push-notification-ios"
   RNDateTimePicker:
     :path: "../../node_modules/@react-native-community/datetimepicker"
   RNFBApp:
@@ -640,6 +647,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native-fs"
   RNNotifee:
     :path: "../node_modules/@notifee/react-native"
+  RNNotifeeCore:
+    :path: "../node_modules/@notifee/react-native/RNNotifeeCore.podspec"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
   RNScreens:
@@ -713,16 +722,18 @@ SPEC CHECKSUMS:
   ReactCommon: 57b69f6383eafcbd7da625bfa6003810332313c4
   RNCAsyncStorage: 4efdcd2f7378421b29467c9de58f43552b60cf5b
   RNCClipboard: cc054ad1e8a33d2a74cd13e565588b4ca928d8fd
+  RNCPushNotificationIOS: 87b8d16d3ede4532745e05b03c42cff33a36cc45
   RNDateTimePicker: 1dd15d7ed1ab7d999056bc77879a42920d139c12
   RNFBApp: 097a31d372b3db15b41c7a1a5c429433b0609e12
   RNFBMessaging: 06a7a73883f3f43da61507dbfcf4db2245c22869
   RNFS: fc610f78fdf8bfc89a9e5cc2f898519f4dba1002
-  RNNotifee: 83b475b2fdf7e9191a39ebd591f153713930eb7d
+  RNNotifee: 8910ba632248f29a8aa3351a5e266f4ebce24793
+  RNNotifeeCore: 5f33ddf48a32bc2f027d5d03b6528c6abd78f1b4
   RNPermissions: 34d678157c800b25b22a488e4d8babb57456e796
   RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19
   Yoga: e7dc4e71caba6472ff48ad7d234389b91dadc280
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 0332d8c0c24e907cfbbeda48488612f9ff3d15ea
+PODFILE CHECKSUM: 286397e0c254c47d559ec1982bf7e33385545b25
 
 COCOAPODS: 1.11.2

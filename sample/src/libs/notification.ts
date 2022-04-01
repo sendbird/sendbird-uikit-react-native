@@ -1,33 +1,58 @@
 import Notifee, { EventType } from '@notifee/react-native';
 import type { Event } from '@notifee/react-native/dist/types/Notification';
+import PushNotificationIOS, { PushNotification } from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
+import { Platform } from 'react-native';
 
-import { isSendbirdNotification, parseSendbirdNotification } from '@sendbird/uikit-utils';
+import { EmptyFunction, isSendbirdNotification, parseSendbirdNotification } from '@sendbird/uikit-utils';
 
 import { SendBirdInstance } from '../factory';
 import { Routes, runAfterAppReady } from './navigation';
 
-export const onNotificationEvent: (event: Event) => Promise<void> = async ({ type, detail }) => {
-  if (type !== EventType.PRESS || !detail.notification) return;
-  if (!isSendbirdNotification(detail.notification.data)) return;
+export const onNotificationAndroid: (event: Event) => Promise<void> = async ({ type, detail }) => {
+  if (Platform.OS !== 'android') return;
 
-  const sendbird = parseSendbirdNotification(detail.notification.data);
-  if (sendbird.channel) {
-    const channel = await SendBirdInstance.GroupChannel.getChannel(sendbird.channel.channel_url);
+  if (type === EventType.PRESS && detail.notification && isSendbirdNotification(detail.notification.data)) {
+    const sendbird = parseSendbirdNotification(detail.notification.data);
     runAfterAppReady(async (actions) => {
+      const channel = await SendBirdInstance.GroupChannel.getChannel(sendbird.channel.channel_url);
       actions.navigate(Routes.GroupChannel, { serializedChannel: channel.serialize() });
     });
   }
 };
 
-Notifee.onBackgroundEvent(onNotificationEvent);
+export const onForegroundAndroid = () => Notifee.onForegroundEvent(onNotificationAndroid);
+export const onForegroundIOS = () => {
+  if (Platform.OS !== 'ios') return EmptyFunction;
+
+  const onNotificationIOS = (notification: PushNotification) => {
+    const data = notification.getData();
+    if (data.userInteraction === 1 && isSendbirdNotification(data)) {
+      const sendbird = parseSendbirdNotification(data);
+      runAfterAppReady(async (actions) => {
+        const channel = await SendBirdInstance.GroupChannel.getChannel(sendbird.channel.channel_url);
+        actions.navigate(Routes.GroupChannel, { serializedChannel: channel.serialize() });
+      });
+    }
+  };
+
+  const checkAppOpenedWithNotification = async () => {
+    const notification = await PushNotificationIOS.getInitialNotification();
+    notification && onNotificationIOS(notification);
+  };
+
+  checkAppOpenedWithNotification();
+  PushNotificationIOS.addEventListener('localNotification', onNotificationIOS);
+  return () => PushNotificationIOS.removeEventListener('localNotification');
+};
+
+Notifee.onBackgroundEvent(onNotificationAndroid);
 messaging().setBackgroundMessageHandler(async (message) => {
+  if (Platform.OS !== 'android') return;
+
   const channelId = await Notifee.createChannel({ id: 'default', name: 'Default Channel', importance: 4 });
   if (isSendbirdNotification(message.data)) {
     const sendbird = parseSendbirdNotification(message.data);
-    try {
-      SendBirdInstance.markAsDelivered(sendbird.channel.channel_url);
-    } catch {}
     await Notifee.displayNotification({
       id: String(sendbird.message_id),
       title: sendbird.channel.name || sendbird.sender?.name || 'Message received',

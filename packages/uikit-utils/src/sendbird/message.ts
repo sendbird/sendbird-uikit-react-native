@@ -84,12 +84,14 @@ export function getAvailableUriFromFileMessage(message: Sendbird.FileMessage) {
   return message.url;
 }
 
-type RawSendbirdDataPayload = { message: string; sendbird: string };
-export function isSendbirdNotification(dataPayload?: { [key: string]: string }): dataPayload is RawSendbirdDataPayload {
+type RawSendbirdDataPayload = { sendbird: string | object };
+export function isSendbirdNotification(dataPayload?: {
+  [key: string]: string | object;
+}): dataPayload is RawSendbirdDataPayload {
   if (!dataPayload) return false;
   return Boolean(dataPayload['sendbird']);
 }
 
 export function parseSendbirdNotification(dataPayload: RawSendbirdDataPayload): SendbirdDataPayload {
-  return JSON.parse(dataPayload.sendbird);
+  return typeof dataPayload.sendbird === 'string' ? JSON.parse(dataPayload.sendbird) : dataPayload.sendbird;
 }

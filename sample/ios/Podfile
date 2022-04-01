@@ -29,3 +29,9 @@ target 'SendbirdUIKitSample' do
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
 end
+
+$NotifeeExtension = true
+
+target 'NotificationService' do
+  pod 'RNNotifeeCore', :path => '../node_modules/@notifee/react-native/RNNotifeeCore.podspec'
+end

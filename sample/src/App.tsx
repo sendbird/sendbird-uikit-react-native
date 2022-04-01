@@ -1,12 +1,9 @@
-import Notifee from '@notifee/react-native';
-import messaging from '@react-native-firebase/messaging';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 
 import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
 import { useSendbirdChat } from '@sendbird/uikit-react-native-core/src/contexts/SendbirdChat';
 import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { Logger, isSendbirdNotification, parseSendbirdNotification } from '@sendbird/uikit-utils';
 
 import {
   ClipboardService,
@@ -18,7 +15,7 @@ import {
 } from './factory';
 import useAppearance from './hooks/useAppearance';
 import { Routes, navigationRef } from './libs/navigation';
-import { onNotificationEvent } from './libs/notification';
+import { onForegroundAndroid, onForegroundIOS } from './libs/notification';
 import {
   GroupChannelCreateScreen,
   GroupChannelInfoScreen,
@@ -52,21 +49,12 @@ const App = () => {
 };
 
 const Navigations = () => {
-  const { currentUser, sdk } = useSendbirdChat();
+  const { currentUser } = useSendbirdChat();
   const { scheme } = useAppearance();
   const isLightTheme = scheme === 'light';
 
   useEffect(() => {
-    const unsubscribes = [
-      messaging().onMessage((message) => {
-        Logger.log('onMessage');
-        if (isSendbirdNotification(message.data)) {
-          sdk.markAsDelivered(parseSendbirdNotification(message.data).channel.channel_url);
-        }
-      }),
-      Notifee.onForegroundEvent(onNotificationEvent),
-    ];
-
+    const unsubscribes = [onForegroundAndroid(), onForegroundIOS()];
     return () => {
       unsubscribes.forEach((fn) => fn());
     };

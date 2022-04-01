@@ -12,7 +12,7 @@ type Options = {
 
 const useConnection = (opts?: Options) => {
   const { sdk, setCurrentUser } = useSendbirdChat();
-  const { registerPushTokenForCurrentUser, unregisterPushTokenForCurrentUser } = usePushTokenRegistration(true);
+  const { registerPushTokenForCurrentUser, unregisterPushTokenForCurrentUser } = usePushTokenRegistration(false);
 
   const connect = useCallback(
     async (userId: string, accessToken?: string) => {
