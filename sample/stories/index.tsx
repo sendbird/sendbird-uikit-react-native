@@ -1,7 +1,7 @@
 import { getStorybookUI } from '@storybook/react-native';
 import type React from 'react';
 
-// import '../.storybook/storybook.requires';
+import '../.storybook/storybook.requires';
 
 /**
  *   RN Storybook 6.0 arg types
@@ -16,5 +16,5 @@ import type React from 'react';
  *   radio: RadioType,
  *   */
 
-// const StorybookUIRoot = getStorybookUI({}) as unknown as React.ComponentType;
-// export default StorybookUIRoot;
+const StorybookUIRoot = getStorybookUI({}) as unknown as React.ComponentType;
+export default StorybookUIRoot;

@@ -148,8 +148,8 @@ const createNativeFileService = ({
       try {
         const { uri, size, name, type } = await documentPickerModule.pickSingle({});
         return fileTypeGuard({ uri, size, name, type });
-      } catch {
-        options?.onError?.();
+      } catch (e) {
+        if (!documentPickerModule.isCancel(e) && documentPickerModule.isInProgress(e)) options?.onError?.();
         return null;
       }
     },

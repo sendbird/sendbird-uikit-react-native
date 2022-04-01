@@ -26,6 +26,7 @@ import {
   HomeScreen,
   PaletteScreen,
   SignInScreen,
+  StorybookScreen,
   ThemeColorsScreen,
 } from './screens';
 
@@ -78,7 +79,7 @@ const Navigations = () => {
 
             <RootStack.Screen name={Routes.ThemeColors} component={ThemeColorsScreen} />
             <RootStack.Screen name={Routes.Palette} component={PaletteScreen} />
-            {/*<RootStack.Screen name={Routes.Storybook} component={StorybookScreen} />*/}
+            <RootStack.Screen name={Routes.Storybook} component={StorybookScreen} />
           </>
         )}
       </RootStack.Navigator>
