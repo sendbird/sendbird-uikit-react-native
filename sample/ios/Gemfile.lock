@@ -105,9 +105,8 @@ GEM
       xcodeproj (>= 1.13.0, < 2.0.0)
       xcpretty (~> 0.3.0)
       xcpretty-travis-formatter (>= 0.0.3)
-    fastlane-plugin-firebase_app_distribution (0.3.3)
     fastlane-plugin-json (1.1.0)
-    fastlane-plugin-versioning_android (0.1.0)
+    fastlane-plugin-versioning_ios (0.1.0)
     gh_inspector (1.1.3)
     google-apis-androidpublisher_v3 (0.17.0)
       google-apis-core (>= 0.4, < 2.a)
@@ -213,13 +212,12 @@ GEM
 
 PLATFORMS
   arm64-darwin-21
-  x86_64-linux
+  x86_64-darwin-19
 
 DEPENDENCIES
   fastlane
-  fastlane-plugin-firebase_app_distribution
   fastlane-plugin-json
-  fastlane-plugin-versioning_android
+  fastlane-plugin-versioning_ios
 
 BUNDLED WITH
    2.3.7
