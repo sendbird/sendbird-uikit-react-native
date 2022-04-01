@@ -1,0 +1,77 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'iOS / Android'
+        required: true
+        type: choice
+        options:
+          - Android
+          - iOS
+          - All
+env:
+  CACHE_NODE_MODULES_PATH: |
+    node_modules
+    */*/node_modules
+
+jobs:
+  deploy-android:
+    name: '[Android] Deploy'
+    if: ${{ github.event.inputs.platform == 'Android' || github.event.inputs.platform == 'All' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+      - uses: ruby/setup-ruby@v1
+        env:
+          BUNDLE_GEMFILE: ${{ github.workspace }}/sample/android/Gemfile
+        with:
+          ruby-version: 2.7
+          bundler-cache: true
+      - name: Get lockfile hash
+        id: lockfile_hash
+        run: echo "::set-output name=hash::${{ hashFiles('**/yarn.lock') }}"
+      - name: Check cached node_modules
+        id: check_cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+          key: ${{ steps.lockfile_hash.outputs.hash }}
+      - name: Install dependencies
+        if: steps.check_cache.outputs.cache-hit == ''
+        run: yarn install --frozen-lockfile
+      - name: Create env.ts
+        run:
+          echo "export const APP_ID = '${{ secrets.sendbird_app_id }}';" >> sample/src/env.ts
+
+      - name: Create service-account.json
+        uses: /bang9/create-env-json@v3
+        id: service-account
+        with:
+          file-name: './sample/android/fastlane/service-account.json'
+          type: 'service_account'
+          auth_uri: 'https://accounts.google.com/o/oauth2/auth'
+          token_uri: 'https://oauth2.googleapis.com/token'
+          auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs'
+          project_id: ${{ secrets.fastlane_android_account_project_id }}
+          private_key_id: ${{ secrets.fastlane_android_account_private_key_id }}
+          private_key: '${{ secrets.fastlane_android_account_private_key }}'
+          client_email: ${{ secrets.fastlane_android_account_client_email }}
+          client_id: ${{ secrets.fastlane_android_account_client_id }}
+          client_x509_cert_url: ${{ secrets.fastlane_android_account_client_x509_cert_url }}
+      - name: Run fastlane
+        env:
+          FIREBASEAPPDISTRO_APP: ${{ secrets.fastlane_android_app_id }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.service-account.outputs.full-path }}
+        run: yarn deploy:android
+
+#  deploy-ios:
+#    name: '[iOS] Deploy'
+#    if: ${{ github.event.inputs.platform != 'Android' }}
+#    runs-on: macos-latest
+#    steps:
+#      - uses: actions/checkout@v3

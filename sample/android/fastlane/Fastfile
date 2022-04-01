@@ -1,0 +1,13 @@
+PACKAGE_JSON=read_json(json_path: "#{Dir.pwd}/../../package.json")
+VERSION=PACKAGE_JSON[:version]
+DATE=Time.new.strftime("%Y.%m%d.%H%M")
+
+default_platform(:android)
+platform :android do
+  desc "Deploy a new build to Firebase distribution"
+  lane :deploy do
+    android_set_version_name(gradle_file: "app/build.gradle", version_name: "#{VERSION}-#{DATE}")
+    gradle(task: "assemble", build_type: "Release")
+    firebase_app_distribution(groups: "sendbird")
+  end
+end
