@@ -87,9 +87,8 @@ jobs:
       - run: *create_app_env
       - run:
           name: Create service-account.json
-          working_directory: sample/android
           environment:
-            - FILE_PATH: fastlane/service-account.json
+            - FILE_PATH: sample/android/fastlane/service-account.json
           command: |
             echo "$FASTLANE_ANDROID_SERVICE_ACCOUNT" | base64 --decode >> $FILE_PATH
             echo "export GOOGLE_APPLICATION_CREDENTIALS=$CIRCLE_WORKING_DIRECTORY/$FILE_PATH" >> $BASH_ENV
