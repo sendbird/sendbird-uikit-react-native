@@ -25,6 +25,8 @@ alias_commands:
 # https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
 # https://circleci.com/docs/2.0/testing-ios/#supported-xcode-versions
 version: 2.1
+orbs:
+  ruby: circleci/ruby@1.6.0
 parameters:
   platform:
     type: enum
@@ -42,6 +44,9 @@ jobs:
           name: Install gem
           working_directory: sample/ios
           command: bundle install
+      - restore_cache: *restore_node_modules
+      - run: *install_node_modules
+      - save_cache: *save_node_modules
       - restore_cache:
           key: pods-{{ arch }}-{{ checksum "sample/ios/Podfile.lock" }}
       - run:
@@ -52,19 +57,18 @@ jobs:
           key: pods-{{ arch }}-{{ checksum "sample/ios/Podfile.lock" }}
           paths:
             - ios/Pods
-      - restore_cache: *restore_node_modules
-      - run: *install_node_modules
-      - save_cache: *save_node_modules
       - run: *create_app_env
       - run:
+          name: Expose environments
+          command: |
+            echo "export TEAM_ID=$FASTLANE_IOS_TEAM_ID" >> $BASH_ENV
+            echo "export MATCH_PASSWORD=$FASTLANE_IOS_MATCH_PASSWORD" >> $BASH_ENV
+            echo "export MATCH_GIT_URL=$FASTLANE_IOS_MATCH_GIT_URL" >> $BASH_ENV
+            echo "export MATCH_GIT_BASIC_AUTHORIZATION=$FASTLANE_IOS_MATCH_GIT_BASIC_AUTHORIZATION" >> $BASH_ENV
+            echo "export APPLE_ID=$FASTLANE_IOS_APPLE_ID" >> $BASH_ENV
+            echo "export FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=$FASTLANE_IOS_APPLE_APPLICATION_SPECIFIC_PASSWORD" >> $BASH_ENV
+      - run:
           name: Run fastlane
-          environment:
-            - TEAM_ID: $FASTLANE_IOS_TEAM_ID
-            - MATCH_PASSWORD: $FASTLANE_IOS_MATCH_PASSWORD
-            - MATCH_GIT_URL: $FASTLANE_IOS_MATCH_GIT_URL
-            - MATCH_GIT_BASIC_AUTHORIZATION: $FASTLANE_IOS_MATCH_GIT_BASIC_AUTHORIZATION
-            - APPLE_ID: $FASTLANE_IOS_APPLE_ID
-            - FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: $FASTLANE_IOS_APPLE_APPLICATION_SPECIFIC_PASSWORD
           command: yarn deploy:ios
 
   deploy-android:
@@ -73,12 +77,10 @@ jobs:
     resource_class: xlarge
     steps:
       - checkout
-      - run:
-          name: Install gem
-          working_directory: sample/android
-          command: |
-            gem install bundler
-            bundle install
+      - ruby/install:
+          version: '2.7.5'
+      - ruby/install-deps:
+          app-dir: ./sample/android
       - restore_cache: *restore_node_modules
       - run: *install_node_modules
       - save_cache: *save_node_modules
@@ -90,12 +92,10 @@ jobs:
             - FILE_PATH: fastlane/service-account.json
           command: |
             echo "$FASTLANE_ANDROID_SERVICE_ACCOUNT" | base64 --decode >> $FILE_PATH
-            echo "export ACCOUNT_FULL_PATH=$CIRCLE_WORKING_DIRECTORY/$FILE_PATH" >> $BASH_ENV
+            echo "export GOOGLE_APPLICATION_CREDENTIALS=$CIRCLE_WORKING_DIRECTORY/$FILE_PATH" >> $BASH_ENV
+            echo "export FIREBASEAPPDISTRO_APP=$FASTLANE_ANDROID_APP_ID" >> $BASH_ENV
       - run:
           name: Run fastlane
-          environment:
-            - FIREBASEAPPDISTRO_APP: $FASTLANE_ANDROID_APP_ID
-            - GOOGLE_APPLICATION_CREDENTIALS: $ACCOUNT_FULL_PATH
           command: yarn deploy:android
 
 workflows:
