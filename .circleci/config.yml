@@ -64,18 +64,8 @@ jobs:
             echo "export TEAM_ID=$FASTLANE_IOS_TEAM_ID" >> $BASH_ENV
             echo "export MATCH_PASSWORD=$FASTLANE_IOS_MATCH_PASSWORD" >> $BASH_ENV
             echo "export MATCH_GIT_URL=$FASTLANE_IOS_MATCH_GIT_URL" >> $BASH_ENV
-            echo "export MATCH_GIT_BASIC_AUTHORIZATION=$FASTLANE_IOS_MATCH_GIT_BASIC_AUTHORIZATION" >> $BASH_ENV
             echo "export APPLE_ID=$FASTLANE_IOS_APPLE_ID" >> $BASH_ENV
             echo "export FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=$FASTLANE_IOS_APPLE_APPLICATION_SPECIFIC_PASSWORD" >> $BASH_ENV
-      - run:
-          name: Check env length
-          command: |
-            echo "FASTLANE_IOS_TEAM_ID ${#FASTLANE_IOS_TEAM_ID}
-            echo "MATCH_PASSWORD ${#MATCH_PASSWORD}
-            echo "MATCH_GIT_URL ${#MATCH_GIT_URL}
-            echo "MATCH_GIT_BASIC_AUTHORIZATION ${#MATCH_GIT_BASIC_AUTHORIZATION}
-            echo "APPLE_ID ${#APPLE_ID}
-            echo "FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD ${#FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD}
       - run:
           name: Run fastlane
           command: yarn deploy:ios

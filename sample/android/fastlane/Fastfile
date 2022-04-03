@@ -7,7 +7,7 @@ platform :android do
   desc "Deploy a new build to Firebase distribution"
   lane :deploy do
     android_set_version_name(gradle_file: "app/build.gradle", version_name: "#{VERSION}-#{DATE}")
-    gradle(task: "assemble", build_type: "Release", flag: "--no-demon")
+    gradle(task: "assemble", build_type: "Release", flags: "--no-demon")
     firebase_app_distribution(groups: "sendbird")
   end
 end
