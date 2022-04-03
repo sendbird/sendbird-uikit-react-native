@@ -56,7 +56,7 @@ jobs:
       - save_cache:
           key: pods-{{ arch }}-{{ checksum "sample/ios/Podfile.lock" }}
           paths:
-            - ios/Pods
+            - sample/ios/Pods
       - run: *create_app_env
       - run:
           name: Expose environments
