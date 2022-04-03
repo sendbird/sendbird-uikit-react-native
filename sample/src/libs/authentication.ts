@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLayoutEffect } from 'react';
-
-import { USER_ID } from '../env';
+import { Platform } from 'react-native';
 
 interface SimpleUser {
   userId: string;
@@ -29,7 +28,7 @@ class UserStorage implements UserStorageInterface {
 
 const createAuthManager = (userStorage: UserStorageInterface) => {
   const internal: { user: SimpleUser | null } = {
-    user: __DEV__ ? { userId: USER_ID } : null,
+    user: __DEV__ ? { userId: Platform.select({ android: 'TEST_ANDROID', ios: 'TEST_IOS', default: 'TESTER' }) } : null,
   };
   return {
     hasAuthentication() {

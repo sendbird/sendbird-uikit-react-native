@@ -29,7 +29,9 @@
     "fix:eslint": "eslint --fix packages/*/src --ext ts,tsx -c ./.eslintrc.js",
     "fix:prettier": "prettier --write \"sample/src/**/*.{ts,tsx}\" \"packages/*/src/**/*.{ts,tsx}\"",
     "sample:ios": "cd sample && yarn ios",
-    "sample:android": "cd sample && yarn android"
+    "sample:android": "cd sample && yarn android",
+    "deploy:ios": "cd sample/ios && bundle exec fastlane deploy",
+    "deploy:android": "cd sample/android && bundle exec fastlane deploy"
   },
   "devDependencies": {
     "@testing-library/react-native": "^9.0.0",
