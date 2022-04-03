@@ -43,7 +43,9 @@ jobs:
       - run:
           name: Install gem
           working_directory: sample/ios
-          command: bundle install
+          command: |
+            pod --version
+            bundle install
       - restore_cache: *restore_node_modules
       - run: *install_node_modules
       - save_cache: *save_node_modules
