@@ -1,7 +1,7 @@
 import Notifee, { EventType } from '@notifee/react-native';
 import type { Event } from '@notifee/react-native/dist/types/Notification';
 import PushNotificationIOS, { PushNotification } from '@react-native-community/push-notification-ios';
-import messaging from '@react-native-firebase/messaging';
+import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
 import { Platform } from 'react-native';
 
 import { EmptyFunction, isSendbirdNotification, parseSendbirdNotification } from '@sendbird/uikit-utils';
@@ -47,7 +47,7 @@ export const onForegroundIOS = () => {
 };
 
 Notifee.onBackgroundEvent(onNotificationAndroid);
-messaging().setBackgroundMessageHandler(async (message) => {
+messaging().setBackgroundMessageHandler(async (message: FirebaseMessagingTypes.RemoteMessage) => {
   if (Platform.OS !== 'android') return;
 
   const channelId = await Notifee.createChannel({ id: 'default', name: 'Default Channel', importance: 4 });

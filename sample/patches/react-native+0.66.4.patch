@@ -4,14 +4,14 @@ index 2648cc3..726e200 100644
 +++ b/node_modules/react-native/Libraries/Lists/VirtualizedList.js
 @@ -9,6 +9,7 @@
   */
- 
+
  const Batchinator = require('../Interaction/Batchinator');
 +const Platform = require('../Utilities/Platform');
  const FillRateHelper = require('./FillRateHelper');
  const ReactNative = require('../Renderer/shims/ReactNative');
  const RefreshControl = require('../Components/RefreshControl/RefreshControl');
 @@ -2119,7 +2120,14 @@ function describeNestedLists(childList: {
- 
+
  const styles = StyleSheet.create({
    verticallyInverted: {
 -    transform: [{scaleY: -1}],

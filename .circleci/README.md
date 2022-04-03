@@ -22,6 +22,8 @@ How to generate CI environment
 
 - FASTLANE_IOS_TEAM_ID
   - You can find out from the ends of [apple developers](https://developer.apple.com/account) site url
+- FASTLANE_IOS_ITC_TEAM_ID
+  - iTunes connect team id, refer this [link](https://github.com/fastlane/fastlane/issues/4301#issuecomment-253461017)
 - FASTLANE_IOS_MATCH_GIT_URL
   - URL should be starts with `git@` (ssh)
   - Save match git url to environment, you can find out from our github organization repos
