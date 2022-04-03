@@ -27,6 +27,7 @@ alias_commands:
 version: 2.1
 orbs:
   ruby: circleci/ruby@1.6.0
+  macos: circleci/macos@2
 parameters:
   platform:
     type: enum
@@ -41,11 +42,13 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install gem
-          working_directory: sample/ios
-          command: |
-            pod --version
-            bundle install
+          name: Setup node symlink for using nvm
+          command: ln -s $(which node) /usr/local/bin/node
+      - macos/switch-ruby:
+          version: '2.7.5'
+      - ruby/install-deps:
+          key: gems-ios
+          app-dir: ./sample/ios
       - restore_cache: *restore_node_modules
       - run: *install_node_modules
       - save_cache: *save_node_modules
@@ -54,7 +57,7 @@ jobs:
       - run:
           name: Install pods
           working_directory: sample/ios
-          command: pod install
+          command: bundle exec pod install
       - save_cache:
           key: pods-{{ arch }}-{{ checksum "sample/ios/Podfile.lock" }}
           paths:
@@ -81,6 +84,7 @@ jobs:
       - ruby/install:
           version: '2.7.5'
       - ruby/install-deps:
+          key: gems-android
           app-dir: ./sample/android
       - restore_cache: *restore_node_modules
       - run: *install_node_modules
