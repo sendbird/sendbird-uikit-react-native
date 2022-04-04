@@ -5,7 +5,7 @@ import { useTotalUnreadMessageCount } from '@sendbird/chat-react-hooks';
 import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { Icon, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
-import { Routes } from '../../../hooks/useAppNavigation';
+import { Routes } from '../../../libs/navigation';
 import GroupChannelListScreen from './GroupChannelListScreen';
 import SettingsScreen from './SettingsScreen';
 
@@ -15,17 +15,22 @@ const GroupChannelTabs = () => {
   const { colors, typography } = useUIKitTheme();
   const { sdk } = useSendbirdChat();
   const totalUnreadMessages = useTotalUnreadMessageCount(sdk);
+
   return (
     <Tab.Navigator
       initialRouteName={Routes.GroupChannelList}
-      screenOptions={{ tabBarActiveTintColor: colors.primary, tabBarLabelStyle: typography.caption2 }}
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: colors.primary,
+        tabBarLabelStyle: typography.caption2,
+      }}
     >
       <Tab.Screen
         name={Routes.GroupChannelList}
         component={GroupChannelListScreen}
         options={{
           tabBarLabel: 'Channels',
-          tabBarBadge: totalUnreadMessages || undefined,
+          tabBarBadge: totalUnreadMessages === '0' ? undefined : totalUnreadMessages,
           tabBarIcon: ({ color }) => <Icon icon={'chat-filled'} color={color} />,
         }}
       />

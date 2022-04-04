@@ -15,7 +15,7 @@
   "sideEffects": false,
   "scripts": {
     "test": "jest",
-    "prepare": "bob build",
+    "build": "bob build",
     "clean": "del lib"
   },
   "keywords": [
@@ -42,12 +42,13 @@
     "react": "17.0.2",
     "react-native": "0.66.4",
     "react-native-builder-bob": "^0.18.0",
-    "sendbird": "^3.1.7",
+    "sendbird": "^3.1.9",
     "typescript": "^4.1.3"
   },
   "peerDependencies": {
     "react": ">=16.13.1",
-    "react-native": ">=0.63.3"
+    "react-native": ">=0.63.3",
+    "sendbird": "^3.1.9"
   },
   "react-native-builder-bob": {
     "source": "src",

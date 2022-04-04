@@ -1,12 +1,15 @@
-import React, { useLayoutEffect } from 'react';
+import React from 'react';
 import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { usePushTrigger } from '@sendbird/chat-react-hooks';
-import { useConnection, usePlatformService, useSendbirdChat } from '@sendbird/uikit-react-native-core';
+import { usePlatformService, useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import {
   Avatar,
   Divider,
   Header,
+  MenuBar,
+  MenuBarProps,
   Switch,
   Text,
   useActionMenu,
@@ -15,24 +18,24 @@ import {
 } from '@sendbird/uikit-react-native-foundation';
 import { useBottomSheet } from '@sendbird/uikit-react-native-foundation/src/ui/Dialog';
 
-import MenuBar, { MenuBarProps } from '../../../components/MenuBar';
-import { Routes, useAppNavigation } from '../../../hooks/useAppNavigation';
+import { useAppNavigation } from '../../../hooks/useAppNavigation';
 import useAppearance from '../../../hooks/useAppearance';
+import { Routes } from '../../../libs/navigation';
 
 const SettingsScreen = () => {
   const { navigation } = useAppNavigation<Routes.Settings>();
   const { scheme, setScheme } = useAppearance();
 
   const { currentUser, setCurrentUser, sdk } = useSendbirdChat();
-  const { disconnect } = useConnection();
   const { option, updateOption } = usePushTrigger(sdk);
-  const { filePickerService } = usePlatformService();
+  const { fileService } = usePlatformService();
 
   const { colors, palette } = useUIKitTheme();
 
   const { openSheet } = useBottomSheet();
   const { prompt } = usePrompt();
   const { openMenu } = useActionMenu();
+  const { left, right } = useSafeAreaInsets();
 
   const onChangeNickname = () => {
     prompt({
@@ -53,7 +56,7 @@ const SettingsScreen = () => {
         {
           title: 'Take photo',
           onPress: async () => {
-            const file = await filePickerService.openCamera();
+            const file = await fileService.openCamera();
             if (!file) return;
 
             const user = await sdk.updateCurrentUserInfoWithProfileImage(sdk.currentUser.nickname, file);
@@ -63,7 +66,7 @@ const SettingsScreen = () => {
         {
           title: 'Choose photo',
           onPress: async () => {
-            const files = await filePickerService.openMediaLibrary({ selectionLimit: 3 });
+            const files = await fileService.openMediaLibrary({ selectionLimit: 1 });
             if (!files || !files[0]) return;
 
             const user = await sdk.updateCurrentUserInfoWithProfileImage(sdk.currentUser.nickname, files[0]);
@@ -93,7 +96,6 @@ const SettingsScreen = () => {
   };
   const onExitToHome = async () => {
     navigation.navigate(Routes.Home);
-    await disconnect();
   };
 
   const menuItems: MenuBarProps[] = [
@@ -118,10 +120,6 @@ const SettingsScreen = () => {
     },
   ];
 
-  useLayoutEffect(() => {
-    navigation.setOptions({ headerShown: false });
-  }, []);
-
   if (!currentUser) return null;
 
   return (
@@ -131,7 +129,13 @@ const SettingsScreen = () => {
         right={<Header.Button color={colors.primary}>{'Edit'}</Header.Button>}
         onPressRight={onEdit}
       />
-      <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={styles.viewContainer}>
+      <ScrollView
+        style={{ backgroundColor: colors.background }}
+        contentContainerStyle={{
+          paddingLeft: left + styles.viewContainer.paddingHorizontal,
+          paddingRight: right + styles.viewContainer.paddingHorizontal,
+        }}
+      >
         <View style={styles.userInfoContainer}>
           <Avatar uri={currentUser.plainProfileUrl} size={80} containerStyle={styles.avatarContainer} />
           <Text h1 numberOfLines={1}>
@@ -152,6 +156,7 @@ const SettingsScreen = () => {
         {menuItems.map((menu) => {
           return (
             <MenuBar
+              variant={'contained'}
               key={menu.name}
               icon={menu.icon}
               onPress={menu.onPress}

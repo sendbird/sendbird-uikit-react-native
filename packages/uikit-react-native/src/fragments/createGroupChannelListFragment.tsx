@@ -1,13 +1,24 @@
 import React, { useCallback } from 'react';
-import { Pressable } from 'react-native';
-import type Sendbird from 'sendbird';
+import { Pressable, View } from 'react-native';
 
 import { useGroupChannelList } from '@sendbird/chat-react-hooks';
-import type { GroupChannelListFragment, GroupChannelListModule } from '@sendbird/uikit-react-native-core';
+import type {
+  GroupChannelListFragment,
+  GroupChannelListModule,
+  GroupChannelListProps,
+} from '@sendbird/uikit-react-native-core';
 import { createGroupChannelListModule, useLocalization, useSendbirdChat } from '@sendbird/uikit-react-native-core';
-import { Logger, channelComparator } from '@sendbird/uikit-utils';
+import { Avatar } from '@sendbird/uikit-react-native-foundation';
+import {
+  Logger,
+  channelComparator,
+  conditionChaining,
+  getMembersExcludeMe,
+  useDefaultChannelCover,
+} from '@sendbird/uikit-utils';
 
 import GroupChannelPreview from '../ui/GroupChannelPreview';
+import TypedPlaceholder from '../ui/TypedPlaceholder';
 
 const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListModule>): GroupChannelListFragment => {
   const GroupChannelListModule = createGroupChannelListModule(initModule);
@@ -18,31 +29,43 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     onPressCreateChannel,
     queryCreator,
     sortComparator = channelComparator,
-    skipTypeSelection = true,
+    // skipTypeSelection = true,
     flatListProps = {},
     children,
   }) => {
     const { sdk, currentUser } = useSendbirdChat();
-    const { groupChannels, refresh, refreshing, next } = useGroupChannelList(sdk, currentUser?.userId, {
+    const { groupChannels, refresh, refreshing, next, loading } = useGroupChannelList(sdk, currentUser?.userId, {
       queryCreator,
       sortComparator,
+      enableCollectionWithoutLocalCache: true,
     });
 
     const { LABEL } = useLocalization();
 
-    const renderGroupChannelPreview = useCallback(
-      (channel: Sendbird.GroupChannel, selectChannel) => (
-        <Pressable onPress={() => onPressChannel(channel)} onLongPress={() => selectChannel(channel)}>
+    const renderGroupChannelPreview: GroupChannelListProps['List']['renderGroupChannelPreview'] = useCallback(
+      (channel, onLongPressChannel) => (
+        <Pressable onPress={() => onPressChannel(channel)} onLongPress={onLongPressChannel}>
           <GroupChannelPreview
+            customCover={conditionChaining(
+              [useDefaultChannelCover(channel)],
+              [
+                <Avatar uri={channel.coverUrl} size={56} />,
+                <Avatar.Group size={56}>
+                  {getMembersExcludeMe(channel, currentUser?.userId).map((m) => (
+                    <Avatar key={m.userId} uri={m.profileUrl} />
+                  ))}
+                </Avatar.Group>,
+              ],
+            )}
             coverUrl={channel.coverUrl}
-            title={LABEL.GROUP_CHANNEL_LIST.FRAGMENT.PREVIEW_TITLE(currentUser?.userId ?? '', channel)}
-            titleCaption={LABEL.GROUP_CHANNEL_LIST.FRAGMENT.PREVIEW_TITLE_CAPTION(channel)}
-            body={LABEL.GROUP_CHANNEL_LIST.FRAGMENT.PREVIEW_BODY(channel)}
+            title={LABEL.GROUP_CHANNEL_LIST.PREVIEW_TITLE(currentUser?.userId ?? '', channel)}
+            titleCaption={LABEL.GROUP_CHANNEL_LIST.PREVIEW_TITLE_CAPTION(channel)}
+            body={LABEL.GROUP_CHANNEL_LIST.PREVIEW_BODY(channel)}
             badgeCount={channel.unreadMessageCount}
-            frozen={channel.isFrozen}
             bodyIcon={channel.lastMessage?.isFileMessage() ? 'file-document' : undefined}
-            muted={channel.myMutedState === 'muted'}
-            memberCount={channel.memberCount}
+            frozen={channel.isFrozen}
+            notificationOff={channel.myPushTriggerOption === 'off'}
+            memberCount={channel.memberCount > 2 ? channel.memberCount : undefined}
           />
         </Pressable>
       ),
@@ -63,11 +86,20 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
           groupChannels={groupChannels}
           onLoadNext={next}
           onRefresh={refresh}
-          flatListProps={flatListProps}
+          flatListProps={{
+            ListEmptyComponent: (
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <TypedPlaceholder type={loading ? 'loading' : 'no-channels'} />
+              </View>
+            ),
+            contentContainerStyle: { flexGrow: 1 },
+            ...flatListProps,
+          }}
         />
         <GroupChannelListModule.TypeSelector
+          // NOTE: not included in first iteration
+          skipTypeSelection
           Header={TypeSelectorHeader}
-          skipTypeSelection={skipTypeSelection}
           onSelectType={onPressCreateChannel}
         />
         <GroupChannelListModule.ChannelMenu />

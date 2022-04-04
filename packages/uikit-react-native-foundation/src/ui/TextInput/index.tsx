@@ -5,9 +5,7 @@ import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import type { UIKitTheme } from '../../types';
 
-type Props = {
-  variant?: keyof UIKitTheme['colors']['ui']['input'];
-} & TextInputProps;
+type Props = { variant?: keyof UIKitTheme['colors']['ui']['input'] } & TextInputProps;
 const TextInput = React.forwardRef<RNTextInput, Props>(function TextInput(
   { children, style, variant = 'default', editable = true, ...props },
   ref,
@@ -16,6 +14,7 @@ const TextInput = React.forwardRef<RNTextInput, Props>(function TextInput(
 
   const variantStyle = colors['ui']['input'][variant];
   const inputStyle = editable ? variantStyle.active : variantStyle.disabled;
+  const underlineStyle = variant === 'underline' && { borderBottomWidth: 2, borderBottomColor: inputStyle.highlight };
 
   return (
     <RNTextInput
@@ -27,7 +26,7 @@ const TextInput = React.forwardRef<RNTextInput, Props>(function TextInput(
         typography.body3,
         styles.input,
         { color: inputStyle.text, backgroundColor: inputStyle.background },
-        variant === 'underline' && { borderBottomWidth: 2, borderBottomColor: inputStyle.highlight },
+        underlineStyle,
         style,
       ]}
       {...props}

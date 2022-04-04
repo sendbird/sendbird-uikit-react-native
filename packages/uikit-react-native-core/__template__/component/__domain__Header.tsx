@@ -6,9 +6,9 @@ import { __domain__Context } from '../module/moduleContext';
 import type { __domain__Props } from '../types';
 
 const __domain__Header: React.FC<__domain__Props['Header']> = ({ Header = DefaultHeader }) => {
-  const { fragment } = useContext(__domain__Context);
+  const { headerTitle } = useContext(__domain__Context['Fragment']);
   if (!Header) return null;
-  return <Header title={fragment.headerTitle} />;
+  return <Header title={headerTitle} />;
 };
 
 export default __domain__Header;

@@ -15,7 +15,7 @@
   "sideEffects": false,
   "scripts": {
     "test": "jest",
-    "prepare": "bob build",
+    "build": "bob build",
     "clean": "del lib",
     "create-domain": "node scripts/create-core-domain"
   },
@@ -43,12 +43,17 @@
     "@sendbird/uikit-utils": "^0.1.0"
   },
   "devDependencies": {
-    "@react-native-async-storage/async-storage": "^1.15.16",
+    "@react-native-clipboard/clipboard": "^1.8.5",
+    "@react-native-community/cameraroll": "^4.1.2",
     "@react-native-firebase/messaging": "^14.4.0",
     "@types/react": "17.0.2",
     "@types/react-native": "^0.66.15",
     "chalk": "4.x",
+    "expo-clipboard": "^2.1.1",
+    "expo-document-picker": "^10.1.3",
+    "expo-file-system": "^13.1.4",
     "expo-image-picker": "^12.0.2",
+    "expo-media-library": "^14.0.1",
     "expo-notifications": "^0.14.1",
     "glob": "^7.2.0",
     "inquirer": "^8.2.0",
@@ -56,25 +61,42 @@
     "react": "17.0.2",
     "react-native": "0.66.4",
     "react-native-builder-bob": "^0.18.0",
+    "react-native-document-picker": "^8.0.0",
+    "react-native-fs": "^2.19.0",
     "react-native-image-picker": "^4.7.1",
     "react-native-permissions": "^3.2.0",
     "typescript": "^4.1.3"
   },
   "peerDependencies": {
-    "@react-native-async-storage/async-storage": "^1.15.16",
+    "@react-native-clipboard/clipboard": "^1.8.5",
+    "@react-native-community/cameraroll": "^4.1.2",
     "@react-native-firebase/messaging": "^14.4.0",
+    "expo-clipboard": "^2.1.1",
+    "expo-document-picker": "^10.1.3",
+    "expo-file-system": "^13.1.4",
     "expo-image-picker": ">=12.0.2",
     "expo-notifications": ">=0.14.1",
     "react": ">=16.13.1",
     "react-native": ">=0.63.3",
+    "react-native-document-picker": "^8.0.0",
+    "react-native-fs": "^2.19.0",
     "react-native-image-picker": "^4.7.1",
     "react-native-permissions": "^3.2.0"
   },
   "peerDependenciesMeta": {
-    "@react-native-async-storage/async-storage": {
+    "@react-native-clipboard/clipboard": {
+      "optional": true
+    },
+    "@react-native-community/cameraroll": {
       "optional": true
     },
     "@react-native-firebase/messaging": {
+      "optional": true
+    },
+    "react-native-document-picker": {
+      "optional": true
+    },
+    "react-native-fs": {
       "optional": true
     },
     "react-native-image-picker": {

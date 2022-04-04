@@ -1,3 +1,6 @@
+import type { Locale } from 'date-fns';
+import format from 'date-fns/format';
+
 type TruncateMode = 'head' | 'mid' | 'tail';
 type TruncateOption = { mode: TruncateMode; maxLen: number; separator: string };
 const defaultOpts: TruncateOption = { mode: 'mid', maxLen: 40, separator: '...' };
@@ -45,4 +48,26 @@ export const truncate = (str: string, opts: Partial<TruncateOption> = defaultOpt
 export const truncatedBadgeCount = (count: number, MAX = 99) => {
   if (count >= MAX) return `${MAX}+`;
   return `${count}`;
+};
+
+/**
+ * Messages date separator format
+ *
+ * @param {Date} date
+ * @param {Locale} [locale]
+ * @returns {string}
+ * */
+export const dateSeparator = (date: Date, locale?: Locale): string => {
+  return format(date, 'E, LLL dd', { locale });
+};
+
+/**
+ * Message time format
+ *
+ * @param {Date} date
+ * @param {Locale} [locale]
+ * @returns {string}
+ * */
+export const messageTime = (date: Date, locale?: Locale): string => {
+  return format(date, 'p', { locale });
 };

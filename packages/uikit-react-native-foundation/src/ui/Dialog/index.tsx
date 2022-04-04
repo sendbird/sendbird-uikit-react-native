@@ -45,9 +45,28 @@ const AlertContext = React.createContext<Pick<DialogContextType, 'alert'> | null
 const PromptContext = React.createContext<Pick<DialogContextType, 'prompt'> | null>(null);
 const BottomSheetContext = React.createContext<Pick<DialogContextType, 'openSheet'> | null>(null);
 
-export const DialogProvider: React.FC = ({ children }) => {
-  const render = useForceUpdate();
+type Props = {
+  defaultLabels?: {
+    alert?: { ok?: string };
+    prompt?: { placeholder?: string; ok?: string; cancel?: string };
+  };
+};
+const DISMISS_TIMEOUT = 3000;
+export const DialogProvider: React.FC<Props> = ({ defaultLabels, children }) => {
+  const waitDismissTimeout = useRef<NodeJS.Timeout>();
+  const waitDismissPromise = useRef<() => void>();
+  const waitDismiss = useCallback((resolver: () => void) => {
+    waitDismissPromise.current = resolver;
+    waitDismissTimeout.current = setTimeout(completeDismiss, DISMISS_TIMEOUT);
+  }, []);
+  const completeDismiss = useCallback(() => {
+    if (waitDismissTimeout.current) clearTimeout(waitDismissTimeout.current);
+    if (waitDismissPromise.current) waitDismissPromise.current();
+    waitDismissTimeout.current = undefined;
+    waitDismissPromise.current = undefined;
+  }, []);
 
+  const render = useForceUpdate();
   const dialogQueue = useRef<DialogJob[]>([]);
   const workingDialogJob = useRef<DialogJob>();
   const visibleState = useRef(false);
@@ -57,11 +76,15 @@ export const DialogProvider: React.FC = ({ children }) => {
     visibleState.current = true;
     render();
   }, []);
-  const updateToHide = useCallback(() => {
-    visibleState.current = false;
-    render();
+  const updateToHide = useCallback((): Promise<void> => {
+    return new Promise((resolve) => {
+      visibleState.current = false;
+      render();
+      waitDismiss(resolve);
+    });
   }, []);
   const consumeQueue = useCallback(() => {
+    completeDismiss();
     const job = dialogQueue.current.shift();
     if (job) {
       workingDialogJob.current = job;
@@ -95,41 +118,41 @@ export const DialogProvider: React.FC = ({ children }) => {
             {children}
             {workingDialogJob.current?.type === 'ActionMenu' && (
               <ActionMenu
+                onHide={updateToHide}
                 onDismiss={consumeQueue}
                 visible={visibleState.current}
-                onHide={updateToHide}
                 title={workingDialogJob.current.props.title}
                 menuItems={workingDialogJob.current.props.menuItems}
               />
             )}
             {workingDialogJob.current?.type === 'Alert' && (
               <Alert
+                onHide={updateToHide}
                 onDismiss={consumeQueue}
                 visible={visibleState.current}
-                onHide={updateToHide}
                 title={workingDialogJob.current.props.title}
                 message={workingDialogJob.current.props.message}
-                buttons={workingDialogJob.current.props.buttons}
+                buttons={workingDialogJob.current.props.buttons ?? [{ text: defaultLabels?.alert?.ok || 'OK' }]}
               />
             )}
             {workingDialogJob.current?.type === 'Prompt' && (
               <Prompt
+                onHide={updateToHide}
                 onDismiss={consumeQueue}
                 visible={visibleState.current}
-                onHide={updateToHide}
                 title={workingDialogJob.current.props.title}
-                placeholder={workingDialogJob.current.props.placeholder}
-                defaultValue={workingDialogJob.current.props.defaultValue}
                 onSubmit={workingDialogJob.current.props.onSubmit}
-                submitLabel={workingDialogJob.current.props.submitLabel}
-                cancelLabel={workingDialogJob.current.props.cancelLabel}
+                defaultValue={workingDialogJob.current.props.defaultValue}
+                submitLabel={workingDialogJob.current.props.submitLabel ?? defaultLabels?.prompt?.ok}
+                cancelLabel={workingDialogJob.current.props.cancelLabel ?? defaultLabels?.prompt?.cancel}
+                placeholder={workingDialogJob.current.props.placeholder ?? defaultLabels?.prompt?.placeholder}
               />
             )}
             {workingDialogJob.current?.type === 'BottomSheet' && (
               <BottomSheet
+                onHide={updateToHide}
                 onDismiss={consumeQueue}
                 visible={visibleState.current}
-                onHide={updateToHide}
                 sheetItems={workingDialogJob.current.props.sheetItems}
               />
             )}
@@ -142,21 +165,21 @@ export const DialogProvider: React.FC = ({ children }) => {
 
 export const useActionMenu = () => {
   const context = useContext(ActionMenuContext);
-  if (!context) throw new Error('ActionMenuContext is not provided');
+  if (!context) throw new Error('ActionMenuContext is not provided, wrap your app with DialogProvider');
   return context;
 };
 export const useAlert = () => {
   const context = useContext(AlertContext);
-  if (!context) throw new Error('AlertContext is not provided');
+  if (!context) throw new Error('AlertContext is not provided, wrap your app with DialogProvider');
   return context;
 };
 export const usePrompt = () => {
   const context = useContext(PromptContext);
-  if (!context) throw new Error('PromptContext is not provided');
+  if (!context) throw new Error('PromptContext is not provided, wrap your app with DialogProvider');
   return context;
 };
 export const useBottomSheet = () => {
   const context = useContext(BottomSheetContext);
-  if (!context) throw new Error('BottomSheetContext is not provided');
+  if (!context) throw new Error('BottomSheetContext is not provided, wrap your app with DialogProvider');
   return context;
 };

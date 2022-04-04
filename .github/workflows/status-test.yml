@@ -1,4 +1,4 @@
-name: Status_Test
+name: STATUS_TEST
 on:
   push:
     branches:

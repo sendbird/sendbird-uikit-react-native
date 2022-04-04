@@ -9,7 +9,7 @@ import { truncate } from './common';
 export const getGroupChannelTitle = (
   currentUserId: string,
   channel: Sendbird.GroupChannel,
-  EMPTY_USERNAME = 'User',
+  EMPTY_USERNAME = '(No name)',
   DEFAULT_CHANNEL_NAME = 'Group Channel',
 ) => {
   if (channel.name !== DEFAULT_CHANNEL_NAME && channel.name !== '') return channel.name;
@@ -21,7 +21,7 @@ export const getGroupChannelTitle = (
 };
 
 export const getGroupChannelPreviewTime = (channel: Sendbird.GroupChannel, locale?: Locale) => {
-  const timestamp = channel.lastMessage?.createdAt || channel.joinedAt || channel.createdAt;
+  const timestamp = channel.lastMessage?.createdAt || channel.joinedAt * 1000 || channel.createdAt;
   if (isToday(timestamp)) return format(timestamp, 'p', { locale });
   if (isYesterday(timestamp)) return 'Yesterday';
   return format(timestamp, 'MMM dd', { locale });

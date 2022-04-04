@@ -1,5 +1,5 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Avatar as AvatarComponent, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
@@ -22,10 +22,11 @@ export const AvatarGroup: AvatarStory = () => <GroupedAvatar />;
 const DefaultAvatar: React.FC = () => {
   const { colors } = useUIKitTheme();
 
+  const [img1, img2] = useMemo(() => [getMockImage(), getMockImage()], []);
   return (
     <>
-      <AvatarComponent uri={getMockImage()} containerStyle={margin} />
-      <AvatarComponent uri={getMockImage()} muted containerStyle={margin} />
+      <AvatarComponent uri={img1} containerStyle={margin} />
+      <AvatarComponent uri={img2} muted containerStyle={margin} />
       <AvatarComponent containerStyle={margin} />
       <AvatarComponent.Icon icon={'broadcast'} backgroundColor={colors.secondary} containerStyle={margin} />
       <AvatarComponent.Icon icon={'channels'} containerStyle={margin} />
@@ -33,28 +34,29 @@ const DefaultAvatar: React.FC = () => {
   );
 };
 const GroupedAvatar: React.FC = () => {
+  const [img1, img2, img3] = useMemo(() => [getMockImage(), getMockImage(), getMockImage()], []);
   return (
     <>
       <AvatarComponent.Group containerStyle={margin}>
-        <AvatarComponent uri={getMockImage()} />
+        <AvatarComponent uri={img1} />
       </AvatarComponent.Group>
 
       <AvatarComponent.Group containerStyle={margin}>
-        <AvatarComponent uri={getMockImage()} />
-        <AvatarComponent uri={getMockImage()} />
+        <AvatarComponent uri={img1} />
+        <AvatarComponent uri={img2} />
       </AvatarComponent.Group>
 
       <AvatarComponent.Group containerStyle={margin}>
         <AvatarComponent />
-        <AvatarComponent uri={getMockImage()} />
-        <AvatarComponent uri={getMockImage()} />
+        <AvatarComponent uri={img1} />
+        <AvatarComponent uri={img2} />
       </AvatarComponent.Group>
 
       <AvatarComponent.Group>
         <AvatarComponent />
-        <AvatarComponent uri={getMockImage()} />
-        <AvatarComponent muted uri={getMockImage()} />
-        <AvatarComponent uri={getMockImage()} />
+        <AvatarComponent uri={img1} />
+        <AvatarComponent muted uri={img2} />
+        <AvatarComponent uri={img3} />
       </AvatarComponent.Group>
     </>
   );

@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type Sendbird from 'sendbird';
 
-import { SendbirdChatSDK, useAsyncEffect } from '@sendbird/uikit-utils';
+import { Optional, SendbirdChatSDK, useAsyncEffect } from '@sendbird/uikit-utils';
 
 import type { CustomQueryInterface, UseUserList, UseUserListOptions } from '../types';
 
@@ -34,7 +34,7 @@ const createUserQuery = <User>(sdk: SendbirdChatSDK, queryCreator?: UseUserListO
  * */
 export const useUserList = <
   Options extends UseUserListOptions<QueriedUser>,
-  QueriedUser = Options['queryCreator'] extends () => CustomQueryInterface<infer User> ? User : Sendbird.User,
+  QueriedUser = Options['queryCreator'] extends Optional<() => CustomQueryInterface<infer User>> ? User : Sendbird.User,
 >(
   sdk: SendbirdChatSDK,
   options?: Options,
@@ -51,16 +51,16 @@ export const useUserList = <
   }, [users, options?.sortComparator]);
 
   // ---------- internal methods ------------ //
-  const updateUsers = (users: QueriedUser[]) => {
-    setUsers((prev) => prev.concat(users));
-  };
-  const clearUsers = () => {
-    setUsers([]);
+  const updateUsers = (users: QueriedUser[], clearPrev: boolean) => {
+    if (clearPrev) setUsers(users);
+    else setUsers((prev) => prev.concat(users));
   };
   const init = useCallback(async () => {
-    clearUsers();
     query.current = createUserQuery<QueriedUser>(sdk, options?.queryCreator);
-    await next();
+    if (query.current?.hasNext) {
+      const users = await query.current?.next();
+      updateUsers(users, true);
+    }
   }, [sdk, options?.queryCreator]);
   // ---------- internal methods ends ------------ //
 
@@ -81,7 +81,7 @@ export const useUserList = <
 
   const next = useCallback(async () => {
     if (query.current && query.current?.hasNext) {
-      updateUsers(await query.current?.next());
+      updateUsers(await query.current?.next(), false);
     }
   }, []);
   // ---------- returns methods ends ---------- //

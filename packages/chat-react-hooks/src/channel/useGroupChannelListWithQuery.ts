@@ -4,7 +4,7 @@ import type Sendbird from 'sendbird';
 import type { SendbirdChannel, SendbirdChatSDK } from '@sendbird/uikit-utils';
 import { arrayToMap, useAsyncEffect } from '@sendbird/uikit-utils';
 
-import useChannelHandler from '../handler/useChannelHandler';
+import { useChannelHandler } from '../handler/useChannelHandler';
 import type { UseGroupChannelList, UseGroupChannelListOptions } from '../types';
 
 type GroupChannelMap = Record<string, Sendbird.GroupChannel>;
@@ -53,12 +53,8 @@ export const useGroupChannelListWithQuery = (
       return draft;
     });
   };
-  const clearChannels = () => {
-    setGroupChannelMap({});
-  };
   const init = useCallback(
     async (uid?: string) => {
-      clearChannels();
       if (uid) {
         queryRef.current = createGroupChannelListQuery(sdk, options?.queryCreator);
         if (queryRef.current?.hasNext) {

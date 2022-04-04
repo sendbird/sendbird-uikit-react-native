@@ -2,9 +2,10 @@ import React from 'react';
 import { Image, View } from 'react-native';
 
 import { Badge, Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { truncate } from '@sendbird/uikit-utils';
+import { conditionChaining } from '@sendbird/uikit-utils';
 
 type Props = {
+  customCover?: React.ReactElement;
   coverUrl: string;
 
   title: string;
@@ -17,11 +18,12 @@ type Props = {
   maxBadgeCount?: number;
 
   frozen?: boolean;
-  muted?: boolean;
+  notificationOff?: boolean;
 };
 
 //TODO: Extract colors to theme color-set
 const GroupChannelPreview: React.FC<Props> = ({
+  customCover,
   coverUrl,
   memberCount,
   badgeCount,
@@ -31,22 +33,30 @@ const GroupChannelPreview: React.FC<Props> = ({
   title,
   titleCaption,
   frozen,
-  muted,
+  notificationOff,
 }) => {
   const { colors, select, palette } = useUIKitTheme();
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Image
-        resizeMode={'cover'}
-        style={[styles.channelCover, { backgroundColor: colors.onBackground04 }]}
-        source={{ uri: coverUrl }}
-      />
+      <View style={styles.coverContainer}>
+        {conditionChaining(
+          [Boolean(customCover)],
+          [
+            customCover,
+            <Image
+              resizeMode={'cover'}
+              style={[styles.channelCover, { backgroundColor: colors.onBackground04 }]}
+              source={{ uri: coverUrl }}
+            />,
+          ],
+        )}
+      </View>
       <View style={styles.rightSection}>
         <View style={styles.rightTopSection}>
           <View style={styles.channelInfo}>
-            <Text subtitle1 style={styles.title}>
-              {truncate(title, { mode: 'tail', maxLen: 15 })}
+            <Text numberOfLines={1} subtitle1 style={styles.title}>
+              {title}
             </Text>
             {Boolean(memberCount) && (
               <Text caption1 style={styles.memberCount} color={colors.onBackground02}>
@@ -54,7 +64,7 @@ const GroupChannelPreview: React.FC<Props> = ({
               </Text>
             )}
             {frozen && <Icon size={16} icon={'freeze'} color={colors.primary} containerStyle={styles.frozen} />}
-            {muted && <Icon size={16} icon={'notifications-off-filled'} color={colors.onBackground03} />}
+            {notificationOff && <Icon size={16} icon={'notifications-off-filled'} color={colors.onBackground03} />}
           </View>
           <View style={styles.titleCaption}>
             <Text caption2 color={colors.onBackground03}>
@@ -101,11 +111,13 @@ const styles = createStyleSheet({
     paddingVertical: 10,
     alignItems: 'center',
   },
+  coverContainer: {
+    marginRight: 16,
+  },
   channelCover: {
     width: 56,
     height: 56,
     borderRadius: 28,
-    marginRight: 16,
   },
   rightSection: {
     flex: 1,
@@ -121,13 +133,14 @@ const styles = createStyleSheet({
     flexDirection: 'row',
   },
   title: {
+    flexShrink: 1,
     marginRight: 4,
   },
   memberCount: {
     paddingTop: 2,
-    marginRight: 4,
   },
   titleCaption: {
+    marginLeft: 4,
     paddingTop: 2,
   },
   rightBottomSection: {
@@ -164,7 +177,6 @@ const styles = createStyleSheet({
     position: 'absolute',
     right: 0,
     bottom: 0,
-    backgroundColor: 'red',
     height: 1,
     width: '84.5%',
   },

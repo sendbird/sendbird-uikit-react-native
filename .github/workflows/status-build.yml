@@ -1,4 +1,4 @@
-name: Status_Build
+name: STATUS_BUILD
 on:
   push:
     branches:

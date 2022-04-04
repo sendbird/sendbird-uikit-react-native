@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { TextInput as RNTextIput, View } from 'react-native';
+import { Keyboard, TextInput as RNTextInput, View } from 'react-native';
 
 import { EmptyFunction } from '@sendbird/uikit-utils';
 
@@ -43,7 +43,7 @@ const Prompt: React.FC<Props> = ({
 }) => {
   const { statusBarTranslucent } = useHeaderStyle();
   const { colors } = useUIKitTheme();
-  const inputRef = useRef<RNTextIput>(null);
+  const inputRef = useRef<RNTextInput>(null);
 
   const buttons = [
     { text: cancelLabel, onPress: onCancel },
@@ -98,6 +98,7 @@ const Prompt: React.FC<Props> = ({
                 style={styles.button}
                 contentColor={colors.ui.dialog.default.none.highlight}
                 onPress={() => {
+                  Keyboard.dismiss();
                   try {
                     onPress?.();
                   } finally {

@@ -1,4 +1,4 @@
-const DEFAULT_LANDSCAPE_HEIGHT = 40;
+const DEFAULT_LANDSCAPE_HEIGHT = 48;
 const DEFAULT_HEIGHT = 56;
 
 const getDefaultHeaderHeight = (isLandscape: boolean) => {

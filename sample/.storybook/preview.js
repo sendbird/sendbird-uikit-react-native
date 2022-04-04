@@ -1,6 +1,6 @@
 import { withBackgrounds } from '@storybook/addon-ondevice-backgrounds';
 import React from 'react';
-import { View } from 'react-native';
+import { Appearance, View } from 'react-native';
 
 import { Palette } from '@sendbird/uikit-react-native-foundation';
 
@@ -12,8 +12,8 @@ export const decorators = [
 ];
 export const parameters = {
   backgrounds: [
-    { name: 'light', value: Palette.background50, default: true },
-    { name: 'dark', value: Palette.background600 },
+    { name: 'light', value: Palette.background50, default: Appearance.getColorScheme() === 'light' },
+    { name: 'dark', value: Palette.background600, default: Appearance.getColorScheme() === 'dark' },
   ],
   layout: 'fullscreen',
   options: {

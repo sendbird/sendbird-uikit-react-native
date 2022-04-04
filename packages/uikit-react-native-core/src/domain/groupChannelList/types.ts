@@ -13,7 +13,7 @@ import type { CommonComponent } from '../../types';
  * @property Fragment.TypeSelectorHeader - Custom Header for TypeSelector, Only replace header component not a module
  * @property Fragment.skipTypeSelection - Skip type selection, When this is set to true 'channelType' only receive 'GROUP' type
  * @property Fragment.onPressChannel - Navigate to GroupChannelFragment
- * @property Fragment.onPressCreateChannel - Navigate to InviteMembersFragment
+ * @property Fragment.onPressCreateChannel - Navigate to GroupChannelCreateFragment
  * @property Fragment.queryCreator - Custom Query creator for channels query
  * @property Fragment.sortComparator - Sort comparator for sort channels
  * @property Fragment.flatListProps - FlatList props
@@ -24,7 +24,7 @@ import type { CommonComponent } from '../../types';
  * @type {GroupChannelListProps.List} - Props from Fragment for create List module
  * @property List.groupChannels - GroupChannels from SendbirdChat SDK, We are using '@sendbird/chat-react-hooks'
  * @property List.renderGroupChannelPreview - Method to render GroupChannel preview
- * @property List.onLoadMore - Method to load more data, called with onEndReached of FlatList
+ * @property List.onLoadNext - Method to load more data, called with onEndReached of FlatList
  * @property List.onRefresh - Method to refresh GroupChannels
  * @property List.refreshing - State of refreshing
  * @property List.flatListProps - FlatList props from Fragment {@link Fragment.flatListProps}
@@ -50,7 +50,7 @@ export type GroupChannelListProps = {
         onPressRight: () => void;
       }>
     >;
-    skipTypeSelection?: boolean;
+    // skipTypeSelection?: boolean;
     onPressChannel: (channel: Sendbird.GroupChannel) => void;
     onPressCreateChannel: (channelType: GroupChannelType) => void;
     queryCreator?: UseGroupChannelListOptions['queryCreator'];
@@ -64,7 +64,7 @@ export type GroupChannelListProps = {
     groupChannels: Sendbird.GroupChannel[];
     renderGroupChannelPreview: (
       channel: Sendbird.GroupChannel,
-      selectChannel: (channel: Sendbird.GroupChannel) => void,
+      onLongPressChannel: () => void,
     ) => React.ReactElement | null;
     onLoadNext: () => Promise<void>;
     onRefresh?: () => Promise<void>;
@@ -85,19 +85,19 @@ export type GroupChannelListProps = {
  * with getting data from the domain context
  * */
 export type GroupChannelListContextType = {
-  Fragment: {
+  Fragment: React.Context<{
     headerTitle: string;
-  };
-  TypeSelector: {
+  }>;
+  TypeSelector: React.Context<{
     visible: boolean;
     show: () => void;
     hide: () => void;
     headerTitle: string;
-  };
-  ChannelMenu: {
+  }>;
+  ChannelMenu: React.Context<{
     selectedChannel?: Sendbird.GroupChannel;
     selectChannel: (channel?: Sendbird.GroupChannel) => void;
-  };
+  }>;
 };
 export interface GroupChannelListModule {
   Provider: React.FC;

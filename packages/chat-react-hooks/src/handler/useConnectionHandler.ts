@@ -3,7 +3,7 @@ import type Sendbird from 'sendbird';
 
 import { Logger, SendbirdChatSDK } from '@sendbird/uikit-utils';
 
-const useConnectionHandler = (
+export const useConnectionHandler = (
   sdk: SendbirdChatSDK,
   handlerId: string,
   hookHandler: Partial<Sendbird.ConnectionHandler>,
@@ -23,5 +23,3 @@ const useConnectionHandler = (
     return () => sdk.removeConnectionHandler(handlerId);
   }, [sdk, handlerId, ...deps]);
 };
-
-export default useConnectionHandler;

@@ -1,0 +1,76 @@
+import Notifee, { EventType } from '@notifee/react-native';
+import type { Event } from '@notifee/react-native/dist/types/Notification';
+import PushNotificationIOS, { PushNotification } from '@react-native-community/push-notification-ios';
+import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
+import { Platform } from 'react-native';
+
+import { EmptyFunction, isSendbirdNotification, parseSendbirdNotification } from '@sendbird/uikit-utils';
+
+import { SendBirdInstance } from '../factory';
+import { Routes, runAfterAppReady } from './navigation';
+
+export const onNotificationAndroid: (event: Event) => Promise<void> = async ({ type, detail }) => {
+  if (Platform.OS !== 'android') return;
+
+  if (type === EventType.PRESS && detail.notification && isSendbirdNotification(detail.notification.data)) {
+    const sendbird = parseSendbirdNotification(detail.notification.data);
+    runAfterAppReady(async (actions) => {
+      const channel = await SendBirdInstance.GroupChannel.getChannel(sendbird.channel.channel_url);
+      actions.navigate(Routes.GroupChannel, { serializedChannel: channel.serialize() });
+    });
+  }
+};
+
+export const onForegroundAndroid = () => Notifee.onForegroundEvent(onNotificationAndroid);
+export const onForegroundIOS = () => {
+  if (Platform.OS !== 'ios') return EmptyFunction;
+
+  const onNotificationIOS = (notification: PushNotification) => {
+    const data = notification.getData();
+    if (data.userInteraction === 1 && isSendbirdNotification(data)) {
+      const sendbird = parseSendbirdNotification(data);
+      runAfterAppReady(async (actions) => {
+        const channel = await SendBirdInstance.GroupChannel.getChannel(sendbird.channel.channel_url);
+        actions.navigate(Routes.GroupChannel, { serializedChannel: channel.serialize() });
+      });
+    }
+  };
+
+  const checkAppOpenedWithNotification = async () => {
+    const notification = await PushNotificationIOS.getInitialNotification();
+    notification && onNotificationIOS(notification);
+  };
+
+  checkAppOpenedWithNotification();
+  PushNotificationIOS.addEventListener('localNotification', onNotificationIOS);
+  return () => PushNotificationIOS.removeEventListener('localNotification');
+};
+
+Notifee.onBackgroundEvent(onNotificationAndroid);
+messaging().setBackgroundMessageHandler(async (message: FirebaseMessagingTypes.RemoteMessage) => {
+  if (Platform.OS !== 'android') return;
+
+  const channelId = await Notifee.createChannel({ id: 'default', name: 'Default Channel', importance: 4 });
+  if (isSendbirdNotification(message.data)) {
+    const sendbird = parseSendbirdNotification(message.data);
+    await Notifee.displayNotification({
+      id: String(sendbird.message_id),
+      title: sendbird.channel.name || sendbird.sender?.name || 'Message received',
+      body: sendbird.message,
+      data: message.data,
+      android: {
+        channelId,
+        importance: 4,
+        // smallIcon: 'drawable/icon_push_lollipop',
+        largeIcon: sendbird.sender?.profile_url || sendbird.channel.channel_url,
+        circularLargeIcon: true,
+        pressAction: { id: 'default' },
+        showTimestamp: true,
+        timestamp: sendbird.created_at,
+      },
+      ios: {
+        threadId: sendbird.channel.channel_url,
+      },
+    });
+  }
+});

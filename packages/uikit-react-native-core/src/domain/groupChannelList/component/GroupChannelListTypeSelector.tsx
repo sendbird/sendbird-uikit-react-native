@@ -91,7 +91,7 @@ const DefaultTypeText: React.FC<{ type: GroupChannelType }> = ({ type }) => {
   const { colors } = useUIKitTheme();
   return (
     <Text caption2 color={colors.onBackground01}>
-      {LABEL.GROUP_CHANNEL_LIST.TYPE_SELECTOR[type]}
+      {LABEL.GROUP_CHANNEL_LIST[`TYPE_SELECTOR_${type}`]}
     </Text>
   );
 };
