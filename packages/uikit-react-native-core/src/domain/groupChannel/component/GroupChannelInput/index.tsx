@@ -16,7 +16,7 @@ const GroupChannelInput: React.FC<GroupChannelProps['Input']> = (props) => {
 
   const { left, right, bottom } = useSafeAreaInsets();
   const { colors } = useUIKitTheme();
-  const { editMessage, setEditMessage } = useContext(GroupChannelContext.Fragment);
+  const { editMessage, setEditMessage, keyboardAvoidOffset = 0 } = useContext(GroupChannelContext.Fragment);
 
   const [text, setText] = useState('');
   const textTmpRef = useRef('');
@@ -43,7 +43,10 @@ const GroupChannelInput: React.FC<GroupChannelProps['Input']> = (props) => {
   });
 
   return (
-    <KeyboardAvoidingView keyboardVerticalOffset={-bottom} behavior={KEYBOARD_AVOID_VIEW_BEHAVIOR}>
+    <KeyboardAvoidingView
+      keyboardVerticalOffset={-bottom + keyboardAvoidOffset}
+      behavior={KEYBOARD_AVOID_VIEW_BEHAVIOR}
+    >
       <View style={{ paddingLeft: left, paddingRight: right, backgroundColor: colors.background }}>
         <View style={{ justifyContent: 'center', width: '100%' }}>
           {inputMode === 'send' && <SendInput {...props} text={text} setText={setText} disabled={disabled} />}

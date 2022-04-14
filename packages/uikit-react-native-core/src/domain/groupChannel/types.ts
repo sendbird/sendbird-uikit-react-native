@@ -91,6 +91,7 @@ export type GroupChannelProps = {
   Provider: {
     channel: Sendbird.GroupChannel;
     enableTypingIndicator: boolean;
+    keyboardAvoidOffset?: number;
   };
 };
 
@@ -105,6 +106,7 @@ export type GroupChannelContextType = {
     channel: Sendbird.GroupChannel;
     editMessage?: Sendbird.UserMessage | Sendbird.FileMessage;
     setEditMessage: (msg?: Sendbird.UserMessage | Sendbird.FileMessage) => void;
+    keyboardAvoidOffset?: number;
   }>;
   TypingIndicator: React.Context<{
     typingUsers: Sendbird.User[];
