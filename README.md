@@ -22,3 +22,7 @@ uikit
 
 - add: `yarn workspace @sendbird/package add some-package`
 - remove: `yarn workspace @sendbird/package remove some-package`
+
+### Publish
+
+- bump: `lerna version {major|minor|patch} [--no-git-tag-version] [--no-private]`
