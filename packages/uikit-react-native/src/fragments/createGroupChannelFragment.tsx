@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { View } from 'react-native';
 
 import { useGroupChannelMessages } from '@sendbird/chat-react-hooks';
-import useInternalPubSub from '@sendbird/chat-react-hooks/src/common/useInternalPubSub';
+import { useInternalPubSub } from '@sendbird/chat-react-hooks';
 import type { GroupChannelFragment, GroupChannelModule, GroupChannelProps } from '@sendbird/uikit-react-native-core';
 import { createGroupChannelModule, useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { EmptyFunction, messageComparator } from '@sendbird/uikit-utils';

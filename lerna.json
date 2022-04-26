@@ -2,7 +2,7 @@
   "packages": ["packages/*", "sample"],
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "version": "independent",
+  "version": "0.1.0",
   "command": {
     "publish": {
       "allowBranch": "main",
@@ -10,6 +10,17 @@
       "createRelease": "github",
       "message": "chore: publish",
       "ignoreChanges": ["**/__tests__/**", "**/*.md"]
+    },
+    "version": {
+      "allowBranch": "main",
+      "conventionalCommits": true,
+      "exact": true,
+      "gitRemote": "origin",
+      "message": "chore(release): release packages"
     }
-  }
+  },
+  "ignoreChanges": [
+    "**/__tests__/**",
+    "**/*.md"
+  ]
 }
