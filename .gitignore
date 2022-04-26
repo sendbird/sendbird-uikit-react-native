@@ -18,3 +18,4 @@ build
 
 env.ts
 *.app.dSYM.zip
+lerna-debug.log

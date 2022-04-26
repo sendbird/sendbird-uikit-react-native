@@ -1,5 +1,8 @@
 {
-  "packages": ["packages/*", "sample"],
+  "packages": [
+    "packages/*",
+    "sample"
+  ],
   "npmClient": "yarn",
   "useWorkspaces": true,
   "version": "0.1.0",
@@ -8,19 +11,25 @@
       "allowBranch": "main",
       "conventionalCommits": true,
       "createRelease": "github",
-      "message": "chore: publish",
-      "ignoreChanges": ["**/__tests__/**", "**/*.md"]
+      "message": "chore(release): publish %v"
     },
     "version": {
-      "allowBranch": "main",
+      "allowBranch": [
+        "main",
+        "*/lerna"
+      ],
       "conventionalCommits": true,
       "exact": true,
       "gitRemote": "origin",
-      "message": "chore(release): release packages"
+      "message": "chore(release): release packages %s"
     }
   },
   "ignoreChanges": [
+    "**/__template__/**",
     "**/__tests__/**",
-    "**/*.md"
+    "**/*.md",
+    ".circleci",
+    ".github",
+    "sample/**"
   ]
 }

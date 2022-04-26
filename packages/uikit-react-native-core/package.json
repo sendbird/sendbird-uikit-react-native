@@ -10,7 +10,8 @@
   "files": [
     "src",
     "lib",
-    "!**/__tests__"
+    "!**/__tests__",
+    "!__template__"
   ],
   "sideEffects": false,
   "scripts": {
