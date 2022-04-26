@@ -14,7 +14,8 @@ npm install @sendbird/uikit-react-native-core \
             @react-native-community/cameraroll \
             react-native-fs \
             @react-native-clipboard/clipboard \
-            @react-native-firebase/messaging @react-native-firebase/app
+            @react-native-firebase/messaging @react-native-firebase/app \
+            date-fns
 ```
 
 ### Expo
@@ -26,5 +27,6 @@ expo install @sendbird/uikit-react-native-core \
              expo-media-library \
              expo-file-system \
              expo-clipboard \
-             expo-notifications
+             expo-notifications \
+             date-fns
 ```
