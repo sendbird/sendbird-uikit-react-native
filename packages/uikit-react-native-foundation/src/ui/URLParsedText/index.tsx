@@ -14,7 +14,7 @@ const openUrl: OnPressUrl = (url, httpProtocol) => {
 };
 type Props = TextProps & { onPressUrl?: OnPressUrl };
 const URLParsedText: React.FC<Props> = ({ children, onPressUrl = openUrl, ...props }) => {
-  const parsedChildren = useMemo(() => {
+  const parsedChildren = useMemo((): React.ReactNode => {
     return React.Children.map(React.Children.toArray(children), (child) => {
       if (typeof child === 'string') {
         return replaceUrlAsComponents(child, (url) => {
