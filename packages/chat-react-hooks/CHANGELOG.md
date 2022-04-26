@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## 0.1.1 (2022-04-26)
+## 0.1.2 (2022-04-26)
 
 
 ### Bug Fixes
@@ -31,4 +31,5 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **foundation:** added Prompt and Input component ([1bc173a](https://github.com/sendbird/sendbird-uikit-react-native/commit/1bc173af436782a3e6fd34b0d67665d2c44f25ad))
 * **sample:** added create channel ([66e7ae9](https://github.com/sendbird/sendbird-uikit-react-native/commit/66e7ae9a035b3b46e58032ba8336bc93fe04131c))
 * **sample:** added settings ui ([bb81801](https://github.com/sendbird/sendbird-uikit-react-native/commit/bb818015db8aaafa5ca3b0761b20bf4f1bf1c9fc))
+* setup lerna ([#21](https://github.com/sendbird/sendbird-uikit-react-native/issues/21)) ([1382c42](https://github.com/sendbird/sendbird-uikit-react-native/commit/1382c4286c07bcb9a3f8a8c32d757c451610cc76))
 * **uikit:** added message receipt ([9cafe11](https://github.com/sendbird/sendbird-uikit-react-native/commit/9cafe11c499196851dea1861eb29bf533737261b))

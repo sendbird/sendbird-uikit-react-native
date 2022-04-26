@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## 0.1.1 (2022-04-26)
+## 0.1.2 (2022-04-26)
 
 
 ### Bug Fixes
@@ -37,3 +37,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **sample:** added change profile photo ([74ea450](https://github.com/sendbird/sendbird-uikit-react-native/commit/74ea450fc061212e3ba9d43910dbfcac96e98c89))
 * **sample:** added create channel ([66e7ae9](https://github.com/sendbird/sendbird-uikit-react-native/commit/66e7ae9a035b3b46e58032ba8336bc93fe04131c))
 * **sample:** added settings ui ([bb81801](https://github.com/sendbird/sendbird-uikit-react-native/commit/bb818015db8aaafa5ca3b0761b20bf4f1bf1c9fc))
+* setup lerna ([#21](https://github.com/sendbird/sendbird-uikit-react-native/issues/21)) ([1382c42](https://github.com/sendbird/sendbird-uikit-react-native/commit/1382c4286c07bcb9a3f8a8c32d757c451610cc76))

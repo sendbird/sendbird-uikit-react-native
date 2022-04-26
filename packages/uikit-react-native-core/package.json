@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/uikit-react-native-core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "SendbirdUIKit Core domains for building UIKit",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -39,9 +39,9 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@sendbird/chat-react-hooks": "0.1.1",
-    "@sendbird/uikit-react-native-foundation": "0.1.1",
-    "@sendbird/uikit-utils": "0.1.1"
+    "@sendbird/chat-react-hooks": "0.1.2",
+    "@sendbird/uikit-react-native-foundation": "0.1.2",
+    "@sendbird/uikit-utils": "0.1.2"
   },
   "devDependencies": {
     "@react-native-clipboard/clipboard": "^1.8.5",
