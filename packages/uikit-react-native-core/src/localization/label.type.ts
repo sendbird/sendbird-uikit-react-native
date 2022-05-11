@@ -87,7 +87,7 @@ export interface LabelSet {
 
     /** GroupChannelList > Preview */
     PREVIEW_TITLE: (currentUserId: string, channel: Sendbird.GroupChannel) => string;
-    PREVIEW_TITLE_CAPTION: (channel: Sendbird.GroupChannel) => string;
+    PREVIEW_TITLE_CAPTION: (channel: Sendbird.GroupChannel, locale?: Locale) => string;
     PREVIEW_BODY: (channel: Sendbird.GroupChannel) => string;
 
     /** GroupChannelList > TypeSelector > Header */
@@ -178,10 +178,10 @@ export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): 
   GROUP_CHANNEL: {
     HEADER_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel, '(No name)'),
     LIST_BANNER_FROZEN: 'Channel frozen',
-    LIST_DATE_SEPARATOR: (date, locale) => dateSeparator(date, locale),
+    LIST_DATE_SEPARATOR: (date, locale) => dateSeparator(date, locale ?? dateLocale),
     LIST_TOOLTIP_NEW_MSG: (newMessages) => `${newMessages.length} new messages`,
 
-    LIST_MESSAGE_TIME: (message, locale) => messageTime(new Date(message.createdAt), locale),
+    LIST_MESSAGE_TIME: (message, locale) => messageTime(new Date(message.createdAt), locale ?? dateLocale),
     LIST_MESSAGE_FILE_TITLE: (message) => truncate(message.name, { mode: 'mid', maxLen: 20 }),
     LIST_MESSAGE_EDITED_POSTFIX: ' (Edited)',
     LIST_MESSAGE_UNKNOWN_TITLE: () => '(Unknown message type)',
@@ -227,7 +227,7 @@ export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): 
   GROUP_CHANNEL_LIST: {
     HEADER_TITLE: 'Channels',
     PREVIEW_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel, '(No name)'),
-    PREVIEW_TITLE_CAPTION: (channel) => getGroupChannelPreviewTime(channel, dateLocale),
+    PREVIEW_TITLE_CAPTION: (channel, locale) => getGroupChannelPreviewTime(channel, locale ?? dateLocale),
     PREVIEW_BODY: (channel) => getGroupChannelLastMessage(channel),
     TYPE_SELECTOR_HEADER_TITLE: 'Channel type',
     TYPE_SELECTOR_GROUP: 'Group',
