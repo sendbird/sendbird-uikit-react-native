@@ -2,3 +2,5 @@ node_modules
 lib
 android
 ios
+.eslintrc.js
+**/*.config.js
