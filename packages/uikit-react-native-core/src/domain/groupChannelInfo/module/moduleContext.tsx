@@ -68,9 +68,9 @@ export const GroupChannelInfoContextProvider: React.FC<GroupChannelInfoProps['Pr
 
   const changeChannelName = useCallback(() => {
     prompt({
-      title: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_NAME_TITLE,
-      submitLabel: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_NAME_OK,
-      placeholder: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_NAME_PLACEHOLDER,
+      title: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_NAME_PROMPT_TITLE,
+      submitLabel: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_NAME_PROMPT_OK,
+      placeholder: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_NAME_PROMPT_PLACEHOLDER,
       defaultValue: activeChannel.name,
       onSubmit: async (channelName) => {
         const params = new sdk.GroupChannelParams();
@@ -82,10 +82,10 @@ export const GroupChannelInfoContextProvider: React.FC<GroupChannelInfoProps['Pr
 
   const changeChannelImage = useCallback(() => {
     openMenu({
-      title: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_IMAGE_TITLE,
+      title: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_IMAGE_MENU_TITLE,
       menuItems: [
         {
-          title: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_IMAGE_CAMERA,
+          title: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_IMAGE_MENU_CAMERA,
           onPress: async () => {
             const file = await fileService.openCamera();
             if (!file) return;
@@ -96,7 +96,7 @@ export const GroupChannelInfoContextProvider: React.FC<GroupChannelInfoProps['Pr
           },
         },
         {
-          title: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_IMAGE_PHOTO_LIBRARY,
+          title: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY,
           onPress: async () => {
             const files = await fileService.openMediaLibrary({ selectionLimit: 1 });
             if (!files || !files[0]) return;

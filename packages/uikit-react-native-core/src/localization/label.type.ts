@@ -73,13 +73,13 @@ export interface LabelSet {
     /** GroupChannelInfo > Dialog */
     DIALOG_CHANGE_NAME: string;
     DIALOG_CHANGE_IMAGE: string;
-    DIALOG_CHANGE_NAME_TITLE: string;
-    DIALOG_CHANGE_NAME_PLACEHOLDER: string;
-    DIALOG_CHANGE_NAME_CANCEL: string;
-    DIALOG_CHANGE_NAME_OK: string;
-    DIALOG_CHANGE_IMAGE_TITLE: string;
-    DIALOG_CHANGE_IMAGE_CAMERA: string;
-    DIALOG_CHANGE_IMAGE_PHOTO_LIBRARY: string;
+    DIALOG_CHANGE_NAME_PROMPT_TITLE: string;
+    DIALOG_CHANGE_NAME_PROMPT_PLACEHOLDER: string;
+    DIALOG_CHANGE_NAME_PROMPT_CANCEL: string;
+    DIALOG_CHANGE_NAME_PROMPT_OK: string;
+    DIALOG_CHANGE_IMAGE_MENU_TITLE: string;
+    DIALOG_CHANGE_IMAGE_MENU_CAMERA: string;
+    DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY: string;
   };
   GROUP_CHANNEL_LIST: {
     /** GroupChannelList > Header */
@@ -215,13 +215,13 @@ export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): 
     MENU_LEAVE_CHANNEL: 'Leave channel',
     DIALOG_CHANGE_NAME: 'Change channel name',
     DIALOG_CHANGE_IMAGE: 'Change channel image',
-    DIALOG_CHANGE_IMAGE_TITLE: 'Change channel image',
-    DIALOG_CHANGE_IMAGE_CAMERA: 'Take photo',
-    DIALOG_CHANGE_IMAGE_PHOTO_LIBRARY: 'Choose photo',
-    DIALOG_CHANGE_NAME_TITLE: 'Change name',
-    DIALOG_CHANGE_NAME_PLACEHOLDER: 'Enter name',
-    DIALOG_CHANGE_NAME_OK: 'Save',
-    DIALOG_CHANGE_NAME_CANCEL: 'Cancel',
+    DIALOG_CHANGE_IMAGE_MENU_TITLE: 'Change channel image',
+    DIALOG_CHANGE_IMAGE_MENU_CAMERA: 'Take photo',
+    DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY: 'Choose photo',
+    DIALOG_CHANGE_NAME_PROMPT_TITLE: 'Change name',
+    DIALOG_CHANGE_NAME_PROMPT_PLACEHOLDER: 'Enter name',
+    DIALOG_CHANGE_NAME_PROMPT_OK: 'Save',
+    DIALOG_CHANGE_NAME_PROMPT_CANCEL: 'Cancel',
     ...overrides?.GROUP_CHANNEL_INFO,
   },
   GROUP_CHANNEL_LIST: {
