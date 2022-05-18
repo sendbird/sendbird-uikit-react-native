@@ -1,13 +1,13 @@
 import React, { createContext, useContext, useState } from 'react';
 import { Appearance } from 'react-native';
 
-import { EmptyFunction } from '@sendbird/uikit-utils';
+import { NOOP } from '@sendbird/uikit-utils';
 
 const DEFAULT_APPEARANCE = 'light';
 
 const AppearanceContext = createContext<{ scheme: 'light' | 'dark'; setScheme: (val: 'light' | 'dark') => void }>({
   scheme: DEFAULT_APPEARANCE,
-  setScheme: EmptyFunction,
+  setScheme: NOOP,
 });
 
 export const AppearanceProvider: React.FC<{}> = ({ children }) => {

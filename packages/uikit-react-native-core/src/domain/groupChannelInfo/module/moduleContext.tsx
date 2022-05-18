@@ -3,7 +3,7 @@ import type Sendbird from 'sendbird';
 
 import { useChannelHandler } from '@sendbird/chat-react-hooks';
 import { useActionMenu, useBottomSheet, usePrompt } from '@sendbird/uikit-react-native-foundation';
-import { EmptyFunction, isDifferentChannel, useForceUpdate, useUniqId } from '@sendbird/uikit-utils';
+import { NOOP, isDifferentChannel, useForceUpdate, useUniqId } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization } from '../../../contexts/Localization';
@@ -16,7 +16,7 @@ export const GroupChannelInfoContext: GroupChannelInfoContextType = {
     channel: {} as Sendbird.GroupChannel,
     headerTitle: '',
     headerRight: '',
-    onPressHeaderRight: EmptyFunction,
+    onPressHeaderRight: NOOP,
   }),
 };
 

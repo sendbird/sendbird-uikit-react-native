@@ -2,7 +2,7 @@ import React, { createContext, useState } from 'react';
 import type Sendbird from 'sendbird';
 
 import { useChannelHandler } from '@sendbird/chat-react-hooks';
-import { EmptyFunction, isDifferentChannel, useUniqId } from '@sendbird/uikit-utils';
+import { NOOP, isDifferentChannel, useUniqId } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization } from '../../../contexts/Localization';
@@ -13,7 +13,7 @@ export const GroupChannelContext: GroupChannelContextType = {
   Fragment: createContext({
     headerTitle: '',
     channel: {} as Sendbird.GroupChannel,
-    setEditMessage: EmptyFunction,
+    setEditMessage: NOOP,
   }),
   TypingIndicator: createContext({
     typingUsers: [] as Sendbird.User[],

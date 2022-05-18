@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type Sendbird from 'sendbird';
 
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
-import { EmptyFunction, Logger, isDifferentChannel, useForceUpdate } from '@sendbird/uikit-utils';
+import { Logger, NOOP, isDifferentChannel, useForceUpdate } from '@sendbird/uikit-utils';
 import { useIsMountedRef } from '@sendbird/uikit-utils/src/hooks';
 
 import useInternalPubSub from '../../common/useInternalPubSub';
@@ -226,7 +226,7 @@ export const useGroupChannelMessagesWithCollection = (
   );
   const updateUserMessage: UseGroupChannelMessages['updateUserMessage'] = useCallback(
     async (messageId, params) => {
-      const updatedMessage = await activeChannel.updateUserMessage(messageId, params, EmptyFunction);
+      const updatedMessage = await activeChannel.updateUserMessage(messageId, params, NOOP);
       updateMessages([updatedMessage], false, sdk.currentUser.userId);
       return updatedMessage;
     },
@@ -234,7 +234,7 @@ export const useGroupChannelMessagesWithCollection = (
   );
   const updateFileMessage: UseGroupChannelMessages['updateFileMessage'] = useCallback(
     async (messageId, params) => {
-      const updatedMessage = await activeChannel.updateFileMessage(messageId, params, EmptyFunction);
+      const updatedMessage = await activeChannel.updateFileMessage(messageId, params, NOOP);
       updateMessages([updatedMessage], false, sdk.currentUser.userId);
       return updatedMessage;
     },

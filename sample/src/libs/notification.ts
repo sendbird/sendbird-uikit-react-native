@@ -4,7 +4,7 @@ import PushNotificationIOS, { PushNotification } from '@react-native-community/p
 import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
 import { Platform } from 'react-native';
 
-import { EmptyFunction, isSendbirdNotification, parseSendbirdNotification } from '@sendbird/uikit-utils';
+import { NOOP, isSendbirdNotification, parseSendbirdNotification } from '@sendbird/uikit-utils';
 
 import { SendBirdInstance } from '../factory';
 import { Routes, runAfterAppReady } from './navigation';
@@ -23,7 +23,7 @@ export const onNotificationAndroid: (event: Event) => Promise<void> = async ({ t
 
 export const onForegroundAndroid = () => Notifee.onForegroundEvent(onNotificationAndroid);
 export const onForegroundIOS = () => {
-  if (Platform.OS !== 'ios') return EmptyFunction;
+  if (Platform.OS !== 'ios') return NOOP;
 
   const onNotificationIOS = (notification: PushNotification) => {
     const data = notification.getData();

@@ -5,7 +5,7 @@ import { useGroupChannelMessages } from '@sendbird/chat-react-hooks';
 import { useInternalPubSub } from '@sendbird/chat-react-hooks';
 import type { GroupChannelFragment, GroupChannelModule, GroupChannelProps } from '@sendbird/uikit-react-native-core';
 import { createGroupChannelModule, useSendbirdChat } from '@sendbird/uikit-react-native-core';
-import { EmptyFunction, messageComparator } from '@sendbird/uikit-utils';
+import { NOOP, messageComparator } from '@sendbird/uikit-utils';
 
 import MessageRenderer from '../ui/MessageRenderer';
 import DefaultNewMessagesTooltip from '../ui/NewMessagesTooltip';
@@ -24,10 +24,10 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
     enableMessageGrouping = true,
     enableTypingIndicator = true,
     Header,
-    onPressHeaderLeft = EmptyFunction,
-    onPressHeaderRight = EmptyFunction,
-    onPressImageMessage = EmptyFunction,
-    onChannelDeleted = EmptyFunction,
+    onPressHeaderLeft = NOOP,
+    onPressHeaderRight = NOOP,
+    onPressImageMessage = NOOP,
+    onChannelDeleted = NOOP,
     onBeforeSendFileMessage = PassValue,
     onBeforeSendUserMessage = PassValue,
     staleChannel,
