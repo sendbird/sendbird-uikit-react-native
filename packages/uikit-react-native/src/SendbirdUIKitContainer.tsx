@@ -38,8 +38,9 @@ type Props<T extends LabelSets> = {
   appId: string;
   appVersion?: string;
   chatOptions?: {
-    localCacheStorage?: LocalCacheStorage;
     onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
+    localCacheStorage?: LocalCacheStorage;
+    autoPushTokenRegistration?: boolean;
   };
   platformServices: {
     file: FileServiceInterface;
@@ -93,7 +94,10 @@ const SendbirdUIKitContainer = <T extends LabelSets>({
 
   return (
     <SafeAreaProvider>
-      <SendbirdChatProvider sdkInstance={sdkInstance}>
+      <SendbirdChatProvider
+        sdkInstance={sdkInstance}
+        autoPushTokenRegistration={chatOptions?.autoPushTokenRegistration ?? true}
+      >
         <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
           <HeaderStyleProvider
             defaultTitleAlign={styles?.defaultHeaderTitleAlign ?? 'left'}

@@ -41,7 +41,7 @@ const HomeScreen: React.FC = () => {
   const { top, bottom, left, right } = useSafeAreaInsets();
   const { navigation } = useAppNavigation();
   const { signOut } = useAppAuth();
-  const { disconnect } = useConnection({ autoPushTokenRegistration: true });
+  const { disconnect } = useConnection();
   const { select, colors } = useUIKitTheme();
 
   return (

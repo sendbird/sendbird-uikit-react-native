@@ -44,7 +44,7 @@ const usePushTokenRegistration = (forceFCM: boolean) => {
     // Register device token
     const token = await getToken();
     if (token) {
-      Logger.log('push token -', token);
+      Logger.log('[usePushTokenRegistration]', 'registered token:', token);
       registerToken(token);
     }
 
@@ -56,7 +56,10 @@ const usePushTokenRegistration = (forceFCM: boolean) => {
 
   const unregisterPushTokenForCurrentUser = useCallback(async () => {
     const token = await getToken();
-    if (token) unregisterToken(token);
+    if (token) {
+      unregisterToken(token);
+      Logger.log('[usePushTokenRegistration]', 'unregistered token:', token);
+    }
     refreshListener.current?.();
   }, [getToken, unregisterToken]);
 

@@ -9,11 +9,12 @@ import { useAppAuth } from '../libs/authentication';
 
 const SignInScreen: React.FC = () => {
   const [userId, setUserId] = useState('');
+  const [nickname, setNickname] = useState('');
 
   const { sdk } = useSendbirdChat();
-  const { connect } = useConnection({ autoPushTokenRegistration: true });
+  const { connect } = useConnection();
 
-  const connectWith = async (userId: string, useSessionToken = false) => {
+  const connectWith = async (userId: string, nickname?: string, useSessionToken = false) => {
     if (useSessionToken) {
       const sessionHandler = new sdk.SessionHandler();
       sessionHandler.onSessionTokenRequired = (onSuccess, onFail) => {
@@ -24,9 +25,9 @@ const SignInScreen: React.FC = () => {
       sdk.setSessionHandler(sessionHandler);
 
       const data = await SendbirdAPI.getSessionToken(userId);
-      await connect(userId, data.token);
+      await connect(userId, { nickname, accessToken: data.token });
     } else {
-      await connect(userId);
+      await connect(userId, { nickname });
     }
   };
 
@@ -41,6 +42,12 @@ const SignInScreen: React.FC = () => {
         placeholder={'User ID'}
         value={userId}
         onChangeText={setUserId}
+        style={[styles.input, { backgroundColor: colors.onBackground04, marginBottom: 12 }]}
+      />
+      <TextInput
+        placeholder={'Nickname'}
+        value={nickname}
+        onChangeText={setNickname}
         style={[styles.input, { backgroundColor: colors.onBackground04 }]}
       />
       <Button
@@ -49,7 +56,7 @@ const SignInScreen: React.FC = () => {
         onPress={async () => {
           if (userId) {
             await signIn({ userId });
-            await connectWith(userId);
+            await connectWith(userId, nickname);
           }
         }}
       >
