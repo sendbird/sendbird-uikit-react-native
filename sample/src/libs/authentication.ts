@@ -2,59 +2,61 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLayoutEffect } from 'react';
 import { Platform } from 'react-native';
 
-interface SimpleUser {
+interface SimpleCredential {
   userId: string;
 }
 
-interface UserStorageInterface {
-  get(): Promise<SimpleUser | null>;
-  set(user: SimpleUser): Promise<void>;
+interface CredentialStorageInterface {
+  get(): Promise<SimpleCredential | null>;
+  set(cred: SimpleCredential): Promise<void>;
   delete(): Promise<void>;
 }
 
-class UserStorage implements UserStorageInterface {
-  private STORAGE_KEY = 'sendbird@auth';
-  async get(): Promise<SimpleUser | null> {
-    const user = await AsyncStorage.getItem(this.STORAGE_KEY);
-    return user ? JSON.parse(user) : null;
+class CredentialStorage implements CredentialStorageInterface {
+  private STORAGE_KEY = 'sendbird@credential';
+  async get(): Promise<SimpleCredential | null> {
+    const cred = await AsyncStorage.getItem(this.STORAGE_KEY);
+    return cred ? JSON.parse(cred) : null;
   }
-  async set(user: SimpleUser): Promise<void> {
-    return AsyncStorage.setItem(this.STORAGE_KEY, JSON.stringify(user));
+  async set(cred: SimpleCredential): Promise<void> {
+    return AsyncStorage.setItem(this.STORAGE_KEY, JSON.stringify(cred));
   }
   delete(): Promise<void> {
     return AsyncStorage.removeItem(this.STORAGE_KEY);
   }
 }
 
-const createAuthManager = (userStorage: UserStorageInterface) => {
-  const internal: { user: SimpleUser | null } = {
-    user: __DEV__ ? { userId: Platform.select({ android: 'TEST_ANDROID', ios: 'TEST_IOS', default: 'TESTER' }) } : null,
+const createAuthManager = (credStorage: CredentialStorageInterface) => {
+  const internal: { cred: SimpleCredential | null } = {
+    cred: __DEV__
+      ? { userId: Platform.select({ android: 'TEST_ANDROID_UIKIT_RN', ios: 'TEST_IOS_UIKIT_RN', default: 'TESTER' }) }
+      : null,
   };
   return {
     hasAuthentication() {
-      return Boolean(internal.user);
+      return Boolean(internal.cred);
     },
     async getAuthentication() {
-      if (internal.user) return internal.user;
+      if (internal.cred) return internal.cred;
 
-      const user = await userStorage.get();
-      if (user) internal.user = user;
+      const cred = await credStorage.get();
+      if (cred) internal.cred = cred;
 
-      return internal.user;
+      return internal.cred;
     },
-    authenticate(user: SimpleUser) {
-      internal.user = user;
-      return userStorage.set(user);
+    authenticate(cred: SimpleCredential) {
+      internal.cred = cred;
+      return credStorage.set(cred);
     },
     deAuthenticate() {
-      internal.user = null;
-      return userStorage.delete();
+      internal.cred = null;
+      return credStorage.delete();
     },
   };
 };
 
-export const authManager = createAuthManager(new UserStorage());
-export const useAppAuth = (onAutonomousSignIn?: (user: SimpleUser) => void) => {
+export const authManager = createAuthManager(new CredentialStorage());
+export const useAppAuth = (onAutonomousSignIn?: (cred: SimpleCredential) => void) => {
   useLayoutEffect(() => {
     authManager.getAuthentication().then((response) => {
       if (response) onAutonomousSignIn?.(response);
@@ -62,7 +64,7 @@ export const useAppAuth = (onAutonomousSignIn?: (user: SimpleUser) => void) => {
   }, []);
 
   return {
-    signIn: (user: SimpleUser) => authManager.authenticate(user),
+    signIn: (cred: SimpleCredential) => authManager.authenticate(cred),
     signOut: () => authManager.deAuthenticate(),
   };
 };
