@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Sendbird from 'sendbird';
 
 import type {
   ClipboardServiceInterface,
@@ -24,19 +25,30 @@ import {
 } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 
-type Props<Locale extends string> = {
+interface LocalCacheStorage {
+  getAllKeys(): Promise<readonly string[] | string[]>;
+  getItem(key: string): Promise<string | null>;
+  setItem(key: string, value: string): Promise<void>;
+  removeItem(key: string): Promise<void>;
+}
+
+type LabelSets = Record<string, LabelSet>;
+type Props<T extends LabelSets> = {
   children?: React.ReactNode;
-  chat: {
-    sdkInstance: SendbirdChatSDK;
+  appId: string;
+  appVersion?: string;
+  chatOptions?: {
+    localCacheStorage?: LocalCacheStorage;
+    onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
   };
-  services: {
+  platformServices: {
     file: FileServiceInterface;
     notification: NotificationServiceInterface;
     clipboard: ClipboardServiceInterface;
   };
   localization?: {
-    defaultLocale?: Locale;
-    labelSet?: Record<Locale, LabelSet>;
+    labelSet?: T;
+    defaultLocale?: keyof T;
   };
   styles?: {
     theme?: UIKitTheme;
@@ -45,16 +57,43 @@ type Props<Locale extends string> = {
   };
 };
 
-const SendbirdUIKitContainer = <Locale extends string>({
-  chat,
-  services,
+const SendbirdUIKitContainer = <T extends LabelSets>({
+  appId,
+  appVersion,
+  chatOptions,
+  platformServices,
   localization,
   styles,
   children,
-}: Props<Locale>) => {
+}: Props<T>) => {
+  const [sdkInstance, setSdkInstance] = useState<SendbirdChatSDK>();
+
+  useEffect(() => {
+    if (appVersion) Sendbird.setAppVersion(appVersion);
+  }, [appVersion]);
+
+  useEffect(() => {
+    let sdk: SendbirdChatSDK;
+
+    if (chatOptions?.localCacheStorage) {
+      sdk = new Sendbird({ appId, localCacheEnabled: true });
+      sdk.useAsyncStorageAsDatabase(chatOptions?.localCacheStorage);
+    } else {
+      sdk = new Sendbird({ appId });
+    }
+
+    if (chatOptions?.onInitialized) {
+      sdk = chatOptions?.onInitialized(sdk);
+    }
+
+    setSdkInstance(sdk);
+  }, [appId, chatOptions?.localCacheStorage]);
+
+  if (!sdkInstance) return null;
+
   return (
     <SafeAreaProvider>
-      <SendbirdChatProvider sdkInstance={chat.sdkInstance}>
+      <SendbirdChatProvider sdkInstance={sdkInstance}>
         <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
           <HeaderStyleProvider
             defaultTitleAlign={styles?.defaultHeaderTitleAlign ?? 'left'}
@@ -65,9 +104,9 @@ const SendbirdUIKitContainer = <Locale extends string>({
               labelSet={(localization?.labelSet ?? { en: LabelEn }) as { en: LabelSet }}
             >
               <PlatformServiceProvider
-                fileService={services.file}
-                notificationService={services.notification}
-                clipboardService={services.clipboard}
+                fileService={platformServices.file}
+                notificationService={platformServices.notification}
+                clipboardService={platformServices.clipboard}
               >
                 <LocalizedDialogProvider>
                   <ToastProvider>{children}</ToastProvider>
