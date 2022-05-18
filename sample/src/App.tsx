@@ -1,3 +1,4 @@
+import Notifee from '@notifee/react-native';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 
@@ -55,6 +56,7 @@ const Navigations = () => {
   const isLightTheme = scheme === 'light';
 
   useEffect(() => {
+    Notifee.setBadgeCount(0);
     const unsubscribes = [onForegroundAndroid(), onForegroundIOS()];
     return () => {
       unsubscribes.forEach((fn) => fn());
