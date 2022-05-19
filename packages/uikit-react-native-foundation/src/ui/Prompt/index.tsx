@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Keyboard, TextInput as RNTextInput, View } from 'react-native';
 
-import { EmptyFunction } from '@sendbird/uikit-utils';
+import { NOOP } from '@sendbird/uikit-utils';
 
 import createStyleSheet from '../../styles/createStyleSheet';
 import useHeaderStyle from '../../styles/useHeaderStyle';
@@ -36,8 +36,8 @@ const Prompt: React.FC<Props> = ({
   title,
   defaultValue = '',
   placeholder = 'Enter',
-  onSubmit = EmptyFunction,
-  onCancel = EmptyFunction,
+  onSubmit = NOOP,
+  onCancel = NOOP,
   submitLabel = 'Submit',
   cancelLabel = 'Cancel',
 }) => {

@@ -7,16 +7,19 @@ import { useForceUpdate } from '@sendbird/uikit-utils';
 
 type Props = {
   sdkInstance: SendbirdChatSDK;
+  autoPushTokenRegistration: boolean;
 };
 
 type Context = {
   sdk: SendbirdChatSDK;
+  autoPushTokenRegistration: boolean;
+
   currentUser?: Sendbird.User;
   setCurrentUser: React.Dispatch<React.SetStateAction<Sendbird.User | undefined>>;
 };
 
 export const SendbirdChatContext = React.createContext<Context | null>(null);
-export const SendbirdChatProvider: React.FC<Props> = ({ children, sdkInstance }) => {
+export const SendbirdChatProvider: React.FC<Props> = ({ children, sdkInstance, autoPushTokenRegistration }) => {
   const [currentUser, setCurrentUser] = useState<Sendbird.User>();
   const forceUpdate = useForceUpdate();
   const updateCurrentUser: Context['setCurrentUser'] = useCallback((user) => {
@@ -37,7 +40,7 @@ export const SendbirdChatProvider: React.FC<Props> = ({ children, sdkInstance })
     return () => subscriber.remove();
   }, []);
 
-  const value = { sdk: sdkInstance, currentUser, setCurrentUser: updateCurrentUser };
+  const value = { sdk: sdkInstance, currentUser, setCurrentUser: updateCurrentUser, autoPushTokenRegistration };
 
   return <SendbirdChatContext.Provider value={value}>{children}</SendbirdChatContext.Provider>;
 };

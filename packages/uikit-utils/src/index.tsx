@@ -20,8 +20,8 @@ export * from './ui-format/common';
 export * from './sendbird/channel';
 export * from './sendbird/message';
 
-export const EmptyFunction: () => void = () => void 0;
-export const AsyncEmptyFunction = async () => void 0;
+export const NOOP: () => void = () => void 0;
+export const ASYNC_NOOP = async () => void 0;
 export type {
   FilterByValueType,
   UnionToIntersection,

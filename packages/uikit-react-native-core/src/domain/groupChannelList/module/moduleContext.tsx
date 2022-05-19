@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useState } from 'react';
 import type Sendbird from 'sendbird';
 
-import { EmptyFunction } from '@sendbird/uikit-utils';
+import { NOOP } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization } from '../../../contexts/Localization';
@@ -14,11 +14,11 @@ export const GroupChannelListContext: GroupChannelListContextType = {
   TypeSelector: createContext({
     headerTitle: '',
     visible: Boolean(),
-    hide: EmptyFunction,
-    show: EmptyFunction,
+    hide: NOOP,
+    show: NOOP,
   }),
   ChannelMenu: createContext({
-    selectChannel: EmptyFunction,
+    selectChannel: NOOP,
   }),
 };
 
