@@ -32,13 +32,13 @@ export const SendbirdChatProvider: React.FC<Props> = ({ children, sdkInstance, a
   useEffect(() => {
     const listener = (status: AppStateStatus) => {
       // 'active' | 'background' | 'inactive' | 'unknown' | 'extension';
-      if (status === 'active') sdkInstance.setForegroundState();
-      else sdkInstance.setBackgroundState();
+      if (status === 'active') sdkInstance.getConnectionState() === 'CLOSED' && sdkInstance.setForegroundState();
+      else sdkInstance.getConnectionState() === 'OPEN' && sdkInstance.setBackgroundState();
     };
     listener(AppState.currentState);
     const subscriber = AppState.addEventListener('change', listener);
     return () => subscriber.remove();
-  }, []);
+  }, [sdkInstance]);
 
   const value = { sdk: sdkInstance, currentUser, setCurrentUser: updateCurrentUser, autoPushTokenRegistration };
 
