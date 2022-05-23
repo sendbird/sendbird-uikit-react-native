@@ -8,7 +8,14 @@ import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 import { APP_ID } from './env';
-import { ClipboardService, FileService, GetTranslucent, NotificationService, RootStack } from './factory';
+import {
+  ClipboardService,
+  FileService,
+  GetTranslucent,
+  NotificationService,
+  RootStack,
+  SetSendbirdSDK,
+} from './factory';
 import useAppearance from './hooks/useAppearance';
 import { Routes, navigationRef } from './libs/navigation';
 import { onForegroundAndroid, onForegroundIOS } from './libs/notification';
@@ -33,7 +40,7 @@ const App = () => {
   return (
     <SendbirdUIKitContainer
       appId={APP_ID}
-      chatOptions={{ localCacheStorage: AsyncStorage }}
+      chatOptions={{ localCacheStorage: AsyncStorage, onInitialized: SetSendbirdSDK }}
       platformServices={{ file: FileService, notification: NotificationService, clipboard: ClipboardService }}
       styles={{
         defaultHeaderTitleAlign: 'left', //'center',

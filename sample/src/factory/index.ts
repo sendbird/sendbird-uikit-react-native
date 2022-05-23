@@ -14,9 +14,13 @@ import {
   createNativeFileService,
   createNativeNotificationService,
 } from '@sendbird/uikit-react-native-core';
-import { Logger } from '@sendbird/uikit-utils';
+import { Logger, SendbirdChatSDK } from '@sendbird/uikit-utils';
 
 import { APP_ID } from '../env';
+
+let AppSendbirdSDK: SendbirdChatSDK;
+export const GetSendbirdSDK = () => AppSendbirdSDK;
+export const SetSendbirdSDK = (sdk: SendbirdChatSDK) => (AppSendbirdSDK = sdk);
 
 export const RootStack = createNativeStackNavigator();
 export const NotificationService = createNativeNotificationService(RNFBMessaging);

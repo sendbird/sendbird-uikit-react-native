@@ -2,7 +2,9 @@ import { Route, StackActions, createNavigationContainerRef } from '@react-naviga
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import type { GroupChannelType } from '@sendbird/uikit-react-native-core';
+import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 
+import { GetSendbirdSDK } from '../factory';
 import { authManager } from './authentication';
 
 export enum Routes {
@@ -116,11 +118,11 @@ export const navigationActions = {
   },
 };
 
-export const runAfterAppReady = (callback: (actions: typeof navigationActions) => void) => {
+export const runAfterAppReady = (callback: (sdk: SendbirdChatSDK, actions: typeof navigationActions) => void) => {
   const id = setInterval(async () => {
-    if (navigationRef.isReady() && authManager.hasAuthentication()) {
+    if (navigationRef.isReady() && authManager.hasAuthentication() && GetSendbirdSDK()) {
       clearInterval(id);
-      callback(navigationActions);
+      callback(GetSendbirdSDK(), navigationActions);
     }
   }, 250);
 };
