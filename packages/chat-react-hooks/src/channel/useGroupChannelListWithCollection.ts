@@ -54,6 +54,7 @@ export const useGroupChannelListWithCollection = (
     const groupChannels = channels.filter((c): c is Sendbird.GroupChannel => c.isGroupChannel());
     if (clearPrev) setGroupChannelMap(arrayToMap(groupChannels, 'url'));
     else setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(groupChannels, 'url') }));
+    // TODO: check premium feature
     groupChannels.forEach((channel) => sdk.markAsDelivered(channel.url));
   };
   const deleteChannels = (channelUrls: string[]) => {
@@ -155,6 +156,7 @@ export const useGroupChannelListWithCollection = (
 
   const update = useCallback(
     (channel: Sendbird.GroupChannel) => {
+      // TODO: check premium feature
       sdk.markAsDelivered(channel.url);
       setGroupChannelMap((prev) => ({ ...prev, [channel.url]: channel }));
     },
@@ -165,6 +167,7 @@ export const useGroupChannelListWithCollection = (
     if (collectionRef.current?.hasMore) {
       const channels = await collectionRef.current?.loadMore();
       setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(channels, 'url') }));
+      // TODO: check premium feature
       channels.forEach((channel) => sdk.markAsDelivered(channel.url));
     }
   }, [sdk]);

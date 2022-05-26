@@ -58,8 +58,10 @@ export const useGroupChannelMessagesWithCollection = (
     updateRefreshing,
   } = useGroupChannelMessagesReducer(userId, options?.sortComparator);
 
+  // TODO: request buffer is needed
   const channelMarkAs = async () => {
     try {
+      // TODO: check premium feature
       sdk.markAsDelivered(activeChannel.url);
     } catch (e) {
       Logger.error(`[${hookName}/channelMarkAs/Delivered]`, e);

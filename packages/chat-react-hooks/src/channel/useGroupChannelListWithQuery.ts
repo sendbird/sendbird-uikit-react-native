@@ -45,6 +45,7 @@ export const useGroupChannelListWithQuery = (
     const groupChannels = channels.filter((c): c is Sendbird.GroupChannel => c.isGroupChannel());
     if (clearPrev) setGroupChannelMap(arrayToMap(groupChannels, 'url'));
     else setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(groupChannels, 'url') }));
+    // TODO: check premium feature
     groupChannels.forEach((channel) => sdk.markAsDelivered(channel.url));
   };
   const deleteChannels = (channelUrls: string[]) => {
@@ -103,6 +104,7 @@ export const useGroupChannelListWithQuery = (
 
   const update = useCallback(
     (channel: Sendbird.GroupChannel) => {
+      // TODO: check premium feature
       sdk.markAsDelivered(channel.url);
       setGroupChannelMap((prev) => ({ ...prev, [channel.url]: channel }));
     },
