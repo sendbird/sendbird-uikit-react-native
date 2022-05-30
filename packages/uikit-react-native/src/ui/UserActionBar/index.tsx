@@ -21,7 +21,7 @@ const UserActionBar: React.FC<Props> = ({ muted, uri, name, disabled, onPressAct
     <View style={styles.container}>
       <Avatar muted={muted} size={36} uri={uri} containerStyle={styles.avatar} />
       <View style={[styles.infoContainer, { borderBottomColor: colors.onBackground04 }]}>
-        <Text subtitle2 style={styles.name} color={colors.onBackground01}>
+        <Text subtitle2 numberOfLines={1} style={styles.name} color={colors.onBackground01}>
           {name}
         </Text>
         {Boolean(label) && (
