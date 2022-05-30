@@ -25,12 +25,8 @@ import {
 } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 
-interface LocalCacheStorage {
-  getAllKeys(): Promise<readonly string[] | string[]>;
-  getItem(key: string): Promise<string | null>;
-  setItem(key: string, value: string): Promise<void>;
-  removeItem(key: string): Promise<void>;
-}
+import InternalLocalCacheStorage from './InternalLocalCacheStorage';
+import type { LocalCacheStorage } from './types';
 
 type LabelSets = Record<string, LabelSet>;
 type Props<T extends LabelSets> = {
@@ -78,7 +74,7 @@ const SendbirdUIKitContainer = <T extends LabelSets>({
 
     if (chatOptions?.localCacheStorage) {
       sdk = new Sendbird({ appId, localCacheEnabled: true });
-      sdk.useAsyncStorageAsDatabase(chatOptions?.localCacheStorage);
+      sdk.useAsyncStorageAsDatabase(new InternalLocalCacheStorage(chatOptions.localCacheStorage));
     } else {
       sdk = new Sendbird({ appId });
     }
