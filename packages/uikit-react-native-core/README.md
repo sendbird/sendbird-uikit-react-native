@@ -1,6 +1,6 @@
 # @sendbird/uikit-react-native-core
 
-react-native-uikit
+react-native-uikit-core
 
 ## Installation
 

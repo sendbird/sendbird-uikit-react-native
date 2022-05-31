@@ -27,7 +27,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/sendbird/sendbird-uikit-react-native.git",
-    "directory": "packages/uikit-react-core"
+    "directory": "packages/uikit-react-native-core"
   },
   "author": "Sendbird <support@sendbird.com>",
   "license": "SEE LICENSE IN LICENSE.md",
