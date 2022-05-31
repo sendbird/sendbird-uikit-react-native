@@ -13,7 +13,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * android service account path ([dfec8fc](https://github.com/sendbird/sendbird-uikit-react-native/commit/dfec8fc45a2db02e822f74cabd95d8f6a23b9e7f))
 * changed ios match git authorization method to ssh ([a293a75](https://github.com/sendbird/sendbird-uikit-react-native/commit/a293a75345fc23f8cc06e2c6a0f040df657eb64a))
 * **chat-hooks:** added guard to useGroupChannelListWithQuery init ([5ec16d9](https://github.com/sendbird/sendbird-uikit-react-native/commit/5ec16d927dd1381bb9c2c8cdafc8f7b614cdded5))
-* **chat-react-hooks:** wrong if condition ([4f93e6c](https://github.com/sendbird/sendbird-uikit-react-native/commit/4f93e6c5fde4e4e3c26b214934d9c115f3ce452b))
+* **chat-hooks:** wrong if condition ([4f93e6c](https://github.com/sendbird/sendbird-uikit-react-native/commit/4f93e6c5fde4e4e3c26b214934d9c115f3ce452b))
 * **core:** added performance warning and create patch to sample ([c366f28](https://github.com/sendbird/sendbird-uikit-react-native/commit/c366f28a1aea06d896a753a47df88c67e81e5bdc))
 * **core:** exports expo platform service creators ([c98f776](https://github.com/sendbird/sendbird-uikit-react-native/commit/c98f776d41040cdd11cc159dcdb2e7449b91106c))
 * **core:** fixed landscape layout ([3d2ce2d](https://github.com/sendbird/sendbird-uikit-react-native/commit/3d2ce2d4249b197d81e4bb241b63e9014a5654fc))

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useLocalization } from '@sendbird/uikit-react-native-core';
-import Placeholder from '@sendbird/uikit-react-native-foundation/src/ui/Placeholder';
+import { Placeholder } from '@sendbird/uikit-react-native-foundation';
 
 type Props = {
   type:

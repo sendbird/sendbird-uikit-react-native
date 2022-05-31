@@ -1,4 +1,4 @@
-// export * from '@sendbird/chat-react-hooks';
+// export * from '@sendbird/uikit-chat-hooks';
 
 /** Context **/
 export { SendbirdChatContext, SendbirdChatProvider, useSendbirdChat } from './contexts/SendbirdChat';

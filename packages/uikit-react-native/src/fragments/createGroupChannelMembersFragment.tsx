@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react';
 import type Sendbird from 'sendbird';
 
-import { useUserList } from '@sendbird/chat-react-hooks';
-import CustomQuery from '@sendbird/chat-react-hooks/src/model/CustomQuery';
+import { CustomQuery, useUserList } from '@sendbird/uikit-chat-hooks';
 import type { GroupChannelMembersFragment, UserListModule } from '@sendbird/uikit-react-native-core';
 import { createUserListModule, useLocalization, useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { Icon } from '@sendbird/uikit-react-native-foundation';

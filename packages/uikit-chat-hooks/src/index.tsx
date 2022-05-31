@@ -11,6 +11,8 @@ export { useChannelHandler } from './handler/useChannelHandler';
 export { useConnectionHandler } from './handler/useConnectionHandler';
 export { useUserEventHandler } from './handler/useUserEventHandler';
 
+export { default as CustomQuery } from './model/CustomQuery';
+
 export type {
   UseGroupChannelList,
   UseGroupChannelListOptions,

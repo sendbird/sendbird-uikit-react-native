@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Pressable, View } from 'react-native';
 
-import { useGroupChannelList } from '@sendbird/chat-react-hooks';
+import { useGroupChannelList } from '@sendbird/uikit-chat-hooks';
 import type {
   GroupChannelListFragment,
   GroupChannelListModule,
@@ -14,7 +14,7 @@ import {
   channelComparator,
   conditionChaining,
   getMembersExcludeMe,
-  useDefaultChannelCover,
+  preferDefaultChannelCover,
 } from '@sendbird/uikit-utils';
 
 import GroupChannelPreview from '../ui/GroupChannelPreview';
@@ -47,7 +47,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
         <Pressable onPress={() => onPressChannel(channel)} onLongPress={onLongPressChannel}>
           <GroupChannelPreview
             customCover={conditionChaining(
-              [useDefaultChannelCover(channel)],
+              [preferDefaultChannelCover(channel)],
               [
                 <Avatar uri={channel.coverUrl} size={56} />,
                 <Avatar.Group size={56}>

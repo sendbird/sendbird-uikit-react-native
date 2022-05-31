@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import type { UseUserListOptions } from '@sendbird/chat-react-hooks';
+import type { UseUserListOptions } from '@sendbird/uikit-chat-hooks';
 import type { BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
 import type { ContextValue } from '@sendbird/uikit-utils';
 

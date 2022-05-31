@@ -1,3 +1,6 @@
+/**
+ * Scripts to override references of sample/tsconfig.json
+ * */
 const fs = require('fs');
 const path = require('path');
 

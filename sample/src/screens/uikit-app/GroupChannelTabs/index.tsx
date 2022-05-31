@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 
-import { useTotalUnreadMessageCount } from '@sendbird/chat-react-hooks';
+import { useTotalUnreadMessageCount } from '@sendbird/uikit-chat-hooks';
 import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { Icon, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 

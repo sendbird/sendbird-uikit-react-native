@@ -10,3 +10,10 @@ export interface LocalCacheStorage {
   multiGet?(keys: string[]): Promise<readonly KeyValuePairGet[] | KeyValuePairGet[]>;
   multiRemove?(keys: string[]): Promise<void>;
 }
+
+// TODO: Remove this after 3.1.15
+declare module 'sendbird' {
+  interface User {
+    profileUrl: string;
+  }
+}

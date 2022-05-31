@@ -24,5 +24,7 @@ uikit
 - remove: `yarn workspace @sendbird/package remove some-package`
 
 ### Publish
+> Bump > Build > Deploy 
 
-- bump: `lerna version {major|minor|patch} [--no-git-tag-version] [--no-private]`
+- bump script: `lerna version {major|minor|patch} [--no-git-tag-version] [--no-private]` or `yarn bump:{major|minor|patch}`
+- build script: `yarn build`

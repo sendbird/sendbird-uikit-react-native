@@ -2,7 +2,7 @@ import React from 'react';
 import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { usePushTrigger } from '@sendbird/chat-react-hooks';
+import { usePushTrigger } from '@sendbird/uikit-chat-hooks';
 import { usePlatformService, useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import {
   Avatar,
@@ -16,7 +16,7 @@ import {
   usePrompt,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import { useBottomSheet } from '@sendbird/uikit-react-native-foundation/src/ui/Dialog';
+import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
 
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
 import useAppearance from '../../../hooks/useAppearance';

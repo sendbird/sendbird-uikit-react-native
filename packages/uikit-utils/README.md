@@ -1,6 +1,6 @@
 # @sendbird/uikit-utils
 
-chat-react-hooks
+uikit-chat-hooks
 
 ## Installation
 

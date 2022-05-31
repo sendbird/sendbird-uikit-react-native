@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Sendbird from 'sendbird';
 
@@ -27,6 +28,12 @@ import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 
 import InternalLocalCacheStorage from './InternalLocalCacheStorage';
 import type { LocalCacheStorage } from './types';
+import VERSION from './version';
+
+export const SendbirdUIKit = Object.freeze({
+  VERSION,
+  PLATFORM: Platform.OS.toLowerCase(),
+});
 
 type LabelSets = Record<string, LabelSet>;
 type Props<T extends LabelSets> = {
@@ -81,6 +88,15 @@ const SendbirdUIKitContainer = <T extends LabelSets>({
 
     if (chatOptions?.onInitialized) {
       sdk = chatOptions?.onInitialized(sdk);
+    }
+
+    if (SendbirdUIKit.VERSION) {
+      // @ts-ignore
+      sdk.addExtension('sb_uikit', SendbirdUIKit.VERSION);
+    }
+    if (SendbirdUIKit.PLATFORM) {
+      // @ts-ignore
+      sdk.addExtension('device-os-platform', SendbirdUIKit.PLATFORM);
     }
 
     setSdkInstance(sdk);

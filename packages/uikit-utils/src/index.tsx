@@ -13,7 +13,7 @@ export {
   replaceUrlAsComponents,
 } from './shared/regex';
 
-export { useAsyncEffect, useAsyncLayoutEffect, useForceUpdate, useUniqId, useIIFE } from './hooks';
+export { useAsyncEffect, useAsyncLayoutEffect, useForceUpdate, useUniqId, useIIFE, useIsMountedRef } from './hooks';
 
 export * from './ui-format/groupChannel';
 export * from './ui-format/common';

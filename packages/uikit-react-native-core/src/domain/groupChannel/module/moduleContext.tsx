@@ -1,7 +1,7 @@
 import React, { createContext, useState } from 'react';
 import type Sendbird from 'sendbird';
 
-import { useChannelHandler } from '@sendbird/chat-react-hooks';
+import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { NOOP, isDifferentChannel, useUniqId } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';

@@ -17,5 +17,7 @@ build
 /lib/
 
 env.ts
+version.ts
+
 *.app.dSYM.zip
 lerna-debug.log
