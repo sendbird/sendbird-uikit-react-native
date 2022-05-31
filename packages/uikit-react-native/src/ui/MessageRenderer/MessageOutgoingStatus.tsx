@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type Sendbird from 'sendbird';
 
-import { useChannelHandler } from '@sendbird/chat-react-hooks';
+import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { Icon, LoadingSpinner, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';

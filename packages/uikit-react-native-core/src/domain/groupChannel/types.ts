@@ -2,7 +2,7 @@ import type React from 'react';
 import type { FlatListProps } from 'react-native';
 import type Sendbird from 'sendbird';
 
-import type { UseGroupChannelMessagesOptions } from '@sendbird/chat-react-hooks';
+import type { UseGroupChannelMessagesOptions } from '@sendbird/uikit-chat-hooks';
 import type { BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
 

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Pressable, View } from 'react-native';
 
-import { useGroupChannelList } from '@sendbird/chat-react-hooks';
+import { useGroupChannelList } from '@sendbird/uikit-chat-hooks';
 import type {
   GroupChannelListFragment,
   GroupChannelListModule,

@@ -3,7 +3,7 @@ import type Sendbird from 'sendbird';
 
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 import { Logger, NOOP, isDifferentChannel, useForceUpdate } from '@sendbird/uikit-utils';
-import { useIsMountedRef } from '@sendbird/uikit-utils/src/hooks';
+import { useIsMountedRef } from '@sendbird/uikit-utils';
 
 import useInternalPubSub from '../../common/useInternalPubSub';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';

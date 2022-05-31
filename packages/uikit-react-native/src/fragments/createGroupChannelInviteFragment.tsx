@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
 import type Sendbird from 'sendbird';
 
-import { useUserList } from '@sendbird/chat-react-hooks';
+import { useUserList } from '@sendbird/uikit-chat-hooks';
 import type { GroupChannelInviteFragment, UserListModule } from '@sendbird/uikit-react-native-core';
 import { createUserListModule, useLocalization, useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { Logger } from '@sendbird/uikit-utils';

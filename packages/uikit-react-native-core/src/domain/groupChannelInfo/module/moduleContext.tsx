@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import type Sendbird from 'sendbird';
 
-import { useChannelHandler } from '@sendbird/chat-react-hooks';
+import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { useActionMenu, useBottomSheet, usePrompt } from '@sendbird/uikit-react-native-foundation';
 import { NOOP, isDifferentChannel, useForceUpdate, useUniqId } from '@sendbird/uikit-utils';
 

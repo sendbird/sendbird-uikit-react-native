@@ -2,8 +2,13 @@ import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
 import React from 'react';
 import { Button } from 'react-native';
 
-import { DialogProvider, useActionMenu, useAlert, usePrompt } from '@sendbird/uikit-react-native-foundation';
-import { useBottomSheet } from '@sendbird/uikit-react-native-foundation/src/ui/Dialog';
+import {
+  DialogProvider,
+  useActionMenu,
+  useAlert,
+  useBottomSheet,
+  usePrompt,
+} from '@sendbird/uikit-react-native-foundation';
 
 import { loremIpsum } from './constant';
 

@@ -11,7 +11,7 @@ import {
   useToast,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation/src/ui/BottomSheet';
+import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
 import {
   Logger,

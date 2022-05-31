@@ -6,11 +6,11 @@ export { default as LightUIKitTheme } from './theme/LightUIKitTheme';
 export { default as UIKitThemeProvider } from './theme/UIKitThemeProvider';
 
 /** UI **/
-export { default as ActionMenu } from './ui/ActionMenu';
+export { default as ActionMenu, ActionMenuItem } from './ui/ActionMenu';
 export { default as Alert } from './ui/Alert';
 export { default as Avatar } from './ui/Avatar';
 export { default as Badge } from './ui/Badge';
-export { default as BottomSheet } from './ui/BottomSheet';
+export { default as BottomSheet, BottomSheetItem } from './ui/BottomSheet';
 export { default as Button } from './ui/Button';
 export { default as ChannelFrozenBanner } from './ui/ChannelFrozenBanner';
 export { DialogProvider, useActionMenu, useAlert, usePrompt, useBottomSheet } from './ui/Dialog';

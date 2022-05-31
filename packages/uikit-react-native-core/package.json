@@ -39,7 +39,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@sendbird/chat-react-hooks": "0.1.2",
+    "@sendbird/uikit-chat-hooks": "0.1.2",
     "@sendbird/uikit-react-native-foundation": "0.1.2",
     "@sendbird/uikit-utils": "0.1.2"
   },

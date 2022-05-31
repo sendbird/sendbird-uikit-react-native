@@ -2,7 +2,7 @@ import type React from 'react';
 import type { FlatListProps } from 'react-native';
 import type Sendbird from 'sendbird';
 
-import type { UseGroupChannelListOptions } from '@sendbird/chat-react-hooks';
+import type { UseGroupChannelListOptions } from '@sendbird/uikit-chat-hooks';
 import type { BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
 
 import type { CommonComponent } from '../../types';
@@ -22,7 +22,7 @@ import type { CommonComponent } from '../../types';
  * @property Header.Header - Custom header component from Fragment {@link Fragment.Header}
  *
  * @type {GroupChannelListProps.List} - Props from Fragment for create List module
- * @property List.groupChannels - GroupChannels from SendbirdChat SDK, We are using '@sendbird/chat-react-hooks'
+ * @property List.groupChannels - GroupChannels from SendbirdChat SDK, We are using '@sendbird/uikit-chat-hooks'
  * @property List.renderGroupChannelPreview - Method to render GroupChannel preview
  * @property List.onLoadNext - Method to load more data, called with onEndReached of FlatList
  * @property List.onRefresh - Method to refresh GroupChannels

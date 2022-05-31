@@ -16,7 +16,7 @@ aliases:
       key: yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}-v1
       paths:
         - sample/node_modules
-        - packages/chat-react-hooks/node_modules
+        - packages/uikit-chat-hooks/node_modules
         - packages/uikit-react-native/node_modules
         - packages/uikit-react-native-core/node_modules
         - packages/uikit-react-native-foundation/node_modules
