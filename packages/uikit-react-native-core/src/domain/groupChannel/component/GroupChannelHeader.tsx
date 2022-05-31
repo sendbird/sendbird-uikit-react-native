@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { View } from 'react-native';
 
 import { Avatar, Header as DefaultHeader, Icon, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
-import { conditionChaining, getMembersExcludeMe, truncate, preferDefaultChannelCover } from '@sendbird/uikit-utils';
+import { conditionChaining, getMembersExcludeMe, preferDefaultChannelCover, truncate } from '@sendbird/uikit-utils';
 
 import { useLocalization } from '../../../contexts/Localization';
 import { useSendbirdChat } from '../../../contexts/SendbirdChat';
