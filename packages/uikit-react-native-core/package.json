@@ -49,7 +49,6 @@
     "@react-native-firebase/messaging": "^14.4.0",
     "@types/react": "17.0.2",
     "@types/react-native": "^0.66.15",
-    "chalk": "4.x",
     "date-fns": "^2.28.0",
     "expo-clipboard": "^2.1.1",
     "expo-document-picker": "^10.1.3",

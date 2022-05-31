@@ -31,7 +31,10 @@
     "sample:ios": "cd sample && yarn ios",
     "sample:android": "cd sample && yarn android",
     "deploy:ios": "cd sample/ios && bundle exec fastlane deploy",
-    "deploy:android": "cd sample/android && bundle exec fastlane deploy"
+    "deploy:android": "cd sample/android && bundle exec fastlane deploy",
+    "bump:major": "lerna version major --no-git-tag-version --no-private",
+    "bump:minor": "lerna version minor --no-git-tag-version --no-private",
+    "bump:patch": "lerna version patch --no-git-tag-version --no-private"
   },
   "devDependencies": {
     "@testing-library/react-native": "^9.0.0",
@@ -40,6 +43,7 @@
     "@typescript-eslint/eslint-plugin": "^5.9.1",
     "@typescript-eslint/parser": "^5.9.1",
     "babel-jest": "^27.4.6",
+    "chalk": "^4",
     "del-cli": "^4.0.1",
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.5.0",

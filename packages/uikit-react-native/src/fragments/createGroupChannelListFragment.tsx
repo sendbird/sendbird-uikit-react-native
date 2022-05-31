@@ -14,7 +14,7 @@ import {
   channelComparator,
   conditionChaining,
   getMembersExcludeMe,
-  useDefaultChannelCover,
+  preferDefaultChannelCover,
 } from '@sendbird/uikit-utils';
 
 import GroupChannelPreview from '../ui/GroupChannelPreview';
@@ -47,7 +47,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
         <Pressable onPress={() => onPressChannel(channel)} onLongPress={onLongPressChannel}>
           <GroupChannelPreview
             customCover={conditionChaining(
-              [useDefaultChannelCover(channel)],
+              [preferDefaultChannelCover(channel)],
               [
                 <Avatar uri={channel.coverUrl} size={56} />,
                 <Avatar.Group size={56}>

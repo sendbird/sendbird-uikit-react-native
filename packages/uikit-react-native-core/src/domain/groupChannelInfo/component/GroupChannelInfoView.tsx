@@ -18,7 +18,7 @@ import {
   conditionChaining,
   getGroupChannelTitle,
   getMembersExcludeMe,
-  useDefaultChannelCover,
+  preferDefaultChannelCover,
 } from '@sendbird/uikit-utils';
 
 import { useLocalization } from '../../../contexts/Localization';
@@ -81,7 +81,7 @@ const GroupChannelInfoView: React.FC<GroupChannelInfoProps['View']> = ({ onPress
     >
       <View style={styles.userInfoContainer}>
         {conditionChaining(
-          [useDefaultChannelCover(channel)],
+          [preferDefaultChannelCover(channel)],
           [
             <Avatar uri={channel.coverUrl} size={80} containerStyle={styles.avatarContainer} />,
             <Avatar.Group size={80} containerStyle={styles.avatarContainer}>
