@@ -98,8 +98,10 @@ export const useGroupChannelMessagesWithCollection = (
             else {
               Logger.debug(`[${hookName}/onApiResult]`, 'message length:', messages.length);
               updateMessages(messages, true, sdk.currentUser.userId);
-              updateMessages(collectionRef.current?.pendingMessages ?? [], false, sdk.currentUser.userId);
-              updateMessages(collectionRef.current?.failedMessages ?? [], false, sdk.currentUser.userId);
+              if (sdk.isCacheEnabled) {
+                updateMessages(collectionRef.current?.pendingMessages ?? [], false, sdk.currentUser.userId);
+                updateMessages(collectionRef.current?.failedMessages ?? [], false, sdk.currentUser.userId);
+              }
             }
           });
 
