@@ -14,7 +14,7 @@ import TypedPlaceholder from '../ui/TypedPlaceholder';
 
 const PassValue = <T,>(v: T) => v;
 
-const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChannelFragment => {
+const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): GroupChannelFragment => {
   const GroupChannelModule = createGroupChannelModule(initModule);
 
   return ({
@@ -31,6 +31,7 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
     onBeforeSendFileMessage = PassValue,
     onBeforeSendUserMessage = PassValue,
     staleChannel,
+    keyboardAvoidOffset,
     queryCreator,
     collectionCreator,
     sortComparator = messageComparator,
@@ -127,7 +128,11 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
     );
 
     return (
-      <GroupChannelModule.Provider channel={activeChannel} enableTypingIndicator={enableTypingIndicator}>
+      <GroupChannelModule.Provider
+        channel={activeChannel}
+        enableTypingIndicator={enableTypingIndicator}
+        keyboardAvoidOffset={keyboardAvoidOffset}
+      >
         <GroupChannelModule.Header
           Header={Header}
           onPressHeaderLeft={onPressHeaderLeft}

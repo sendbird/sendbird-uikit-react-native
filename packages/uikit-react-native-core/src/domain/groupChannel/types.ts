@@ -29,6 +29,7 @@ export type GroupChannelProps = {
     Header?: GroupChannelProps['Header']['Header'];
 
     enableTypingIndicator?: GroupChannelProps['Provider']['enableTypingIndicator'];
+    keyboardAvoidOffset?: GroupChannelProps['Provider']['keyboardAvoidOffset'];
     enableMessageGrouping?: GroupChannelProps['MessageList']['enableMessageGrouping'];
     flatListProps?: GroupChannelProps['MessageList']['flatListProps'];
     sortComparator?: UseGroupChannelMessagesOptions['sortComparator'];
@@ -91,6 +92,7 @@ export type GroupChannelProps = {
   Provider: {
     channel: Sendbird.GroupChannel;
     enableTypingIndicator: boolean;
+    keyboardAvoidOffset?: number;
   };
 };
 
@@ -105,6 +107,7 @@ export type GroupChannelContextType = {
     channel: Sendbird.GroupChannel;
     editMessage?: Sendbird.UserMessage | Sendbird.FileMessage;
     setEditMessage: (msg?: Sendbird.UserMessage | Sendbird.FileMessage) => void;
+    keyboardAvoidOffset?: number;
   }>;
   TypingIndicator: React.Context<{
     typingUsers: Sendbird.User[];

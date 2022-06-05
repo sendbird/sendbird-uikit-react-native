@@ -27,7 +27,7 @@ const DefaultUserIdGenerator = <T,>(users: T[]) => {
 };
 
 const createGroupChannelInviteFragment = <UserType,>(
-  initModule?: UserListModule<UserType>,
+  initModule?: Partial<UserListModule<UserType>>,
 ): GroupChannelInviteFragment<UserType> => {
   const UserListModule = createUserListModule<UserType>(initModule);
 
