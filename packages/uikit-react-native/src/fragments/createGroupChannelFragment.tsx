@@ -14,7 +14,7 @@ import TypedPlaceholder from '../ui/TypedPlaceholder';
 
 const PassValue = <T,>(v: T) => v;
 
-const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChannelFragment => {
+const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): GroupChannelFragment => {
   const GroupChannelModule = createGroupChannelModule(initModule);
 
   return ({

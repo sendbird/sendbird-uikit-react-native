@@ -4,7 +4,7 @@ import type { GroupChannelInfoFragment, GroupChannelInfoModule } from '@sendbird
 import { createGroupChannelInfoModule } from '@sendbird/uikit-react-native-core';
 import { NOOP } from '@sendbird/uikit-utils';
 
-const createGroupChannelInfoFragment = (initModule?: GroupChannelInfoModule): GroupChannelInfoFragment => {
+const createGroupChannelInfoFragment = (initModule?: Partial<GroupChannelInfoModule>): GroupChannelInfoFragment => {
   const GroupChannelInfoModule = createGroupChannelInfoModule(initModule);
 
   return ({ Header, onPressHeaderLeft = NOOP, staleChannel, onPressMenuMembers, onLeaveChannel, children }) => {

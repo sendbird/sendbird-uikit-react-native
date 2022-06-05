@@ -27,7 +27,7 @@ const createMemberListQuery = (channel: Sendbird.GroupChannel) => {
 };
 
 const createGroupChannelMembersFragment = (
-  initModule?: UserListModule<Sendbird.Member>,
+  initModule?: Partial<UserListModule<Sendbird.Member>>,
 ): GroupChannelMembersFragment<Sendbird.Member> => {
   const UserListModule = createUserListModule<Sendbird.Member>(initModule);
 
