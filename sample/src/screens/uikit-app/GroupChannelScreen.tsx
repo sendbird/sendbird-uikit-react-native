@@ -7,6 +7,65 @@ import { Logger } from '@sendbird/uikit-utils';
 import { useAppNavigation } from '../../hooks/useAppNavigation';
 import { Routes } from '../../libs/navigation';
 
+/**
+ * Example for customize navigation header with DomainContext
+ * Component should return null for hide uikit header
+ *
+ * Especially in GroupChannel (chatting view)
+ * you should provide your custom header height to GroupChannel as a keyboardAvoidOffset prop
+ * to fix Input component position properly (when focused)
+ *
+ * @example
+ * ```
+ * import React, { useContext, useEffect } from 'react';
+ * import { Pressable } from 'react-native';
+ *
+ * import { useNavigation } from "@react-navigation/native";
+ * import { useHeaderHeight } from '@react-navigation/elements';
+ *
+ * import { GroupChannelContext, GroupChannelModule } from '@sendbird/uikit-react-native-core';
+ * import { Icon } from '@sendbird/uikit-react-native-foundation';
+ *
+ * const UseReactNavigationHeader: GroupChannelModule['Header'] = ({ onPressHeaderRight, onPressHeaderLeft }) => {
+ *   const navigation = useNavigation();
+ *   const { headerTitle } = useContext(GroupChannelContext.Fragment);
+ *   useEffect(() => {
+ *     navigation.setOptions({
+ *       headerShown: true,
+ *       headerTitleAlign: 'center',
+ *       title: headerTitle,
+ *       headerLeft: () => (
+ *         <Pressable onPress={onPressHeaderLeft}>
+ *           <Icon icon={'arrow-left'} />
+ *         </Pressable>
+ *       ),
+ *       headerRight: () => (
+ *         <Pressable onPress={onPressHeaderRight}>
+ *           <Icon icon={'info'} />
+ *         </Pressable>
+ *       ),
+ *     });
+ *   }, []);
+ *   return null;
+ * };
+ *
+ * const GroupChannelFragment = createGroupChannelFragment({ Header: UseReactNavigationHeader });
+ *
+ * const GroupChannelScreen = () => {
+ *   // ...
+ *   const height = useHeaderHeight();
+ *
+ *   return (
+ *     <GroupChannelFragment
+ *       keyboardAvoidOffset={height}
+ *       // ...
+ *     />
+ *   )
+ * }
+ *
+ * ```
+ * */
+
 const GroupChannelFragment = createGroupChannelFragment();
 
 const GroupChannelScreen: React.FC = () => {

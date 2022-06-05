@@ -29,6 +29,7 @@ export type GroupChannelProps = {
     Header?: GroupChannelProps['Header']['Header'];
 
     enableTypingIndicator?: GroupChannelProps['Provider']['enableTypingIndicator'];
+    keyboardAvoidOffset?: GroupChannelProps['Provider']['keyboardAvoidOffset'];
     enableMessageGrouping?: GroupChannelProps['MessageList']['enableMessageGrouping'];
     flatListProps?: GroupChannelProps['MessageList']['flatListProps'];
     sortComparator?: UseGroupChannelMessagesOptions['sortComparator'];

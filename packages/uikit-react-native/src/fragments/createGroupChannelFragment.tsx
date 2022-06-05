@@ -31,6 +31,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     onBeforeSendFileMessage = PassValue,
     onBeforeSendUserMessage = PassValue,
     staleChannel,
+    keyboardAvoidOffset,
     queryCreator,
     collectionCreator,
     sortComparator = messageComparator,
@@ -127,7 +128,11 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     );
 
     return (
-      <GroupChannelModule.Provider channel={activeChannel} enableTypingIndicator={enableTypingIndicator}>
+      <GroupChannelModule.Provider
+        channel={activeChannel}
+        enableTypingIndicator={enableTypingIndicator}
+        keyboardAvoidOffset={keyboardAvoidOffset}
+      >
         <GroupChannelModule.Header
           Header={Header}
           onPressHeaderLeft={onPressHeaderLeft}
