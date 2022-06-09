@@ -82,7 +82,7 @@ export type RouteParamsUnion =
 type ExtractParams<R extends Routes, U extends RouteParamsUnion> = U extends { route: R } ? U['params'] : never;
 export type RouteParams<R extends Routes> = ExtractParams<R, RouteParamsUnion>;
 export type ParamListBase<T extends RouteParamsUnion = RouteParamsUnion> = {
-  [k in T['route']]: T['params'];
+  [k in T['route']]: T extends { route: k; params: infer P } ? P : never;
 };
 
 export type RouteProps<T extends Routes, P extends Record<string, unknown> = Record<string, string>> = {
@@ -102,7 +102,7 @@ export const navigationActions = {
         // navigationRef.setParams(params);
         navigationRef.dispatch(StackActions.replace(name, params));
       } else {
-        navigationRef.navigate<T>(name, params);
+        navigationRef.navigate<Routes>(name, params);
       }
     }
   },
