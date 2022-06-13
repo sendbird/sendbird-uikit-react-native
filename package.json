@@ -17,6 +17,7 @@
     ]
   },
   "scripts": {
+    "prepare": "lerna run --stream --sort prepare",
     "reset": "find . -type dir -name node_modules | xargs rm -rf",
     "clean": "lerna run clean",
     "build": "lerna run build",
