@@ -15,4 +15,6 @@ export { default as createGroupChannelInviteFragment } from './fragments/createG
 export { default as createGroupChannelListFragment } from './fragments/createGroupChannelListFragment';
 export { default as createGroupChannelMembersFragment } from './fragments/createGroupChannelMembersFragment';
 
-export { default as SendbirdUIKitContainer } from './SendbirdUIKitContainer';
+export { default as SendbirdUIKitContainer, SendbirdUIKit } from './SendbirdUIKitContainer';
+
+export * from './types';

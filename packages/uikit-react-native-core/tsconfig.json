@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.json",
   "references": [
     {
-      "path": "../chat-react-hooks"
+      "path": "../uikit-chat-hooks"
     },
     {
       "path": "../uikit-utils"

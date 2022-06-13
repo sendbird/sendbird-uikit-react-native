@@ -17,7 +17,6 @@ const IconAssets = {
   'close': require('./icon-close.png'),
   'copy': require('./icon-copy.png'),
   'create': require('./icon-create.png'),
-  'delete-copy': require('./icon-delete-copy.png'),
   'delete': require('./icon-delete.png'),
   'document': require('./icon-document.png'),
   'done-all': require('./icon-done-all.png'),

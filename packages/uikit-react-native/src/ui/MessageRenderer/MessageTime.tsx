@@ -14,7 +14,7 @@ const MessageTime: React.FC<Props> = ({ message, grouping, style }) => {
   return (
     <View style={style}>
       <Text caption4 color={colors.ui.message.incoming.enabled.textTime}>
-        {LABEL.GROUP_CHANNEL.LIST_MESSAGE_TIME(message)}
+        {LABEL.GROUP_CHANNEL.MESSAGE_BUBBLE_TIME(message)}
       </Text>
     </View>
   );

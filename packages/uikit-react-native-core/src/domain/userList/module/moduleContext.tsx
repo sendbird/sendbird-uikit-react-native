@@ -1,7 +1,7 @@
 import React, { createContext, useState } from 'react';
 
 import type { ContextValue } from '@sendbird/uikit-utils';
-import { EmptyFunction } from '@sendbird/uikit-utils';
+import { NOOP } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import type { UserListContextType, UserListProps } from '../types';
@@ -13,7 +13,7 @@ export const UserListContext: UserListContextType<unknown> = {
   }),
   List: createContext<ContextValue<UserListContextType<unknown>['List']>>({
     selectedUsers: [],
-    setSelectedUsers: EmptyFunction,
+    setSelectedUsers: NOOP,
   }),
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

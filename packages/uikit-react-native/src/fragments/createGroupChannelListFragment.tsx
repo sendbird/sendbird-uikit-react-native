@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Pressable, View } from 'react-native';
 
-import { useGroupChannelList } from '@sendbird/chat-react-hooks';
+import { useGroupChannelList } from '@sendbird/uikit-chat-hooks';
 import type {
   GroupChannelListFragment,
   GroupChannelListModule,
@@ -14,7 +14,7 @@ import {
   channelComparator,
   conditionChaining,
   getMembersExcludeMe,
-  useDefaultChannelCover,
+  preferDefaultChannelCover,
 } from '@sendbird/uikit-utils';
 
 import GroupChannelPreview from '../ui/GroupChannelPreview';
@@ -47,7 +47,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
         <Pressable onPress={() => onPressChannel(channel)} onLongPress={onLongPressChannel}>
           <GroupChannelPreview
             customCover={conditionChaining(
-              [useDefaultChannelCover(channel)],
+              [preferDefaultChannelCover(channel)],
               [
                 <Avatar uri={channel.coverUrl} size={56} />,
                 <Avatar.Group size={56}>
@@ -58,9 +58,9 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
               ],
             )}
             coverUrl={channel.coverUrl}
-            title={LABEL.GROUP_CHANNEL_LIST.PREVIEW_TITLE(currentUser?.userId ?? '', channel)}
-            titleCaption={LABEL.GROUP_CHANNEL_LIST.PREVIEW_TITLE_CAPTION(channel)}
-            body={LABEL.GROUP_CHANNEL_LIST.PREVIEW_BODY(channel)}
+            title={LABEL.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE(currentUser?.userId ?? '', channel)}
+            titleCaption={LABEL.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE_CAPTION(channel)}
+            body={LABEL.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_BODY(channel)}
             badgeCount={channel.unreadMessageCount}
             bodyIcon={channel.lastMessage?.isFileMessage() ? 'file-document' : undefined}
             frozen={channel.isFrozen}

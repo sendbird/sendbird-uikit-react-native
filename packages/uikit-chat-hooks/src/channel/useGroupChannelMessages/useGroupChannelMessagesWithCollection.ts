@@ -2,8 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type Sendbird from 'sendbird';
 
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
-import { EmptyFunction, Logger, isDifferentChannel, useForceUpdate } from '@sendbird/uikit-utils';
-import { useIsMountedRef } from '@sendbird/uikit-utils/src/hooks';
+import { Logger, NOOP, isDifferentChannel, useForceUpdate } from '@sendbird/uikit-utils';
+import { useIsMountedRef } from '@sendbird/uikit-utils';
 
 import useInternalPubSub from '../../common/useInternalPubSub';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';
@@ -58,8 +58,10 @@ export const useGroupChannelMessagesWithCollection = (
     updateRefreshing,
   } = useGroupChannelMessagesReducer(userId, options?.sortComparator);
 
+  // TODO: request buffer is needed
   const channelMarkAs = async () => {
     try {
+      // TODO: check premium feature
       sdk.markAsDelivered(activeChannel.url);
     } catch (e) {
       Logger.error(`[${hookName}/channelMarkAs/Delivered]`, e);
@@ -96,8 +98,10 @@ export const useGroupChannelMessagesWithCollection = (
             else {
               Logger.debug(`[${hookName}/onApiResult]`, 'message length:', messages.length);
               updateMessages(messages, true, sdk.currentUser.userId);
-              updateMessages(collectionRef.current?.pendingMessages ?? [], false, sdk.currentUser.userId);
-              updateMessages(collectionRef.current?.failedMessages ?? [], false, sdk.currentUser.userId);
+              if (sdk.isCacheEnabled) {
+                updateMessages(collectionRef.current?.pendingMessages ?? [], false, sdk.currentUser.userId);
+                updateMessages(collectionRef.current?.failedMessages ?? [], false, sdk.currentUser.userId);
+              }
             }
           });
 
@@ -226,7 +230,7 @@ export const useGroupChannelMessagesWithCollection = (
   );
   const updateUserMessage: UseGroupChannelMessages['updateUserMessage'] = useCallback(
     async (messageId, params) => {
-      const updatedMessage = await activeChannel.updateUserMessage(messageId, params, EmptyFunction);
+      const updatedMessage = await activeChannel.updateUserMessage(messageId, params, NOOP);
       updateMessages([updatedMessage], false, sdk.currentUser.userId);
       return updatedMessage;
     },
@@ -234,7 +238,7 @@ export const useGroupChannelMessagesWithCollection = (
   );
   const updateFileMessage: UseGroupChannelMessages['updateFileMessage'] = useCallback(
     async (messageId, params) => {
-      const updatedMessage = await activeChannel.updateFileMessage(messageId, params, EmptyFunction);
+      const updatedMessage = await activeChannel.updateFileMessage(messageId, params, NOOP);
       updateMessages([updatedMessage], false, sdk.currentUser.userId);
       return updatedMessage;
     },

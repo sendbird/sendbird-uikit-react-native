@@ -1,8 +1,8 @@
 import React, { createContext, useState } from 'react';
 import type Sendbird from 'sendbird';
 
-import { useChannelHandler } from '@sendbird/chat-react-hooks';
-import { EmptyFunction, isDifferentChannel, useUniqId } from '@sendbird/uikit-utils';
+import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
+import { NOOP, isDifferentChannel, useUniqId } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization } from '../../../contexts/Localization';
@@ -13,7 +13,7 @@ export const GroupChannelContext: GroupChannelContextType = {
   Fragment: createContext({
     headerTitle: '',
     channel: {} as Sendbird.GroupChannel,
-    setEditMessage: EmptyFunction,
+    setEditMessage: NOOP,
   }),
   TypingIndicator: createContext({
     typingUsers: [] as Sendbird.User[],
@@ -24,6 +24,7 @@ export const GroupChannelContextProvider: GroupChannelModule['Provider'] = ({
   children,
   channel,
   enableTypingIndicator,
+  keyboardAvoidOffset = 0,
 }) => {
   if (!channel) throw new Error('GroupChannel is not provided to GroupChannelModule');
 
@@ -55,6 +56,7 @@ export const GroupChannelContextProvider: GroupChannelModule['Provider'] = ({
           channel,
           editMessage,
           setEditMessage,
+          keyboardAvoidOffset,
         }}
       >
         <GroupChannelContext.TypingIndicator.Provider value={{ typingUsers }}>

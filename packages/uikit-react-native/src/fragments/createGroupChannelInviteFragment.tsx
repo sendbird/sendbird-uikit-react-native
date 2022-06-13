@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
 import type Sendbird from 'sendbird';
 
-import { useUserList } from '@sendbird/chat-react-hooks';
+import { useUserList } from '@sendbird/uikit-chat-hooks';
 import type { GroupChannelInviteFragment, UserListModule } from '@sendbird/uikit-react-native-core';
 import { createUserListModule, useLocalization, useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { Logger } from '@sendbird/uikit-utils';
@@ -27,7 +27,7 @@ const DefaultUserIdGenerator = <T,>(users: T[]) => {
 };
 
 const createGroupChannelInviteFragment = <UserType,>(
-  initModule?: UserListModule<UserType>,
+  initModule?: Partial<UserListModule<UserType>>,
 ): GroupChannelInviteFragment<UserType> => {
   const UserListModule = createUserListModule<UserType>(initModule);
 

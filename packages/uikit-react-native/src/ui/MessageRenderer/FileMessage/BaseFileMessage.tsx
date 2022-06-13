@@ -25,7 +25,7 @@ const BaseFileMessage: React.FC<FileMessageProps & { type: 'image' | 'audio' | '
         containerStyle={{ backgroundColor: colors.background, padding: 2, borderRadius: 8, marginRight: 8 }}
       />
       <Text numberOfLines={1} body3 color={color.textMsg}>
-        {LABEL.GROUP_CHANNEL.LIST_MESSAGE_FILE_TITLE(message)}
+        {LABEL.GROUP_CHANNEL.MESSAGE_BUBBLE_FILE_TITLE(message)}
       </Text>
     </View>
   );

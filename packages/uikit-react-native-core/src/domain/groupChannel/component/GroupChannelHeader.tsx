@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { View } from 'react-native';
 
 import { Avatar, Header as DefaultHeader, Icon, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
-import { conditionChaining, getMembersExcludeMe, truncate, useDefaultChannelCover } from '@sendbird/uikit-utils';
+import { conditionChaining, getMembersExcludeMe, preferDefaultChannelCover, truncate } from '@sendbird/uikit-utils';
 
 import { useLocalization } from '../../../contexts/Localization';
 import { useSendbirdChat } from '../../../contexts/SendbirdChat';
@@ -28,7 +28,7 @@ const GroupChannelHeader: React.FC<GroupChannelProps['Header']> = ({
       title={
         <View style={styles.titleContainer}>
           {conditionChaining(
-            [useDefaultChannelCover(channel)],
+            [preferDefaultChannelCover(channel)],
             [
               <Avatar uri={channel.coverUrl} size={34} containerStyle={styles.avatarGroup} />,
               <Avatar.Group size={34} containerStyle={styles.avatarGroup}>

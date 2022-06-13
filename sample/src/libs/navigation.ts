@@ -2,7 +2,9 @@ import { Route, StackActions, createNavigationContainerRef } from '@react-naviga
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import type { GroupChannelType } from '@sendbird/uikit-react-native-core';
+import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 
+import { GetSendbirdSDK } from '../factory';
 import { authManager } from './authentication';
 
 export enum Routes {
@@ -80,7 +82,7 @@ export type RouteParamsUnion =
 type ExtractParams<R extends Routes, U extends RouteParamsUnion> = U extends { route: R } ? U['params'] : never;
 export type RouteParams<R extends Routes> = ExtractParams<R, RouteParamsUnion>;
 export type ParamListBase<T extends RouteParamsUnion = RouteParamsUnion> = {
-  [k in T['route']]: T['params'];
+  [k in T['route']]: T extends { route: k; params: infer P } ? P : never;
 };
 
 export type RouteProps<T extends Routes, P extends Record<string, unknown> = Record<string, string>> = {
@@ -100,7 +102,7 @@ export const navigationActions = {
         // navigationRef.setParams(params);
         navigationRef.dispatch(StackActions.replace(name, params));
       } else {
-        navigationRef.navigate<T>(name, params);
+        navigationRef.navigate<Routes>(name, params);
       }
     }
   },
@@ -116,11 +118,14 @@ export const navigationActions = {
   },
 };
 
-export const runAfterAppReady = (callback: (actions: typeof navigationActions) => void) => {
+export const runAfterAppReady = (callback: (sdk: SendbirdChatSDK, actions: typeof navigationActions) => void) => {
   const id = setInterval(async () => {
-    if (navigationRef.isReady() && authManager.hasAuthentication()) {
-      clearInterval(id);
-      callback(navigationActions);
+    if (navigationRef.isReady() && authManager.hasAuthentication() && GetSendbirdSDK()) {
+      const sdk = GetSendbirdSDK();
+      if (sdk.getConnectionState() === 'OPEN') {
+        clearInterval(id);
+        callback(sdk, navigationActions);
+      }
     }
   }, 250);
 };

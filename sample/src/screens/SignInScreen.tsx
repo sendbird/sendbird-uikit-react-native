@@ -1,16 +1,37 @@
 import React, { useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 
-import { useConnection } from '@sendbird/uikit-react-native-core';
+import { useConnection, useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { Button, Text, TextInput, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
+import { SendbirdAPI } from '../factory';
 import { useAppAuth } from '../libs/authentication';
 
 const SignInScreen: React.FC = () => {
   const [userId, setUserId] = useState('');
+  const [nickname, setNickname] = useState('');
 
-  const { connect } = useConnection({ autoPushTokenRegistration: true });
-  const { signIn } = useAppAuth((user) => connect(user.userId));
+  const { sdk } = useSendbirdChat();
+  const { connect } = useConnection();
+
+  const connectWith = async (userId: string, nickname?: string, useSessionToken = false) => {
+    if (useSessionToken) {
+      const sessionHandler = new sdk.SessionHandler();
+      sessionHandler.onSessionTokenRequired = (onSuccess, onFail) => {
+        SendbirdAPI.getSessionToken(userId)
+          .then(({ token }) => onSuccess(token))
+          .catch(onFail);
+      };
+      sdk.setSessionHandler(sessionHandler);
+
+      const data = await SendbirdAPI.getSessionToken(userId);
+      await connect(userId, { nickname, accessToken: data.token });
+    } else {
+      await connect(userId, { nickname });
+    }
+  };
+
+  const { signIn } = useAppAuth((user) => connectWith(user.userId));
   const { colors } = useUIKitTheme();
 
   return (
@@ -21,6 +42,12 @@ const SignInScreen: React.FC = () => {
         placeholder={'User ID'}
         value={userId}
         onChangeText={setUserId}
+        style={[styles.input, { backgroundColor: colors.onBackground04, marginBottom: 12 }]}
+      />
+      <TextInput
+        placeholder={'Nickname'}
+        value={nickname}
+        onChangeText={setNickname}
         style={[styles.input, { backgroundColor: colors.onBackground04 }]}
       />
       <Button
@@ -29,7 +56,7 @@ const SignInScreen: React.FC = () => {
         onPress={async () => {
           if (userId) {
             await signIn({ userId });
-            await connect(userId);
+            await connectWith(userId, nickname);
           }
         }}
       >

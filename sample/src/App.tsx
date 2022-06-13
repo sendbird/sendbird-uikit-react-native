@@ -1,3 +1,5 @@
+import Notifee from '@notifee/react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 
@@ -5,13 +7,14 @@ import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
 import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
+import { APP_ID } from './env';
 import {
   ClipboardService,
   FileService,
   GetTranslucent,
   NotificationService,
   RootStack,
-  SendBirdInstance,
+  SetSendbirdSDK,
 } from './factory';
 import useAppearance from './hooks/useAppearance';
 import { Routes, navigationRef } from './libs/navigation';
@@ -36,8 +39,9 @@ const App = () => {
 
   return (
     <SendbirdUIKitContainer
-      chat={{ sdkInstance: SendBirdInstance }}
-      services={{ file: FileService, notification: NotificationService, clipboard: ClipboardService }}
+      appId={APP_ID}
+      chatOptions={{ localCacheStorage: AsyncStorage, onInitialized: SetSendbirdSDK }}
+      platformServices={{ file: FileService, notification: NotificationService, clipboard: ClipboardService }}
       styles={{
         defaultHeaderTitleAlign: 'left', //'center',
         theme: isLightTheme ? LightUIKitTheme : DarkUIKitTheme,
@@ -55,6 +59,7 @@ const Navigations = () => {
   const isLightTheme = scheme === 'light';
 
   useEffect(() => {
+    Notifee.setBadgeCount(0);
     const unsubscribes = [onForegroundAndroid(), onForegroundIOS()];
     return () => {
       unsubscribes.forEach((fn) => fn());

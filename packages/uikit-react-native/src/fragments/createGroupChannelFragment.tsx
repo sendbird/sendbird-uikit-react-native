@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { View } from 'react-native';
 
-import { useGroupChannelMessages } from '@sendbird/chat-react-hooks';
-import { useInternalPubSub } from '@sendbird/chat-react-hooks';
+import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
+import { useInternalPubSub } from '@sendbird/uikit-chat-hooks';
 import type { GroupChannelFragment, GroupChannelModule, GroupChannelProps } from '@sendbird/uikit-react-native-core';
 import { createGroupChannelModule, useSendbirdChat } from '@sendbird/uikit-react-native-core';
-import { EmptyFunction, messageComparator } from '@sendbird/uikit-utils';
+import { NOOP, messageComparator } from '@sendbird/uikit-utils';
 
 import MessageRenderer from '../ui/MessageRenderer';
 import DefaultNewMessagesTooltip from '../ui/NewMessagesTooltip';
@@ -14,7 +14,7 @@ import TypedPlaceholder from '../ui/TypedPlaceholder';
 
 const PassValue = <T,>(v: T) => v;
 
-const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChannelFragment => {
+const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): GroupChannelFragment => {
   const GroupChannelModule = createGroupChannelModule(initModule);
 
   return ({
@@ -24,13 +24,14 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
     enableMessageGrouping = true,
     enableTypingIndicator = true,
     Header,
-    onPressHeaderLeft = EmptyFunction,
-    onPressHeaderRight = EmptyFunction,
-    onPressImageMessage = EmptyFunction,
-    onChannelDeleted = EmptyFunction,
+    onPressHeaderLeft = NOOP,
+    onPressHeaderRight = NOOP,
+    onPressImageMessage = NOOP,
+    onChannelDeleted = NOOP,
     onBeforeSendFileMessage = PassValue,
     onBeforeSendUserMessage = PassValue,
     staleChannel,
+    keyboardAvoidOffset,
     queryCreator,
     collectionCreator,
     sortComparator = messageComparator,
@@ -127,7 +128,11 @@ const createGroupChannelFragment = (initModule?: GroupChannelModule): GroupChann
     );
 
     return (
-      <GroupChannelModule.Provider channel={activeChannel} enableTypingIndicator={enableTypingIndicator}>
+      <GroupChannelModule.Provider
+        channel={activeChannel}
+        enableTypingIndicator={enableTypingIndicator}
+        keyboardAvoidOffset={keyboardAvoidOffset}
+      >
         <GroupChannelModule.Header
           Header={Header}
           onPressHeaderLeft={onPressHeaderLeft}

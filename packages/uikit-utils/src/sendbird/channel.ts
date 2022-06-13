@@ -28,7 +28,7 @@ export const groupChannelChatUnavailable = (channel: Sendbird.GroupChannel) => {
   return channel.myMutedState === 'muted' || (channel.isFrozen && channel.myRole !== 'operator');
 };
 
-export function useDefaultChannelCover(channel: Sendbird.GroupChannel) {
+export function preferDefaultChannelCover(channel: Sendbird.GroupChannel) {
   if (channel.memberCount > 1) {
     return !channel.coverUrl.startsWith('https://static.sendbird.com/sample/cover/');
   }

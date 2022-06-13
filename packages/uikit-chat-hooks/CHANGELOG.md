@@ -9,7 +9,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * **chat-hooks:** added guard to useGroupChannelListWithQuery init ([5ec16d9](https://github.com/sendbird/sendbird-uikit-react-native/commit/5ec16d927dd1381bb9c2c8cdafc8f7b614cdded5))
-* **chat-react-hooks:** wrong if condition ([4f93e6c](https://github.com/sendbird/sendbird-uikit-react-native/commit/4f93e6c5fde4e4e3c26b214934d9c115f3ce452b))
+* **chat-hooks:** wrong if condition ([4f93e6c](https://github.com/sendbird/sendbird-uikit-react-native/commit/4f93e6c5fde4e4e3c26b214934d9c115f3ce452b))
 * fixed channel preview update properly ([b8b3d53](https://github.com/sendbird/sendbird-uikit-react-native/commit/b8b3d536d80b1f15b39e47e428d648da4f513831))
 * **utils:** pubsub enhancement ([2006249](https://github.com/sendbird/sendbird-uikit-react-native/commit/2006249e34777293b04dd06f9186cf1436298c6e))
 

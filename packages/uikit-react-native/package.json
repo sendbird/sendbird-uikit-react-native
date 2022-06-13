@@ -14,9 +14,11 @@
   ],
   "sideEffects": false,
   "scripts": {
+    "postinstall": "yarn generate-version",
     "test": "jest",
-    "build": "bob build",
-    "clean": "del lib"
+    "build": "yarn generate-version && bob build",
+    "clean": "del lib",
+    "generate-version": "node scripts/generate-version.js ./src/version.ts"
   },
   "keywords": [
     "react-native",
