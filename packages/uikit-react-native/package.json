@@ -14,7 +14,7 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "postinstall": "yarn generate-version",
+    "prepare": "yarn generate-version",
     "test": "jest",
     "build": "yarn generate-version && bob build",
     "clean": "del lib",
