@@ -46,7 +46,7 @@ const createSendbirdFetcher = (appId: string, apiToken: string) => {
 
 const createSendbirdAPI = (appId: string, apiToken: string) => {
   const fetcher = createSendbirdFetcher(appId, apiToken);
-  const MIN = 60_000;
+  const MIN = 60 * 1000;
   return {
     getSessionToken(
       userId: string,
