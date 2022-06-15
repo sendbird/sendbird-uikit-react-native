@@ -38,7 +38,7 @@ const OpenGraphUserMessage: React.FC<Props> = ({ message, variant, pressed, ogMe
             [
               <Icon containerStyle={styles.ogImage} icon={'thumbnail-none'} size={48} color={colors.onBackground02} />,
               <Image
-                source={{ uri: ogMetaData.defaultImage.url }}
+                source={{ uri: ogMetaData.defaultImage?.url }}
                 style={styles.ogImage}
                 resizeMode={'cover'}
                 onError={() => setImageNotFound(true)}
