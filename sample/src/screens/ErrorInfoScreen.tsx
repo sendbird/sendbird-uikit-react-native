@@ -23,14 +23,10 @@ const ErrorInfoScreen = (props: ErrorBoundaryProps) => {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <SectionList
-        style={{
-          backgroundColor: Palette.background100,
-          maxHeight: 400,
-          maxWidth: '80%',
-          borderRadius: 8,
-          overflow: 'hidden',
-          marginBottom: 16,
-        }}
+        bounces={false}
+        style={{ width: '80%', maxHeight: 400, borderRadius: 8, marginBottom: 16 }}
+        contentContainerStyle={{ backgroundColor: Palette.background100 }}
+        stickySectionHeadersEnabled
         sections={[
           {
             title: 'Error name',

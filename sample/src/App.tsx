@@ -84,9 +84,11 @@ const Navigations = () => {
             <RootStack.Screen name={Routes.GroupChannelInvite} component={GroupChannelInviteScreen} />
             <RootStack.Screen name={Routes.GroupChannelMembers} component={GroupChannelMembersScreen} />
 
-            <RootStack.Screen name={Routes.ThemeColors} component={ThemeColorsScreen} />
-            <RootStack.Screen name={Routes.Palette} component={PaletteScreen} />
-            <RootStack.Screen name={Routes.Storybook} component={StorybookScreen} />
+            <RootStack.Group screenOptions={{ headerShown: true }}>
+              <RootStack.Screen name={Routes.ThemeColors} component={ThemeColorsScreen} />
+              <RootStack.Screen name={Routes.Palette} component={PaletteScreen} />
+              <RootStack.Screen name={Routes.Storybook} component={StorybookScreen} />
+            </RootStack.Group>
           </>
         )}
       </RootStack.Navigator>
