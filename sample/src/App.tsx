@@ -20,6 +20,7 @@ import useAppearance from './hooks/useAppearance';
 import { Routes, navigationRef } from './libs/navigation';
 import { onForegroundAndroid, onForegroundIOS } from './libs/notification';
 import {
+  ErrorInfoScreen,
   GroupChannelCreateScreen,
   GroupChannelInfoScreen,
   GroupChannelInviteScreen,
@@ -47,6 +48,7 @@ const App = () => {
         theme: isLightTheme ? LightUIKitTheme : DarkUIKitTheme,
         statusBarTranslucent: GetTranslucent(),
       }}
+      ErrorInfoComponent={ErrorInfoScreen}
     >
       <Navigations />
     </SendbirdUIKitContainer>

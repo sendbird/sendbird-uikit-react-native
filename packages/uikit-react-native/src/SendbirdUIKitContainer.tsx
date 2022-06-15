@@ -26,8 +26,9 @@ import {
 } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 
+import InternalErrorBoundary from './InternalErrorBoundary';
 import InternalLocalCacheStorage from './InternalLocalCacheStorage';
-import type { LocalCacheStorage } from './types';
+import type { ErrorBoundaryProps, LocalCacheStorage } from './types';
 import VERSION from './version';
 
 export const SendbirdUIKit = Object.freeze({
@@ -59,16 +60,20 @@ type Props<T extends LabelSets> = {
     statusBarTranslucent?: boolean;
     defaultHeaderTitleAlign?: 'left' | 'center' | 'right';
   };
+  onError?: (props: ErrorBoundaryProps) => void;
+  ErrorInfoComponent?: (props: ErrorBoundaryProps) => JSX.Element;
 };
 
 const SendbirdUIKitContainer = <T extends LabelSets>({
+  children,
   appId,
   appVersion,
   chatOptions,
   platformServices,
   localization,
   styles,
-  children,
+  onError,
+  ErrorInfoComponent,
 }: Props<T>) => {
   const [sdkInstance, setSdkInstance] = useState<SendbirdChatSDK>();
 
@@ -125,7 +130,11 @@ const SendbirdUIKitContainer = <T extends LabelSets>({
                 clipboardService={platformServices.clipboard}
               >
                 <LocalizedDialogProvider>
-                  <ToastProvider>{children}</ToastProvider>
+                  <ToastProvider>
+                    <InternalErrorBoundary onError={onError} ErrorInfoComponent={ErrorInfoComponent}>
+                      {children}
+                    </InternalErrorBoundary>
+                  </ToastProvider>
                 </LocalizedDialogProvider>
               </PlatformServiceProvider>
             </LocalizationProvider>
