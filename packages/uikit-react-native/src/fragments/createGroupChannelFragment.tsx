@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { View } from 'react-native';
 
-import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
-import { useInternalPubSub } from '@sendbird/uikit-chat-hooks';
+import { useGroupChannelMessages, useInternalPubSub } from '@sendbird/uikit-chat-hooks';
 import type { GroupChannelFragment, GroupChannelModule, GroupChannelProps } from '@sendbird/uikit-react-native-core';
 import { createGroupChannelModule, useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { NOOP, messageComparator } from '@sendbird/uikit-utils';

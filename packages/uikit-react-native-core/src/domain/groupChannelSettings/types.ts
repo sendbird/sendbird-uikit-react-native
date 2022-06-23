@@ -1,7 +1,7 @@
 import type React from 'react';
 import type Sendbird from 'sendbird';
 
-import type { BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
+import type { BaseHeaderProps, MenuBarProps } from '@sendbird/uikit-react-native-foundation';
 
 import type { CommonComponent } from '../../types';
 
@@ -10,16 +10,19 @@ export type GroupChannelSettingsProps = {
     staleChannel: GroupChannelSettingsProps['Provider']['staleChannel'];
     Header?: GroupChannelSettingsProps['Header']['Header'];
     onPressHeaderLeft: GroupChannelSettingsProps['Header']['onPressHeaderLeft'];
-    onPressMenuMembers: GroupChannelSettingsProps['View']['onPressMenuMembers'];
-    onLeaveChannel: GroupChannelSettingsProps['View']['onLeaveChannel'];
+    onPressMenuMembers: GroupChannelSettingsProps['Menu']['onPressMenuMembers'];
+    onLeaveChannel: GroupChannelSettingsProps['Menu']['onLeaveChannel'];
+    menuItemsCreator?: GroupChannelSettingsProps['Menu']['menuItemsCreator'];
   };
   Header: {
     Header?: null | CommonComponent<BaseHeaderProps<{ title: string; onPressLeft: () => void }>>;
     onPressHeaderLeft: () => void;
   };
-  View: {
+  Info: {};
+  Menu: {
     onPressMenuMembers: () => void;
     onLeaveChannel: () => void;
+    menuItemsCreator?: (defaultMenuItems: MenuBarProps[]) => MenuBarProps[];
   };
   Provider: {
     staleChannel: Sendbird.GroupChannel;
@@ -42,7 +45,8 @@ export type GroupChannelSettingsContextType = {
 export interface GroupChannelSettingsModule {
   Provider: React.FC<GroupChannelSettingsProps['Provider']>;
   Header: CommonComponent<GroupChannelSettingsProps['Header']>;
-  View: CommonComponent<GroupChannelSettingsProps['View']>;
+  Info: CommonComponent<GroupChannelSettingsProps['Info']>;
+  Menu: CommonComponent<GroupChannelSettingsProps['Menu']>;
 }
 
 export type GroupChannelSettingsFragment = React.FC<GroupChannelSettingsProps['Fragment']>;

@@ -12,8 +12,9 @@ type Props = {
     | 'no-results-found'
     | 'error-wrong'
     | 'loading';
+  onPressRetry?: () => void;
 };
-const TypedPlaceholder: React.FC<Props> = ({ type }) => {
+const TypedPlaceholder: React.FC<Props> = ({ type, onPressRetry }) => {
   const { LABEL } = useLocalization();
   switch (type) {
     case 'no-banned-members':
@@ -32,6 +33,7 @@ const TypedPlaceholder: React.FC<Props> = ({ type }) => {
           icon={'error'}
           message={LABEL.PLACEHOLDER.ERROR_SOMETHING_IS_WRONG.MESSAGE}
           errorRetryLabel={LABEL.PLACEHOLDER.ERROR_SOMETHING_IS_WRONG.RETRY_LABEL}
+          onPressRetry={onPressRetry}
         />
       );
     case 'loading':
