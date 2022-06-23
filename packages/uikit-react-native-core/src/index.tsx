@@ -33,7 +33,7 @@ export type {
 
 /** Domain **/
 export * from './domain/groupChannel';
-export * from './domain/groupChannelInfo';
+export * from './domain/groupChannelSettings';
 export * from './domain/groupChannelList';
 export * from './domain/userList';
 export type {
@@ -43,11 +43,11 @@ export type {
   GroupChannelContextType,
 } from './domain/groupChannel/types';
 export type {
-  GroupChannelInfoProps,
-  GroupChannelInfoModule,
-  GroupChannelInfoFragment,
-  GroupChannelInfoContextType,
-} from './domain/groupChannelInfo/types';
+  GroupChannelSettingsProps,
+  GroupChannelSettingsModule,
+  GroupChannelSettingsFragment,
+  GroupChannelSettingsContextType,
+} from './domain/groupChannelSettings/types';
 export type {
   GroupChannelType,
   GroupChannelListProps,

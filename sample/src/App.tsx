@@ -22,10 +22,10 @@ import { onForegroundAndroid, onForegroundIOS } from './libs/notification';
 import {
   ErrorInfoScreen,
   GroupChannelCreateScreen,
-  GroupChannelInfoScreen,
   GroupChannelInviteScreen,
   GroupChannelMembersScreen,
   GroupChannelScreen,
+  GroupChannelSettingsScreen,
   GroupChannelTabs,
   HomeScreen,
   PaletteScreen,
@@ -79,7 +79,7 @@ const Navigations = () => {
 
             <RootStack.Screen name={Routes.GroupChannelTabs} component={GroupChannelTabs} />
             <RootStack.Screen name={Routes.GroupChannel} component={GroupChannelScreen} />
-            <RootStack.Screen name={Routes.GroupChannelInfo} component={GroupChannelInfoScreen} />
+            <RootStack.Screen name={Routes.GroupChannelSettings} component={GroupChannelSettingsScreen} />
             <RootStack.Screen name={Routes.GroupChannelCreate} component={GroupChannelCreateScreen} />
             <RootStack.Screen name={Routes.GroupChannelInvite} component={GroupChannelInviteScreen} />
             <RootStack.Screen name={Routes.GroupChannelMembers} component={GroupChannelMembersScreen} />

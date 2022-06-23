@@ -18,7 +18,7 @@ export enum Routes {
   GroupChannelTabs = 'GroupChannelTabs',
   GroupChannelList = 'GroupChannelList',
   GroupChannel = 'GroupChannel',
-  GroupChannelInfo = 'GroupChannelInfo',
+  GroupChannelSettings = 'GroupChannelSettings',
   GroupChannelCreate = 'GroupChannelCreate',
   GroupChannelInvite = 'GroupChannelInvite',
   GroupChannelMembers = 'GroupChannelMembers',
@@ -59,7 +59,7 @@ export type RouteParamsUnion =
       params: { serializedChannel: object };
     }
   | {
-      route: Routes.GroupChannelInfo;
+      route: Routes.GroupChannelSettings;
       params: { serializedChannel: object };
     }
   | {

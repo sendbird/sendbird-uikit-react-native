@@ -9,9 +9,9 @@ import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization } from '../../../contexts/Localization';
 import { usePlatformService } from '../../../contexts/PlatformService';
 import { useSendbirdChat } from '../../../contexts/SendbirdChat';
-import type { GroupChannelInfoContextType, GroupChannelInfoProps } from '../types';
+import type { GroupChannelSettingsContextType, GroupChannelSettingsProps } from '../types';
 
-export const GroupChannelInfoContext: GroupChannelInfoContextType = {
+export const GroupChannelSettingsContext: GroupChannelSettingsContextType = {
   Fragment: createContext({
     channel: {} as Sendbird.GroupChannel,
     headerTitle: '',
@@ -20,8 +20,8 @@ export const GroupChannelInfoContext: GroupChannelInfoContextType = {
   }),
 };
 
-const HOOK_NAME = 'GroupChannelInfoContextProvider';
-export const GroupChannelInfoContextProvider: React.FC<GroupChannelInfoProps['Provider']> = ({
+const HOOK_NAME = 'GroupChannelSettingsContextProvider';
+export const GroupChannelSettingsContextProvider: React.FC<GroupChannelSettingsProps['Provider']> = ({
   children,
   staleChannel,
 }) => {
@@ -68,9 +68,9 @@ export const GroupChannelInfoContextProvider: React.FC<GroupChannelInfoProps['Pr
 
   const changeChannelName = useCallback(() => {
     prompt({
-      title: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_NAME_PROMPT_TITLE,
-      submitLabel: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_NAME_PROMPT_OK,
-      placeholder: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_NAME_PROMPT_PLACEHOLDER,
+      title: LABEL.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME_PROMPT_TITLE,
+      submitLabel: LABEL.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME_PROMPT_OK,
+      placeholder: LABEL.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME_PROMPT_PLACEHOLDER,
       defaultValue: activeChannel.name,
       onSubmit: async (channelName) => {
         const params = new sdk.GroupChannelParams();
@@ -82,10 +82,10 @@ export const GroupChannelInfoContextProvider: React.FC<GroupChannelInfoProps['Pr
 
   const changeChannelImage = useCallback(() => {
     openMenu({
-      title: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_IMAGE_MENU_TITLE,
+      title: LABEL.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_IMAGE_MENU_TITLE,
       menuItems: [
         {
-          title: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_IMAGE_MENU_CAMERA,
+          title: LABEL.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_IMAGE_MENU_CAMERA,
           onPress: async () => {
             const file = await fileService.openCamera();
             if (!file) return;
@@ -96,7 +96,7 @@ export const GroupChannelInfoContextProvider: React.FC<GroupChannelInfoProps['Pr
           },
         },
         {
-          title: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY,
+          title: LABEL.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY,
           onPress: async () => {
             const files = await fileService.openMediaLibrary({ selectionLimit: 1 });
             if (!files || !files[0]) return;
@@ -113,24 +113,24 @@ export const GroupChannelInfoContextProvider: React.FC<GroupChannelInfoProps['Pr
   const onPressHeaderRight = useCallback(() => {
     openSheet({
       sheetItems: [
-        { title: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_NAME, onPress: changeChannelName },
-        { title: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_IMAGE, onPress: changeChannelImage },
+        { title: LABEL.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME, onPress: changeChannelName },
+        { title: LABEL.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_IMAGE, onPress: changeChannelImage },
       ],
     });
   }, [LABEL, changeChannelImage, changeChannelName]);
 
   return (
     <ProviderLayout>
-      <GroupChannelInfoContext.Fragment.Provider
+      <GroupChannelSettingsContext.Fragment.Provider
         value={{
           channel: activeChannel,
-          headerTitle: LABEL.GROUP_CHANNEL_INFO.HEADER_TITLE,
-          headerRight: LABEL.GROUP_CHANNEL_INFO.HEADER_RIGHT,
+          headerTitle: LABEL.GROUP_CHANNEL_SETTINGS.HEADER_TITLE,
+          headerRight: LABEL.GROUP_CHANNEL_SETTINGS.HEADER_RIGHT,
           onPressHeaderRight,
         }}
       >
         {children}
-      </GroupChannelInfoContext.Fragment.Provider>
+      </GroupChannelSettingsContext.Fragment.Provider>
     </ProviderLayout>
   );
 };

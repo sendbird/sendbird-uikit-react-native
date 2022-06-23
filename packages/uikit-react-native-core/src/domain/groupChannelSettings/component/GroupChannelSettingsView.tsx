@@ -23,11 +23,14 @@ import {
 
 import { useLocalization } from '../../../contexts/Localization';
 import { useSendbirdChat } from '../../../contexts/SendbirdChat';
-import { GroupChannelInfoContext } from '../module/moduleContext';
-import type { GroupChannelInfoProps } from '../types';
+import { GroupChannelSettingsContext } from '../module/moduleContext';
+import type { GroupChannelSettingsProps } from '../types';
 
-const GroupChannelInfoView: React.FC<GroupChannelInfoProps['View']> = ({ onPressMenuMembers, onLeaveChannel }) => {
-  const { channel } = useContext(GroupChannelInfoContext.Fragment);
+const GroupChannelSettingsView: React.FC<GroupChannelSettingsProps['View']> = ({
+  onPressMenuMembers,
+  onLeaveChannel,
+}) => {
+  const { channel } = useContext(GroupChannelSettingsContext.Fragment);
   const { currentUser } = useSendbirdChat();
   const { LABEL } = useLocalization();
   const { colors } = useUIKitTheme();
@@ -44,13 +47,13 @@ const GroupChannelInfoView: React.FC<GroupChannelInfoProps['View']> = ({ onPress
   const menuItems: MenuBarProps[] = [
     {
       icon: 'notifications',
-      name: LABEL.GROUP_CHANNEL_INFO.MENU_NOTIFICATION,
+      name: LABEL.GROUP_CHANNEL_SETTINGS.MENU_NOTIFICATION,
       onPress: toggleNotification,
       actionItem: <Switch value={channel.myPushTriggerOption !== 'off'} onChangeValue={toggleNotification} />,
     },
     {
       icon: 'members',
-      name: LABEL.GROUP_CHANNEL_INFO.MENU_MEMBERS,
+      name: LABEL.GROUP_CHANNEL_SETTINGS.MENU_MEMBERS,
       onPress: () => onPressMenuMembers(),
       actionLabel: String(channel.memberCount),
       actionItem: <Icon icon={'chevron-right'} color={colors.onBackground01} />,
@@ -58,7 +61,7 @@ const GroupChannelInfoView: React.FC<GroupChannelInfoProps['View']> = ({ onPress
     {
       icon: 'leave',
       iconColor: colors.error,
-      name: LABEL.GROUP_CHANNEL_INFO.MENU_LEAVE_CHANNEL,
+      name: LABEL.GROUP_CHANNEL_SETTINGS.MENU_LEAVE_CHANNEL,
       onPress: () => {
         onLeaveChannel();
         channel.leave();
@@ -67,7 +70,7 @@ const GroupChannelInfoView: React.FC<GroupChannelInfoProps['View']> = ({ onPress
   ];
 
   if (!currentUser) {
-    Logger.warn('Cannot render GroupChannelInfoFragment, User is not connected');
+    Logger.warn('Cannot render GroupChannelSettingsFragment, User is not connected');
     return null;
   }
 
@@ -124,4 +127,4 @@ const styles = createStyleSheet({
   userIdContainer: { paddingVertical: 16 },
   userIdLabel: { marginBottom: 4 },
 });
-export default GroupChannelInfoView;
+export default GroupChannelSettingsView;

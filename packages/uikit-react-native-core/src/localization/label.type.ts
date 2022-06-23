@@ -60,17 +60,17 @@ export interface LabelSet {
     DIALOG_ATTACHMENT_PHOTO_LIBRARY: string;
     DIALOG_ATTACHMENT_FILES: string;
   };
-  GROUP_CHANNEL_INFO: {
-    /** GroupChannelInfo > Header */
+  GROUP_CHANNEL_SETTINGS: {
+    /** GroupChannelSettings > Header */
     HEADER_TITLE: string;
     HEADER_RIGHT: string;
 
-    /** GroupChannelInfo > Menu */
+    /** GroupChannelSettings > Menu */
     MENU_NOTIFICATION: string;
     MENU_MEMBERS: string;
     MENU_LEAVE_CHANNEL: string;
 
-    /** GroupChannelInfo > Dialog */
+    /** GroupChannelSettings > Dialog */
     DIALOG_CHANGE_NAME: string;
     DIALOG_CHANGE_IMAGE: string;
     DIALOG_CHANGE_NAME_PROMPT_TITLE: string;
@@ -209,7 +209,7 @@ export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): 
       DIALOG_ATTACHMENT_FILES: 'Files',
       ...overrides?.GROUP_CHANNEL,
     },
-    GROUP_CHANNEL_INFO: {
+    GROUP_CHANNEL_SETTINGS: {
       HEADER_TITLE: 'Channel information',
       HEADER_RIGHT: 'Edit',
       MENU_NOTIFICATION: 'Notification',
@@ -224,7 +224,7 @@ export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): 
       DIALOG_CHANGE_IMAGE_MENU_TITLE: 'Change channel image',
       DIALOG_CHANGE_IMAGE_MENU_CAMERA: 'Take photo',
       DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY: 'Choose photo',
-      ...overrides?.GROUP_CHANNEL_INFO,
+      ...overrides?.GROUP_CHANNEL_SETTINGS,
     },
     GROUP_CHANNEL_LIST: {
       HEADER_TITLE: 'Channels',

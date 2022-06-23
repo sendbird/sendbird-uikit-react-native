@@ -93,7 +93,7 @@ const GroupChannelScreen: React.FC = () => {
       }}
       onPressHeaderRight={() => {
         // Navigate to group channel information
-        navigation.navigate(Routes.GroupChannelInfo, { serializedChannel: params.serializedChannel });
+        navigation.navigate(Routes.GroupChannelSettings, { serializedChannel: params.serializedChannel });
       }}
     />
   );
