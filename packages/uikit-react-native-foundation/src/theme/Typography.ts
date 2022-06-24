@@ -1,8 +1,9 @@
 import type { FontAttributes, Typography } from '../types';
 
-type TypographyOverrides = Partial<Typography> & {
+export type TypographyOverrides = Partial<Typography> & {
   shared?: Partial<FontAttributes>;
 };
+
 export const createTypography = (
   overrides: TypographyOverrides = {},
   scaleFactor: (dp: number) => number,
