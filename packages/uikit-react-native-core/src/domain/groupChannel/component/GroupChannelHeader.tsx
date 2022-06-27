@@ -40,7 +40,7 @@ const GroupChannelHeader: React.FC<GroupChannelProps['Header']> = ({
           )}
           <View>
             <DefaultHeader.Title h2>{truncate(headerTitle, { mode: 'tail', maxLen: 25 })}</DefaultHeader.Title>
-            {subtitle && Boolean(subtitle) && (
+            {Boolean(subtitle) && subtitle && (
               <DefaultHeader.SubTitle style={styles.subtitle}>{subtitle}</DefaultHeader.SubTitle>
             )}
           </View>
