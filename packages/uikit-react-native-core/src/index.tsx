@@ -14,6 +14,7 @@ export { default as usePushTokenRegistration } from './hooks/usePushTokenRegistr
 
 /** Localization **/
 export { default as StringSetEn } from './localization/StringSet.en';
+export { createBaseStringSet } from './localization/StringSet.type';
 export type { StringSet, StringsLocale } from './localization/StringSet.type';
 
 /** Platform API **/
