@@ -15,7 +15,7 @@ export const __domain__ContextProvider: React.FC = ({ children }) => {
 
   return (
     <ProviderLayout>
-      <__domain__Context.Fragment.Provider value={{ headerTitle: 'LABEL.DOMAIN.HEADER_TITLE' }}>
+      <__domain__Context.Fragment.Provider value={{ headerTitle: 'STRINGS.DOMAIN.HEADER_TITLE' }}>
         {children}
       </__domain__Context.Fragment.Provider>
     </ProviderLayout>

@@ -29,7 +29,7 @@ export const GroupChannelContextProvider: GroupChannelModule['Provider'] = ({
   if (!channel) throw new Error('GroupChannel is not provided to GroupChannelModule');
 
   const id = useUniqId('GroupChannelContextProvider');
-  const { LABEL } = useLocalization();
+  const { STRINGS } = useLocalization();
   const { currentUser, sdk } = useSendbirdChat();
 
   const [typingUsers, setTypingUsers] = useState<Sendbird.User[]>([]);
@@ -52,7 +52,7 @@ export const GroupChannelContextProvider: GroupChannelModule['Provider'] = ({
     <ProviderLayout>
       <GroupChannelContext.Fragment.Provider
         value={{
-          headerTitle: LABEL.GROUP_CHANNEL.HEADER_TITLE(currentUser?.userId ?? '', channel),
+          headerTitle: STRINGS.GROUP_CHANNEL.HEADER_TITLE(currentUser?.userId ?? '', channel),
           channel,
           editMessage,
           setEditMessage,

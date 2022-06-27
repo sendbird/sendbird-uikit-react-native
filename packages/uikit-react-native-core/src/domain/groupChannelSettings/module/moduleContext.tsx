@@ -28,7 +28,7 @@ export const GroupChannelSettingsContextProvider: React.FC<GroupChannelSettingsP
   const uniqId = useUniqId(HOOK_NAME);
   const forceUpdate = useForceUpdate();
   const [activeChannel, setActiveChannel] = useState(staleChannel);
-  const { LABEL } = useLocalization();
+  const { STRINGS } = useLocalization();
   const { sdk } = useSendbirdChat();
   const { fileService } = usePlatformService();
 
@@ -68,9 +68,9 @@ export const GroupChannelSettingsContextProvider: React.FC<GroupChannelSettingsP
 
   const changeChannelName = useCallback(() => {
     prompt({
-      title: LABEL.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME_PROMPT_TITLE,
-      submitLabel: LABEL.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME_PROMPT_OK,
-      placeholder: LABEL.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME_PROMPT_PLACEHOLDER,
+      title: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME_PROMPT_TITLE,
+      submitLabel: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME_PROMPT_OK,
+      placeholder: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME_PROMPT_PLACEHOLDER,
       defaultValue: activeChannel.name,
       onSubmit: async (channelName) => {
         const params = new sdk.GroupChannelParams();
@@ -78,14 +78,14 @@ export const GroupChannelSettingsContextProvider: React.FC<GroupChannelSettingsP
         await updateChannel(params);
       },
     });
-  }, [LABEL, updateChannel, activeChannel.name]);
+  }, [STRINGS, updateChannel, activeChannel.name]);
 
   const changeChannelImage = useCallback(() => {
     openMenu({
-      title: LABEL.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_IMAGE_MENU_TITLE,
+      title: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_IMAGE_MENU_TITLE,
       menuItems: [
         {
-          title: LABEL.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_IMAGE_MENU_CAMERA,
+          title: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_IMAGE_MENU_CAMERA,
           onPress: async () => {
             const file = await fileService.openCamera();
             if (!file) return;
@@ -96,7 +96,7 @@ export const GroupChannelSettingsContextProvider: React.FC<GroupChannelSettingsP
           },
         },
         {
-          title: LABEL.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY,
+          title: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY,
           onPress: async () => {
             const files = await fileService.openMediaLibrary({ selectionLimit: 1 });
             if (!files || !files[0]) return;
@@ -108,24 +108,24 @@ export const GroupChannelSettingsContextProvider: React.FC<GroupChannelSettingsP
         },
       ],
     });
-  }, [LABEL, updateChannel]);
+  }, [STRINGS, updateChannel]);
 
   const onPressHeaderRight = useCallback(() => {
     openSheet({
       sheetItems: [
-        { title: LABEL.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME, onPress: changeChannelName },
-        { title: LABEL.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_IMAGE, onPress: changeChannelImage },
+        { title: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME, onPress: changeChannelName },
+        { title: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_IMAGE, onPress: changeChannelImage },
       ],
     });
-  }, [LABEL, changeChannelImage, changeChannelName]);
+  }, [STRINGS, changeChannelImage, changeChannelName]);
 
   return (
     <ProviderLayout>
       <GroupChannelSettingsContext.Fragment.Provider
         value={{
           channel: activeChannel,
-          headerTitle: LABEL.GROUP_CHANNEL_SETTINGS.HEADER_TITLE,
-          headerRight: LABEL.GROUP_CHANNEL_SETTINGS.HEADER_RIGHT,
+          headerTitle: STRINGS.GROUP_CHANNEL_SETTINGS.HEADER_TITLE,
+          headerRight: STRINGS.GROUP_CHANNEL_SETTINGS.HEADER_RIGHT,
           onPressHeaderRight,
         }}
       >

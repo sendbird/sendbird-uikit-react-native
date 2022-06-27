@@ -14,7 +14,7 @@ const GroupChannelSettingsMenu: React.FC<GroupChannelSettingsProps['Menu']> = ({
   menuItemsCreator = (menu) => menu,
 }) => {
   const { channel } = useContext(GroupChannelSettingsContext.Fragment);
-  const { LABEL } = useLocalization();
+  const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
 
   const toggleNotification = async () => {
@@ -28,13 +28,13 @@ const GroupChannelSettingsMenu: React.FC<GroupChannelSettingsProps['Menu']> = ({
   const menuItems: MenuBarProps[] = menuItemsCreator([
     {
       icon: 'notifications',
-      name: LABEL.GROUP_CHANNEL_SETTINGS.MENU_NOTIFICATION,
+      name: STRINGS.GROUP_CHANNEL_SETTINGS.MENU_NOTIFICATION,
       onPress: toggleNotification,
       actionItem: <Switch value={channel.myPushTriggerOption !== 'off'} onChangeValue={toggleNotification} />,
     },
     {
       icon: 'members',
-      name: LABEL.GROUP_CHANNEL_SETTINGS.MENU_MEMBERS,
+      name: STRINGS.GROUP_CHANNEL_SETTINGS.MENU_MEMBERS,
       onPress: () => onPressMenuMembers(),
       actionLabel: String(channel.memberCount),
       actionItem: <Icon icon={'chevron-right'} color={colors.onBackground01} />,
@@ -42,7 +42,7 @@ const GroupChannelSettingsMenu: React.FC<GroupChannelSettingsProps['Menu']> = ({
     {
       icon: 'leave',
       iconColor: colors.error,
-      name: LABEL.GROUP_CHANNEL_SETTINGS.MENU_LEAVE_CHANNEL,
+      name: STRINGS.GROUP_CHANNEL_SETTINGS.MENU_LEAVE_CHANNEL,
       onPress: () => {
         onLeaveChannel();
         channel.leave();

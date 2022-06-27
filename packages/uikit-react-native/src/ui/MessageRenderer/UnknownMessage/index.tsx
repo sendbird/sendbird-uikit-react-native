@@ -8,16 +8,16 @@ import type { MessageRendererInterface } from '../index';
 
 export type UnknownMessageProps = MessageRendererInterface;
 const UnknownMessage: React.FC<UnknownMessageProps> = ({ message, variant, pressed }) => {
-  const { LABEL } = useLocalization();
+  const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
   const color = colors.ui.message[variant][pressed ? 'pressed' : 'enabled'];
   return (
     <View style={[styles.container, { backgroundColor: color.background }]}>
       <Text body3 color={colors.onBackground01}>
-        {LABEL.GROUP_CHANNEL.MESSAGE_BUBBLE_UNKNOWN_TITLE(message)}
+        {STRINGS.GROUP_CHANNEL.MESSAGE_BUBBLE_UNKNOWN_TITLE(message)}
       </Text>
       <Text body3 color={colors.onBackground02}>
-        {LABEL.GROUP_CHANNEL.MESSAGE_BUBBLE_UNKNOWN_DESC(message)}
+        {STRINGS.GROUP_CHANNEL.MESSAGE_BUBBLE_UNKNOWN_DESC(message)}
       </Text>
     </View>
   );

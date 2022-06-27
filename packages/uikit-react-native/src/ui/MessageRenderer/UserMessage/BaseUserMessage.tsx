@@ -9,14 +9,14 @@ import type { UserMessageProps } from './index';
 const BaseUserMessage: React.FC<UserMessageProps> = ({ message, variant, pressed }) => {
   const { colors } = useUIKitTheme();
   const color = colors.ui.message[variant][pressed ? 'pressed' : 'enabled'];
-  const { LABEL } = useLocalization();
+  const { STRINGS } = useLocalization();
   return (
     <View style={[styles.container, { backgroundColor: color.background }]}>
       <URLParsedText body3 color={color.textMsg}>
         {message.message}
         {Boolean(message.updatedAt) && (
           <Text body3 color={color.textEdited}>
-            {LABEL.GROUP_CHANNEL.MESSAGE_BUBBLE_EDITED_POSTFIX}
+            {STRINGS.GROUP_CHANNEL.MESSAGE_BUBBLE_EDITED_POSTFIX}
           </Text>
         )}
       </URLParsedText>

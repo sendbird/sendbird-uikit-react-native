@@ -16,12 +16,12 @@ const GroupChannelHeader: React.FC<GroupChannelProps['Header']> = ({
 }) => {
   const { headerTitle, channel } = useContext(GroupChannelContext.Fragment);
   const { typingUsers } = useContext(GroupChannelContext.TypingIndicator);
-  const { LABEL } = useLocalization();
+  const { STRINGS } = useLocalization();
   const { currentUser } = useSendbirdChat();
 
   if (!Header) return null;
 
-  const subtitle = LABEL.STRINGS.TYPING_INDICATOR_TYPINGS(typingUsers);
+  const subtitle = STRINGS.LABELS.TYPING_INDICATOR_TYPINGS(typingUsers);
   return (
     <Header
       clearTitleMargin

@@ -34,7 +34,7 @@ const createGroupChannelMembersFragment = (
   return ({ Header, channel, onPressHeaderLeft, onPressHeaderRight, sortComparator, renderUser, children }) => {
     const queryCreator = useCallback(() => createMemberListQuery(channel), [channel]);
     const { sdk, currentUser } = useSendbirdChat();
-    const { LABEL } = useLocalization();
+    const { STRINGS } = useLocalization();
     const { users, refreshing, refresh, next } = useUserList(sdk, {
       queryCreator,
       sortComparator,
@@ -48,10 +48,10 @@ const createGroupChannelMembersFragment = (
           <UserActionBar
             muted={user.isMuted}
             uri={user.profileUrl}
-            label={user.role === 'operator' ? LABEL.GROUP_CHANNEL_MEMBERS.USER_BAR_OPERATOR : ''}
+            label={user.role === 'operator' ? STRINGS.GROUP_CHANNEL_MEMBERS.USER_BAR_OPERATOR : ''}
             name={
-              (user.nickname || LABEL.STRINGS.USER_NO_NAME) +
-              (user.userId === currentUser?.userId ? LABEL.GROUP_CHANNEL_MEMBERS.USER_BAR_ME_POSTFIX : '')
+              (user.nickname || STRINGS.LABELS.USER_NO_NAME) +
+              (user.userId === currentUser?.userId ? STRINGS.GROUP_CHANNEL_MEMBERS.USER_BAR_ME_POSTFIX : '')
             }
             disabled={user.userId === currentUser?.userId}
             // TODO: implement ban/mute actions, use channel.members with handlers instead member query
@@ -62,7 +62,7 @@ const createGroupChannelMembersFragment = (
       [renderUser],
     );
     return (
-      <UserListModule.Provider headerRight={noop} headerTitle={LABEL.GROUP_CHANNEL_MEMBERS.HEADER_TITLE}>
+      <UserListModule.Provider headerRight={noop} headerTitle={STRINGS.GROUP_CHANNEL_MEMBERS.HEADER_TITLE}>
         <UserListModule.Header
           ignoreActiveOnly
           Header={Header}

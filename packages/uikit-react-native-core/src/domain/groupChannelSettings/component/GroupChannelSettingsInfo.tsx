@@ -18,7 +18,7 @@ import type { GroupChannelSettingsProps } from '../types';
 const GroupChannelSettingsInfo: React.FC<GroupChannelSettingsProps['Info']> = () => {
   const { channel } = useContext(GroupChannelSettingsContext.Fragment);
   const { currentUser } = useSendbirdChat();
-  const { LABEL } = useLocalization();
+  const { STRINGS } = useLocalization();
 
   if (!currentUser) {
     Logger.warn('Cannot render GroupChannelSettingsInfo, User is not connected');
@@ -40,7 +40,7 @@ const GroupChannelSettingsInfo: React.FC<GroupChannelSettingsProps['Info']> = ()
           ],
         )}
         <Text h1 numberOfLines={1}>
-          {getGroupChannelTitle(currentUser.userId, channel, LABEL.STRINGS.USER_NO_NAME)}
+          {getGroupChannelTitle(currentUser.userId, channel, STRINGS.LABELS.USER_NO_NAME)}
         </Text>
       </View>
       <Divider />

@@ -40,7 +40,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
       enableCollectionWithoutLocalCache: true,
     });
 
-    const { LABEL } = useLocalization();
+    const { STRINGS } = useLocalization();
 
     const renderGroupChannelPreview: GroupChannelListProps['List']['renderGroupChannelPreview'] = useCallback(
       (channel, onLongPressChannel) => (
@@ -58,9 +58,9 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
               ],
             )}
             coverUrl={channel.coverUrl}
-            title={LABEL.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE(currentUser?.userId ?? '', channel)}
-            titleCaption={LABEL.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE_CAPTION(channel)}
-            body={LABEL.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_BODY(channel)}
+            title={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE(currentUser?.userId ?? '', channel)}
+            titleCaption={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE_CAPTION(channel)}
+            body={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_BODY(channel)}
             badgeCount={channel.unreadMessageCount}
             bodyIcon={channel.lastMessage?.isFileMessage() ? 'file-document' : undefined}
             frozen={channel.isFrozen}
@@ -69,7 +69,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
           />
         </Pressable>
       ),
-      [LABEL, onPressChannel, currentUser?.userId],
+      [STRINGS, onPressChannel, currentUser?.userId],
     );
 
     if (!currentUser) {

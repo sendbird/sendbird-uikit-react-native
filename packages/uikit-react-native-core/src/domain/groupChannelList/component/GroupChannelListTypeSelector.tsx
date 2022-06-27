@@ -87,11 +87,11 @@ const DefaultTypeIcon: React.FC<{ type: GroupChannelType }> = ({ type }) => {
 };
 
 const DefaultTypeText: React.FC<{ type: GroupChannelType }> = ({ type }) => {
-  const { LABEL } = useLocalization();
+  const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
   return (
     <Text caption2 color={colors.onBackground01}>
-      {LABEL.GROUP_CHANNEL_LIST[`TYPE_SELECTOR_${type}`]}
+      {STRINGS.GROUP_CHANNEL_LIST[`TYPE_SELECTOR_${type}`]}
     </Text>
   );
 };

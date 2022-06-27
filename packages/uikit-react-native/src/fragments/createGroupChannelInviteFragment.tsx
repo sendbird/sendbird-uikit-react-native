@@ -43,7 +43,7 @@ const createGroupChannelInviteFragment = <UserType,>(
     children,
   }) => {
     const { sdk } = useSendbirdChat();
-    const { LABEL } = useLocalization();
+    const { STRINGS } = useLocalization();
     const { users, refreshing, refresh, next } = useUserList(sdk, {
       queryCreator,
       sortComparator,
@@ -80,7 +80,7 @@ const createGroupChannelInviteFragment = <UserType,>(
           >
             <UserSelectableBar
               uri={sbUser.profileUrl}
-              name={sbUser.nickname || LABEL.STRINGS.USER_NO_NAME}
+              name={sbUser.nickname || STRINGS.LABELS.USER_NO_NAME}
               selected={isAlreadyJoined || isSelected}
               disabled={isAlreadyJoined}
             />
@@ -91,8 +91,8 @@ const createGroupChannelInviteFragment = <UserType,>(
     );
     return (
       <UserListModule.Provider
-        headerRight={(selectedUsers) => LABEL.GROUP_CHANNEL_INVITE.HEADER_RIGHT({ selectedUsers })}
-        headerTitle={LABEL.GROUP_CHANNEL_INVITE.HEADER_TITLE}
+        headerRight={(selectedUsers) => STRINGS.GROUP_CHANNEL_INVITE.HEADER_RIGHT({ selectedUsers })}
+        headerTitle={STRINGS.GROUP_CHANNEL_INVITE.HEADER_TITLE}
       >
         <UserListModule.Header
           Header={Header}

@@ -6,14 +6,14 @@ import Sendbird from 'sendbird';
 import type {
   ClipboardServiceInterface,
   FileServiceInterface,
-  LabelSet,
   NotificationServiceInterface,
+  StringSet,
 } from '@sendbird/uikit-react-native-core';
 import {
-  LabelEn,
   LocalizationProvider,
   PlatformServiceProvider,
   SendbirdChatProvider,
+  StringSetEn,
   useLocalization,
 } from '@sendbird/uikit-react-native-core';
 import type { UIKitTheme } from '@sendbird/uikit-react-native-foundation';
@@ -36,8 +36,8 @@ export const SendbirdUIKit = Object.freeze({
   PLATFORM: Platform.OS.toLowerCase(),
 });
 
-type LabelSets = Record<string, LabelSet>;
-type Props<T extends LabelSets> = {
+type StringSets = Record<string, StringSet>;
+type Props<T extends StringSets> = {
   children?: React.ReactNode;
   appId: string;
   appVersion?: string;
@@ -52,7 +52,7 @@ type Props<T extends LabelSets> = {
     clipboard: ClipboardServiceInterface;
   };
   localization?: {
-    labelSet?: T;
+    stringSets?: T;
     defaultLocale?: keyof T;
   };
   styles?: {
@@ -64,7 +64,7 @@ type Props<T extends LabelSets> = {
   ErrorInfoComponent?: (props: ErrorBoundaryProps) => JSX.Element;
 };
 
-const SendbirdUIKitContainer = <T extends LabelSets>({
+const SendbirdUIKitContainer = <T extends StringSets>({
   children,
   appId,
   appVersion,
@@ -122,7 +122,7 @@ const SendbirdUIKitContainer = <T extends LabelSets>({
           >
             <LocalizationProvider
               defaultLocale={(localization?.defaultLocale ?? 'en') as 'en'}
-              labelSet={(localization?.labelSet ?? { en: LabelEn }) as { en: LabelSet }}
+              stringSets={(localization?.stringSets ?? { en: StringSetEn }) as { en: StringSet }}
             >
               <PlatformServiceProvider
                 fileService={platformServices.file}
@@ -146,17 +146,17 @@ const SendbirdUIKitContainer = <T extends LabelSets>({
 };
 
 const LocalizedDialogProvider: React.FC = ({ children }) => {
-  const { LABEL } = useLocalization();
+  const { STRINGS } = useLocalization();
   return (
     <DialogProvider
       defaultLabels={{
         alert: {
-          ok: LABEL.DIALOG.ALERT_DEFAULT_OK,
+          ok: STRINGS.DIALOG.ALERT_DEFAULT_OK,
         },
         prompt: {
-          ok: LABEL.DIALOG.PROMPT_DEFAULT_OK,
-          cancel: LABEL.DIALOG.PROMPT_DEFAULT_CANCEL,
-          placeholder: LABEL.DIALOG.PROMPT_DEFAULT_PLACEHOLDER,
+          ok: STRINGS.DIALOG.PROMPT_DEFAULT_OK,
+          cancel: STRINGS.DIALOG.PROMPT_DEFAULT_CANCEL,
+          placeholder: STRINGS.DIALOG.PROMPT_DEFAULT_PLACEHOLDER,
         },
       }}
     >

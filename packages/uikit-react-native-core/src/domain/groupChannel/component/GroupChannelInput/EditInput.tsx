@@ -16,7 +16,7 @@ type EditInputProps = GroupChannelProps['Input'] & {
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
 const EditInput: React.FC<EditInputProps> = ({ text, setText, editMessage, setEditMessage, onUpdateUserMessage }) => {
-  const { LABEL } = useLocalization();
+  const { STRINGS } = useLocalization();
   const inputRef = useRef<RNTextInput>(null);
   const toast = useToast();
 
@@ -35,7 +35,7 @@ const EditInput: React.FC<EditInputProps> = ({ text, setText, editMessage, setEd
 
   const onPressSave = () => {
     if (editMessage.isUserMessage()) {
-      onUpdateUserMessage(text, editMessage).catch(() => toast.show(LABEL.TOAST.UPDATE_MSG_ERROR, 'error'));
+      onUpdateUserMessage(text, editMessage).catch(() => toast.show(STRINGS.TOAST.UPDATE_MSG_ERROR, 'error'));
     }
     setEditMessage();
     setText('');
@@ -51,16 +51,16 @@ const EditInput: React.FC<EditInputProps> = ({ text, setText, editMessage, setEd
           value={text}
           onChangeText={setText}
           style={styles.input}
-          placeholder={LABEL.GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE}
+          placeholder={STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE}
         />
       </View>
       <View style={{ marginTop: 8, flexDirection: 'row' }}>
         <Button variant={'text'} onPress={onPressCancel}>
-          {LABEL.GROUP_CHANNEL.INPUT_EDIT_CANCEL}
+          {STRINGS.GROUP_CHANNEL.INPUT_EDIT_CANCEL}
         </Button>
         <View style={styles.space} />
         <Button variant={'contained'} onPress={onPressSave}>
-          {LABEL.GROUP_CHANNEL.INPUT_EDIT_OK}
+          {STRINGS.GROUP_CHANNEL.INPUT_EDIT_OK}
         </Button>
       </View>
     </View>

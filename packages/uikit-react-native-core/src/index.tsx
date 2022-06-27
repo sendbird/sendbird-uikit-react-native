@@ -13,8 +13,8 @@ export { default as useConnection } from './hooks/useConnection';
 export { default as usePushTokenRegistration } from './hooks/usePushTokenRegistration';
 
 /** Localization **/
-export { default as LabelEn } from './localization/label.en';
-export type { LabelSet, LabelLocale } from './localization/label.type';
+export { default as StringSetEn } from './localization/StringSet.en';
+export type { StringSet, StringsLocale } from './localization/StringSet.type';
 
 /** Platform API **/
 export { default as createNativeFileService } from './platform/createFileService.native';
