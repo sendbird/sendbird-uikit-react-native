@@ -44,7 +44,7 @@ type Props<T extends StringSets> = {
   chatOptions?: {
     onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
     localCacheStorage?: LocalCacheStorage;
-    autoPushTokenRegistration?: boolean;
+    enableAutoPushTokenRegistration?: boolean;
   };
   platformServices: {
     file: FileServiceInterface;
@@ -58,7 +58,7 @@ type Props<T extends StringSets> = {
   styles?: {
     theme?: UIKitTheme;
     statusBarTranslucent?: boolean;
-    defaultHeaderTitleAlign?: 'left' | 'center' | 'right';
+    defaultHeaderTitleAlign?: 'left' | 'center';
   };
   onError?: (props: ErrorBoundaryProps) => void;
   ErrorInfoComponent?: (props: ErrorBoundaryProps) => JSX.Element;
@@ -75,13 +75,7 @@ const SendbirdUIKitContainer = <T extends StringSets>({
   onError,
   ErrorInfoComponent,
 }: Props<T>) => {
-  const [sdkInstance, setSdkInstance] = useState<SendbirdChatSDK>();
-
-  useEffect(() => {
-    if (appVersion) Sendbird.setAppVersion(appVersion);
-  }, [appVersion]);
-
-  useEffect(() => {
+  const getSendbirdSDK = () => {
     let sdk: SendbirdChatSDK;
 
     if (chatOptions?.localCacheStorage) {
@@ -104,16 +98,24 @@ const SendbirdUIKitContainer = <T extends StringSets>({
       sdk.addExtension('device-os-platform', SendbirdUIKit.PLATFORM);
     }
 
-    setSdkInstance(sdk);
-  }, [appId, chatOptions?.localCacheStorage]);
+    return sdk;
+  };
 
-  if (!sdkInstance) return null;
+  const [sdkInstance, setSdkInstance] = useState<SendbirdChatSDK>(getSendbirdSDK);
+
+  useEffect(() => {
+    if (appVersion) Sendbird.setAppVersion(appVersion);
+  }, [appVersion]);
+
+  useEffect(() => {
+    setSdkInstance(getSendbirdSDK);
+  }, [appId, chatOptions?.localCacheStorage]);
 
   return (
     <SafeAreaProvider>
       <SendbirdChatProvider
         sdkInstance={sdkInstance}
-        autoPushTokenRegistration={chatOptions?.autoPushTokenRegistration ?? true}
+        enableAutoPushTokenRegistration={chatOptions?.enableAutoPushTokenRegistration ?? true}
       >
         <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
           <HeaderStyleProvider

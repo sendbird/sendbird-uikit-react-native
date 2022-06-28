@@ -2,14 +2,15 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type Sendbird from 'sendbird';
 
 import type { SendbirdChannel, SendbirdChatSDK } from '@sendbird/uikit-utils';
-import { Logger, arrayToMap, useAsyncEffect, useUniqId } from '@sendbird/uikit-utils';
+import { arrayToMap, useAsyncEffect, useUniqId } from '@sendbird/uikit-utils';
 
-import useInternalPubSub from '../common/useInternalPubSub';
+import { useAppFeatures } from '../common/useAppFeatures';
 import { useChannelHandler } from '../handler/useChannelHandler';
 import type { UseGroupChannelList, UseGroupChannelListOptions } from '../types';
 
 type GroupChannelMap = Record<string, Sendbird.GroupChannel>;
 
+const HOOK_NAME = 'useGroupChannelListWithCollection';
 const createGroupChannelListCollection = (
   sdk: SendbirdChatSDK,
   collectionCreator: UseGroupChannelListOptions['collectionCreator'],
@@ -22,13 +23,11 @@ const createGroupChannelListCollection = (
   filter.includeEmpty = true;
   filter.memberStateFilter = sdk.GroupChannelFilter.MemberStateFilter.ALL;
   return defaultCollection
-    .setLimit(10)
+    .setLimit(20)
     .setFilter(filter)
     .setOrder(sdk.GroupChannelCollection.GroupChannelOrder.LATEST_LAST_MESSAGE)
     .build();
 };
-
-const HOOK_NAME = 'useGroupChannelListWithCollection';
 
 export const useGroupChannelListWithCollection = (
   sdk: SendbirdChatSDK,
@@ -36,7 +35,7 @@ export const useGroupChannelListWithCollection = (
   options?: UseGroupChannelListOptions,
 ): UseGroupChannelList => {
   const id = useUniqId(HOOK_NAME);
-  const { events, subscribe } = useInternalPubSub();
+  const { deliveryReceiptEnabled } = useAppFeatures(sdk);
 
   const collectionRef = useRef<Sendbird.GroupChannelCollection>();
   const [loading, setLoading] = useState(false);
@@ -54,8 +53,7 @@ export const useGroupChannelListWithCollection = (
     const groupChannels = channels.filter((c): c is Sendbird.GroupChannel => c.isGroupChannel());
     if (clearPrev) setGroupChannelMap(arrayToMap(groupChannels, 'url'));
     else setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(groupChannels, 'url') }));
-    // TODO: check premium feature
-    groupChannels.forEach((channel) => sdk.markAsDelivered(channel.url));
+    if (deliveryReceiptEnabled) groupChannels.forEach((channel) => sdk.markAsDelivered(channel.url));
   };
   const deleteChannels = (channelUrls: string[]) => {
     setGroupChannelMap(({ ...draft }) => {
@@ -88,6 +86,24 @@ export const useGroupChannelListWithCollection = (
     },
     [sdk, options?.collectionCreator],
   );
+
+  useChannelHandler(
+    sdk,
+    HOOK_NAME,
+    {
+      onUserLeft(channel, user) {
+        const isMe = user.userId === userId;
+        if (isMe) deleteChannels([channel.url]);
+        else updateChannels([channel], false);
+      },
+      onUserBanned(channel, user) {
+        const isMe = user.userId === userId;
+        if (isMe) deleteChannels([channel.url]);
+        else updateChannels([channel], false);
+      },
+    },
+    [sdk, userId],
+  );
   // ---------- internal methods ends ---------- //
 
   // ---------- internal hooks ---------- //
@@ -102,31 +118,6 @@ export const useGroupChannelListWithCollection = (
     setLoading(false);
   }, [init, userId]);
 
-  useEffect(() => {
-    const unsubscribes = [
-      subscribe(
-        events.ChannelUpdated,
-        ({ channel }, err) => {
-          if (err) Logger.warn(HOOK_NAME, 'Cannot update channels', err);
-          else updateChannels([channel], false);
-        },
-        HOOK_NAME,
-      ),
-      subscribe(
-        events.ChannelDeleted,
-        ({ channelUrl }, err) => {
-          if (err) Logger.warn(HOOK_NAME, 'Cannot delete channels', err);
-          else deleteChannels([channelUrl]);
-        },
-        HOOK_NAME,
-      ),
-    ];
-
-    return () => {
-      unsubscribes.forEach((fn) => fn());
-    };
-  }, []);
-
   useChannelHandler(
     sdk,
     `${HOOK_NAME}_${id}`,
@@ -138,6 +129,11 @@ export const useGroupChannelListWithCollection = (
       onChannelDeleted: (url) => deleteChannels([url]),
       onUserJoined: (channel) => updateChannels([channel], false),
       onUserLeft: (channel, user) => {
+        const isMe = user.userId === userId;
+        if (isMe) deleteChannels([channel.url]);
+        else updateChannels([channel], false);
+      },
+      onUserBanned: (channel, user) => {
         const isMe = user.userId === userId;
         if (isMe) deleteChannels([channel.url]);
         else updateChannels([channel], false);
@@ -156,8 +152,7 @@ export const useGroupChannelListWithCollection = (
 
   const update = useCallback(
     (channel: Sendbird.GroupChannel) => {
-      // TODO: check premium feature
-      sdk.markAsDelivered(channel.url);
+      if (deliveryReceiptEnabled) sdk.markAsDelivered(channel.url);
       setGroupChannelMap((prev) => ({ ...prev, [channel.url]: channel }));
     },
     [sdk],
@@ -167,8 +162,7 @@ export const useGroupChannelListWithCollection = (
     if (collectionRef.current?.hasMore) {
       const channels = await collectionRef.current?.loadMore();
       setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(channels, 'url') }));
-      // TODO: check premium feature
-      channels.forEach((channel) => sdk.markAsDelivered(channel.url));
+      if (deliveryReceiptEnabled) channels.forEach((channel) => sdk.markAsDelivered(channel.url));
     }
   }, [sdk]);
   // ---------- returns methods ends ---------- //

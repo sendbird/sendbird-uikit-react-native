@@ -1,11 +1,25 @@
 import React, { ErrorInfo } from 'react';
+import { View } from 'react-native';
 
 import type { ErrorBoundaryProps } from './types';
+import TypedPlaceholder from './ui/TypedPlaceholder';
+
+const DefaultErrorBoundaryComponent = (props: ErrorBoundaryProps) => {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <TypedPlaceholder type={'error-wrong'} onPressRetry={props.reset} />
+    </View>
+  );
+};
 
 class InternalErrorBoundary extends React.PureComponent<{
   onError?: (props: ErrorBoundaryProps) => void;
   ErrorInfoComponent?: (props: ErrorBoundaryProps) => JSX.Element;
 }> {
+  static defaultProps = {
+    ErrorInfoComponent: DefaultErrorBoundaryComponent,
+  };
+
   state: { error: Error | null; errorInfo: ErrorInfo | null } = {
     error: null,
     errorInfo: null,

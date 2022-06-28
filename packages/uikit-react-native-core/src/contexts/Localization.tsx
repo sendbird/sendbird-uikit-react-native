@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 
-import type { StringsLocale, StringSet } from '../localization/StringSet.type';
+import type { StringSet, StringsLocale } from '../localization/StringSet.type';
 
 type Props<T extends string = StringsLocale['locale']> = {
   defaultLocale: T;

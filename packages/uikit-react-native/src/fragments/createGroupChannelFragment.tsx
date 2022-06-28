@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { View } from 'react-native';
 
-import { useGroupChannelMessages, useInternalPubSub } from '@sendbird/uikit-chat-hooks';
+import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
 import type { GroupChannelFragment, GroupChannelModule, GroupChannelProps } from '@sendbird/uikit-react-native-core';
 import { createGroupChannelModule, useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { NOOP, messageComparator } from '@sendbird/uikit-utils';
@@ -26,7 +26,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     onPressHeaderLeft = NOOP,
     onPressHeaderRight = NOOP,
     onPressImageMessage = NOOP,
-    onChannelDeleted = NOOP,
+    onLeaveChannel = NOOP,
     onBeforeSendFileMessage = PassValue,
     onBeforeSendUserMessage = PassValue,
     staleChannel,
@@ -38,7 +38,6 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     children,
   }) => {
     const { sdk, currentUser } = useSendbirdChat();
-    const { subscribe, events } = useInternalPubSub();
 
     const {
       activeChannel,
@@ -58,14 +57,9 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       collectionCreator,
       queryCreator,
       sortComparator,
+      onLeaveChannel,
       enableCollectionWithoutLocalCache: true,
     });
-
-    useEffect(() => {
-      return subscribe(events.ChannelDeleted, ({ channelUrl }) => {
-        if (channelUrl === activeChannel.url) onChannelDeleted();
-      });
-    }, [activeChannel.url]);
 
     const _renderMessage: GroupChannelProps['MessageList']['renderMessage'] = useCallback(
       (props) => {

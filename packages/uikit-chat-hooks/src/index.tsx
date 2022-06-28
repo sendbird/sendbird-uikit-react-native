@@ -5,13 +5,13 @@ export { useUserList } from './common/useUserList';
 export { usePushTrigger } from './common/usePushTrigger';
 export { useTotalUnreadMessageCount } from './common/useTotalUnreadMessageCount';
 export { useTotalUnreadChannelCount } from './common/useTotalUnreadChannelCount';
-export { default as useInternalPubSub } from './common/useInternalPubSub';
+export { useAppFeatures } from './common/useAppFeatures';
 
 export { useChannelHandler } from './handler/useChannelHandler';
 export { useConnectionHandler } from './handler/useConnectionHandler';
 export { useUserEventHandler } from './handler/useUserEventHandler';
 
-export { default as CustomQuery } from './model/CustomQuery';
+export { CustomQuery } from './model/CustomQuery';
 
 export type {
   UseGroupChannelList,

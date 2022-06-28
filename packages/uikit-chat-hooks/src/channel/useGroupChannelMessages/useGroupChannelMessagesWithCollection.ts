@@ -2,10 +2,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type Sendbird from 'sendbird';
 
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
-import { Logger, NOOP, isDifferentChannel, useForceUpdate } from '@sendbird/uikit-utils';
-import { useIsMountedRef } from '@sendbird/uikit-utils';
+import { Logger, NOOP, isDifferentChannel, useForceUpdate, useIsMountedRef } from '@sendbird/uikit-utils';
 
-import useInternalPubSub from '../../common/useInternalPubSub';
+import { useAppFeatures } from '../../common/useAppFeatures';
+import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';
 import { useGroupChannelMessagesReducer } from './reducer';
 
@@ -20,20 +20,22 @@ const createMessageCollection = (
   return collection.setLimit(100).setStartingPoint(Date.now()).setFilter(filter).build();
 };
 
-const hookName = 'useGroupChannelMessagesWithCollection';
+const HOOK_NAME = 'useGroupChannelMessagesWithCollection';
 
+// FIXME: MessageCollection event handler bug, initialize(run async addObserver) -> dispose -> removeObserver -> addObserver called
 export const useGroupChannelMessagesWithCollection = (
   sdk: SendbirdChatSDK,
   staleChannel: Sendbird.GroupChannel,
   userId?: string,
   options?: UseGroupChannelMessagesOptions,
 ): UseGroupChannelMessages => {
-  // FIXME: MessageCollection event handler bug, initialize(run async addObserver) -> dispose -> removeObserver -> addObserver called
   const isMounted = useIsMountedRef();
   const disposeManuallyAfterUnmounted = () => {
     if (!isMounted.current && collectionRef.current) collectionRef.current.dispose();
   };
-  const { events, publish } = useInternalPubSub();
+
+  const { deliveryReceiptEnabled } = useAppFeatures(sdk);
+
   const collectionRef = useRef<Sendbird.MessageCollection>();
 
   // NOTE: We cannot determine the channel object of Sendbird SDK is stale or not, so force update after setActiveChannel
@@ -58,18 +60,16 @@ export const useGroupChannelMessagesWithCollection = (
     updateRefreshing,
   } = useGroupChannelMessagesReducer(userId, options?.sortComparator);
 
-  // TODO: request buffer is needed
   const channelMarkAs = async () => {
     try {
-      // TODO: check premium feature
-      sdk.markAsDelivered(activeChannel.url);
+      if (deliveryReceiptEnabled) sdk.markAsDelivered(activeChannel.url);
     } catch (e) {
-      Logger.error(`[${hookName}/channelMarkAs/Delivered]`, e);
+      Logger.error(`[${HOOK_NAME}/channelMarkAs/Delivered]`, e);
     }
     try {
       await sdk.markAsReadWithChannelUrls([activeChannel.url]);
     } catch (e) {
-      Logger.error(`[${hookName}/channelMarkAs/Read]`, e);
+      Logger.error(`[${HOOK_NAME}/channelMarkAs/Read]`, e);
     }
   };
 
@@ -85,18 +85,18 @@ export const useGroupChannelMessagesWithCollection = (
         collectionRef.current
           .initialize(sdk.MessageCollection.MessageCollectionInitPolicy.CACHE_AND_REPLACE_BY_API)
           .onCacheResult((err, messages) => {
-            if (err) sdk.isCacheEnabled && Logger.error(`[${hookName}/onCacheResult]`, err);
+            if (err) sdk.isCacheEnabled && Logger.error(`[${HOOK_NAME}/onCacheResult]`, err);
             else {
-              Logger.debug(`[${hookName}/onCacheResult]`, 'message length:', messages.length);
+              Logger.debug(`[${HOOK_NAME}/onCacheResult]`, 'message length:', messages.length);
               updateMessages(messages, true, sdk.currentUser.userId);
               updateMessages(collectionRef.current?.pendingMessages ?? [], false, sdk.currentUser.userId);
               updateMessages(collectionRef.current?.failedMessages ?? [], false, sdk.currentUser.userId);
             }
           })
           .onApiResult((err, messages) => {
-            if (err) Logger.error(`[${hookName}/onApiResult]`, err);
+            if (err) Logger.error(`[${HOOK_NAME}/onApiResult]`, err);
             else {
-              Logger.debug(`[${hookName}/onApiResult]`, 'message length:', messages.length);
+              Logger.debug(`[${HOOK_NAME}/onApiResult]`, 'message length:', messages.length);
               updateMessages(messages, true, sdk.currentUser.userId);
               if (sdk.isCacheEnabled) {
                 updateMessages(collectionRef.current?.pendingMessages ?? [], false, sdk.currentUser.userId);
@@ -125,9 +125,9 @@ export const useGroupChannelMessagesWithCollection = (
             deleteMessages(msgIds, reqIds);
             deleteNextMessages(msgIds, reqIds);
           },
-          onChannelDeleted(_, channelUrl) {
+          onChannelDeleted() {
             disposeManuallyAfterUnmounted();
-            publish(events.ChannelDeleted, { channelUrl }, hookName);
+            options?.onLeaveChannel?.();
           },
           onChannelUpdated(_, channel) {
             disposeManuallyAfterUnmounted();
@@ -135,7 +135,6 @@ export const useGroupChannelMessagesWithCollection = (
               setActiveChannel(channel);
               forceUpdate();
             }
-            publish(events.ChannelUpdated, { channel }, hookName);
           },
           onHugeGapDetected() {
             disposeManuallyAfterUnmounted();
@@ -147,20 +146,39 @@ export const useGroupChannelMessagesWithCollection = (
     [sdk, activeChannel.url, options?.collectionCreator],
   );
 
-  useEffect(() => {
-    return () => {
-      if (collectionRef.current) collectionRef.current?.dispose();
-    };
-  }, []);
+  useChannelHandler(
+    sdk,
+    HOOK_NAME,
+    {
+      onUserBanned(channel, bannedUser) {
+        disposeManuallyAfterUnmounted();
+        if (channel.isGroupChannel() && !isDifferentChannel(channel, activeChannel)) {
+          if (bannedUser.userId === sdk.currentUser.userId) {
+            options?.onLeaveChannel?.();
+          } else {
+            setActiveChannel(channel);
+            forceUpdate();
+          }
+        }
+      },
+    },
+    [sdk],
+  );
 
   useEffect(() => {
-    // NOTE: Cache read is heavy synchronous task, It prevents smooth ui transition
+    // NOTE: Cache read is heavy synchronous task, and it prevents smooth ui transition
     setTimeout(async () => {
       updateLoading(true);
       await init(userId);
       updateLoading(false);
     }, 0);
   }, [init, userId]);
+
+  useEffect(() => {
+    return () => {
+      if (collectionRef.current) collectionRef.current?.dispose();
+    };
+  }, []);
 
   const refresh: UseGroupChannelMessages['refresh'] = useCallback(async () => {
     updateRefreshing(true);

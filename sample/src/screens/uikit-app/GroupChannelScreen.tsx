@@ -78,13 +78,13 @@ const GroupChannelScreen: React.FC = () => {
 
   return (
     <GroupChannelFragment
+      staleChannel={staleChannel}
       onPressImageMessage={(msg, uri) => {
         // Navigate to photo preview
         Logger.log('file uri', msg.name, uri);
       }}
-      staleChannel={staleChannel}
-      onChannelDeleted={() => {
-        // Navigate to channel list
+      onLeaveChannel={() => {
+        // Should leave channel, navigate to channel list
         navigation.navigate(Routes.GroupChannelList);
       }}
       onPressHeaderLeft={() => {

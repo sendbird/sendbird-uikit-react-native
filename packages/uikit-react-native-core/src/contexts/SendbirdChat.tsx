@@ -2,29 +2,42 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
 import type Sendbird from 'sendbird';
 
+import { useAppFeatures } from '@sendbird/uikit-chat-hooks';
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 import { useForceUpdate } from '@sendbird/uikit-utils';
 
 type Props = {
   sdkInstance: SendbirdChatSDK;
-  autoPushTokenRegistration: boolean;
+
+  enableAutoPushTokenRegistration: boolean;
+  // enableChannelListTypingIndicator: boolean;
+  // enableChannelListMessageReceiptStatus: boolean;
 };
 
 type Context = {
   sdk: SendbirdChatSDK;
-  autoPushTokenRegistration: boolean;
-
   currentUser?: Sendbird.User;
   setCurrentUser: React.Dispatch<React.SetStateAction<Sendbird.User | undefined>>;
+
+  // UIKit features
+  enableAutoPushTokenRegistration: boolean;
+  // enableChannelListTypingIndicator: boolean;
+  // enableChannelListMessageReceiptState: boolean;
+
+  // Sendbird application features
+  deliveryReceiptEnabled: boolean;
+  broadcastChannelEnabled: boolean;
+  superGroupChannelEnabled: boolean;
+  reactionEnabled: boolean;
 };
 
 export const SendbirdChatContext = React.createContext<Context | null>(null);
-export const SendbirdChatProvider: React.FC<Props> = ({ children, sdkInstance, autoPushTokenRegistration }) => {
-  const [currentUser, setCurrentUser] = useState<Sendbird.User>();
+export const SendbirdChatProvider: React.FC<Props> = ({ children, sdkInstance, enableAutoPushTokenRegistration }) => {
+  const [currentUser, _setCurrentUser] = useState<Sendbird.User>();
   const forceUpdate = useForceUpdate();
-  const updateCurrentUser: Context['setCurrentUser'] = useCallback((user) => {
+  const setCurrentUser: Context['setCurrentUser'] = useCallback((user) => {
     // NOTE: Sendbird SDK handle User object is always same object, so force update after setCurrentUser
-    setCurrentUser(user);
+    _setCurrentUser(user);
     forceUpdate();
   }, []);
 
@@ -40,7 +53,15 @@ export const SendbirdChatProvider: React.FC<Props> = ({ children, sdkInstance, a
     return () => subscriber.remove();
   }, [sdkInstance]);
 
-  const value = { sdk: sdkInstance, currentUser, setCurrentUser: updateCurrentUser, autoPushTokenRegistration };
+  const appFeatures = useAppFeatures(sdkInstance);
+
+  const value: Context = {
+    sdk: sdkInstance,
+    currentUser,
+    setCurrentUser,
+    enableAutoPushTokenRegistration,
+    ...appFeatures,
+  };
 
   return <SendbirdChatContext.Provider value={value}>{children}</SendbirdChatContext.Provider>;
 };

@@ -6,7 +6,7 @@ type ConstructorParams<T> = {
   hasNext: () => boolean;
 };
 
-class CustomQuery<T> implements CustomQueryInterface<T> {
+export class CustomQuery<T> implements CustomQueryInterface<T> {
   constructor(private params: ConstructorParams<T>) {}
   get isLoading(): boolean {
     return this.params.isLoading();
@@ -18,5 +18,3 @@ class CustomQuery<T> implements CustomQueryInterface<T> {
     return this.params.next();
   }
 }
-
-export default CustomQuery;

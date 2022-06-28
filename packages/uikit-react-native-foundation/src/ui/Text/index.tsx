@@ -4,7 +4,6 @@ import { Text as RNText, TextProps as RNTextProps } from 'react-native';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import type { TypoName, UIKitTheme } from '../../types';
 
-// TODO: check re-render performance
 type TypographyProps = Partial<Record<TypoName, boolean>>;
 export type TextProps = RNTextProps & TypographyProps & { color?: ((colors: UIKitTheme['colors']) => string) | string };
 const Text: React.FC<TextProps> = ({ children, color, style, ...props }) => {

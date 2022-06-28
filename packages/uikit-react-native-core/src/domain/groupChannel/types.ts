@@ -17,7 +17,7 @@ export type GroupChannelProps = {
     onBeforeSendUserMessage?: (
       params: Sendbird.UserMessageParams,
     ) => Sendbird.UserMessageParams | Promise<Sendbird.UserMessageParams>;
-    onChannelDeleted: () => void;
+    onLeaveChannel: () => void;
     onPressHeaderLeft: GroupChannelProps['Header']['onPressHeaderLeft'];
     onPressHeaderRight: GroupChannelProps['Header']['onPressHeaderRight'];
     onPressImageMessage: GroupChannelProps['MessageList']['onPressImageMessage'];
@@ -29,8 +29,9 @@ export type GroupChannelProps = {
     Header?: GroupChannelProps['Header']['Header'];
 
     enableTypingIndicator?: GroupChannelProps['Provider']['enableTypingIndicator'];
-    keyboardAvoidOffset?: GroupChannelProps['Provider']['keyboardAvoidOffset'];
     enableMessageGrouping?: GroupChannelProps['MessageList']['enableMessageGrouping'];
+
+    keyboardAvoidOffset?: GroupChannelProps['Provider']['keyboardAvoidOffset'];
     flatListProps?: GroupChannelProps['MessageList']['flatListProps'];
     sortComparator?: UseGroupChannelMessagesOptions['sortComparator'];
     collectionCreator?: UseGroupChannelMessagesOptions['collectionCreator'];
