@@ -120,7 +120,7 @@ export const useGroupChannelMessagesWithQuery = (
         }
       },
       onChannelDeleted(channelUrl: string) {
-        if (activeChannel.url === channelUrl) options?.onLeaveChannel?.();
+        if (activeChannel.url === channelUrl) options?.onChannelDeleted?.();
       },
       // Users
       onOperatorUpdated: channelUpdater,
@@ -135,7 +135,7 @@ export const useGroupChannelMessagesWithQuery = (
         if (isDifferentChannel(activeChannel, eventChannel)) return;
 
         if (bannedUser.userId === sdk.currentUser.userId) {
-          options?.onLeaveChannel?.();
+          options?.onChannelDeleted?.();
         } else {
           channelUpdater(eventChannel);
         }

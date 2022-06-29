@@ -26,7 +26,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     onPressHeaderLeft = NOOP,
     onPressHeaderRight = NOOP,
     onPressImageMessage = NOOP,
-    onLeaveChannel = NOOP,
+    onChannelDeleted = NOOP,
     onBeforeSendFileMessage = PassValue,
     onBeforeSendUserMessage = PassValue,
     staleChannel,
@@ -57,7 +57,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       collectionCreator,
       queryCreator,
       sortComparator,
-      onLeaveChannel,
+      onChannelDeleted,
       enableCollectionWithoutLocalCache: true,
     });
 

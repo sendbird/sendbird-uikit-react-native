@@ -127,7 +127,7 @@ export const useGroupChannelMessagesWithCollection = (
           },
           onChannelDeleted() {
             disposeManuallyAfterUnmounted();
-            options?.onLeaveChannel?.();
+            options?.onChannelDeleted?.();
           },
           onChannelUpdated(_, channel) {
             disposeManuallyAfterUnmounted();
@@ -154,7 +154,7 @@ export const useGroupChannelMessagesWithCollection = (
         disposeManuallyAfterUnmounted();
         if (channel.isGroupChannel() && !isDifferentChannel(channel, activeChannel)) {
           if (bannedUser.userId === sdk.currentUser.userId) {
-            options?.onLeaveChannel?.();
+            options?.onChannelDeleted?.();
           } else {
             setActiveChannel(channel);
             forceUpdate();

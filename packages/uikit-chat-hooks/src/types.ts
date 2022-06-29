@@ -184,7 +184,7 @@ export type UseGroupChannelMessagesOptions = {
   queryCreator?: () => Sendbird.PreviousMessageListQuery;
   collectionCreator?: () => Sendbird.MessageCollection;
   enableCollectionWithoutLocalCache?: boolean;
-  onLeaveChannel?: () => void;
+  onChannelDeleted?: () => void;
 };
 
 /**

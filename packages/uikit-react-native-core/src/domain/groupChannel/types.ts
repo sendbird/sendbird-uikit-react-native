@@ -17,7 +17,7 @@ export type GroupChannelProps = {
     onBeforeSendUserMessage?: (
       params: Sendbird.UserMessageParams,
     ) => Sendbird.UserMessageParams | Promise<Sendbird.UserMessageParams>;
-    onLeaveChannel: () => void;
+    onChannelDeleted: () => void;
     onPressHeaderLeft: GroupChannelProps['Header']['onPressHeaderLeft'];
     onPressHeaderRight: GroupChannelProps['Header']['onPressHeaderRight'];
     onPressImageMessage: GroupChannelProps['MessageList']['onPressImageMessage'];

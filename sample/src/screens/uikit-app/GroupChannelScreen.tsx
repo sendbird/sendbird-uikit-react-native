@@ -83,7 +83,7 @@ const GroupChannelScreen: React.FC = () => {
         // Navigate to photo preview
         Logger.log('file uri', msg.name, uri);
       }}
-      onLeaveChannel={() => {
+      onChannelDeleted={() => {
         // Should leave channel, navigate to channel list
         navigation.navigate(Routes.GroupChannelList);
       }}
