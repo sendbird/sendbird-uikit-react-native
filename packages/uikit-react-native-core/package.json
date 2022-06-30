@@ -83,7 +83,8 @@
     "react-native-document-picker": "^8.0.0",
     "react-native-fs": "^2.19.0",
     "react-native-image-picker": "^4.7.1",
-    "react-native-permissions": "^3.2.0"
+    "react-native-permissions": "^3.2.0",
+    "sendbird": "^3.1.16"
   },
   "peerDependenciesMeta": {
     "@react-native-clipboard/clipboard": {
