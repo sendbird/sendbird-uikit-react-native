@@ -60,8 +60,13 @@ type Props<T extends StringSets> = {
     statusBarTranslucent?: boolean;
     defaultHeaderTitleAlign?: 'left' | 'center';
   };
-  onError?: (props: ErrorBoundaryProps) => void;
-  ErrorInfoComponent?: (props: ErrorBoundaryProps) => JSX.Element;
+  toast?: {
+    dismissTimeout?: number;
+  };
+  errorBoundary?: {
+    onError?: (props: ErrorBoundaryProps) => void;
+    ErrorInfoComponent?: (props: ErrorBoundaryProps) => JSX.Element;
+  };
 };
 
 const SendbirdUIKitContainer = <T extends StringSets>({
@@ -72,8 +77,8 @@ const SendbirdUIKitContainer = <T extends StringSets>({
   platformServices,
   localization,
   styles,
-  onError,
-  ErrorInfoComponent,
+  toast,
+  errorBoundary,
 }: Props<T>) => {
   const getSendbirdSDK = () => {
     let sdk: SendbirdChatSDK;
@@ -132,10 +137,8 @@ const SendbirdUIKitContainer = <T extends StringSets>({
                 clipboardService={platformServices.clipboard}
               >
                 <LocalizedDialogProvider>
-                  <ToastProvider>
-                    <InternalErrorBoundary onError={onError} ErrorInfoComponent={ErrorInfoComponent}>
-                      {children}
-                    </InternalErrorBoundary>
+                  <ToastProvider dismissTimeout={toast?.dismissTimeout}>
+                    <InternalErrorBoundary {...errorBoundary}>{children}</InternalErrorBoundary>
                   </ToastProvider>
                 </LocalizedDialogProvider>
               </PlatformServiceProvider>

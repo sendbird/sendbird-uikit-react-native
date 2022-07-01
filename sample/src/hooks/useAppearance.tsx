@@ -13,6 +13,7 @@ const AppearanceContext = createContext<{ scheme: 'light' | 'dark'; setScheme: (
 export const AppearanceProvider: React.FC<{}> = ({ children }) => {
   const [scheme, setScheme] = useState<'light' | 'dark'>(Appearance.getColorScheme() ?? DEFAULT_APPEARANCE);
 
+  // Handle scheme from Settings screen.
   // useEffect(() => {
   //   const unsubscribe = Appearance.addChangeListener(({ colorScheme }) => setScheme(colorScheme ?? DEFAULT_APPEARANCE));
   //   return () => unsubscribe.remove();

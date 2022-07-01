@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Keyboard, TextInput as RNTextInput, View } from 'react-native';
+import { Keyboard, Platform, TextInput as RNTextInput, View, useWindowDimensions } from 'react-native';
 
 import { NOOP } from '@sendbird/uikit-utils';
 
@@ -44,6 +44,7 @@ const Prompt: React.FC<Props> = ({
   const { statusBarTranslucent } = useHeaderStyle();
   const { colors } = useUIKitTheme();
   const inputRef = useRef<RNTextInput>(null);
+  const { width, height } = useWindowDimensions();
 
   const buttons = [
     { text: cancelLabel, onPress: onCancel },
@@ -52,9 +53,20 @@ const Prompt: React.FC<Props> = ({
 
   const [text, setText] = useState(defaultValue);
 
+  // FIXME: autoFocus trick with modal
+  // Android
+  // - InputProps.autoFocus is not trigger keyboard appearing.
+  // - InputRef.focus() is trigger keyboard appearing, but position of keyboard selection is always the start of text.
+  // iOS
+  // - InputProps.autoFocus is trigger weird UI behavior on landscape mode.
   useEffect(() => {
-    autoFocus && visible && setTimeout(() => inputRef.current?.focus(), 250);
-  }, [autoFocus, visible]);
+    if (autoFocus && visible) {
+      setTimeout(() => {
+        if (Platform.OS === 'android') inputRef.current?.blur();
+        inputRef.current?.focus();
+      }, 250);
+    }
+  }, [autoFocus, visible, `${width}-${height}`]);
 
   return (
     <Modal
@@ -80,6 +92,7 @@ const Prompt: React.FC<Props> = ({
 
         <View style={styles.inputContainer}>
           <TextInput
+            autoFocus={autoFocus && Platform.OS === 'android'}
             ref={inputRef}
             placeholder={placeholder}
             variant={'underline'}

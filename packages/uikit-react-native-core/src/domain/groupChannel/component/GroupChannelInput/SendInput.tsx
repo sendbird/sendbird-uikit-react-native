@@ -40,7 +40,7 @@ const SendInput: React.FC<SendInputProps> = ({ onSendUserMessage, onSendFileMess
           onPress: async () => {
             const photo = await fileService.openCamera({
               mediaType: 'photo',
-              onError: () => toast.show(STRINGS.TOAST.OPEN_CAMERA_ERROR, 'error'),
+              onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_CAMERA_ERROR, 'error'),
             });
 
             if (photo) {
@@ -55,7 +55,7 @@ const SendInput: React.FC<SendInputProps> = ({ onSendUserMessage, onSendFileMess
             const photo = await fileService.openMediaLibrary({
               selectionLimit: 1,
               mediaType: 'photo',
-              onError: () => toast.show(STRINGS.TOAST.OPEN_PHOTO_LIBRARY_ERROR, 'error'),
+              onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_PHOTO_LIBRARY_ERROR, 'error'),
             });
 
             if (photo && photo[0]) {
@@ -68,7 +68,7 @@ const SendInput: React.FC<SendInputProps> = ({ onSendUserMessage, onSendFileMess
           icon: 'document',
           onPress: async () => {
             const file = await fileService.openDocument({
-              onError: () => toast.show(STRINGS.TOAST.OPEN_FILES_ERROR, 'error'),
+              onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_FILES_ERROR, 'error'),
             });
 
             if (file) {

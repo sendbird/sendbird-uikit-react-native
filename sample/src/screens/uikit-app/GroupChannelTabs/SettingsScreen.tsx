@@ -3,7 +3,7 @@ import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { usePushTrigger } from '@sendbird/uikit-chat-hooks';
-import { usePlatformService, useSendbirdChat } from '@sendbird/uikit-react-native-core';
+import { useLocalization, usePlatformService, useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import {
   Avatar,
   Divider,
@@ -14,6 +14,7 @@ import {
   Text,
   useActionMenu,
   usePrompt,
+  useToast,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
 import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
@@ -25,17 +26,17 @@ import { Routes } from '../../../libs/navigation';
 const SettingsScreen = () => {
   const { navigation } = useAppNavigation<Routes.Settings>();
   const { scheme, setScheme } = useAppearance();
+  const { left, right } = useSafeAreaInsets();
 
   const { currentUser, setCurrentUser, sdk } = useSendbirdChat();
   const { option, updateOption } = usePushTrigger(sdk);
   const { fileService } = usePlatformService();
-
   const { colors, palette } = useUIKitTheme();
-
+  const { STRINGS } = useLocalization();
+  const toast = useToast();
   const { openSheet } = useBottomSheet();
   const { prompt } = usePrompt();
   const { openMenu } = useActionMenu();
-  const { left, right } = useSafeAreaInsets();
 
   const onChangeNickname = () => {
     prompt({
@@ -56,17 +57,24 @@ const SettingsScreen = () => {
         {
           title: 'Take photo',
           onPress: async () => {
-            const file = await fileService.openCamera();
-            if (!file) return;
+            const photo = await fileService.openCamera({
+              mediaType: 'photo',
+              onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_CAMERA_ERROR, 'error'),
+            });
+            if (!photo) return;
 
-            const user = await sdk.updateCurrentUserInfoWithProfileImage(sdk.currentUser.nickname, file);
+            const user = await sdk.updateCurrentUserInfoWithProfileImage(sdk.currentUser.nickname, photo);
             setCurrentUser(user);
           },
         },
         {
           title: 'Choose photo',
           onPress: async () => {
-            const files = await fileService.openMediaLibrary({ selectionLimit: 1 });
+            const files = await fileService.openMediaLibrary({
+              selectionLimit: 1,
+              mediaType: 'photo',
+              onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_PHOTO_LIBRARY_ERROR, 'error'),
+            });
             if (!files || !files[0]) return;
 
             const user = await sdk.updateCurrentUserInfoWithProfileImage(sdk.currentUser.nickname, files[0]);

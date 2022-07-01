@@ -48,7 +48,7 @@ const App = () => {
         theme: isLightTheme ? LightUIKitTheme : DarkUIKitTheme,
         statusBarTranslucent: GetTranslucent(),
       }}
-      ErrorInfoComponent={ErrorInfoScreen}
+      errorBoundary={{ ErrorInfoComponent: ErrorInfoScreen }}
     >
       <Navigations />
     </SendbirdUIKitContainer>

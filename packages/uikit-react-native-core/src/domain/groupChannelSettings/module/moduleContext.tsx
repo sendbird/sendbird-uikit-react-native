@@ -2,7 +2,7 @@ import React, { createContext, useCallback, useEffect, useState } from 'react';
 import type Sendbird from 'sendbird';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
-import { useActionMenu, useBottomSheet, usePrompt } from '@sendbird/uikit-react-native-foundation';
+import { useActionMenu, useBottomSheet, usePrompt, useToast } from '@sendbird/uikit-react-native-foundation';
 import { NOOP, isDifferentChannel, useForceUpdate, useUniqId } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
@@ -53,6 +53,7 @@ export const GroupChannelSettingsContextProvider: React.FC<GroupChannelSettingsP
     [activeChannel],
   );
 
+  const toast = useToast();
   const { openSheet } = useBottomSheet();
   const { prompt } = usePrompt();
   const { openMenu } = useActionMenu();
@@ -87,7 +88,10 @@ export const GroupChannelSettingsContextProvider: React.FC<GroupChannelSettingsP
         {
           title: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_IMAGE_MENU_CAMERA,
           onPress: async () => {
-            const file = await fileService.openCamera();
+            const file = await fileService.openCamera({
+              mediaType: 'photo',
+              onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_CAMERA_ERROR, 'error'),
+            });
             if (!file) return;
 
             const params = new sdk.GroupChannelParams();
@@ -98,7 +102,11 @@ export const GroupChannelSettingsContextProvider: React.FC<GroupChannelSettingsP
         {
           title: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY,
           onPress: async () => {
-            const files = await fileService.openMediaLibrary({ selectionLimit: 1 });
+            const files = await fileService.openMediaLibrary({
+              selectionLimit: 1,
+              mediaType: 'photo',
+              onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_PHOTO_LIBRARY_ERROR, 'error'),
+            });
             if (!files || !files[0]) return;
 
             const params = new sdk.GroupChannelParams();

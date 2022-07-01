@@ -78,11 +78,12 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
     });
   };
 
-  useEffect(() => {
-    if (HANDLE_NEXT_MSG_SEPARATELY) return;
-    newMessagesFromNext.length !== 0 && setNewMessages((prev) => prev.concat(newMessagesFromNext));
-    onBottomReached();
-  }, [newMessagesFromNext]);
+  if (HANDLE_NEXT_MSG_SEPARATELY) {
+    useEffect(() => {
+      newMessagesFromNext.length !== 0 && setNewMessages((prev) => prev.concat(newMessagesFromNext));
+      onBottomReached();
+    }, [newMessagesFromNext]);
+  }
 
   const onLeaveScrollBottom = useCallback((val: boolean) => {
     if (!HANDLE_NEXT_MSG_SEPARATELY) setNewMessages([]);
@@ -228,7 +229,7 @@ const useGetMessagePressActions = ({
           }
 
           fileService
-            .save(msg.url, msg.name)
+            .save({ fileUrl: msg.url, fileName: msg.name })
             .then((response) => {
               toast.show(STRINGS.TOAST.DOWNLOAD_OK, 'success');
               Logger.log('File saved to', response);
