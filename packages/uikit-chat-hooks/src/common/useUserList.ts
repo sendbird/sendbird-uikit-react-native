@@ -7,7 +7,6 @@ import type { CustomQueryInterface, UseUserList, UseUserListOptions } from '../t
 
 const createUserQuery = <User>(sdk: SendbirdChatSDK, queryCreator?: UseUserListOptions<User>['queryCreator']) => {
   if (queryCreator) return queryCreator();
-  sdk.createFriendListQuery();
   return sdk.createApplicationUserListQuery() as unknown as CustomQueryInterface<User>;
 };
 

@@ -64,7 +64,7 @@ const createGroupChannelMembersFragment = (
     return (
       <UserListModule.Provider headerRight={noop} headerTitle={STRINGS.GROUP_CHANNEL_MEMBERS.HEADER_TITLE}>
         <UserListModule.Header
-          ignoreActiveOnly
+          shouldActivateHeaderRight={() => true}
           Header={Header}
           onPressHeaderLeft={onPressHeaderLeft}
           right={<Icon icon={'plus'} />}

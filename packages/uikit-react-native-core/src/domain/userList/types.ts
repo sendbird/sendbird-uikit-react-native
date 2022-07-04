@@ -47,8 +47,8 @@ export type UserListProps<User> = {
     right?: React.ReactElement;
     left?: React.ReactElement;
     onPressHeaderLeft: () => void;
-    onPressHeaderRight: (users: User[]) => Promise<void>;
-    ignoreActiveOnly?: boolean;
+    onPressHeaderRight: (selectedUsers: User[]) => Promise<void>;
+    shouldActivateHeaderRight?: (selectedUsers: User[]) => boolean;
   };
   List: {
     users: User[];

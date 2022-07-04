@@ -21,11 +21,11 @@ const UserListHeader = <T,>({
   onPressHeaderRight,
   right,
   left,
-  ignoreActiveOnly = false,
+  shouldActivateHeaderRight = (selectedUsers) => selectedUsers.length > 0,
 }: UserListProps<T>['Header']) => {
   const { headerTitle } = useContext(UserListContext.Fragment);
   const { selectedUsers } = useContext(UserListContext.List as UserListContextType<T>['List']);
-  const isActive = ignoreActiveOnly || selectedUsers.length > 0;
+  const isActive = shouldActivateHeaderRight(selectedUsers);
 
   if (!Header) return null;
   return (
