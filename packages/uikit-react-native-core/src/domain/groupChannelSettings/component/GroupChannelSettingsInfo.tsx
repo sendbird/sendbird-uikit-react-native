@@ -12,11 +12,11 @@ import {
 
 import { useLocalization } from '../../../contexts/Localization';
 import { useSendbirdChat } from '../../../contexts/SendbirdChat';
-import { GroupChannelSettingsContext } from '../module/moduleContext';
+import { GroupChannelSettingsContexts } from '../module/moduleContext';
 import type { GroupChannelSettingsProps } from '../types';
 
 const GroupChannelSettingsInfo: React.FC<GroupChannelSettingsProps['Info']> = () => {
-  const { channel } = useContext(GroupChannelSettingsContext.Fragment);
+  const { channel } = useContext(GroupChannelSettingsContexts.Fragment);
   const { currentUser } = useSendbirdChat();
   const { STRINGS } = useLocalization();
 

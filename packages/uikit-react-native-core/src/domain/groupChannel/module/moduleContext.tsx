@@ -7,9 +7,9 @@ import { NOOP, isDifferentChannel, useUniqId } from '@sendbird/uikit-utils';
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization } from '../../../contexts/Localization';
 import { useSendbirdChat } from '../../../contexts/SendbirdChat';
-import type { GroupChannelContextType, GroupChannelModule } from '../types';
+import type { GroupChannelContextsType, GroupChannelModule } from '../types';
 
-export const GroupChannelContext: GroupChannelContextType = {
+export const GroupChannelContexts: GroupChannelContextsType = {
   Fragment: createContext({
     headerTitle: '',
     channel: {} as Sendbird.GroupChannel,
@@ -20,7 +20,7 @@ export const GroupChannelContext: GroupChannelContextType = {
   }),
 };
 
-export const GroupChannelContextProvider: GroupChannelModule['Provider'] = ({
+export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
   children,
   channel,
   enableTypingIndicator,
@@ -28,7 +28,7 @@ export const GroupChannelContextProvider: GroupChannelModule['Provider'] = ({
 }) => {
   if (!channel) throw new Error('GroupChannel is not provided to GroupChannelModule');
 
-  const id = useUniqId('GroupChannelContextProvider');
+  const id = useUniqId('GroupChannelContextsProvider');
   const { STRINGS } = useLocalization();
   const { currentUser, sdk } = useSendbirdChat();
 
@@ -37,7 +37,7 @@ export const GroupChannelContextProvider: GroupChannelModule['Provider'] = ({
 
   useChannelHandler(
     sdk,
-    `GroupChannelContextProvider_${id}`,
+    `GroupChannelContextsProvider_${id}`,
     {
       onTypingStatusUpdated(eventChannel) {
         if (isDifferentChannel(channel, eventChannel) && !enableTypingIndicator) return;
@@ -50,7 +50,7 @@ export const GroupChannelContextProvider: GroupChannelModule['Provider'] = ({
 
   return (
     <ProviderLayout>
-      <GroupChannelContext.Fragment.Provider
+      <GroupChannelContexts.Fragment.Provider
         value={{
           headerTitle: STRINGS.GROUP_CHANNEL.HEADER_TITLE(currentUser?.userId ?? '', channel),
           channel,
@@ -59,10 +59,10 @@ export const GroupChannelContextProvider: GroupChannelModule['Provider'] = ({
           keyboardAvoidOffset,
         }}
       >
-        <GroupChannelContext.TypingIndicator.Provider value={{ typingUsers }}>
+        <GroupChannelContexts.TypingIndicator.Provider value={{ typingUsers }}>
           {children}
-        </GroupChannelContext.TypingIndicator.Provider>
-      </GroupChannelContext.Fragment.Provider>
+        </GroupChannelContexts.TypingIndicator.Provider>
+      </GroupChannelContexts.Fragment.Provider>
     </ProviderLayout>
   );
 };

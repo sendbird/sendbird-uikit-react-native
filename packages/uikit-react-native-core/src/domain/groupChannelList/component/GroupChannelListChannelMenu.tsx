@@ -4,11 +4,11 @@ import { ActionMenu } from '@sendbird/uikit-react-native-foundation';
 
 import { useLocalization } from '../../../contexts/Localization';
 import { useSendbirdChat } from '../../../contexts/SendbirdChat';
-import { GroupChannelListContext } from '../module/moduleContext';
+import { GroupChannelListContexts } from '../module/moduleContext';
 import type { GroupChannelListProps } from '../types';
 
 const GroupChannelListChannelMenu: React.FC<GroupChannelListProps['ChannelMenu']> = () => {
-  const channelMenu = useContext(GroupChannelListContext.ChannelMenu);
+  const channelMenu = useContext(GroupChannelListContexts.ChannelMenu);
   const { STRINGS } = useLocalization();
   const { currentUser } = useSendbirdChat();
 

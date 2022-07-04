@@ -23,12 +23,12 @@ import { Routes } from '../../libs/navigation';
  * import { useNavigation } from "@react-navigation/native";
  * import { useHeaderHeight } from '@react-navigation/elements';
  *
- * import { GroupChannelContext, GroupChannelModule } from '@sendbird/uikit-react-native-core';
+ * import { GroupChannelContexts, GroupChannelModule } from '@sendbird/uikit-react-native-core';
  * import { Icon } from '@sendbird/uikit-react-native-foundation';
  *
  * const UseReactNavigationHeader: GroupChannelModule['Header'] = ({ onPressHeaderRight, onPressHeaderLeft }) => {
  *   const navigation = useNavigation();
- *   const { headerTitle } = useContext(GroupChannelContext.Fragment);
+ *   const { headerTitle } = useContext(GroupChannelContexts.Fragment);
  *   useEffect(() => {
  *     navigation.setOptions({
  *       headerShown: true,

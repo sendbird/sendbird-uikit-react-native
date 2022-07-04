@@ -26,7 +26,7 @@ import type { ChatFlatListRef } from '../../../components/ChatFlatList';
 import ChatFlatList from '../../../components/ChatFlatList';
 import { useLocalization } from '../../../contexts/Localization';
 import { usePlatformService } from '../../../contexts/PlatformService';
-import { GroupChannelContext } from '../module/moduleContext';
+import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
 
 const HANDLE_NEXT_MSG_SEPARATELY = Platform.select({ android: true, ios: false });
@@ -148,7 +148,7 @@ const useGetMessagePressActions = ({
   const { openSheet } = useBottomSheet();
   const { alert } = useAlert();
   const { clipboardService, fileService } = usePlatformService();
-  const { setEditMessage } = useContext(GroupChannelContext.Fragment);
+  const { setEditMessage } = useContext(GroupChannelContexts.Fragment);
 
   const handleFailedMessage = (message: HandleableMessage) => {
     openSheet({

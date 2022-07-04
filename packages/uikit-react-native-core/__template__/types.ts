@@ -26,7 +26,7 @@ export type __domain__Props = {
  * For example, the developer can create a custom header
  * with getting data from the domain context
  * */
-export type __domain__ContextType = {
+export type __domain__ContextsType = {
   Fragment: React.Context<{
     headerTitle: string;
   }>;

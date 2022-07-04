@@ -12,8 +12,8 @@ import { Routes } from '../../../libs/navigation';
  * ```
  *  const UseReactNavigationHeader = () => {
  *    const { navigation } = useAppNavigation<Routes.GroupChannelList>();
- *    const fragment = useContext(GroupChannelListContext.Fragment);
- *    const typeSelector = useContext(GroupChannelListContext.TypeSelector);
+ *    const fragment = useContext(GroupChannelListContexts.Fragment);
+ *    const typeSelector = useContext(GroupChannelListContexts.TypeSelector);
  *
  *    useLayoutEffect(() => {
  *      navigation.setOptions({

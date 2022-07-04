@@ -102,7 +102,7 @@ export type GroupChannelProps = {
  * For example, the developer can create a custom header
  * with getting data from the domain context
  * */
-export type GroupChannelContextType = {
+export type GroupChannelContextsType = {
   Fragment: React.Context<{
     headerTitle: string;
     channel: Sendbird.GroupChannel;

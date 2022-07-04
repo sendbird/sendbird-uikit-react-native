@@ -9,9 +9,9 @@ import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization } from '../../../contexts/Localization';
 import { usePlatformService } from '../../../contexts/PlatformService';
 import { useSendbirdChat } from '../../../contexts/SendbirdChat';
-import type { GroupChannelSettingsContextType, GroupChannelSettingsProps } from '../types';
+import type { GroupChannelSettingsContextsType, GroupChannelSettingsProps } from '../types';
 
-export const GroupChannelSettingsContext: GroupChannelSettingsContextType = {
+export const GroupChannelSettingsContexts: GroupChannelSettingsContextsType = {
   Fragment: createContext({
     channel: {} as Sendbird.GroupChannel,
     headerTitle: '',
@@ -20,8 +20,8 @@ export const GroupChannelSettingsContext: GroupChannelSettingsContextType = {
   }),
 };
 
-const HOOK_NAME = 'GroupChannelSettingsContextProvider';
-export const GroupChannelSettingsContextProvider: React.FC<GroupChannelSettingsProps['Provider']> = ({
+const HOOK_NAME = 'GroupChannelSettingsContextsProvider';
+export const GroupChannelSettingsContextsProvider: React.FC<GroupChannelSettingsProps['Provider']> = ({
   children,
   staleChannel,
 }) => {
@@ -129,7 +129,7 @@ export const GroupChannelSettingsContextProvider: React.FC<GroupChannelSettingsP
 
   return (
     <ProviderLayout>
-      <GroupChannelSettingsContext.Fragment.Provider
+      <GroupChannelSettingsContexts.Fragment.Provider
         value={{
           channel: activeChannel,
           headerTitle: STRINGS.GROUP_CHANNEL_SETTINGS.HEADER_TITLE,
@@ -138,7 +138,7 @@ export const GroupChannelSettingsContextProvider: React.FC<GroupChannelSettingsP
         }}
       >
         {children}
-      </GroupChannelSettingsContext.Fragment.Provider>
+      </GroupChannelSettingsContexts.Fragment.Provider>
     </ProviderLayout>
   );
 };

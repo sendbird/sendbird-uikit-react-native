@@ -5,7 +5,7 @@ import type { MenuBarProps } from '@sendbird/uikit-react-native-foundation';
 import { Icon, MenuBar, Switch, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 import { useLocalization } from '../../../contexts/Localization';
-import { GroupChannelSettingsContext } from '../module/moduleContext';
+import { GroupChannelSettingsContexts } from '../module/moduleContext';
 import type { GroupChannelSettingsProps } from '../types';
 
 const GroupChannelSettingsMenu: React.FC<GroupChannelSettingsProps['Menu']> = ({
@@ -13,7 +13,7 @@ const GroupChannelSettingsMenu: React.FC<GroupChannelSettingsProps['Menu']> = ({
   onLeaveChannel,
   menuItemsCreator = (menu) => menu,
 }) => {
-  const { channel } = useContext(GroupChannelSettingsContext.Fragment);
+  const { channel } = useContext(GroupChannelSettingsContexts.Fragment);
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
 

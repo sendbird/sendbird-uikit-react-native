@@ -5,9 +5,9 @@ import { NOOP } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization } from '../../../contexts/Localization';
-import type { GroupChannelListContextType } from '../types';
+import type { GroupChannelListContextsType } from '../types';
 
-export const GroupChannelListContext: GroupChannelListContextType = {
+export const GroupChannelListContexts: GroupChannelListContextsType = {
   Fragment: createContext({
     headerTitle: '',
   }),
@@ -22,7 +22,7 @@ export const GroupChannelListContext: GroupChannelListContextType = {
   }),
 };
 
-export const GroupChannelListContextProvider: React.FC = ({ children }) => {
+export const GroupChannelListContextsProvider: React.FC = ({ children }) => {
   const { STRINGS } = useLocalization();
 
   // Type selector
@@ -35,15 +35,15 @@ export const GroupChannelListContextProvider: React.FC = ({ children }) => {
 
   return (
     <ProviderLayout>
-      <GroupChannelListContext.TypeSelector.Provider
+      <GroupChannelListContexts.TypeSelector.Provider
         value={{ headerTitle: STRINGS.GROUP_CHANNEL_LIST.TYPE_SELECTOR_HEADER_TITLE, visible, show, hide }}
       >
-        <GroupChannelListContext.Fragment.Provider value={{ headerTitle: STRINGS.GROUP_CHANNEL_LIST.HEADER_TITLE }}>
-          <GroupChannelListContext.ChannelMenu.Provider value={{ selectChannel, selectedChannel }}>
+        <GroupChannelListContexts.Fragment.Provider value={{ headerTitle: STRINGS.GROUP_CHANNEL_LIST.HEADER_TITLE }}>
+          <GroupChannelListContexts.ChannelMenu.Provider value={{ selectChannel, selectedChannel }}>
             {children}
-          </GroupChannelListContext.ChannelMenu.Provider>
-        </GroupChannelListContext.Fragment.Provider>
-      </GroupChannelListContext.TypeSelector.Provider>
+          </GroupChannelListContexts.ChannelMenu.Provider>
+        </GroupChannelListContexts.Fragment.Provider>
+      </GroupChannelListContexts.TypeSelector.Provider>
     </ProviderLayout>
   );
 };

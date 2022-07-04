@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 
 import { Header as DefaultHeader, Icon, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
-import { GroupChannelSettingsContext } from '../module/moduleContext';
+import { GroupChannelSettingsContexts } from '../module/moduleContext';
 import type { GroupChannelSettingsProps } from '../types';
 
 const GroupChannelSettingsHeader: React.FC<GroupChannelSettingsProps['Header']> = ({
@@ -10,7 +10,7 @@ const GroupChannelSettingsHeader: React.FC<GroupChannelSettingsProps['Header']> 
   onPressHeaderLeft,
 }) => {
   const { colors } = useUIKitTheme();
-  const { headerTitle, headerRight, onPressHeaderRight } = useContext(GroupChannelSettingsContext.Fragment);
+  const { headerTitle, headerRight, onPressHeaderRight } = useContext(GroupChannelSettingsContexts.Fragment);
   if (!Header) return null;
   return (
     <Header

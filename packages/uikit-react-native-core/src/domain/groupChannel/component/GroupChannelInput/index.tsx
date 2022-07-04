@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { groupChannelChatUnavailable, useIIFE } from '@sendbird/uikit-utils';
 
-import { GroupChannelContext } from '../../module/moduleContext';
+import { GroupChannelContexts } from '../../module/moduleContext';
 import type { GroupChannelProps } from '../../types';
 import EditInput from './EditInput';
 import SendInput from './SendInput';
@@ -16,7 +16,7 @@ const GroupChannelInput: React.FC<GroupChannelProps['Input']> = (props) => {
 
   const { left, right, bottom } = useSafeAreaInsets();
   const { colors } = useUIKitTheme();
-  const { editMessage, setEditMessage, keyboardAvoidOffset = 0 } = useContext(GroupChannelContext.Fragment);
+  const { editMessage, setEditMessage, keyboardAvoidOffset = 0 } = useContext(GroupChannelContexts.Fragment);
 
   const [text, setText] = useState('');
   const textTmpRef = useRef('');

@@ -54,8 +54,8 @@ export type UserListProps<User> = {
     users: User[];
     renderUser: (
       user: User,
-      selectedUsers: ContextValue<UserListContextType<User>['List']>['selectedUsers'],
-      setSelectedUsers: ContextValue<UserListContextType<User>['List']>['setSelectedUsers'],
+      selectedUsers: ContextValue<UserListContextsType<User>['List']>['selectedUsers'],
+      setSelectedUsers: ContextValue<UserListContextsType<User>['List']>['setSelectedUsers'],
     ) => React.ReactElement | null;
     onLoadNext: () => Promise<void>;
     onRefresh?: () => Promise<void>;
@@ -72,7 +72,7 @@ export type UserListProps<User> = {
  * For example, the developer can create a custom header
  * with getting data from the domain context
  * */
-export type UserListContextType<User> = {
+export type UserListContextsType<User> = {
   Fragment: React.Context<{
     headerTitle: string;
     headerRight: string;

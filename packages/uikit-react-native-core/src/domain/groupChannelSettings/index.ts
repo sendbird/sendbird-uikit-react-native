@@ -2,4 +2,4 @@ export { default as GroupChannelSettingsHeader } from './component/GroupChannelS
 export { default as GroupChannelSettingsInfo } from './component/GroupChannelSettingsInfo';
 export { default as GroupChannelSettingsMenu } from './component/GroupChannelSettingsMenu';
 export { default as createGroupChannelSettingsModule } from './module/createGroupChannelSettingsModule';
-export { GroupChannelSettingsContextProvider, GroupChannelSettingsContext } from './module/moduleContext';
+export { GroupChannelSettingsContextsProvider, GroupChannelSettingsContexts } from './module/moduleContext';

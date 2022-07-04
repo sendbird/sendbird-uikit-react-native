@@ -41,20 +41,20 @@ export type {
   GroupChannelProps,
   GroupChannelModule,
   GroupChannelFragment,
-  GroupChannelContextType,
+  GroupChannelContextsType,
 } from './domain/groupChannel/types';
 export type {
   GroupChannelSettingsProps,
   GroupChannelSettingsModule,
   GroupChannelSettingsFragment,
-  GroupChannelSettingsContextType,
+  GroupChannelSettingsContextsType,
 } from './domain/groupChannelSettings/types';
 export type {
   GroupChannelType,
   GroupChannelListProps,
   GroupChannelListModule,
   GroupChannelListFragment,
-  GroupChannelListContextType,
+  GroupChannelListContextsType,
 } from './domain/groupChannelList/types';
 
 export type {
@@ -62,4 +62,4 @@ export type {
   GroupChannelInviteFragment,
   GroupChannelMembersFragment,
 } from './domain/groupChannelUserList/types';
-export type { UserListProps, UserListModule, UserListFragment, UserListContextType } from './domain/userList/types';
+export type { UserListProps, UserListModule, UserListFragment, UserListContextsType } from './domain/userList/types';

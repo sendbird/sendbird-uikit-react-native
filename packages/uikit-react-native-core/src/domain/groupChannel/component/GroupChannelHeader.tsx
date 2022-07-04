@@ -6,7 +6,7 @@ import { conditionChaining, getMembersExcludeMe, preferDefaultChannelCover, trun
 
 import { useLocalization } from '../../../contexts/Localization';
 import { useSendbirdChat } from '../../../contexts/SendbirdChat';
-import { GroupChannelContext } from '../module/moduleContext';
+import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
 
 const GroupChannelHeader: React.FC<GroupChannelProps['Header']> = ({
@@ -14,8 +14,8 @@ const GroupChannelHeader: React.FC<GroupChannelProps['Header']> = ({
   onPressHeaderLeft,
   onPressHeaderRight,
 }) => {
-  const { headerTitle, channel } = useContext(GroupChannelContext.Fragment);
-  const { typingUsers } = useContext(GroupChannelContext.TypingIndicator);
+  const { headerTitle, channel } = useContext(GroupChannelContexts.Fragment);
+  const { typingUsers } = useContext(GroupChannelContexts.TypingIndicator);
   const { STRINGS } = useLocalization();
   const { currentUser } = useSendbirdChat();
 
