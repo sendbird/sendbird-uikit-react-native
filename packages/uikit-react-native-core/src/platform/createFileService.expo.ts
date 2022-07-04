@@ -8,7 +8,14 @@ import { getFileExtension, getFileType } from '@sendbird/uikit-utils';
 import type { ExpoMediaLibraryPermissionResponse, ExpoPermissionResponse } from '../utils/expoPermissionGranted';
 import expoPermissionGranted from '../utils/expoPermissionGranted';
 import fileTypeGuard from '../utils/fileTypeGuard';
-import type { FilePickerResponse, FileServiceInterface } from './types';
+import type {
+  FilePickerResponse,
+  FileServiceInterface,
+  OpenCameraOptions,
+  OpenDocumentOptions,
+  OpenMediaLibraryOptions,
+  SaveOptions,
+} from './types';
 
 const createExpoFileService = ({
   imagePickerModule,
@@ -21,20 +28,36 @@ const createExpoFileService = ({
   mediaLibraryModule: typeof ExpoMediaLibrary;
   fsModule: typeof ExpoFs;
 }): FileServiceInterface => {
-  return {
+  class ExpoFileServiceInterface implements FileServiceInterface {
     async hasCameraPermission(): Promise<boolean> {
       const res = (await imagePickerModule.getCameraPermissionsAsync()) as ExpoPermissionResponse;
       return expoPermissionGranted([res]);
-    },
+    }
     async requestCameraPermission(): Promise<boolean> {
       const res = (await imagePickerModule.requestCameraPermissionsAsync()) as ExpoPermissionResponse;
       return expoPermissionGranted([res]);
-    },
-    async openCamera(options): Promise<FilePickerResponse> {
+    }
+    async hasMediaLibraryPermission(type: 'write' | 'read'): Promise<boolean> {
+      const perms = (await mediaLibraryModule.getPermissionsAsync(
+        type === 'write',
+      )) as ExpoMediaLibraryPermissionResponse;
+      return expoPermissionGranted([perms], () => mediaLibraryModule.presentPermissionsPickerAsync());
+    }
+    async requestMediaLibraryPermission(type: 'write' | 'read'): Promise<boolean> {
+      const perms = (await mediaLibraryModule.requestPermissionsAsync(
+        type === 'write',
+      )) as ExpoMediaLibraryPermissionResponse;
+      return expoPermissionGranted([perms]);
+    }
+
+    async openCamera(options?: OpenCameraOptions): Promise<FilePickerResponse> {
       const hasPermission = await this.hasCameraPermission();
       if (!hasPermission) {
         const granted = await this.requestCameraPermission();
-        if (!granted) return null;
+        if (!granted) {
+          options?.onOpenFailureWithToastMessage?.();
+          return null;
+        }
       }
 
       const response = await imagePickerModule.launchCameraAsync({
@@ -52,27 +75,16 @@ const createExpoFileService = ({
       const type = getFileType(uri);
 
       return fileTypeGuard({ uri, size, type: `${type}/${ext.slice(1)}`, name: Date.now() + ext });
-    },
-
-    async hasMediaLibraryPermission(type): Promise<boolean> {
-      const perms = (await mediaLibraryModule.getPermissionsAsync(
-        type === 'write',
-      )) as ExpoMediaLibraryPermissionResponse;
-      return expoPermissionGranted([perms], () => mediaLibraryModule.presentPermissionsPickerAsync());
-    },
-    async requestMediaLibraryPermission(type): Promise<boolean> {
-      const perms = (await mediaLibraryModule.requestPermissionsAsync(
-        type === 'write',
-      )) as ExpoMediaLibraryPermissionResponse;
-      return expoPermissionGranted([perms]);
-    },
-
-    async openMediaLibrary(options) {
+    }
+    async openMediaLibrary(options: OpenMediaLibraryOptions) {
       const selectionLimit = options?.selectionLimit || 1;
       const hasPermission = await this.hasMediaLibraryPermission('read');
       if (!hasPermission) {
         const granted = await this.requestMediaLibraryPermission('read');
-        if (!granted) return null;
+        if (!granted) {
+          options?.onOpenFailureWithToastMessage?.();
+          return null;
+        }
       }
 
       const response = await imagePickerModule.launchImageLibraryAsync({ allowsMultipleSelection: true });
@@ -86,22 +98,21 @@ const createExpoFileService = ({
           return fileTypeGuard({ uri, size, type: `${type}/${ext.slice(1)}`, name: Date.now() + ext });
         }),
       );
-    },
+    }
 
-    async hasStoragePermission(): Promise<boolean> {
-      return true;
-    },
-    async requestStoragePermission(): Promise<boolean> {
-      return true;
-    },
-    async openDocument(): Promise<FilePickerResponse> {
-      const response = await documentPickerModule.getDocumentAsync({ type: '*/*' });
-      if (response.type === 'cancel') return null;
-      const { mimeType, uri, size, name } = response;
-      return fileTypeGuard({ uri, size, name, type: mimeType });
-    },
+    async openDocument(options?: OpenDocumentOptions): Promise<FilePickerResponse> {
+      try {
+        const response = await documentPickerModule.getDocumentAsync({ type: '*/*' });
+        if (response.type === 'cancel') return null;
+        const { mimeType, uri, size, name } = response;
+        return fileTypeGuard({ uri, size, name, type: mimeType });
+      } catch {
+        options?.onOpenFailureWithToastMessage?.();
+        return null;
+      }
+    }
 
-    async save(fileUrl: string, fileName: string): Promise<string> {
+    async save(options: SaveOptions): Promise<string> {
       const hasPermission = await this.hasMediaLibraryPermission('write');
       if (!hasPermission) {
         const granted = await this.requestMediaLibraryPermission('write');
@@ -111,13 +122,15 @@ const createExpoFileService = ({
       const basePath = fsModule.documentDirectory || fsModule.cacheDirectory;
       if (!basePath) throw new Error('Cannot determine directory');
 
-      const downloadPath = `${basePath}/${fileName}`;
+      const downloadPath = `${basePath}/${options.fileName}`;
 
-      const response = await fsModule.downloadAsync(fileUrl, downloadPath);
+      const response = await fsModule.downloadAsync(options.fileUrl, downloadPath);
       await mediaLibraryModule.saveToLibraryAsync(response.uri);
       return response.uri;
-    },
-  };
+    }
+  }
+
+  return new ExpoFileServiceInterface();
 };
 
 export default createExpoFileService;

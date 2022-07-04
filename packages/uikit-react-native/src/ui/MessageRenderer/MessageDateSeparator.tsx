@@ -12,7 +12,7 @@ type Props = {
 };
 
 const MessageDateSeparator: React.FC<Props> = ({ message, prevMessage }) => {
-  const { LABEL } = useLocalization();
+  const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
   const sameDay = isSameDay(message.createdAt, prevMessage?.createdAt ?? 0);
   if (sameDay) return null;
@@ -20,7 +20,7 @@ const MessageDateSeparator: React.FC<Props> = ({ message, prevMessage }) => {
     <View style={styles.container}>
       <View style={[styles.view, { backgroundColor: colors.ui.dateSeparator.default.none.background }]}>
         <Text caption1 color={colors.ui.dateSeparator.default.none.text}>
-          {LABEL.GROUP_CHANNEL.LIST_DATE_SEPARATOR(new Date(message.createdAt))}
+          {STRINGS.GROUP_CHANNEL.LIST_DATE_SEPARATOR(new Date(message.createdAt))}
         </Text>
       </View>
     </View>

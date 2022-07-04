@@ -21,58 +21,58 @@ type SendInputProps = GroupChannelProps['Input'] & {
   disabled: boolean;
 };
 const SendInput: React.FC<SendInputProps> = ({ onSendUserMessage, onSendFileMessage, text, setText, disabled }) => {
-  const { LABEL } = useLocalization();
+  const { STRINGS } = useLocalization();
   const { openSheet } = useBottomSheet();
   const { fileService } = usePlatformService();
   const { colors } = useUIKitTheme();
   const toast = useToast();
 
   const onPressSend = () => {
-    onSendUserMessage(text).catch(() => toast.show(LABEL.TOAST.SEND_MSG_ERROR, 'error'));
+    onSendUserMessage(text).catch(() => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error'));
     setText('');
   };
   const onPressAttachment = () => {
     openSheet({
       sheetItems: [
         {
-          title: LABEL.GROUP_CHANNEL.DIALOG_ATTACHMENT_CAMERA,
+          title: STRINGS.GROUP_CHANNEL.DIALOG_ATTACHMENT_CAMERA,
           icon: 'camera',
           onPress: async () => {
             const photo = await fileService.openCamera({
               mediaType: 'photo',
-              onError: () => toast.show(LABEL.TOAST.OPEN_CAMERA_ERROR, 'error'),
+              onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_CAMERA_ERROR, 'error'),
             });
 
             if (photo) {
-              onSendFileMessage(photo).catch(() => toast.show(LABEL.TOAST.SEND_MSG_ERROR, 'error'));
+              onSendFileMessage(photo).catch(() => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error'));
             }
           },
         },
         {
-          title: LABEL.GROUP_CHANNEL.DIALOG_ATTACHMENT_PHOTO_LIBRARY,
+          title: STRINGS.GROUP_CHANNEL.DIALOG_ATTACHMENT_PHOTO_LIBRARY,
           icon: 'photo',
           onPress: async () => {
             const photo = await fileService.openMediaLibrary({
               selectionLimit: 1,
               mediaType: 'photo',
-              onError: () => toast.show(LABEL.TOAST.OPEN_PHOTO_LIBRARY_ERROR, 'error'),
+              onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_PHOTO_LIBRARY_ERROR, 'error'),
             });
 
             if (photo && photo[0]) {
-              onSendFileMessage(photo[0]).catch(() => toast.show(LABEL.TOAST.SEND_MSG_ERROR, 'error'));
+              onSendFileMessage(photo[0]).catch(() => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error'));
             }
           },
         },
         {
-          title: LABEL.GROUP_CHANNEL.DIALOG_ATTACHMENT_FILES,
+          title: STRINGS.GROUP_CHANNEL.DIALOG_ATTACHMENT_FILES,
           icon: 'document',
           onPress: async () => {
             const file = await fileService.openDocument({
-              onError: () => toast.show(LABEL.TOAST.OPEN_FILES_ERROR, 'error'),
+              onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_FILES_ERROR, 'error'),
             });
 
             if (file) {
-              onSendFileMessage(file).catch(() => toast.show(LABEL.TOAST.SEND_MSG_ERROR, 'error'));
+              onSendFileMessage(file).catch(() => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error'));
             }
           },
         },
@@ -98,7 +98,7 @@ const SendInput: React.FC<SendInputProps> = ({ onSendUserMessage, onSendFileMess
         style={styles.input}
         placeholder={conditionChaining(
           [disabled],
-          [LABEL.GROUP_CHANNEL.INPUT_PLACEHOLDER_DISABLED, LABEL.GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE],
+          [STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_DISABLED, STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE],
         )}
       />
       {Boolean(text) && (

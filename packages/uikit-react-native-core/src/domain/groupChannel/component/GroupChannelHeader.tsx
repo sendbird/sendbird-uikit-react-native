@@ -6,7 +6,7 @@ import { conditionChaining, getMembersExcludeMe, preferDefaultChannelCover, trun
 
 import { useLocalization } from '../../../contexts/Localization';
 import { useSendbirdChat } from '../../../contexts/SendbirdChat';
-import { GroupChannelContext } from '../module/moduleContext';
+import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
 
 const GroupChannelHeader: React.FC<GroupChannelProps['Header']> = ({
@@ -14,14 +14,14 @@ const GroupChannelHeader: React.FC<GroupChannelProps['Header']> = ({
   onPressHeaderLeft,
   onPressHeaderRight,
 }) => {
-  const { headerTitle, channel } = useContext(GroupChannelContext.Fragment);
-  const { typingUsers } = useContext(GroupChannelContext.TypingIndicator);
-  const { LABEL } = useLocalization();
+  const { headerTitle, channel } = useContext(GroupChannelContexts.Fragment);
+  const { typingUsers } = useContext(GroupChannelContexts.TypingIndicator);
+  const { STRINGS } = useLocalization();
   const { currentUser } = useSendbirdChat();
 
   if (!Header) return null;
 
-  const subtitle = LABEL.STRINGS.TYPING_INDICATOR_TYPINGS(typingUsers);
+  const subtitle = STRINGS.LABELS.TYPING_INDICATOR_TYPINGS(typingUsers);
   return (
     <Header
       clearTitleMargin
@@ -40,7 +40,7 @@ const GroupChannelHeader: React.FC<GroupChannelProps['Header']> = ({
           )}
           <View>
             <DefaultHeader.Title h2>{truncate(headerTitle, { mode: 'tail', maxLen: 25 })}</DefaultHeader.Title>
-            {subtitle && Boolean(subtitle) && (
+            {Boolean(subtitle) && subtitle && (
               <DefaultHeader.SubTitle style={styles.subtitle}>{subtitle}</DefaultHeader.SubTitle>
             )}
           </View>

@@ -1,12 +1,12 @@
 import UserListHeader from '../component/UserListHeader';
 import UserListList from '../component/UserListList';
 import type { UserListModule } from '../types';
-import { UserListContextProvider } from './moduleContext';
+import { UserListContextsProvider } from './moduleContext';
 
 const createUserListModule = <T,>({
   Header = UserListHeader,
   List = UserListList,
-  Provider = UserListContextProvider,
+  Provider = UserListContextsProvider,
   ...module
 }: Partial<UserListModule<T>> = {}): UserListModule<T> => {
   return { Header, List, Provider, ...module };

@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 
-import { createGroupChannelInfoFragment } from '@sendbird/uikit-react-native';
+import { createGroupChannelSettingsFragment } from '@sendbird/uikit-react-native';
 import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
 
 import { useAppNavigation } from '../../hooks/useAppNavigation';
 import { Routes } from '../../libs/navigation';
 
-const GroupChannelInfoFragment = createGroupChannelInfoFragment();
-const GroupChannelInfoScreen: React.FC = () => {
+const GroupChannelSettingsFragment = createGroupChannelSettingsFragment();
+const GroupChannelSettingsScreen: React.FC = () => {
   const { sdk } = useSendbirdChat();
-  const { navigation, params } = useAppNavigation<Routes.GroupChannelInfo>();
+  const { navigation, params } = useAppNavigation<Routes.GroupChannelSettings>();
   const [channel] = useState(() => sdk.GroupChannel.buildFromSerializedData(params.serializedChannel));
 
   return (
-    <GroupChannelInfoFragment
+    <GroupChannelSettingsFragment
       staleChannel={channel}
       onPressHeaderLeft={() => {
         // Navigate back
@@ -31,4 +31,4 @@ const GroupChannelInfoScreen: React.FC = () => {
   );
 };
 
-export default GroupChannelInfoScreen;
+export default GroupChannelSettingsScreen;

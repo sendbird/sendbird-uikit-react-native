@@ -7,6 +7,8 @@ import type { BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
 import type { CommonComponent } from '../../types';
 import type { UserListProps } from '../userList/types';
 
+type UserIds = string[];
+
 export type GroupChannelCreateFragment<User> = React.FC<{
   Header?: null | CommonComponent<
     BaseHeaderProps<{
@@ -30,7 +32,6 @@ export type GroupChannelCreateFragment<User> = React.FC<{
   renderUser?: UserListProps<User>['List']['renderUser'];
 }>;
 
-type UserIds = string[];
 export type GroupChannelInviteFragment<User> = React.FC<{
   Header?: null | CommonComponent<
     BaseHeaderProps<{

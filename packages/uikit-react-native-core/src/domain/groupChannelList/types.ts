@@ -84,7 +84,7 @@ export type GroupChannelListProps = {
  * For example, the developer can create a custom header
  * with getting data from the domain context
  * */
-export type GroupChannelListContextType = {
+export type GroupChannelListContextsType = {
   Fragment: React.Context<{
     headerTitle: string;
   }>;

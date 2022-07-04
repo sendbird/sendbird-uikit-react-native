@@ -13,8 +13,9 @@ export { default as useConnection } from './hooks/useConnection';
 export { default as usePushTokenRegistration } from './hooks/usePushTokenRegistration';
 
 /** Localization **/
-export { default as LabelEn } from './localization/label.en';
-export type { LabelSet, LabelLocale } from './localization/label.type';
+export { default as StringSetEn } from './localization/StringSet.en';
+export { createBaseStringSet } from './localization/StringSet.type';
+export type { StringSet, StringsLocale } from './localization/StringSet.type';
 
 /** Platform API **/
 export { default as createNativeFileService } from './platform/createFileService.native';
@@ -33,27 +34,27 @@ export type {
 
 /** Domain **/
 export * from './domain/groupChannel';
-export * from './domain/groupChannelInfo';
+export * from './domain/groupChannelSettings';
 export * from './domain/groupChannelList';
 export * from './domain/userList';
 export type {
   GroupChannelProps,
   GroupChannelModule,
   GroupChannelFragment,
-  GroupChannelContextType,
+  GroupChannelContextsType,
 } from './domain/groupChannel/types';
 export type {
-  GroupChannelInfoProps,
-  GroupChannelInfoModule,
-  GroupChannelInfoFragment,
-  GroupChannelInfoContextType,
-} from './domain/groupChannelInfo/types';
+  GroupChannelSettingsProps,
+  GroupChannelSettingsModule,
+  GroupChannelSettingsFragment,
+  GroupChannelSettingsContextsType,
+} from './domain/groupChannelSettings/types';
 export type {
   GroupChannelType,
   GroupChannelListProps,
   GroupChannelListModule,
   GroupChannelListFragment,
-  GroupChannelListContextType,
+  GroupChannelListContextsType,
 } from './domain/groupChannelList/types';
 
 export type {
@@ -61,4 +62,4 @@ export type {
   GroupChannelInviteFragment,
   GroupChannelMembersFragment,
 } from './domain/groupChannelUserList/types';
-export type { UserListProps, UserListModule, UserListFragment, UserListContextType } from './domain/userList/types';
+export type { UserListProps, UserListModule, UserListFragment, UserListContextsType } from './domain/userList/types';

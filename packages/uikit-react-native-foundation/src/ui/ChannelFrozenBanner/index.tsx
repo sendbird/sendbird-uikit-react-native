@@ -12,7 +12,7 @@ type Props = {
   backgroundColor?: string;
 };
 
-const ChannelFrozenBanner: React.FC<Props> = ({ text = 'Channel frozen', backgroundColor, textColor, style }) => {
+const ChannelFrozenBanner: React.FC<Props> = ({ text = 'Channel is frozen', backgroundColor, textColor, style }) => {
   const { palette } = useUIKitTheme();
 
   return (

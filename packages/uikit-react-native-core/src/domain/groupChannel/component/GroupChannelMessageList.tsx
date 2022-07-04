@@ -26,7 +26,7 @@ import type { ChatFlatListRef } from '../../../components/ChatFlatList';
 import ChatFlatList from '../../../components/ChatFlatList';
 import { useLocalization } from '../../../contexts/Localization';
 import { usePlatformService } from '../../../contexts/PlatformService';
-import { GroupChannelContext } from '../module/moduleContext';
+import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
 
 const HANDLE_NEXT_MSG_SEPARATELY = Platform.select({ android: true, ios: false });
@@ -48,7 +48,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   flatListProps,
   enableMessageGrouping,
 }) => {
-  const { LABEL } = useLocalization();
+  const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
   const { left, right } = useSafeAreaInsets();
   const [scrollLeaveBottom, setScrollLeaveBottom] = useState(false);
@@ -78,11 +78,12 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
     });
   };
 
-  useEffect(() => {
-    if (HANDLE_NEXT_MSG_SEPARATELY) return;
-    newMessagesFromNext.length !== 0 && setNewMessages((prev) => prev.concat(newMessagesFromNext));
-    onBottomReached();
-  }, [newMessagesFromNext]);
+  if (HANDLE_NEXT_MSG_SEPARATELY) {
+    useEffect(() => {
+      newMessagesFromNext.length !== 0 && setNewMessages((prev) => prev.concat(newMessagesFromNext));
+      onBottomReached();
+    }, [newMessagesFromNext]);
+  }
 
   const onLeaveScrollBottom = useCallback((val: boolean) => {
     if (!HANDLE_NEXT_MSG_SEPARATELY) setNewMessages([]);
@@ -92,7 +93,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   return (
     <View style={[{ flex: 1, backgroundColor: colors.background }, safeAreaLayout]}>
       {channel.isFrozen && (
-        <ChannelFrozenBanner style={styles.frozenBanner} text={LABEL.GROUP_CHANNEL.LIST_BANNER_FROZEN} />
+        <ChannelFrozenBanner style={styles.frozenBanner} text={STRINGS.GROUP_CHANNEL.LIST_BANNER_FROZEN} />
       )}
       <ChatFlatList
         nextMessages={nextMessages}
@@ -142,22 +143,23 @@ const useGetMessagePressActions = ({
   'onDeleteMessage' | 'onResendFailedMessage' | 'onPressImageMessage' | 'currentUserId'
 >) => {
   const { colors } = useUIKitTheme();
-  const { LABEL } = useLocalization();
+  const { STRINGS } = useLocalization();
   const toast = useToast();
   const { openSheet } = useBottomSheet();
   const { alert } = useAlert();
   const { clipboardService, fileService } = usePlatformService();
-  const { setEditMessage } = useContext(GroupChannelContext.Fragment);
+  const { setEditMessage } = useContext(GroupChannelContexts.Fragment);
 
   const handleFailedMessage = (message: HandleableMessage) => {
     openSheet({
       sheetItems: [
         {
-          title: LABEL.GROUP_CHANNEL.DIALOG_MESSAGE_FAILED_RETRY,
-          onPress: () => onResendFailedMessage(message).catch(() => toast.show(LABEL.TOAST.RESEND_MSG_ERROR, 'error')),
+          title: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_FAILED_RETRY,
+          onPress: () =>
+            onResendFailedMessage(message).catch(() => toast.show(STRINGS.TOAST.RESEND_MSG_ERROR, 'error')),
         },
         {
-          title: LABEL.GROUP_CHANNEL.DIALOG_MESSAGE_FAILED_REMOVE,
+          title: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_FAILED_REMOVE,
           titleColor: colors.ui.dialog.default.none.destructive,
           onPress: () => confirmDelete(message),
         },
@@ -166,15 +168,15 @@ const useGetMessagePressActions = ({
   };
   const confirmDelete = (message: HandleableMessage) => {
     alert({
-      title: LABEL.GROUP_CHANNEL.DIALOG_MESSAGE_DELETE_CONFIRM_TITLE,
+      title: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_DELETE_CONFIRM_TITLE,
       buttons: [
         {
-          text: LABEL.GROUP_CHANNEL.DIALOG_MESSAGE_DELETE_CONFIRM_CANCEL,
+          text: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_DELETE_CONFIRM_CANCEL,
         },
         {
-          text: LABEL.GROUP_CHANNEL.DIALOG_MESSAGE_DELETE_CONFIRM_OK,
+          text: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_DELETE_CONFIRM_OK,
           style: 'destructive',
-          onPress: () => onDeleteMessage(message).catch(() => toast.show(LABEL.TOAST.DELETE_MSG_ERROR, 'error')),
+          onPress: () => onDeleteMessage(message).catch(() => toast.show(STRINGS.TOAST.DELETE_MSG_ERROR, 'error')),
         },
       ],
     });
@@ -194,10 +196,10 @@ const useGetMessagePressActions = ({
     if (msg.isUserMessage()) {
       sheetItems.push({
         icon: 'copy',
-        title: LABEL.GROUP_CHANNEL.DIALOG_MESSAGE_COPY,
+        title: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_COPY,
         onPress: () => {
           clipboardService.setString(msg.message || '');
-          toast.show(LABEL.TOAST.COPY_OK, 'success');
+          toast.show(STRINGS.TOAST.COPY_OK, 'success');
         },
       });
 
@@ -205,12 +207,12 @@ const useGetMessagePressActions = ({
         sheetItems.push(
           {
             icon: 'edit',
-            title: LABEL.GROUP_CHANNEL.DIALOG_MESSAGE_EDIT,
+            title: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_EDIT,
             onPress: () => setEditMessage(msg),
           },
           {
             icon: 'delete',
-            title: LABEL.GROUP_CHANNEL.DIALOG_MESSAGE_DELETE,
+            title: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_DELETE,
             onPress: () => confirmDelete(msg),
           },
         );
@@ -220,20 +222,20 @@ const useGetMessagePressActions = ({
     if (msg.isFileMessage()) {
       sheetItems.push({
         icon: 'download',
-        title: LABEL.GROUP_CHANNEL.DIALOG_MESSAGE_SAVE,
+        title: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_SAVE,
         onPress: async () => {
           if (toMegabyte(msg.size) > 4) {
-            toast.show(LABEL.TOAST.DOWNLOAD_START, 'success');
+            toast.show(STRINGS.TOAST.DOWNLOAD_START, 'success');
           }
 
           fileService
-            .save(msg.url, msg.name)
+            .save({ fileUrl: msg.url, fileName: msg.name })
             .then((response) => {
-              toast.show(LABEL.TOAST.DOWNLOAD_OK, 'success');
+              toast.show(STRINGS.TOAST.DOWNLOAD_OK, 'success');
               Logger.log('File saved to', response);
             })
             .catch((err) => {
-              toast.show(LABEL.TOAST.DOWNLOAD_ERROR, 'error');
+              toast.show(STRINGS.TOAST.DOWNLOAD_ERROR, 'error');
               Logger.log('File save failure', err);
             });
         },
@@ -242,7 +244,7 @@ const useGetMessagePressActions = ({
       if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
         sheetItems.push({
           icon: 'delete',
-          title: LABEL.GROUP_CHANNEL.DIALOG_MESSAGE_DELETE,
+          title: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_DELETE,
           onPress: () => confirmDelete(msg),
         });
       }

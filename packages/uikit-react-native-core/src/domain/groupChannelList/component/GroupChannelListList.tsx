@@ -3,7 +3,7 @@ import { FlatList, ListRenderItem } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type Sendbird from 'sendbird';
 
-import { GroupChannelListContext } from '../module/moduleContext';
+import { GroupChannelListContexts } from '../module/moduleContext';
 import type { GroupChannelListProps } from '../types';
 
 const GroupChannelListList: React.FC<GroupChannelListProps['List']> = ({
@@ -14,7 +14,7 @@ const GroupChannelListList: React.FC<GroupChannelListProps['List']> = ({
   // onRefresh,
   flatListProps,
 }) => {
-  const channelMenu = useContext(GroupChannelListContext.ChannelMenu);
+  const channelMenu = useContext(GroupChannelListContexts.ChannelMenu);
   const renderItem: ListRenderItem<Sendbird.GroupChannel> = useCallback(
     ({ item }) => renderGroupChannelPreview?.(item, () => channelMenu.selectChannel(item)),
     [renderGroupChannelPreview, channelMenu.selectChannel],

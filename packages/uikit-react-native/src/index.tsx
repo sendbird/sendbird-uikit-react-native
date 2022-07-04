@@ -10,7 +10,7 @@ export { default as UserSelectableBar } from './ui/UserSelectableBar';
 /** Fragments **/
 export { default as createGroupChannelCreateFragment } from './fragments/createGroupChannelCreateFragment';
 export { default as createGroupChannelFragment } from './fragments/createGroupChannelFragment';
-export { default as createGroupChannelInfoFragment } from './fragments/createGroupChannelInfoFragment';
+export { default as createGroupChannelSettingsFragment } from './fragments/createGroupChannelSettingsFragment';
 export { default as createGroupChannelInviteFragment } from './fragments/createGroupChannelInviteFragment';
 export { default as createGroupChannelListFragment } from './fragments/createGroupChannelListFragment';
 export { default as createGroupChannelMembersFragment } from './fragments/createGroupChannelMembersFragment';

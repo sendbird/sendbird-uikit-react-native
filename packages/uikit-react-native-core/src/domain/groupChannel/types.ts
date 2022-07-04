@@ -29,8 +29,9 @@ export type GroupChannelProps = {
     Header?: GroupChannelProps['Header']['Header'];
 
     enableTypingIndicator?: GroupChannelProps['Provider']['enableTypingIndicator'];
-    keyboardAvoidOffset?: GroupChannelProps['Provider']['keyboardAvoidOffset'];
     enableMessageGrouping?: GroupChannelProps['MessageList']['enableMessageGrouping'];
+
+    keyboardAvoidOffset?: GroupChannelProps['Provider']['keyboardAvoidOffset'];
     flatListProps?: GroupChannelProps['MessageList']['flatListProps'];
     sortComparator?: UseGroupChannelMessagesOptions['sortComparator'];
     collectionCreator?: UseGroupChannelMessagesOptions['collectionCreator'];
@@ -101,7 +102,7 @@ export type GroupChannelProps = {
  * For example, the developer can create a custom header
  * with getting data from the domain context
  * */
-export type GroupChannelContextType = {
+export type GroupChannelContextsType = {
   Fragment: React.Context<{
     headerTitle: string;
     channel: Sendbird.GroupChannel;

@@ -4,7 +4,7 @@ import type Sendbird from 'sendbird';
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 import { Logger, isDifferentChannel, useAsyncEffect, useForceUpdate } from '@sendbird/uikit-utils';
 
-import useInternalPubSub from '../../common/useInternalPubSub';
+import { useAppFeatures } from '../../common/useAppFeatures';
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';
 import { useGroupChannelMessagesReducer } from './reducer';
@@ -20,14 +20,14 @@ const createMessageQuery = (
   return query;
 };
 
-const hookName = 'useGroupChannelMessagesWithQuery';
+const HOOK_NAME = 'useGroupChannelMessagesWithQuery';
 export const useGroupChannelMessagesWithQuery = (
   sdk: SendbirdChatSDK,
   staleChannel: Sendbird.GroupChannel,
   userId?: string,
   options?: UseGroupChannelMessagesOptions,
 ): UseGroupChannelMessages => {
-  const { events, publish } = useInternalPubSub();
+  const { deliveryReceiptEnabled } = useAppFeatures(sdk);
 
   const queryRef = useRef<Sendbird.PreviousMessageListQuery>();
 
@@ -55,14 +55,14 @@ export const useGroupChannelMessagesWithQuery = (
 
   const channelMarkAs = async () => {
     try {
-      sdk.markAsDelivered(activeChannel.url);
+      if (deliveryReceiptEnabled) sdk.markAsDelivered(activeChannel.url);
     } catch (e) {
-      Logger.error(`[${hookName}/channelMarkAs/Delivered]`, e);
+      Logger.error(`[${HOOK_NAME}/channelMarkAs/Delivered]`, e);
     }
     try {
       await sdk.markAsReadWithChannelUrls([activeChannel.url]);
     } catch (e) {
-      Logger.error(`[${hookName}/channelMarkAs/Read]`, e);
+      Logger.error(`[${HOOK_NAME}/channelMarkAs/Read]`, e);
     }
   };
 
@@ -80,24 +80,19 @@ export const useGroupChannelMessagesWithQuery = (
     },
     [sdk, activeChannel.url, options?.queryCreator],
   );
-  useAsyncEffect(async () => {
-    updateLoading(true);
-    await init(userId);
-    updateLoading(false);
-  }, [init, userId]);
 
   const channelUpdater = (channel: Sendbird.GroupChannel | Sendbird.OpenChannel) => {
     if (channel.isGroupChannel() && !isDifferentChannel(channel, activeChannel)) {
       setActiveChannel(channel);
       forceUpdate();
     }
-    publish(events.ChannelUpdated, { channel }, hookName);
   };
 
   useChannelHandler(
     sdk,
-    hookName,
+    HOOK_NAME,
     {
+      // Messages
       onMessageReceived(eventChannel, message) {
         if (isDifferentChannel(activeChannel, eventChannel)) return;
         channelMarkAs();
@@ -112,6 +107,11 @@ export const useGroupChannelMessagesWithQuery = (
         deleteMessages([messageId], []);
         deleteNextMessages([messageId], []);
       },
+      // Channels
+      onChannelChanged: channelUpdater,
+      onChannelFrozen: channelUpdater,
+      onChannelUnfrozen: channelUpdater,
+      onChannelHidden: channelUpdater,
       onChannelMemberCountChanged(channels) {
         const channel = channels.find((c) => !isDifferentChannel(c, activeChannel));
         if (channel) {
@@ -120,19 +120,35 @@ export const useGroupChannelMessagesWithQuery = (
         }
       },
       onChannelDeleted(channelUrl: string) {
-        publish(events.ChannelDeleted, { channelUrl }, hookName);
+        if (activeChannel.url === channelUrl) options?.onChannelDeleted?.();
       },
-      onChannelChanged: channelUpdater,
-      onChannelFrozen: channelUpdater,
-      onChannelUnfrozen: channelUpdater,
-      onChannelHidden: channelUpdater,
-      onUserBanned: channelUpdater,
+      // Users
+      onOperatorUpdated: channelUpdater,
+      onUserLeft: channelUpdater,
+      onUserEntered: channelUpdater,
+      onUserExited: channelUpdater,
+      onUserJoined: channelUpdater,
       onUserUnbanned: channelUpdater,
       onUserMuted: channelUpdater,
       onUserUnmuted: channelUpdater,
+      onUserBanned(eventChannel, bannedUser) {
+        if (isDifferentChannel(activeChannel, eventChannel)) return;
+
+        if (bannedUser.userId === sdk.currentUser.userId) {
+          options?.onChannelDeleted?.();
+        } else {
+          channelUpdater(eventChannel);
+        }
+      },
     },
     [sdk],
   );
+
+  useAsyncEffect(async () => {
+    updateLoading(true);
+    await init(userId);
+    updateLoading(false);
+  }, [init, userId]);
 
   const refresh: UseGroupChannelMessages['refresh'] = useCallback(async () => {
     updateRefreshing(true);

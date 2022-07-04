@@ -2,16 +2,16 @@ import React, { createContext, useCallback, useEffect, useState } from 'react';
 import type Sendbird from 'sendbird';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
-import { useActionMenu, useBottomSheet, usePrompt } from '@sendbird/uikit-react-native-foundation';
+import { useActionMenu, useBottomSheet, usePrompt, useToast } from '@sendbird/uikit-react-native-foundation';
 import { NOOP, isDifferentChannel, useForceUpdate, useUniqId } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization } from '../../../contexts/Localization';
 import { usePlatformService } from '../../../contexts/PlatformService';
 import { useSendbirdChat } from '../../../contexts/SendbirdChat';
-import type { GroupChannelInfoContextType, GroupChannelInfoProps } from '../types';
+import type { GroupChannelSettingsContextsType, GroupChannelSettingsProps } from '../types';
 
-export const GroupChannelInfoContext: GroupChannelInfoContextType = {
+export const GroupChannelSettingsContexts: GroupChannelSettingsContextsType = {
   Fragment: createContext({
     channel: {} as Sendbird.GroupChannel,
     headerTitle: '',
@@ -20,15 +20,15 @@ export const GroupChannelInfoContext: GroupChannelInfoContextType = {
   }),
 };
 
-const HOOK_NAME = 'GroupChannelInfoContextProvider';
-export const GroupChannelInfoContextProvider: React.FC<GroupChannelInfoProps['Provider']> = ({
+const HOOK_NAME = 'GroupChannelSettingsContextsProvider';
+export const GroupChannelSettingsContextsProvider: React.FC<GroupChannelSettingsProps['Provider']> = ({
   children,
   staleChannel,
 }) => {
   const uniqId = useUniqId(HOOK_NAME);
   const forceUpdate = useForceUpdate();
   const [activeChannel, setActiveChannel] = useState(staleChannel);
-  const { LABEL } = useLocalization();
+  const { STRINGS } = useLocalization();
   const { sdk } = useSendbirdChat();
   const { fileService } = usePlatformService();
 
@@ -53,6 +53,7 @@ export const GroupChannelInfoContextProvider: React.FC<GroupChannelInfoProps['Pr
     [activeChannel],
   );
 
+  const toast = useToast();
   const { openSheet } = useBottomSheet();
   const { prompt } = usePrompt();
   const { openMenu } = useActionMenu();
@@ -68,9 +69,9 @@ export const GroupChannelInfoContextProvider: React.FC<GroupChannelInfoProps['Pr
 
   const changeChannelName = useCallback(() => {
     prompt({
-      title: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_NAME_PROMPT_TITLE,
-      submitLabel: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_NAME_PROMPT_OK,
-      placeholder: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_NAME_PROMPT_PLACEHOLDER,
+      title: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME_PROMPT_TITLE,
+      submitLabel: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME_PROMPT_OK,
+      placeholder: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME_PROMPT_PLACEHOLDER,
       defaultValue: activeChannel.name,
       onSubmit: async (channelName) => {
         const params = new sdk.GroupChannelParams();
@@ -78,16 +79,19 @@ export const GroupChannelInfoContextProvider: React.FC<GroupChannelInfoProps['Pr
         await updateChannel(params);
       },
     });
-  }, [LABEL, updateChannel, activeChannel.name]);
+  }, [STRINGS, updateChannel, activeChannel.name]);
 
   const changeChannelImage = useCallback(() => {
     openMenu({
-      title: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_IMAGE_MENU_TITLE,
+      title: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_IMAGE_MENU_TITLE,
       menuItems: [
         {
-          title: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_IMAGE_MENU_CAMERA,
+          title: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_IMAGE_MENU_CAMERA,
           onPress: async () => {
-            const file = await fileService.openCamera();
+            const file = await fileService.openCamera({
+              mediaType: 'photo',
+              onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_CAMERA_ERROR, 'error'),
+            });
             if (!file) return;
 
             const params = new sdk.GroupChannelParams();
@@ -96,9 +100,13 @@ export const GroupChannelInfoContextProvider: React.FC<GroupChannelInfoProps['Pr
           },
         },
         {
-          title: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY,
+          title: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY,
           onPress: async () => {
-            const files = await fileService.openMediaLibrary({ selectionLimit: 1 });
+            const files = await fileService.openMediaLibrary({
+              selectionLimit: 1,
+              mediaType: 'photo',
+              onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_PHOTO_LIBRARY_ERROR, 'error'),
+            });
             if (!files || !files[0]) return;
 
             const params = new sdk.GroupChannelParams();
@@ -108,29 +116,29 @@ export const GroupChannelInfoContextProvider: React.FC<GroupChannelInfoProps['Pr
         },
       ],
     });
-  }, [LABEL, updateChannel]);
+  }, [STRINGS, updateChannel]);
 
   const onPressHeaderRight = useCallback(() => {
     openSheet({
       sheetItems: [
-        { title: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_NAME, onPress: changeChannelName },
-        { title: LABEL.GROUP_CHANNEL_INFO.DIALOG_CHANGE_IMAGE, onPress: changeChannelImage },
+        { title: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME, onPress: changeChannelName },
+        { title: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_IMAGE, onPress: changeChannelImage },
       ],
     });
-  }, [LABEL, changeChannelImage, changeChannelName]);
+  }, [STRINGS, changeChannelImage, changeChannelName]);
 
   return (
     <ProviderLayout>
-      <GroupChannelInfoContext.Fragment.Provider
+      <GroupChannelSettingsContexts.Fragment.Provider
         value={{
           channel: activeChannel,
-          headerTitle: LABEL.GROUP_CHANNEL_INFO.HEADER_TITLE,
-          headerRight: LABEL.GROUP_CHANNEL_INFO.HEADER_RIGHT,
+          headerTitle: STRINGS.GROUP_CHANNEL_SETTINGS.HEADER_TITLE,
+          headerRight: STRINGS.GROUP_CHANNEL_SETTINGS.HEADER_RIGHT,
           onPressHeaderRight,
         }}
       >
         {children}
-      </GroupChannelInfoContext.Fragment.Provider>
+      </GroupChannelSettingsContexts.Fragment.Provider>
     </ProviderLayout>
   );
 };

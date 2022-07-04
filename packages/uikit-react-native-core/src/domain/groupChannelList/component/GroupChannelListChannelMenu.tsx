@@ -4,12 +4,12 @@ import { ActionMenu } from '@sendbird/uikit-react-native-foundation';
 
 import { useLocalization } from '../../../contexts/Localization';
 import { useSendbirdChat } from '../../../contexts/SendbirdChat';
-import { GroupChannelListContext } from '../module/moduleContext';
+import { GroupChannelListContexts } from '../module/moduleContext';
 import type { GroupChannelListProps } from '../types';
 
 const GroupChannelListChannelMenu: React.FC<GroupChannelListProps['ChannelMenu']> = () => {
-  const channelMenu = useContext(GroupChannelListContext.ChannelMenu);
-  const { LABEL } = useLocalization();
+  const channelMenu = useContext(GroupChannelListContexts.ChannelMenu);
+  const { STRINGS } = useLocalization();
   const { currentUser } = useSendbirdChat();
 
   const [visible, setVisible] = useState(false);
@@ -25,11 +25,11 @@ const GroupChannelListChannelMenu: React.FC<GroupChannelListProps['ChannelMenu']
       onDismiss={channelMenu.selectChannel}
       title={
         channelMenu.selectedChannel &&
-        LABEL.GROUP_CHANNEL_LIST.DIALOG_CHANNEL_TITLE(currentUser?.userId ?? '', channelMenu.selectedChannel)
+        STRINGS.GROUP_CHANNEL_LIST.DIALOG_CHANNEL_TITLE(currentUser?.userId ?? '', channelMenu.selectedChannel)
       }
       menuItems={[
         {
-          title: LABEL.GROUP_CHANNEL_LIST.DIALOG_CHANNEL_NOTIFICATION(channelMenu.selectedChannel),
+          title: STRINGS.GROUP_CHANNEL_LIST.DIALOG_CHANNEL_NOTIFICATION(channelMenu.selectedChannel),
           onPress: async () => {
             if (channelMenu.selectedChannel?.myPushTriggerOption === 'off') {
               await channelMenu.selectedChannel?.setMyPushTriggerOption('default');
@@ -39,7 +39,7 @@ const GroupChannelListChannelMenu: React.FC<GroupChannelListProps['ChannelMenu']
           },
         },
         {
-          title: LABEL.GROUP_CHANNEL_LIST.DIALOG_CHANNEL_LEAVE,
+          title: STRINGS.GROUP_CHANNEL_LIST.DIALOG_CHANNEL_LEAVE,
           onPress: async () => {
             await channelMenu.selectedChannel?.leave();
           },

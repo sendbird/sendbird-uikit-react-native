@@ -10,7 +10,7 @@ type ConnectOptions = { nickname?: string; accessToken?: string };
 const cacheStrictCodes = [400300, 400301, 400302, 400310];
 
 const useConnection = () => {
-  const { sdk, autoPushTokenRegistration, setCurrentUser } = useSendbirdChat();
+  const { sdk, enableAutoPushTokenRegistration, setCurrentUser } = useSendbirdChat();
   const { registerPushTokenForCurrentUser, unregisterPushTokenForCurrentUser } = usePushTokenRegistration(false);
 
   const connect = useCallback(
@@ -35,7 +35,7 @@ const useConnection = () => {
                 .catch((e) => Logger.warn('[useConnection]', 'nickname-sync failure', e));
             }
 
-            if (autoPushTokenRegistration) {
+            if (enableAutoPushTokenRegistration) {
               Logger.debug('[useConnection]', 'autoPushTokenRegistration enabled, register for current user');
               await registerPushTokenForCurrentUser().catch((e) => {
                 Logger.warn('[useConnection]', 'autoPushToken Registration failure', e);
@@ -58,13 +58,13 @@ const useConnection = () => {
         else sdk.connect(userId, callback);
       });
     },
-    [sdk, registerPushTokenForCurrentUser, autoPushTokenRegistration],
+    [sdk, registerPushTokenForCurrentUser, enableAutoPushTokenRegistration],
   );
 
   const disconnect = useCallback(async () => {
     Logger.debug('[useConnection]', 'disconnect start');
 
-    if (autoPushTokenRegistration) {
+    if (enableAutoPushTokenRegistration) {
       Logger.debug('[useConnection]', 'autoPushTokenRegistration enabled, unregister for current user');
       await unregisterPushTokenForCurrentUser().catch((e) => {
         Logger.warn('[useConnection]', 'autoPushToken unregister failure', e);
@@ -74,7 +74,7 @@ const useConnection = () => {
     await sdk.disconnect();
     setCurrentUser(undefined);
     Logger.debug('[useConnection]', 'disconnected!');
-  }, [sdk, unregisterPushTokenForCurrentUser, autoPushTokenRegistration]);
+  }, [sdk, unregisterPushTokenForCurrentUser, enableAutoPushTokenRegistration]);
 
   return { connect, disconnect, reconnect: sdk.reconnect };
 };

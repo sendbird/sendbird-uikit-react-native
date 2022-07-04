@@ -67,7 +67,7 @@ const Toast: React.FC<Props> = ({ visible, type, children, top, bottom }) => {
 };
 
 const VISIBLE_MS = 3000;
-export const ToastProvider: React.FC = ({ children }) => {
+export const ToastProvider: React.FC<{ dismissTimeout?: number }> = ({ children, dismissTimeout = VISIBLE_MS }) => {
   const [state, setState] = useState({ visible: false, type: 'error' as ToastType, text: '' });
   const { bottom } = useSafeAreaInsets();
 
@@ -76,7 +76,7 @@ export const ToastProvider: React.FC = ({ children }) => {
 
     const hideTimeout = setTimeout(() => {
       setState((prev) => ({ ...prev, visible: false }));
-    }, VISIBLE_MS);
+    }, dismissTimeout);
     return () => clearTimeout(hideTimeout);
   });
 

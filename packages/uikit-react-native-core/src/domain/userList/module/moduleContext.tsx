@@ -4,20 +4,20 @@ import type { ContextValue } from '@sendbird/uikit-utils';
 import { NOOP } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
-import type { UserListContextType, UserListProps } from '../types';
+import type { UserListContextsType, UserListProps } from '../types';
 
-export const UserListContext: UserListContextType<unknown> = {
+export const UserListContexts: UserListContextsType<unknown> = {
   Fragment: createContext({
     headerTitle: '',
     headerRight: '',
   }),
-  List: createContext<ContextValue<UserListContextType<unknown>['List']>>({
+  List: createContext<ContextValue<UserListContextsType<unknown>['List']>>({
     selectedUsers: [],
     setSelectedUsers: NOOP,
   }),
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const UserListContextProvider: React.FC<UserListProps<any>['Provider']> = ({
+export const UserListContextsProvider: React.FC<UserListProps<any>['Provider']> = ({
   children,
   headerTitle,
   headerRight,
@@ -26,11 +26,11 @@ export const UserListContextProvider: React.FC<UserListProps<any>['Provider']> =
 
   return (
     <ProviderLayout>
-      <UserListContext.Fragment.Provider value={{ headerTitle, headerRight: headerRight(selectedUsers) }}>
-        <UserListContext.List.Provider value={{ selectedUsers, setSelectedUsers }}>
+      <UserListContexts.Fragment.Provider value={{ headerTitle, headerRight: headerRight(selectedUsers) }}>
+        <UserListContexts.List.Provider value={{ selectedUsers, setSelectedUsers }}>
           {children}
-        </UserListContext.List.Provider>
-      </UserListContext.Fragment.Provider>
+        </UserListContexts.List.Provider>
+      </UserListContexts.Fragment.Provider>
     </ProviderLayout>
   );
 };

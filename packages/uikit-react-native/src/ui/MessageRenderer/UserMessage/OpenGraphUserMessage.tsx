@@ -10,7 +10,7 @@ import type { UserMessageProps } from './index';
 
 type Props = UserMessageProps & { ogMetaData: Sendbird.OGMetaData };
 const OpenGraphUserMessage: React.FC<Props> = ({ message, variant, pressed, ogMetaData }) => {
-  const { LABEL } = useLocalization();
+  const { STRINGS } = useLocalization();
   const { colors, select, palette } = useUIKitTheme();
   const color = colors.ui.message[variant][pressed ? 'pressed' : 'enabled'];
   const [imageNotFound, setImageNotFound] = useState(false);
@@ -21,7 +21,7 @@ const OpenGraphUserMessage: React.FC<Props> = ({ message, variant, pressed, ogMe
           {message.message}
           {Boolean(message.updatedAt) && (
             <Text body3 color={color.textEdited}>
-              {LABEL.GROUP_CHANNEL.MESSAGE_BUBBLE_EDITED_POSTFIX}
+              {STRINGS.GROUP_CHANNEL.MESSAGE_BUBBLE_EDITED_POSTFIX}
             </Text>
           )}
         </URLParsedText>
@@ -38,7 +38,7 @@ const OpenGraphUserMessage: React.FC<Props> = ({ message, variant, pressed, ogMe
             [
               <Icon containerStyle={styles.ogImage} icon={'thumbnail-none'} size={48} color={colors.onBackground02} />,
               <Image
-                source={{ uri: ogMetaData.defaultImage.url }}
+                source={{ uri: ogMetaData.defaultImage?.url }}
                 style={styles.ogImage}
                 resizeMode={'cover'}
                 onError={() => setImageNotFound(true)}

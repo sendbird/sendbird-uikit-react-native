@@ -11,7 +11,7 @@ type Props = {
   onPress: () => void;
 };
 const NewMessagesTooltip: React.FC<Props> = ({ newMessages, visible, onPress }) => {
-  const { LABEL } = useLocalization();
+  const { STRINGS } = useLocalization();
   const { select, palette, colors } = useUIKitTheme();
   if (newMessages.length === 0 || !visible) return null;
   return (
@@ -24,7 +24,7 @@ const NewMessagesTooltip: React.FC<Props> = ({ newMessages, visible, onPress }) 
       ]}
     >
       <Text button color={colors.primary}>
-        {LABEL.GROUP_CHANNEL.LIST_TOOLTIP_NEW_MSG(newMessages)}
+        {STRINGS.GROUP_CHANNEL.LIST_TOOLTIP_NEW_MSG(newMessages)}
       </Text>
     </TouchableOpacity>
   );

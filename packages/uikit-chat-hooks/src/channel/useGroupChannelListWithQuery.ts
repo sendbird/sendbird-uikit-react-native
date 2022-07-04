@@ -4,11 +4,13 @@ import type Sendbird from 'sendbird';
 import type { SendbirdChannel, SendbirdChatSDK } from '@sendbird/uikit-utils';
 import { arrayToMap, useAsyncEffect } from '@sendbird/uikit-utils';
 
+import { useAppFeatures } from '../common/useAppFeatures';
 import { useChannelHandler } from '../handler/useChannelHandler';
 import type { UseGroupChannelList, UseGroupChannelListOptions } from '../types';
 
 type GroupChannelMap = Record<string, Sendbird.GroupChannel>;
 
+const HOOK_NAME = 'useGroupChannelListWithQuery';
 const createGroupChannelListQuery = (
   sdk: SendbirdChatSDK,
   queryCreator: UseGroupChannelListOptions['queryCreator'],
@@ -17,7 +19,7 @@ const createGroupChannelListQuery = (
   if (passedQuery) return passedQuery;
 
   const defaultQuery = sdk.GroupChannel.createMyGroupChannelListQuery();
-  defaultQuery.limit = 10;
+  defaultQuery.limit = 20;
   defaultQuery.includeEmpty = true;
   defaultQuery.memberStateFilter = 'all';
   defaultQuery.order = 'latest_last_message';
@@ -29,6 +31,7 @@ export const useGroupChannelListWithQuery = (
   userId?: string,
   options?: UseGroupChannelListOptions,
 ): UseGroupChannelList => {
+  const { deliveryReceiptEnabled } = useAppFeatures(sdk);
   const queryRef = useRef<Sendbird.GroupChannelListQuery>();
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -45,8 +48,8 @@ export const useGroupChannelListWithQuery = (
     const groupChannels = channels.filter((c): c is Sendbird.GroupChannel => c.isGroupChannel());
     if (clearPrev) setGroupChannelMap(arrayToMap(groupChannels, 'url'));
     else setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(groupChannels, 'url') }));
-    // TODO: check premium feature
-    groupChannels.forEach((channel) => sdk.markAsDelivered(channel.url));
+
+    if (deliveryReceiptEnabled) groupChannels.forEach((channel) => sdk.markAsDelivered(channel.url));
   };
   const deleteChannels = (channelUrls: string[]) => {
     setGroupChannelMap(({ ...draft }) => {
@@ -77,7 +80,7 @@ export const useGroupChannelListWithQuery = (
 
   useChannelHandler(
     sdk,
-    'useGroupChannelListWithQuery',
+    HOOK_NAME,
     {
       onChannelChanged: (channel) => updateChannels([channel], false),
       onChannelFrozen: (channel) => updateChannels([channel], false),
@@ -86,6 +89,11 @@ export const useGroupChannelListWithQuery = (
       onChannelDeleted: (url) => deleteChannels([url]),
       onUserJoined: (channel) => updateChannels([channel], false),
       onUserLeft: (channel, user) => {
+        const isMe = user.userId === userId;
+        if (isMe) deleteChannels([channel.url]);
+        else updateChannels([channel], false);
+      },
+      onUserBanned(channel, user) {
         const isMe = user.userId === userId;
         if (isMe) deleteChannels([channel.url]);
         else updateChannels([channel], false);
@@ -104,8 +112,7 @@ export const useGroupChannelListWithQuery = (
 
   const update = useCallback(
     (channel: Sendbird.GroupChannel) => {
-      // TODO: check premium feature
-      sdk.markAsDelivered(channel.url);
+      if (deliveryReceiptEnabled) sdk.markAsDelivered(channel.url);
       setGroupChannelMap((prev) => ({ ...prev, [channel.url]: channel }));
     },
     [sdk],
@@ -115,7 +122,7 @@ export const useGroupChannelListWithQuery = (
     if (queryRef.current?.hasNext) {
       const channels = await queryRef.current.next();
       setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(channels, 'url') }));
-      channels.forEach((channel) => sdk.markAsDelivered(channel.url));
+      if (deliveryReceiptEnabled) channels.forEach((channel) => sdk.markAsDelivered(channel.url));
     }
   }, [sdk]);
   // ---------- returns methods ends ---------- //

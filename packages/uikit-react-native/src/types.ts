@@ -1,3 +1,5 @@
+import type { ErrorInfo } from 'react';
+
 export type KeyValuePairGet = [string, string | null];
 export type KeyValuePairSet = [string, string];
 export interface LocalCacheStorage {
@@ -10,3 +12,5 @@ export interface LocalCacheStorage {
   multiGet?(keys: string[]): Promise<readonly KeyValuePairGet[] | KeyValuePairGet[]>;
   multiRemove?(keys: string[]): Promise<void>;
 }
+
+export type ErrorBoundaryProps = { error: Error; errorInfo: ErrorInfo; reset: () => void };

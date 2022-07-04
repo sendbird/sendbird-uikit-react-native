@@ -2,22 +2,22 @@
 import React, { createContext } from 'react';
 
 import ProviderLayout from '../../../components/ProviderLayout';
-import type { __domain__ContextType } from '../types';
+import type { __domain__ContextsType } from '../types';
 
-export const __domain__Context: __domain__ContextType = {
+export const __domain__Contexts: __domain__ContextsType = {
   Fragment: createContext({
     headerTitle: '',
   }),
 };
 
-export const __domain__ContextProvider: React.FC = ({ children }) => {
+export const __domain__ContextsProvider: React.FC = ({ children }) => {
   // const [visible, setVisible] = useState(false);
 
   return (
     <ProviderLayout>
-      <__domain__Context.Fragment.Provider value={{ headerTitle: 'LABEL.DOMAIN.HEADER_TITLE' }}>
+      <__domain__Contexts.Fragment.Provider value={{ headerTitle: 'STRINGS.DOMAIN.HEADER_TITLE' }}>
         {children}
-      </__domain__Context.Fragment.Provider>
+      </__domain__Contexts.Fragment.Provider>
     </ProviderLayout>
   );
 };

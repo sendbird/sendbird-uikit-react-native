@@ -12,7 +12,7 @@ import {
 } from '@sendbird/uikit-react-native-foundation';
 
 import { useLocalization } from '../../../contexts/Localization';
-import { GroupChannelListContext } from '../module/moduleContext';
+import { GroupChannelListContexts } from '../module/moduleContext';
 import type { GroupChannelListProps, GroupChannelType } from '../types';
 
 const TYPES: GroupChannelType[] = ['GROUP', 'SUPER_GROUP', 'BROADCAST'];
@@ -29,7 +29,7 @@ const GroupChannelListTypeSelector: React.FC<GroupChannelListProps['TypeSelector
 }) => {
   const { statusBarTranslucent } = useHeaderStyle();
   const { colors } = useUIKitTheme();
-  const typeSelector = useContext(GroupChannelListContext.TypeSelector);
+  const typeSelector = useContext(GroupChannelListContexts.TypeSelector);
   const { visible, hide } = typeSelector;
   const createOnPressType = (type: GroupChannelType) => () => {
     hide();
@@ -87,11 +87,11 @@ const DefaultTypeIcon: React.FC<{ type: GroupChannelType }> = ({ type }) => {
 };
 
 const DefaultTypeText: React.FC<{ type: GroupChannelType }> = ({ type }) => {
-  const { LABEL } = useLocalization();
+  const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
   return (
     <Text caption2 color={colors.onBackground01}>
-      {LABEL.GROUP_CHANNEL_LIST[`TYPE_SELECTOR_${type}`]}
+      {STRINGS.GROUP_CHANNEL_LIST[`TYPE_SELECTOR_${type}`]}
     </Text>
   );
 };

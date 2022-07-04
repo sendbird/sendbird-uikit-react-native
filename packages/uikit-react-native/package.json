@@ -57,7 +57,8 @@
     "date-fns": "^2.28.0",
     "react": ">=16.13.1",
     "react-native": ">=0.63.3",
-    "react-native-safe-area-context": "^3.3.2"
+    "react-native-safe-area-context": "^3.3.2",
+    "sendbird": "^3.1.16"
   },
   "react-native-builder-bob": {
     "source": "src",

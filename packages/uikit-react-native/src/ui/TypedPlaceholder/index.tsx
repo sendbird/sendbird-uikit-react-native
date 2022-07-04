@@ -12,26 +12,28 @@ type Props = {
     | 'no-results-found'
     | 'error-wrong'
     | 'loading';
+  onPressRetry?: () => void;
 };
-const TypedPlaceholder: React.FC<Props> = ({ type }) => {
-  const { LABEL } = useLocalization();
+const TypedPlaceholder: React.FC<Props> = ({ type, onPressRetry }) => {
+  const { STRINGS } = useLocalization();
   switch (type) {
     case 'no-banned-members':
-      return <Placeholder icon={'ban'} message={LABEL.PLACEHOLDER.NO_BANNED_MEMBERS} />;
+      return <Placeholder icon={'ban'} message={STRINGS.PLACEHOLDER.NO_BANNED_MEMBERS} />;
     case 'no-channels':
-      return <Placeholder icon={'chat'} message={LABEL.PLACEHOLDER.NO_CHANNELS} />;
+      return <Placeholder icon={'chat'} message={STRINGS.PLACEHOLDER.NO_CHANNELS} />;
     case 'no-messages':
-      return <Placeholder icon={'message'} message={LABEL.PLACEHOLDER.NO_MESSAGES} />;
+      return <Placeholder icon={'message'} message={STRINGS.PLACEHOLDER.NO_MESSAGES} />;
     case 'no-muted-members':
-      return <Placeholder icon={'mute'} message={LABEL.PLACEHOLDER.NO_MUTED_MEMBERS} />;
+      return <Placeholder icon={'mute'} message={STRINGS.PLACEHOLDER.NO_MUTED_MEMBERS} />;
     case 'no-results-found':
-      return <Placeholder icon={'search'} message={LABEL.PLACEHOLDER.NO_RESULTS_FOUND} />;
+      return <Placeholder icon={'search'} message={STRINGS.PLACEHOLDER.NO_RESULTS_FOUND} />;
     case 'error-wrong':
       return (
         <Placeholder
           icon={'error'}
-          message={LABEL.PLACEHOLDER.ERROR_SOMETHING_IS_WRONG.MESSAGE}
-          errorRetryLabel={LABEL.PLACEHOLDER.ERROR_SOMETHING_IS_WRONG.RETRY_LABEL}
+          message={STRINGS.PLACEHOLDER.ERROR.MESSAGE}
+          errorRetryLabel={STRINGS.PLACEHOLDER.ERROR.RETRY_LABEL}
+          onPressRetry={onPressRetry}
         />
       );
     case 'loading':

@@ -23,12 +23,12 @@ import { Routes } from '../../libs/navigation';
  * import { useNavigation } from "@react-navigation/native";
  * import { useHeaderHeight } from '@react-navigation/elements';
  *
- * import { GroupChannelContext, GroupChannelModule } from '@sendbird/uikit-react-native-core';
+ * import { GroupChannelContexts, GroupChannelModule } from '@sendbird/uikit-react-native-core';
  * import { Icon } from '@sendbird/uikit-react-native-foundation';
  *
  * const UseReactNavigationHeader: GroupChannelModule['Header'] = ({ onPressHeaderRight, onPressHeaderLeft }) => {
  *   const navigation = useNavigation();
- *   const { headerTitle } = useContext(GroupChannelContext.Fragment);
+ *   const { headerTitle } = useContext(GroupChannelContexts.Fragment);
  *   useEffect(() => {
  *     navigation.setOptions({
  *       headerShown: true,
@@ -78,13 +78,13 @@ const GroupChannelScreen: React.FC = () => {
 
   return (
     <GroupChannelFragment
+      staleChannel={staleChannel}
       onPressImageMessage={(msg, uri) => {
         // Navigate to photo preview
         Logger.log('file uri', msg.name, uri);
       }}
-      staleChannel={staleChannel}
       onChannelDeleted={() => {
-        // Navigate to channel list
+        // Should leave channel, navigate to channel list
         navigation.navigate(Routes.GroupChannelList);
       }}
       onPressHeaderLeft={() => {
@@ -93,7 +93,7 @@ const GroupChannelScreen: React.FC = () => {
       }}
       onPressHeaderRight={() => {
         // Navigate to group channel information
-        navigation.navigate(Routes.GroupChannelInfo, { serializedChannel: params.serializedChannel });
+        navigation.navigate(Routes.GroupChannelSettings, { serializedChannel: params.serializedChannel });
       }}
     />
   );

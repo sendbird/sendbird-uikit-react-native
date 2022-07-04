@@ -17,6 +17,7 @@
     ]
   },
   "scripts": {
+    "postinstall": "patch-package",
     "prepare": "lerna run --stream --sort prepare",
     "reset": "find . -type dir -name node_modules | xargs rm -rf",
     "clean": "lerna run clean",
@@ -49,7 +50,7 @@
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.5.0",
     "jest": "^27.4.7",
-    "lerna": "^4.0.0",
+    "lerna": "^5.1.6",
     "patch-package": "^6.4.7",
     "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.5.1",

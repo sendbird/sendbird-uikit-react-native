@@ -184,6 +184,7 @@ export type UseGroupChannelMessagesOptions = {
   queryCreator?: () => Sendbird.PreviousMessageListQuery;
   collectionCreator?: () => Sendbird.MessageCollection;
   enableCollectionWithoutLocalCache?: boolean;
+  onChannelDeleted?: () => void;
 };
 
 /**
@@ -218,6 +219,7 @@ export interface UseUserList<User> {
    * */
   next: () => Promise<void>;
 }
+
 export type UseUserListOptions<User> = {
   sortComparator?: (a: User, b: User) => number;
   queryCreator?: () => CustomQueryInterface<User>;

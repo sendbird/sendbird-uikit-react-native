@@ -1,0 +1,17 @@
+diff --git a/node_modules/@lerna/conventional-commits/lib/constants.js b/node_modules/@lerna/conventional-commits/lib/constants.js
+index 30d177d..4b5b6cf 100644
+--- a/node_modules/@lerna/conventional-commits/lib/constants.js
++++ b/node_modules/@lerna/conventional-commits/lib/constants.js
+@@ -11,8 +11,8 @@ exports.COMMIT_GUIDELINE =
+   "See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.";
+ 
+ exports.CHANGELOG_HEADER = [
+-  "# Change Log",
+-  "",
+-  "All notable changes to this project will be documented in this file.",
+-  exports.COMMIT_GUIDELINE,
++  "# Changelog",
++  // "",
++  // "All notable changes to this project will be documented in this file.",
++  // exports.COMMIT_GUIDELINE,
+ ].join(EOL);

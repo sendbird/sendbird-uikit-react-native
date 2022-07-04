@@ -11,15 +11,15 @@ import {
   truncate,
 } from '@sendbird/uikit-utils';
 
-export interface LabelLocale {
+export interface StringsLocale {
   locale: 'en';
 }
 
 /**
- * LabelSet interface
+ * StringSet interface
  * Do not configure over 3 depths (for overrides easy)
  * */
-export interface LabelSet {
+export interface StringSet {
   GROUP_CHANNEL: {
     /** GroupChannel > Header */
     HEADER_TITLE: (currentUserId: string, channel: Sendbird.GroupChannel) => string;
@@ -60,17 +60,17 @@ export interface LabelSet {
     DIALOG_ATTACHMENT_PHOTO_LIBRARY: string;
     DIALOG_ATTACHMENT_FILES: string;
   };
-  GROUP_CHANNEL_INFO: {
-    /** GroupChannelInfo > Header */
+  GROUP_CHANNEL_SETTINGS: {
+    /** GroupChannelSettings > Header */
     HEADER_TITLE: string;
     HEADER_RIGHT: string;
 
-    /** GroupChannelInfo > Menu */
+    /** GroupChannelSettings > Menu */
     MENU_NOTIFICATION: string;
     MENU_MEMBERS: string;
     MENU_LEAVE_CHANNEL: string;
 
-    /** GroupChannelInfo > Dialog */
+    /** GroupChannelSettings > Dialog */
     DIALOG_CHANGE_NAME: string;
     DIALOG_CHANGE_IMAGE: string;
     DIALOG_CHANGE_NAME_PROMPT_TITLE: string;
@@ -126,7 +126,7 @@ export interface LabelSet {
     HEADER_RIGHT: <T>(params: { selectedUsers: Array<T> }) => string;
   };
   // UI
-  STRINGS: {
+  LABELS: {
     USER_NO_NAME: string;
     TYPING_INDICATOR_TYPINGS: (users: Sendbird.User[]) => string | undefined;
   };
@@ -136,7 +136,7 @@ export interface LabelSet {
     NO_MESSAGES: string;
     NO_MUTED_MEMBERS: string;
     NO_RESULTS_FOUND: string;
-    ERROR_SOMETHING_IS_WRONG: {
+    ERROR: {
       MESSAGE: string;
       RETRY_LABEL: string;
     };
@@ -162,30 +162,30 @@ export interface LabelSet {
   };
 }
 
-type LabelCreateOptions = {
+type StringSetCreateOptions = {
   dateLocale: Locale;
-  overrides?: PartialDeep<LabelSet>;
+  overrides?: PartialDeep<StringSet>;
 };
 
 /**
- * Create label set
- * You can create localized labels, you should provide locale for date and string as a parameters
+ * Create string set
+ * You can create localized String set, you should provide locale for date and string as a parameters
  *
- * @param {LabelCreateOptions.dateLocale} dateLocale Date locale (from date-fns)
- * @param {LabelCreateOptions.overrides} [overrides] Localized label strings
+ * @param {StringSetCreateOptions.dateLocale} dateLocale Date locale (from date-fns)
+ * @param {StringSetCreateOptions.overrides} [overrides] Localized strings
  * */
-export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): LabelSet => {
-  const USER_NO_NAME = overrides?.STRINGS?.USER_NO_NAME ?? '(No name)';
+export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOptions): StringSet => {
+  const USER_NO_NAME = overrides?.LABELS?.USER_NO_NAME ?? '(No name)';
   return {
     GROUP_CHANNEL: {
       HEADER_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel, USER_NO_NAME),
-      LIST_BANNER_FROZEN: 'Channel frozen',
+      LIST_BANNER_FROZEN: 'Channel is frozen',
       LIST_DATE_SEPARATOR: (date, locale) => dateSeparator(date, locale ?? dateLocale),
       LIST_TOOLTIP_NEW_MSG: (newMessages) => `${newMessages.length} new messages`,
 
       MESSAGE_BUBBLE_TIME: (message, locale) => messageTime(new Date(message.createdAt), locale ?? dateLocale),
       MESSAGE_BUBBLE_FILE_TITLE: (message) => truncate(message.name, { mode: 'mid', maxLen: 20 }),
-      MESSAGE_BUBBLE_EDITED_POSTFIX: ' (Edited)',
+      MESSAGE_BUBBLE_EDITED_POSTFIX: ' (edited)',
       MESSAGE_BUBBLE_UNKNOWN_TITLE: () => '(Unknown message type)',
       MESSAGE_BUBBLE_UNKNOWN_DESC: () => 'Cannot read this message.',
 
@@ -209,14 +209,14 @@ export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): 
       DIALOG_ATTACHMENT_FILES: 'Files',
       ...overrides?.GROUP_CHANNEL,
     },
-    GROUP_CHANNEL_INFO: {
+    GROUP_CHANNEL_SETTINGS: {
       HEADER_TITLE: 'Channel information',
       HEADER_RIGHT: 'Edit',
-      MENU_NOTIFICATION: 'Notification',
+      MENU_NOTIFICATION: 'Notifications',
       MENU_MEMBERS: 'Members',
       MENU_LEAVE_CHANNEL: 'Leave channel',
       DIALOG_CHANGE_NAME: 'Change channel name',
-      DIALOG_CHANGE_NAME_PROMPT_TITLE: 'Change name',
+      DIALOG_CHANGE_NAME_PROMPT_TITLE: 'Change channel name',
       DIALOG_CHANGE_NAME_PROMPT_PLACEHOLDER: 'Enter name',
       DIALOG_CHANGE_NAME_PROMPT_OK: 'Save',
       DIALOG_CHANGE_NAME_PROMPT_CANCEL: 'Cancel',
@@ -224,7 +224,7 @@ export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): 
       DIALOG_CHANGE_IMAGE_MENU_TITLE: 'Change channel image',
       DIALOG_CHANGE_IMAGE_MENU_CAMERA: 'Take photo',
       DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY: 'Choose photo',
-      ...overrides?.GROUP_CHANNEL_INFO,
+      ...overrides?.GROUP_CHANNEL_SETTINGS,
     },
     GROUP_CHANNEL_LIST: {
       HEADER_TITLE: 'Channels',
@@ -267,11 +267,11 @@ export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): 
       HEADER_RIGHT: ({ selectedUsers }) => {
         const len = selectedUsers.length;
         if (len === 0) return 'Invite';
-        return `${len} Invite`;
+        return `${len} invites`;
       },
       ...overrides?.GROUP_CHANNEL_INVITE,
     },
-    STRINGS: {
+    LABELS: {
       USER_NO_NAME,
       TYPING_INDICATOR_TYPINGS: (users, NO_NAME = USER_NO_NAME) => {
         const userNames = users.map((u) => u.nickname || NO_NAME);
@@ -280,19 +280,19 @@ export const createBaseLabel = ({ dateLocale, overrides }: LabelCreateOptions): 
         if (users.length === 2) return `${userNames.join(' and ')} are typing...`;
         return 'Several people are typing...';
       },
-      ...overrides?.STRINGS,
+      ...overrides?.LABELS,
     },
     PLACEHOLDER: {
       NO_BANNED_MEMBERS: 'No banned members',
-      NO_CHANNELS: 'There are no channels',
-      NO_MESSAGES: 'There are no messages',
+      NO_CHANNELS: 'No channels',
+      NO_MESSAGES: 'No messages',
       NO_MUTED_MEMBERS: 'No muted members',
       NO_RESULTS_FOUND: 'No results found',
       ...overrides?.PLACEHOLDER,
-      ERROR_SOMETHING_IS_WRONG: {
-        MESSAGE: 'Something is wrong',
+      ERROR: {
+        MESSAGE: 'Something went wrong',
         RETRY_LABEL: 'Retry',
-        ...overrides?.PLACEHOLDER?.ERROR_SOMETHING_IS_WRONG,
+        ...overrides?.PLACEHOLDER?.ERROR,
       },
     },
     DIALOG: {
