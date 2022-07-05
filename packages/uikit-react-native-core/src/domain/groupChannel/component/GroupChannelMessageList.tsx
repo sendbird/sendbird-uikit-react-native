@@ -252,7 +252,7 @@ const useGetMessagePressActions = ({
       const ext = getFileExtension(msg.name);
       const fileType = getFileType(ext);
       if (fileType === 'image') {
-        response.onPress = () => onPressImageMessage(msg, getAvailableUriFromFileMessage(msg));
+        response.onPress = () => onPressImageMessage?.(msg, getAvailableUriFromFileMessage(msg));
       } else {
         response.onPress = () => Linking.openURL(msg.url);
       }
