@@ -6,7 +6,7 @@ import { Logger, useIIFE } from '@sendbird/uikit-utils';
 import { usePlatformService } from '../contexts/PlatformService';
 import { useSendbirdChat } from '../contexts/SendbirdChat';
 
-const usePushTokenRegistration = (forceFCM: boolean) => {
+const usePushTokenRegistration = () => {
   const { sdk } = useSendbirdChat();
   const { notificationService } = usePlatformService();
 
@@ -14,17 +14,15 @@ const usePushTokenRegistration = (forceFCM: boolean) => {
   const [registerToken, unregisterToken, getToken] = useIIFE(() => {
     return [
       Platform.select({
-        ios: (token: string) =>
-          forceFCM ? sdk.registerGCMPushTokenForCurrentUser(token) : sdk.registerAPNSPushTokenForCurrentUser(token),
+        ios: (token: string) => sdk.registerAPNSPushTokenForCurrentUser(token),
         default: (token: string) => sdk.registerGCMPushTokenForCurrentUser(token),
       }),
       Platform.select({
-        ios: (token: string) =>
-          forceFCM ? sdk.unregisterGCMPushTokenForCurrentUser(token) : sdk.unregisterAPNSPushTokenForCurrentUser(token),
+        ios: (token: string) => sdk.unregisterAPNSPushTokenForCurrentUser(token),
         default: (token: string) => sdk.unregisterGCMPushTokenForCurrentUser(token),
       }),
       Platform.select({
-        ios: forceFCM ? notificationService.getFCMToken : notificationService.getAPNSToken,
+        ios: notificationService.getAPNSToken,
         default: notificationService.getFCMToken,
       }),
     ];
@@ -49,9 +47,7 @@ const usePushTokenRegistration = (forceFCM: boolean) => {
     }
 
     // Remove listener
-    refreshListener.current = notificationService.onTokenRefresh(
-      (token) => Platform.OS !== 'ios' && registerToken(token),
-    );
+    refreshListener.current = notificationService.onTokenRefresh(registerToken);
   }, [notificationService, getToken, registerToken]);
 
   const unregisterPushTokenForCurrentUser = useCallback(async () => {

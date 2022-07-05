@@ -1,4 +1,5 @@
 import type RNFBMessaging from '@react-native-firebase/messaging';
+import { Platform } from 'react-native';
 
 import type { NotificationServiceInterface } from './types';
 
@@ -24,7 +25,9 @@ const createNativeNotificationService = (messagingModule: typeof RNFBMessaging):
       return authorizedStatus.includes(status);
     },
     onTokenRefresh(handler: (token: string) => void): () => void | undefined {
-      return module.onTokenRefresh(handler);
+      return module.onTokenRefresh((token) => {
+        if (Platform.OS === 'android') handler(token);
+      });
     },
   };
 };

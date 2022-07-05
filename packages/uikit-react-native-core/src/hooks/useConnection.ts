@@ -11,10 +11,10 @@ const cacheStrictCodes = [400300, 400301, 400302, 400310];
 
 const useConnection = () => {
   const { sdk, enableAutoPushTokenRegistration, setCurrentUser } = useSendbirdChat();
-  const { registerPushTokenForCurrentUser, unregisterPushTokenForCurrentUser } = usePushTokenRegistration(false);
+  const { registerPushTokenForCurrentUser, unregisterPushTokenForCurrentUser } = usePushTokenRegistration();
 
   const connect = useCallback(
-    async (userId: string, opts?: ConnectOptions) => {
+    async (userId: string, opts?: ConnectOptions): Promise<Sendbird.User> => {
       return new Promise((resolve, reject) => {
         const callback: Sendbird.userCallback = async (user, error) => {
           if (error && sdk.isCacheEnabled && cacheStrictCodes.some((code) => error.code === code)) {
