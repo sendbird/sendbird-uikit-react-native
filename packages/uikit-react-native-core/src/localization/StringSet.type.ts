@@ -128,6 +128,7 @@ export interface StringSet {
   // UI
   LABELS: {
     USER_NO_NAME: string;
+    CHANNEL_NO_MEMBERS: string;
     TYPING_INDICATOR_TYPINGS: (users: Sendbird.User[]) => string | undefined;
   };
   PLACEHOLDER: {
@@ -176,9 +177,11 @@ type StringSetCreateOptions = {
  * */
 export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOptions): StringSet => {
   const USER_NO_NAME = overrides?.LABELS?.USER_NO_NAME ?? '(No name)';
+  const CHANNEL_NO_MEMBERS = overrides?.LABELS?.CHANNEL_NO_MEMBERS ?? '(No members)';
   return {
     GROUP_CHANNEL: {
-      HEADER_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel, USER_NO_NAME),
+      HEADER_TITLE: (currentUserId, channel) =>
+        getGroupChannelTitle(currentUserId, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       LIST_BANNER_FROZEN: 'Channel is frozen',
       LIST_DATE_SEPARATOR: (date, locale) => dateSeparator(date, locale ?? dateLocale),
       LIST_TOOLTIP_NEW_MSG: (newMessages) => `${newMessages.length} new messages`,
@@ -228,14 +231,16 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     },
     GROUP_CHANNEL_LIST: {
       HEADER_TITLE: 'Channels',
-      CHANNEL_PREVIEW_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel, USER_NO_NAME),
+      CHANNEL_PREVIEW_TITLE: (currentUserId, channel) =>
+        getGroupChannelTitle(currentUserId, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       CHANNEL_PREVIEW_TITLE_CAPTION: (channel, locale) => getGroupChannelPreviewTime(channel, locale ?? dateLocale),
       CHANNEL_PREVIEW_BODY: (channel) => getGroupChannelLastMessage(channel),
       TYPE_SELECTOR_HEADER_TITLE: 'Channel type',
       TYPE_SELECTOR_GROUP: 'Group',
       TYPE_SELECTOR_SUPER_GROUP: 'Super group',
       TYPE_SELECTOR_BROADCAST: 'Broadcast',
-      DIALOG_CHANNEL_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel, USER_NO_NAME),
+      DIALOG_CHANNEL_TITLE: (currentUserId, channel) =>
+        getGroupChannelTitle(currentUserId, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       DIALOG_CHANNEL_NOTIFICATION: (channel) => {
         if (!channel) return '';
         if (channel.myPushTriggerOption === 'off') return 'Turn on notifications';
@@ -273,6 +278,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     },
     LABELS: {
       USER_NO_NAME,
+      CHANNEL_NO_MEMBERS,
       TYPING_INDICATOR_TYPINGS: (users, NO_NAME = USER_NO_NAME) => {
         const userNames = users.map((u) => u.nickname || NO_NAME);
         if (userNames.length === 0) return;

@@ -40,7 +40,12 @@ const GroupChannelSettingsInfo: React.FC<GroupChannelSettingsProps['Info']> = ()
           ],
         )}
         <Text h1 numberOfLines={1}>
-          {getGroupChannelTitle(currentUser.userId, channel, STRINGS.LABELS.USER_NO_NAME)}
+          {getGroupChannelTitle(
+            currentUser.userId,
+            channel,
+            STRINGS.LABELS.USER_NO_NAME,
+            STRINGS.LABELS.CHANNEL_NO_MEMBERS,
+          )}
         </Text>
       </View>
       <Divider />

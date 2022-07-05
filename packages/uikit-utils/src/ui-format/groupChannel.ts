@@ -10,10 +10,11 @@ export const getGroupChannelTitle = (
   currentUserId: string,
   channel: Sendbird.GroupChannel,
   EMPTY_USERNAME = '(No name)',
+  NO_MEMBERS = '(No members)',
   DEFAULT_CHANNEL_NAME = 'Group Channel',
 ) => {
   if (channel.name !== DEFAULT_CHANNEL_NAME && channel.name !== '') return channel.name;
-  if (channel.memberCount === 1) return DEFAULT_CHANNEL_NAME;
+  if (channel.memberCount === 1) return NO_MEMBERS;
   return channel.members
     .filter(({ userId }) => userId !== currentUserId)
     .map(({ nickname }) => nickname || EMPTY_USERNAME)
