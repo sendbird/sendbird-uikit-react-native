@@ -86,6 +86,7 @@ const ChatFlatList = forwardRef<ChatFlatListRef, Props>(function CustomFlatList(
       removeClippedSubviews
       onEndReachedThreshold={0.5}
       onEndReached={onTopReached}
+      scrollEventThrottle={16}
       onScroll={_onScroll}
     />
   );
