@@ -17,7 +17,7 @@ const createMessageCollection = (
   if (creator) return creator();
   const collection = channel.createMessageCollection();
   const filter = new sdk.MessageFilter();
-  return collection.setLimit(100).setStartingPoint(Date.now()).setFilter(filter).build();
+  return collection.setLimit(100).setFilter(filter).build();
 };
 
 const HOOK_NAME = 'useGroupChannelMessagesWithCollection';
