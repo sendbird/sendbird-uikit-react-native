@@ -2,14 +2,14 @@ import React, { useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
 import type Sendbird from 'sendbird';
 
-import { useUserList } from '@sendbird/uikit-chat-hooks';
+import { useActiveGroupChannel, useUserList } from '@sendbird/uikit-chat-hooks';
 import type { GroupChannelInviteFragment, UserListModule } from '@sendbird/uikit-react-native-core';
 import { createUserListModule, useLocalization, useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { Logger } from '@sendbird/uikit-utils';
 
 import UserSelectableBar from '../ui/UserSelectableBar';
 
-const DefaultUserIdGenerator = <T,>(users: T[]) => {
+const defaultUserIdsGenerator = <T,>(users: T[]) => {
   const userIds = users
     .map((user) => {
       // @ts-ignore
@@ -36,7 +36,7 @@ const createGroupChannelInviteFragment = <UserType,>(
     channel,
     onPressHeaderLeft,
     onInviteMembers,
-    userIdsGenerator = DefaultUserIdGenerator,
+    userIdsGenerator = defaultUserIdsGenerator,
     sortComparator,
     queryCreator,
     renderUser,
@@ -49,6 +49,8 @@ const createGroupChannelInviteFragment = <UserType,>(
       sortComparator,
     });
 
+    const { activeChannel } = useActiveGroupChannel(sdk, channel);
+
     const _renderUser: NonNullable<typeof renderUser> = useCallback(
       (user, selectedUsers, setSelectedUsers) => {
         if (queryCreator && !renderUser) {
@@ -60,7 +62,7 @@ const createGroupChannelInviteFragment = <UserType,>(
         const sbSelectedUsers = selectedUsers as unknown as Sendbird.User[];
         const sbSetSelectedUsers = setSelectedUsers as unknown as React.Dispatch<React.SetStateAction<Sendbird.User[]>>;
 
-        const joinedUserIds = channel.members.map((u) => u.userId);
+        const joinedUserIds = activeChannel.members.map((u) => u.userId);
         const userIdx = sbSelectedUsers.findIndex((u) => u.userId === sbUser.userId);
         const isSelected = userIdx > -1;
 
@@ -87,7 +89,7 @@ const createGroupChannelInviteFragment = <UserType,>(
           </TouchableOpacity>
         );
       },
-      [renderUser, queryCreator],
+      [activeChannel, renderUser, queryCreator],
     );
     return (
       <UserListModule.Provider
@@ -99,7 +101,7 @@ const createGroupChannelInviteFragment = <UserType,>(
           onPressHeaderLeft={onPressHeaderLeft}
           onPressHeaderRight={async (users) => {
             const userIds = userIdsGenerator(users);
-            const updatedChannel = await channel.inviteWithUserIds(userIds);
+            const updatedChannel = await activeChannel.inviteWithUserIds(userIds);
             onInviteMembers(updatedChannel);
           }}
         />

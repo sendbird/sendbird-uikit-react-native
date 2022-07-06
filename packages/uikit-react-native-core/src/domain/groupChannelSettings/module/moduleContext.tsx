@@ -1,7 +1,7 @@
-import React, { createContext, useCallback, useEffect, useState } from 'react';
+import React, { createContext, useCallback } from 'react';
 import type Sendbird from 'sendbird';
 
-import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
+import { useActiveGroupChannel, useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { useActionMenu, useBottomSheet, usePrompt, useToast } from '@sendbird/uikit-react-native-foundation';
 import { NOOP, isDifferentChannel, useForceUpdate, useUniqId } from '@sendbird/uikit-utils';
 
@@ -27,14 +27,11 @@ export const GroupChannelSettingsContextsProvider: React.FC<GroupChannelSettings
 }) => {
   const uniqId = useUniqId(HOOK_NAME);
   const forceUpdate = useForceUpdate();
-  const [activeChannel, setActiveChannel] = useState(staleChannel);
   const { STRINGS } = useLocalization();
   const { sdk } = useSendbirdChat();
   const { fileService } = usePlatformService();
 
-  useEffect(() => {
-    setActiveChannel(staleChannel);
-  }, [staleChannel.url]);
+  const { activeChannel, setActiveChannel } = useActiveGroupChannel(sdk, staleChannel);
 
   const onChannelChanged = (channel: Sendbird.GroupChannel | Sendbird.OpenChannel) => {
     if (isDifferentChannel(channel, activeChannel) || !channel.isGroupChannel()) return;

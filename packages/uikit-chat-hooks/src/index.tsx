@@ -1,5 +1,6 @@
 export { useGroupChannelList } from './channel/useGroupChannelList';
 export { useGroupChannelMessages } from './channel/useGroupChannelMessages';
+export { useActiveGroupChannel } from './channel/useActiveGroupChannel';
 
 export { useUserList } from './common/useUserList';
 export { usePushTrigger } from './common/usePushTrigger';

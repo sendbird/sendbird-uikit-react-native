@@ -1,12 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import type Sendbird from 'sendbird';
 
-import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
+import type { SendbirdChannel, SendbirdChatSDK } from '@sendbird/uikit-utils';
 import { Logger, NOOP, isDifferentChannel, useForceUpdate, useIsMountedRef } from '@sendbird/uikit-utils';
 
 import { useAppFeatures } from '../../common/useAppFeatures';
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';
+import { useActiveGroupChannel } from '../useActiveGroupChannel';
 import { useGroupChannelMessagesReducer } from './reducer';
 
 const createMessageCollection = (
@@ -38,13 +39,9 @@ export const useGroupChannelMessagesWithCollection = (
 
   const collectionRef = useRef<Sendbird.MessageCollection>();
 
-  // NOTE: We cannot determine the channel object of Sendbird SDK is stale or not, so force update after setActiveChannel
-  const [activeChannel, setActiveChannel] = useState(() => staleChannel);
+  // NOTE: We cannot determine the channel object of Sendbird SDK is stale or not, so force update af
+  const { activeChannel, setActiveChannel } = useActiveGroupChannel(sdk, staleChannel);
   const forceUpdate = useForceUpdate();
-
-  useEffect(() => {
-    setActiveChannel(staleChannel);
-  }, [staleChannel.url]);
 
   const {
     loading,
@@ -73,8 +70,15 @@ export const useGroupChannelMessagesWithCollection = (
     }
   };
 
+  const updateChannel = (channel: SendbirdChannel) => {
+    if (channel.isGroupChannel() && !isDifferentChannel(channel, activeChannel)) {
+      setActiveChannel(channel);
+      forceUpdate();
+    }
+  };
+
   const init = useCallback(
-    async (uid?: string) => {
+    async (uid?: string, callback?: () => void) => {
       if (collectionRef.current) collectionRef.current?.dispose();
 
       if (uid) {
@@ -91,6 +95,7 @@ export const useGroupChannelMessagesWithCollection = (
               updateMessages(messages, true, sdk.currentUser.userId);
               updateMessages(collectionRef.current?.pendingMessages ?? [], false, sdk.currentUser.userId);
               updateMessages(collectionRef.current?.failedMessages ?? [], false, sdk.currentUser.userId);
+              if (messages?.length) callback?.();
             }
           })
           .onApiResult((err, messages) => {
@@ -103,19 +108,22 @@ export const useGroupChannelMessagesWithCollection = (
                 updateMessages(collectionRef.current?.failedMessages ?? [], false, sdk.currentUser.userId);
               }
             }
+            callback?.();
           });
 
         collectionRef.current.setMessageCollectionHandler({
-          onMessagesAdded(_, __, messages) {
+          onMessagesAdded(_, channel, messages) {
             disposeManuallyAfterUnmounted();
             channelMarkAs();
             updateNextMessages(messages, false, sdk.currentUser.userId);
+            updateChannel(channel);
           },
-          onMessagesUpdated(_, __, messages) {
+          onMessagesUpdated(_, channel, messages) {
             disposeManuallyAfterUnmounted();
             updateMessages(messages, false, sdk.currentUser.userId);
+            updateChannel(channel);
           },
-          onMessagesDeleted(_, __, messages) {
+          onMessagesDeleted(_, channel, messages) {
             disposeManuallyAfterUnmounted();
             const msgIds = messages.map((m) => m.messageId);
             const reqIds = messages
@@ -124,6 +132,7 @@ export const useGroupChannelMessagesWithCollection = (
 
             deleteMessages(msgIds, reqIds);
             deleteNextMessages(msgIds, reqIds);
+            updateChannel(channel);
           },
           onChannelDeleted() {
             disposeManuallyAfterUnmounted();
@@ -131,10 +140,7 @@ export const useGroupChannelMessagesWithCollection = (
           },
           onChannelUpdated(_, channel) {
             disposeManuallyAfterUnmounted();
-            if (channel.isGroupChannel() && !isDifferentChannel(channel, activeChannel)) {
-              setActiveChannel(channel);
-              forceUpdate();
-            }
+            updateChannel(channel);
           },
           onHugeGapDetected() {
             disposeManuallyAfterUnmounted();
@@ -169,8 +175,7 @@ export const useGroupChannelMessagesWithCollection = (
     // NOTE: Cache read is heavy synchronous task, and it prevents smooth ui transition
     setTimeout(async () => {
       updateLoading(true);
-      await init(userId);
-      updateLoading(false);
+      init(userId, () => updateLoading(false));
     }, 0);
   }, [init, userId]);
 
@@ -182,8 +187,7 @@ export const useGroupChannelMessagesWithCollection = (
 
   const refresh: UseGroupChannelMessages['refresh'] = useCallback(async () => {
     updateRefreshing(true);
-    await init(userId);
-    updateRefreshing(false);
+    init(userId, () => updateRefreshing(false));
   }, [init, userId]);
 
   const prev: UseGroupChannelMessages['prev'] = useCallback(async () => {
