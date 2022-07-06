@@ -9,9 +9,8 @@ import { Logger } from '@sendbird/uikit-utils';
 
 import UserSelectableBar from '../ui/UserSelectableBar';
 
-const PassValue = <T,>(v: T) => v;
-
-const DefaultUserIdGenerator = <T,>(users: T[]) => {
+const passValue = <T,>(v: T) => v;
+const defaultUserIdsGenerator = <T,>(users: T[]) => {
   const userIds = users
     .map((user) => {
       // @ts-ignore
@@ -35,9 +34,9 @@ const createGroupChannelCreateFragment = <UserType,>(
 
   return ({
     Header,
-    userIdsGenerator = DefaultUserIdGenerator,
+    userIdsGenerator = defaultUserIdsGenerator,
     onPressHeaderLeft,
-    onBeforeCreateChannel = PassValue,
+    onBeforeCreateChannel = passValue,
     onCreateChannel,
     sortComparator,
     queryCreator,
@@ -61,6 +60,9 @@ const createGroupChannelCreateFragment = <UserType,>(
         const sbUser = user as unknown as Sendbird.User;
         const sbSelectedUsers = selectedUsers as unknown as Sendbird.User[];
         const sbSetSelectedUsers = setSelectedUsers as unknown as React.Dispatch<React.SetStateAction<Sendbird.User[]>>;
+
+        const isMe = sbUser.userId === currentUser?.userId;
+        if (isMe) return null;
 
         const userIdx = sbSelectedUsers.findIndex((u) => u.userId === sbUser.userId);
         const isSelected = userIdx > -1;
@@ -87,6 +89,7 @@ const createGroupChannelCreateFragment = <UserType,>(
       },
       [renderUser, queryCreator],
     );
+
     return (
       <UserListModule.Provider
         headerRight={(selectedUsers) => STRINGS.GROUP_CHANNEL_CREATE.HEADER_RIGHT({ selectedUsers })}
