@@ -160,6 +160,9 @@ export interface StringSet {
     DELETE_MSG_ERROR: string;
     SEND_MSG_ERROR: string;
     UPDATE_MSG_ERROR: string;
+    TURN_ON_NOTIFICATIONS_ERROR: string;
+    TURN_OFF_NOTIFICATIONS_ERROR: string;
+    LEAVE_CHANNEL_ERROR: string;
   };
 }
 
@@ -320,6 +323,9 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       RESEND_MSG_ERROR: "Couldn't send message.",
       SEND_MSG_ERROR: "Couldn't send message.",
       UPDATE_MSG_ERROR: "Couldn't edit message.",
+      TURN_ON_NOTIFICATIONS_ERROR: "Couldn't turn on notifications.",
+      TURN_OFF_NOTIFICATIONS_ERROR: "Couldn't turn off notifications.",
+      LEAVE_CHANNEL_ERROR: "Couldn't leave channel.",
       ...overrides?.TOAST,
     },
   };
