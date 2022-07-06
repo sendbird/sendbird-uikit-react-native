@@ -32,7 +32,13 @@ export function messageKeyExtractor(message: SendbirdMessage): string {
 // |     succeeded     | timestamp(A) / '' |    id from DB   |    timestamp(C)   |
 // |-------------------|-------------------|-----------------|-------------------|
 export function messageComparator<T extends SendbirdMessage>(a: T, b: T) {
-  return b.createdAt - a.createdAt;
+  let aStatusOffset = 0;
+  let bStatusOffset = 0;
+
+  if (a.sendingStatus !== 'succeeded') aStatusOffset = 999999;
+  if (b.sendingStatus !== 'succeeded') bStatusOffset = 999999;
+
+  return b.createdAt + bStatusOffset - (a.createdAt + aStatusOffset);
 }
 
 export function hasSameSender(a?: SendbirdMessage, b?: SendbirdMessage) {
@@ -70,11 +76,11 @@ export function calcMessageGrouping(
 
 export function getMessageUniqId(msg: SendbirdMessage) {
   if (msg.isUserMessage() || msg.isFileMessage()) {
-    if (msg.sendingStatus === 'succeeded') return msg.messageId + '';
+    if (msg.sendingStatus === 'succeeded') return String(msg.messageId);
     return msg.reqId;
   }
 
-  return msg.messageId + '';
+  return String(msg.messageId);
 }
 
 export function getAvailableUriFromFileMessage(message: Sendbird.FileMessage) {
