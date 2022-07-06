@@ -8,7 +8,6 @@ import {
   getGroupChannelPreviewTime,
   getGroupChannelTitle,
   messageTime,
-  truncate,
 } from '@sendbird/uikit-utils';
 
 export interface StringsLocale {
@@ -190,7 +189,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       LIST_TOOLTIP_NEW_MSG: (newMessages) => `${newMessages.length} new messages`,
 
       MESSAGE_BUBBLE_TIME: (message, locale) => messageTime(new Date(message.createdAt), locale ?? dateLocale),
-      MESSAGE_BUBBLE_FILE_TITLE: (message) => truncate(message.name, { mode: 'mid', maxLen: 20 }),
+      MESSAGE_BUBBLE_FILE_TITLE: (message) => message.name,
       MESSAGE_BUBBLE_EDITED_POSTFIX: ' (edited)',
       MESSAGE_BUBBLE_UNKNOWN_TITLE: () => '(Unknown message type)',
       MESSAGE_BUBBLE_UNKNOWN_DESC: () => 'Cannot read this message.',
