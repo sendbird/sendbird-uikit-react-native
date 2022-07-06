@@ -61,7 +61,7 @@ const createNativeFileService = ({
       const status = await permissionModule.checkMultiple(
         type === 'read' ? mediaLibraryReadPermissions : mediaLibraryWritePermissions,
       );
-      return nativePermissionGranted(status, () => permissionModule.openLimitedPhotoLibraryPicker());
+      return nativePermissionGranted(status);
     }
     async requestMediaLibraryPermission(type: 'read' | 'write'): Promise<boolean> {
       const status = await permissionModule.requestMultiple(
@@ -124,7 +124,7 @@ const createNativeFileService = ({
     }
     async openDocument(options?: OpenDocumentOptions): Promise<FilePickerResponse> {
       try {
-        const { uri, size, name, type } = await documentPickerModule.pickSingle({});
+        const { uri, size, name, type } = await documentPickerModule.pickSingle();
         return fileTypeGuard({ uri, size, name, type });
       } catch (e) {
         if (!documentPickerModule.isCancel(e) && documentPickerModule.isInProgress(e)) {
