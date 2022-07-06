@@ -95,6 +95,7 @@ const styles = createStyleSheet({
     marginBottom: 4,
   },
   ogDesc: {
+    lineHeight: 14,
     marginBottom: 8,
   },
 });
