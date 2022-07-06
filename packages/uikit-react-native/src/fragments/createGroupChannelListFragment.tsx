@@ -17,6 +17,7 @@ import {
   preferDefaultChannelCover,
 } from '@sendbird/uikit-utils';
 
+import { DEFAULT_LONG_PRESS_DELAY } from '../constants';
 import GroupChannelPreview from '../ui/GroupChannelPreview';
 import TypedPlaceholder from '../ui/TypedPlaceholder';
 
@@ -44,7 +45,11 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
 
     const renderGroupChannelPreview: GroupChannelListProps['List']['renderGroupChannelPreview'] = useCallback(
       (channel, onLongPressChannel) => (
-        <Pressable onPress={() => onPressChannel(channel)} onLongPress={onLongPressChannel}>
+        <Pressable
+          onPress={() => onPressChannel(channel)}
+          onLongPress={onLongPressChannel}
+          delayLongPress={DEFAULT_LONG_PRESS_DELAY}
+        >
           <GroupChannelPreview
             customCover={conditionChaining(
               [preferDefaultChannelCover(channel)],

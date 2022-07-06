@@ -6,6 +6,7 @@ import { createStyleSheet } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
 import { calcMessageGrouping, conditionChaining, isMyMessage, useIIFE } from '@sendbird/uikit-utils';
 
+import { DEFAULT_LONG_PRESS_DELAY } from '../../constants';
 import AdminMessage from './AdminMessage';
 import FileMessage from './FileMessage';
 import MessageContainer from './MessageContainer';
@@ -49,7 +50,12 @@ const MessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
   );
 
   const messageComponent = useIIFE(() => {
-    const pressableProps = { style: styles.msgContainer, onPress, onLongPress };
+    const pressableProps = {
+      style: styles.msgContainer,
+      onPress,
+      onLongPress,
+      delayLongPress: DEFAULT_LONG_PRESS_DELAY,
+    };
     const messageProps = { ...rest, variant, groupWithNext, groupWithPrev };
 
     if (message.isUserMessage()) {

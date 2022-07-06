@@ -1,0 +1,1 @@
+export const DEFAULT_LONG_PRESS_DELAY = 350;
