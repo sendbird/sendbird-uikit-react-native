@@ -97,6 +97,21 @@
     "@react-native-firebase/messaging": {
       "optional": true
     },
+    "expo-clipboard": {
+      "optional": true
+    },
+    "expo-document-picker": {
+      "optional": true
+    },
+    "expo-file-system": {
+      "optional": true
+    },
+    "expo-image-picker": {
+      "optional": true
+    },
+    "expo-notifications": {
+      "optional": true
+    },
     "react-native-document-picker": {
       "optional": true
     },
