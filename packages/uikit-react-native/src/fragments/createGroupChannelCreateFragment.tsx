@@ -97,9 +97,12 @@ const createGroupChannelCreateFragment = <UserType,>(
           onPressHeaderLeft={onPressHeaderLeft}
           onPressHeaderRight={async (users) => {
             const params = new sdk.GroupChannelParams();
+
             if (currentUser) params.operatorUserIds = [currentUser.userId];
-            params.isDistinct = true;
             params.addUserIds(userIdsGenerator(users));
+            params.name = '';
+            params.coverUrl = '';
+            params.isDistinct = false;
 
             const processedParams = await onBeforeCreateChannel(params, users);
             const channel = await sdk.GroupChannel.createChannel(processedParams);
