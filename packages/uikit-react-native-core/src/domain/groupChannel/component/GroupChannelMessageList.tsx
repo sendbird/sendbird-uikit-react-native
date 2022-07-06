@@ -78,7 +78,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
     });
   };
 
-  if (HANDLE_NEXT_MSG_SEPARATELY) {
+  if (!HANDLE_NEXT_MSG_SEPARATELY) {
     useEffect(() => {
       newMessagesFromNext.length !== 0 && setNewMessages((prev) => prev.concat(newMessagesFromNext));
       onBottomReached();
