@@ -124,7 +124,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
       )}
       {ScrollToBottomTooltip && (
         <View pointerEvents={scrollLeaveBottom ? 'auto' : 'none'} style={[styles.scrollTooltip, safeAreaLayout]}>
-          <ScrollToBottomTooltip visible={scrollLeaveBottom} onPress={() => scrollRef.current?.scrollToBottom(true)} />
+          <ScrollToBottomTooltip visible={scrollLeaveBottom} onPress={() => scrollRef.current?.scrollToBottom(false)} />
         </View>
       )}
     </View>
