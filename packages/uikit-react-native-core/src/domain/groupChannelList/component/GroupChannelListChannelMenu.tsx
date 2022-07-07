@@ -10,7 +10,7 @@ import type { GroupChannelListProps } from '../types';
 const GroupChannelListChannelMenu: React.FC<GroupChannelListProps['ChannelMenu']> = () => {
   const channelMenu = useContext(GroupChannelListContexts.ChannelMenu);
   const { STRINGS } = useLocalization();
-  const { currentUser } = useSendbirdChat();
+  const { currentUser, sdk } = useSendbirdChat();
   const toast = useToast();
 
   const [visible, setVisible] = useState(false);
@@ -49,7 +49,10 @@ const GroupChannelListChannelMenu: React.FC<GroupChannelListProps['ChannelMenu']
         {
           title: STRINGS.GROUP_CHANNEL_LIST.DIALOG_CHANNEL_LEAVE,
           onPress: async () => {
-            await channelMenu.selectedChannel?.leave();
+            const channel = channelMenu.selectedChannel;
+            if (channel) {
+              channel.leave().then(() => sdk.clearCachedMessages([channel.url]).catch());
+            }
           },
           onError: () => toast.show(STRINGS.TOAST.LEAVE_CHANNEL_ERROR, 'error'),
         },
