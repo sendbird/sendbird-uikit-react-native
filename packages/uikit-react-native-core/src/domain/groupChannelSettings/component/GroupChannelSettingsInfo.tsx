@@ -1,15 +1,10 @@
 import React, { useContext } from 'react';
 import { View } from 'react-native';
 
-import { Avatar, Divider, Text, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
-import {
-  Logger,
-  conditionChaining,
-  getGroupChannelTitle,
-  getMembersExcludeMe,
-  preferDefaultChannelCover,
-} from '@sendbird/uikit-utils';
+import { Divider, Text, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
+import { Logger, getGroupChannelTitle } from '@sendbird/uikit-utils';
 
+import ChannelCover from '../../../components/ChannelCover';
 import { useLocalization } from '../../../contexts/Localization';
 import { useSendbirdChat } from '../../../contexts/SendbirdChat';
 import { GroupChannelSettingsContexts } from '../module/moduleContext';
@@ -28,17 +23,7 @@ const GroupChannelSettingsInfo: React.FC<GroupChannelSettingsProps['Info']> = ()
   return (
     <View>
       <View style={styles.userInfoContainer}>
-        {conditionChaining(
-          [preferDefaultChannelCover(channel)],
-          [
-            <Avatar uri={channel.coverUrl} size={80} containerStyle={styles.avatarContainer} />,
-            <Avatar.Group size={80} containerStyle={styles.avatarContainer}>
-              {getMembersExcludeMe(channel, currentUser?.userId).map((m) => (
-                <Avatar key={m.userId} uri={m.profileUrl} />
-              ))}
-            </Avatar.Group>,
-          ],
-        )}
+        <ChannelCover channel={channel} size={80} containerStyle={styles.avatarContainer} />
         <Text h1 numberOfLines={1}>
           {getGroupChannelTitle(
             currentUser.userId,

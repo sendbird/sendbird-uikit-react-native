@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react';
-import { Pressable, View } from 'react-native';
+import React, { useCallback, useEffect } from 'react';
+import { AppState, Pressable, View } from 'react-native';
 
 import { useGroupChannelList } from '@sendbird/uikit-chat-hooks';
 import type {
@@ -7,19 +7,17 @@ import type {
   GroupChannelListModule,
   GroupChannelListProps,
 } from '@sendbird/uikit-react-native-core';
-import { createGroupChannelListModule, useLocalization, useSendbirdChat } from '@sendbird/uikit-react-native-core';
-import { Avatar } from '@sendbird/uikit-react-native-foundation';
 import {
-  Logger,
-  channelComparator,
-  conditionChaining,
-  getMembersExcludeMe,
-  preferDefaultChannelCover,
-} from '@sendbird/uikit-utils';
+  ChannelCover,
+  createGroupChannelListModule,
+  useLocalization,
+  useSendbirdChat,
+} from '@sendbird/uikit-react-native-core';
+import { Logger, channelComparator } from '@sendbird/uikit-utils';
 
+import TypedPlaceholder from '../../../uikit-react-native-core/src/components/TypedPlaceholder';
 import { DEFAULT_LONG_PRESS_DELAY } from '../constants';
 import GroupChannelPreview from '../ui/GroupChannelPreview';
-import TypedPlaceholder from '../ui/TypedPlaceholder';
 
 const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListModule>): GroupChannelListFragment => {
   const GroupChannelListModule = createGroupChannelListModule(initModule);
@@ -34,14 +32,22 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     flatListProps = {},
     children,
   }) => {
-    const { sdk, currentUser } = useSendbirdChat();
+    const { sdk, currentUser, features, markAsDeliveredWithChannel } = useSendbirdChat();
+    const { STRINGS } = useLocalization();
     const { groupChannels, refresh, refreshing, next, loading } = useGroupChannelList(sdk, currentUser?.userId, {
       queryCreator,
       sortComparator,
       enableCollectionWithoutLocalCache: true,
     });
 
-    const { STRINGS } = useLocalization();
+    if (features.deliveryReceiptEnabled) {
+      useEffect(() => {
+        const listener = AppState.addEventListener('change', (status) => {
+          if (status === 'active') groupChannels.forEach(markAsDeliveredWithChannel);
+        });
+        return () => listener.remove();
+      }, []);
+    }
 
     const renderGroupChannelPreview: GroupChannelListProps['List']['renderGroupChannelPreview'] = useCallback(
       (channel, onLongPressChannel) => (
@@ -51,17 +57,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
           delayLongPress={DEFAULT_LONG_PRESS_DELAY}
         >
           <GroupChannelPreview
-            customCover={conditionChaining(
-              [preferDefaultChannelCover(channel)],
-              [
-                <Avatar uri={channel.coverUrl} size={56} />,
-                <Avatar.Group size={56}>
-                  {getMembersExcludeMe(channel, currentUser?.userId).map((m) => (
-                    <Avatar key={m.userId} uri={m.profileUrl} />
-                  ))}
-                </Avatar.Group>,
-              ],
-            )}
+            customCover={<ChannelCover channel={channel} size={56} />}
             coverUrl={channel.coverUrl}
             title={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE(currentUser?.userId ?? '', channel)}
             titleCaption={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE_CAPTION(channel)}
