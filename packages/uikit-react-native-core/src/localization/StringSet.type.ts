@@ -261,20 +261,20 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       ...overrides?.GROUP_CHANNEL_MEMBERS,
     },
     GROUP_CHANNEL_CREATE: {
-      HEADER_TITLE: 'Select members',
+      HEADER_TITLE: 'New channel',
       HEADER_RIGHT: ({ selectedUsers }) => {
         const len = selectedUsers.length;
         if (len === 0) return 'Create';
-        return `${len} Create`;
+        return `Create (${len})`;
       },
       ...overrides?.GROUP_CHANNEL_CREATE,
     },
     GROUP_CHANNEL_INVITE: {
-      HEADER_TITLE: 'Invite members',
+      HEADER_TITLE: 'Invite users',
       HEADER_RIGHT: ({ selectedUsers }) => {
         const len = selectedUsers.length;
         if (len === 0) return 'Invite';
-        return `${len} invites`;
+        return `Invite (${len})`;
       },
       ...overrides?.GROUP_CHANNEL_INVITE,
     },
