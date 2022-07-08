@@ -3,7 +3,8 @@ export { default as arrayToMap, arrayToMapWithGetter } from './shared/arrayToMap
 export { createPubSub } from './shared/pubsub';
 export { default as conditionChaining } from './shared/conditionChaining';
 export {
-  urlRegex,
+  urlRegexStrict,
+  urlRegexRough,
   newLineRegex,
   audioExtRegex,
   videoExtRegex,
