@@ -3,9 +3,10 @@ import { AppState, AppStateStatus } from 'react-native';
 import type Sendbird from 'sendbird';
 
 import { useAppFeatures } from '@sendbird/uikit-chat-hooks';
-import type { FileType } from '@sendbird/uikit-react-native-core';
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 import { useForceUpdate } from '@sendbird/uikit-utils';
+
+import type { FileType } from '../platform/types';
 
 type Props = {
   sdkInstance: SendbirdChatSDK;

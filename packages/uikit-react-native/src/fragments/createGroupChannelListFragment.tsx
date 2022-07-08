@@ -9,13 +9,13 @@ import type {
 } from '@sendbird/uikit-react-native-core';
 import {
   ChannelCover,
+  TypedPlaceholder,
   createGroupChannelListModule,
   useLocalization,
   useSendbirdChat,
 } from '@sendbird/uikit-react-native-core';
 import { Logger, channelComparator } from '@sendbird/uikit-utils';
 
-import TypedPlaceholder from '../../../uikit-react-native-core/src/components/TypedPlaceholder';
 import { DEFAULT_LONG_PRESS_DELAY } from '../constants';
 import GroupChannelPreview from '../ui/GroupChannelPreview';
 
