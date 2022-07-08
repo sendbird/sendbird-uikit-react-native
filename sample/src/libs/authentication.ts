@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
-import { Platform } from 'react-native';
 
 import { useAsyncLayoutEffect } from '@sendbird/uikit-utils';
 

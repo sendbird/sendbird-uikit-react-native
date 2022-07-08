@@ -5,7 +5,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { UserListContexts } from '../module/moduleContext';
 import type { UserListContextsType, UserListProps } from '../types';
 
-const UserListList = <T,>({ users, onRefresh, refreshing, renderUser, onLoadNext }: UserListProps<T>['List']) => {
+const UserListList = <T,>({
+  users,
+  onRefresh,
+  refreshing,
+  renderUser,
+  onLoadNext,
+  ListEmptyComponent,
+}: UserListProps<T>['List']) => {
   const context = useContext(UserListContexts.List as UserListContextsType<T>['List']);
   const renderItem: ListRenderItem<T> = useCallback(
     ({ item }) => renderUser?.(item, context.selectedUsers, context.setSelectedUsers),
@@ -20,7 +27,8 @@ const UserListList = <T,>({ users, onRefresh, refreshing, renderUser, onLoadNext
       onRefresh={onRefresh}
       renderItem={renderItem}
       onEndReached={onLoadNext}
-      contentContainerStyle={{ paddingLeft: left, paddingRight: right }}
+      contentContainerStyle={{ paddingLeft: left, paddingRight: right, flexGrow: 1, flex: 1 }}
+      ListEmptyComponent={ListEmptyComponent}
     />
   );
 };

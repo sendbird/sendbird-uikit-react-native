@@ -119,6 +119,8 @@ export interface GroupChannelModule {
   Header: CommonComponent<GroupChannelProps['Header']>;
   MessageList: CommonComponent<GroupChannelProps['MessageList']>;
   Input: CommonComponent<GroupChannelProps['Input']>;
+  StatusEmpty: CommonComponent;
+  StatusLoading: CommonComponent;
 }
 
 export type GroupChannelFragment = React.FC<GroupChannelProps['Fragment']>;

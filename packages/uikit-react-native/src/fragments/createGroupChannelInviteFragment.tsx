@@ -5,6 +5,7 @@ import type Sendbird from 'sendbird';
 import { useActiveGroupChannel, useUserList } from '@sendbird/uikit-chat-hooks';
 import type { GroupChannelInviteFragment, UserListModule } from '@sendbird/uikit-react-native-core';
 import { createUserListModule, useLocalization, useSendbirdChat } from '@sendbird/uikit-react-native-core';
+import StatusComposition from '@sendbird/uikit-react-native-core/src/components/StatusComposition';
 import { Logger } from '@sendbird/uikit-utils';
 
 import UserSelectableBar from '../ui/UserSelectableBar';
@@ -40,11 +41,10 @@ const createGroupChannelInviteFragment = <UserType,>(
     sortComparator,
     queryCreator,
     renderUser,
-    children,
   }) => {
     const { sdk } = useSendbirdChat();
     const { STRINGS } = useLocalization();
-    const { users, refreshing, refresh, next } = useUserList(sdk, {
+    const { users, refreshing, refresh, next, error, loading } = useUserList(sdk, {
       queryCreator,
       sortComparator,
     });
@@ -105,14 +105,21 @@ const createGroupChannelInviteFragment = <UserType,>(
             onInviteMembers(updatedChannel);
           }}
         />
-        <UserListModule.List
-          onLoadNext={next}
-          users={users}
-          renderUser={_renderUser}
-          onRefresh={refresh}
-          refreshing={refreshing}
-        />
-        {children}
+        <StatusComposition
+          loading={loading}
+          error={Boolean(error)}
+          LoadingComponent={<UserListModule.StatusLoading />}
+          ErrorComponent={<UserListModule.StatusError onPressRetry={() => refresh()} />}
+        >
+          <UserListModule.List
+            onLoadNext={next}
+            users={users}
+            renderUser={_renderUser}
+            onRefresh={refresh}
+            refreshing={refreshing}
+            ListEmptyComponent={<UserListModule.StatusEmpty />}
+          />
+        </StatusComposition>
       </UserListModule.Provider>
     );
   };

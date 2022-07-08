@@ -5,11 +5,11 @@ import type Sendbird from 'sendbird';
 import { useUserList } from '@sendbird/uikit-chat-hooks';
 import type { GroupChannelCreateFragment, UserListModule } from '@sendbird/uikit-react-native-core';
 import { createUserListModule, useLocalization, useSendbirdChat } from '@sendbird/uikit-react-native-core';
-import { Logger } from '@sendbird/uikit-utils';
+import StatusComposition from '@sendbird/uikit-react-native-core/src/components/StatusComposition';
+import { Logger, PASS } from '@sendbird/uikit-utils';
 
 import UserSelectableBar from '../ui/UserSelectableBar';
 
-const passValue = <T,>(v: T) => v;
 const defaultUserIdsGenerator = <T,>(users: T[]) => {
   const userIds = users
     .map((user) => {
@@ -36,16 +36,15 @@ const createGroupChannelCreateFragment = <UserType,>(
     Header,
     userIdsGenerator = defaultUserIdsGenerator,
     onPressHeaderLeft,
-    onBeforeCreateChannel = passValue,
+    onBeforeCreateChannel = PASS,
     onCreateChannel,
     sortComparator,
     queryCreator,
     renderUser,
-    children,
   }) => {
     const { sdk, currentUser } = useSendbirdChat();
     const { STRINGS } = useLocalization();
-    const { users, refreshing, refresh, next } = useUserList(sdk, {
+    const { users, refreshing, loading, error, refresh, next } = useUserList(sdk, {
       queryCreator,
       sortComparator,
     });
@@ -112,14 +111,21 @@ const createGroupChannelCreateFragment = <UserType,>(
             onCreateChannel(channel);
           }}
         />
-        <UserListModule.List
-          onLoadNext={next}
-          users={users}
-          renderUser={_renderUser}
-          onRefresh={refresh}
-          refreshing={refreshing}
-        />
-        {children}
+        <StatusComposition
+          loading={loading}
+          error={Boolean(error)}
+          LoadingComponent={<UserListModule.StatusLoading />}
+          ErrorComponent={<UserListModule.StatusError onPressRetry={() => refresh()} />}
+        >
+          <UserListModule.List
+            onLoadNext={next}
+            users={users}
+            renderUser={_renderUser}
+            onRefresh={refresh}
+            refreshing={refreshing}
+            ListEmptyComponent={<UserListModule.StatusEmpty />}
+          />
+        </StatusComposition>
       </UserListModule.Provider>
     );
   };

@@ -1,13 +1,15 @@
 import React from 'react';
 
-import { useLocalization } from '@sendbird/uikit-react-native-core';
 import { Placeholder } from '@sendbird/uikit-react-native-foundation';
+
+import { useLocalization } from '../contexts/Localization';
 
 type Props = {
   type:
     | 'no-banned-members'
     | 'no-channels'
     | 'no-messages'
+    | 'no-users'
     | 'no-muted-members'
     | 'no-results-found'
     | 'error-wrong'
@@ -27,6 +29,8 @@ const TypedPlaceholder: React.FC<Props> = ({ type, onPressRetry }) => {
       return <Placeholder icon={'mute'} message={STRINGS.PLACEHOLDER.NO_MUTED_MEMBERS} />;
     case 'no-results-found':
       return <Placeholder icon={'search'} message={STRINGS.PLACEHOLDER.NO_RESULTS_FOUND} />;
+    case 'no-users':
+      return <Placeholder icon={'members'} message={STRINGS.PLACEHOLDER.NO_USERS} />;
     case 'error-wrong':
       return (
         <Placeholder

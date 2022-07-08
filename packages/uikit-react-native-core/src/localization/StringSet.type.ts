@@ -132,6 +132,7 @@ export interface StringSet {
   };
   PLACEHOLDER: {
     NO_BANNED_MEMBERS: string;
+    NO_USERS: string;
     NO_CHANNELS: string;
     NO_MESSAGES: string;
     NO_MUTED_MEMBERS: string;
@@ -292,6 +293,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     },
     PLACEHOLDER: {
       NO_BANNED_MEMBERS: 'No banned members',
+      NO_USERS: 'No users',
       NO_CHANNELS: 'No channels',
       NO_MESSAGES: 'No messages',
       NO_MUTED_MEMBERS: 'No muted members',

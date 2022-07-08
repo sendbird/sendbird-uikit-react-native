@@ -40,6 +40,7 @@ export const useUserList = <
 ): UseUserList<QueriedUser> => {
   const query = useRef<CustomQueryInterface<QueriedUser>>();
 
+  const [error, setError] = useState<unknown>(null);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -49,11 +50,11 @@ export const useUserList = <
     return users;
   }, [users, options?.sortComparator]);
 
-  // ---------- internal methods ------------ //
   const updateUsers = (users: QueriedUser[], clearPrev: boolean) => {
     if (clearPrev) setUsers(users);
     else setUsers((prev) => prev.concat(users));
   };
+
   const init = useCallback(async () => {
     query.current = createUserQuery<QueriedUser>(sdk, options?.queryCreator);
     if (query.current?.hasNext) {
@@ -61,21 +62,29 @@ export const useUserList = <
       updateUsers(users, true);
     }
   }, [sdk, options?.queryCreator]);
-  // ---------- internal methods ends ------------ //
 
-  // ---------- internal hooks ------------ //
   useAsyncEffect(async () => {
     setLoading(true);
-    await init();
-    setLoading(false);
+    setError(null);
+    try {
+      await init();
+    } catch (e) {
+      setError(e);
+    } finally {
+      setLoading(false);
+    }
   }, [init]);
-  // ---------- internal hooks ends ------------ //
 
-  // ---------- returns methods ---------- //
   const refresh = useCallback(async () => {
     setRefreshing(true);
-    await init();
-    setRefreshing(false);
+    setError(null);
+    try {
+      await init();
+    } catch (e) {
+      setError(e);
+    } finally {
+      setRefreshing(false);
+    }
   }, [init]);
 
   const next = useCallback(async () => {
@@ -83,13 +92,13 @@ export const useUserList = <
       updateUsers(await query.current?.next(), false);
     }
   }, []);
-  // ---------- returns methods ends ---------- //
 
   return {
     loading,
-    refreshing,
-    refresh,
+    error,
     users: sortedUsers,
     next,
+    refreshing,
+    refresh,
   };
 };

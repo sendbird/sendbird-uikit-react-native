@@ -1,17 +1,14 @@
 import React, { useCallback, useMemo } from 'react';
-import { View } from 'react-native';
 
 import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
 import type { GroupChannelFragment, GroupChannelModule, GroupChannelProps } from '@sendbird/uikit-react-native-core';
 import { createGroupChannelModule, useSendbirdChat } from '@sendbird/uikit-react-native-core';
-import { NOOP, messageComparator } from '@sendbird/uikit-utils';
+import StatusComposition from '@sendbird/uikit-react-native-core/src/components/StatusComposition';
+import { NOOP, PASS, messageComparator } from '@sendbird/uikit-utils';
 
 import MessageRenderer from '../ui/MessageRenderer';
 import DefaultNewMessagesTooltip from '../ui/NewMessagesTooltip';
 import DefaultScrollToBottomTooltip from '../ui/ScrollToBottomTooltip';
-import TypedPlaceholder from '../ui/TypedPlaceholder';
-
-const PassValue = <T,>(v: T) => v;
 
 const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): GroupChannelFragment => {
   const GroupChannelModule = createGroupChannelModule(initModule);
@@ -27,15 +24,14 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     onPressHeaderRight = NOOP,
     onPressImageMessage = NOOP,
     onChannelDeleted = NOOP,
-    onBeforeSendFileMessage = PassValue,
-    onBeforeSendUserMessage = PassValue,
+    onBeforeSendFileMessage = PASS,
+    onBeforeSendUserMessage = PASS,
     staleChannel,
     keyboardAvoidOffset,
     queryCreator,
     collectionCreator,
     sortComparator = messageComparator,
     flatListProps,
-    children,
   }) => {
     const { sdk, currentUser } = useSendbirdChat();
 
@@ -71,11 +67,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
 
     const memoizedFlatListProps = useMemo(
       () => ({
-        ListEmptyComponent: (
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <TypedPlaceholder type={loading ? 'loading' : 'no-messages'} />
-          </View>
-        ),
+        ListEmptyComponent: <GroupChannelModule.StatusEmpty />,
         contentContainerStyle: { flexGrow: 1 },
         ...flatListProps,
       }),
@@ -131,31 +123,32 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
           onPressHeaderLeft={onPressHeaderLeft}
           onPressHeaderRight={onPressHeaderRight}
         />
-        <GroupChannelModule.MessageList
-          enableMessageGrouping={enableMessageGrouping}
-          currentUserId={currentUser?.userId}
-          channel={activeChannel}
-          messages={messages}
-          renderMessage={_renderMessage}
-          newMessagesFromNext={newMessagesFromNext}
-          nextMessages={nextMessages}
-          onTopReached={prev}
-          onBottomReached={next}
-          NewMessagesTooltip={NewMessagesTooltip}
-          ScrollToBottomTooltip={ScrollToBottomTooltip}
-          onResendFailedMessage={resendMessage}
-          onDeleteMessage={deleteMessage}
-          onPressImageMessage={onPressImageMessage}
-          flatListProps={memoizedFlatListProps}
-        />
-        <GroupChannelModule.Input
-          channel={activeChannel}
-          onSendFileMessage={onSendFileMessage}
-          onSendUserMessage={onSendUserMessage}
-          onUpdateFileMessage={onUpdateFileMessage}
-          onUpdateUserMessage={onUpdateUserMessage}
-        />
-        {children}
+        <StatusComposition loading={loading} LoadingComponent={<GroupChannelModule.StatusLoading />}>
+          <GroupChannelModule.MessageList
+            enableMessageGrouping={enableMessageGrouping}
+            currentUserId={currentUser?.userId}
+            channel={activeChannel}
+            renderMessage={_renderMessage}
+            messages={messages}
+            nextMessages={nextMessages}
+            newMessagesFromNext={newMessagesFromNext}
+            onTopReached={prev}
+            onBottomReached={next}
+            NewMessagesTooltip={NewMessagesTooltip}
+            ScrollToBottomTooltip={ScrollToBottomTooltip}
+            onResendFailedMessage={resendMessage}
+            onDeleteMessage={deleteMessage}
+            onPressImageMessage={onPressImageMessage}
+            flatListProps={memoizedFlatListProps}
+          />
+          <GroupChannelModule.Input
+            channel={activeChannel}
+            onSendFileMessage={onSendFileMessage}
+            onSendUserMessage={onSendUserMessage}
+            onUpdateFileMessage={onUpdateFileMessage}
+            onUpdateUserMessage={onUpdateUserMessage}
+          />
+        </StatusComposition>
       </GroupChannelModule.Provider>
     );
   };
