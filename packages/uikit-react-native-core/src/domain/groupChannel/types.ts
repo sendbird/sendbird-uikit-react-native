@@ -20,7 +20,7 @@ export type GroupChannelProps = {
     onChannelDeleted: () => void;
     onPressHeaderLeft: GroupChannelProps['Header']['onPressHeaderLeft'];
     onPressHeaderRight: GroupChannelProps['Header']['onPressHeaderRight'];
-    onPressImageMessage: GroupChannelProps['MessageList']['onPressImageMessage'];
+    onPressImageMessage?: GroupChannelProps['MessageList']['onPressImageMessage'];
 
     staleChannel: Sendbird.GroupChannel;
     renderMessage?: GroupChannelProps['MessageList']['renderMessage'];
@@ -60,7 +60,7 @@ export type GroupChannelProps = {
 
     onResendFailedMessage: (failedMessage: Sendbird.UserMessage | Sendbird.FileMessage) => Promise<void>;
     onDeleteMessage: (message: Sendbird.UserMessage | Sendbird.FileMessage) => Promise<void>;
-    onPressImageMessage: (message: Sendbird.FileMessage, uri: string) => void;
+    onPressImageMessage?: (message: Sendbird.FileMessage, uri: string) => void;
 
     renderMessage: (props: {
       message: SendbirdMessage;
@@ -119,6 +119,8 @@ export interface GroupChannelModule {
   Header: CommonComponent<GroupChannelProps['Header']>;
   MessageList: CommonComponent<GroupChannelProps['MessageList']>;
   Input: CommonComponent<GroupChannelProps['Input']>;
+  StatusEmpty: CommonComponent;
+  StatusLoading: CommonComponent;
 }
 
 export type GroupChannelFragment = React.FC<GroupChannelProps['Fragment']>;

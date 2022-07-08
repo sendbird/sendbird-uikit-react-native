@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useLayoutEffect } from 'react';
-import { Platform } from 'react-native';
+import { useState } from 'react';
+
+import { useAsyncLayoutEffect } from '@sendbird/uikit-utils';
 
 interface SimpleCredential {
   userId: string;
@@ -27,11 +28,7 @@ class CredentialStorage implements CredentialStorageInterface {
 }
 
 const createAuthManager = (credStorage: CredentialStorageInterface) => {
-  const internal: { cred: SimpleCredential | null } = {
-    cred: __DEV__
-      ? { userId: Platform.select({ android: 'TEST_ANDROID_UIKIT_RN', ios: 'TEST_IOS_UIKIT_RN', default: 'TESTER' }) }
-      : null,
-  };
+  const internal: { cred: SimpleCredential | null } = { cred: null };
   return {
     hasAuthentication() {
       return Boolean(internal.cred);
@@ -56,14 +53,20 @@ const createAuthManager = (credStorage: CredentialStorageInterface) => {
 };
 
 export const authManager = createAuthManager(new CredentialStorage());
-export const useAppAuth = (onAutonomousSignIn?: (cred: SimpleCredential) => void) => {
-  useLayoutEffect(() => {
-    authManager.getAuthentication().then((response) => {
-      if (response) onAutonomousSignIn?.(response);
-    });
+export const useAppAuth = (onAutonomousSignIn?: (cred: SimpleCredential) => Promise<void>) => {
+  const [loading, setLoading] = useState(true);
+
+  useAsyncLayoutEffect(async () => {
+    await authManager
+      .getAuthentication()
+      .then(async (response) => {
+        if (response) await onAutonomousSignIn?.(response);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   return {
+    loading,
     signIn: (cred: SimpleCredential) => authManager.authenticate(cred),
     signOut: () => authManager.deAuthenticate(),
   };

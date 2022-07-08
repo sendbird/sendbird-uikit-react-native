@@ -2,7 +2,7 @@ import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
 import React from 'react';
 import { ScrollView, View } from 'react-native';
 
-import { TypedPlaceholder as TypedPlaceholderComponent } from '@sendbird/uikit-react-native';
+import { TypedPlaceholder as TypedPlaceholderComponent } from '@sendbird/uikit-react-native-core';
 import { Placeholder as PlaceholderComponent } from '@sendbird/uikit-react-native-foundation';
 
 const PlaceholderMeta: ComponentMeta<typeof PlaceholderComponent> = {
@@ -27,6 +27,7 @@ export const TypedPlaceholder: PlaceholderStory = () => (
       <TypedPlaceholderComponent type={'no-banned-members'} />
       <TypedPlaceholderComponent type={'no-channels'} />
       <TypedPlaceholderComponent type={'no-messages'} />
+      <TypedPlaceholderComponent type={'no-users'} />
       <TypedPlaceholderComponent type={'no-muted-members'} />
       <TypedPlaceholderComponent type={'no-results-found'} />
       <TypedPlaceholderComponent type={'error-wrong'} />

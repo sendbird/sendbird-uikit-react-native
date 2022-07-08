@@ -12,7 +12,7 @@ const BaseUserMessage: React.FC<UserMessageProps> = ({ message, variant, pressed
   const { STRINGS } = useLocalization();
   return (
     <View style={[styles.container, { backgroundColor: color.background }]}>
-      <URLParsedText body3 color={color.textMsg}>
+      <URLParsedText body3 strict color={color.textMsg}>
         {message.message}
         {Boolean(message.updatedAt) && (
           <Text body3 color={color.textEdited}>

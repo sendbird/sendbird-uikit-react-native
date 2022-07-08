@@ -12,7 +12,8 @@ npm install @sendbird/uikit-react-native-core \
             react-native-image-picker \
             react-native-document-picker \
             @react-native-community/cameraroll \
-            react-native-fs \
+            react-native-file-access \
+            react-native-device-info \
             @react-native-clipboard/clipboard \
             @react-native-firebase/messaging @react-native-firebase/app \
             date-fns

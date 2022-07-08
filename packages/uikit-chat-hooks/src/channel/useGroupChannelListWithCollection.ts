@@ -20,13 +20,7 @@ const createGroupChannelListCollection = (
 
   const defaultCollection = sdk.GroupChannel.createGroupChannelCollection();
   const filter = new sdk.GroupChannelFilter();
-  filter.includeEmpty = true;
-  filter.memberStateFilter = sdk.GroupChannelFilter.MemberStateFilter.ALL;
-  return defaultCollection
-    .setLimit(20)
-    .setFilter(filter)
-    .setOrder(sdk.GroupChannelCollection.GroupChannelOrder.LATEST_LAST_MESSAGE)
-    .build();
+  return defaultCollection.setLimit(20).setFilter(filter).build();
 };
 
 export const useGroupChannelListWithCollection = (

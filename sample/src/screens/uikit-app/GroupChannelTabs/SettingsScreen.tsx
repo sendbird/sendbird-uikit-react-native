@@ -28,7 +28,7 @@ const SettingsScreen = () => {
   const { scheme, setScheme } = useAppearance();
   const { left, right } = useSafeAreaInsets();
 
-  const { currentUser, setCurrentUser, sdk } = useSendbirdChat();
+  const { currentUser, sdk, updateCurrentUserInfo } = useSendbirdChat();
   const { option, updateOption } = usePushTrigger(sdk);
   const { fileService } = usePlatformService();
   const { colors, palette } = useUIKitTheme();
@@ -44,10 +44,7 @@ const SettingsScreen = () => {
       submitLabel: 'Save',
       placeholder: 'Enter name',
       defaultValue: currentUser?.nickname ?? '',
-      onSubmit: async (nickname) => {
-        const user = await sdk.updateCurrentUserInfo(nickname, sdk.currentUser.plainProfileUrl);
-        setCurrentUser(user);
-      },
+      onSubmit: (nickname) => updateCurrentUserInfo(nickname, sdk.currentUser.plainProfileUrl),
     });
   };
   const onChangeProfileImage = () => {
@@ -61,10 +58,10 @@ const SettingsScreen = () => {
               mediaType: 'photo',
               onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_CAMERA_ERROR, 'error'),
             });
+
             if (!photo) return;
 
-            const user = await sdk.updateCurrentUserInfoWithProfileImage(sdk.currentUser.nickname, photo);
-            setCurrentUser(user);
+            await updateCurrentUserInfo(sdk.currentUser.nickname, photo);
           },
         },
         {
@@ -77,8 +74,7 @@ const SettingsScreen = () => {
             });
             if (!files || !files[0]) return;
 
-            const user = await sdk.updateCurrentUserInfoWithProfileImage(sdk.currentUser.nickname, files[0]);
-            setCurrentUser(user);
+            await updateCurrentUserInfo(sdk.currentUser.nickname, files[0]);
           },
         },
       ],

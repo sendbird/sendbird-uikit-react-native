@@ -24,7 +24,7 @@ const BaseFileMessage: React.FC<FileMessageProps & { type: 'image' | 'audio' | '
         size={24}
         containerStyle={{ backgroundColor: colors.background, padding: 2, borderRadius: 8, marginRight: 8 }}
       />
-      <Text numberOfLines={1} body3 color={color.textMsg}>
+      <Text body3 ellipsizeMode={'middle'} numberOfLines={1} color={color.textMsg} style={styles.name}>
         {STRINGS.GROUP_CHANNEL.MESSAGE_BUBBLE_FILE_TITLE(message)}
       </Text>
     </View>
@@ -39,6 +39,9 @@ const styles = createStyleSheet({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
+  },
+  name: {
+    flexShrink: 1,
   },
 });
 

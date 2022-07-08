@@ -28,11 +28,8 @@ export const groupChannelChatUnavailable = (channel: Sendbird.GroupChannel) => {
   return channel.myMutedState === 'muted' || (channel.isFrozen && channel.myRole !== 'operator');
 };
 
-export function preferDefaultChannelCover(channel: Sendbird.GroupChannel) {
-  if (channel.memberCount > 1) {
-    return !channel.coverUrl.startsWith('https://static.sendbird.com/sample/cover/');
-  }
-  return true;
+export function isDefaultCoverImage(coverUrl: string) {
+  return coverUrl === '' || coverUrl.startsWith('https://static.sendbird.com/sample/cover');
 }
 
 export function getMembersExcludeMe(channel: Sendbird.GroupChannel, currentUserId?: string) {

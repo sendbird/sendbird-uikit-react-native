@@ -1,9 +1,32 @@
-export const urlRegex =
-  /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#()?&/=]*)/g;
+export const urlRegexStrict =
+  /(https?:\/\/|www\.)[-a-zA-Z0-9@:%._+~#=]{1,256}\.(xn--)?[a-z0-9-]{2,20}\b([-a-zA-Z0-9@:%_+[\],.~#?&/=]*[-a-zA-Z0-9@:%_+\]~#?&/=])*/g;
+export const urlRegexRough =
+  /(https?:\/\/|www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/g;
+export const phoneRegex = /[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,7}/;
+export const emailRegex = /\S+@\S+\.\S+/;
 export const newLineRegex = /\r\n|\r|\n/g;
 
-export const replaceUrlAsComponents = <T>(originText: string, replacer: (url: string) => T) => {
-  const matches = [...originText.matchAll(urlRegex)];
+// const cases = [
+//   {
+//     type: 'urlStrict',
+//     regex: urlRegexStrict,
+//   },
+//   {
+//     type: 'urlRough',
+//     regex: urlRegexStrict,
+//   },
+//   {
+//     type: 'email',
+//     regex: emailRegex,
+//   },
+//   {
+//     type: 'phone',
+//     regex: urlRegexStrict,
+//   },
+// ];
+
+export const replaceUrlAsComponents = <T>(originText: string, replacer: (url: string) => T, strict?: boolean) => {
+  const matches = [...originText.matchAll(strict ? urlRegexStrict : urlRegexRough)];
   const founds = matches.map((value) => {
     const text = value[0];
     const pos = value.index ?? 0;

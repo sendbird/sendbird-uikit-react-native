@@ -31,8 +31,10 @@ const SignInScreen: React.FC = () => {
     }
   };
 
-  const { signIn } = useAppAuth((user) => connectWith(user.userId));
+  const { loading, signIn } = useAppAuth((user) => connectWith(user.userId));
   const { colors } = useUIKitTheme();
+
+  if (loading) return null;
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>

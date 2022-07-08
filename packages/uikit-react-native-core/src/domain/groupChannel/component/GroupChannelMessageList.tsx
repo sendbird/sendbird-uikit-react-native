@@ -78,7 +78,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
     });
   };
 
-  if (HANDLE_NEXT_MSG_SEPARATELY) {
+  if (!HANDLE_NEXT_MSG_SEPARATELY) {
     useEffect(() => {
       newMessagesFromNext.length !== 0 && setNewMessages((prev) => prev.concat(newMessagesFromNext));
       onBottomReached();
@@ -124,7 +124,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
       )}
       {ScrollToBottomTooltip && (
         <View pointerEvents={scrollLeaveBottom ? 'auto' : 'none'} style={[styles.scrollTooltip, safeAreaLayout]}>
-          <ScrollToBottomTooltip visible={scrollLeaveBottom} onPress={() => scrollRef.current?.scrollToBottom(true)} />
+          <ScrollToBottomTooltip visible={scrollLeaveBottom} onPress={() => scrollRef.current?.scrollToBottom(false)} />
         </View>
       )}
     </View>
@@ -252,7 +252,7 @@ const useGetMessagePressActions = ({
       const ext = getFileExtension(msg.name);
       const fileType = getFileType(ext);
       if (fileType === 'image') {
-        response.onPress = () => onPressImageMessage(msg, getAvailableUriFromFileMessage(msg));
+        response.onPress = () => onPressImageMessage?.(msg, getAvailableUriFromFileMessage(msg));
       } else {
         response.onPress = () => Linking.openURL(msg.url);
       }

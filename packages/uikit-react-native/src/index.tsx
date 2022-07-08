@@ -3,7 +3,6 @@ export { default as GroupChannelPreview } from './ui/GroupChannelPreview';
 export { default as MessageRenderer } from './ui/MessageRenderer';
 export { default as NewMessagesTooltip } from './ui/NewMessagesTooltip';
 export { default as ScrollToBottomTooltip } from './ui/ScrollToBottomTooltip';
-export { default as TypedPlaceholder } from './ui/TypedPlaceholder';
 export { default as UserActionBar } from './ui/UserActionBar';
 export { default as UserSelectableBar } from './ui/UserSelectableBar';
 

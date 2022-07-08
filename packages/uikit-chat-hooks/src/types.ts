@@ -203,6 +203,11 @@ export interface UseUserList<User> {
   refreshing: boolean;
 
   /**
+   * Error state
+   * */
+  error: unknown | null;
+
+  /**
    * Refresh, clear and reload messages from latest
    * @return {Promise<void>}
    * */

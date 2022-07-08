@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef } from 'react';
 import type Sendbird from 'sendbird';
 
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
@@ -7,6 +7,7 @@ import { Logger, isDifferentChannel, useAsyncEffect, useForceUpdate } from '@sen
 import { useAppFeatures } from '../../common/useAppFeatures';
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';
+import { useActiveGroupChannel } from '../useActiveGroupChannel';
 import { useGroupChannelMessagesReducer } from './reducer';
 
 const createMessageQuery = (
@@ -32,12 +33,8 @@ export const useGroupChannelMessagesWithQuery = (
   const queryRef = useRef<Sendbird.PreviousMessageListQuery>();
 
   // NOTE: We cannot determine the channel object of Sendbird SDK is stale or not, so force update after setActiveChannel
-  const [activeChannel, setActiveChannel] = useState(() => staleChannel);
+  const { activeChannel, setActiveChannel } = useActiveGroupChannel(sdk, staleChannel);
   const forceUpdate = useForceUpdate();
-
-  useEffect(() => {
-    setActiveChannel(staleChannel);
-  }, [staleChannel.url]);
 
   const {
     loading,
@@ -114,10 +111,7 @@ export const useGroupChannelMessagesWithQuery = (
       onChannelHidden: channelUpdater,
       onChannelMemberCountChanged(channels) {
         const channel = channels.find((c) => !isDifferentChannel(c, activeChannel));
-        if (channel) {
-          setActiveChannel(channel);
-          forceUpdate();
-        }
+        if (channel) channelUpdater(channel);
       },
       onChannelDeleted(channelUrl: string) {
         if (activeChannel.url === channelUrl) options?.onChannelDeleted?.();

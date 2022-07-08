@@ -8,7 +8,6 @@ import {
   getGroupChannelPreviewTime,
   getGroupChannelTitle,
   messageTime,
-  truncate,
 } from '@sendbird/uikit-utils';
 
 export interface StringsLocale {
@@ -128,10 +127,12 @@ export interface StringSet {
   // UI
   LABELS: {
     USER_NO_NAME: string;
+    CHANNEL_NO_MEMBERS: string;
     TYPING_INDICATOR_TYPINGS: (users: Sendbird.User[]) => string | undefined;
   };
   PLACEHOLDER: {
     NO_BANNED_MEMBERS: string;
+    NO_USERS: string;
     NO_CHANNELS: string;
     NO_MESSAGES: string;
     NO_MUTED_MEMBERS: string;
@@ -159,6 +160,9 @@ export interface StringSet {
     DELETE_MSG_ERROR: string;
     SEND_MSG_ERROR: string;
     UPDATE_MSG_ERROR: string;
+    TURN_ON_NOTIFICATIONS_ERROR: string;
+    TURN_OFF_NOTIFICATIONS_ERROR: string;
+    LEAVE_CHANNEL_ERROR: string;
   };
 }
 
@@ -176,15 +180,17 @@ type StringSetCreateOptions = {
  * */
 export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOptions): StringSet => {
   const USER_NO_NAME = overrides?.LABELS?.USER_NO_NAME ?? '(No name)';
+  const CHANNEL_NO_MEMBERS = overrides?.LABELS?.CHANNEL_NO_MEMBERS ?? '(No members)';
   return {
     GROUP_CHANNEL: {
-      HEADER_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel, USER_NO_NAME),
+      HEADER_TITLE: (currentUserId, channel) =>
+        getGroupChannelTitle(currentUserId, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       LIST_BANNER_FROZEN: 'Channel is frozen',
       LIST_DATE_SEPARATOR: (date, locale) => dateSeparator(date, locale ?? dateLocale),
       LIST_TOOLTIP_NEW_MSG: (newMessages) => `${newMessages.length} new messages`,
 
       MESSAGE_BUBBLE_TIME: (message, locale) => messageTime(new Date(message.createdAt), locale ?? dateLocale),
-      MESSAGE_BUBBLE_FILE_TITLE: (message) => truncate(message.name, { mode: 'mid', maxLen: 20 }),
+      MESSAGE_BUBBLE_FILE_TITLE: (message) => message.name,
       MESSAGE_BUBBLE_EDITED_POSTFIX: ' (edited)',
       MESSAGE_BUBBLE_UNKNOWN_TITLE: () => '(Unknown message type)',
       MESSAGE_BUBBLE_UNKNOWN_DESC: () => 'Cannot read this message.',
@@ -228,14 +234,16 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     },
     GROUP_CHANNEL_LIST: {
       HEADER_TITLE: 'Channels',
-      CHANNEL_PREVIEW_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel, USER_NO_NAME),
+      CHANNEL_PREVIEW_TITLE: (currentUserId, channel) =>
+        getGroupChannelTitle(currentUserId, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       CHANNEL_PREVIEW_TITLE_CAPTION: (channel, locale) => getGroupChannelPreviewTime(channel, locale ?? dateLocale),
       CHANNEL_PREVIEW_BODY: (channel) => getGroupChannelLastMessage(channel),
       TYPE_SELECTOR_HEADER_TITLE: 'Channel type',
       TYPE_SELECTOR_GROUP: 'Group',
       TYPE_SELECTOR_SUPER_GROUP: 'Super group',
       TYPE_SELECTOR_BROADCAST: 'Broadcast',
-      DIALOG_CHANNEL_TITLE: (currentUserId, channel) => getGroupChannelTitle(currentUserId, channel, USER_NO_NAME),
+      DIALOG_CHANNEL_TITLE: (currentUserId, channel) =>
+        getGroupChannelTitle(currentUserId, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       DIALOG_CHANNEL_NOTIFICATION: (channel) => {
         if (!channel) return '';
         if (channel.myPushTriggerOption === 'off') return 'Turn on notifications';
@@ -254,25 +262,26 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       ...overrides?.GROUP_CHANNEL_MEMBERS,
     },
     GROUP_CHANNEL_CREATE: {
-      HEADER_TITLE: 'Select members',
+      HEADER_TITLE: 'New channel',
       HEADER_RIGHT: ({ selectedUsers }) => {
         const len = selectedUsers.length;
         if (len === 0) return 'Create';
-        return `${len} Create`;
+        return `Create (${len})`;
       },
       ...overrides?.GROUP_CHANNEL_CREATE,
     },
     GROUP_CHANNEL_INVITE: {
-      HEADER_TITLE: 'Invite members',
+      HEADER_TITLE: 'Invite users',
       HEADER_RIGHT: ({ selectedUsers }) => {
         const len = selectedUsers.length;
         if (len === 0) return 'Invite';
-        return `${len} invites`;
+        return `Invite (${len})`;
       },
       ...overrides?.GROUP_CHANNEL_INVITE,
     },
     LABELS: {
       USER_NO_NAME,
+      CHANNEL_NO_MEMBERS,
       TYPING_INDICATOR_TYPINGS: (users, NO_NAME = USER_NO_NAME) => {
         const userNames = users.map((u) => u.nickname || NO_NAME);
         if (userNames.length === 0) return;
@@ -284,6 +293,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     },
     PLACEHOLDER: {
       NO_BANNED_MEMBERS: 'No banned members',
+      NO_USERS: 'No users',
       NO_CHANNELS: 'No channels',
       NO_MESSAGES: 'No messages',
       NO_MUTED_MEMBERS: 'No muted members',
@@ -314,6 +324,9 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       RESEND_MSG_ERROR: "Couldn't send message.",
       SEND_MSG_ERROR: "Couldn't send message.",
       UPDATE_MSG_ERROR: "Couldn't edit message.",
+      TURN_ON_NOTIFICATIONS_ERROR: "Couldn't turn on notifications.",
+      TURN_OFF_NOTIFICATIONS_ERROR: "Couldn't turn off notifications.",
+      LEAVE_CHANNEL_ERROR: "Couldn't leave channel.",
       ...overrides?.TOAST,
     },
   };
