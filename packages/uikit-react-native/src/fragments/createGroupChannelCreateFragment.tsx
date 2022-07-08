@@ -5,13 +5,12 @@ import type Sendbird from 'sendbird';
 import { useUserList } from '@sendbird/uikit-chat-hooks';
 import type { GroupChannelCreateFragment, UserListModule } from '@sendbird/uikit-react-native-core';
 import { createUserListModule, useLocalization, useSendbirdChat } from '@sendbird/uikit-react-native-core';
-import { Logger } from '@sendbird/uikit-utils';
+import StatusComposition from '@sendbird/uikit-react-native-core/src/components/StatusComposition';
+import { Logger, PASS } from '@sendbird/uikit-utils';
 
 import UserSelectableBar from '../ui/UserSelectableBar';
 
-const PassValue = <T,>(v: T) => v;
-
-const DefaultUserIdGenerator = <T,>(users: T[]) => {
+const defaultUserIdsGenerator = <T,>(users: T[]) => {
   const userIds = users
     .map((user) => {
       // @ts-ignore
@@ -35,18 +34,17 @@ const createGroupChannelCreateFragment = <UserType,>(
 
   return ({
     Header,
-    userIdsGenerator = DefaultUserIdGenerator,
+    userIdsGenerator = defaultUserIdsGenerator,
     onPressHeaderLeft,
-    onBeforeCreateChannel = PassValue,
+    onBeforeCreateChannel = PASS,
     onCreateChannel,
     sortComparator,
     queryCreator,
     renderUser,
-    children,
   }) => {
     const { sdk, currentUser } = useSendbirdChat();
     const { STRINGS } = useLocalization();
-    const { users, refreshing, refresh, next } = useUserList(sdk, {
+    const { users, refreshing, loading, error, refresh, next } = useUserList(sdk, {
       queryCreator,
       sortComparator,
     });
@@ -61,6 +59,9 @@ const createGroupChannelCreateFragment = <UserType,>(
         const sbUser = user as unknown as Sendbird.User;
         const sbSelectedUsers = selectedUsers as unknown as Sendbird.User[];
         const sbSetSelectedUsers = setSelectedUsers as unknown as React.Dispatch<React.SetStateAction<Sendbird.User[]>>;
+
+        const isMe = sbUser.userId === currentUser?.userId;
+        if (isMe) return null;
 
         const userIdx = sbSelectedUsers.findIndex((u) => u.userId === sbUser.userId);
         const isSelected = userIdx > -1;
@@ -87,6 +88,7 @@ const createGroupChannelCreateFragment = <UserType,>(
       },
       [renderUser, queryCreator],
     );
+
     return (
       <UserListModule.Provider
         headerRight={(selectedUsers) => STRINGS.GROUP_CHANNEL_CREATE.HEADER_RIGHT({ selectedUsers })}
@@ -97,23 +99,33 @@ const createGroupChannelCreateFragment = <UserType,>(
           onPressHeaderLeft={onPressHeaderLeft}
           onPressHeaderRight={async (users) => {
             const params = new sdk.GroupChannelParams();
+
             if (currentUser) params.operatorUserIds = [currentUser.userId];
-            params.isDistinct = true;
             params.addUserIds(userIdsGenerator(users));
+            params.name = '';
+            params.coverUrl = '';
+            params.isDistinct = false;
 
             const processedParams = await onBeforeCreateChannel(params, users);
             const channel = await sdk.GroupChannel.createChannel(processedParams);
             onCreateChannel(channel);
           }}
         />
-        <UserListModule.List
-          onLoadNext={next}
-          users={users}
-          renderUser={_renderUser}
-          onRefresh={refresh}
-          refreshing={refreshing}
-        />
-        {children}
+        <StatusComposition
+          loading={loading}
+          error={Boolean(error)}
+          LoadingComponent={<UserListModule.StatusLoading />}
+          ErrorComponent={<UserListModule.StatusError onPressRetry={() => refresh()} />}
+        >
+          <UserListModule.List
+            onLoadNext={next}
+            users={users}
+            renderUser={_renderUser}
+            onRefresh={refresh}
+            refreshing={refreshing}
+            ListEmptyComponent={<UserListModule.StatusEmpty />}
+          />
+        </StatusComposition>
       </UserListModule.Provider>
     );
   };

@@ -40,16 +40,16 @@ type StringSets = Record<string, StringSet>;
 type Props<T extends StringSets> = {
   children?: React.ReactNode;
   appId: string;
-  appVersion?: string;
-  chatOptions?: {
-    onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
-    localCacheStorage?: LocalCacheStorage;
-    enableAutoPushTokenRegistration?: boolean;
-  };
   platformServices: {
     file: FileServiceInterface;
     notification: NotificationServiceInterface;
     clipboard: ClipboardServiceInterface;
+  };
+  appVersion?: string;
+  chatOptions?: {
+    localCacheStorage?: LocalCacheStorage;
+    enableAutoPushTokenRegistration?: boolean;
+    onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
   };
   localization?: {
     stringSets?: T;
@@ -122,29 +122,29 @@ const SendbirdUIKitContainer = <T extends StringSets>({
         sdkInstance={sdkInstance}
         enableAutoPushTokenRegistration={chatOptions?.enableAutoPushTokenRegistration ?? true}
       >
-        <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
-          <HeaderStyleProvider
-            defaultTitleAlign={styles?.defaultHeaderTitleAlign ?? 'left'}
-            statusBarTranslucent={styles?.statusBarTranslucent ?? true}
+        <LocalizationProvider
+          defaultLocale={(localization?.defaultLocale ?? 'en') as 'en'}
+          stringSets={(localization?.stringSets ?? { en: StringSetEn }) as { en: StringSet }}
+        >
+          <PlatformServiceProvider
+            fileService={platformServices.file}
+            notificationService={platformServices.notification}
+            clipboardService={platformServices.clipboard}
           >
-            <LocalizationProvider
-              defaultLocale={(localization?.defaultLocale ?? 'en') as 'en'}
-              stringSets={(localization?.stringSets ?? { en: StringSetEn }) as { en: StringSet }}
-            >
-              <PlatformServiceProvider
-                fileService={platformServices.file}
-                notificationService={platformServices.notification}
-                clipboardService={platformServices.clipboard}
+            <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
+              <HeaderStyleProvider
+                defaultTitleAlign={styles?.defaultHeaderTitleAlign ?? 'left'}
+                statusBarTranslucent={styles?.statusBarTranslucent ?? true}
               >
                 <LocalizedDialogProvider>
                   <ToastProvider dismissTimeout={toast?.dismissTimeout}>
                     <InternalErrorBoundary {...errorBoundary}>{children}</InternalErrorBoundary>
                   </ToastProvider>
                 </LocalizedDialogProvider>
-              </PlatformServiceProvider>
-            </LocalizationProvider>
-          </HeaderStyleProvider>
-        </UIKitThemeProvider>
+              </HeaderStyleProvider>
+            </UIKitThemeProvider>
+          </PlatformServiceProvider>
+        </LocalizationProvider>
       </SendbirdChatProvider>
     </SafeAreaProvider>
   );

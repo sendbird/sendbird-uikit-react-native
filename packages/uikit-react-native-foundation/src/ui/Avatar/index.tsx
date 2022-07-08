@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
 import { conditionChaining } from '@sendbird/uikit-utils';
@@ -19,6 +19,8 @@ type Props = {
 };
 const Avatar: React.FC<Props> & SubComponents = ({ uri, square, muted = false, size = 56, containerStyle }) => {
   const { colors, palette } = useUIKitTheme();
+  const [loadFailure, setLoadFailure] = useState(false);
+
   return (
     <View
       style={[
@@ -28,9 +30,14 @@ const Avatar: React.FC<Props> & SubComponents = ({ uri, square, muted = false, s
       ]}
     >
       {conditionChaining(
-        [Boolean(uri)],
+        [Boolean(uri) && !loadFailure],
         [
-          <Image source={{ uri }} resizeMode={'cover'} style={StyleSheet.absoluteFill} />,
+          <Image
+            onError={() => setLoadFailure(true)}
+            source={{ uri }}
+            resizeMode={'cover'}
+            style={StyleSheet.absoluteFill}
+          />,
           <Icon icon={'user'} size={size / 2} color={colors.onBackgroundReverse01} />,
         ],
       )}

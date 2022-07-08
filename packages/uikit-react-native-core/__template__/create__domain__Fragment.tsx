@@ -9,7 +9,9 @@ const create__domain__Fragment = (initModule?: Partial<__domain__Module>): __dom
   const __domain__Module = create__domain__Module(initModule);
 
   return ({ Header, onPressHeaderLeft = NOOP, children }) => {
-    // const { domainViewProps } = use__domain__();
+    // const { domainViewProps, loading } = use__domain__();
+
+    // if (loading) return <__domain__Module.StatusLoading />;
 
     return (
       <__domain__Module.Provider>

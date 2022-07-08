@@ -40,7 +40,9 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
     `GroupChannelContextsProvider_${id}`,
     {
       onTypingStatusUpdated(eventChannel) {
-        if (isDifferentChannel(channel, eventChannel) && !enableTypingIndicator) return;
+        if (isDifferentChannel(channel, eventChannel)) return;
+        if (!enableTypingIndicator) return;
+
         const usersWithoutMe = eventChannel.getTypingUsers().filter((u) => u.userId !== currentUser?.userId);
         setTypingUsers(usersWithoutMe);
       },

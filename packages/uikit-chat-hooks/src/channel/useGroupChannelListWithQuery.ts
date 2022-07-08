@@ -20,9 +20,6 @@ const createGroupChannelListQuery = (
 
   const defaultQuery = sdk.GroupChannel.createMyGroupChannelListQuery();
   defaultQuery.limit = 20;
-  defaultQuery.includeEmpty = true;
-  defaultQuery.memberStateFilter = 'all';
-  defaultQuery.order = 'latest_last_message';
   return defaultQuery;
 };
 

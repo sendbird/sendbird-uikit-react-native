@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { View } from 'react-native';
 
-import { Avatar, Header as DefaultHeader, Icon, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
-import { conditionChaining, getMembersExcludeMe, preferDefaultChannelCover, truncate } from '@sendbird/uikit-utils';
+import { Header as DefaultHeader, Icon, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
+import { truncate } from '@sendbird/uikit-utils';
 
+import ChannelCover from '../../../components/ChannelCover';
 import { useLocalization } from '../../../contexts/Localization';
-import { useSendbirdChat } from '../../../contexts/SendbirdChat';
 import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
 
@@ -17,7 +17,6 @@ const GroupChannelHeader: React.FC<GroupChannelProps['Header']> = ({
   const { headerTitle, channel } = useContext(GroupChannelContexts.Fragment);
   const { typingUsers } = useContext(GroupChannelContexts.TypingIndicator);
   const { STRINGS } = useLocalization();
-  const { currentUser } = useSendbirdChat();
 
   if (!Header) return null;
 
@@ -27,17 +26,7 @@ const GroupChannelHeader: React.FC<GroupChannelProps['Header']> = ({
       clearTitleMargin
       title={
         <View style={styles.titleContainer}>
-          {conditionChaining(
-            [preferDefaultChannelCover(channel)],
-            [
-              <Avatar uri={channel.coverUrl} size={34} containerStyle={styles.avatarGroup} />,
-              <Avatar.Group size={34} containerStyle={styles.avatarGroup}>
-                {getMembersExcludeMe(channel, currentUser?.userId).map((m) => (
-                  <Avatar key={m.userId} uri={m.profileUrl} />
-                ))}
-              </Avatar.Group>,
-            ],
-          )}
+          <ChannelCover channel={channel} size={34} containerStyle={styles.avatarGroup} />
           <View>
             <DefaultHeader.Title h2>{truncate(headerTitle, { mode: 'tail', maxLen: 25 })}</DefaultHeader.Title>
             {Boolean(subtitle) && subtitle && (

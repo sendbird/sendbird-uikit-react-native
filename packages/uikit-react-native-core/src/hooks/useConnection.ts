@@ -10,11 +10,11 @@ type ConnectOptions = { nickname?: string; accessToken?: string };
 const cacheStrictCodes = [400300, 400301, 400302, 400310];
 
 const useConnection = () => {
-  const { sdk, enableAutoPushTokenRegistration, setCurrentUser } = useSendbirdChat();
-  const { registerPushTokenForCurrentUser, unregisterPushTokenForCurrentUser } = usePushTokenRegistration(false);
+  const { sdk, setCurrentUser, features } = useSendbirdChat();
+  const { registerPushTokenForCurrentUser, unregisterPushTokenForCurrentUser } = usePushTokenRegistration();
 
   const connect = useCallback(
-    async (userId: string, opts?: ConnectOptions) => {
+    async (userId: string, opts?: ConnectOptions): Promise<Sendbird.User> => {
       return new Promise((resolve, reject) => {
         const callback: Sendbird.userCallback = async (user, error) => {
           if (error && sdk.isCacheEnabled && cacheStrictCodes.some((code) => error.code === code)) {
@@ -35,7 +35,7 @@ const useConnection = () => {
                 .catch((e) => Logger.warn('[useConnection]', 'nickname-sync failure', e));
             }
 
-            if (enableAutoPushTokenRegistration) {
+            if (features.autoPushTokenRegistrationEnabled) {
               Logger.debug('[useConnection]', 'autoPushTokenRegistration enabled, register for current user');
               await registerPushTokenForCurrentUser().catch((e) => {
                 Logger.warn('[useConnection]', 'autoPushToken Registration failure', e);
@@ -58,13 +58,13 @@ const useConnection = () => {
         else sdk.connect(userId, callback);
       });
     },
-    [sdk, registerPushTokenForCurrentUser, enableAutoPushTokenRegistration],
+    [sdk, registerPushTokenForCurrentUser, features.autoPushTokenRegistrationEnabled],
   );
 
   const disconnect = useCallback(async () => {
     Logger.debug('[useConnection]', 'disconnect start');
 
-    if (enableAutoPushTokenRegistration) {
+    if (features.autoPushTokenRegistrationEnabled) {
       Logger.debug('[useConnection]', 'autoPushTokenRegistration enabled, unregister for current user');
       await unregisterPushTokenForCurrentUser().catch((e) => {
         Logger.warn('[useConnection]', 'autoPushToken unregister failure', e);
@@ -74,7 +74,7 @@ const useConnection = () => {
     await sdk.disconnect();
     setCurrentUser(undefined);
     Logger.debug('[useConnection]', 'disconnected!');
-  }, [sdk, unregisterPushTokenForCurrentUser, enableAutoPushTokenRegistration]);
+  }, [sdk, unregisterPushTokenForCurrentUser, features.autoPushTokenRegistrationEnabled]);
 
   return { connect, disconnect, reconnect: sdk.reconnect };
 };

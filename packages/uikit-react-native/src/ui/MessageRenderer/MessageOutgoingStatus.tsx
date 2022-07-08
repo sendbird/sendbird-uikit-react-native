@@ -1,49 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import type Sendbird from 'sendbird';
 
-import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { Icon, LoadingSpinner, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
+import { useUniqId } from '@sendbird/uikit-utils';
 
 const SIZE = 16;
 
-type Props = {
-  channel: Sendbird.GroupChannel;
-  message: SendbirdMessage;
-};
+type Props = { channel: Sendbird.GroupChannel; message: SendbirdMessage };
 const MessageOutgoingStatus: React.FC<Props> = ({ channel, message }) => {
   if (!message.isUserMessage() && !message.isFileMessage()) return null;
 
+  const handlerId = useUniqId('MessageOutgoingStatus');
+
   const { sdk } = useSendbirdChat();
   const { colors } = useUIKitTheme();
-
-  const update = (channel: Sendbird.GroupChannel) => {
-    setState((prev) => {
-      const unreadCount = channel.getUnreadMemberCount(message);
-      const undeliveredCount = channel.getUndeliveredMemberCount(message);
-      if (prev.undeliveredCount === undeliveredCount && prev.unreadCount === unreadCount) return prev;
-      return { unreadCount, undeliveredCount };
-    });
-  };
 
   const [state, setState] = useState(() => ({
     unreadCount: channel.getUnreadMemberCount(message),
     undeliveredCount: channel.getUndeliveredMemberCount(message),
   }));
 
-  useEffect(() => update(channel), [message.sendingStatus]);
+  const getCounts = (channel: Sendbird.GroupChannel, message: Sendbird.UserMessage | Sendbird.FileMessage) => {
+    return {
+      unreadCount: channel.getUnreadMemberCount(message),
+      undeliveredCount: channel.getUndeliveredMemberCount(message),
+    };
+  };
 
-  useChannelHandler(
-    sdk,
-    `MessageOutgoingStatus_${message.messageId || message.reqId}`,
-    {
-      onReadReceiptUpdated(channel) {
-        if (channel.url === message.channelUrl) update(channel);
-      },
-    },
-    [message.messageId, message.reqId],
-  );
+  useEffect(() => {
+    const id = String(handlerId);
+    if (message.sendingStatus === 'succeeded' && state.unreadCount === 0 && state.undeliveredCount === 0) {
+      sdk.removeChannelHandler(id);
+    } else {
+      const handler = new sdk.ChannelHandler();
+      handler.onReadReceiptUpdated = (channel) => {
+        if (channel.url === message.channelUrl) setState(getCounts(channel, message));
+      };
+      handler.onDeliveryReceiptUpdated = (channel) => {
+        if (channel.url === message.channelUrl && channel.isGroupChannel()) setState(getCounts(channel, message));
+      };
+      sdk.addChannelHandler(id, handler);
+    }
+
+    return () => {
+      sdk.removeChannelHandler(id);
+    };
+  }, [message.sendingStatus]);
 
   if (message.sendingStatus === 'pending') {
     return <LoadingSpinner size={SIZE} style={styles.container} />;

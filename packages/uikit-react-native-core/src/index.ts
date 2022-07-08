@@ -7,6 +7,8 @@ export { LocalizationContext, LocalizationProvider, useLocalization } from './co
 
 /** Components **/
 export { default as ChatFlatList } from './components/ChatFlatList';
+export { default as TypedPlaceholder } from './components/TypedPlaceholder';
+export { default as ChannelCover } from './components/ChannelCover';
 
 /** Hooks **/
 export { default as useConnection } from './hooks/useConnection';

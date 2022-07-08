@@ -20,6 +20,7 @@ type Props = Omit<FlatListProps<SendbirdMessage>, 'onEndReached'> & {
   nextMessages: SendbirdMessage[];
   onLeaveScrollBottom: (value: boolean) => void;
 };
+// FIXME: Inverted FlatList performance issue on Android {@link https://github.com/facebook/react-native/issues/30034}
 const ChatFlatList = forwardRef<ChatFlatListRef, Props>(function CustomFlatList(
   { onTopReached, nextMessages, onBottomReached, onLeaveScrollBottom, onScroll, currentUserId, ...props },
   ref,
@@ -75,8 +76,8 @@ const ChatFlatList = forwardRef<ChatFlatListRef, Props>(function CustomFlatList(
   return (
     <FlatList
       {...props}
-      // FIXME: Inverted FlatList performance issue on Android {@link https://github.com/facebook/react-native/issues/30034}
-      inverted
+      // FIXME: inverted list of ListEmptyComponent is reversed {@link https://github.com/facebook/react-native/issues/21196#issuecomment-836937743}
+      inverted={Boolean(props.data?.length)}
       // FIXME: maintainVisibleContentPosition is not working on Android {@link https://github.com/facebook/react-native/issues/25239}
       maintainVisibleContentPosition={{ minIndexForVisible: 1, autoscrollToTopThreshold: AUTO_SCROLL_TO_TOP_THRESHOLD }}
       ref={scrollRef}
@@ -86,6 +87,7 @@ const ChatFlatList = forwardRef<ChatFlatListRef, Props>(function CustomFlatList(
       removeClippedSubviews
       onEndReachedThreshold={0.5}
       onEndReached={onTopReached}
+      scrollEventThrottle={16}
       onScroll={_onScroll}
     />
   );

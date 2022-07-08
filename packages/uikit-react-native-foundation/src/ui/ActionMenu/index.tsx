@@ -13,7 +13,7 @@ import Text from '../Text';
 
 export type ActionMenuItem = {
   title?: string;
-  menuItems: { title: string; onPress?: () => void }[];
+  menuItems: { title: string; onPress?: () => void; onError?: () => void }[];
 };
 
 type Props = {
@@ -58,36 +58,29 @@ const ActionMenu: React.FC<Props> = ({ visible, onHide, onError, onDismiss, titl
           )}
         </View>
         <View style={styles.buttonContainer}>
-          {menuItems.map(({ title, onPress }, index) => {
+          {menuItems.map((item, index) => {
             return (
               <TouchableOpacity
                 activeOpacity={0.75}
-                key={title + index}
+                key={item.title + index}
                 style={styles.button}
                 disabled={pending}
                 onPress={async () => {
-                  // try {
-                  //   await onPress?.();
-                  // } catch (e) {
-                  //   Logger.error('ActionMenu', e);
-                  //   onError?.(e);
-                  // } finally {
-                  //   onHide();
-                  // }
                   setPending(true);
                   try {
-                    await onPress?.();
-                    onHide();
+                    await item.onPress?.();
                   } catch (e: unknown) {
-                    onError?.(e);
-                    if (!onError) Logger.error('ActionMenu onPress error', e);
+                    const errorHandler = onError ?? item.onError;
+                    errorHandler?.(e);
+                    if (!errorHandler) Logger.error('ActionMenu onPress error', e);
                   } finally {
+                    onHide();
                     setPending(false);
                   }
                 }}
               >
                 <Text subtitle2 color={colors.ui.dialog.default.none.text} numberOfLines={1}>
-                  {title}
+                  {item.title}
                 </Text>
               </TouchableOpacity>
             );

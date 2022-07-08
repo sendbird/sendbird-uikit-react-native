@@ -60,6 +60,7 @@ export type UserListProps<User> = {
     onLoadNext: () => Promise<void>;
     onRefresh?: () => Promise<void>;
     refreshing?: boolean;
+    ListEmptyComponent?: React.ReactElement;
   };
   Provider: {
     headerTitle: string;
@@ -87,6 +88,9 @@ export interface UserListModule<User> {
   Provider: React.FC<UserListProps<User>['Provider']>;
   Header: CommonComponent<UserListProps<User>['Header']>;
   List: CommonComponent<UserListProps<User>['List']>;
+  StatusEmpty: CommonComponent;
+  StatusLoading: CommonComponent;
+  StatusError: CommonComponent<{ onPressRetry: () => void }>;
 }
 
 export type UserListFragment<User> = React.FC<UserListProps<User>['Fragment']>;

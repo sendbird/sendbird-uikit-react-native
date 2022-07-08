@@ -3,7 +3,8 @@ export { default as arrayToMap, arrayToMapWithGetter } from './shared/arrayToMap
 export { createPubSub } from './shared/pubsub';
 export { default as conditionChaining } from './shared/conditionChaining';
 export {
-  urlRegex,
+  urlRegexStrict,
+  urlRegexRough,
   newLineRegex,
   audioExtRegex,
   videoExtRegex,
@@ -23,6 +24,7 @@ export * from './sendbird/attrs';
 
 export const NOOP: () => void = () => void 0;
 export const ASYNC_NOOP = async () => void 0;
+export const PASS = <T,>(val: T) => val;
 export type {
   FilterByValueType,
   UnionToIntersection,

@@ -55,15 +55,17 @@ const GroupChannelPreview: React.FC<Props> = ({
       <View style={styles.rightSection}>
         <View style={styles.rightTopSection}>
           <View style={styles.channelInfo}>
-            <Text numberOfLines={1} subtitle1 style={styles.title}>
+            <Text numberOfLines={1} subtitle1 style={styles.channelInfoTitle}>
               {title}
             </Text>
             {Boolean(memberCount) && (
-              <Text caption1 style={styles.memberCount} color={colors.onBackground02}>
+              <Text caption1 style={styles.channelInfoMemberCount} color={colors.onBackground02}>
                 {memberCount}
               </Text>
             )}
-            {frozen && <Icon size={16} icon={'freeze'} color={colors.primary} containerStyle={styles.frozen} />}
+            {frozen && (
+              <Icon size={16} icon={'freeze'} color={colors.primary} containerStyle={styles.channelInfoFrozen} />
+            )}
             {notificationOff && <Icon size={16} icon={'notifications-off-filled'} color={colors.onBackground03} />}
           </View>
           <View style={styles.titleCaption}>
@@ -90,7 +92,7 @@ const GroupChannelPreview: React.FC<Props> = ({
               {body}
             </Text>
           </View>
-          {badgeCount > 0 && <Badge count={badgeCount} maxCount={maxBadgeCount} />}
+          <View>{badgeCount > 0 && <Badge count={badgeCount} maxCount={maxBadgeCount} />}</View>
         </View>
       </View>
       <Separator />
@@ -132,26 +134,31 @@ const styles = createStyleSheet({
     alignItems: 'center',
     flexDirection: 'row',
   },
-  title: {
+  channelInfoTitle: {
     flexShrink: 1,
     marginRight: 4,
   },
-  memberCount: {
+  channelInfoMemberCount: {
     paddingTop: 2,
+    marginRight: 4,
+  },
+  channelInfoFrozen: {
+    marginRight: 4,
   },
   titleCaption: {
     marginLeft: 4,
     paddingTop: 2,
   },
   rightBottomSection: {
-    alignItems: 'center',
+    flex: 1,
+    height: '100%',
     flexDirection: 'row',
-    height: 32,
   },
   body: {
     marginRight: 4,
     flex: 1,
-    alignItems: 'center',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
     flexDirection: 'row',
   },
   bodyText: {
@@ -169,9 +176,6 @@ const styles = createStyleSheet({
     borderRadius: 99,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  frozen: {
-    marginRight: 4,
   },
   separator: {
     position: 'absolute',

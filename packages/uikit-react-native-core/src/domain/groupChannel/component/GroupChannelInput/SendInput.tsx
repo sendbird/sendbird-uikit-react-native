@@ -101,7 +101,7 @@ const SendInput: React.FC<SendInputProps> = ({ onSendUserMessage, onSendFileMess
           [STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_DISABLED, STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE],
         )}
       />
-      {Boolean(text) && (
+      {Boolean(text.trim()) && (
         <TouchableOpacity onPress={onPressSend} disabled={disabled}>
           <Icon
             color={disabled ? colors.ui.input.default.disabled.highlight : colors.ui.input.default.active.highlight}
