@@ -27,7 +27,7 @@ const UserListList = <T,>({
       onRefresh={onRefresh}
       renderItem={renderItem}
       onEndReached={onLoadNext}
-      contentContainerStyle={{ paddingLeft: left, paddingRight: right, flexGrow: 1, flex: 1 }}
+      contentContainerStyle={{ paddingLeft: left, paddingRight: right, flexGrow: 1 }}
       ListEmptyComponent={ListEmptyComponent}
     />
   );
