@@ -70,8 +70,6 @@ const createNativeFileService = ({
         return nativePermissionGranted(status);
       } else {
         const status = await permissionModule.checkMultiple(mediaLibraryPermissionsLegacy);
-        console.log(status);
-
         return nativePermissionGranted(status);
       }
     }
@@ -81,8 +79,6 @@ const createNativeFileService = ({
         return nativePermissionGranted(status);
       } else {
         const status = await permissionModule.checkMultiple(mediaLibraryPermissionsLegacy);
-        console.log(status);
-
         return nativePermissionGranted(status);
       }
     }
@@ -152,27 +148,23 @@ const createNativeFileService = ({
     }
     async save(options: SaveOptions): Promise<string> {
       const hasPermission = await this.hasMediaLibraryPermission();
-      console.log('hasPermission', hasPermission);
       if (!hasPermission) {
         const granted = await this.requestMediaLibraryPermission();
         if (!granted) throw new Error('Permission not granted');
       }
 
-      const basePath = Platform.select({
-        android: fsModule.Dirs.CacheDir,
-        default: fsModule.Dirs.DocumentDir,
-      });
+      const basePath = Platform.select({ android: fsModule.Dirs.CacheDir, default: fsModule.Dirs.DocumentDir });
       const downloadPath = `${basePath}/${options.fileName}`;
 
       await fsModule.FileSystem.fetch(options.fileUrl, { path: downloadPath });
 
       const fileType = getFileType(getFileExtension(options.fileUrl));
-      const dirType = <const>{
+      const dirType = {
         'file': 'downloads',
         'audio': 'audio',
         'image': 'images',
         'video': 'video',
-      }
+      } as const;
 
       if (Platform.OS === 'ios') {
         await mediaLibraryModule.save(downloadPath);
