@@ -1,9 +1,10 @@
 import type CameraRoll from '@react-native-community/cameraroll';
 import { Platform } from 'react-native';
+import type * as DeviceInfo from 'react-native-device-info';
 import type * as DocumentPicker from 'react-native-document-picker';
-import type * as RNFS from 'react-native-fs';
+import type * as FileAccess from 'react-native-file-access';
 import type * as ImagePicker from 'react-native-image-picker';
-import type Permissions from 'react-native-permissions';
+import type * as Permissions from 'react-native-permissions';
 import type { Permission } from 'react-native-permissions';
 
 import { getFileExtension, getFileType } from '@sendbird/uikit-utils';
@@ -25,28 +26,34 @@ const createNativeFileService = ({
   permissionModule,
   mediaLibraryModule,
   fsModule,
+  deviceInfoModule,
 }: {
   imagePickerModule: typeof ImagePicker;
   documentPickerModule: typeof DocumentPicker;
   permissionModule: typeof Permissions;
   mediaLibraryModule: typeof CameraRoll;
-  fsModule: typeof RNFS;
+  fsModule: typeof FileAccess;
+  deviceInfoModule: typeof DeviceInfo;
 }): FileServiceInterface => {
   const cameraPermissions: Permission[] = Platform.select({
     ios: [permissionModule.PERMISSIONS.IOS.CAMERA],
     android: [permissionModule.PERMISSIONS.ANDROID.CAMERA],
     default: [],
   });
-  const mediaLibraryReadPermissions: Permission[] = Platform.select({
+  const mediaLibraryPermissionsLegacy: Permission[] = Platform.select({
+    ios: [permissionModule.PERMISSIONS.IOS.MEDIA_LIBRARY, permissionModule.PERMISSIONS.IOS.PHOTO_LIBRARY],
+    android: [
+      permissionModule.PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
+      permissionModule.PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+    ],
+    default: [],
+  });
+  const mediaLibraryPermissions: Permission[] = Platform.select({
     ios: [permissionModule.PERMISSIONS.IOS.MEDIA_LIBRARY, permissionModule.PERMISSIONS.IOS.PHOTO_LIBRARY],
     android: [permissionModule.PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE],
     default: [],
   });
-  const mediaLibraryWritePermissions: Permission[] = Platform.select({
-    ios: [permissionModule.PERMISSIONS.IOS.PHOTO_LIBRARY_ADD_ONLY],
-    android: [permissionModule.PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE],
-    default: [],
-  });
+  deviceInfoModule.getApiLevel();
 
   class NativeFileService implements FileServiceInterface {
     async hasCameraPermission(): Promise<boolean> {
@@ -57,17 +64,27 @@ const createNativeFileService = ({
       const status = await permissionModule.requestMultiple(cameraPermissions);
       return nativePermissionGranted(status);
     }
-    async hasMediaLibraryPermission(type: 'read' | 'write'): Promise<boolean> {
-      const status = await permissionModule.checkMultiple(
-        type === 'read' ? mediaLibraryReadPermissions : mediaLibraryWritePermissions,
-      );
-      return nativePermissionGranted(status);
+    async hasMediaLibraryPermission(): Promise<boolean> {
+      if (Platform.OS !== 'android' || (await deviceInfoModule.getApiLevel()) > 28) {
+        const status = await permissionModule.checkMultiple(mediaLibraryPermissions);
+        return nativePermissionGranted(status);
+      } else {
+        const status = await permissionModule.checkMultiple(mediaLibraryPermissionsLegacy);
+        console.log(status);
+
+        return nativePermissionGranted(status);
+      }
     }
-    async requestMediaLibraryPermission(type: 'read' | 'write'): Promise<boolean> {
-      const status = await permissionModule.requestMultiple(
-        type === 'read' ? mediaLibraryReadPermissions : mediaLibraryWritePermissions,
-      );
-      return nativePermissionGranted(status);
+    async requestMediaLibraryPermission(): Promise<boolean> {
+      if (Platform.OS !== 'android' || (await deviceInfoModule.getApiLevel()) > 28) {
+        const status = await permissionModule.requestMultiple(mediaLibraryPermissions);
+        return nativePermissionGranted(status);
+      } else {
+        const status = await permissionModule.checkMultiple(mediaLibraryPermissionsLegacy);
+        console.log(status);
+
+        return nativePermissionGranted(status);
+      }
     }
 
     async openCamera(options?: OpenCameraOptions): Promise<FilePickerResponse> {
@@ -99,9 +116,9 @@ const createNativeFileService = ({
        * We do not support 0 (any number of files)
        **/
       const selectionLimit = options?.selectionLimit || 1;
-      const hasPermission = await this.hasMediaLibraryPermission('read');
+      const hasPermission = await this.hasMediaLibraryPermission();
       if (!hasPermission) {
-        const granted = await this.requestMediaLibraryPermission('read');
+        const granted = await this.requestMediaLibraryPermission();
         if (!granted) {
           options?.onOpenFailureWithToastMessage?.();
           return null;
@@ -133,27 +150,36 @@ const createNativeFileService = ({
         return null;
       }
     }
-    async save(options: SaveOptions) {
+    async save(options: SaveOptions): Promise<string> {
+      const hasPermission = await this.hasMediaLibraryPermission();
+      console.log('hasPermission', hasPermission);
+      if (!hasPermission) {
+        const granted = await this.requestMediaLibraryPermission();
+        if (!granted) throw new Error('Permission not granted');
+      }
+
       const basePath = Platform.select({
-        android: fsModule.DownloadDirectoryPath,
-        default: fsModule.DocumentDirectoryPath,
+        android: fsModule.Dirs.CacheDir,
+        default: fsModule.Dirs.DocumentDir,
       });
       const downloadPath = `${basePath}/${options.fileName}`;
 
-      const fileType = getFileType(getFileExtension(options.fileUrl));
-      if (fileType.match(/image|video/)) {
-        const hasPermission = await this.hasMediaLibraryPermission('write');
-        if (!hasPermission) {
-          const granted = await this.requestMediaLibraryPermission('write');
-          if (!granted) throw new Error('Permission not granted');
-        }
+      await fsModule.FileSystem.fetch(options.fileUrl, { path: downloadPath });
 
-        await fsModule.downloadFile({ fromUrl: options.fileUrl, toFile: downloadPath }).promise;
-        await mediaLibraryModule.save(downloadPath);
-      } else {
-        await fsModule.downloadFile({ fromUrl: options.fileUrl, toFile: downloadPath }).promise;
+      const fileType = getFileType(getFileExtension(options.fileUrl));
+      const dirType = <const>{
+        'file': 'downloads',
+        'audio': 'audio',
+        'image': 'images',
+        'video': 'video',
       }
 
+      if (Platform.OS === 'ios') {
+        await mediaLibraryModule.save(downloadPath);
+      }
+      if (Platform.OS === 'android') {
+        await fsModule.FileSystem.cpExternal(downloadPath, options.fileName, dirType[fileType]);
+      }
       return downloadPath;
     }
   }

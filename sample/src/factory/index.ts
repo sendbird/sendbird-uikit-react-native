@@ -4,10 +4,11 @@ import RNFBMessaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import axios from 'axios';
 import { Platform, StatusBar } from 'react-native';
+import * as ReactNativeDeviceInfo from 'react-native-device-info';
 import * as DocumentPicker from 'react-native-document-picker';
-import * as RNFS from 'react-native-fs';
+import * as FileAccess from 'react-native-file-access';
 import * as ImagePicker from 'react-native-image-picker';
-import Permissions from 'react-native-permissions';
+import * as Permissions from 'react-native-permissions';
 
 import {
   createNativeClipboardService,
@@ -29,8 +30,9 @@ export const FileService = createNativeFileService({
   imagePickerModule: ImagePicker,
   documentPickerModule: DocumentPicker,
   permissionModule: Permissions,
-  fsModule: RNFS,
+  fsModule: FileAccess,
   mediaLibraryModule: CameraRoll,
+  deviceInfoModule: ReactNativeDeviceInfo,
 });
 
 export const GetTranslucent = (state = true) => {
