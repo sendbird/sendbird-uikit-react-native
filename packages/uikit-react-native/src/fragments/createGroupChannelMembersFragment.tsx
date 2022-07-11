@@ -3,8 +3,12 @@ import type Sendbird from 'sendbird';
 
 import { CustomQuery, useUserList } from '@sendbird/uikit-chat-hooks';
 import type { GroupChannelMembersFragment, UserListModule } from '@sendbird/uikit-react-native-core';
-import { createUserListModule, useLocalization, useSendbirdChat } from '@sendbird/uikit-react-native-core';
-import StatusComposition from '@sendbird/uikit-react-native-core/src/components/StatusComposition';
+import {
+  StatusComposition,
+  createUserListModule,
+  useLocalization,
+  useSendbirdChat,
+} from '@sendbird/uikit-react-native-core';
 import { Icon } from '@sendbird/uikit-react-native-foundation';
 
 import UserActionBar from '../ui/UserActionBar';

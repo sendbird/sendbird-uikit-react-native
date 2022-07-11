@@ -2,8 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 
 import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
 import type { GroupChannelFragment, GroupChannelModule, GroupChannelProps } from '@sendbird/uikit-react-native-core';
-import { createGroupChannelModule, useSendbirdChat } from '@sendbird/uikit-react-native-core';
-import StatusComposition from '@sendbird/uikit-react-native-core/src/components/StatusComposition';
+import { StatusComposition, createGroupChannelModule, useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { NOOP, PASS, messageComparator } from '@sendbird/uikit-utils';
 
 import MessageRenderer from '../ui/MessageRenderer';

@@ -105,6 +105,8 @@ export interface GroupChannelListModule {
   List: CommonComponent<GroupChannelListProps['List']>;
   TypeSelector: CommonComponent<GroupChannelListProps['TypeSelector']>;
   ChannelMenu: CommonComponent<GroupChannelListProps['ChannelMenu']>;
+  StatusEmpty: CommonComponent;
+  StatusLoading: CommonComponent;
 }
 
 export type GroupChannelListFragment = React.FC<GroupChannelListProps['Fragment']>;

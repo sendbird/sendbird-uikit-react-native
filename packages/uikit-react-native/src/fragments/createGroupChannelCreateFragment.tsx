@@ -4,8 +4,12 @@ import type Sendbird from 'sendbird';
 
 import { useUserList } from '@sendbird/uikit-chat-hooks';
 import type { GroupChannelCreateFragment, UserListModule } from '@sendbird/uikit-react-native-core';
-import { createUserListModule, useLocalization, useSendbirdChat } from '@sendbird/uikit-react-native-core';
-import StatusComposition from '@sendbird/uikit-react-native-core/src/components/StatusComposition';
+import {
+  StatusComposition,
+  createUserListModule,
+  useLocalization,
+  useSendbirdChat,
+} from '@sendbird/uikit-react-native-core';
 import { Logger, PASS } from '@sendbird/uikit-utils';
 
 import UserSelectableBar from '../ui/UserSelectableBar';

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { AppState, Pressable, View } from 'react-native';
+import { AppState, Pressable } from 'react-native';
 
 import { useGroupChannelList } from '@sendbird/uikit-chat-hooks';
 import type {
@@ -9,7 +9,7 @@ import type {
 } from '@sendbird/uikit-react-native-core';
 import {
   ChannelCover,
-  TypedPlaceholder,
+  StatusComposition,
   createGroupChannelListModule,
   useLocalization,
   useSendbirdChat,
@@ -30,7 +30,6 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     sortComparator = channelComparator,
     // skipTypeSelection = true,
     flatListProps = {},
-    children,
   }) => {
     const { sdk, currentUser, features, markAsDeliveredWithChannel } = useSendbirdChat();
     const { STRINGS } = useLocalization();
@@ -81,22 +80,20 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     return (
       <GroupChannelListModule.Provider>
         <GroupChannelListModule.Header Header={Header} />
-        <GroupChannelListModule.List
-          refreshing={refreshing}
-          renderGroupChannelPreview={renderGroupChannelPreview}
-          groupChannels={groupChannels}
-          onLoadNext={next}
-          onRefresh={refresh}
-          flatListProps={{
-            ListEmptyComponent: (
-              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <TypedPlaceholder type={loading ? 'loading' : 'no-channels'} />
-              </View>
-            ),
-            contentContainerStyle: { flexGrow: 1 },
-            ...flatListProps,
-          }}
-        />
+        <StatusComposition loading={loading} LoadingComponent={<GroupChannelListModule.StatusLoading />}>
+          <GroupChannelListModule.List
+            refreshing={refreshing}
+            renderGroupChannelPreview={renderGroupChannelPreview}
+            groupChannels={groupChannels}
+            onLoadNext={next}
+            onRefresh={refresh}
+            flatListProps={{
+              ListEmptyComponent: <GroupChannelListModule.StatusEmpty />,
+              contentContainerStyle: { flexGrow: 1 },
+              ...flatListProps,
+            }}
+          />
+        </StatusComposition>
         <GroupChannelListModule.TypeSelector
           // NOTE: not included in first iteration
           skipTypeSelection
@@ -104,7 +101,6 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
           onSelectType={onPressCreateChannel}
         />
         <GroupChannelListModule.ChannelMenu />
-        {children}
       </GroupChannelListModule.Provider>
     );
   };
