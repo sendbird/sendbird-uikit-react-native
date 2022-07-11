@@ -53,7 +53,6 @@ const createNativeFileService = ({
     android: [permissionModule.PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE],
     default: [],
   });
-  deviceInfoModule.getApiLevel();
 
   class NativeFileService implements FileServiceInterface {
     async hasCameraPermission(): Promise<boolean> {
@@ -78,7 +77,7 @@ const createNativeFileService = ({
         const status = await permissionModule.requestMultiple(mediaLibraryPermissions);
         return nativePermissionGranted(status);
       } else {
-        const status = await permissionModule.checkMultiple(mediaLibraryPermissionsLegacy);
+        const status = await permissionModule.requestMultiple(mediaLibraryPermissionsLegacy);
         return nativePermissionGranted(status);
       }
     }
