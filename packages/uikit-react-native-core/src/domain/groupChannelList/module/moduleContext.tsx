@@ -1,5 +1,4 @@
 import React, { createContext, useCallback, useState } from 'react';
-import type Sendbird from 'sendbird';
 
 import { NOOP } from '@sendbird/uikit-utils';
 
@@ -17,9 +16,6 @@ export const GroupChannelListContexts: GroupChannelListContextsType = {
     hide: NOOP,
     show: NOOP,
   }),
-  ChannelMenu: createContext({
-    selectChannel: NOOP,
-  }),
 };
 
 export const GroupChannelListContextsProvider: React.FC = ({ children }) => {
@@ -30,18 +26,13 @@ export const GroupChannelListContextsProvider: React.FC = ({ children }) => {
   const show = useCallback(() => setVisible(true), []);
   const hide = useCallback(() => setVisible(false), []);
 
-  // Channel menu
-  const [selectedChannel, selectChannel] = useState<Sendbird.GroupChannel>();
-
   return (
     <ProviderLayout>
       <GroupChannelListContexts.TypeSelector.Provider
         value={{ headerTitle: STRINGS.GROUP_CHANNEL_LIST.TYPE_SELECTOR_HEADER_TITLE, visible, show, hide }}
       >
         <GroupChannelListContexts.Fragment.Provider value={{ headerTitle: STRINGS.GROUP_CHANNEL_LIST.HEADER_TITLE }}>
-          <GroupChannelListContexts.ChannelMenu.Provider value={{ selectChannel, selectedChannel }}>
-            {children}
-          </GroupChannelListContexts.ChannelMenu.Provider>
+          {children}
         </GroupChannelListContexts.Fragment.Provider>
       </GroupChannelListContexts.TypeSelector.Provider>
     </ProviderLayout>

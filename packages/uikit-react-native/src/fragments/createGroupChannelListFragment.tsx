@@ -14,7 +14,7 @@ import {
   useLocalization,
   useSendbirdChat,
 } from '@sendbird/uikit-react-native-core';
-import { Logger, channelComparator } from '@sendbird/uikit-utils';
+import { Logger, PASS, channelComparator } from '@sendbird/uikit-utils';
 
 import { DEFAULT_LONG_PRESS_DELAY } from '../constants';
 import GroupChannelPreview from '../ui/GroupChannelPreview';
@@ -30,6 +30,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     sortComparator = channelComparator,
     // skipTypeSelection = true,
     flatListProps = {},
+    menuItemCreator = PASS,
   }) => {
     const { sdk, currentUser, features, markAsDeliveredWithChannel } = useSendbirdChat();
     const { STRINGS } = useLocalization();
@@ -82,6 +83,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
         <GroupChannelListModule.Header Header={Header} />
         <StatusComposition loading={loading} LoadingComponent={<GroupChannelListModule.StatusLoading />}>
           <GroupChannelListModule.List
+            menuItemCreator={menuItemCreator}
             refreshing={refreshing}
             renderGroupChannelPreview={renderGroupChannelPreview}
             groupChannels={groupChannels}
@@ -100,7 +102,6 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
           Header={TypeSelectorHeader}
           onSelectType={onPressCreateChannel}
         />
-        <GroupChannelListModule.ChannelMenu />
       </GroupChannelListModule.Provider>
     );
   };

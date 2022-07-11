@@ -3,7 +3,7 @@ import type { FlatListProps } from 'react-native';
 import type Sendbird from 'sendbird';
 
 import type { UseGroupChannelListOptions } from '@sendbird/uikit-chat-hooks';
-import type { BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
+import type { ActionMenuItem, BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
 
 import type { CommonComponent } from '../../types';
 
@@ -28,6 +28,7 @@ import type { CommonComponent } from '../../types';
  * @property List.onRefresh - Method to refresh GroupChannels
  * @property List.refreshing - State of refreshing
  * @property List.flatListProps - FlatList props from Fragment {@link Fragment.flatListProps}
+ * @property List.menuItemCreator - Action menu item creator for onLongPress
  *
  * @type {GroupChannelListProps.TypeSelector} - Props from Fragment for create TypeSelector module
  * @property TypeSelector.Header - Custom header component from Fragment {@link Fragment.TypeSelectorHeader}
@@ -56,6 +57,7 @@ export type GroupChannelListProps = {
     queryCreator?: UseGroupChannelListOptions['queryCreator'];
     sortComparator?: UseGroupChannelListOptions['sortComparator'];
     flatListProps?: GroupChannelListProps['List']['flatListProps'];
+    menuItemCreator?: GroupChannelListProps['List']['menuItemCreator'];
   };
   Header: {
     Header: GroupChannelListProps['Fragment']['Header'];
@@ -70,13 +72,13 @@ export type GroupChannelListProps = {
     onRefresh?: () => Promise<void>;
     refreshing?: boolean;
     flatListProps?: Omit<FlatListProps<Sendbird.GroupChannel>, 'data' | 'renderItem'>;
+    menuItemCreator?: (defaultMenuItem: ActionMenuItem) => ActionMenuItem;
   };
   TypeSelector: {
     Header: GroupChannelListProps['Fragment']['TypeSelectorHeader'];
     skipTypeSelection: boolean;
     onSelectType: (type: GroupChannelType) => void;
   };
-  ChannelMenu: {};
 };
 
 /**
@@ -94,17 +96,12 @@ export type GroupChannelListContextsType = {
     hide: () => void;
     headerTitle: string;
   }>;
-  ChannelMenu: React.Context<{
-    selectedChannel?: Sendbird.GroupChannel;
-    selectChannel: (channel?: Sendbird.GroupChannel) => void;
-  }>;
 };
 export interface GroupChannelListModule {
   Provider: React.FC;
   Header: CommonComponent<GroupChannelListProps['Header']>;
   List: CommonComponent<GroupChannelListProps['List']>;
   TypeSelector: CommonComponent<GroupChannelListProps['TypeSelector']>;
-  ChannelMenu: CommonComponent<GroupChannelListProps['ChannelMenu']>;
   StatusEmpty: CommonComponent;
   StatusLoading: CommonComponent;
 }
