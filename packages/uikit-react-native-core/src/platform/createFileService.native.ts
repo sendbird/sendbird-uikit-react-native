@@ -156,10 +156,9 @@ const createNativeFileService = ({
       const downloadPath = `${basePath}/${options.fileName}`;
 
       await fsModule.FileSystem.fetch(options.fileUrl, { path: downloadPath });
-
       const fileType = getFileType(getFileExtension(options.fileUrl));
 
-      if (Platform.OS === 'ios' && fileType.match(/audio|video/)) {
+      if (Platform.OS === 'ios' && fileType.match(/image|video/)) {
         await mediaLibraryModule.save(downloadPath);
       }
       if (Platform.OS === 'android') {
