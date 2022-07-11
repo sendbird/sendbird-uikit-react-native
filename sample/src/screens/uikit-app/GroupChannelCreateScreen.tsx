@@ -13,10 +13,9 @@ const GroupChannelCreateScreen: React.FC = () => {
 
   return (
     <GroupChannelCreateFragment
+      channelType={params.channelType}
       onBeforeCreateChannel={(channelParams) => {
         // Customize channel params before create
-        if (params.channelType === 'BROADCAST') channelParams.isBroadcast = true;
-        if (params.channelType === 'SUPER_GROUP') channelParams.isSuper = true;
         return channelParams;
       }}
       onCreateChannel={async (channel) => {

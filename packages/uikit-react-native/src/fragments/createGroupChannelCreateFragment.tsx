@@ -44,6 +44,7 @@ const createGroupChannelCreateFragment = <UserType,>(
     onCreateChannel,
     sortComparator,
     queryCreator,
+    channelType = 'GROUP',
     renderUser,
   }) => {
     const { sdk, currentUser } = useSendbirdChat();
@@ -104,6 +105,8 @@ const createGroupChannelCreateFragment = <UserType,>(
           onPressHeaderRight={async (users) => {
             const params = new sdk.GroupChannelParams();
 
+            if (channelType === 'BROADCAST') params.isBroadcast = true;
+            if (channelType === 'SUPER_GROUP') params.isSuper = true;
             if (currentUser) params.operatorUserIds = [currentUser.userId];
             params.addUserIds(userIdsGenerator(users));
             params.name = '';

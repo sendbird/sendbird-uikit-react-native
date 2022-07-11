@@ -5,6 +5,7 @@ import type { UseUserListOptions } from '@sendbird/uikit-chat-hooks';
 import type { BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
 
 import type { CommonComponent } from '../../types';
+import type { GroupChannelType } from '../groupChannelList/types';
 import type { UserListProps } from '../userList/types';
 
 type UserIds = string[];
@@ -19,7 +20,7 @@ export type GroupChannelCreateFragment<User> = React.FC<{
       onPressLeft: () => void;
     }>
   >;
-
+  channelType?: GroupChannelType;
   userIdsGenerator?: (users: User[]) => UserIds;
   onPressHeaderLeft: () => void;
   onBeforeCreateChannel?: (
@@ -42,7 +43,6 @@ export type GroupChannelInviteFragment<User> = React.FC<{
       onPressLeft: () => void;
     }>
   >;
-
   channel: Sendbird.GroupChannel;
   userIdsGenerator?: (users: User[]) => UserIds;
   onPressHeaderLeft: () => void;
@@ -62,7 +62,6 @@ export type GroupChannelMembersFragment<User> = React.FC<{
       onPressLeft: () => void;
     }>
   >;
-
   channel: Sendbird.GroupChannel;
   onPressHeaderLeft: () => void;
   onPressHeaderRight: () => void;
