@@ -29,18 +29,20 @@ export const replaceUrlAsComponents = <T>(originText: string, replacer: (url: st
   const matches = [...originText.matchAll(strict ? urlRegexStrict : urlRegexRough)];
   const founds = matches.map((value) => {
     const text = value[0];
-    const pos = value.index ?? 0;
-    const end = pos + text.length;
-    return { text, pos, end };
+    const start = value.index ?? 0;
+    const end = start + text.length;
+    return { text, start, end };
   });
 
   const items: Array<string | T> = [originText];
-  founds.forEach(({ text, pos, end }) => {
+  let cursor = 0;
+  founds.forEach(({ text, start, end }) => {
     const restText = items.pop() as string;
-    const head = restText.slice(0, pos);
+    const head = restText.slice(0, start - cursor);
     const mid = replacer(text);
-    const tail = restText.slice(end);
+    const tail = restText.slice(end - cursor);
     items.push(head, mid, tail);
+    cursor = end;
   });
   return items;
 };
