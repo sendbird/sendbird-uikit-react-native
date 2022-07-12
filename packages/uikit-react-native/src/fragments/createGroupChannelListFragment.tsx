@@ -34,7 +34,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
   }) => {
     const { sdk, currentUser, features, markAsDeliveredWithChannel } = useSendbirdChat();
     const { STRINGS } = useLocalization();
-    const { groupChannels, refresh, refreshing, next, loading } = useGroupChannelList(sdk, currentUser?.userId, {
+    const { groupChannels, next, loading } = useGroupChannelList(sdk, currentUser?.userId, {
       queryCreator,
       sortComparator,
       enableCollectionWithoutLocalCache: true,
@@ -84,11 +84,9 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
         <StatusComposition loading={loading} LoadingComponent={<GroupChannelListModule.StatusLoading />}>
           <GroupChannelListModule.List
             menuItemCreator={menuItemCreator}
-            refreshing={refreshing}
             renderGroupChannelPreview={renderGroupChannelPreview}
             groupChannels={groupChannels}
             onLoadNext={next}
-            onRefresh={refresh}
             flatListProps={{
               ListEmptyComponent: <GroupChannelListModule.StatusEmpty />,
               contentContainerStyle: { flexGrow: 1 },

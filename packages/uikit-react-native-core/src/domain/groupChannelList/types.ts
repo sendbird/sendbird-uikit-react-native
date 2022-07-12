@@ -25,8 +25,6 @@ import type { CommonComponent } from '../../types';
  * @property List.groupChannels - GroupChannels from SendbirdChat SDK, We are using '@sendbird/uikit-chat-hooks'
  * @property List.renderGroupChannelPreview - Method to render GroupChannel preview
  * @property List.onLoadNext - Method to load more data, called with onEndReached of FlatList
- * @property List.onRefresh - Method to refresh GroupChannels
- * @property List.refreshing - State of refreshing
  * @property List.flatListProps - FlatList props from Fragment {@link Fragment.flatListProps}
  * @property List.menuItemCreator - Action menu item creator for onLongPress
  *
@@ -37,6 +35,8 @@ import type { CommonComponent } from '../../types';
  * */
 export type GroupChannelListProps = {
   Fragment: {
+    onPressChannel: (channel: Sendbird.GroupChannel) => void;
+    onPressCreateChannel: (channelType: GroupChannelType) => void;
     Header?: null | CommonComponent<
       BaseHeaderProps<{
         title: string;
@@ -52,8 +52,6 @@ export type GroupChannelListProps = {
       }>
     >;
     // skipTypeSelection?: boolean;
-    onPressChannel: (channel: Sendbird.GroupChannel) => void;
-    onPressCreateChannel: (channelType: GroupChannelType) => void;
     queryCreator?: UseGroupChannelListOptions['queryCreator'];
     sortComparator?: UseGroupChannelListOptions['sortComparator'];
     flatListProps?: GroupChannelListProps['List']['flatListProps'];
@@ -69,8 +67,6 @@ export type GroupChannelListProps = {
       onLongPressChannel: () => void,
     ) => React.ReactElement | null;
     onLoadNext: () => Promise<void>;
-    onRefresh?: () => Promise<void>;
-    refreshing?: boolean;
     flatListProps?: Omit<FlatListProps<Sendbird.GroupChannel>, 'data' | 'renderItem'>;
     menuItemCreator?: (defaultMenuItem: ActionMenuItem) => ActionMenuItem;
   };

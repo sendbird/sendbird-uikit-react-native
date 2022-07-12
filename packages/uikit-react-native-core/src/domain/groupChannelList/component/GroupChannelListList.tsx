@@ -14,8 +14,6 @@ const GroupChannelListList: React.FC<GroupChannelListProps['List']> = ({
   renderGroupChannelPreview,
   groupChannels,
   onLoadNext,
-  // refreshing,
-  // onRefresh,
   flatListProps,
   menuItemCreator = PASS,
 }) => {
@@ -68,8 +66,6 @@ const GroupChannelListList: React.FC<GroupChannelListProps['List']> = ({
     <FlatList
       bounces={false}
       data={groupChannels}
-      // refreshing={refreshing}
-      // onRefresh={onRefresh}
       renderItem={renderItem}
       onEndReached={onLoadNext}
       {...flatListProps}
