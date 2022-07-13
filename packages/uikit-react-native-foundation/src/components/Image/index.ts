@@ -11,7 +11,6 @@ export type SendbirdImageComponent = React.FC<SendbirdImageProps>;
 
 function getImageModule(): SendbirdImageComponent {
   const hasFastImage = Boolean(NativeModules.FastImageView) && Boolean(require('react-native-fast-image'));
-  console.log('!! FAstImage', hasFastImage);
   if (hasFastImage) {
     return require('./Image.fastimage').default;
   } else {
