@@ -11,18 +11,19 @@ import type { CommonComponent } from '../../types';
 
 export type GroupChannelProps = {
   Fragment: {
+    staleChannel: Sendbird.GroupChannel;
+    onChannelDeleted: () => void;
+    onPressHeaderLeft: GroupChannelProps['Header']['onPressHeaderLeft'];
+    onPressHeaderRight: GroupChannelProps['Header']['onPressHeaderRight'];
+
     onBeforeSendFileMessage?: (
       params: Sendbird.FileMessageParams,
     ) => Sendbird.FileMessageParams | Promise<Sendbird.FileMessageParams>;
     onBeforeSendUserMessage?: (
       params: Sendbird.UserMessageParams,
     ) => Sendbird.UserMessageParams | Promise<Sendbird.UserMessageParams>;
-    onChannelDeleted: () => void;
-    onPressHeaderLeft: GroupChannelProps['Header']['onPressHeaderLeft'];
-    onPressHeaderRight: GroupChannelProps['Header']['onPressHeaderRight'];
     onPressImageMessage?: GroupChannelProps['MessageList']['onPressImageMessage'];
 
-    staleChannel: Sendbird.GroupChannel;
     renderMessage?: GroupChannelProps['MessageList']['renderMessage'];
     NewMessagesTooltip?: GroupChannelProps['MessageList']['NewMessagesTooltip'];
     ScrollToBottomTooltip?: GroupChannelProps['MessageList']['ScrollToBottomTooltip'];

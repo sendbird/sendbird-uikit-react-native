@@ -3,6 +3,7 @@ import { Linking, ListRenderItem, Platform, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type Sendbird from 'sendbird';
 
+import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation';
 import {
   ChannelFrozenBanner,
   createStyleSheet,
@@ -11,7 +12,6 @@ import {
   useToast,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
 import {
   Logger,
@@ -29,7 +29,7 @@ import { usePlatformService } from '../../../contexts/PlatformService';
 import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
 
-const HANDLE_NEXT_MSG_SEPARATELY = Platform.select({ android: true, ios: false });
+const HANDLE_NEXT_MSG_SEPARATELY = Platform.select({ default: true });
 
 const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   currentUserId,

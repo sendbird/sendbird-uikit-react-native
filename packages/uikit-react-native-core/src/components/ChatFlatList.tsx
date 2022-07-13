@@ -5,8 +5,8 @@ import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { SendbirdMessage, isMyMessage } from '@sendbird/uikit-utils';
 
 let ANDROID_BUG_ALERT_SHOWED = Platform.OS !== 'android';
-const BOTTOM_DETECT_THRESHOLD = 150;
-const AUTO_SCROLL_TO_TOP_THRESHOLD = 15;
+const BOTTOM_DETECT_THRESHOLD = 25;
+// const AUTO_SCROLL_TO_TOP_THRESHOLD = 15;
 
 function hasReachedToBottom(yPos: number, thresholdPx = 0) {
   return thresholdPx >= yPos;
@@ -79,7 +79,7 @@ const ChatFlatList = forwardRef<ChatFlatListRef, Props>(function CustomFlatList(
       // FIXME: inverted list of ListEmptyComponent is reversed {@link https://github.com/facebook/react-native/issues/21196#issuecomment-836937743}
       inverted={Boolean(props.data?.length)}
       // FIXME: maintainVisibleContentPosition is not working on Android {@link https://github.com/facebook/react-native/issues/25239}
-      maintainVisibleContentPosition={{ minIndexForVisible: 1, autoscrollToTopThreshold: AUTO_SCROLL_TO_TOP_THRESHOLD }}
+      // maintainVisibleContentPosition={{ minIndexForVisible: 1, autoscrollToTopThreshold: AUTO_SCROLL_TO_TOP_THRESHOLD }}
       ref={scrollRef}
       bounces={false}
       keyboardShouldPersistTaps={'handled'}
