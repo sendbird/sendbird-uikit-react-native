@@ -268,8 +268,6 @@ export const useGroupChannelMessagesWithCollection = (
   );
   const resendMessage: UseGroupChannelMessages['resendMessage'] = useCallback(
     async (failedMessage) => {
-      if (!failedMessage.isResendable()) return;
-
       const message = await (() => {
         if (failedMessage.isUserMessage()) return activeChannel.resendUserMessage(failedMessage);
         if (failedMessage.isFileMessage()) return activeChannel.resendFileMessage(failedMessage);
