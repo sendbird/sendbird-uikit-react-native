@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Image } from 'react-native';
 
-import { Icon, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { Icon, Image, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { getAvailableUriFromFileMessage } from '@sendbird/uikit-utils';
 
 import type { FileMessageProps } from './index';

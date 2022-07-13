@@ -1,7 +1,7 @@
 import React from 'react';
-import { Image, View } from 'react-native';
+import { View } from 'react-native';
 
-import { Badge, Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { Badge, Icon, Image, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { conditionChaining } from '@sendbird/uikit-utils';
 
 type Props = {

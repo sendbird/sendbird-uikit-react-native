@@ -5,6 +5,9 @@ export { default as DarkUIKitTheme } from './theme/DarkUIKitTheme';
 export { default as LightUIKitTheme } from './theme/LightUIKitTheme';
 export { default as UIKitThemeProvider } from './theme/UIKitThemeProvider';
 
+/** Component **/
+export { default as Image } from './components/Image';
+
 /** UI **/
 export { default as ActionMenu, ActionMenuItem } from './ui/ActionMenu';
 export { default as Alert } from './ui/Alert';

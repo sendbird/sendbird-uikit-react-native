@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
-import { Image, Linking, TouchableOpacity, View } from 'react-native';
+import { Linking, TouchableOpacity, View } from 'react-native';
 import type Sendbird from 'sendbird';
 
 import { useLocalization } from '@sendbird/uikit-react-native-core';
-import { Icon, Text, URLParsedText, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import {
+  Icon,
+  Image,
+  Text,
+  URLParsedText,
+  createStyleSheet,
+  useUIKitTheme,
+} from '@sendbird/uikit-react-native-foundation';
 import { conditionChaining } from '@sendbird/uikit-utils';
 
 import type { UserMessageProps } from './index';
