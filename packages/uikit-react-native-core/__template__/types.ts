@@ -1,19 +1,13 @@
 // @ts-nocheck - !!REMOVE
 import type React from 'react';
 
-import type { BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
-
 import type { CommonComponent } from '../../types';
 
 export type __domain__Props = {
   Fragment: {
-    Header?: __domain__Props['Header']['Header'];
     onPressHeaderLeft: __domain__Props['Header']['onPressHeaderLeft'];
   };
   Header: {
-    Header?: null | CommonComponent<
-      BaseHeaderProps<{ title: string; left: React.ReactElement; onPressLeft: () => void }>
-    >;
     onPressHeaderLeft: () => void;
   };
   View: {
