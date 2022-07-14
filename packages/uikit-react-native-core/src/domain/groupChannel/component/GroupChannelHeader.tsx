@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { View } from 'react-native';
 
 import { Header, Icon, createStyleSheet, useHeaderStyle } from '@sendbird/uikit-react-native-foundation';
-import { truncate } from '@sendbird/uikit-utils';
 
 import ChannelCover from '../../../components/ChannelCover';
 import { useLocalization } from '../../../contexts/Localization';
@@ -22,8 +21,8 @@ const GroupChannelHeader: React.FC<GroupChannelProps['Header']> = ({ onPressHead
       title={
         <View style={styles.titleContainer}>
           <ChannelCover channel={channel} size={34} containerStyle={styles.avatarGroup} />
-          <View>
-            <Header.Title h2>{truncate(headerTitle, { mode: 'tail', maxLen: 25 })}</Header.Title>
+          <View style={{ flexShrink: 1 }}>
+            <Header.Title h2>{headerTitle}</Header.Title>
             {Boolean(subtitle) && subtitle && <Header.SubTitle style={styles.subtitle}>{subtitle}</Header.SubTitle>}
           </View>
         </View>
