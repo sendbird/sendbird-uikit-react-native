@@ -17,7 +17,7 @@ const GroupChannelInviteScreen: React.FC = () => {
 
   return (
     <GroupChannelInviteFragment
-      channel={channel}
+      staleChannel={channel}
       onPressHeaderLeft={() => {
         navigation.goBack();
       }}

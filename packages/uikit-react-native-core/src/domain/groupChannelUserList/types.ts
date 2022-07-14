@@ -43,7 +43,7 @@ export type GroupChannelInviteFragment<User> = React.FC<{
       onPressLeft: () => void;
     }>
   >;
-  channel: Sendbird.GroupChannel;
+  staleChannel: Sendbird.GroupChannel;
   userIdsGenerator?: (users: User[]) => UserIds;
   onPressHeaderLeft: () => void;
   onInviteMembers: (channel: Sendbird.GroupChannel) => void;
