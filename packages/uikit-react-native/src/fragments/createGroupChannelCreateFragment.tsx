@@ -24,7 +24,7 @@ const defaultUserIdsGenerator = <T,>(users: T[]) => {
 
   if (userIds.length === 0) {
     Logger.warn(
-      'GroupChannelCreateFragment: Couldn\'t find user ids! if you provided "queryCreator", please provide "userIdsGenerator" as well',
+      'GroupChannelCreateFragment: Couldn\'t find user ids! if you provide "queryCreator", please provide "userIdsGenerator" as well',
     );
   }
 

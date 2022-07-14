@@ -11,6 +11,8 @@ import type { UserListProps } from '../userList/types';
 type UserIds = string[];
 
 export type GroupChannelCreateFragment<User> = React.FC<{
+  onPressHeaderLeft: () => void;
+  onCreateChannel: (channel: Sendbird.GroupChannel) => void;
   Header?: null | CommonComponent<
     BaseHeaderProps<{
       title: string;
@@ -22,12 +24,10 @@ export type GroupChannelCreateFragment<User> = React.FC<{
   >;
   channelType?: GroupChannelType;
   userIdsGenerator?: (users: User[]) => UserIds;
-  onPressHeaderLeft: () => void;
   onBeforeCreateChannel?: (
     params: Sendbird.GroupChannelParams,
     users: User[],
   ) => Sendbird.GroupChannelParams | Promise<Sendbird.GroupChannelParams>;
-  onCreateChannel: (channel: Sendbird.GroupChannel) => void;
   sortComparator?: UseUserListOptions<User>['sortComparator'];
   queryCreator?: UseUserListOptions<User>['queryCreator'];
   renderUser?: UserListProps<User>['List']['renderUser'];
