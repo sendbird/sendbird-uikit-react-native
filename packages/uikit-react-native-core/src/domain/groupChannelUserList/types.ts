@@ -24,12 +24,12 @@ export type GroupChannelCreateFragment<User> = React.FC<{
 
 export type GroupChannelInviteFragment<User> = React.FC<{
   staleChannel: Sendbird.GroupChannel;
-  userIdsGenerator?: (users: User[]) => UserIds;
   onPressHeaderLeft: () => void;
   onInviteMembers: (channel: Sendbird.GroupChannel) => void;
-  sortComparator?: UseUserListOptions<User>['sortComparator'];
+  userIdsGenerator?: (users: User[]) => UserIds;
   queryCreator?: UseUserListOptions<User>['queryCreator'];
   renderUser?: UserListProps<User>['List']['renderUser'];
+  sortComparator?: UseUserListOptions<User>['sortComparator'];
 }>;
 
 export type GroupChannelMembersFragment<User> = React.FC<{
