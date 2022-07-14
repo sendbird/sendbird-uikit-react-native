@@ -63,7 +63,6 @@
     "react": "17.0.2",
     "react-native": "0.66.4",
     "react-native-builder-bob": "^0.18.0",
-    "react-native-device-info": "^10.0.0",
     "react-native-document-picker": "^8.0.0",
     "react-native-file-access": "^2.4.3",
     "react-native-image-picker": "^4.7.1",
@@ -82,7 +81,6 @@
     "expo-notifications": ">=0.14.1",
     "react": ">=16.13.1",
     "react-native": ">=0.63.3",
-    "react-native-device-info": "^10.0.0",
     "react-native-document-picker": "^8.0.0",
     "react-native-file-access": "^2.4.3",
     "react-native-image-picker": "^4.7.1",
@@ -112,9 +110,6 @@
       "optional": true
     },
     "expo-notifications": {
-      "optional": true
-    },
-    "react-native-device-info": {
       "optional": true
     },
     "react-native-document-picker": {

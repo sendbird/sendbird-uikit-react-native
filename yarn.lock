@@ -12842,11 +12842,6 @@ react-native-codegen@^0.0.7:
     jscodeshift "^0.11.0"
     nullthrows "^1.1.1"
 
-react-native-device-info@^10.0.0:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-10.0.0.tgz#4021a81640c2e70d43f9cfc6f73aae694e79ea3d"
-  integrity sha512-yZ/JEcCxYp0rwsRcS3DFZ0PQhRmQOrrt6YO/aiq368MH6kb0uZyTiyTqYLXM71peHaB4duI6QjRWjAYubtlliA==
-
 react-native-document-picker@^8.0.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-8.1.0.tgz#e167a98b6fcdd1aee08597793029101d674eab83"

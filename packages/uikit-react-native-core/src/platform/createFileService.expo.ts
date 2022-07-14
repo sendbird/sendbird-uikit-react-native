@@ -41,7 +41,7 @@ const createExpoFileService = ({
       const perms = (await mediaLibraryModule.getPermissionsAsync(
         type === 'write',
       )) as ExpoMediaLibraryPermissionResponse;
-      return expoPermissionGranted([perms], () => mediaLibraryModule.presentPermissionsPickerAsync());
+      return expoPermissionGranted([perms]);
     }
     async requestMediaLibraryPermission(type: 'write' | 'read'): Promise<boolean> {
       const perms = (await mediaLibraryModule.requestPermissionsAsync(

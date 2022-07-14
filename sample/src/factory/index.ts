@@ -4,7 +4,6 @@ import RNFBMessaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import axios from 'axios';
 import { Platform, StatusBar } from 'react-native';
-import * as ReactNativeDeviceInfo from 'react-native-device-info';
 import * as DocumentPicker from 'react-native-document-picker';
 import * as FileAccess from 'react-native-file-access';
 import * as ImagePicker from 'react-native-image-picker';
@@ -32,7 +31,6 @@ export const FileService = createNativeFileService({
   permissionModule: Permissions,
   fsModule: FileAccess,
   mediaLibraryModule: CameraRoll,
-  deviceInfoModule: ReactNativeDeviceInfo,
 });
 
 export const GetTranslucent = (state = true) => {

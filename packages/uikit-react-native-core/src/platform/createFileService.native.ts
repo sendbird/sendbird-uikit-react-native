@@ -1,6 +1,5 @@
 import type CameraRoll from '@react-native-community/cameraroll';
 import { Platform } from 'react-native';
-import type * as DeviceInfo from 'react-native-device-info';
 import type * as DocumentPicker from 'react-native-document-picker';
 import type * as FileAccess from 'react-native-file-access';
 import type * as ImagePicker from 'react-native-image-picker';
@@ -26,14 +25,12 @@ const createNativeFileService = ({
   permissionModule,
   mediaLibraryModule,
   fsModule,
-  deviceInfoModule,
 }: {
   imagePickerModule: typeof ImagePicker;
   documentPickerModule: typeof DocumentPicker;
   permissionModule: typeof Permissions;
   mediaLibraryModule: typeof CameraRoll;
   fsModule: typeof FileAccess;
-  deviceInfoModule: typeof DeviceInfo;
 }): FileServiceInterface => {
   const cameraPermissions: Permission[] = Platform.select({
     ios: [permissionModule.PERMISSIONS.IOS.CAMERA],
@@ -64,7 +61,7 @@ const createNativeFileService = ({
       return nativePermissionGranted(status);
     }
     async hasMediaLibraryPermission(): Promise<boolean> {
-      if (Platform.OS !== 'android' || (await deviceInfoModule.getApiLevel()) > 28) {
+      if (Platform.OS !== 'android' || Platform.Version > 28) {
         const status = await permissionModule.checkMultiple(mediaLibraryPermissions);
         return nativePermissionGranted(status);
       } else {
@@ -73,7 +70,7 @@ const createNativeFileService = ({
       }
     }
     async requestMediaLibraryPermission(): Promise<boolean> {
-      if (Platform.OS !== 'android' || (await deviceInfoModule.getApiLevel()) > 28) {
+      if (Platform.OS !== 'android' || Platform.Version > 28) {
         const status = await permissionModule.requestMultiple(mediaLibraryPermissions);
         return nativePermissionGranted(status);
       } else {
