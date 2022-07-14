@@ -22,7 +22,6 @@ import GroupChannelPreview from '../ui/GroupChannelPreview';
 const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListModule>): GroupChannelListFragment => {
   const GroupChannelListModule = createGroupChannelListModule(initModule);
   return ({
-    Header,
     TypeSelectorHeader,
     onPressChannel,
     onPressCreateChannel,
@@ -80,7 +79,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
 
     return (
       <GroupChannelListModule.Provider>
-        <GroupChannelListModule.Header Header={Header} />
+        <GroupChannelListModule.Header />
         <StatusComposition loading={loading} LoadingComponent={<GroupChannelListModule.StatusLoading />}>
           <GroupChannelListModule.List
             menuItemCreator={menuItemCreator}

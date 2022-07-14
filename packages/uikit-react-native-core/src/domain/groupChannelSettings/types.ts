@@ -1,21 +1,19 @@
 import type React from 'react';
 import type Sendbird from 'sendbird';
 
-import type { BaseHeaderProps, MenuBarProps } from '@sendbird/uikit-react-native-foundation';
+import type { MenuBarProps } from '@sendbird/uikit-react-native-foundation';
 
 import type { CommonComponent } from '../../types';
 
 export type GroupChannelSettingsProps = {
   Fragment: {
     staleChannel: GroupChannelSettingsProps['Provider']['staleChannel'];
-    Header?: GroupChannelSettingsProps['Header']['Header'];
     onPressHeaderLeft: GroupChannelSettingsProps['Header']['onPressHeaderLeft'];
     onPressMenuMembers: GroupChannelSettingsProps['Menu']['onPressMenuMembers'];
     onLeaveChannel: GroupChannelSettingsProps['Menu']['onLeaveChannel'];
     menuItemsCreator?: GroupChannelSettingsProps['Menu']['menuItemsCreator'];
   };
   Header: {
-    Header?: null | CommonComponent<BaseHeaderProps<{ title: string; onPressLeft: () => void }>>;
     onPressHeaderLeft: () => void;
   };
   Info: {};

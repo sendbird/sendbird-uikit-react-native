@@ -36,7 +36,7 @@ const createGroupChannelMembersFragment = (
 ): GroupChannelMembersFragment<Sendbird.Member> => {
   const UserListModule = createUserListModule<Sendbird.Member>(initModule);
 
-  return ({ Header, channel, onPressHeaderLeft, onPressHeaderRight, sortComparator, renderUser }) => {
+  return ({ channel, onPressHeaderLeft, onPressHeaderRight, sortComparator, renderUser }) => {
     const queryCreator = useCallback(() => createMemberListQuery(channel), [channel]);
     const { sdk, currentUser } = useSendbirdChat();
     const { STRINGS } = useLocalization();
@@ -70,7 +70,6 @@ const createGroupChannelMembersFragment = (
       <UserListModule.Provider headerRight={noop} headerTitle={STRINGS.GROUP_CHANNEL_MEMBERS.HEADER_TITLE}>
         <UserListModule.Header
           shouldActivateHeaderRight={() => true}
-          Header={Header}
           onPressHeaderLeft={onPressHeaderLeft}
           right={<Icon icon={'plus'} />}
           onPressHeaderRight={async () => onPressHeaderRight()}

@@ -37,7 +37,6 @@ const createGroupChannelCreateFragment = <UserType,>(
   const UserListModule = createUserListModule<UserType>(initModule);
 
   return ({
-    Header,
     userIdsGenerator = defaultUserIdsGenerator,
     onPressHeaderLeft,
     onBeforeCreateChannel = PASS,
@@ -100,7 +99,6 @@ const createGroupChannelCreateFragment = <UserType,>(
         headerTitle={STRINGS.GROUP_CHANNEL_CREATE.HEADER_TITLE}
       >
         <UserListModule.Header
-          Header={Header}
           onPressHeaderLeft={onPressHeaderLeft}
           onPressHeaderRight={async (users) => {
             const params = new sdk.GroupChannelParams();

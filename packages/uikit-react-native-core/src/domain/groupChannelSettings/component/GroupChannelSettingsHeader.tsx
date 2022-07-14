@@ -1,19 +1,18 @@
 import React, { useContext } from 'react';
 
-import { Header as DefaultHeader, Icon, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { Icon, Text, useHeaderStyle, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 import { GroupChannelSettingsContexts } from '../module/moduleContext';
 import type { GroupChannelSettingsProps } from '../types';
 
-const GroupChannelSettingsHeader: React.FC<GroupChannelSettingsProps['Header']> = ({
-  Header = DefaultHeader,
-  onPressHeaderLeft,
-}) => {
+const GroupChannelSettingsHeader: React.FC<GroupChannelSettingsProps['Header']> = ({ onPressHeaderLeft }) => {
   const { colors } = useUIKitTheme();
   const { headerTitle, headerRight, onPressHeaderRight } = useContext(GroupChannelSettingsContexts.Fragment);
-  if (!Header) return null;
+
+  const { HeaderComponent } = useHeaderStyle();
+
   return (
-    <Header
+    <HeaderComponent
       title={headerTitle}
       left={<Icon icon={'arrow-left'} />}
       onPressLeft={onPressHeaderLeft}

@@ -13,7 +13,6 @@ const createGroupChannelSettingsFragment = (
   const GroupChannelSettingsModule = createGroupChannelSettingsModule(initModule);
 
   return ({
-    Header,
     onPressHeaderLeft = NOOP,
     staleChannel,
     onPressMenuMembers,
@@ -26,7 +25,7 @@ const createGroupChannelSettingsFragment = (
 
     return (
       <GroupChannelSettingsModule.Provider staleChannel={staleChannel}>
-        <GroupChannelSettingsModule.Header Header={Header} onPressHeaderLeft={onPressHeaderLeft} />
+        <GroupChannelSettingsModule.Header onPressHeaderLeft={onPressHeaderLeft} />
         <ScrollView
           style={{ backgroundColor: colors.background }}
           contentContainerStyle={{

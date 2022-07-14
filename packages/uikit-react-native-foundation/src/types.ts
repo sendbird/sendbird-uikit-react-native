@@ -121,8 +121,8 @@ export interface UIKitColors {
   };
 }
 
-type HeaderElement = string | ReactElement | null;
-type HeaderPartProps = {
+export type HeaderElement = string | ReactElement | null;
+export type HeaderPartProps = {
   title?: HeaderElement;
   right?: HeaderElement;
   left?: HeaderElement;

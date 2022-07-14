@@ -18,7 +18,6 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     renderMessage,
     enableMessageGrouping = true,
     enableTypingIndicator = true,
-    Header,
     onPressHeaderLeft = NOOP,
     onPressHeaderRight = NOOP,
     onPressImageMessage = NOOP,
@@ -117,11 +116,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
         enableTypingIndicator={enableTypingIndicator}
         keyboardAvoidOffset={keyboardAvoidOffset}
       >
-        <GroupChannelModule.Header
-          Header={Header}
-          onPressHeaderLeft={onPressHeaderLeft}
-          onPressHeaderRight={onPressHeaderRight}
-        />
+        <GroupChannelModule.Header onPressHeaderLeft={onPressHeaderLeft} onPressHeaderRight={onPressHeaderRight} />
         <StatusComposition loading={loading} LoadingComponent={<GroupChannelModule.StatusLoading />}>
           <GroupChannelModule.MessageList
             enableMessageGrouping={enableMessageGrouping}

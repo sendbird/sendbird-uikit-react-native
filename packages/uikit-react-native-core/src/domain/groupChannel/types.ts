@@ -3,7 +3,6 @@ import type { FlatListProps } from 'react-native';
 import type Sendbird from 'sendbird';
 
 import type { UseGroupChannelMessagesOptions } from '@sendbird/uikit-chat-hooks';
-import type { BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
 
 import type { FileType } from '../../platform/types';
@@ -27,7 +26,6 @@ export type GroupChannelProps = {
     renderMessage?: GroupChannelProps['MessageList']['renderMessage'];
     NewMessagesTooltip?: GroupChannelProps['MessageList']['NewMessagesTooltip'];
     ScrollToBottomTooltip?: GroupChannelProps['MessageList']['ScrollToBottomTooltip'];
-    Header?: GroupChannelProps['Header']['Header'];
 
     enableTypingIndicator?: GroupChannelProps['Provider']['enableTypingIndicator'];
     enableMessageGrouping?: GroupChannelProps['MessageList']['enableMessageGrouping'];
@@ -39,13 +37,6 @@ export type GroupChannelProps = {
     queryCreator?: UseGroupChannelMessagesOptions['queryCreator'];
   };
   Header: {
-    Header?: null | CommonComponent<
-      BaseHeaderProps<{
-        title: string | React.ReactElement;
-        left: React.ReactElement;
-        onPressLeft: () => void;
-      }>
-    >;
     onPressHeaderLeft: () => void;
     onPressHeaderRight: () => void;
   };

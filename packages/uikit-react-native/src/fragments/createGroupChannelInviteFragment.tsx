@@ -37,7 +37,6 @@ const createGroupChannelInviteFragment = <UserType,>(
   const UserListModule = createUserListModule<UserType>(initModule);
 
   return ({
-    Header,
     staleChannel,
     onPressHeaderLeft,
     onInviteMembers,
@@ -101,7 +100,6 @@ const createGroupChannelInviteFragment = <UserType,>(
         headerTitle={STRINGS.GROUP_CHANNEL_INVITE.HEADER_TITLE}
       >
         <UserListModule.Header
-          Header={Header}
           onPressHeaderLeft={onPressHeaderLeft}
           onPressHeaderRight={async (users) => {
             const userIds = userIdsGenerator(users);

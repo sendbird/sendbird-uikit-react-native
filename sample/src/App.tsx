@@ -34,6 +34,19 @@ import {
   ThemeColorsScreen,
 } from './screens';
 
+// const UseReactNavigationHeader: HeaderStyleContextType['HeaderComponent'] = ({ title, right, left, onPressLeft, onPressRight }) => {
+//   const { navigation } = useAppNavigation();
+//   useEffect(() => {
+//     navigation.setOptions({
+//       headerShown: true,
+//       headerTitle: () => (typeof title === 'string' ? <Text subtitle2>{title}</Text> : title),
+//       headerLeft: () => <Pressable onPress={onPressLeft}>{left}</Pressable>,
+//       headerRight: () => <Pressable onPress={onPressRight}>{right}</Pressable>,
+//     });
+//   }, [title, right, left, onPressLeft, onPressRight]);
+//   return null;
+// };
+
 const App = () => {
   const { scheme } = useAppearance();
   const isLightTheme = scheme === 'light';
@@ -47,6 +60,7 @@ const App = () => {
         defaultHeaderTitleAlign: 'left', //'center',
         theme: isLightTheme ? LightUIKitTheme : DarkUIKitTheme,
         statusBarTranslucent: GetTranslucent(),
+        // HeaderComponent: UseReactNavigationHeader,
       }}
       errorBoundary={{ ErrorInfoComponent: ErrorInfoScreen }}
     >

@@ -37,13 +37,6 @@ export type GroupChannelListProps = {
   Fragment: {
     onPressChannel: (channel: Sendbird.GroupChannel) => void;
     onPressCreateChannel: (channelType: GroupChannelType) => void;
-    Header?: null | CommonComponent<
-      BaseHeaderProps<{
-        title: string;
-        right: React.ReactElement;
-        onPressRight: () => void;
-      }>
-    >;
     TypeSelectorHeader?: null | CommonComponent<
       BaseHeaderProps<{
         title: string;
@@ -57,9 +50,7 @@ export type GroupChannelListProps = {
     flatListProps?: GroupChannelListProps['List']['flatListProps'];
     menuItemCreator?: GroupChannelListProps['List']['menuItemCreator'];
   };
-  Header: {
-    Header: GroupChannelListProps['Fragment']['Header'];
-  };
+  Header: {};
   List: {
     groupChannels: Sendbird.GroupChannel[];
     renderGroupChannelPreview: (

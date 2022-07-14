@@ -36,7 +36,7 @@ export { default as createAppearanceHelper } from './styles/createAppearanceHelp
 export { default as createScaleFactor } from './styles/createScaleFactor';
 export { default as createStyleSheet } from './styles/createStyleSheet';
 export { default as getDefaultHeaderHeight } from './styles/getDefaultHeaderHeight';
-export { HeaderStyleContext, HeaderStyleProvider } from './styles/HeaderStyleContext';
+export { HeaderStyleContext, HeaderStyleProvider, HeaderStyleContextType } from './styles/HeaderStyleContext';
 export { themeFactory } from './styles/themeFactory';
 export { default as useHeaderStyle } from './styles/useHeaderStyle';
 

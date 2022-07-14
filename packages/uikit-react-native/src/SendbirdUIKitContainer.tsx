@@ -16,9 +16,10 @@ import {
   StringSetEn,
   useLocalization,
 } from '@sendbird/uikit-react-native-core';
-import type { UIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import type { HeaderStyleContextType, UIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import {
   DialogProvider,
+  Header,
   HeaderStyleProvider,
   LightUIKitTheme,
   ToastProvider,
@@ -59,6 +60,7 @@ type Props<T extends StringSets> = {
     theme?: UIKitTheme;
     statusBarTranslucent?: boolean;
     defaultHeaderTitleAlign?: 'left' | 'center';
+    HeaderComponent?: HeaderStyleContextType['HeaderComponent'];
   };
   toast?: {
     dismissTimeout?: number;
@@ -133,6 +135,7 @@ const SendbirdUIKitContainer = <T extends StringSets>({
           >
             <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
               <HeaderStyleProvider
+                HeaderComponent={styles?.HeaderComponent ?? Header}
                 defaultTitleAlign={styles?.defaultHeaderTitleAlign ?? 'left'}
                 statusBarTranslucent={styles?.statusBarTranslucent ?? true}
               >
