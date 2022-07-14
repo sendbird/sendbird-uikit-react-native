@@ -1,13 +1,12 @@
 import { useMemo, useReducer } from 'react';
-import type Sendbird from 'sendbird';
 
-import {
+import type {
+  SendbirdBaseMessage,
+  SendbirdFileMessage,
   SendbirdMessage,
-  arrayToMapWithGetter,
-  getMessageUniqId,
-  isMyMessage,
-  isNewMessage,
+  SendbirdUserMessage,
 } from '@sendbird/uikit-utils';
+import { arrayToMapWithGetter, getMessageUniqId, isMyMessage, isNewMessage } from '@sendbird/uikit-utils';
 
 import type { UseGroupChannelMessagesOptions } from '../../types';
 
@@ -18,7 +17,7 @@ type Action =
     }
   | {
       type: 'update_messages' | 'update_next_messages';
-      value: { messages: Sendbird.BaseMessageInstance[]; clearPrev: boolean; currentUserId?: string };
+      value: { messages: SendbirdBaseMessage[]; clearPrev: boolean; currentUserId?: string };
     }
   | {
       type: 'delete_messages' | 'delete_next_messages';
@@ -52,7 +51,7 @@ const defaultReducer = ({ ...draft }: State, action: Action) => {
 
         // NOTE: Replace pending message to succeeded message
         action.value.messages
-          .filter((m): m is Sendbird.UserMessage | Sendbird.FileMessage => {
+          .filter((m): m is SendbirdUserMessage | SendbirdFileMessage => {
             return (
               (m.isFileMessage() || m.isUserMessage()) &&
               Boolean(draft[key][m.reqId]) &&
@@ -92,13 +91,13 @@ export const useGroupChannelMessagesReducer = (
     nextMessageMap: {},
   });
 
-  const updateMessages = (messages: Sendbird.BaseMessageInstance[], clearPrev: boolean, currentUserId?: string) => {
+  const updateMessages = (messages: SendbirdBaseMessage[], clearPrev: boolean, currentUserId?: string) => {
     dispatch({ type: 'update_messages', value: { messages, clearPrev, currentUserId } });
   };
   const deleteMessages = (messageIds: number[], reqIds: string[]) => {
     dispatch({ type: 'delete_messages', value: { messageIds, reqIds } });
   };
-  const updateNextMessages = (messages: Sendbird.BaseMessageInstance[], clearPrev: boolean, currentUserId?: string) => {
+  const updateNextMessages = (messages: SendbirdBaseMessage[], clearPrev: boolean, currentUserId?: string) => {
     dispatch({ type: 'update_next_messages', value: { messages, clearPrev, currentUserId } });
   };
   const deleteNextMessages = (messageIds: number[], reqIds: string[]) => {

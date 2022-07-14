@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import type Sendbird from 'sendbird';
 
-import { Logger } from '@sendbird/uikit-utils';
+import { Logger, SendbirdUser } from '@sendbird/uikit-utils';
 
 import { useSendbirdChat } from '../contexts/SendbirdChat';
 import usePushTokenRegistration from './usePushTokenRegistration';
@@ -14,7 +14,7 @@ const useConnection = () => {
   const { registerPushTokenForCurrentUser, unregisterPushTokenForCurrentUser } = usePushTokenRegistration();
 
   const connect = useCallback(
-    async (userId: string, opts?: ConnectOptions): Promise<Sendbird.User> => {
+    async (userId: string, opts?: ConnectOptions): Promise<SendbirdUser> => {
       return new Promise((resolve, reject) => {
         const callback: Sendbird.userCallback = async (user, error) => {
           if (error && sdk.isCacheEnabled && cacheStrictCodes.some((code) => error.code === code)) {

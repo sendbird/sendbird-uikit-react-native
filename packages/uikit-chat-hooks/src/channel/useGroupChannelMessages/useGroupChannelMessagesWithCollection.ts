@@ -1,7 +1,13 @@
 import { useCallback, useEffect, useRef } from 'react';
-import type Sendbird from 'sendbird';
 
-import type { SendbirdChannel, SendbirdChatSDK } from '@sendbird/uikit-utils';
+import type {
+  SendbirdChannel,
+  SendbirdChatSDK,
+  SendbirdFileMessage,
+  SendbirdGroupChannel,
+  SendbirdMessageCollection,
+  SendbirdUserMessage,
+} from '@sendbird/uikit-utils';
 import { Logger, NOOP, isDifferentChannel, useForceUpdate, useIsMountedRef } from '@sendbird/uikit-utils';
 
 import { useAppFeatures } from '../../common/useAppFeatures';
@@ -12,7 +18,7 @@ import { useGroupChannelMessagesReducer } from './reducer';
 
 const createMessageCollection = (
   sdk: SendbirdChatSDK,
-  channel: Sendbird.GroupChannel,
+  channel: SendbirdGroupChannel,
   creator?: UseGroupChannelMessagesOptions['collectionCreator'],
 ) => {
   if (creator) return creator();
@@ -26,7 +32,7 @@ const HOOK_NAME = 'useGroupChannelMessagesWithCollection';
 // FIXME: MessageCollection event handler bug, initialize(run async addObserver) -> dispose -> removeObserver -> addObserver called
 export const useGroupChannelMessagesWithCollection = (
   sdk: SendbirdChatSDK,
-  staleChannel: Sendbird.GroupChannel,
+  staleChannel: SendbirdGroupChannel,
   userId?: string,
   options?: UseGroupChannelMessagesOptions,
 ): UseGroupChannelMessages => {
@@ -37,7 +43,7 @@ export const useGroupChannelMessagesWithCollection = (
 
   const { deliveryReceiptEnabled } = useAppFeatures(sdk);
 
-  const collectionRef = useRef<Sendbird.MessageCollection>();
+  const collectionRef = useRef<SendbirdMessageCollection>();
 
   // NOTE: We cannot determine the channel object of Sendbird SDK is stale or not, so force update af
   const { activeChannel, setActiveChannel } = useActiveGroupChannel(sdk, staleChannel);
@@ -127,7 +133,7 @@ export const useGroupChannelMessagesWithCollection = (
             disposeManuallyAfterUnmounted();
             const msgIds = messages.map((m) => m.messageId);
             const reqIds = messages
-              .filter((m): m is Sendbird.UserMessage | Sendbird.FileMessage => 'reqId' in m)
+              .filter((m): m is SendbirdUserMessage | SendbirdFileMessage => 'reqId' in m)
               .map((m) => m.reqId);
 
             deleteMessages(msgIds, reqIds);
@@ -240,7 +246,7 @@ export const useGroupChannelMessagesWithCollection = (
           if (error) reject(error);
           else {
             updateMessages([sentMessage], false, sdk.currentUser.userId);
-            resolve(sentMessage as Sendbird.FileMessage);
+            resolve(sentMessage as SendbirdFileMessage);
           }
         });
 

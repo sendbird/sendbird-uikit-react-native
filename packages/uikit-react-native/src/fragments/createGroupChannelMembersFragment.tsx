@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import type Sendbird from 'sendbird';
 
 import { CustomQuery, useUserList } from '@sendbird/uikit-chat-hooks';
 import type { GroupChannelMembersFragment, UserListModule } from '@sendbird/uikit-react-native-core';
@@ -10,11 +9,12 @@ import {
   useSendbirdChat,
 } from '@sendbird/uikit-react-native-core';
 import { Icon } from '@sendbird/uikit-react-native-foundation';
+import type { SendbirdGroupChannel, SendbirdMember } from '@sendbird/uikit-utils';
 
 import UserActionBar from '../ui/UserActionBar';
 
 const noop = () => '';
-const createMemberListQuery = (channel: Sendbird.GroupChannel) => {
+const createMemberListQuery = (channel: SendbirdGroupChannel) => {
   const query = channel.createMemberListQuery();
   query.limit = 50;
   query.order = 'operator_then_member_alphabetical';
@@ -32,9 +32,9 @@ const createMemberListQuery = (channel: Sendbird.GroupChannel) => {
 };
 
 const createGroupChannelMembersFragment = (
-  initModule?: Partial<UserListModule<Sendbird.Member>>,
-): GroupChannelMembersFragment<Sendbird.Member> => {
-  const UserListModule = createUserListModule<Sendbird.Member>(initModule);
+  initModule?: Partial<UserListModule<SendbirdMember>>,
+): GroupChannelMembersFragment<SendbirdMember> => {
+  const UserListModule = createUserListModule<SendbirdMember>(initModule);
 
   return ({ channel, onPressHeaderLeft, onPressHeaderRight, sortComparator, renderUser }) => {
     const queryCreator = useCallback(() => createMemberListQuery(channel), [channel]);

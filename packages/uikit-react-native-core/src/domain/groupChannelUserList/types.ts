@@ -1,7 +1,7 @@
 import type React from 'react';
-import type Sendbird from 'sendbird';
 
 import type { UseUserListOptions } from '@sendbird/uikit-chat-hooks';
+import type { SendbirdGroupChannel, SendbirdGroupChannelParams } from '@sendbird/uikit-utils';
 
 import type { GroupChannelType } from '../groupChannelList/types';
 import type { UserListProps } from '../userList/types';
@@ -10,22 +10,22 @@ type UserIds = string[];
 
 export type GroupChannelCreateFragment<User> = React.FC<{
   onPressHeaderLeft: () => void;
-  onCreateChannel: (channel: Sendbird.GroupChannel) => void;
+  onCreateChannel: (channel: SendbirdGroupChannel) => void;
   channelType?: GroupChannelType;
   userIdsGenerator?: (users: User[]) => UserIds;
   onBeforeCreateChannel?: (
-    params: Sendbird.GroupChannelParams,
+    params: SendbirdGroupChannelParams,
     users: User[],
-  ) => Sendbird.GroupChannelParams | Promise<Sendbird.GroupChannelParams>;
+  ) => SendbirdGroupChannelParams | Promise<SendbirdGroupChannelParams>;
   sortComparator?: UseUserListOptions<User>['sortComparator'];
   queryCreator?: UseUserListOptions<User>['queryCreator'];
   renderUser?: UserListProps<User>['List']['renderUser'];
 }>;
 
 export type GroupChannelInviteFragment<User> = React.FC<{
-  staleChannel: Sendbird.GroupChannel;
+  staleChannel: SendbirdGroupChannel;
   onPressHeaderLeft: () => void;
-  onInviteMembers: (channel: Sendbird.GroupChannel) => void;
+  onInviteMembers: (channel: SendbirdGroupChannel) => void;
   userIdsGenerator?: (users: User[]) => UserIds;
   queryCreator?: UseUserListOptions<User>['queryCreator'];
   renderUser?: UserListProps<User>['List']['renderUser'];
@@ -33,7 +33,7 @@ export type GroupChannelInviteFragment<User> = React.FC<{
 }>;
 
 export type GroupChannelMembersFragment<User> = React.FC<{
-  channel: Sendbird.GroupChannel;
+  channel: SendbirdGroupChannel;
   onPressHeaderLeft: () => void;
   onPressHeaderRight: () => void;
   sortComparator?: UseUserListOptions<User>['sortComparator'];

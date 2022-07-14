@@ -1,7 +1,7 @@
 import type React from 'react';
-import type Sendbird from 'sendbird';
 
 import type { MenuBarProps } from '@sendbird/uikit-react-native-foundation';
+import type { SendbirdGroupChannel } from '@sendbird/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 
@@ -23,7 +23,7 @@ export type GroupChannelSettingsProps = {
     menuItemsCreator?: (defaultMenuItems: MenuBarProps[]) => MenuBarProps[];
   };
   Provider: {
-    staleChannel: Sendbird.GroupChannel;
+    staleChannel: SendbirdGroupChannel;
   };
 };
 
@@ -34,7 +34,7 @@ export type GroupChannelSettingsProps = {
  * */
 export type GroupChannelSettingsContextsType = {
   Fragment: React.Context<{
-    channel: Sendbird.GroupChannel;
+    channel: SendbirdGroupChannel;
     headerTitle: string;
     headerRight: string;
     onPressHeaderRight: () => void;

@@ -1,6 +1,16 @@
 import type Sendbird from 'sendbird';
 
-import type { SendbirdMessage } from '@sendbird/uikit-utils';
+import type {
+  SendbirdError,
+  SendbirdFileMessage,
+  SendbirdFileMessageParams,
+  SendbirdGroupChannel,
+  SendbirdGroupChannelCollection,
+  SendbirdMessage,
+  SendbirdMessageCollection,
+  SendbirdUserMessage,
+  SendbirdUserMessageParams,
+} from '@sendbird/uikit-utils';
 
 export interface CustomQueryInterface<Data> {
   isLoading: boolean;
@@ -38,15 +48,15 @@ export interface UseGroupChannelList {
 
   /**
    * Update channel, update or insert channel to state
-   * @param {Sendbird.GroupChannel} channel
+   * @param {SendbirdGroupChannel} channel
    * @return {void}
    * */
-  update: (channel: Sendbird.GroupChannel) => void;
+  update: (channel: SendbirdGroupChannel) => void;
 
   /**
    * Get group channels state
    * */
-  groupChannels: Sendbird.GroupChannel[];
+  groupChannels: SendbirdGroupChannel[];
 
   /**
    * Fetch next channels to state
@@ -55,9 +65,9 @@ export interface UseGroupChannelList {
   next: () => Promise<void>;
 }
 export type UseGroupChannelListOptions = {
-  sortComparator?: (a: Sendbird.GroupChannel, b: Sendbird.GroupChannel) => number;
+  sortComparator?: (a: SendbirdGroupChannel, b: SendbirdGroupChannel) => number;
   queryCreator?: () => Sendbird.GroupChannelListQuery;
-  collectionCreator?: () => Sendbird.GroupChannelCollection;
+  collectionCreator?: () => SendbirdGroupChannelCollection;
   enableCollectionWithoutLocalCache?: boolean;
 };
 
@@ -128,9 +138,9 @@ export interface UseGroupChannelMessages {
    * @return pending message
    * */
   sendFileMessage: (
-    params: Sendbird.FileMessageParams,
-    onPending?: (message: Sendbird.FileMessage, error?: Sendbird.SendBirdError) => void,
-  ) => Promise<Sendbird.FileMessage>;
+    params: SendbirdFileMessageParams,
+    onPending?: (message: SendbirdFileMessage, error?: SendbirdError) => void,
+  ) => Promise<SendbirdFileMessage>;
 
   /**
    * Send user message
@@ -139,9 +149,9 @@ export interface UseGroupChannelMessages {
    * @return pending message
    * */
   sendUserMessage: (
-    params: Sendbird.UserMessageParams,
-    onPending?: (message: Sendbird.UserMessage, error?: Sendbird.SendBirdError) => void,
-  ) => Promise<Sendbird.UserMessage>;
+    params: SendbirdUserMessageParams,
+    onPending?: (message: SendbirdUserMessage, error?: SendbirdError) => void,
+  ) => Promise<SendbirdUserMessage>;
 
   /**
    * Update file message
@@ -149,7 +159,7 @@ export interface UseGroupChannelMessages {
    * @param params file message params
    * @return updated message
    * */
-  updateFileMessage: (messageId: number, params: Sendbird.FileMessageParams) => Promise<Sendbird.FileMessage>;
+  updateFileMessage: (messageId: number, params: SendbirdFileMessageParams) => Promise<SendbirdFileMessage>;
 
   /**
    * Update user message
@@ -157,32 +167,32 @@ export interface UseGroupChannelMessages {
    * @param params user message params
    * @return updated message
    * */
-  updateUserMessage: (messageId: number, params: Sendbird.UserMessageParams) => Promise<Sendbird.UserMessage>;
+  updateUserMessage: (messageId: number, params: SendbirdUserMessageParams) => Promise<SendbirdUserMessage>;
 
   /**
    * Resend failed message
    * @param failedMessage failed message to resend
    * @return {Promise<void>}
    * */
-  resendMessage: (failedMessage: Sendbird.FileMessage | Sendbird.UserMessage) => Promise<void>;
+  resendMessage: (failedMessage: SendbirdFileMessage | SendbirdUserMessage) => Promise<void>;
 
   /**
    * Delete message
    * @param message sent or failed message
    * @return {Promise<void>}
    * */
-  deleteMessage: (message: Sendbird.FileMessage | Sendbird.UserMessage) => Promise<void>;
+  deleteMessage: (message: SendbirdFileMessage | SendbirdUserMessage) => Promise<void>;
 
   /**
    * Activated channel
    * */
-  activeChannel: Sendbird.GroupChannel;
+  activeChannel: SendbirdGroupChannel;
 }
 
 export type UseGroupChannelMessagesOptions = {
   sortComparator?: (a: SendbirdMessage, b: SendbirdMessage) => number;
   queryCreator?: () => Sendbird.PreviousMessageListQuery;
-  collectionCreator?: () => Sendbird.MessageCollection;
+  collectionCreator?: () => SendbirdMessageCollection;
   enableCollectionWithoutLocalCache?: boolean;
   onChannelDeleted?: () => void;
 };

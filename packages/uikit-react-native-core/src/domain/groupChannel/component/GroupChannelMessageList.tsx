@@ -1,7 +1,6 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Linking, ListRenderItem, Platform, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import type Sendbird from 'sendbird';
 
 import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation';
 import {
@@ -12,7 +11,7 @@ import {
   useToast,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdMessage } from '@sendbird/uikit-utils';
+import type { SendbirdFileMessage, SendbirdMessage, SendbirdUserMessage } from '@sendbird/uikit-utils';
 import {
   Logger,
   getAvailableUriFromFileMessage,
@@ -131,7 +130,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   );
 };
 
-type HandleableMessage = Sendbird.UserMessage | Sendbird.FileMessage;
+type HandleableMessage = SendbirdUserMessage | SendbirdFileMessage;
 const toMegabyte = (byte: number) => byte / 1024 / 1024;
 const useGetMessagePressActions = ({
   onPressImageMessage,

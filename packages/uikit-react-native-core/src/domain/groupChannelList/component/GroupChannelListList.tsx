@@ -1,10 +1,9 @@
 import React, { useCallback } from 'react';
 import { FlatList, ListRenderItem } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import type Sendbird from 'sendbird';
 
 import { useActionMenu, useToast } from '@sendbird/uikit-react-native-foundation';
-import { PASS, useFreshCallback } from '@sendbird/uikit-utils';
+import { PASS, SendbirdGroupChannel, useFreshCallback } from '@sendbird/uikit-utils';
 
 import { useLocalization } from '../../../contexts/Localization';
 import { useSendbirdChat } from '../../../contexts/SendbirdChat';
@@ -22,7 +21,7 @@ const GroupChannelListList: React.FC<GroupChannelListProps['List']> = ({
   const { STRINGS } = useLocalization();
   const { sdk, currentUser } = useSendbirdChat();
 
-  const onLongPress = useFreshCallback((channel: Sendbird.GroupChannel) => {
+  const onLongPress = useFreshCallback((channel: SendbirdGroupChannel) => {
     const action = channel.myPushTriggerOption === 'off' ? 'on' : 'off';
     const menuItem = menuItemCreator({
       title: STRINGS.GROUP_CHANNEL_LIST.DIALOG_CHANNEL_TITLE(currentUser?.userId ?? '', channel),
@@ -56,7 +55,7 @@ const GroupChannelListList: React.FC<GroupChannelListProps['List']> = ({
     openMenu(menuItem);
   });
 
-  const renderItem: ListRenderItem<Sendbird.GroupChannel> = useCallback(
+  const renderItem: ListRenderItem<SendbirdGroupChannel> = useCallback(
     ({ item }) => renderGroupChannelPreview?.(item, () => onLongPress(item)),
     [renderGroupChannelPreview, onLongPress],
   );

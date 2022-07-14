@@ -1,26 +1,33 @@
 import type React from 'react';
 import type { FlatListProps } from 'react-native';
-import type Sendbird from 'sendbird';
 
 import type { UseGroupChannelMessagesOptions } from '@sendbird/uikit-chat-hooks';
-import type { SendbirdMessage } from '@sendbird/uikit-utils';
+import type {
+  SendbirdFileMessage,
+  SendbirdFileMessageParams,
+  SendbirdGroupChannel,
+  SendbirdMessage,
+  SendbirdUser,
+  SendbirdUserMessage,
+  SendbirdUserMessageParams,
+} from '@sendbird/uikit-utils';
 
 import type { FileType } from '../../platform/types';
 import type { CommonComponent } from '../../types';
 
 export type GroupChannelProps = {
   Fragment: {
-    staleChannel: Sendbird.GroupChannel;
+    staleChannel: SendbirdGroupChannel;
     onChannelDeleted: () => void;
     onPressHeaderLeft: GroupChannelProps['Header']['onPressHeaderLeft'];
     onPressHeaderRight: GroupChannelProps['Header']['onPressHeaderRight'];
 
     onBeforeSendFileMessage?: (
-      params: Sendbird.FileMessageParams,
-    ) => Sendbird.FileMessageParams | Promise<Sendbird.FileMessageParams>;
+      params: SendbirdFileMessageParams,
+    ) => SendbirdFileMessageParams | Promise<SendbirdFileMessageParams>;
     onBeforeSendUserMessage?: (
-      params: Sendbird.UserMessageParams,
-    ) => Sendbird.UserMessageParams | Promise<Sendbird.UserMessageParams>;
+      params: SendbirdUserMessageParams,
+    ) => SendbirdUserMessageParams | Promise<SendbirdUserMessageParams>;
     onPressImageMessage?: GroupChannelProps['MessageList']['onPressImageMessage'];
 
     renderMessage?: GroupChannelProps['MessageList']['renderMessage'];
@@ -43,16 +50,16 @@ export type GroupChannelProps = {
   MessageList: {
     enableMessageGrouping: boolean;
     currentUserId?: string;
-    channel: Sendbird.GroupChannel;
+    channel: SendbirdGroupChannel;
     messages: SendbirdMessage[];
     nextMessages: SendbirdMessage[];
     newMessagesFromNext: SendbirdMessage[];
     onTopReached: () => void;
     onBottomReached: () => void;
 
-    onResendFailedMessage: (failedMessage: Sendbird.UserMessage | Sendbird.FileMessage) => Promise<void>;
-    onDeleteMessage: (message: Sendbird.UserMessage | Sendbird.FileMessage) => Promise<void>;
-    onPressImageMessage?: (message: Sendbird.FileMessage, uri: string) => void;
+    onResendFailedMessage: (failedMessage: SendbirdUserMessage | SendbirdFileMessage) => Promise<void>;
+    onDeleteMessage: (message: SendbirdUserMessage | SendbirdFileMessage) => Promise<void>;
+    onPressImageMessage?: (message: SendbirdFileMessage, uri: string) => void;
 
     renderMessage: (props: {
       message: SendbirdMessage;
@@ -76,14 +83,14 @@ export type GroupChannelProps = {
     flatListProps?: Omit<FlatListProps<SendbirdMessage>, 'data' | 'renderItem'>;
   };
   Input: {
-    channel: Sendbird.GroupChannel;
+    channel: SendbirdGroupChannel;
     onSendFileMessage: (file: FileType) => Promise<void>;
     onSendUserMessage: (text: string) => Promise<void>;
-    onUpdateFileMessage: (editedFile: FileType, message: Sendbird.FileMessage) => Promise<void>;
-    onUpdateUserMessage: (editedText: string, message: Sendbird.UserMessage) => Promise<void>;
+    onUpdateFileMessage: (editedFile: FileType, message: SendbirdFileMessage) => Promise<void>;
+    onUpdateUserMessage: (editedText: string, message: SendbirdUserMessage) => Promise<void>;
   };
   Provider: {
-    channel: Sendbird.GroupChannel;
+    channel: SendbirdGroupChannel;
     enableTypingIndicator: boolean;
     keyboardAvoidOffset?: number;
   };
@@ -97,13 +104,13 @@ export type GroupChannelProps = {
 export type GroupChannelContextsType = {
   Fragment: React.Context<{
     headerTitle: string;
-    channel: Sendbird.GroupChannel;
-    editMessage?: Sendbird.UserMessage | Sendbird.FileMessage;
-    setEditMessage: (msg?: Sendbird.UserMessage | Sendbird.FileMessage) => void;
+    channel: SendbirdGroupChannel;
+    editMessage?: SendbirdUserMessage | SendbirdFileMessage;
+    setEditMessage: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
     keyboardAvoidOffset?: number;
   }>;
   TypingIndicator: React.Context<{
-    typingUsers: Sendbird.User[];
+    typingUsers: SendbirdUser[];
   }>;
 };
 export interface GroupChannelModule {

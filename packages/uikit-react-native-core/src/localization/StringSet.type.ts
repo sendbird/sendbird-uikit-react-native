@@ -1,7 +1,12 @@
 import type { Locale } from 'date-fns';
-import type Sendbird from 'sendbird';
 
-import type { PartialDeep, SendbirdMessage } from '@sendbird/uikit-utils';
+import type {
+  PartialDeep,
+  SendbirdFileMessage,
+  SendbirdGroupChannel,
+  SendbirdMessage,
+  SendbirdUser,
+} from '@sendbird/uikit-utils';
 import {
   dateSeparator,
   getGroupChannelLastMessage,
@@ -21,7 +26,7 @@ export interface StringsLocale {
 export interface StringSet {
   GROUP_CHANNEL: {
     /** GroupChannel > Header */
-    HEADER_TITLE: (currentUserId: string, channel: Sendbird.GroupChannel) => string;
+    HEADER_TITLE: (currentUserId: string, channel: SendbirdGroupChannel) => string;
 
     /** GroupChannel > List */
     LIST_BANNER_FROZEN: string;
@@ -30,7 +35,7 @@ export interface StringSet {
 
     /** GroupChannel > Message bubble */
     MESSAGE_BUBBLE_TIME: (message: SendbirdMessage, locale?: Locale) => string;
-    MESSAGE_BUBBLE_FILE_TITLE: (message: Sendbird.FileMessage) => string;
+    MESSAGE_BUBBLE_FILE_TITLE: (message: SendbirdFileMessage) => string;
     MESSAGE_BUBBLE_EDITED_POSTFIX: string;
     MESSAGE_BUBBLE_UNKNOWN_TITLE: (message: SendbirdMessage) => string;
     MESSAGE_BUBBLE_UNKNOWN_DESC: (message: SendbirdMessage) => string;
@@ -85,9 +90,9 @@ export interface StringSet {
     HEADER_TITLE: string;
 
     /** GroupChannelList > Channel preview */
-    CHANNEL_PREVIEW_TITLE: (currentUserId: string, channel: Sendbird.GroupChannel) => string;
-    CHANNEL_PREVIEW_TITLE_CAPTION: (channel: Sendbird.GroupChannel, locale?: Locale) => string;
-    CHANNEL_PREVIEW_BODY: (channel: Sendbird.GroupChannel) => string;
+    CHANNEL_PREVIEW_TITLE: (currentUserId: string, channel: SendbirdGroupChannel) => string;
+    CHANNEL_PREVIEW_TITLE_CAPTION: (channel: SendbirdGroupChannel, locale?: Locale) => string;
+    CHANNEL_PREVIEW_BODY: (channel: SendbirdGroupChannel) => string;
 
     /** GroupChannelList > TypeSelector > Header */
     TYPE_SELECTOR_HEADER_TITLE: string;
@@ -97,8 +102,8 @@ export interface StringSet {
     TYPE_SELECTOR_BROADCAST: string;
 
     /** GroupChannelList > Dialog > Channel */
-    DIALOG_CHANNEL_TITLE: (currentUserId: string, channel: Sendbird.GroupChannel) => string;
-    DIALOG_CHANNEL_NOTIFICATION: (channel?: Sendbird.GroupChannel) => string;
+    DIALOG_CHANNEL_TITLE: (currentUserId: string, channel: SendbirdGroupChannel) => string;
+    DIALOG_CHANNEL_NOTIFICATION: (channel?: SendbirdGroupChannel) => string;
     DIALOG_CHANNEL_LEAVE: string;
   };
   GROUP_CHANNEL_MEMBERS: {
@@ -128,7 +133,7 @@ export interface StringSet {
   LABELS: {
     USER_NO_NAME: string;
     CHANNEL_NO_MEMBERS: string;
-    TYPING_INDICATOR_TYPINGS: (users: Sendbird.User[]) => string | undefined;
+    TYPING_INDICATOR_TYPINGS: (users: SendbirdUser[]) => string | undefined;
   };
   PLACEHOLDER: {
     NO_BANNED_MEMBERS: string;

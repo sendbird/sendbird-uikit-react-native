@@ -1,9 +1,8 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
-import type Sendbird from 'sendbird';
 
 import { useAppFeatures } from '@sendbird/uikit-chat-hooks';
-import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
+import type { SendbirdChatSDK, SendbirdGroupChannel, SendbirdUser } from '@sendbird/uikit-utils';
 import { useForceUpdate } from '@sendbird/uikit-utils';
 
 import type { FileType } from '../platform/types';
@@ -18,12 +17,12 @@ type Props = {
 
 type Context = {
   sdk: SendbirdChatSDK;
-  currentUser?: Sendbird.User;
-  setCurrentUser: React.Dispatch<React.SetStateAction<Sendbird.User | undefined>>;
+  currentUser?: SendbirdUser;
+  setCurrentUser: React.Dispatch<React.SetStateAction<SendbirdUser | undefined>>;
 
   // helper functions
-  updateCurrentUserInfo: (nickname: string, profile?: string | FileType) => Promise<Sendbird.User>;
-  markAsDeliveredWithChannel: (channel: Sendbird.GroupChannel) => void;
+  updateCurrentUserInfo: (nickname: string, profile?: string | FileType) => Promise<SendbirdUser>;
+  markAsDeliveredWithChannel: (channel: SendbirdGroupChannel) => void;
 
   features: {
     // UIKit features
@@ -41,7 +40,7 @@ type Context = {
 
 export const SendbirdChatContext = React.createContext<Context | null>(null);
 export const SendbirdChatProvider: React.FC<Props> = ({ children, sdkInstance, enableAutoPushTokenRegistration }) => {
-  const [currentUser, _setCurrentUser] = useState<Sendbird.User>();
+  const [currentUser, _setCurrentUser] = useState<SendbirdUser>();
   const forceUpdate = useForceUpdate();
   const appFeatures = useAppFeatures(sdkInstance);
 
@@ -74,7 +73,7 @@ export const SendbirdChatProvider: React.FC<Props> = ({ children, sdkInstance, e
   );
 
   const markAsDeliveredWithChannel: Context['markAsDeliveredWithChannel'] = useCallback(
-    (channel: Sendbird.GroupChannel) => {
+    (channel: SendbirdGroupChannel) => {
       if (appFeatures.deliveryReceiptEnabled && channel.unreadMessageCount > 0) {
         sdkInstance.markAsDelivered(channel.url);
       }

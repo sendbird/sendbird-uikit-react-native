@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import type Sendbird from 'sendbird';
 
 import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { Icon, LoadingSpinner, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdMessage } from '@sendbird/uikit-utils';
+import type {
+  SendbirdFileMessage,
+  SendbirdGroupChannel,
+  SendbirdMessage,
+  SendbirdUserMessage,
+} from '@sendbird/uikit-utils';
 import { useUniqId } from '@sendbird/uikit-utils';
 
 const SIZE = 16;
 
-type Props = { channel: Sendbird.GroupChannel; message: SendbirdMessage };
+type Props = { channel: SendbirdGroupChannel; message: SendbirdMessage };
 const MessageOutgoingStatus: React.FC<Props> = ({ channel, message }) => {
   if (!message.isUserMessage() && !message.isFileMessage()) return null;
 
@@ -22,7 +26,7 @@ const MessageOutgoingStatus: React.FC<Props> = ({ channel, message }) => {
     undeliveredCount: channel.getUndeliveredMemberCount(message),
   }));
 
-  const getCounts = (channel: Sendbird.GroupChannel, message: Sendbird.UserMessage | Sendbird.FileMessage) => {
+  const getCounts = (channel: SendbirdGroupChannel, message: SendbirdUserMessage | SendbirdFileMessage) => {
     return {
       unreadCount: channel.getUnreadMemberCount(message),
       undeliveredCount: channel.getUndeliveredMemberCount(message),

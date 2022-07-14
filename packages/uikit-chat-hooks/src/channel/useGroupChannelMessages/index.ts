@@ -1,6 +1,4 @@
-import type Sendbird from 'sendbird';
-
-import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
+import type { SendbirdChatSDK, SendbirdGroupChannel } from '@sendbird/uikit-utils';
 
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';
 import { useGroupChannelMessagesWithCollection } from './useGroupChannelMessagesWithCollection';
@@ -8,7 +6,7 @@ import { useGroupChannelMessagesWithQuery } from './useGroupChannelMessagesWithQ
 
 export const useGroupChannelMessages = (
   sdk: SendbirdChatSDK,
-  staleChannel: Sendbird.GroupChannel,
+  staleChannel: SendbirdGroupChannel,
   userId?: string,
   options?: UseGroupChannelMessagesOptions,
 ): UseGroupChannelMessages => {

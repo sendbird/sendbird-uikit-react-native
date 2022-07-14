@@ -2,13 +2,13 @@ import type { Locale } from 'date-fns';
 import format from 'date-fns/format';
 import isToday from 'date-fns/isToday';
 import isYesterday from 'date-fns/isYesterday';
-import type Sendbird from 'sendbird';
 
+import type { SendbirdGroupChannel } from '../types';
 import { truncate } from './common';
 
 export const getGroupChannelTitle = (
   currentUserId: string,
-  channel: Sendbird.GroupChannel,
+  channel: SendbirdGroupChannel,
   EMPTY_USERNAME = '(No name)',
   NO_MEMBERS = '(No members)',
   DEFAULT_CHANNEL_NAME = 'Group Channel',
@@ -21,14 +21,14 @@ export const getGroupChannelTitle = (
     .join(', ');
 };
 
-export const getGroupChannelPreviewTime = (channel: Sendbird.GroupChannel, locale?: Locale) => {
+export const getGroupChannelPreviewTime = (channel: SendbirdGroupChannel, locale?: Locale) => {
   const timestamp = channel.lastMessage?.createdAt || channel.joinedAt * 1000 || channel.createdAt;
   if (isToday(timestamp)) return format(timestamp, 'p', { locale });
   if (isYesterday(timestamp)) return 'Yesterday';
   return format(timestamp, 'MMM dd', { locale });
 };
 
-export const getGroupChannelLastMessage = (channel: Sendbird.GroupChannel, EMPTY_MESSAGE = '', MAX_LEN = 15) => {
+export const getGroupChannelLastMessage = (channel: SendbirdGroupChannel, EMPTY_MESSAGE = '', MAX_LEN = 15) => {
   const message = channel.lastMessage;
   if (!message) return EMPTY_MESSAGE;
 

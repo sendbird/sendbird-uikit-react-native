@@ -1,9 +1,9 @@
 import type React from 'react';
 import type { FlatListProps } from 'react-native';
-import type Sendbird from 'sendbird';
 
 import type { UseGroupChannelListOptions } from '@sendbird/uikit-chat-hooks';
 import type { ActionMenuItem, BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
+import type { SendbirdGroupChannel } from '@sendbird/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 
@@ -35,7 +35,7 @@ import type { CommonComponent } from '../../types';
  * */
 export type GroupChannelListProps = {
   Fragment: {
-    onPressChannel: (channel: Sendbird.GroupChannel) => void;
+    onPressChannel: (channel: SendbirdGroupChannel) => void;
     onPressCreateChannel: (channelType: GroupChannelType) => void;
     TypeSelectorHeader?: null | CommonComponent<
       BaseHeaderProps<{
@@ -52,13 +52,13 @@ export type GroupChannelListProps = {
   };
   Header: {};
   List: {
-    groupChannels: Sendbird.GroupChannel[];
+    groupChannels: SendbirdGroupChannel[];
     renderGroupChannelPreview: (
-      channel: Sendbird.GroupChannel,
+      channel: SendbirdGroupChannel,
       onLongPressChannel: () => void,
     ) => React.ReactElement | null;
     onLoadNext: () => Promise<void>;
-    flatListProps?: Omit<FlatListProps<Sendbird.GroupChannel>, 'data' | 'renderItem'>;
+    flatListProps?: Omit<FlatListProps<SendbirdGroupChannel>, 'data' | 'renderItem'>;
     menuItemCreator?: (defaultMenuItem: ActionMenuItem) => ActionMenuItem;
   };
   TypeSelector: {

@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
-import type Sendbird from 'sendbird';
 
 import { useUserList } from '@sendbird/uikit-chat-hooks';
 import type { GroupChannelCreateFragment, UserListModule } from '@sendbird/uikit-react-native-core';
@@ -10,7 +9,7 @@ import {
   useLocalization,
   useSendbirdChat,
 } from '@sendbird/uikit-react-native-core';
-import { Logger, PASS } from '@sendbird/uikit-utils';
+import { Logger, PASS, SendbirdUser } from '@sendbird/uikit-utils';
 
 import UserSelectableBar from '../ui/UserSelectableBar';
 
@@ -60,9 +59,9 @@ const createGroupChannelCreateFragment = <UserType,>(
         }
         if (renderUser) return renderUser(user, selectedUsers, setSelectedUsers);
 
-        const sbUser = user as unknown as Sendbird.User;
-        const sbSelectedUsers = selectedUsers as unknown as Sendbird.User[];
-        const sbSetSelectedUsers = setSelectedUsers as unknown as React.Dispatch<React.SetStateAction<Sendbird.User[]>>;
+        const sbUser = user as unknown as SendbirdUser;
+        const sbSelectedUsers = selectedUsers as unknown as SendbirdUser[];
+        const sbSetSelectedUsers = setSelectedUsers as unknown as React.Dispatch<React.SetStateAction<SendbirdUser[]>>;
 
         const isMe = sbUser.userId === currentUser?.userId;
         if (isMe) return null;

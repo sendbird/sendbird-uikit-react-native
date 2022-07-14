@@ -1,14 +1,13 @@
 import React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import type Sendbird from 'sendbird';
 
 import { Avatar } from '@sendbird/uikit-react-native-foundation';
-import { getMembersExcludeMe, isDefaultCoverImage } from '@sendbird/uikit-utils';
+import { SendbirdGroupChannel, getMembersExcludeMe, isDefaultCoverImage } from '@sendbird/uikit-utils';
 
 import { useSendbirdChat } from '../contexts/SendbirdChat';
 
 type Props = {
-  channel: Sendbird.GroupChannel;
+  channel: SendbirdGroupChannel;
   size?: number;
   containerStyle?: StyleProp<ViewStyle>;
 };

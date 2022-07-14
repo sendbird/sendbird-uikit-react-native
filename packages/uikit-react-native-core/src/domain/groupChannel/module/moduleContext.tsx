@@ -1,8 +1,15 @@
 import React, { createContext, useState } from 'react';
-import type Sendbird from 'sendbird';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
-import { NOOP, isDifferentChannel, useUniqId } from '@sendbird/uikit-utils';
+import {
+  NOOP,
+  SendbirdFileMessage,
+  SendbirdGroupChannel,
+  SendbirdUser,
+  SendbirdUserMessage,
+  isDifferentChannel,
+  useUniqId,
+} from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization } from '../../../contexts/Localization';
@@ -12,11 +19,11 @@ import type { GroupChannelContextsType, GroupChannelModule } from '../types';
 export const GroupChannelContexts: GroupChannelContextsType = {
   Fragment: createContext({
     headerTitle: '',
-    channel: {} as Sendbird.GroupChannel,
+    channel: {} as SendbirdGroupChannel,
     setEditMessage: NOOP,
   }),
   TypingIndicator: createContext({
-    typingUsers: [] as Sendbird.User[],
+    typingUsers: [] as SendbirdUser[],
   }),
 };
 
@@ -32,8 +39,8 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
   const { STRINGS } = useLocalization();
   const { currentUser, sdk } = useSendbirdChat();
 
-  const [typingUsers, setTypingUsers] = useState<Sendbird.User[]>([]);
-  const [editMessage, setEditMessage] = useState<Sendbird.UserMessage | Sendbird.FileMessage>();
+  const [typingUsers, setTypingUsers] = useState<SendbirdUser[]>([]);
+  const [editMessage, setEditMessage] = useState<SendbirdUserMessage | SendbirdFileMessage>();
 
   useChannelHandler(
     sdk,

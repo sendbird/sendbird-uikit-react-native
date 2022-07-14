@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { Platform, TextInput as RNTextInput, View } from 'react-native';
-import type Sendbird from 'sendbird';
 
 import { Button, TextInput, createStyleSheet, useToast } from '@sendbird/uikit-react-native-foundation';
+import type { SendbirdFileMessage, SendbirdUserMessage } from '@sendbird/uikit-utils';
 
 import { useLocalization } from '../../../../contexts/Localization';
 import type { GroupChannelProps } from '../../types';
@@ -10,8 +10,8 @@ import type { GroupChannelProps } from '../../types';
 type EditInputProps = GroupChannelProps['Input'] & {
   text: string;
   setText: (val: string) => void;
-  editMessage: Sendbird.UserMessage | Sendbird.FileMessage;
-  setEditMessage: (msg?: Sendbird.UserMessage | Sendbird.FileMessage) => void;
+  editMessage: SendbirdUserMessage | SendbirdFileMessage;
+  setEditMessage: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
 };
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });

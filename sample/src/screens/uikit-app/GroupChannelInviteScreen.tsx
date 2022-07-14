@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import type Sendbird from 'sendbird';
 
 import { createGroupChannelInviteFragment } from '@sendbird/uikit-react-native';
 import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
+import type { SendbirdUser } from '@sendbird/uikit-utils';
 
 import { useAppNavigation } from '../../hooks/useAppNavigation';
 import { Routes } from '../../libs/navigation';
 
-const GroupChannelInviteFragment = createGroupChannelInviteFragment<Sendbird.User>();
+const GroupChannelInviteFragment = createGroupChannelInviteFragment<SendbirdUser>();
 
 const GroupChannelInviteScreen: React.FC = () => {
   const { navigation, params } = useAppNavigation<Routes.GroupChannelInvite>();

@@ -1,9 +1,16 @@
 import React, { createContext, useCallback } from 'react';
-import type Sendbird from 'sendbird';
 
 import { useActiveGroupChannel, useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { useActionMenu, useBottomSheet, usePrompt, useToast } from '@sendbird/uikit-react-native-foundation';
-import { NOOP, isDifferentChannel, useForceUpdate, useUniqId } from '@sendbird/uikit-utils';
+import {
+  NOOP,
+  SendbirdGroupChannel,
+  SendbirdGroupChannelParams,
+  SendbirdOpenChannel,
+  isDifferentChannel,
+  useForceUpdate,
+  useUniqId,
+} from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization } from '../../../contexts/Localization';
@@ -13,7 +20,7 @@ import type { GroupChannelSettingsContextsType, GroupChannelSettingsProps } from
 
 export const GroupChannelSettingsContexts: GroupChannelSettingsContextsType = {
   Fragment: createContext({
-    channel: {} as Sendbird.GroupChannel,
+    channel: {} as SendbirdGroupChannel,
     headerTitle: '',
     headerRight: '',
     onPressHeaderRight: NOOP,
@@ -33,7 +40,7 @@ export const GroupChannelSettingsContextsProvider: React.FC<GroupChannelSettings
 
   const { activeChannel, setActiveChannel } = useActiveGroupChannel(sdk, staleChannel);
 
-  const onChannelChanged = (channel: Sendbird.GroupChannel | Sendbird.OpenChannel) => {
+  const onChannelChanged = (channel: SendbirdGroupChannel | SendbirdOpenChannel) => {
     if (isDifferentChannel(channel, activeChannel) || !channel.isGroupChannel()) return;
     setActiveChannel(channel);
     forceUpdate();
@@ -56,7 +63,7 @@ export const GroupChannelSettingsContextsProvider: React.FC<GroupChannelSettings
   const { openMenu } = useActionMenu();
 
   const updateChannel = useCallback(
-    async (params: Sendbird.GroupChannelParams) => {
+    async (params: SendbirdGroupChannelParams) => {
       const updatedChannel = await activeChannel.updateChannel(params);
       setActiveChannel(updatedChannel);
       forceUpdate();

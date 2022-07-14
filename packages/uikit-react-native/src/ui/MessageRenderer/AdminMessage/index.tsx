@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import type Sendbird from 'sendbird';
 
 import { Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import type { SendbirdAdminMessage } from '@sendbird/uikit-utils';
 
 import type { MessageRendererInterface } from '../index';
 
-export type AdminMessageProps = MessageRendererInterface<Sendbird.AdminMessage>;
+export type AdminMessageProps = MessageRendererInterface<SendbirdAdminMessage>;
 const AdminMessage: React.FC<AdminMessageProps> = ({ message, nextMessage }) => {
   const { colors } = useUIKitTheme();
 

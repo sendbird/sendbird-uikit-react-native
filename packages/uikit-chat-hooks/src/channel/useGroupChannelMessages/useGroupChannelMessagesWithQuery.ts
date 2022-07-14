@@ -1,7 +1,12 @@
 import { useCallback, useRef } from 'react';
 import type Sendbird from 'sendbird';
 
-import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
+import type {
+  SendbirdChatSDK,
+  SendbirdFileMessage,
+  SendbirdGroupChannel,
+  SendbirdOpenChannel,
+} from '@sendbird/uikit-utils';
 import { Logger, isDifferentChannel, useAsyncEffect, useForceUpdate } from '@sendbird/uikit-utils';
 
 import { useAppFeatures } from '../../common/useAppFeatures';
@@ -11,7 +16,7 @@ import { useActiveGroupChannel } from '../useActiveGroupChannel';
 import { useGroupChannelMessagesReducer } from './reducer';
 
 const createMessageQuery = (
-  channel: Sendbird.GroupChannel,
+  channel: SendbirdGroupChannel,
   creator?: UseGroupChannelMessagesOptions['queryCreator'],
 ) => {
   if (creator) return creator();
@@ -24,7 +29,7 @@ const createMessageQuery = (
 const HOOK_NAME = 'useGroupChannelMessagesWithQuery';
 export const useGroupChannelMessagesWithQuery = (
   sdk: SendbirdChatSDK,
-  staleChannel: Sendbird.GroupChannel,
+  staleChannel: SendbirdGroupChannel,
   userId?: string,
   options?: UseGroupChannelMessagesOptions,
 ): UseGroupChannelMessages => {
@@ -78,7 +83,7 @@ export const useGroupChannelMessagesWithQuery = (
     [sdk, activeChannel.url, options?.queryCreator],
   );
 
-  const channelUpdater = (channel: Sendbird.GroupChannel | Sendbird.OpenChannel) => {
+  const channelUpdater = (channel: SendbirdGroupChannel | SendbirdOpenChannel) => {
     if (channel.isGroupChannel() && !isDifferentChannel(channel, activeChannel)) {
       setActiveChannel(channel);
       forceUpdate();
@@ -187,7 +192,7 @@ export const useGroupChannelMessagesWithQuery = (
           if (error) reject(error);
           else {
             updateNextMessages([sentMessage], false, sdk.currentUser.userId);
-            resolve(sentMessage as Sendbird.FileMessage);
+            resolve(sentMessage as SendbirdFileMessage);
           }
         });
         updateNextMessages([pendingMessage], false, sdk.currentUser.userId);
