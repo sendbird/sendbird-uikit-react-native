@@ -36,8 +36,8 @@ const createGroupChannelMembersFragment = (
 ): GroupChannelMembersFragment<SendbirdMember> => {
   const UserListModule = createUserListModule<SendbirdMember>(initModule);
 
-  return ({ channel, onPressHeaderLeft, onPressHeaderRight, sortComparator, renderUser }) => {
-    const queryCreator = useCallback(() => createMemberListQuery(channel), [channel]);
+  return ({ staleChannel, onPressHeaderLeft, onPressHeaderRight, sortComparator, renderUser }) => {
+    const queryCreator = useCallback(() => createMemberListQuery(staleChannel), [staleChannel]);
     const { sdk, currentUser } = useSendbirdChat();
     const { STRINGS } = useLocalization();
     const { users, refreshing, refresh, next, error, loading } = useUserList(sdk, {

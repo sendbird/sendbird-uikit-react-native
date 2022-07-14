@@ -12,11 +12,11 @@ const GroupChannelMembersScreen: React.FC = () => {
   const { navigation, params } = useAppNavigation<Routes.GroupChannelInvite>();
   const { sdk } = useSendbirdChat();
 
-  const [channel] = useState(() => sdk.GroupChannel.buildFromSerializedData(params.serializedChannel));
+  const [staleChannel] = useState(() => sdk.GroupChannel.buildFromSerializedData(params.serializedChannel));
 
   return (
     <GroupChannelMembersFragment
-      channel={channel}
+      staleChannel={staleChannel}
       onPressHeaderLeft={() => {
         navigation.goBack();
       }}

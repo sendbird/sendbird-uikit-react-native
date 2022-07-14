@@ -33,7 +33,7 @@ export type GroupChannelInviteFragment<User> = React.FC<{
 }>;
 
 export type GroupChannelMembersFragment<User> = React.FC<{
-  channel: SendbirdGroupChannel;
+  staleChannel: SendbirdGroupChannel;
   onPressHeaderLeft: () => void;
   onPressHeaderRight: () => void;
   sortComparator?: UseUserListOptions<User>['sortComparator'];
