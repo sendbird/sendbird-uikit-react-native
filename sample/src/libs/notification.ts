@@ -6,7 +6,7 @@ import { Platform } from 'react-native';
 
 import { NOOP, isSendbirdNotification, parseSendbirdNotification } from '@sendbird/uikit-utils';
 
-import { Routes, runAfterAppReady } from './navigation';
+import { Routes, navigationRef, runAfterAppReady } from './navigation';
 
 export const onNotificationAndroid: (event: Event) => Promise<void> = async ({ type, detail }) => {
   if (Platform.OS !== 'android') return;
@@ -14,6 +14,10 @@ export const onNotificationAndroid: (event: Event) => Promise<void> = async ({ t
   if (type === EventType.PRESS && detail.notification && isSendbirdNotification(detail.notification.data)) {
     const sendbird = parseSendbirdNotification(detail.notification.data);
     runAfterAppReady(async (sdk, actions) => {
+      if (Routes.Home === navigationRef.getCurrentRoute()?.name) {
+        actions.push(Routes.GroupChannelTabs, undefined);
+      }
+
       const channel = await sdk.GroupChannel.getChannel(sendbird.channel.channel_url);
       actions.navigate(Routes.GroupChannel, { serializedChannel: channel.serialize() });
     });
@@ -29,6 +33,10 @@ export const onForegroundIOS = () => {
     if (data.userInteraction === 1 && isSendbirdNotification(data)) {
       const sendbird = parseSendbirdNotification(data);
       runAfterAppReady(async (sdk, actions) => {
+        if (Routes.Home === navigationRef.getCurrentRoute()?.name) {
+          actions.push(Routes.GroupChannelTabs, undefined);
+        }
+
         const channel = await sdk.GroupChannel.getChannel(sendbird.channel.channel_url);
         actions.navigate(Routes.GroupChannel, { serializedChannel: channel.serialize() });
       });
