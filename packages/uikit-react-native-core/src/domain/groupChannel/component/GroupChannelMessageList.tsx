@@ -257,12 +257,15 @@ const useGetMessagePressActions = ({
       }
     }
 
-    if (msg.sendingStatus === 'failed') {
-      response.onPress = () => handleFailedMessage(msg);
-    }
-
     if (sheetItems.length > 0) {
       response.onLongPress = () => openSheet({ sheetItems });
+    }
+
+    if (msg.sendingStatus === 'failed') {
+      response.onLongPress = () => handleFailedMessage(msg);
+      response.onPress = () => {
+        onResendFailedMessage(msg).catch(() => toast.show(STRINGS.TOAST.RESEND_MSG_ERROR, 'error'));
+      };
     }
 
     return response;
