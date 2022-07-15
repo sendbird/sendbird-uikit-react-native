@@ -34,11 +34,19 @@ import {
   ThemeColorsScreen,
 } from './screens';
 
-// const UseReactNavigationHeader: HeaderStyleContextType['HeaderComponent'] = ({ title, right, left, onPressLeft, onPressRight }) => {
+// const UseReactNavigationHeader: HeaderStyleContextType['HeaderComponent'] = ({
+//   title,
+//   right,
+//   left,
+//   onPressLeft,
+//   onPressRight,
+// }) => {
 //   const { navigation } = useAppNavigation();
 //   useEffect(() => {
 //     navigation.setOptions({
 //       headerShown: true,
+//       headerTitleAlign: 'center',
+//       headerBackVisible: false,
 //       headerTitle: () => (typeof title === 'string' ? <Text subtitle2>{title}</Text> : title),
 //       headerLeft: () => <Pressable onPress={onPressLeft}>{left}</Pressable>,
 //       headerRight: () => <Pressable onPress={onPressRight}>{right}</Pressable>,
