@@ -23,7 +23,7 @@ const GroupChannelSettingsScreen: React.FC = () => {
         // Navigate to group channel members
         navigation.navigate(Routes.GroupChannelMembers, params);
       }}
-      onLeaveChannel={() => {
+      onPressMenuLeaveChannel={() => {
         // Navigate to group channel list
         navigation.navigate(Routes.GroupChannelList);
       }}

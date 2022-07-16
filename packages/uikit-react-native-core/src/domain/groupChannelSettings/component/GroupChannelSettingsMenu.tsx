@@ -11,7 +11,7 @@ import type { GroupChannelSettingsProps } from '../types';
 
 const GroupChannelSettingsMenu: React.FC<GroupChannelSettingsProps['Menu']> = ({
   onPressMenuMembers,
-  onLeaveChannel,
+  onPressMenuLeaveChannel,
   menuItemsCreator = (menu) => menu,
 }) => {
   const { sdk } = useSendbirdChat();
@@ -46,8 +46,10 @@ const GroupChannelSettingsMenu: React.FC<GroupChannelSettingsProps['Menu']> = ({
       iconColor: colors.error,
       name: STRINGS.GROUP_CHANNEL_SETTINGS.MENU_LEAVE_CHANNEL,
       onPress: () => {
-        onLeaveChannel();
-        channel.leave().then(() => sdk.clearCachedMessages([channel.url]).catch());
+        channel.leave().then(() => {
+          onPressMenuLeaveChannel();
+          sdk.clearCachedMessages([channel.url]).catch();
+        });
       },
     },
   ]);

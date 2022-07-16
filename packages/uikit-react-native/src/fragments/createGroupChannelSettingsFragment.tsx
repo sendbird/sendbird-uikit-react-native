@@ -16,7 +16,7 @@ const createGroupChannelSettingsFragment = (
     onPressHeaderLeft = NOOP,
     staleChannel,
     onPressMenuMembers,
-    onLeaveChannel,
+    onPressMenuLeaveChannel,
     menuItemsCreator,
     children,
   }) => {
@@ -37,7 +37,7 @@ const createGroupChannelSettingsFragment = (
           <GroupChannelSettingsModule.Menu
             menuItemsCreator={menuItemsCreator}
             onPressMenuMembers={onPressMenuMembers}
-            onLeaveChannel={onLeaveChannel}
+            onPressMenuLeaveChannel={onPressMenuLeaveChannel}
           />
           {children}
         </ScrollView>

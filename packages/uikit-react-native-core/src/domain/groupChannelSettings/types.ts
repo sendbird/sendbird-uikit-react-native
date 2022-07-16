@@ -10,7 +10,7 @@ export type GroupChannelSettingsProps = {
     staleChannel: GroupChannelSettingsProps['Provider']['staleChannel'];
     onPressHeaderLeft: GroupChannelSettingsProps['Header']['onPressHeaderLeft'];
     onPressMenuMembers: GroupChannelSettingsProps['Menu']['onPressMenuMembers'];
-    onLeaveChannel: GroupChannelSettingsProps['Menu']['onLeaveChannel'];
+    onPressMenuLeaveChannel: GroupChannelSettingsProps['Menu']['onPressMenuLeaveChannel'];
     menuItemsCreator?: GroupChannelSettingsProps['Menu']['menuItemsCreator'];
   };
   Header: {
@@ -19,7 +19,7 @@ export type GroupChannelSettingsProps = {
   Info: {};
   Menu: {
     onPressMenuMembers: () => void;
-    onLeaveChannel: () => void;
+    onPressMenuLeaveChannel: () => void;
     menuItemsCreator?: (defaultMenuItems: MenuBarProps[]) => MenuBarProps[];
   };
   Provider: {
