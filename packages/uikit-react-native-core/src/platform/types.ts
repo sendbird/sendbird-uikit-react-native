@@ -24,7 +24,7 @@ export interface OpenResultListener {
 }
 export interface OpenMediaLibraryOptions extends OpenResultListener {
   selectionLimit?: number;
-  mediaType?: 'photo' | 'video';
+  mediaType?: 'photo' | 'video' | 'all';
 }
 export interface OpenCameraOptions extends OpenResultListener {
   cameraType?: 'front' | 'back';

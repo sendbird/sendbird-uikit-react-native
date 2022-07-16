@@ -6,7 +6,7 @@ import { Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-rea
 
 import type { FileMessageProps } from './index';
 
-const iconMapper = { audio: 'file-audio', image: 'photo', video: 'streaming', file: 'file-document' } as const;
+const iconMapper = { audio: 'file-audio', image: 'photo', video: 'play', file: 'file-document' } as const;
 
 const BaseFileMessage: React.FC<FileMessageProps & { type: 'image' | 'audio' | 'video' | 'file' }> = ({
   message,

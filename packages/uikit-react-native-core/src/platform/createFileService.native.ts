@@ -118,8 +118,17 @@ const createNativeFileService = ({
       }
 
       const response = await imagePickerModule.launchImageLibrary({
-        mediaType: options?.mediaType ?? 'photo',
         selectionLimit,
+        mediaType: (() => {
+          switch (options?.mediaType) {
+            case 'photo':
+              return 'photo';
+            case 'video':
+              return 'video';
+            default:
+              return 'mixed';
+          }
+        })(),
       });
       if (response.didCancel) return null;
       if (response.errorCode === 'camera_unavailable') {

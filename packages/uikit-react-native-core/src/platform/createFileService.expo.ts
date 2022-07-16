@@ -61,10 +61,16 @@ const createExpoFileService = ({
       }
 
       const response = await imagePickerModule.launchCameraAsync({
-        mediaTypes:
-          options?.mediaType === 'photo'
-            ? imagePickerModule.MediaTypeOptions.Images
-            : imagePickerModule.MediaTypeOptions.Videos,
+        mediaTypes: (() => {
+          switch (options?.mediaType) {
+            case 'photo':
+              return imagePickerModule.MediaTypeOptions.Images;
+            case 'video':
+              return imagePickerModule.MediaTypeOptions.Videos;
+            default:
+              return imagePickerModule.MediaTypeOptions.All;
+          }
+        })(),
       });
 
       if (response.cancelled) return null;

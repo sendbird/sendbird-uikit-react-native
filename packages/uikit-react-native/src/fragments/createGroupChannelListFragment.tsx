@@ -19,7 +19,7 @@ import { Logger, PASS, channelComparator, getFileExtension, getFileType } from '
 import { DEFAULT_LONG_PRESS_DELAY } from '../constants';
 import GroupChannelPreview from '../ui/GroupChannelPreview';
 
-const iconMapper = { audio: 'file-audio', image: 'photo', video: 'streaming', file: 'file-document' } as const;
+const iconMapper = { audio: 'file-audio', image: 'photo', video: 'play', file: 'file-document' } as const;
 const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListModule>): GroupChannelListFragment => {
   const GroupChannelListModule = createGroupChannelListModule(initModule);
   return ({

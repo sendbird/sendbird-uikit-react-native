@@ -54,7 +54,7 @@ const SendInput: React.FC<SendInputProps> = ({ onSendUserMessage, onSendFileMess
           onPress: async () => {
             const photo = await fileService.openMediaLibrary({
               selectionLimit: 1,
-              mediaType: 'photo',
+              mediaType: 'all',
               onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_PHOTO_LIBRARY_ERROR, 'error'),
             });
 
