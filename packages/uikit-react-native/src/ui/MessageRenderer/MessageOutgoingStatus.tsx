@@ -18,7 +18,7 @@ const MessageOutgoingStatus: React.FC<Props> = ({ channel, message }) => {
 
   const handlerId = useUniqId('MessageOutgoingStatus');
 
-  const { sdk } = useSendbirdChat();
+  const { sdk, features } = useSendbirdChat();
   const { colors } = useUIKitTheme();
 
   const [state, setState] = useState(() => ({
@@ -42,9 +42,12 @@ const MessageOutgoingStatus: React.FC<Props> = ({ channel, message }) => {
       handler.onReadReceiptUpdated = (channel) => {
         if (channel.url === message.channelUrl) setState(getCounts(channel, message));
       };
-      handler.onDeliveryReceiptUpdated = (channel) => {
-        if (channel.url === message.channelUrl && channel.isGroupChannel()) setState(getCounts(channel, message));
-      };
+
+      if (features.deliveryReceiptEnabled) {
+        handler.onDeliveryReceiptUpdated = (channel) => {
+          if (channel.url === message.channelUrl && channel.isGroupChannel()) setState(getCounts(channel, message));
+        };
+      }
       sdk.addChannelHandler(id, handler);
     }
 
@@ -65,11 +68,14 @@ const MessageOutgoingStatus: React.FC<Props> = ({ channel, message }) => {
     return <Icon icon={'done-all'} size={SIZE} color={colors.secondary} style={styles.container} />;
   }
 
-  if (state.undeliveredCount === 0) {
-    return <Icon icon={'done-all'} size={SIZE} color={colors.onBackground03} style={styles.container} />;
+  if (features.deliveryReceiptEnabled) {
+    if (state.undeliveredCount === 0) {
+      return <Icon icon={'done-all'} size={SIZE} color={colors.onBackground03} style={styles.container} />;
+    }
+    return <Icon icon={'done'} size={SIZE} color={colors.onBackground03} style={styles.container} />;
   }
 
-  return <Icon icon={'done'} size={SIZE} color={colors.onBackground03} style={styles.container} />;
+  return <Icon icon={'done-all'} size={SIZE} color={colors.onBackground03} style={styles.container} />;
 };
 
 const styles = createStyleSheet({
