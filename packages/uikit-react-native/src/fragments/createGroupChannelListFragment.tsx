@@ -14,11 +14,12 @@ import {
   useLocalization,
   useSendbirdChat,
 } from '@sendbird/uikit-react-native-core';
-import { Logger, PASS, channelComparator } from '@sendbird/uikit-utils';
+import { Logger, PASS, channelComparator, getFileExtension, getFileType } from '@sendbird/uikit-utils';
 
 import { DEFAULT_LONG_PRESS_DELAY } from '../constants';
 import GroupChannelPreview from '../ui/GroupChannelPreview';
 
+const iconMapper = { audio: 'file-audio', image: 'photo', video: 'streaming', file: 'file-document' } as const;
 const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListModule>): GroupChannelListFragment => {
   const GroupChannelListModule = createGroupChannelListModule(initModule);
   return ({
@@ -62,7 +63,11 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
             titleCaption={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE_CAPTION(channel)}
             body={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_BODY(channel)}
             badgeCount={channel.unreadMessageCount}
-            bodyIcon={channel.lastMessage?.isFileMessage() ? 'file-document' : undefined}
+            bodyIcon={
+              channel.lastMessage?.isFileMessage()
+                ? iconMapper[getFileType(getFileExtension(channel.lastMessage.name))]
+                : undefined
+            }
             frozen={channel.isFrozen}
             notificationOff={channel.myPushTriggerOption === 'off'}
             memberCount={channel.memberCount > 2 ? channel.memberCount : undefined}

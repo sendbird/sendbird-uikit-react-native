@@ -64,6 +64,7 @@
     ]
   },
   "dependencies": {
-    "date-fns": "^2.28.0"
+    "date-fns": "^2.28.0",
+    "string.prototype.matchall": "^4.0.7"
   }
 }

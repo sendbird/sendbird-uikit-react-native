@@ -76,7 +76,7 @@ const GroupChannelPreview: React.FC<Props> = ({
         </View>
 
         <View style={styles.rightBottomSection}>
-          <View style={styles.body}>
+          <View style={[styles.body, bodyIcon && { alignItems: 'center' }]}>
             {bodyIcon && (
               <Icon
                 size={18}
