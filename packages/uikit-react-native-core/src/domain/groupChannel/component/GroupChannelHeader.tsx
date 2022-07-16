@@ -23,7 +23,7 @@ const GroupChannelHeader: React.FC<GroupChannelProps['Header']> = ({ onPressHead
           <ChannelCover channel={channel} size={34} containerStyle={styles.avatarGroup} />
           <View style={{ flexShrink: 1 }}>
             <Header.Title h2>{headerTitle}</Header.Title>
-            {Boolean(subtitle) && subtitle && <Header.SubTitle style={styles.subtitle}>{subtitle}</Header.SubTitle>}
+            {Boolean(subtitle) && subtitle && <Header.Subtitle style={styles.subtitle}>{subtitle}</Header.Subtitle>}
           </View>
         </View>
       }

@@ -1,3 +1,5 @@
+/** Assets **/
+export { default as IconAssets } from './assets/icon';
 /** Component **/
 export { default as Image } from './components/Image';
 
@@ -55,4 +57,7 @@ export type {
   UIKitPalette,
   HeaderElement,
   HeaderPartProps,
+  ComponentColors,
+  Component,
+  GetColorTree,
 } from './types';

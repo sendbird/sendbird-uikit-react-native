@@ -28,6 +28,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     onPressCreateChannel,
     queryCreator,
     sortComparator = channelComparator,
+    renderGroupChannelPreview,
     // skipTypeSelection = true,
     flatListProps = {},
     menuItemCreator = PASS,
@@ -49,31 +50,34 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
       }, []);
     }
 
-    const renderGroupChannelPreview: GroupChannelListProps['List']['renderGroupChannelPreview'] = useCallback(
-      (channel, onLongPressChannel) => (
-        <Pressable
-          onPress={() => onPressChannel(channel)}
-          onLongPress={onLongPressChannel}
-          delayLongPress={DEFAULT_LONG_PRESS_DELAY}
-        >
-          <GroupChannelPreview
-            customCover={<ChannelCover channel={channel} size={56} />}
-            coverUrl={channel.coverUrl}
-            title={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE(currentUser?.userId ?? '', channel)}
-            titleCaption={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE_CAPTION(channel)}
-            body={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_BODY(channel)}
-            badgeCount={channel.unreadMessageCount}
-            bodyIcon={
-              channel.lastMessage?.isFileMessage()
-                ? iconMapper[getFileType(getFileExtension(channel.lastMessage.name))]
-                : undefined
-            }
-            frozen={channel.isFrozen}
-            notificationOff={channel.myPushTriggerOption === 'off'}
-            memberCount={channel.memberCount > 2 ? channel.memberCount : undefined}
-          />
-        </Pressable>
-      ),
+    const _renderGroupChannelPreview: GroupChannelListProps['List']['renderGroupChannelPreview'] = useCallback(
+      (channel, onLongPressChannel) => {
+        if (renderGroupChannelPreview) return renderGroupChannelPreview(channel, onLongPressChannel);
+        return (
+          <Pressable
+            onPress={() => onPressChannel(channel)}
+            onLongPress={onLongPressChannel}
+            delayLongPress={DEFAULT_LONG_PRESS_DELAY}
+          >
+            <GroupChannelPreview
+              customCover={<ChannelCover channel={channel} size={56} />}
+              coverUrl={channel.coverUrl}
+              title={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE(currentUser?.userId ?? '', channel)}
+              titleCaption={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE_CAPTION(channel)}
+              body={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_BODY(channel)}
+              badgeCount={channel.unreadMessageCount}
+              bodyIcon={
+                channel.lastMessage?.isFileMessage()
+                  ? iconMapper[getFileType(getFileExtension(channel.lastMessage.name))]
+                  : undefined
+              }
+              frozen={channel.isFrozen}
+              notificationOff={channel.myPushTriggerOption === 'off'}
+              memberCount={channel.memberCount > 2 ? channel.memberCount : undefined}
+            />
+          </Pressable>
+        );
+      },
       [STRINGS, onPressChannel, currentUser?.userId],
     );
 
@@ -88,7 +92,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
         <StatusComposition loading={loading} LoadingComponent={<GroupChannelListModule.StatusLoading />}>
           <GroupChannelListModule.List
             menuItemCreator={menuItemCreator}
-            renderGroupChannelPreview={renderGroupChannelPreview}
+            renderGroupChannelPreview={_renderGroupChannelPreview}
             groupChannels={groupChannels}
             onLoadNext={next}
             flatListProps={{

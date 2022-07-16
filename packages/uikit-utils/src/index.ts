@@ -23,7 +23,7 @@ export * from './sendbird/attrs';
 
 export const NOOP: () => void = () => void 0;
 export const ASYNC_NOOP = async () => void 0;
-export const PASS = <T,>(val: T) => val;
+export const PASS = <T>(val: T) => val;
 export type {
   FilterByValueType,
   UnionToIntersection,

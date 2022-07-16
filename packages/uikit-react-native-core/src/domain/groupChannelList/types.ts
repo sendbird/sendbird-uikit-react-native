@@ -7,73 +7,68 @@ import type { SendbirdGroupChannel } from '@sendbird/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 
-/**
- * @type {GroupChannelListProps.Fragment} - Props from developer to create fragment
- * @property Fragment.Header - Custom Header for Fragment, Only replace header component not a module
- * @property Fragment.TypeSelectorHeader - Custom Header for TypeSelector, Only replace header component not a module
- * @property Fragment.skipTypeSelection - Skip type selection, When this is set to true 'channelType' only receive 'GROUP' type
- * @property Fragment.onPressChannel - Navigate to GroupChannelFragment
- * @property Fragment.onPressCreateChannel - Navigate to GroupChannelCreateFragment
- * @property Fragment.queryCreator - Custom Query creator for channels query
- * @property Fragment.sortComparator - Sort comparator for sort channels
- * @property Fragment.flatListProps - FlatList props
- *
- * @type {GroupChannelListProps.Header} - Props from Fragment for create Header module
- * @property Header.Header - Custom header component from Fragment {@link Fragment.Header}
- *
- * @type {GroupChannelListProps.List} - Props from Fragment for create List module
- * @property List.groupChannels - GroupChannels from SendbirdChat SDK, We are using '@sendbird/uikit-chat-hooks'
- * @property List.renderGroupChannelPreview - Method to render GroupChannel preview
- * @property List.onLoadNext - Method to load more data, called with onEndReached of FlatList
- * @property List.flatListProps - FlatList props from Fragment {@link Fragment.flatListProps}
- * @property List.menuItemCreator - Action menu item creator for onLongPress
- *
- * @type {GroupChannelListProps.TypeSelector} - Props from Fragment for create TypeSelector module
- * @property TypeSelector.Header - Custom header component from Fragment {@link Fragment.TypeSelectorHeader}
- * @property TypeSelector.skipTypeSelection - Prop from Fragment {@link Fragment.skipTypeSelection}
- * @property TypeSelector.onSelectType - Method called when type is selected, call {@link Fragment.onPressCreateChannel}.
- * */
-export type GroupChannelListProps = {
+export interface GroupChannelListProps {
+  /** Props for `GroupChannelListFragment` **/
   Fragment: {
+    /** Navigate to GroupChannelFragment **/
     onPressChannel: (channel: SendbirdGroupChannel) => void;
+    /** Navigate to GroupChannelCreateFragment **/
     onPressCreateChannel: (channelType: GroupChannelType) => void;
+    /** Custom Header for TypeSelector, Only replace header component not a module **/
     TypeSelectorHeader?: null | CommonComponent<
-      BaseHeaderProps<{
-        title: string;
-        right: React.ReactElement;
-        onPressRight: () => void;
-      }>
+      BaseHeaderProps<{ title: string; right: React.ReactElement; onPressRight: () => void }>
     >;
+    /** Method to render GroupChannel preview **/
+    renderGroupChannelPreview?: (
+      channel: SendbirdGroupChannel,
+      onLongPressChannel: () => void,
+    ) => React.ReactElement | null;
+    // /** Skip type selection, When this is set to true 'channelType' only receive 'GROUP' type **/
     // skipTypeSelection?: boolean;
+    /** Custom Query creator for channels query **/
     queryCreator?: UseGroupChannelListOptions['queryCreator'];
+    /** Sort comparator for sort channels **/
     sortComparator?: UseGroupChannelListOptions['sortComparator'];
+    /** FlatList props for GroupChannelList.List **/
     flatListProps?: GroupChannelListProps['List']['flatListProps'];
+    /** Action menu item creator for onLongPress **/
     menuItemCreator?: GroupChannelListProps['List']['menuItemCreator'];
   };
+  /** Props for `GroupChannelListModule.Header` **/
   Header: {};
+  /** Props for `GroupChannelListModule.List` **/
   List: {
+    /** GroupChannels from SendbirdChat SDK **/
     groupChannels: SendbirdGroupChannel[];
+    /** Method to render GroupChannel preview **/
     renderGroupChannelPreview: (
       channel: SendbirdGroupChannel,
       onLongPressChannel: () => void,
     ) => React.ReactElement | null;
+    /** Method to load more data, called with onEndReached of FlatList **/
     onLoadNext: () => Promise<void>;
+    /** Prop from Fragment **/
     flatListProps?: Omit<FlatListProps<SendbirdGroupChannel>, 'data' | 'renderItem'>;
+    /** Prop from Fragment **/
     menuItemCreator?: (defaultMenuItem: ActionMenuItem) => ActionMenuItem;
   };
+  /** Props for `GroupChannelListModule.TypeSelector` **/
   TypeSelector: {
+    /** Prop from Fragment `Fragment.TypeSelectorHeader` **/
     Header: GroupChannelListProps['Fragment']['TypeSelectorHeader'];
+    /** Prop from Fragment `Fragment.skipTypeSelection` **/
     skipTypeSelection: boolean;
+    /** Method called when type is selected, call `Fragment.onPressCreateChannel` **/
     onSelectType: (type: GroupChannelType) => void;
   };
-};
+}
 
 /**
  * Internal context for GroupChannelList
  * For example, the developer can create a custom header
  * with getting data from the domain context
  * */
-export type GroupChannelListContextsType = {
+export interface GroupChannelListContextsType {
   Fragment: React.Context<{
     headerTitle: string;
   }>;
@@ -83,7 +78,7 @@ export type GroupChannelListContextsType = {
     hide: () => void;
     headerTitle: string;
   }>;
-};
+}
 export interface GroupChannelListModule {
   Provider: React.FC;
   Header: CommonComponent<GroupChannelListProps['Header']>;

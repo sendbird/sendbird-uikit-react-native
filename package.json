@@ -22,6 +22,7 @@
     "reset": "find . -type dir -name node_modules | xargs rm -rf",
     "clean": "lerna run clean",
     "build": "lerna run build",
+    "docs": "yarn build && typedoc --out docs --entryPointStrategy packages 'packages/*' && yarn clean",
     "test": "jest --verbose",
     "test:build": "yarn build --stream && yarn clean --stream",
     "lint": "yarn lint:eslint && yarn lint:prettier",
@@ -59,6 +60,7 @@
     "react-native-builder-bob": "^0.18.2",
     "react-native-safe-area-context": "^3.3.2",
     "react-test-renderer": "^17.0.2",
+    "typedoc": "^0.23.7",
     "typescript": "^4.5.4"
   },
   "resolutions": {

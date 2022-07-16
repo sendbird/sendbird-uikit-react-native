@@ -30,8 +30,16 @@ export interface UIKitTheme {
   scaleFactor: (dp: number) => number;
 }
 
-type Component = 'Header' | 'Button' | 'Dialog' | 'Input' | 'Badge' | 'Placeholder' | 'Message' | 'DateSeparator';
-type GetColorTree<
+export type Component =
+  | 'Header'
+  | 'Button'
+  | 'Dialog'
+  | 'Input'
+  | 'Badge'
+  | 'Placeholder'
+  | 'Message'
+  | 'DateSeparator';
+export type GetColorTree<
   Tree extends {
     Variant: {
       [key in Component]: string;
@@ -77,7 +85,7 @@ export type ComponentColorTree = GetColorTree<{
     DateSeparator: 'text' | 'background';
   };
 }>;
-type ComponentColors<T extends Component> = {
+export type ComponentColors<T extends Component> = {
   [key in ComponentColorTree['Variant'][T]]: {
     [key in ComponentColorTree['State'][T]]: {
       [key in ComponentColorTree['ColorPart'][T]]: string;

@@ -37,8 +37,8 @@ export const SendbirdUIKit = Object.freeze({
   PLATFORM: Platform.OS.toLowerCase(),
 });
 
-type StringSets = Record<string, StringSet>;
-type Props<T extends StringSets> = {
+export type StringSets = Record<string, StringSet>;
+export type SendbirdUIKitContainerProps<T extends StringSets> = {
   children?: React.ReactNode;
   appId: string;
   platformServices: {
@@ -81,7 +81,7 @@ const SendbirdUIKitContainer = <T extends StringSets>({
   styles,
   toast,
   errorBoundary,
-}: Props<T>) => {
+}: SendbirdUIKitContainerProps<T>) => {
   const getSendbirdSDK = () => {
     let sdk: SendbirdChatSDK;
 

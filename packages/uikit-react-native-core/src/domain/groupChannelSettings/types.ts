@@ -5,7 +5,7 @@ import type { SendbirdGroupChannel } from '@sendbird/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 
-export type GroupChannelSettingsProps = {
+export interface GroupChannelSettingsProps {
   Fragment: {
     staleChannel: GroupChannelSettingsProps['Provider']['staleChannel'];
     onPressHeaderLeft: GroupChannelSettingsProps['Header']['onPressHeaderLeft'];
@@ -25,21 +25,21 @@ export type GroupChannelSettingsProps = {
   Provider: {
     staleChannel: SendbirdGroupChannel;
   };
-};
+}
 
 /**
  * Internal context for GroupChannelSettings
  * For example, the developer can create a custom header
  * with getting data from the domain context
  * */
-export type GroupChannelSettingsContextsType = {
+export interface GroupChannelSettingsContextsType {
   Fragment: React.Context<{
     channel: SendbirdGroupChannel;
     headerTitle: string;
     headerRight: string;
     onPressHeaderRight: () => void;
   }>;
-};
+}
 export interface GroupChannelSettingsModule {
   Provider: React.FC<GroupChannelSettingsProps['Provider']>;
   Header: CommonComponent<GroupChannelSettingsProps['Header']>;

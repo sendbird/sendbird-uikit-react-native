@@ -15,7 +15,7 @@ import type {
 import type { FileType } from '../../platform/types';
 import type { CommonComponent } from '../../types';
 
-export type GroupChannelProps = {
+export interface GroupChannelProps {
   Fragment: {
     staleChannel: SendbirdGroupChannel;
     onChannelDeleted: () => void;
@@ -94,14 +94,14 @@ export type GroupChannelProps = {
     enableTypingIndicator: boolean;
     keyboardAvoidOffset?: number;
   };
-};
+}
 
 /**
  * Internal context for GroupChannel
  * For example, the developer can create a custom header
  * with getting data from the domain context
  * */
-export type GroupChannelContextsType = {
+export interface GroupChannelContextsType {
   Fragment: React.Context<{
     headerTitle: string;
     channel: SendbirdGroupChannel;
@@ -112,7 +112,7 @@ export type GroupChannelContextsType = {
   TypingIndicator: React.Context<{
     typingUsers: SendbirdUser[];
   }>;
-};
+}
 export interface GroupChannelModule {
   Provider: React.FC<GroupChannelProps['Provider']>;
   Header: CommonComponent<GroupChannelProps['Header']>;
