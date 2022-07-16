@@ -16,17 +16,17 @@ export type TypoName =
   | 'caption3'
   | 'caption4';
 export type FontAttributes = Pick<TextStyle, 'fontFamily' | 'fontSize' | 'lineHeight' | 'letterSpacing' | 'fontWeight'>;
-export type Typography = Record<TypoName, FontAttributes>;
+export type UIKitTypography = Record<TypoName, FontAttributes>;
 
 export type UIKitAppearance = 'light' | 'dark';
 export interface UIKitTheme {
   appearance: UIKitAppearance;
   select<T>(options: { light?: T; dark: T; default?: T } | { light: T; dark?: T; default?: T }): T;
 
-  palette: PaletteInterface;
+  palette: UIKitPalette;
   colors: UIKitColors;
 
-  typography: Typography;
+  typography: UIKitTypography;
   scaleFactor: (dp: number) => number;
 }
 
@@ -134,7 +134,7 @@ export type BaseHeaderProps<HeaderParts extends HeaderPartProps = {}, Additional
   children?: ReactNode;
 } & HeaderParts &
   AdditionalProps;
-export interface PaletteInterface {
+export interface UIKitPalette {
   primary100: string;
   primary200: string;
   primary300: string;

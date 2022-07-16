@@ -1,7 +1,7 @@
-import { themeFactory } from '../styles/themeFactory';
 import Palette from './Palette';
+import createTheme from './createTheme';
 
-const DarkUIKitTheme = themeFactory({
+const DarkUIKitTheme = createTheme({
   appearance: 'dark',
   palette: Palette,
   colors: (palette) => ({

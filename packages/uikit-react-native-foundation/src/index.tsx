@@ -1,10 +1,3 @@
-/** Theme **/
-export { default as Palette } from './theme/Palette';
-export { default as useUIKitTheme } from './theme/useUIKitTheme';
-export { default as DarkUIKitTheme } from './theme/DarkUIKitTheme';
-export { default as LightUIKitTheme } from './theme/LightUIKitTheme';
-export { default as UIKitThemeProvider } from './theme/UIKitThemeProvider';
-
 /** Component **/
 export { default as Image } from './components/Image';
 
@@ -35,20 +28,31 @@ export { default as URLParsedText } from './ui/URLParsedText';
 export { default as createAppearanceHelper } from './styles/createAppearanceHelper';
 export { default as createScaleFactor } from './styles/createScaleFactor';
 export { default as createStyleSheet } from './styles/createStyleSheet';
+export { default as createTypography, UIKitTypographyOverrides } from './styles/createTypography';
 export { default as getDefaultHeaderHeight } from './styles/getDefaultHeaderHeight';
 export { HeaderStyleContext, HeaderStyleProvider, HeaderStyleContextType } from './styles/HeaderStyleContext';
-export { themeFactory } from './styles/themeFactory';
 export { default as useHeaderStyle } from './styles/useHeaderStyle';
+
+/** Theme **/
+export { default as createTheme } from './theme/createTheme';
+export { default as DarkUIKitTheme } from './theme/DarkUIKitTheme';
+export { default as LightUIKitTheme } from './theme/LightUIKitTheme';
+export { default as Palette } from './theme/Palette';
+export { default as UIKitThemeContext } from './theme/UIKitThemeContext';
+export { default as UIKitThemeProvider } from './theme/UIKitThemeProvider';
+export { default as useUIKitTheme } from './theme/useUIKitTheme';
 
 /** Types **/
 export type {
   TypoName,
   UIKitTheme,
-  Typography,
+  UIKitTypography,
   FontAttributes,
   BaseHeaderProps,
   UIKitAppearance,
   UIKitColors,
   ComponentColorTree,
-  PaletteInterface,
+  UIKitPalette,
+  HeaderElement,
+  HeaderPartProps,
 } from './types';

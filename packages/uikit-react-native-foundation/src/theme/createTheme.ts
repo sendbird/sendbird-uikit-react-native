@@ -1,37 +1,39 @@
-import Palette from '../theme/Palette';
-import { TypographyOverrides, createTypography } from '../theme/Typography';
+import createAppearanceHelper from '../styles/createAppearanceHelper';
+import createScaleFactor from '../styles/createScaleFactor';
+import createStyleSheet from '../styles/createStyleSheet';
+import createTypography, { UIKitTypographyOverrides } from '../styles/createTypography';
 import type { UIKitColors, UIKitTheme } from '../types';
-import createAppearanceHelper from './createAppearanceHelper';
-import createScaleFactor from './createScaleFactor';
-import createStyleSheet from './createStyleSheet';
+import Palette from './Palette';
 
 type Options = {
   appearance: UIKitTheme['appearance'];
-  palette?: UIKitTheme['palette'];
   colors: (palette: UIKitTheme['palette']) => UIKitColors;
-  typography?: TypographyOverrides;
+  palette?: UIKitTheme['palette'];
+  typography?: UIKitTypographyOverrides;
   scaleFactorOption?: {
     scaleFactor: UIKitTheme['scaleFactor'];
     applyToCreateStyleSheet: boolean;
   };
 };
 
-export const themeFactory = ({
+const createTheme = ({
   appearance,
-  scaleFactorOption,
   palette = Palette,
-  colors,
+  colors: createColors,
   typography = { shared: { fontFamily: 'System' } },
+  scaleFactorOption,
 }: Options): UIKitTheme => {
   if (scaleFactorOption?.applyToCreateStyleSheet) createStyleSheet.updateScaleFactor(scaleFactorOption.scaleFactor);
   const scaleFactor = scaleFactorOption?.scaleFactor ?? createScaleFactor();
 
   return {
     appearance,
-    palette,
     select: createAppearanceHelper(appearance),
-    colors: colors(palette),
-    typography: createTypography(typography, scaleFactor),
+    palette,
+    colors: createColors(palette),
     scaleFactor,
+    typography: createTypography(typography, scaleFactor),
   };
 };
+
+export default createTheme;

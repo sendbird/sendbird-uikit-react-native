@@ -1,13 +1,13 @@
-import type { FontAttributes, Typography } from '../types';
+import type { FontAttributes, UIKitTypography } from '../types';
 
-export type TypographyOverrides = Partial<Typography> & {
+export type UIKitTypographyOverrides = Partial<UIKitTypography> & {
   shared?: Partial<FontAttributes>;
 };
 
-export const createTypography = (
-  overrides: TypographyOverrides = {},
+const createTypography = (
+  overrides: UIKitTypographyOverrides = {},
   scaleFactor: (dp: number) => number,
-): Typography => {
+): UIKitTypography => {
   return {
     h1: {
       fontWeight: '500',
@@ -98,3 +98,5 @@ export const createTypography = (
     },
   };
 };
+
+export default createTypography;

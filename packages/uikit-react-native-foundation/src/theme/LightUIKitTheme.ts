@@ -1,7 +1,7 @@
-import { themeFactory } from '../styles/themeFactory';
 import Palette from './Palette';
+import createTheme from './createTheme';
 
-const LightUIKitTheme = themeFactory({
+const LightUIKitTheme = createTheme({
   appearance: 'light',
   palette: Palette,
   colors: (palette) => ({
