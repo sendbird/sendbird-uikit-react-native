@@ -27,7 +27,6 @@ export interface UIKitTheme {
   colors: UIKitColors;
 
   typography: UIKitTypography;
-  scaleFactor: (dp: number) => number;
 }
 
 export type Component =

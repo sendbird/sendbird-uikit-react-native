@@ -1,4 +1,5 @@
 import type { FontAttributes, UIKitTypography } from '../types';
+import { DEFAULT_SCALE_FACTOR } from './createScaleFactor';
 
 export type UIKitTypographyOverrides = Partial<UIKitTypography> & {
   shared?: Partial<FontAttributes>;
@@ -6,7 +7,7 @@ export type UIKitTypographyOverrides = Partial<UIKitTypography> & {
 
 const createTypography = (
   overrides: UIKitTypographyOverrides = {},
-  scaleFactor: (dp: number) => number,
+  scaleFactor: (dp: number) => number = DEFAULT_SCALE_FACTOR,
 ): UIKitTypography => {
   return {
     h1: {
