@@ -2,26 +2,27 @@
 import type { ReactElement, ReactNode } from 'react';
 import type { TextStyle } from 'react-native';
 
-export type TypoName =
-  | 'h1'
-  | 'h2'
-  | 'subtitle1'
-  | 'subtitle2'
-  | 'body1'
-  | 'body2'
-  | 'body3'
-  | 'button'
-  | 'caption1'
-  | 'caption2'
-  | 'caption3'
-  | 'caption4';
+export interface UIKitTypography {
+  h1: FontAttributes;
+  h2: FontAttributes;
+  subtitle1: FontAttributes;
+  subtitle2: FontAttributes;
+  body1: FontAttributes;
+  body2: FontAttributes;
+  body3: FontAttributes;
+  button: FontAttributes;
+  caption1: FontAttributes;
+  caption2: FontAttributes;
+  caption3: FontAttributes;
+  caption4: FontAttributes;
+}
+export type TypoName = keyof UIKitTypography;
 export type FontAttributes = Pick<TextStyle, 'fontFamily' | 'fontSize' | 'lineHeight' | 'letterSpacing' | 'fontWeight'>;
-export type UIKitTypography = Record<TypoName, FontAttributes>;
 
-export type UIKitAppearance = 'light' | 'dark';
-export interface UIKitTheme {
-  appearance: UIKitAppearance;
-  select<T>(options: { light?: T; dark: T; default?: T } | { light: T; dark?: T; default?: T }): T;
+export type UIKitAppearance<Appearance extends string = 'default'> = 'light' | 'dark' | 'default' | Appearance;
+export interface UIKitTheme<Appearance extends string = 'default'> {
+  appearance: UIKitAppearance<Appearance>;
+  select<T>(options: { [key in UIKitAppearance<Appearance>]?: T }): T;
 
   palette: UIKitPalette;
   colors: UIKitColors;
@@ -94,9 +95,10 @@ export type ComponentColors<T extends Component> = {
 
 export interface UIKitColors {
   primary: string;
+  secondary: string;
+  error: string;
   background: string;
   text: string;
-  notification: string;
   onBackground01: string;
   onBackground02: string;
   onBackground03: string;
@@ -105,8 +107,6 @@ export interface UIKitColors {
   onBackgroundReverse02: string;
   onBackgroundReverse03: string;
   onBackgroundReverse04: string;
-  secondary: string;
-  error: string;
   /**
    * UI Colors has below structure
    * Component.{Variant}.{State}.{ColorPart}

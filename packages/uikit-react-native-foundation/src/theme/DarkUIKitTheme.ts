@@ -6,9 +6,10 @@ const DarkUIKitTheme = createTheme({
   palette: Palette,
   colors: (palette) => ({
     primary: palette.primary200,
+    secondary: palette.secondary200,
+    error: palette.error200,
     background: palette.background600,
     text: palette.onBackgroundDark01,
-    notification: palette.error200,
     onBackground01: palette.onBackgroundDark01,
     onBackground02: palette.onBackgroundDark02,
     onBackground03: palette.onBackgroundDark03,
@@ -17,8 +18,6 @@ const DarkUIKitTheme = createTheme({
     onBackgroundReverse02: palette.onBackgroundLight02,
     onBackgroundReverse03: palette.onBackgroundLight03,
     onBackgroundReverse04: palette.onBackgroundLight04,
-    secondary: palette.secondary200,
-    error: palette.error200,
     ui: {
       header: {
         nav: {

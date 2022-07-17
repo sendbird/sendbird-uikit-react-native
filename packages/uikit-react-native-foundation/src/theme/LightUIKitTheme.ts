@@ -6,9 +6,10 @@ const LightUIKitTheme = createTheme({
   palette: Palette,
   colors: (palette) => ({
     primary: palette.primary300,
+    secondary: palette.secondary300,
+    error: palette.error300,
     background: palette.background50,
     text: palette.onBackgroundLight01,
-    notification: palette.error300,
     onBackground01: palette.onBackgroundLight01,
     onBackground02: palette.onBackgroundLight02,
     onBackground03: palette.onBackgroundLight03,
@@ -17,8 +18,6 @@ const LightUIKitTheme = createTheme({
     onBackgroundReverse02: palette.onBackgroundDark02,
     onBackgroundReverse03: palette.onBackgroundDark03,
     onBackgroundReverse04: palette.onBackgroundDark04,
-    secondary: palette.secondary300,
-    error: palette.error300,
     ui: {
       header: {
         nav: {

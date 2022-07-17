@@ -3,19 +3,19 @@ import createTypography, { UIKitTypographyOverrides } from '../styles/createTypo
 import type { UIKitColors, UIKitTheme } from '../types';
 import Palette from './Palette';
 
-type Options = {
-  appearance: UIKitTheme['appearance'];
-  colors: (palette: UIKitTheme['palette']) => UIKitColors;
-  palette?: UIKitTheme['palette'];
+type Options<Appearance extends string> = {
+  appearance: UIKitTheme<Appearance>['appearance'];
+  colors: (palette: UIKitTheme<Appearance>['palette']) => UIKitColors;
+  palette?: UIKitTheme<Appearance>['palette'];
   typography?: UIKitTypographyOverrides;
 };
 
-const createTheme = ({
+const createTheme = <Appearance extends string>({
   appearance,
   palette = Palette,
   colors: createColors,
   typography = { shared: { fontFamily: 'System' } },
-}: Options): UIKitTheme => {
+}: Options<Appearance>): UIKitTheme<Appearance> => {
   return {
     appearance,
     select: createAppearanceHelper(appearance),
