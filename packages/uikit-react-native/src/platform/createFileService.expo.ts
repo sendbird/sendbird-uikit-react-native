@@ -78,7 +78,7 @@ const createExpoFileService = ({
       const { uri } = response;
       const { size } = await fsModule.getInfoAsync(response.uri);
       const ext = getFileExtension(uri);
-      const type = getFileType(uri);
+      const type = getFileType(ext);
 
       return fileTypeGuard({ uri, size, type: `${type}/${ext.slice(1)}`, name: Date.now() + ext });
     }
@@ -100,7 +100,7 @@ const createExpoFileService = ({
         response.selected.slice(0, selectionLimit).map(async ({ uri }) => {
           const { size } = await fsModule.getInfoAsync(uri);
           const ext = getFileExtension(uri);
-          const type = getFileType(uri);
+          const type = getFileType(ext);
           return fileTypeGuard({ uri, size, type: `${type}/${ext.slice(1)}`, name: Date.now() + ext });
         }),
       );

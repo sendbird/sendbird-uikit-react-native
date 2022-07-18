@@ -53,10 +53,18 @@ export const replaceUrlAsComponents = <T>(originText: string, replacer: (url: st
 export const imageExtRegex = /jpeg|jpg|png|webp|gif/i;
 export const audioExtRegex = /3gp|aac|aax|act|aiff|flac|gsm|m4a|m4b|m4p|tta|wma|mp3|webm|wav/i;
 export const videoExtRegex = /mov|vod|mp4|avi/i;
-export const getFileType = (ext: string) => {
-  if (ext.match(imageExtRegex)) return 'image';
-  if (ext.match(audioExtRegex)) return 'audio';
-  if (ext.match(videoExtRegex)) return 'video';
+export const getFileType = (extOrType: string) => {
+  if (extOrType.indexOf('/') > -1) {
+    const type = extOrType.split('/')[0];
+    if (type === 'video') return 'video';
+    if (type === 'audio') return 'audio';
+    if (type === 'image') return 'image';
+    return 'file';
+  }
+
+  if (extOrType.match(imageExtRegex)) return 'image';
+  if (extOrType.match(audioExtRegex)) return 'audio';
+  if (extOrType.match(videoExtRegex)) return 'video';
   return 'file';
 };
 export function getFileExtension(filePath: string) {

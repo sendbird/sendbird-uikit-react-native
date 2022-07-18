@@ -3,20 +3,20 @@ import React, { useCallback, useMemo } from 'react';
 import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
 import { NOOP, PASS, messageComparator } from '@sendbird/uikit-utils';
 
+import MessageRenderer from '../components/MessageRenderer';
+import DefaultNewMessagesTooltip from '../components/NewMessagesTooltip';
+import DefaultScrollToBottomTooltip from '../components/ScrollToBottomTooltip';
 import StatusComposition from '../components/StatusComposition';
 import createGroupChannelModule from '../domain/groupChannel/module/createGroupChannelModule';
 import type { GroupChannelFragment, GroupChannelModule, GroupChannelProps } from '../domain/groupChannel/types';
 import { useSendbirdChat } from '../hooks/useContext';
-import MessageRenderer from '../components/MessageRenderer';
-import DefaultNewMessagesTooltip from '../components/NewMessagesTooltip';
-import DefaultScrollToBottomTooltip from '../components/ScrollToBottomTooltip';
 
 const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): GroupChannelFragment => {
   const GroupChannelModule = createGroupChannelModule(initModule);
 
   return ({
-    NewMessagesTooltip = DefaultNewMessagesTooltip,
-    ScrollToBottomTooltip = DefaultScrollToBottomTooltip,
+    renderNewMessagesTooltip = (props) => <DefaultNewMessagesTooltip {...props} />,
+    renderScrollToBottomTooltip = (props) => <DefaultScrollToBottomTooltip {...props} />,
     renderMessage,
     enableMessageGrouping = true,
     enableTypingIndicator = true,
@@ -130,8 +130,8 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             newMessagesFromNext={newMessagesFromNext}
             onTopReached={prev}
             onBottomReached={next}
-            NewMessagesTooltip={NewMessagesTooltip}
-            ScrollToBottomTooltip={ScrollToBottomTooltip}
+            renderNewMessagesTooltip={renderNewMessagesTooltip}
+            renderScrollToBottomTooltip={renderScrollToBottomTooltip}
             onResendFailedMessage={resendMessage}
             onDeleteMessage={deleteMessage}
             onPressImageMessage={onPressImageMessage}

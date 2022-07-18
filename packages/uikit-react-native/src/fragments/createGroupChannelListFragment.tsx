@@ -65,7 +65,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
               badgeCount={channel.unreadMessageCount}
               bodyIcon={
                 channel.lastMessage?.isFileMessage()
-                  ? iconMapper[getFileType(getFileExtension(channel.lastMessage.name))]
+                  ? iconMapper[getFileType(channel.lastMessage.type || getFileExtension(channel.lastMessage.name))]
                   : undefined
               }
               frozen={channel.isFrozen}

@@ -38,8 +38,8 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   newMessagesFromNext,
   onBottomReached,
   onTopReached,
-  NewMessagesTooltip,
-  ScrollToBottomTooltip,
+  renderNewMessagesTooltip,
+  renderScrollToBottomTooltip,
   onResendFailedMessage,
   onDeleteMessage,
   onPressImageMessage,
@@ -111,18 +111,21 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
           flatListProps?.contentContainerStyle,
         ]}
       />
-      {NewMessagesTooltip && (
+      {renderNewMessagesTooltip && (
         <View style={[styles.newMsgTooltip, safeAreaLayout]}>
-          <NewMessagesTooltip
-            visible={scrollLeaveBottom}
-            onPress={() => scrollRef.current?.scrollToBottom(false)}
-            newMessages={HANDLE_NEXT_MSG_SEPARATELY ? newMessagesFromNext : newMessages}
-          />
+          {renderNewMessagesTooltip({
+            visible: scrollLeaveBottom,
+            onPress: () => scrollRef.current?.scrollToBottom(false),
+            newMessages: HANDLE_NEXT_MSG_SEPARATELY ? newMessagesFromNext : newMessages,
+          })}
         </View>
       )}
-      {ScrollToBottomTooltip && (
+      {renderScrollToBottomTooltip && (
         <View pointerEvents={scrollLeaveBottom ? 'auto' : 'none'} style={[styles.scrollTooltip, safeAreaLayout]}>
-          <ScrollToBottomTooltip visible={scrollLeaveBottom} onPress={() => scrollRef.current?.scrollToBottom(false)} />
+          {renderScrollToBottomTooltip({
+            visible: scrollLeaveBottom,
+            onPress: () => scrollRef.current?.scrollToBottom(false),
+          })}
         </View>
       )}
     </View>
@@ -247,8 +250,7 @@ const useGetMessagePressActions = ({
         });
       }
 
-      const ext = getFileExtension(msg.name);
-      const fileType = getFileType(ext);
+      const fileType = getFileType(msg.type || getFileExtension(msg.name));
       if (fileType === 'image') {
         response.onPress = () => onPressImageMessage?.(msg, getAvailableUriFromFileMessage(msg));
       } else {

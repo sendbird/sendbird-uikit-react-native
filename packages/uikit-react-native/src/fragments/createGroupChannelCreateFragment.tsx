@@ -5,11 +5,11 @@ import { useUserList } from '@sendbird/uikit-chat-hooks';
 import { Logger, PASS, SendbirdUser } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
+import UserSelectableBar from '../components/UserSelectableBar';
 import type { GroupChannelCreateFragment } from '../domain/groupChannelUserList/types';
 import createUserListModule from '../domain/userList/module/createUserListModule';
 import type { UserListModule } from '../domain/userList/types';
 import { useLocalization, useSendbirdChat } from '../hooks/useContext';
-import UserSelectableBar from '../components/UserSelectableBar';
 
 const defaultUserIdsGenerator = <T,>(users: T[]) => {
   const userIds = users

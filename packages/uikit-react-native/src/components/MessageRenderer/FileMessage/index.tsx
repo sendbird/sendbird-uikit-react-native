@@ -8,8 +8,7 @@ import ImageFileMessage from './ImageFileMessage';
 
 export type FileMessageProps = MessageRendererInterface<SendbirdFileMessage>;
 const FileMessage: React.FC<FileMessageProps> = (props) => {
-  const ext = getFileExtension(props.message.name);
-  const fileType = getFileType(ext);
+  const fileType = getFileType(props.message.type || getFileExtension(props.message.name));
 
   if (fileType === 'image') return <ImageFileMessage {...props} />;
   return <BaseFileMessage {...props} type={fileType} />;
