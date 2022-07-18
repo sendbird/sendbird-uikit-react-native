@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import type { ClipboardServiceInterface, FileServiceInterface, NotificationServiceInterface } from '../platform/types';
 
@@ -20,9 +20,4 @@ export const PlatformServiceProvider: React.FC<Props> = ({
       {children}
     </PlatformServiceContext.Provider>
   );
-};
-export const usePlatformService = () => {
-  const value = useContext(PlatformServiceContext);
-  if (!value) throw new Error('PlatformServiceContext is not provided');
-  return value;
 };

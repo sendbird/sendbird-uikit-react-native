@@ -12,8 +12,7 @@ import {
 } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
-import { useLocalization } from '../../../contexts/Localization';
-import { useSendbirdChat } from '../../../contexts/SendbirdChat';
+import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import type { GroupChannelContextsType, GroupChannelModule } from '../types';
 
 export const GroupChannelContexts: GroupChannelContextsType = {

@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
 
-import { useLocalization } from '../../contexts/Localization';
+import { useLocalization } from '../../hooks/useContext';
 
 type Props = { message: SendbirdMessage; grouping: boolean };
 const MessageIncomingSenderName: React.FC<Props> = ({ message, grouping }) => {

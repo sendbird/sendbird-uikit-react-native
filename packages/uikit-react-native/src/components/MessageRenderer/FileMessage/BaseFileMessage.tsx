@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import { Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
-import { useLocalization } from '../../../contexts/Localization';
+import { useLocalization } from '../../../hooks/useContext';
 import type { FileMessageProps } from './index';
 
 const iconMapper = { audio: 'file-audio', image: 'photo', video: 'play', file: 'file-document' } as const;

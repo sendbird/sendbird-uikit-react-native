@@ -3,8 +3,7 @@ import { Platform } from 'react-native';
 
 import { Logger, useFreshCallback, useIIFE } from '@sendbird/uikit-utils';
 
-import { usePlatformService } from '../contexts/PlatformService';
-import { useSendbirdChat } from '../contexts/SendbirdChat';
+import { usePlatformService, useSendbirdChat } from './useContext';
 
 const usePushTokenRegistration = () => {
   const { sdk } = useSendbirdChat();

@@ -3,7 +3,7 @@ import React, { createContext, useCallback, useState } from 'react';
 import { NOOP } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
-import { useLocalization } from '../../../contexts/Localization';
+import { useLocalization } from '../../../hooks/useContext';
 import type { GroupChannelListContextsType } from '../types';
 
 export const GroupChannelListContexts: GroupChannelListContextsType = {

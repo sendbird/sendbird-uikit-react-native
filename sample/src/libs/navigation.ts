@@ -79,7 +79,7 @@ export type RouteParamsUnion =
       params: undefined;
     };
 
-type ExtractParams<R extends Routes, U extends RouteParamsUnion> = U extends { route: R } ? U['params'] : never;
+type ExtractParams<R extends Routes, U extends RouteParamsUnion> = U extends { route: R; params: infer P } ? P : never;
 export type RouteParams<R extends Routes> = ExtractParams<R, RouteParamsUnion>;
 export type ParamListBase<T extends RouteParamsUnion = RouteParamsUnion> = {
   [k in T['route']]: T extends { route: k; params: infer P } ? P : never;

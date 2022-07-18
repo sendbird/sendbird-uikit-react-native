@@ -13,6 +13,7 @@ export { default as Button } from './ui/Button';
 export { default as ChannelFrozenBanner } from './ui/ChannelFrozenBanner';
 export { DialogProvider, useActionMenu, useAlert, usePrompt, useBottomSheet } from './ui/Dialog';
 export { default as Divider } from './ui/Divider';
+export { default as GroupChannelPreview } from './ui/GroupChannelPreview';
 export { default as Header } from './ui/Header';
 export { default as Icon } from './ui/Icon';
 export { default as LoadingSpinner } from './ui/LoadingSpinner';

@@ -4,7 +4,7 @@ import type { StyleProp, ViewStyle } from 'react-native';
 import { Avatar } from '@sendbird/uikit-react-native-foundation';
 import { SendbirdGroupChannel, getMembersExcludeMe, isDefaultCoverImage } from '@sendbird/uikit-utils';
 
-import { useSendbirdChat } from '../contexts/SendbirdChat';
+import { useSendbirdChat } from '../hooks/useContext';
 
 type Props = {
   channel: SendbirdGroupChannel;

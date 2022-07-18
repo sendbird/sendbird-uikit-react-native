@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import { Text, URLParsedText, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
-import { useLocalization } from '../../../contexts/Localization';
+import { useLocalization } from '../../../hooks/useContext';
 import type { UserMessageProps } from './index';
 
 const BaseUserMessage: React.FC<UserMessageProps> = ({ message, variant, pressed }) => {

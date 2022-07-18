@@ -5,12 +5,11 @@ import { Icon } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMember } from '@sendbird/uikit-utils';
 import { useForceUpdate, useUniqId } from '@sendbird/uikit-utils';
 
-import { useLocalization } from '../contexts/Localization';
-import { useSendbirdChat } from '../contexts/SendbirdChat';
 import type { GroupChannelMembersFragment } from '../domain/groupChannelUserList/types';
 import createUserListModule from '../domain/userList/module/createUserListModule';
 import type { UserListModule } from '../domain/userList/types';
-import UserActionBar from '../ui/UserActionBar';
+import { useLocalization, useSendbirdChat } from '../hooks/useContext';
+import UserActionBar from '../components/UserActionBar';
 
 const noop = () => '';
 const name = 'createGroupChannelMembersFragment';

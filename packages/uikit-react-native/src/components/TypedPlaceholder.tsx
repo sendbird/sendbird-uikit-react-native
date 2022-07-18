@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Placeholder } from '@sendbird/uikit-react-native-foundation';
 
-import { useLocalization } from '../contexts/Localization';
+import { useLocalization } from '../hooks/useContext';
 
 type Props = {
   type:

@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { Header, Icon, createStyleSheet, useHeaderStyle } from '@sendbird/uikit-react-native-foundation';
 
 import ChannelCover from '../../../components/ChannelCover';
-import { useLocalization } from '../../../contexts/Localization';
+import { useLocalization } from '../../../hooks/useContext';
 import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
 

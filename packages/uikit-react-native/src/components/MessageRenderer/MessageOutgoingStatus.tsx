@@ -9,7 +9,7 @@ import type {
 } from '@sendbird/uikit-utils';
 import { useUniqId } from '@sendbird/uikit-utils';
 
-import { useSendbirdChat } from '../../contexts/SendbirdChat';
+import { useSendbirdChat } from '../../hooks/useContext';
 
 const SIZE = 16;
 

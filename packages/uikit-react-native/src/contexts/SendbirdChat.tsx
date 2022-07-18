@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
 
 import { useAppFeatures } from '@sendbird/uikit-chat-hooks';
@@ -107,10 +107,4 @@ export const SendbirdChatProvider: React.FC<Props> = ({ children, sdkInstance, e
   };
 
   return <SendbirdChatContext.Provider value={value}>{children}</SendbirdChatContext.Provider>;
-};
-
-export const useSendbirdChat = () => {
-  const value = useContext(SendbirdChatContext);
-  if (!value) throw new Error('SendbirdChatContext is not provided');
-  return value;
 };

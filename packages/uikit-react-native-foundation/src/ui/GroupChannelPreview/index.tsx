@@ -1,8 +1,14 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { Badge, Icon, Image, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { conditionChaining } from '@sendbird/uikit-utils';
+
+import Image from '../../components/Image';
+import createStyleSheet from '../../styles/createStyleSheet';
+import useUIKitTheme from '../../theme/useUIKitTheme';
+import Badge from '../Badge';
+import Icon from '../Icon';
+import Text from '../Text';
 
 type Props = {
   customCover?: React.ReactElement;

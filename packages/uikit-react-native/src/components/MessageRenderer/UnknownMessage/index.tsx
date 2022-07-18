@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import { Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
-import { useLocalization } from '../../../contexts/Localization';
+import { useLocalization } from '../../../hooks/useContext';
 import type { MessageRendererInterface } from '../index';
 
 export type UnknownMessageProps = MessageRendererInterface;

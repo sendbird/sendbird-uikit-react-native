@@ -23,8 +23,7 @@ import {
 
 import type { ChatFlatListRef } from '../../../components/ChatFlatList';
 import ChatFlatList from '../../../components/ChatFlatList';
-import { useLocalization } from '../../../contexts/Localization';
-import { usePlatformService } from '../../../contexts/PlatformService';
+import { useLocalization, usePlatformService } from '../../../hooks/useContext';
 import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
 

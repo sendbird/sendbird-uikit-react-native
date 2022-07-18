@@ -12,7 +12,7 @@ import {
 } from '@sendbird/uikit-react-native-foundation';
 import { conditionChaining } from '@sendbird/uikit-utils';
 
-import { useLocalization } from '../../../contexts/Localization';
+import { useLocalization } from '../../../hooks/useContext';
 import type { UserMessageProps } from './index';
 
 type Props = UserMessageProps & { ogMetaData: Sendbird.OGMetaData };

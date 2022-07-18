@@ -1,10 +1,14 @@
-/** UI **/
-export { default as GroupChannelPreview } from './ui/GroupChannelPreview';
-export { default as MessageRenderer } from './ui/MessageRenderer';
-export { default as NewMessagesTooltip } from './ui/NewMessagesTooltip';
-export { default as ScrollToBottomTooltip } from './ui/ScrollToBottomTooltip';
-export { default as UserActionBar } from './ui/UserActionBar';
-export { default as UserSelectableBar } from './ui/UserSelectableBar';
+/** Components **/
+export { default as MessageRenderer } from './components/MessageRenderer';
+export { default as ChannelCover } from './components/ChannelCover';
+export { default as ChatFlatList } from './components/ChatFlatList';
+export { default as NewMessagesTooltip } from './components/NewMessagesTooltip';
+export { default as ProviderLayout } from './components/ProviderLayout';
+export { default as ScrollToBottomTooltip } from './components/ScrollToBottomTooltip';
+export { default as StatusComposition } from './components/StatusComposition';
+export { default as TypedPlaceholder } from './components/TypedPlaceholder';
+export { default as UserActionBar } from './components/UserActionBar';
+export { default as UserSelectableBar } from './components/UserSelectableBar';
 
 /** Fragments **/
 export { default as createGroupChannelCreateFragment } from './fragments/createGroupChannelCreateFragment';
@@ -15,19 +19,14 @@ export { default as createGroupChannelListFragment } from './fragments/createGro
 export { default as createGroupChannelMembersFragment } from './fragments/createGroupChannelMembersFragment';
 
 /** Context **/
-export { SendbirdChatContext, SendbirdChatProvider, useSendbirdChat } from './contexts/SendbirdChat';
-export { PlatformServiceContext, PlatformServiceProvider, usePlatformService } from './contexts/PlatformService';
-export { LocalizationContext, LocalizationProvider, useLocalization } from './contexts/Localization';
-
-/** Components **/
-export { default as ChatFlatList } from './components/ChatFlatList';
-export { default as TypedPlaceholder } from './components/TypedPlaceholder';
-export { default as ChannelCover } from './components/ChannelCover';
-export { default as StatusComposition } from './components/StatusComposition';
+export { SendbirdChatContext, SendbirdChatProvider } from './contexts/SendbirdChat';
+export { PlatformServiceContext, PlatformServiceProvider } from './contexts/PlatformService';
+export { LocalizationContext, LocalizationProvider } from './contexts/Localization';
 
 /** Hooks **/
 export { default as useConnection } from './hooks/useConnection';
 export { default as usePushTokenRegistration } from './hooks/usePushTokenRegistration';
+export { useLocalization, usePlatformService, useSendbirdChat } from './hooks/useContext';
 
 /** Localization **/
 export { default as StringSetEn } from './localization/StringSet.en';

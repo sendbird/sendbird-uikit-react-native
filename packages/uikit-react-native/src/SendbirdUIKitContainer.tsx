@@ -16,9 +16,10 @@ import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 
 import InternalErrorBoundary from './InternalErrorBoundary';
 import InternalLocalCacheStorage from './InternalLocalCacheStorage';
-import { LocalizationProvider, useLocalization } from './contexts/Localization';
+import { LocalizationProvider } from './contexts/Localization';
 import { PlatformServiceProvider } from './contexts/PlatformService';
 import { SendbirdChatProvider } from './contexts/SendbirdChat';
+import { useLocalization } from './hooks/useContext';
 import StringSetEn from './localization/StringSet.en';
 import type { StringSet } from './localization/StringSet.type';
 import type { ClipboardServiceInterface, FileServiceInterface, NotificationServiceInterface } from './platform/types';

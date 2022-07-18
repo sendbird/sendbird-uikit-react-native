@@ -4,7 +4,7 @@ import { Platform, TextInput as RNTextInput, View } from 'react-native';
 import { Button, TextInput, createStyleSheet, useToast } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdFileMessage, SendbirdUserMessage } from '@sendbird/uikit-utils';
 
-import { useLocalization } from '../../../../contexts/Localization';
+import { useLocalization } from '../../../../hooks/useContext';
 import type { GroupChannelProps } from '../../types';
 
 type EditInputProps = GroupChannelProps['Input'] & {

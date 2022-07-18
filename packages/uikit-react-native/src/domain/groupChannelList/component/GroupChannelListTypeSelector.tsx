@@ -11,7 +11,7 @@ import {
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
 
-import { useLocalization } from '../../../contexts/Localization';
+import { useLocalization } from '../../../hooks/useContext';
 import { GroupChannelListContexts } from '../module/moduleContext';
 import type { GroupChannelListProps, GroupChannelType } from '../types';
 

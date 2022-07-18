@@ -2,20 +2,19 @@ import React, { useCallback, useEffect } from 'react';
 import { AppState, Pressable } from 'react-native';
 
 import { useGroupChannelList } from '@sendbird/uikit-chat-hooks';
+import { GroupChannelPreview } from '@sendbird/uikit-react-native-foundation';
 import { Logger, PASS, channelComparator, getFileExtension, getFileType } from '@sendbird/uikit-utils';
 
 import ChannelCover from '../components/ChannelCover';
 import StatusComposition from '../components/StatusComposition';
 import { DEFAULT_LONG_PRESS_DELAY } from '../constants';
-import { useLocalization } from '../contexts/Localization';
-import { useSendbirdChat } from '../contexts/SendbirdChat';
 import createGroupChannelListModule from '../domain/groupChannelList/module/createGroupChannelListModule';
 import type {
   GroupChannelListFragment,
   GroupChannelListModule,
   GroupChannelListProps,
 } from '../domain/groupChannelList/types';
-import GroupChannelPreview from '../ui/GroupChannelPreview';
+import { useLocalization, useSendbirdChat } from '../hooks/useContext';
 
 const iconMapper = { audio: 'file-audio', image: 'photo', video: 'play', file: 'file-document' } as const;
 const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListModule>): GroupChannelListFragment => {

@@ -4,12 +4,12 @@ import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
 import { NOOP, PASS, messageComparator } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
-import { useSendbirdChat } from '../contexts/SendbirdChat';
 import createGroupChannelModule from '../domain/groupChannel/module/createGroupChannelModule';
 import type { GroupChannelFragment, GroupChannelModule, GroupChannelProps } from '../domain/groupChannel/types';
-import MessageRenderer from '../ui/MessageRenderer';
-import DefaultNewMessagesTooltip from '../ui/NewMessagesTooltip';
-import DefaultScrollToBottomTooltip from '../ui/ScrollToBottomTooltip';
+import { useSendbirdChat } from '../hooks/useContext';
+import MessageRenderer from '../components/MessageRenderer';
+import DefaultNewMessagesTooltip from '../components/NewMessagesTooltip';
+import DefaultScrollToBottomTooltip from '../components/ScrollToBottomTooltip';
 
 const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): GroupChannelFragment => {
   const GroupChannelModule = createGroupChannelModule(initModule);

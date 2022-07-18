@@ -5,8 +5,7 @@ import { Divider, Text, createStyleSheet } from '@sendbird/uikit-react-native-fo
 import { Logger, getGroupChannelTitle } from '@sendbird/uikit-utils';
 
 import ChannelCover from '../../../components/ChannelCover';
-import { useLocalization } from '../../../contexts/Localization';
-import { useSendbirdChat } from '../../../contexts/SendbirdChat';
+import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelSettingsContexts } from '../module/moduleContext';
 import type { GroupChannelSettingsProps } from '../types';
 

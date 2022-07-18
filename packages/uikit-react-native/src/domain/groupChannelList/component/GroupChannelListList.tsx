@@ -5,8 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useActionMenu, useToast } from '@sendbird/uikit-react-native-foundation';
 import { PASS, SendbirdGroupChannel, useFreshCallback } from '@sendbird/uikit-utils';
 
-import { useLocalization } from '../../../contexts/Localization';
-import { useSendbirdChat } from '../../../contexts/SendbirdChat';
+import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import type { GroupChannelListProps } from '../types';
 
 const GroupChannelListList: React.FC<GroupChannelListProps['List']> = ({

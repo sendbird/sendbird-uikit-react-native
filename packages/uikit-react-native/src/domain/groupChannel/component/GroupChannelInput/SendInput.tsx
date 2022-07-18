@@ -11,8 +11,7 @@ import {
 } from '@sendbird/uikit-react-native-foundation';
 import { conditionChaining } from '@sendbird/uikit-utils';
 
-import { useLocalization } from '../../../../contexts/Localization';
-import { usePlatformService } from '../../../../contexts/PlatformService';
+import { useLocalization, usePlatformService } from '../../../../hooks/useContext';
 import type { GroupChannelProps } from '../../types';
 
 type SendInputProps = GroupChannelProps['Input'] & {

@@ -4,8 +4,7 @@ import { View } from 'react-native';
 import type { MenuBarProps } from '@sendbird/uikit-react-native-foundation';
 import { Icon, MenuBar, Switch, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
-import { useLocalization } from '../../../contexts/Localization';
-import { useSendbirdChat } from '../../../contexts/SendbirdChat';
+import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelSettingsContexts } from '../module/moduleContext';
 import type { GroupChannelSettingsProps } from '../types';
 

@@ -3,7 +3,7 @@ import type Sendbird from 'sendbird';
 
 import { Logger, SendbirdUser } from '@sendbird/uikit-utils';
 
-import { useSendbirdChat } from '../contexts/SendbirdChat';
+import { useSendbirdChat } from './useContext';
 import usePushTokenRegistration from './usePushTokenRegistration';
 
 type ConnectOptions = { nickname?: string; accessToken?: string };
