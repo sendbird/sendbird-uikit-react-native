@@ -20,7 +20,7 @@ export type {
   UseGroupChannelMessages,
   UseUserListOptions,
   UseGroupChannelMessagesOptions,
-  UseUserList,
+  UseUserListReturn,
   CustomQueryInterface,
   CustomBidirectionalQueryInterface,
 } from './types';

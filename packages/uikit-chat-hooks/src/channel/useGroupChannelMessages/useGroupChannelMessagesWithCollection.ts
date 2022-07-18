@@ -30,12 +30,7 @@ const createMessageCollection = (
 const HOOK_NAME = 'useGroupChannelMessagesWithCollection';
 
 // FIXME: MessageCollection event handler bug, initialize(run async addObserver) -> dispose -> removeObserver -> addObserver called
-export const useGroupChannelMessagesWithCollection = (
-  sdk: SendbirdChatSDK,
-  staleChannel: SendbirdGroupChannel,
-  userId?: string,
-  options?: UseGroupChannelMessagesOptions,
-): UseGroupChannelMessages => {
+export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (sdk, staleChannel, userId, options) => {
   const isMounted = useIsMountedRef();
   const disposeManuallyAfterUnmounted = () => {
     if (!isMounted.current && collectionRef.current) collectionRef.current.dispose();
@@ -191,12 +186,12 @@ export const useGroupChannelMessagesWithCollection = (
     };
   }, []);
 
-  const refresh: UseGroupChannelMessages['refresh'] = useCallback(async () => {
+  const refresh: ReturnType<UseGroupChannelMessages>['refresh'] = useCallback(async () => {
     updateRefreshing(true);
     init(userId, () => updateRefreshing(false));
   }, [init, userId]);
 
-  const prev: UseGroupChannelMessages['prev'] = useCallback(async () => {
+  const prev: ReturnType<UseGroupChannelMessages>['prev'] = useCallback(async () => {
     if (collectionRef.current && collectionRef.current?.hasPrevious) {
       try {
         const list = await collectionRef.current?.loadPrevious();
@@ -205,7 +200,7 @@ export const useGroupChannelMessagesWithCollection = (
     }
   }, []);
 
-  const next: UseGroupChannelMessages['next'] = useCallback(async () => {
+  const next: ReturnType<UseGroupChannelMessages>['next'] = useCallback(async () => {
     const list = [];
     if (collectionRef.current && collectionRef.current?.hasNext) {
       try {
@@ -222,7 +217,7 @@ export const useGroupChannelMessagesWithCollection = (
     }
   }, [nextMessages.length]);
 
-  const sendUserMessage: UseGroupChannelMessages['sendUserMessage'] = useCallback(
+  const sendUserMessage: ReturnType<UseGroupChannelMessages>['sendUserMessage'] = useCallback(
     (params, onPending) => {
       return new Promise((resolve, reject) => {
         const pendingMessage = activeChannel.sendUserMessage(params, (sentMessage, error) => {
@@ -239,7 +234,7 @@ export const useGroupChannelMessagesWithCollection = (
     },
     [activeChannel],
   );
-  const sendFileMessage: UseGroupChannelMessages['sendFileMessage'] = useCallback(
+  const sendFileMessage: ReturnType<UseGroupChannelMessages>['sendFileMessage'] = useCallback(
     (params, onPending) => {
       return new Promise((resolve, reject) => {
         const pendingMessage = activeChannel.sendFileMessage(params, (sentMessage, error) => {
@@ -256,7 +251,7 @@ export const useGroupChannelMessagesWithCollection = (
     },
     [activeChannel],
   );
-  const updateUserMessage: UseGroupChannelMessages['updateUserMessage'] = useCallback(
+  const updateUserMessage: ReturnType<UseGroupChannelMessages>['updateUserMessage'] = useCallback(
     async (messageId, params) => {
       const updatedMessage = await activeChannel.updateUserMessage(messageId, params, NOOP);
       updateMessages([updatedMessage], false, sdk.currentUser.userId);
@@ -264,7 +259,7 @@ export const useGroupChannelMessagesWithCollection = (
     },
     [activeChannel],
   );
-  const updateFileMessage: UseGroupChannelMessages['updateFileMessage'] = useCallback(
+  const updateFileMessage: ReturnType<UseGroupChannelMessages>['updateFileMessage'] = useCallback(
     async (messageId, params) => {
       const updatedMessage = await activeChannel.updateFileMessage(messageId, params, NOOP);
       updateMessages([updatedMessage], false, sdk.currentUser.userId);
@@ -272,7 +267,7 @@ export const useGroupChannelMessagesWithCollection = (
     },
     [activeChannel],
   );
-  const resendMessage: UseGroupChannelMessages['resendMessage'] = useCallback(
+  const resendMessage: ReturnType<UseGroupChannelMessages>['resendMessage'] = useCallback(
     async (failedMessage) => {
       const message = await (() => {
         if (failedMessage.isUserMessage()) return activeChannel.resendUserMessage(failedMessage);
@@ -284,7 +279,7 @@ export const useGroupChannelMessagesWithCollection = (
     },
     [activeChannel],
   );
-  const deleteMessage: UseGroupChannelMessages['deleteMessage'] = useCallback(
+  const deleteMessage: ReturnType<UseGroupChannelMessages>['deleteMessage'] = useCallback(
     async (message) => {
       if (message.sendingStatus === 'succeeded') {
         if (message.isUserMessage()) await activeChannel.deleteMessage(message);

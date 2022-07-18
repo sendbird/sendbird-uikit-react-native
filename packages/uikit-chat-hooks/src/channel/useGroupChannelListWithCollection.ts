@@ -27,11 +27,7 @@ const createGroupChannelListCollection = (
   return defaultCollection.setLimit(20).setFilter(filter).build();
 };
 
-export const useGroupChannelListWithCollection = (
-  sdk: SendbirdChatSDK,
-  userId?: string,
-  options?: UseGroupChannelListOptions,
-): UseGroupChannelList => {
+export const useGroupChannelListWithCollection: UseGroupChannelList = (sdk, userId, options) => {
   const id = useUniqId(HOOK_NAME);
   const { deliveryReceiptEnabled } = useAppFeatures(sdk);
 

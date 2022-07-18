@@ -23,11 +23,7 @@ const createGroupChannelListQuery = (
   return defaultQuery;
 };
 
-export const useGroupChannelListWithQuery = (
-  sdk: SendbirdChatSDK,
-  userId?: string,
-  options?: UseGroupChannelListOptions,
-): UseGroupChannelList => {
+export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, options) => {
   const { deliveryReceiptEnabled } = useAppFeatures(sdk);
   const queryRef = useRef<Sendbird.GroupChannelListQuery>();
   const [loading, setLoading] = useState(false);

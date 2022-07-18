@@ -1,12 +1,7 @@
 import { useCallback, useRef } from 'react';
 import type Sendbird from 'sendbird';
 
-import type {
-  SendbirdChatSDK,
-  SendbirdFileMessage,
-  SendbirdGroupChannel,
-  SendbirdOpenChannel,
-} from '@sendbird/uikit-utils';
+import type { SendbirdFileMessage, SendbirdGroupChannel, SendbirdOpenChannel } from '@sendbird/uikit-utils';
 import { Logger, isDifferentChannel, useAsyncEffect, useForceUpdate } from '@sendbird/uikit-utils';
 
 import { useAppFeatures } from '../../common/useAppFeatures';
@@ -27,12 +22,7 @@ const createMessageQuery = (
 };
 
 const HOOK_NAME = 'useGroupChannelMessagesWithQuery';
-export const useGroupChannelMessagesWithQuery = (
-  sdk: SendbirdChatSDK,
-  staleChannel: SendbirdGroupChannel,
-  userId?: string,
-  options?: UseGroupChannelMessagesOptions,
-): UseGroupChannelMessages => {
+export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, staleChannel, userId, options) => {
   const { deliveryReceiptEnabled } = useAppFeatures(sdk);
 
   const queryRef = useRef<Sendbird.PreviousMessageListQuery>();
@@ -149,27 +139,27 @@ export const useGroupChannelMessagesWithQuery = (
     updateLoading(false);
   }, [init, userId]);
 
-  const refresh: UseGroupChannelMessages['refresh'] = useCallback(async () => {
+  const refresh: ReturnType<UseGroupChannelMessages>['refresh'] = useCallback(async () => {
     updateRefreshing(true);
     await init(userId);
     updateRefreshing(false);
   }, [init, userId]);
 
-  const prev: UseGroupChannelMessages['prev'] = useCallback(async () => {
+  const prev: ReturnType<UseGroupChannelMessages>['prev'] = useCallback(async () => {
     if (queryRef.current && queryRef.current?.hasMore) {
       const list = await queryRef.current?.load();
       updateMessages(list, false, sdk.currentUser.userId);
     }
   }, []);
 
-  const next: UseGroupChannelMessages['next'] = useCallback(async () => {
+  const next: ReturnType<UseGroupChannelMessages>['next'] = useCallback(async () => {
     if (nextMessages.length > 0) {
       updateMessages(nextMessages, false, sdk.currentUser.userId);
       updateNextMessages([], true, sdk.currentUser.userId);
     }
   }, [nextMessages.length]);
 
-  const sendUserMessage: UseGroupChannelMessages['sendUserMessage'] = useCallback(
+  const sendUserMessage: ReturnType<UseGroupChannelMessages>['sendUserMessage'] = useCallback(
     (params, onPending) => {
       return new Promise((resolve, reject) => {
         const pendingMessage = activeChannel.sendUserMessage(params, (sentMessage, error) => {
@@ -185,7 +175,7 @@ export const useGroupChannelMessagesWithQuery = (
     },
     [activeChannel],
   );
-  const sendFileMessage: UseGroupChannelMessages['sendFileMessage'] = useCallback(
+  const sendFileMessage: ReturnType<UseGroupChannelMessages>['sendFileMessage'] = useCallback(
     (params, onPending) => {
       return new Promise((resolve, reject) => {
         const pendingMessage = activeChannel.sendFileMessage(params, (sentMessage, error) => {
@@ -201,7 +191,7 @@ export const useGroupChannelMessagesWithQuery = (
     },
     [activeChannel],
   );
-  const updateUserMessage: UseGroupChannelMessages['updateUserMessage'] = useCallback(
+  const updateUserMessage: ReturnType<UseGroupChannelMessages>['updateUserMessage'] = useCallback(
     async (messageId, params) => {
       const updatedMessage = await activeChannel.updateUserMessage(messageId, params);
       updateMessages([updatedMessage], false, sdk.currentUser.userId);
@@ -209,7 +199,7 @@ export const useGroupChannelMessagesWithQuery = (
     },
     [activeChannel],
   );
-  const updateFileMessage: UseGroupChannelMessages['updateFileMessage'] = useCallback(
+  const updateFileMessage: ReturnType<UseGroupChannelMessages>['updateFileMessage'] = useCallback(
     async (messageId, params) => {
       const updatedMessage = await activeChannel.updateFileMessage(messageId, params);
       updateMessages([updatedMessage], false, sdk.currentUser.userId);
@@ -217,7 +207,7 @@ export const useGroupChannelMessagesWithQuery = (
     },
     [activeChannel],
   );
-  const resendMessage: UseGroupChannelMessages['resendMessage'] = useCallback(
+  const resendMessage: ReturnType<UseGroupChannelMessages>['resendMessage'] = useCallback(
     async (failedMessage) => {
       if (!failedMessage.isResendable()) return;
 
@@ -231,7 +221,7 @@ export const useGroupChannelMessagesWithQuery = (
     },
     [activeChannel],
   );
-  const deleteMessage: UseGroupChannelMessages['deleteMessage'] = useCallback(
+  const deleteMessage: ReturnType<UseGroupChannelMessages>['deleteMessage'] = useCallback(
     async (message) => {
       if (message.sendingStatus === 'succeeded') {
         if (message.isUserMessage()) await activeChannel.deleteMessage(message);

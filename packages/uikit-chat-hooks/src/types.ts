@@ -1,6 +1,7 @@
 import type Sendbird from 'sendbird';
 
 import type {
+  SendbirdChatSDK,
   SendbirdError,
   SendbirdFileMessage,
   SendbirdFileMessageParams,
@@ -27,42 +28,44 @@ export interface CustomBidirectionalQueryInterface<Data> {
 
 /**
  * @interface UseGroupChannelList
- * interface for group channel list hook
+ * @description interface for group channel list hook
  * */
 export interface UseGroupChannelList {
-  /**
-   * Loading state, only available on first render
-   * */
-  loading: boolean;
+  (sdk: SendbirdChatSDK, userId?: string, options?: UseGroupChannelListOptions): {
+    /**
+     * Loading state, only available on first render
+     * */
+    loading: boolean;
 
-  /**
-   * Refreshing state, status is changes when the refresh is called.
-   * */
-  refreshing: boolean;
+    /**
+     * Refreshing state, status is changes when the refresh is called.
+     * */
+    refreshing: boolean;
 
-  /**
-   * Refresh, clear and reload messages from latest
-   * @return {Promise<void>}
-   * */
-  refresh: () => Promise<void>;
+    /**
+     * Refresh, clear and reload messages from latest
+     * @return {Promise<void>}
+     * */
+    refresh: () => Promise<void>;
 
-  /**
-   * Update channel, update or insert channel to state
-   * @param {SendbirdGroupChannel} channel
-   * @return {void}
-   * */
-  update: (channel: SendbirdGroupChannel) => void;
+    /**
+     * Update channel, update or insert channel to state
+     * @param {SendbirdGroupChannel} channel
+     * @return {void}
+     * */
+    update: (channel: SendbirdGroupChannel) => void;
 
-  /**
-   * Get group channels state
-   * */
-  groupChannels: SendbirdGroupChannel[];
+    /**
+     * Get group channels state
+     * */
+    groupChannels: SendbirdGroupChannel[];
 
-  /**
-   * Fetch next channels to state
-   * @return {Promise<void>}
-   * */
-  next: () => Promise<void>;
+    /**
+     * Fetch next channels to state
+     * @return {Promise<void>}
+     * */
+    next: () => Promise<void>;
+  };
 }
 export type UseGroupChannelListOptions = {
   sortComparator?: (a: SendbirdGroupChannel, b: SendbirdGroupChannel) => number;
@@ -73,120 +76,127 @@ export type UseGroupChannelListOptions = {
 
 /**
  * @interface UseGroupChannelMessages
- * interface for group channel messages hook
+ * @description interface for group channel messages hook
  * - Receive new messages from other users -> append to state(nextMessages)
  * - onTopReached -> prev() -> fetch prev messages and append to state(messages)
  * - onBottomReached -> next() -> nextMessages append to state(messages)
  * */
 export interface UseGroupChannelMessages {
-  /**
-   * Loading state, only available on first render
-   * */
-  loading: boolean;
+  (
+    sdk: SendbirdChatSDK,
+    staleChannel: SendbirdGroupChannel,
+    userId?: string,
+    options?: UseGroupChannelMessagesOptions,
+  ): {
+    /**
+     * Loading state, only available on first render
+     * */
+    loading: boolean;
 
-  /**
-   * Refreshing state, status is changes when the refresh is called.
-   * */
-  refreshing: boolean;
+    /**
+     * Refreshing state, status is changes when the refresh is called.
+     * */
+    refreshing: boolean;
 
-  /**
-   * Refresh, clear and reload messages from latest
-   * @return {Promise<void>}
-   * */
-  refresh: () => Promise<void>;
+    /**
+     * Refresh, clear and reload messages from latest
+     * @return {Promise<void>}
+     * */
+    refresh: () => Promise<void>;
 
-  /**
-   * Get messages, this state is for render
-   * For example, if a user receives a new messages while searching for an old message
-   * for this case, new messages will be included here.
-   * @return {SendbirdMessage[]}
-   * */
-  messages: SendbirdMessage[];
+    /**
+     * Get messages, this state is for render
+     * For example, if a user receives a new messages while searching for an old message
+     * for this case, new messages will be included here.
+     * @return {SendbirdMessage[]}
+     * */
+    messages: SendbirdMessage[];
 
-  /**
-   * Fetch prev messages to state
-   * @return {Promise<void>}
-   * */
-  prev: () => Promise<void>;
+    /**
+     * Fetch prev messages to state
+     * @return {Promise<void>}
+     * */
+    prev: () => Promise<void>;
 
-  /**
-   * Get messages, this state is for temporary data before render
-   * For example, if a user receives a new messages while searching for an old message
-   * for this case, new messages will be included here.
-   * */
-  nextMessages: SendbirdMessage[];
+    /**
+     * Get messages, this state is for temporary data before render
+     * For example, if a user receives a new messages while searching for an old message
+     * for this case, new messages will be included here.
+     * */
+    nextMessages: SendbirdMessage[];
 
-  /**
-   * Get new messages from nextMessages
-   * A new message means a message that meets the below conditions
-   * - Not admin message
-   * - Not updated message
-   * - Not current user's message
-   * */
-  newMessagesFromNext: SendbirdMessage[];
+    /**
+     * Get new messages from nextMessages
+     * A new message means a message that meets the below conditions
+     * - Not admin message
+     * - Not updated message
+     * - Not current user's message
+     * */
+    newMessagesFromNext: SendbirdMessage[];
 
-  /**
-   * Fetch next messages to state
-   * @return {Promise<void>}
-   * */
-  next: () => Promise<void>;
+    /**
+     * Fetch next messages to state
+     * @return {Promise<void>}
+     * */
+    next: () => Promise<void>;
 
-  /**
-   * Send file message
-   * @param params file message params
-   * @param callback sent message callback
-   * @return pending message
-   * */
-  sendFileMessage: (
-    params: SendbirdFileMessageParams,
-    onPending?: (message: SendbirdFileMessage, error?: SendbirdError) => void,
-  ) => Promise<SendbirdFileMessage>;
+    /**
+     * Send file message
+     * @param params file message params
+     * @param callback sent message callback
+     * @return pending message
+     * */
+    sendFileMessage: (
+      params: SendbirdFileMessageParams,
+      onPending?: (message: SendbirdFileMessage, error?: SendbirdError) => void,
+    ) => Promise<SendbirdFileMessage>;
 
-  /**
-   * Send user message
-   * @param params user message params
-   * @param callback sent message callback
-   * @return pending message
-   * */
-  sendUserMessage: (
-    params: SendbirdUserMessageParams,
-    onPending?: (message: SendbirdUserMessage, error?: SendbirdError) => void,
-  ) => Promise<SendbirdUserMessage>;
+    /**
+     * Send user message
+     * @param params user message params
+     * @param callback sent message callback
+     * @return pending message
+     * */
+    sendUserMessage: (
+      params: SendbirdUserMessageParams,
+      onPending?: (message: SendbirdUserMessage, error?: SendbirdError) => void,
+    ) => Promise<SendbirdUserMessage>;
 
-  /**
-   * Update file message
-   * @param messageId
-   * @param params file message params
-   * @return updated message
-   * */
-  updateFileMessage: (messageId: number, params: SendbirdFileMessageParams) => Promise<SendbirdFileMessage>;
+    /**
+     * Update file message
+     * @param messageId
+     * @param params file message params
+     * @return updated message
+     * */
+    updateFileMessage: (messageId: number, params: SendbirdFileMessageParams) => Promise<SendbirdFileMessage>;
 
-  /**
-   * Update user message
-   * @param messageId
-   * @param params user message params
-   * @return updated message
-   * */
-  updateUserMessage: (messageId: number, params: SendbirdUserMessageParams) => Promise<SendbirdUserMessage>;
+    /**
+     * Update user message
+     * @param messageId
+     * @param params user message params
+     * @return updated message
+     * */
+    updateUserMessage: (messageId: number, params: SendbirdUserMessageParams) => Promise<SendbirdUserMessage>;
 
-  /**
-   * Resend failed message
-   * @param failedMessage failed message to resend
-   * @return {Promise<void>}
-   * */
-  resendMessage: (failedMessage: SendbirdFileMessage | SendbirdUserMessage) => Promise<void>;
+    /**
+     * Resend failed message
+     * @param failedMessage failed message to resend
+     * @return {Promise<void>}
+     * */
+    resendMessage: (failedMessage: SendbirdFileMessage | SendbirdUserMessage) => Promise<void>;
 
-  /**
-   * Delete message
-   * @param message sent or failed message
-   * @return {Promise<void>}
-   * */
-  deleteMessage: (message: SendbirdFileMessage | SendbirdUserMessage) => Promise<void>;
+    /**
+     * Delete message
+     * @param message sent or failed message
+     * @return {Promise<void>}
+     * */
+    deleteMessage: (message: SendbirdFileMessage | SendbirdUserMessage) => Promise<void>;
 
-  /**
-   * Activated channel
-   * */
-  activeChannel: SendbirdGroupChannel;
+    /**
+     * Activated channel
+     * */
+    activeChannel: SendbirdGroupChannel;
+  };
 }
 
 export type UseGroupChannelMessagesOptions = {
@@ -198,10 +208,10 @@ export type UseGroupChannelMessagesOptions = {
 };
 
 /**
- * @interface UseUserList
- * interface for user list hook
+ * @interface UseUserListReturn
+ * @description interface for user list hook return value
  * */
-export interface UseUserList<User> {
+export interface UseUserListReturn<User> {
   /**
    * Loading state, only available on first render
    * */

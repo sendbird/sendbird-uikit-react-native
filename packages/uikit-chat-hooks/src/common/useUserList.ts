@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { Optional, SendbirdChatSDK, SendbirdUser, useAsyncEffect } from '@sendbird/uikit-utils';
 
-import type { CustomQueryInterface, UseUserList, UseUserListOptions } from '../types';
+import type { CustomQueryInterface, UseUserListOptions, UseUserListReturn } from '../types';
 
 const createUserQuery = <User>(sdk: SendbirdChatSDK, queryCreator?: UseUserListOptions<User>['queryCreator']) => {
   if (queryCreator) return queryCreator();
@@ -36,7 +36,7 @@ export const useUserList = <
 >(
   sdk: SendbirdChatSDK,
   options?: Options,
-): UseUserList<QueriedUser> => {
+): UseUserListReturn<QueriedUser> => {
   const query = useRef<CustomQueryInterface<QueriedUser>>();
 
   const [error, setError] = useState<unknown>(null);

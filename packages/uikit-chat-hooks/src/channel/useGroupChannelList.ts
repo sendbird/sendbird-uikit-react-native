@@ -1,14 +1,8 @@
-import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
-
-import type { UseGroupChannelList, UseGroupChannelListOptions } from '../types';
+import type { UseGroupChannelList } from '../types';
 import { useGroupChannelListWithCollection } from './useGroupChannelListWithCollection';
 import { useGroupChannelListWithQuery } from './useGroupChannelListWithQuery';
 
-export const useGroupChannelList = (
-  sdk: SendbirdChatSDK,
-  userId?: string,
-  options?: UseGroupChannelListOptions,
-): UseGroupChannelList => {
+export const useGroupChannelList: UseGroupChannelList = (sdk, userId, options) => {
   if (sdk.isCacheEnabled || options?.enableCollectionWithoutLocalCache) {
     return useGroupChannelListWithCollection(sdk, userId, options);
   } else {
