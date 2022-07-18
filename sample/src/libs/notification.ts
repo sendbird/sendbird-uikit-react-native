@@ -8,6 +8,9 @@ import { NOOP, isSendbirdNotification, parseSendbirdNotification } from '@sendbi
 
 import { Routes, navigationRef, runAfterAppReady } from './navigation';
 
+const channelId = 'default';
+Notifee.createChannel({ id: channelId, name: 'Default Channel', importance: 4 });
+
 export const onNotificationAndroid: (event: Event) => Promise<void> = async ({ type, detail }) => {
   if (Platform.OS !== 'android') return;
 
@@ -57,7 +60,6 @@ Notifee.onBackgroundEvent(onNotificationAndroid);
 messaging().setBackgroundMessageHandler(async (message: FirebaseMessagingTypes.RemoteMessage) => {
   if (Platform.OS !== 'android') return;
 
-  const channelId = await Notifee.createChannel({ id: 'default', name: 'Default Channel', importance: 4 });
   if (isSendbirdNotification(message.data)) {
     const sendbird = parseSendbirdNotification(message.data);
     await Notifee.displayNotification({

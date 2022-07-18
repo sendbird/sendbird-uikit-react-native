@@ -1,7 +1,7 @@
-import { useCallback, useRef } from 'react';
+import { useRef } from 'react';
 import { Platform } from 'react-native';
 
-import { Logger, useIIFE } from '@sendbird/uikit-utils';
+import { Logger, useFreshCallback, useIIFE } from '@sendbird/uikit-utils';
 
 import { usePlatformService } from '../contexts/PlatformService';
 import { useSendbirdChat } from '../contexts/SendbirdChat';
@@ -28,7 +28,7 @@ const usePushTokenRegistration = () => {
     ];
   });
 
-  const registerPushTokenForCurrentUser = useCallback(async () => {
+  const registerPushTokenForCurrentUser = useFreshCallback(async () => {
     // Check and request push permission
     const hasPermission = await notificationService.hasPushPermission();
     if (!hasPermission) {
@@ -48,16 +48,16 @@ const usePushTokenRegistration = () => {
 
     // Remove listener
     refreshListener.current = notificationService.onTokenRefresh(registerToken);
-  }, [notificationService, getToken, registerToken]);
+  });
 
-  const unregisterPushTokenForCurrentUser = useCallback(async () => {
+  const unregisterPushTokenForCurrentUser = useFreshCallback(async () => {
     const token = await getToken();
     if (token) {
       unregisterToken(token);
       Logger.log('[usePushTokenRegistration]', 'unregistered token:', token);
     }
     refreshListener.current?.();
-  }, [getToken, unregisterToken]);
+  });
 
   return { registerPushTokenForCurrentUser, unregisterPushTokenForCurrentUser };
 };

@@ -131,22 +131,19 @@ PODS:
   - libwebp/mux (1.2.1):
     - libwebp/demux
   - libwebp/webp (1.2.1)
-  - MMKV (1.2.13):
-    - MMKVCore (~> 1.2.13)
-  - MMKVCore (1.2.13)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
   - OpenSSL-Universal (1.1.180)
-  - Permission-Camera (3.3.1):
+  - Permission-Camera (3.6.0):
     - RNPermissions
-  - Permission-MediaLibrary (3.3.1):
+  - Permission-MediaLibrary (3.6.0):
     - RNPermissions
-  - Permission-PhotoLibrary (3.3.1):
+  - Permission-PhotoLibrary (3.6.0):
     - RNPermissions
-  - Permission-PhotoLibraryAddOnly (3.3.1):
+  - Permission-PhotoLibraryAddOnly (3.6.0):
     - RNPermissions
   - PromisesObjC (2.1.0)
   - RCT-Folly (2021.06.28.00-v2):
@@ -356,9 +353,6 @@ PODS:
     - ZIPFoundation (= 0.9.11)
   - react-native-image-picker (4.7.3):
     - React-Core
-  - react-native-mmkv (2.3.3):
-    - MMKV (>= 1.2.13)
-    - React-Core
   - react-native-safe-area-context (3.4.1):
     - React-Core
   - react-native-slider (4.2.2):
@@ -453,7 +447,7 @@ PODS:
   - RNNotifeeCore (5.3.0):
     - RNNotifeeCore/NotifeeCore (= 5.3.0)
   - RNNotifeeCore/NotifeeCore (5.3.0)
-  - RNPermissions (3.3.1):
+  - RNPermissions (3.6.0):
     - React-Core
   - RNScreens (3.13.1):
     - React-Core
@@ -518,7 +512,6 @@ DEPENDENCIES:
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-file-access (from `../node_modules/react-native-file-access`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
-  - react-native-mmkv (from `../node_modules/react-native-mmkv`)
   - react-native-safe-area-context (from `../../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -568,8 +561,6 @@ SPEC REPOS:
     - GoogleUtilities
     - libevent
     - libwebp
-    - MMKV
-    - MMKVCore
     - nanopb
     - OpenSSL-Universal
     - PromisesObjC
@@ -629,8 +620,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-file-access"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
-  react-native-mmkv:
-    :path: "../node_modules/react-native-mmkv"
   react-native-safe-area-context:
     :path: "../../node_modules/react-native-safe-area-context"
   react-native-slider:
@@ -710,14 +699,12 @@ SPEC CHECKSUMS:
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: 98a37e597e40bfdb4c911fc98f2c53d0b12d05fc
-  MMKV: aac95d817a100479445633f2b3ed8961b4ac5043
-  MMKVCore: 3388952ded307e41b3ed8a05892736a236ed1b8e
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
-  Permission-Camera: bae27a8503530770c35aadfecbb97ec71823382a
-  Permission-MediaLibrary: cbc1ee191cf0fe73282d2b3f197714941783d99d
-  Permission-PhotoLibrary: ddb5a158725b29cb12e9e477e8a5f5151c66cc3c
-  Permission-PhotoLibraryAddOnly: 104e42dbe894b0fccb370be26dd1b4a3c23578eb
+  Permission-Camera: 0a0fb4341f50ab242f496fb2f73380e0ec454fe7
+  Permission-MediaLibrary: ed0054dbd841f3ed5a2debb4eda9ebe069b43cc1
+  Permission-PhotoLibrary: fda0fda455bebaa2602f3dfdf8296b28247c1484
+  Permission-PhotoLibraryAddOnly: e5ae346a7ad3effb3f4da07220cf487ff6a2bcba
   PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
   RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
   RCTRequired: 4bf86c70714490bca4bf2696148638284622644b
@@ -735,7 +722,6 @@ SPEC CHECKSUMS:
   react-native-document-picker: 5663fe4bcdb646200683a41790464d2793307ac8
   react-native-file-access: cb3caef2103575aa15876624f91ac81d37182840
   react-native-image-picker: 4e6008ad8c2321622affa2c85432a5ebd02d480c
-  react-native-mmkv: 30297e5e2a65341b36a727c1c79b0aff0132b396
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
   react-native-slider: 2f25c919f1dc309b90e2cc8346b8042ecec2102f
   React-perflogger: 93075d8931c32cd1fce8a98c15d2d5ccc4d891bd
@@ -759,7 +745,7 @@ SPEC CHECKSUMS:
   RNFBMessaging: 6f77a25697eaa0f2efbcce144bdbdb58b8686b84
   RNNotifee: 0f34dc638ac57ae82f3d0a94044488c77524aa32
   RNNotifeeCore: 7e813421582d93d88899ee354628e20a2e3c7206
-  RNPermissions: 34d678157c800b25b22a488e4d8babb57456e796
+  RNPermissions: de7b7c3fe1680d974ac7a85e3e97aa539c0e68ea
   RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d

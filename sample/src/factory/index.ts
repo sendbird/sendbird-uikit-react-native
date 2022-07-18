@@ -23,8 +23,11 @@ export const GetSendbirdSDK = () => AppSendbirdSDK;
 export const SetSendbirdSDK = (sdk: SendbirdChatSDK) => (AppSendbirdSDK = sdk);
 
 export const RootStack = createNativeStackNavigator();
-export const NotificationService = createNativeNotificationService(RNFBMessaging);
 export const ClipboardService = createNativeClipboardService(Clipboard);
+export const NotificationService = createNativeNotificationService({
+  messagingModule: RNFBMessaging,
+  permissionModule: Permissions,
+});
 export const FileService = createNativeFileService({
   imagePickerModule: ImagePicker,
   documentPickerModule: DocumentPicker,

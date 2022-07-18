@@ -19,6 +19,27 @@ import type {
   SaveOptions,
 } from './types';
 
+function getAndroidStoragePermissionsByAPILevel(permissionModule: typeof Permissions): Permission[] {
+  if (Platform.OS !== 'android') return [];
+
+  if (Platform.Version > 32) {
+    return [
+      permissionModule.PERMISSIONS.ANDROID.READ_MEDIA_AUDIO,
+      permissionModule.PERMISSIONS.ANDROID.READ_MEDIA_IMAGES,
+      permissionModule.PERMISSIONS.ANDROID.READ_MEDIA_VIDEO,
+    ];
+  }
+
+  if (Platform.Version > 28) {
+    return [permissionModule.PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE];
+  }
+
+  return [
+    permissionModule.PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
+    permissionModule.PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+  ];
+}
+
 const createNativeFileService = ({
   imagePickerModule,
   documentPickerModule,
@@ -37,17 +58,9 @@ const createNativeFileService = ({
     android: [permissionModule.PERMISSIONS.ANDROID.CAMERA],
     default: [],
   });
-  const mediaLibraryPermissionsLegacy: Permission[] = Platform.select({
-    ios: [permissionModule.PERMISSIONS.IOS.MEDIA_LIBRARY, permissionModule.PERMISSIONS.IOS.PHOTO_LIBRARY],
-    android: [
-      permissionModule.PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
-      permissionModule.PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
-    ],
-    default: [],
-  });
   const mediaLibraryPermissions: Permission[] = Platform.select({
     ios: [permissionModule.PERMISSIONS.IOS.MEDIA_LIBRARY, permissionModule.PERMISSIONS.IOS.PHOTO_LIBRARY],
-    android: [permissionModule.PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE],
+    android: getAndroidStoragePermissionsByAPILevel(permissionModule),
     default: [],
   });
 
@@ -61,22 +74,12 @@ const createNativeFileService = ({
       return nativePermissionGranted(status);
     }
     async hasMediaLibraryPermission(): Promise<boolean> {
-      if (Platform.OS !== 'android' || Platform.Version > 28) {
-        const status = await permissionModule.checkMultiple(mediaLibraryPermissions);
-        return nativePermissionGranted(status);
-      } else {
-        const status = await permissionModule.checkMultiple(mediaLibraryPermissionsLegacy);
-        return nativePermissionGranted(status);
-      }
+      const status = await permissionModule.checkMultiple(mediaLibraryPermissions);
+      return nativePermissionGranted(status);
     }
     async requestMediaLibraryPermission(): Promise<boolean> {
-      if (Platform.OS !== 'android' || Platform.Version > 28) {
-        const status = await permissionModule.requestMultiple(mediaLibraryPermissions);
-        return nativePermissionGranted(status);
-      } else {
-        const status = await permissionModule.requestMultiple(mediaLibraryPermissionsLegacy);
-        return nativePermissionGranted(status);
-      }
+      const status = await permissionModule.requestMultiple(mediaLibraryPermissions);
+      return nativePermissionGranted(status);
     }
 
     async openCamera(options?: OpenCameraOptions): Promise<FilePickerResponse> {
