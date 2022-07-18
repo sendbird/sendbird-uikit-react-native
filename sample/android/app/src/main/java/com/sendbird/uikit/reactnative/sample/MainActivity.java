@@ -1,4 +1,4 @@
-package com.sendbirduikitsample;
+package com.sendbird.uikit.reactnative.sample;
 
 import com.facebook.react.ReactActivity;
 import android.os.Bundle;

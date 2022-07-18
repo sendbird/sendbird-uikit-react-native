@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Linking, TouchableOpacity, View } from 'react-native';
 import type Sendbird from 'sendbird';
 
-import { useLocalization } from '@sendbird/uikit-react-native-core';
 import {
   Icon,
   Image,
@@ -13,6 +12,7 @@ import {
 } from '@sendbird/uikit-react-native-foundation';
 import { conditionChaining } from '@sendbird/uikit-utils';
 
+import { useLocalization } from '../../../contexts/Localization';
 import type { UserMessageProps } from './index';
 
 type Props = UserMessageProps & { ogMetaData: Sendbird.OGMetaData };

@@ -1,9 +1,10 @@
 import React from 'react';
 import { Platform, TouchableOpacity } from 'react-native';
 
-import { useLocalization } from '@sendbird/uikit-react-native-core';
 import { Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
+
+import { useLocalization } from '../../contexts/Localization';
 
 type Props = {
   newMessages: SendbirdMessage[];

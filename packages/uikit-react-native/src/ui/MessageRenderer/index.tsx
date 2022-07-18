@@ -1,12 +1,12 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
 
-import type { GroupChannelProps } from '@sendbird/uikit-react-native-core';
 import { createStyleSheet } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
 import { calcMessageGrouping, conditionChaining, isMyMessage, useIIFE } from '@sendbird/uikit-utils';
 
 import { DEFAULT_LONG_PRESS_DELAY } from '../../constants';
+import type { GroupChannelProps } from '../../domain/groupChannel/types';
 import AdminMessage from './AdminMessage';
 import FileMessage from './FileMessage';
 import MessageContainer from './MessageContainer';

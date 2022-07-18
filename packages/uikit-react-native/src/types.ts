@@ -1,4 +1,4 @@
-import type { ErrorInfo } from 'react';
+import type { ErrorInfo, ReactNode } from 'react';
 
 export type KeyValuePairGet = [string, string | null];
 export type KeyValuePairSet = [string, string];
@@ -14,3 +14,5 @@ export interface LocalCacheStorage {
 }
 
 export type ErrorBoundaryProps = { error: Error; errorInfo: ErrorInfo; reset: () => void };
+
+export type CommonComponent<P = {}> = (props: P & { children?: ReactNode }) => null | JSX.Element; //ReactNode;

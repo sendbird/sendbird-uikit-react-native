@@ -56,7 +56,7 @@ export const useIsMountedRef = () => {
   return isMounted;
 };
 
-export const useFreshCallback = <T extends (...args: unknown[]) => unknown>(callback: T) => {
+export const useFreshCallback = <T extends (...args: any[]) => any>(callback: T): T => {
   const ref = useRef<T>(callback);
   useLayoutEffect(() => {
     ref.current = callback;

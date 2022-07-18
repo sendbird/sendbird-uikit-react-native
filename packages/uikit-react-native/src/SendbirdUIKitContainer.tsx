@@ -3,19 +3,6 @@ import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Sendbird from 'sendbird';
 
-import type {
-  ClipboardServiceInterface,
-  FileServiceInterface,
-  NotificationServiceInterface,
-  StringSet,
-} from '@sendbird/uikit-react-native-core';
-import {
-  LocalizationProvider,
-  PlatformServiceProvider,
-  SendbirdChatProvider,
-  StringSetEn,
-  useLocalization,
-} from '@sendbird/uikit-react-native-core';
 import type { HeaderStyleContextType, UIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import {
   DialogProvider,
@@ -29,6 +16,12 @@ import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 
 import InternalErrorBoundary from './InternalErrorBoundary';
 import InternalLocalCacheStorage from './InternalLocalCacheStorage';
+import { LocalizationProvider, useLocalization } from './contexts/Localization';
+import { PlatformServiceProvider } from './contexts/PlatformService';
+import { SendbirdChatProvider } from './contexts/SendbirdChat';
+import StringSetEn from './localization/StringSet.en';
+import type { StringSet } from './localization/StringSet.type';
+import type { ClipboardServiceInterface, FileServiceInterface, NotificationServiceInterface } from './platform/types';
 import type { ErrorBoundaryProps, LocalCacheStorage } from './types';
 import VERSION from './version';
 

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { Icon, LoadingSpinner, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import type {
   SendbirdFileMessage,
@@ -9,6 +8,8 @@ import type {
   SendbirdUserMessage,
 } from '@sendbird/uikit-utils';
 import { useUniqId } from '@sendbird/uikit-utils';
+
+import { useSendbirdChat } from '../../contexts/SendbirdChat';
 
 const SIZE = 16;
 

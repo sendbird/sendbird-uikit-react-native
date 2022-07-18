@@ -2,7 +2,7 @@ import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
 import React from 'react';
 import { ScrollView, View } from 'react-native';
 
-import { TypedPlaceholder as TypedPlaceholderComponent } from '@sendbird/uikit-react-native-core';
+import { TypedPlaceholder as TypedPlaceholderComponent } from '@sendbird/uikit-react-native';
 import { Placeholder as PlaceholderComponent } from '@sendbird/uikit-react-native-foundation';
 
 const PlaceholderMeta: ComponentMeta<typeof PlaceholderComponent> = {

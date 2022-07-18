@@ -1,8 +1,8 @@
 // @ts-nocheck - !!REMOVE
 import React from 'react';
 
-import type { __domain__Fragment, __domain__Module } from '@sendbird/uikit-react-native-core';
-import { create__domain__Module } from '@sendbird/uikit-react-native-core';
+import type { __domain__Fragment, __domain__Module } from '../domain/__template__';
+import { create__domain__Module } from '../domain/__template__';
 import { NOOP } from '@sendbird/uikit-utils';
 
 const create__domain__Fragment = (initModule?: Partial<__domain__Module>): __domain__Fragment => {

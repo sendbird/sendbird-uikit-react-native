@@ -2,9 +2,10 @@ import isSameDay from 'date-fns/isSameDay';
 import React from 'react';
 import { View } from 'react-native';
 
-import { useLocalization } from '@sendbird/uikit-react-native-core';
 import { Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
+
+import { useLocalization } from '../../contexts/Localization';
 
 type Props = {
   message: SendbirdMessage;

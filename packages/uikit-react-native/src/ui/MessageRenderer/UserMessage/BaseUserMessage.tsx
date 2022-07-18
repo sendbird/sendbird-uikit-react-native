@@ -1,9 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { useLocalization } from '@sendbird/uikit-react-native-core';
 import { Text, URLParsedText, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
+import { useLocalization } from '../../../contexts/Localization';
 import type { UserMessageProps } from './index';
 
 const BaseUserMessage: React.FC<UserMessageProps> = ({ message, variant, pressed }) => {

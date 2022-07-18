@@ -1,10 +1,12 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
-import type { GroupChannelFragment, GroupChannelModule, GroupChannelProps } from '@sendbird/uikit-react-native-core';
-import { StatusComposition, createGroupChannelModule, useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { NOOP, PASS, messageComparator } from '@sendbird/uikit-utils';
 
+import StatusComposition from '../components/StatusComposition';
+import { useSendbirdChat } from '../contexts/SendbirdChat';
+import createGroupChannelModule from '../domain/groupChannel/module/createGroupChannelModule';
+import type { GroupChannelFragment, GroupChannelModule, GroupChannelProps } from '../domain/groupChannel/types';
 import MessageRenderer from '../ui/MessageRenderer';
 import DefaultNewMessagesTooltip from '../ui/NewMessagesTooltip';
 import DefaultScrollToBottomTooltip from '../ui/ScrollToBottomTooltip';

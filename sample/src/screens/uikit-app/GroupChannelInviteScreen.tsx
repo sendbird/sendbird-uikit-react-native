@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { createGroupChannelInviteFragment } from '@sendbird/uikit-react-native';
-import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
+import { useSendbirdChat } from '@sendbird/uikit-react-native';
 import type { SendbirdUser } from '@sendbird/uikit-utils';
 
 import { useAppNavigation } from '../../hooks/useAppNavigation';

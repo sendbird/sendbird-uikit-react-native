@@ -2,15 +2,14 @@ import React, { useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
 
 import { useUserList } from '@sendbird/uikit-chat-hooks';
-import type { GroupChannelCreateFragment, UserListModule } from '@sendbird/uikit-react-native-core';
-import {
-  StatusComposition,
-  createUserListModule,
-  useLocalization,
-  useSendbirdChat,
-} from '@sendbird/uikit-react-native-core';
 import { Logger, PASS, SendbirdUser } from '@sendbird/uikit-utils';
 
+import StatusComposition from '../components/StatusComposition';
+import { useLocalization } from '../contexts/Localization';
+import { useSendbirdChat } from '../contexts/SendbirdChat';
+import type { GroupChannelCreateFragment } from '../domain/groupChannelUserList/types';
+import createUserListModule from '../domain/userList/module/createUserListModule';
+import type { UserListModule } from '../domain/userList/types';
 import UserSelectableBar from '../ui/UserSelectableBar';
 
 const defaultUserIdsGenerator = <T,>(users: T[]) => {

@@ -1,9 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { useLocalization } from '@sendbird/uikit-react-native-core';
 import { Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
+import { useLocalization } from '../../../contexts/Localization';
 import type { MessageRendererInterface } from '../index';
 
 export type UnknownMessageProps = MessageRendererInterface;

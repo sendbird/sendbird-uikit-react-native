@@ -10,10 +10,8 @@ const packagesRoot = path.resolve(__dirname, '../../');
 
 const sendbirdUIKitRoot = path.resolve(packagesRoot, 'uikit-react-native');
 const fragmentsRoot = path.resolve(sendbirdUIKitRoot, 'src/fragments');
-
-const sendbirdUIKitCoreRoot = path.resolve(packagesRoot, 'uikit-react-native-core');
-const domainRoot = path.resolve(sendbirdUIKitCoreRoot, 'src/domain');
-const templateRoot = path.resolve(sendbirdUIKitCoreRoot, '__template__');
+const domainRoot = path.resolve(sendbirdUIKitRoot, 'src/domain');
+const templateRoot = path.resolve(sendbirdUIKitRoot, '__template__');
 
 inquirer
   .prompt([
@@ -52,8 +50,8 @@ inquirer
     console.log(chalk.white('Write template files...'));
     const templateFiles = await Promise.all(readPromises);
     const writePromises = templateFiles.map(async ({ filePath, data }) => {
-      // filePath:        ~/packages/uikit-react-native-core/__template__/**/__domain__
-      // domainFilePath:  ~/packages/uikit-react-native-core/someDomain/**/SomeDomain
+      // filePath:        ~/packages/uikit-react-native/__template__/**/__domain__
+      // domainFilePath:  ~/packages/uikit-react-native/domain/someDomain/**/SomeDomain
       const domainFilePath = domainReplacer(templateReplacer(filePath, __domain__), __domain__);
 
       if (isFragmentTemplate(filePath)) {

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 
 import { createGroupChannelFragment } from '@sendbird/uikit-react-native';
-import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
+import { useSendbirdChat } from '@sendbird/uikit-react-native';
 import { Logger } from '@sendbird/uikit-utils';
 
 import { useAppNavigation } from '../../hooks/useAppNavigation';
@@ -23,7 +23,7 @@ import { Routes } from '../../libs/navigation';
  * import { useNavigation } from "@react-navigation/native";
  * import { useHeaderHeight } from '@react-navigation/elements';
  *
- * import { GroupChannelContexts, GroupChannelModule } from '@sendbird/uikit-react-native-core';
+ * import { GroupChannelContexts, GroupChannelModule } from '@sendbird/uikit-react-native';
  * import { Icon } from '@sendbird/uikit-react-native-foundation';
  *
  * const UseReactNavigationHeader: GroupChannelModule['Header'] = ({ onPressHeaderRight, onPressHeaderLeft }) => {
