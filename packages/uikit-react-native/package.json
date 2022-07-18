@@ -18,7 +18,8 @@
     "test": "jest",
     "build": "yarn generate-version && bob build",
     "clean": "del lib",
-    "generate-version": "node scripts/generate-version.js ./src/version.ts"
+    "generate-version": "node scripts/generate-version.js ./src/version.ts",
+    "create-domain": "node scripts/create-core-domain"
   },
   "keywords": [
     "react-native",

@@ -1,7 +1,7 @@
 // @ts-nocheck - !!REMOVE
 import React from 'react';
 
-import type { __domain__Fragment, __domain__Module } from '../domain/__template__';
+import type { __domain__Fragment, __domain__Module } from '../domain/__template__/types';
 import { create__domain__Module } from '../domain/__template__';
 import { NOOP } from '@sendbird/uikit-utils';
 

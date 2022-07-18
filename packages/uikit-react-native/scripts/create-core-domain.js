@@ -56,15 +56,15 @@ inquirer
 
       if (isFragmentTemplate(filePath)) {
         console.log(chalk.white('Write Fragment template...'));
-        const currentDomainRoot = path.resolve(sendbirdUIKitCoreRoot, __domain__);
+        const currentDomainRoot = path.resolve(sendbirdUIKitRoot, __domain__);
         const destPath = domainFilePath.replace(currentDomainRoot, fragmentsRoot);
         await fsP.mkdir(path.dirname(destPath), { recursive: true });
-        return fsP.writeFile(destPath, ignoreReplacer(domainReplacer(data, __domain__)));
+        return fsP.writeFile(destPath, ignoreReplacer(templateReplacer(domainReplacer(data, __domain__), __domain__)));
       } else {
         console.log(chalk.white('Write Module template...'));
-        const destPath = domainFilePath.replace(sendbirdUIKitCoreRoot, domainRoot);
+        const destPath = domainFilePath.replace(sendbirdUIKitRoot, domainRoot);
         await fsP.mkdir(path.dirname(destPath), { recursive: true });
-        return fsP.writeFile(destPath, ignoreReplacer(domainReplacer(data, __domain__)));
+        return fsP.writeFile(destPath, ignoreReplacer(templateReplacer(domainReplacer(data, __domain__), __domain__)));
       }
     });
     await Promise.all(writePromises);
