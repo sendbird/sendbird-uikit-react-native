@@ -113,7 +113,7 @@ export interface UIKitColors {
    * @example
    * ```
    *  const { colors } = useUIKitTheme();
-   *  colors.button.contained.disabled.backgroundColor
+   *  colors.ui.button.contained.disabled.backgroundColor
    * ```
    * */
   ui: {

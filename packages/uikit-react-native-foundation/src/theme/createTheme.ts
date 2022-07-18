@@ -16,11 +16,25 @@ const createTheme = <Appearance extends string>({
   colors: createColors,
   typography = { shared: { fontFamily: 'System' } },
 }: Options<Appearance>): UIKitTheme<Appearance> => {
+  let _palette = palette;
+  let _colors = createColors(_palette);
+
   return {
     appearance,
     select: createAppearanceHelper(appearance),
-    palette,
-    colors: createColors(palette),
+    get palette() {
+      return _palette;
+    },
+    set palette(value) {
+      _palette = value;
+      _colors = createColors(_palette);
+    },
+    get colors() {
+      return _colors;
+    },
+    set colors(value) {
+      _colors = value;
+    },
     typography: createTypography(typography),
   };
 };
