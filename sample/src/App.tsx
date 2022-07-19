@@ -4,7 +4,7 @@ import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/
 import React, { useEffect } from 'react';
 
 import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
-import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
+import { useSendbirdChat } from '@sendbird/uikit-react-native';
 import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 import { APP_ID } from './env';

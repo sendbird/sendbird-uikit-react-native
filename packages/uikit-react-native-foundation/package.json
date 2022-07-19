@@ -54,6 +54,11 @@
     "react-native": ">=0.63.3",
     "react-native-safe-area-context": "^3.3.2"
   },
+  "peerDependenciesMeta": {
+    "react-native-fast-image": {
+      "optional": true
+    }
+  },
   "react-native-builder-bob": {
     "source": "src",
     "output": "lib",

@@ -13,7 +13,7 @@ import {
   createNativeClipboardService,
   createNativeFileService,
   createNativeNotificationService,
-} from '@sendbird/uikit-react-native-core';
+} from '@sendbird/uikit-react-native';
 import { Logger, SendbirdChatSDK } from '@sendbird/uikit-utils';
 
 import { APP_ID } from '../env';

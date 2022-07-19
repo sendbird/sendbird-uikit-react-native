@@ -2,16 +2,14 @@ import React, { useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
 
 import { useActiveGroupChannel, useUserList } from '@sendbird/uikit-chat-hooks';
-import type { GroupChannelInviteFragment, UserListModule } from '@sendbird/uikit-react-native-core';
-import {
-  StatusComposition,
-  createUserListModule,
-  useLocalization,
-  useSendbirdChat,
-} from '@sendbird/uikit-react-native-core';
 import { Logger, SendbirdUser } from '@sendbird/uikit-utils';
 
-import UserSelectableBar from '../ui/UserSelectableBar';
+import StatusComposition from '../components/StatusComposition';
+import UserSelectableBar from '../components/UserSelectableBar';
+import type { GroupChannelInviteFragment } from '../domain/groupChannelUserList/types';
+import createUserListModule from '../domain/userList/module/createUserListModule';
+import type { UserListModule } from '../domain/userList/types';
+import { useLocalization, useSendbirdChat } from '../hooks/useContext';
 
 const defaultUserIdsGenerator = <T,>(users: T[]) => {
   const userIds = users
@@ -36,7 +34,7 @@ const createGroupChannelInviteFragment = <UserType,>(
   const UserListModule = createUserListModule<UserType>(initModule);
 
   return ({
-    staleChannel,
+    channel,
     onPressHeaderLeft,
     onInviteMembers,
     userIdsGenerator = defaultUserIdsGenerator,
@@ -51,7 +49,7 @@ const createGroupChannelInviteFragment = <UserType,>(
       sortComparator,
     });
 
-    const { activeChannel } = useActiveGroupChannel(sdk, staleChannel);
+    const { activeChannel } = useActiveGroupChannel(sdk, channel);
 
     const _renderUser: NonNullable<typeof renderUser> = useCallback(
       (user, selectedUsers, setSelectedUsers) => {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 
-import { useConnection, useSendbirdChat } from '@sendbird/uikit-react-native-core';
+import { useConnection, useSendbirdChat } from '@sendbird/uikit-react-native';
 import { Button, Text, TextInput, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 import { SendbirdAPI } from '../factory';

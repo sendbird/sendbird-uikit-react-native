@@ -3,7 +3,7 @@ import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { usePushTrigger } from '@sendbird/uikit-chat-hooks';
-import { useLocalization, usePlatformService, useSendbirdChat } from '@sendbird/uikit-react-native-core';
+import { useLocalization, usePlatformService, useSendbirdChat } from '@sendbird/uikit-react-native';
 import {
   Avatar,
   Divider,

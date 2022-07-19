@@ -1,6 +1,6 @@
 # @sendbird/uikit-utils
 
-uikit-chat-hooks
+Utility library for Sendbird UIKit
 
 ## Installation
 

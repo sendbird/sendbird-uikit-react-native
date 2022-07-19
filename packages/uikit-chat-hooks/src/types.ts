@@ -82,12 +82,7 @@ export type UseGroupChannelListOptions = {
  * - onBottomReached -> next() -> nextMessages append to state(messages)
  * */
 export interface UseGroupChannelMessages {
-  (
-    sdk: SendbirdChatSDK,
-    staleChannel: SendbirdGroupChannel,
-    userId?: string,
-    options?: UseGroupChannelMessagesOptions,
-  ): {
+  (sdk: SendbirdChatSDK, channel: SendbirdGroupChannel, userId?: string, options?: UseGroupChannelMessagesOptions): {
     /**
      * Loading state, only available on first render
      * */

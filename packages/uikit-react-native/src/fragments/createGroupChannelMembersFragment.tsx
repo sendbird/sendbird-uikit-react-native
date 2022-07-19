@@ -1,13 +1,15 @@
 import React, { useCallback } from 'react';
 
 import { useActiveGroupChannel, useChannelHandler } from '@sendbird/uikit-chat-hooks';
-import type { GroupChannelMembersFragment, UserListModule } from '@sendbird/uikit-react-native-core';
-import { createUserListModule, useLocalization, useSendbirdChat } from '@sendbird/uikit-react-native-core';
 import { Icon } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMember } from '@sendbird/uikit-utils';
 import { useForceUpdate, useUniqId } from '@sendbird/uikit-utils';
 
-import UserActionBar from '../ui/UserActionBar';
+import UserActionBar from '../components/UserActionBar';
+import type { GroupChannelMembersFragment } from '../domain/groupChannelUserList/types';
+import createUserListModule from '../domain/userList/module/createUserListModule';
+import type { UserListModule } from '../domain/userList/types';
+import { useLocalization, useSendbirdChat } from '../hooks/useContext';
 
 const noop = () => '';
 const name = 'createGroupChannelMembersFragment';
@@ -16,11 +18,11 @@ const createGroupChannelMembersFragment = (
 ): GroupChannelMembersFragment<SendbirdMember> => {
   const UserListModule = createUserListModule<SendbirdMember>(initModule);
 
-  return ({ staleChannel, onPressHeaderLeft, onPressHeaderRight, renderUser }) => {
+  return ({ channel, onPressHeaderLeft, onPressHeaderRight, renderUser }) => {
     const uniqId = useUniqId(name);
     const forceUpdate = useForceUpdate();
     const { sdk, currentUser } = useSendbirdChat();
-    const { activeChannel } = useActiveGroupChannel(sdk, staleChannel);
+    const { activeChannel } = useActiveGroupChannel(sdk, channel);
 
     const { STRINGS } = useLocalization();
 
@@ -50,7 +52,7 @@ const createGroupChannelMembersFragment = (
           if (channel.url === activeChannel.url) forceUpdate();
         },
         onChannelMemberCountChanged(channels) {
-          if (channels.find((c) => c.url === staleChannel.url)) forceUpdate();
+          if (channels.find((c) => c.url === channel.url)) forceUpdate();
         },
         onChannelChanged(channel) {
           if (channel.url === activeChannel.url) forceUpdate();

@@ -29,8 +29,8 @@ type DialogJob =
       props: BottomSheetItem;
     };
 
-type DialogPropsBy<T extends DialogJob['type'], U extends DialogJob = DialogJob> = U extends { type: T }
-  ? U['props']
+type DialogPropsBy<T extends DialogJob['type'], U extends DialogJob = DialogJob> = U extends { type: T; props: infer P }
+  ? P
   : never;
 
 type DialogContextType = {

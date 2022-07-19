@@ -1,7 +1,7 @@
 import { Route, StackActions, createNavigationContainerRef } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import type { GroupChannelType } from '@sendbird/uikit-react-native-core';
+import type { GroupChannelType } from '@sendbird/uikit-react-native';
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 
 import { GetSendbirdSDK } from '../factory';
@@ -79,7 +79,7 @@ export type RouteParamsUnion =
       params: undefined;
     };
 
-type ExtractParams<R extends Routes, U extends RouteParamsUnion> = U extends { route: R } ? U['params'] : never;
+type ExtractParams<R extends Routes, U extends RouteParamsUnion> = U extends { route: R; params: infer P } ? P : never;
 export type RouteParams<R extends Routes> = ExtractParams<R, RouteParamsUnion>;
 export type ParamListBase<T extends RouteParamsUnion = RouteParamsUnion> = {
   [k in T['route']]: T extends { route: k; params: infer P } ? P : never;
