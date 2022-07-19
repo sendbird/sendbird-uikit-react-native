@@ -4,8 +4,8 @@ import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
 import { NOOP, PASS, messageComparator } from '@sendbird/uikit-utils';
 
 import MessageRenderer from '../components/MessageRenderer';
-import DefaultNewMessagesTooltip from '../components/NewMessagesTooltip';
-import DefaultScrollToBottomTooltip from '../components/ScrollToBottomTooltip';
+import NewMessagesButton from '../components/NewMessagesButton';
+import ScrollToBottomButton from '../components/ScrollToBottomButton';
 import StatusComposition from '../components/StatusComposition';
 import createGroupChannelModule from '../domain/groupChannel/module/createGroupChannelModule';
 import type { GroupChannelFragment, GroupChannelModule, GroupChannelProps } from '../domain/groupChannel/types';
@@ -15,8 +15,8 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
   const GroupChannelModule = createGroupChannelModule(initModule);
 
   return ({
-    renderNewMessagesTooltip = (props) => <DefaultNewMessagesTooltip {...props} />,
-    renderScrollToBottomTooltip = (props) => <DefaultScrollToBottomTooltip {...props} />,
+    renderNewMessagesButton = (props) => <NewMessagesButton {...props} />,
+    renderScrollToBottomButton = (props) => <ScrollToBottomButton {...props} />,
     renderMessage,
     enableMessageGrouping = true,
     enableTypingIndicator = true,
@@ -130,8 +130,8 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             newMessagesFromNext={newMessagesFromNext}
             onTopReached={prev}
             onBottomReached={next}
-            renderNewMessagesTooltip={renderNewMessagesTooltip}
-            renderScrollToBottomTooltip={renderScrollToBottomTooltip}
+            renderNewMessagesButton={renderNewMessagesButton}
+            renderScrollToBottomButton={renderScrollToBottomButton}
             onResendFailedMessage={resendMessage}
             onDeleteMessage={deleteMessage}
             onPressImageMessage={onPressImageMessage}

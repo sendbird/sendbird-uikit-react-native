@@ -38,8 +38,8 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   newMessagesFromNext,
   onBottomReached,
   onTopReached,
-  renderNewMessagesTooltip,
-  renderScrollToBottomTooltip,
+  renderNewMessagesButton,
+  renderScrollToBottomButton,
   onResendFailedMessage,
   onDeleteMessage,
   onPressImageMessage,
@@ -111,18 +111,18 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
           flatListProps?.contentContainerStyle,
         ]}
       />
-      {renderNewMessagesTooltip && (
-        <View style={[styles.newMsgTooltip, safeAreaLayout]}>
-          {renderNewMessagesTooltip({
+      {renderNewMessagesButton && (
+        <View style={[styles.newMsgButton, safeAreaLayout]}>
+          {renderNewMessagesButton({
             visible: scrollLeaveBottom,
             onPress: () => scrollRef.current?.scrollToBottom(false),
             newMessages: HANDLE_NEXT_MSG_SEPARATELY ? newMessagesFromNext : newMessages,
           })}
         </View>
       )}
-      {renderScrollToBottomTooltip && (
-        <View pointerEvents={scrollLeaveBottom ? 'auto' : 'none'} style={[styles.scrollTooltip, safeAreaLayout]}>
-          {renderScrollToBottomTooltip({
+      {renderScrollToBottomButton && (
+        <View pointerEvents={scrollLeaveBottom ? 'auto' : 'none'} style={[styles.scrollButton, safeAreaLayout]}>
+          {renderScrollToBottomButton({
             visible: scrollLeaveBottom,
             onPress: () => scrollRef.current?.scrollToBottom(false),
           })}
@@ -284,13 +284,13 @@ const styles = createStyleSheet({
   frozenListPadding: {
     paddingBottom: 32,
   },
-  newMsgTooltip: {
+  newMsgButton: {
     position: 'absolute',
     zIndex: 999,
     bottom: 10,
     alignSelf: 'center',
   },
-  scrollTooltip: {
+  scrollButton: {
     position: 'absolute',
     zIndex: 998,
     bottom: 10,

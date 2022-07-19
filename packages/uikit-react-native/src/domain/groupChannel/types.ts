@@ -31,8 +31,8 @@ export interface GroupChannelProps {
     onPressImageMessage?: GroupChannelProps['MessageList']['onPressImageMessage'];
 
     renderMessage?: GroupChannelProps['MessageList']['renderMessage'];
-    renderNewMessagesTooltip?: GroupChannelProps['MessageList']['renderNewMessagesTooltip'];
-    renderScrollToBottomTooltip?: GroupChannelProps['MessageList']['renderScrollToBottomTooltip'];
+    renderNewMessagesButton?: GroupChannelProps['MessageList']['renderNewMessagesButton'];
+    renderScrollToBottomButton?: GroupChannelProps['MessageList']['renderScrollToBottomButton'];
 
     enableTypingIndicator?: GroupChannelProps['Provider']['enableTypingIndicator'];
     enableMessageGrouping?: GroupChannelProps['MessageList']['enableMessageGrouping'];
@@ -71,12 +71,12 @@ export interface GroupChannelProps {
       currentUserId?: GroupChannelProps['MessageList']['currentUserId'];
       enableMessageGrouping: GroupChannelProps['MessageList']['enableMessageGrouping'];
     }) => React.ReactElement | null;
-    renderNewMessagesTooltip: null | CommonComponent<{
+    renderNewMessagesButton: null | CommonComponent<{
       visible: boolean;
       onPress: () => void;
       newMessages: SendbirdMessage[];
     }>;
-    renderScrollToBottomTooltip: null | CommonComponent<{
+    renderScrollToBottomButton: null | CommonComponent<{
       visible: boolean;
       onPress: () => void;
     }>;

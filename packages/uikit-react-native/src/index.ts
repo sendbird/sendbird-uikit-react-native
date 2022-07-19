@@ -2,9 +2,9 @@
 export { default as MessageRenderer } from './components/MessageRenderer';
 export { default as ChannelCover } from './components/ChannelCover';
 export { default as ChatFlatList } from './components/ChatFlatList';
-export { default as NewMessagesTooltip } from './components/NewMessagesTooltip';
+export { default as NewMessagesButton } from './components/NewMessagesButton';
 export { default as ProviderLayout } from './components/ProviderLayout';
-export { default as ScrollToBottomTooltip } from './components/ScrollToBottomTooltip';
+export { default as ScrollToBottomButton } from './components/ScrollToBottomButton';
 export { default as StatusComposition } from './components/StatusComposition';
 export { default as TypedPlaceholder } from './components/TypedPlaceholder';
 export { default as UserActionBar } from './components/UserActionBar';

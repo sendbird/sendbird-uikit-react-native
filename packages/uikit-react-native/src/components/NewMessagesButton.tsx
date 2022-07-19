@@ -11,7 +11,7 @@ type Props = {
   visible: boolean;
   onPress: () => void;
 };
-const NewMessagesTooltip: React.FC<Props> = ({ newMessages, visible, onPress }) => {
+const NewMessagesButton: React.FC<Props> = ({ newMessages, visible, onPress }) => {
   const { STRINGS } = useLocalization();
   const { select, palette, colors } = useUIKitTheme();
   if (newMessages.length === 0 || !visible) return null;
@@ -25,7 +25,7 @@ const NewMessagesTooltip: React.FC<Props> = ({ newMessages, visible, onPress }) 
       ]}
     >
       <Text button color={colors.primary}>
-        {STRINGS.GROUP_CHANNEL.LIST_TOOLTIP_NEW_MSG(newMessages)}
+        {STRINGS.GROUP_CHANNEL.LIST_BUTTON_NEW_MSG(newMessages)}
       </Text>
     </TouchableOpacity>
   );
@@ -49,4 +49,4 @@ const styles = createStyleSheet({
     }),
   },
 });
-export default React.memo(NewMessagesTooltip);
+export default React.memo(NewMessagesButton);

@@ -7,7 +7,7 @@ type Props = {
   visible: boolean;
   onPress: () => void;
 };
-const ScrollToBottomTooltip: React.FC<Props> = ({ visible, onPress }) => {
+const ScrollToBottomButton: React.FC<Props> = ({ visible, onPress }) => {
   const { palette, select } = useUIKitTheme();
   return (
     <TouchableOpacity
@@ -45,4 +45,4 @@ const styles = createStyleSheet({
   },
 });
 
-export default React.memo(ScrollToBottomTooltip);
+export default React.memo(ScrollToBottomButton);

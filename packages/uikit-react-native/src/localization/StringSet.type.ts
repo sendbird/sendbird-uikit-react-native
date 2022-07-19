@@ -31,7 +31,7 @@ export interface StringSet {
     /** GroupChannel > List */
     LIST_BANNER_FROZEN: string;
     LIST_DATE_SEPARATOR: (date: Date, locale?: Locale) => string;
-    LIST_TOOLTIP_NEW_MSG: (newMessages: SendbirdMessage[]) => string;
+    LIST_BUTTON_NEW_MSG: (newMessages: SendbirdMessage[]) => string;
 
     /** GroupChannel > Message bubble */
     MESSAGE_BUBBLE_TIME: (message: SendbirdMessage, locale?: Locale) => string;
@@ -192,7 +192,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
         getGroupChannelTitle(currentUserId, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       LIST_BANNER_FROZEN: 'Channel is frozen',
       LIST_DATE_SEPARATOR: (date, locale) => dateSeparator(date, locale ?? dateLocale),
-      LIST_TOOLTIP_NEW_MSG: (newMessages) => `${newMessages.length} new messages`,
+      LIST_BUTTON_NEW_MSG: (newMessages) => `${newMessages.length} new messages`,
 
       MESSAGE_BUBBLE_TIME: (message, locale) => messageTime(new Date(message.createdAt), locale ?? dateLocale),
       MESSAGE_BUBBLE_FILE_TITLE: (message) => message.name,
