@@ -51,7 +51,7 @@ export type SendbirdUIKitContainerProps<T extends StringSets> = {
     defaultLocale?: keyof T;
   };
   styles?: {
-    theme?: UIKitTheme<any>;
+    theme?: UIKitTheme;
     statusBarTranslucent?: boolean;
     defaultHeaderTitleAlign?: 'left' | 'center';
     HeaderComponent?: HeaderStyleContextType['HeaderComponent'];

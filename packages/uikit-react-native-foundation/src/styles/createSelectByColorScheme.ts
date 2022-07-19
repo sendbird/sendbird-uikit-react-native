@@ -6,7 +6,7 @@ import type { UIKitColorScheme, UIKitTheme } from '../types';
  * @param colorScheme
  * @returns Function
  * */
-const createSelectByColorScheme = <T extends string>(colorScheme: UIKitColorScheme<T>): UIKitTheme<T>['select'] => {
+const createSelectByColorScheme = (colorScheme: UIKitColorScheme): UIKitTheme['select'] => {
   return (options) => {
     const value = options[colorScheme ?? 'default'] ?? options['light'] ?? options['dark'] ?? options['default'];
     if (!value) throw Error('Not provided any selectable color scheme values');

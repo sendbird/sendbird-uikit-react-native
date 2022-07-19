@@ -19,10 +19,10 @@ export interface UIKitTypography {
 export type TypoName = keyof UIKitTypography;
 export type FontAttributes = Pick<TextStyle, 'fontFamily' | 'fontSize' | 'lineHeight' | 'letterSpacing' | 'fontWeight'>;
 
-export type UIKitColorScheme<T extends string = 'default'> = 'light' | 'dark' | 'default' | T;
-export interface UIKitTheme<T extends string = 'default'> {
-  colorScheme: UIKitColorScheme<T>;
-  select<V>(options: { [key in UIKitColorScheme<T>]?: V }): V;
+export type UIKitColorScheme = 'light' | 'dark';
+export interface UIKitTheme {
+  colorScheme: UIKitColorScheme;
+  select<V>(options: { [key in UIKitColorScheme | 'default']?: V }): V;
 
   palette: UIKitPalette;
   colors: UIKitColors;
