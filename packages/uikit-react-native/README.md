@@ -1,19 +1,26 @@
 # @sendbird/uikit-react-native
 
-react-native-uikit
+Sendbird UIKit for React-Native
 
 ## Installation
 
+### Install uikit
+
 ```sh
-npm install sendbird \
-            date-fns \
-            react-native-safe-area-context \
-            @sendbird/uikit-react-native
+npm install sendbird @sendbird/uikit-react-native
 ```
 
-## Installation for Helper functions.
+### Install dependencies
 
-### React-Native-Cli
+```sh
+npm install date-fns react-native-safe-area-context
+```
+
+### (Optional) Install native modules
+
+#### React-Native-CLI
+
+Install if you want to use `createNativeClipboardService`, `createNativeNotificationService` and `createNativeFileService`
 
 ```sh
 npm install react-native-permissions \
@@ -26,7 +33,9 @@ npm install react-native-permissions \
             date-fns
 ```
 
-### Expo
+#### Expo-CLI
+
+Install if you want to use `createExpoClipboardService`, `createExpoNotificationService` and `createExpoFileService`
 
 ```sh
 expo install expo-image-picker \
