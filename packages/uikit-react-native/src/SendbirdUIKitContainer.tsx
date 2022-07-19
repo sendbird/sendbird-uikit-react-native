@@ -31,8 +31,7 @@ export const SendbirdUIKit = Object.freeze({
   PLATFORM: Platform.OS.toLowerCase(),
 });
 
-export type StringSets = Record<string, StringSet>;
-export type SendbirdUIKitContainerProps<T extends StringSets> = {
+export type SendbirdUIKitContainerProps = {
   children?: React.ReactNode;
   appId: string;
   platformServices: {
@@ -47,8 +46,7 @@ export type SendbirdUIKitContainerProps<T extends StringSets> = {
     onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
   };
   localization?: {
-    stringSets?: T;
-    defaultLocale?: keyof T;
+    stringSet?: StringSet;
   };
   styles?: {
     theme?: UIKitTheme;
@@ -65,7 +63,7 @@ export type SendbirdUIKitContainerProps<T extends StringSets> = {
   };
 };
 
-const SendbirdUIKitContainer = <T extends StringSets>({
+const SendbirdUIKitContainer = ({
   children,
   appId,
   appVersion,
@@ -75,7 +73,7 @@ const SendbirdUIKitContainer = <T extends StringSets>({
   styles,
   toast,
   errorBoundary,
-}: SendbirdUIKitContainerProps<T>) => {
+}: SendbirdUIKitContainerProps) => {
   const getSendbirdSDK = () => {
     let sdk: SendbirdChatSDK;
 
@@ -118,10 +116,7 @@ const SendbirdUIKitContainer = <T extends StringSets>({
         sdkInstance={sdkInstance}
         enableAutoPushTokenRegistration={chatOptions?.enableAutoPushTokenRegistration ?? true}
       >
-        <LocalizationProvider
-          defaultLocale={(localization?.defaultLocale ?? 'en') as 'en'}
-          stringSets={(localization?.stringSets ?? { en: StringSetEn }) as { en: StringSet }}
-        >
+        <LocalizationProvider stringSet={localization?.stringSet ?? StringSetEn}>
           <PlatformServiceProvider
             fileService={platformServices.file}
             notificationService={platformServices.notification}

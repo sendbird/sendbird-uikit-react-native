@@ -3,11 +3,10 @@ import React, { useContext } from 'react';
 import { LocalizationContext, LocalizationContextType } from '../contexts/Localization';
 import { PlatformServiceContext } from '../contexts/PlatformService';
 import { SendbirdChatContext } from '../contexts/SendbirdChat';
-import type { StringsLocale } from '../localization/StringSet.type';
 
-export const useLocalization = <T extends string = StringsLocale['locale']>() => {
-  const value = useContext<LocalizationContextType<T> | null>(
-    LocalizationContext as React.Context<LocalizationContextType<T> | null>,
+export const useLocalization = () => {
+  const value = useContext<LocalizationContextType | null>(
+    LocalizationContext as React.Context<LocalizationContextType | null>,
   );
   if (!value) throw new Error('LocalizationContext is not provided');
   return value;

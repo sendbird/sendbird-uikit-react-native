@@ -15,10 +15,6 @@ import {
   messageTime,
 } from '@sendbird/uikit-utils';
 
-export interface StringsLocale {
-  locale: 'en';
-}
-
 /**
  * StringSet interface
  * Do not configure over 3 depths (for overrides easy)

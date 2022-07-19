@@ -31,7 +31,7 @@ export { useLocalization, usePlatformService, useSendbirdChat } from './hooks/us
 /** Localization **/
 export { default as StringSetEn } from './localization/StringSet.en';
 export { createBaseStringSet } from './localization/StringSet.type';
-export type { StringSet, StringsLocale } from './localization/StringSet.type';
+export type { StringSet } from './localization/StringSet.type';
 
 /** Platform API **/
 export { default as createNativeFileService } from './platform/createFileService.native';
@@ -92,7 +92,6 @@ export {
   default as SendbirdUIKitContainer,
   SendbirdUIKit,
   SendbirdUIKitContainerProps,
-  StringSets,
 } from './SendbirdUIKitContainer';
 
 export * from './types';
