@@ -57,7 +57,7 @@ export const GroupChannelSettingsContextsProvider: React.FC<GroupChannelSettings
 
   const toast = useToast();
   const { openSheet } = useBottomSheet();
-  const { prompt } = usePrompt();
+  const { openPrompt } = usePrompt();
   const { openMenu } = useActionMenu();
 
   const updateChannel = useCallback(
@@ -70,7 +70,7 @@ export const GroupChannelSettingsContextsProvider: React.FC<GroupChannelSettings
   );
 
   const changeChannelName = useCallback(() => {
-    prompt({
+    openPrompt({
       title: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME_PROMPT_TITLE,
       submitLabel: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME_PROMPT_OK,
       placeholder: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME_PROMPT_PLACEHOLDER,

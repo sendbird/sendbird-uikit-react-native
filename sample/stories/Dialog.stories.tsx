@@ -151,14 +151,14 @@ const WrappedAlert: React.FC = () => {
 };
 
 const WrappedPrompt: React.FC = () => {
-  const { prompt } = usePrompt();
+  const { openPrompt } = usePrompt();
   const { alert } = useAlert();
   return (
     <>
       <Button
         title={'Open Prompt'}
         onPress={() => {
-          prompt({
+          openPrompt({
             title: 'Input your text',
             submitLabel: 'Save',
             onSubmit: (text) => {
