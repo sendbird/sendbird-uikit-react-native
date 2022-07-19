@@ -8,9 +8,6 @@
       "path": "../packages/uikit-react-native"
     },
     {
-      "path": "../packages/uikit-react-native-core"
-    },
-    {
       "path": "../packages/uikit-react-native-foundation"
     },
     {
