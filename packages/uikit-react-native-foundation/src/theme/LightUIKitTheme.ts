@@ -1,9 +1,7 @@
-import Palette from './Palette';
 import createTheme from './createTheme';
 
 const LightUIKitTheme = createTheme({
   colorScheme: 'light',
-  palette: Palette,
   colors: (palette) => ({
     primary: palette.primary300,
     secondary: palette.secondary300,
