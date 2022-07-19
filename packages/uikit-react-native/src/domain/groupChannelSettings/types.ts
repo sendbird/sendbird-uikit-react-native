@@ -7,7 +7,7 @@ import type { CommonComponent } from '../../types';
 
 export interface GroupChannelSettingsProps {
   Fragment: {
-    staleChannel: GroupChannelSettingsProps['Provider']['staleChannel'];
+    channel: GroupChannelSettingsProps['Provider']['channel'];
     onPressHeaderLeft: GroupChannelSettingsProps['Header']['onPressHeaderLeft'];
     onPressMenuMembers: GroupChannelSettingsProps['Menu']['onPressMenuMembers'];
     onPressMenuLeaveChannel: GroupChannelSettingsProps['Menu']['onPressMenuLeaveChannel'];
@@ -23,7 +23,7 @@ export interface GroupChannelSettingsProps {
     menuItemsCreator?: (defaultMenuItems: MenuBarProps[]) => MenuBarProps[];
   };
   Provider: {
-    staleChannel: SendbirdGroupChannel;
+    channel: SendbirdGroupChannel;
   };
 }
 

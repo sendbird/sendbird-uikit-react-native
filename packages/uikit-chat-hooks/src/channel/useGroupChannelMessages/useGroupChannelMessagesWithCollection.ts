@@ -30,7 +30,7 @@ const createMessageCollection = (
 const HOOK_NAME = 'useGroupChannelMessagesWithCollection';
 
 // FIXME: MessageCollection event handler bug, initialize(run async addObserver) -> dispose -> removeObserver -> addObserver called
-export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (sdk, staleChannel, userId, options) => {
+export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (sdk, channel, userId, options) => {
   const isMounted = useIsMountedRef();
   const disposeManuallyAfterUnmounted = () => {
     if (!isMounted.current && collectionRef.current) collectionRef.current.dispose();
@@ -41,7 +41,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
   const collectionRef = useRef<SendbirdMessageCollection>();
 
   // NOTE: We cannot determine the channel object of Sendbird SDK is stale or not, so force update af
-  const { activeChannel, setActiveChannel } = useActiveGroupChannel(sdk, staleChannel);
+  const { activeChannel, setActiveChannel } = useActiveGroupChannel(sdk, channel);
   const forceUpdate = useForceUpdate();
 
   const {

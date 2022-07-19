@@ -28,7 +28,7 @@ export const GroupChannelSettingsContexts: GroupChannelSettingsContextsType = {
 const HOOK_NAME = 'GroupChannelSettingsContextsProvider';
 export const GroupChannelSettingsContextsProvider: React.FC<GroupChannelSettingsProps['Provider']> = ({
   children,
-  staleChannel,
+  channel,
 }) => {
   const uniqId = useUniqId(HOOK_NAME);
   const forceUpdate = useForceUpdate();
@@ -36,7 +36,7 @@ export const GroupChannelSettingsContextsProvider: React.FC<GroupChannelSettings
   const { sdk } = useSendbirdChat();
   const { fileService } = usePlatformService();
 
-  const { activeChannel, setActiveChannel } = useActiveGroupChannel(sdk, staleChannel);
+  const { activeChannel, setActiveChannel } = useActiveGroupChannel(sdk, channel);
 
   const onChannelChanged = (channel: SendbirdGroupChannel | SendbirdOpenChannel) => {
     if (isDifferentChannel(channel, activeChannel) || !channel.isGroupChannel()) return;

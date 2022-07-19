@@ -27,7 +27,7 @@ export type GroupChannelCreateFragment<User> = React.FC<GroupChannelCreateProps<
 
 export interface GroupChannelInviteProps<User> {
   Fragment: {
-    staleChannel: SendbirdGroupChannel;
+    channel: SendbirdGroupChannel;
     onPressHeaderLeft: () => void;
     onInviteMembers: (channel: SendbirdGroupChannel) => void;
     userIdsGenerator?: (users: User[]) => UserIds;
@@ -40,7 +40,7 @@ export type GroupChannelInviteFragment<User> = React.FC<GroupChannelInviteProps<
 
 export interface GroupChannelMembersProps<User> {
   Fragment: {
-    staleChannel: SendbirdGroupChannel;
+    channel: SendbirdGroupChannel;
     onPressHeaderLeft: () => void;
     onPressHeaderRight: () => void;
     sortComparator?: UseUserListOptions<User>['sortComparator'];

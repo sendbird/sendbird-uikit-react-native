@@ -17,7 +17,7 @@ import type { CommonComponent } from '../../types';
 
 export interface GroupChannelProps {
   Fragment: {
-    staleChannel: SendbirdGroupChannel;
+    channel: SendbirdGroupChannel;
     onChannelDeleted: () => void;
     onPressHeaderLeft: GroupChannelProps['Header']['onPressHeaderLeft'];
     onPressHeaderRight: GroupChannelProps['Header']['onPressHeaderRight'];

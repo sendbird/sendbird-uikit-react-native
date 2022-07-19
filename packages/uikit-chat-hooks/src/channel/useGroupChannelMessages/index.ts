@@ -2,10 +2,10 @@ import type { UseGroupChannelMessages } from '../../types';
 import { useGroupChannelMessagesWithCollection } from './useGroupChannelMessagesWithCollection';
 import { useGroupChannelMessagesWithQuery } from './useGroupChannelMessagesWithQuery';
 
-export const useGroupChannelMessages: UseGroupChannelMessages = (sdk, staleChannel, userId, options) => {
+export const useGroupChannelMessages: UseGroupChannelMessages = (sdk, channel, userId, options) => {
   if (sdk.isCacheEnabled || options?.enableCollectionWithoutLocalCache) {
-    return useGroupChannelMessagesWithCollection(sdk, staleChannel, userId, options);
+    return useGroupChannelMessagesWithCollection(sdk, channel, userId, options);
   } else {
-    return useGroupChannelMessagesWithQuery(sdk, staleChannel, userId, options);
+    return useGroupChannelMessagesWithQuery(sdk, channel, userId, options);
   }
 };

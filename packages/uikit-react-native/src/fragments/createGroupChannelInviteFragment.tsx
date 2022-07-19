@@ -34,7 +34,7 @@ const createGroupChannelInviteFragment = <UserType,>(
   const UserListModule = createUserListModule<UserType>(initModule);
 
   return ({
-    staleChannel,
+    channel,
     onPressHeaderLeft,
     onInviteMembers,
     userIdsGenerator = defaultUserIdsGenerator,
@@ -49,7 +49,7 @@ const createGroupChannelInviteFragment = <UserType,>(
       sortComparator,
     });
 
-    const { activeChannel } = useActiveGroupChannel(sdk, staleChannel);
+    const { activeChannel } = useActiveGroupChannel(sdk, channel);
 
     const _renderUser: NonNullable<typeof renderUser> = useCallback(
       (user, selectedUsers, setSelectedUsers) => {

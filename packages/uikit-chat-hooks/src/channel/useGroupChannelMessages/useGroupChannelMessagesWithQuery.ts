@@ -22,13 +22,13 @@ const createMessageQuery = (
 };
 
 const HOOK_NAME = 'useGroupChannelMessagesWithQuery';
-export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, staleChannel, userId, options) => {
+export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, channel, userId, options) => {
   const { deliveryReceiptEnabled } = useAppFeatures(sdk);
 
   const queryRef = useRef<Sendbird.PreviousMessageListQuery>();
 
   // NOTE: We cannot determine the channel object of Sendbird SDK is stale or not, so force update after setActiveChannel
-  const { activeChannel, setActiveChannel } = useActiveGroupChannel(sdk, staleChannel);
+  const { activeChannel, setActiveChannel } = useActiveGroupChannel(sdk, channel);
   const forceUpdate = useForceUpdate();
 
   const {

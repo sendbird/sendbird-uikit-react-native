@@ -1,7 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useState } from 'react';
 
-import { createGroupChannelFragment } from '@sendbird/uikit-react-native';
-import { useSendbirdChat } from '@sendbird/uikit-react-native';
+import { createGroupChannelFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
 import { Logger } from '@sendbird/uikit-utils';
 
 import { useAppNavigation } from '../../hooks/useAppNavigation';
@@ -71,14 +70,11 @@ const GroupChannelFragment = createGroupChannelFragment();
 const GroupChannelScreen: React.FC = () => {
   const { navigation, params } = useAppNavigation<Routes.GroupChannel>();
   const { sdk } = useSendbirdChat();
-  const staleChannel = useMemo(
-    () => sdk.GroupChannel.buildFromSerializedData(params.serializedChannel),
-    [params.serializedChannel],
-  );
+  const [channel] = useState(() => sdk.GroupChannel.buildFromSerializedData(params.serializedChannel));
 
   return (
     <GroupChannelFragment
-      staleChannel={staleChannel}
+      channel={channel}
       onPressImageMessage={(msg, uri) => {
         // Navigate to photo preview
         Logger.log('file uri', msg.name, uri);

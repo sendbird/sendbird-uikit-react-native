@@ -15,7 +15,7 @@ const createGroupChannelSettingsFragment = (
 
   return ({
     onPressHeaderLeft = NOOP,
-    staleChannel,
+    channel,
     onPressMenuMembers,
     onPressMenuLeaveChannel,
     menuItemsCreator,
@@ -25,7 +25,7 @@ const createGroupChannelSettingsFragment = (
     const { left, right } = useSafeAreaInsets();
 
     return (
-      <GroupChannelSettingsModule.Provider staleChannel={staleChannel}>
+      <GroupChannelSettingsModule.Provider channel={channel}>
         <GroupChannelSettingsModule.Header onPressHeaderLeft={onPressHeaderLeft} />
         <ScrollView
           style={{ backgroundColor: colors.background }}

@@ -26,7 +26,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     onChannelDeleted = NOOP,
     onBeforeSendFileMessage = PASS,
     onBeforeSendUserMessage = PASS,
-    staleChannel,
+    channel,
     keyboardAvoidOffset,
     queryCreator,
     collectionCreator,
@@ -49,7 +49,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       resendMessage,
       deleteMessage,
       loading,
-    } = useGroupChannelMessages(sdk, staleChannel, currentUser?.userId, {
+    } = useGroupChannelMessages(sdk, channel, currentUser?.userId, {
       collectionCreator,
       queryCreator,
       sortComparator,

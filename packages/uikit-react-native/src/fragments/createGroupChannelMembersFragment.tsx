@@ -18,11 +18,11 @@ const createGroupChannelMembersFragment = (
 ): GroupChannelMembersFragment<SendbirdMember> => {
   const UserListModule = createUserListModule<SendbirdMember>(initModule);
 
-  return ({ staleChannel, onPressHeaderLeft, onPressHeaderRight, renderUser }) => {
+  return ({ channel, onPressHeaderLeft, onPressHeaderRight, renderUser }) => {
     const uniqId = useUniqId(name);
     const forceUpdate = useForceUpdate();
     const { sdk, currentUser } = useSendbirdChat();
-    const { activeChannel } = useActiveGroupChannel(sdk, staleChannel);
+    const { activeChannel } = useActiveGroupChannel(sdk, channel);
 
     const { STRINGS } = useLocalization();
 
@@ -52,7 +52,7 @@ const createGroupChannelMembersFragment = (
           if (channel.url === activeChannel.url) forceUpdate();
         },
         onChannelMemberCountChanged(channels) {
-          if (channels.find((c) => c.url === staleChannel.url)) forceUpdate();
+          if (channels.find((c) => c.url === channel.url)) forceUpdate();
         },
         onChannelChanged(channel) {
           if (channel.url === activeChannel.url) forceUpdate();

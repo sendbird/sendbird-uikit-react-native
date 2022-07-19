@@ -14,7 +14,7 @@ const GroupChannelSettingsScreen: React.FC = () => {
 
   return (
     <GroupChannelSettingsFragment
-      staleChannel={channel}
+      channel={channel}
       onPressHeaderLeft={() => {
         // Navigate back
         navigation.goBack();
