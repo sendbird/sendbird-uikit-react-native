@@ -20,7 +20,7 @@
     "postinstall": "patch-package",
     "prepare": "lerna run --stream --sort prepare",
     "reset": "find . -type dir -name node_modules | xargs rm -rf",
-    "clean": "lerna run clean && rm -rf docs",
+    "clean": "rm -rf docs && lerna run clean",
     "build": "lerna run build",
     "docs": "yarn build && typedoc --out docs --entryPointStrategy packages 'packages/*' && yarn clean",
     "test": "jest --verbose",
