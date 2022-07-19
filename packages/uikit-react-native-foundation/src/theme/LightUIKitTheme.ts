@@ -165,7 +165,7 @@ const LightUIKitTheme = createTheme({
             background: palette.background50,
             coverBackground: palette.onBackgroundLight04,
             bodyIconBackground: palette.background100,
-            separator: palette.onBackgroundLight03,
+            separator: palette.onBackgroundLight04,
           },
         },
       },
