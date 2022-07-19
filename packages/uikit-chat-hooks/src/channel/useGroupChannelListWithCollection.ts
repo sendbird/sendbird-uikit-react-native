@@ -80,24 +80,6 @@ export const useGroupChannelListWithCollection: UseGroupChannelList = (sdk, user
     },
     [sdk, options?.collectionCreator],
   );
-
-  useChannelHandler(
-    sdk,
-    HOOK_NAME,
-    {
-      onUserLeft(channel, user) {
-        const isMe = user.userId === userId;
-        if (isMe) deleteChannels([channel.url]);
-        else updateChannels([channel], false);
-      },
-      onUserBanned(channel, user) {
-        const isMe = user.userId === userId;
-        if (isMe) deleteChannels([channel.url]);
-        else updateChannels([channel], false);
-      },
-    },
-    [sdk, userId],
-  );
   // ---------- internal methods ends ---------- //
 
   // ---------- internal hooks ---------- //
@@ -106,6 +88,7 @@ export const useGroupChannelListWithCollection: UseGroupChannelList = (sdk, user
       if (collectionRef.current) collectionRef.current?.dispose();
     };
   }, []);
+
   useAsyncEffect(async () => {
     setLoading(true);
     await init(userId);
@@ -116,17 +99,6 @@ export const useGroupChannelListWithCollection: UseGroupChannelList = (sdk, user
     sdk,
     `${HOOK_NAME}_${id}`,
     {
-      onChannelChanged: (channel) => updateChannels([channel], false),
-      onChannelFrozen: (channel) => updateChannels([channel], false),
-      onChannelUnfrozen: (channel) => updateChannels([channel], false),
-      onChannelMemberCountChanged: (channels) => updateChannels(channels, false),
-      onChannelDeleted: (url) => deleteChannels([url]),
-      onUserJoined: (channel) => updateChannels([channel], false),
-      onUserLeft: (channel, user) => {
-        const isMe = user.userId === userId;
-        if (isMe) deleteChannels([channel.url]);
-        else updateChannels([channel], false);
-      },
       onUserBanned: (channel, user) => {
         const isMe = user.userId === userId;
         if (isMe) deleteChannels([channel.url]);
