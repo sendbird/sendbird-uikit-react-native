@@ -2,7 +2,7 @@ import Palette from './Palette';
 import createTheme from './createTheme';
 
 const DarkUIKitTheme = createTheme({
-  appearance: 'dark',
+  colorScheme: 'dark',
   palette: Palette,
   colors: (palette) => ({
     primary: palette.primary200,

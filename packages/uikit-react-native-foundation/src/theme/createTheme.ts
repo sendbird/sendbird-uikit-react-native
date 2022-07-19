@@ -1,27 +1,27 @@
-import createAppearanceHelper from '../styles/createAppearanceHelper';
+import createSelectByColorScheme from '../styles/createSelectByColorScheme';
 import createTypography, { UIKitTypographyOverrides } from '../styles/createTypography';
 import type { UIKitColors, UIKitTheme } from '../types';
 import Palette from './Palette';
 
-type Options<Appearance extends string> = {
-  appearance: UIKitTheme<Appearance>['appearance'];
-  colors: (palette: UIKitTheme<Appearance>['palette']) => UIKitColors;
-  palette?: UIKitTheme<Appearance>['palette'];
+type Options<T extends string> = {
+  colorScheme: UIKitTheme<T>['colorScheme'];
+  colors: (palette: UIKitTheme<T>['palette']) => UIKitColors;
+  palette?: UIKitTheme<T>['palette'];
   typography?: UIKitTypographyOverrides;
 };
 
-const createTheme = <Appearance extends string>({
-  appearance,
+const createTheme = <T extends string>({
+  colorScheme,
   palette = Palette,
   colors: createColors,
   typography = { shared: { fontFamily: 'System' } },
-}: Options<Appearance>): UIKitTheme<Appearance> => {
+}: Options<T>): UIKitTheme<T> => {
   let _palette = palette;
   let _colors = createColors(_palette);
 
   return {
-    appearance,
-    select: createAppearanceHelper(appearance),
+    colorScheme,
+    select: createSelectByColorScheme(colorScheme),
     get palette() {
       return _palette;
     },

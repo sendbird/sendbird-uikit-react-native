@@ -28,7 +28,7 @@ export { default as Toast, useToast, ToastProvider } from './ui/Toast';
 export { default as URLParsedText } from './ui/URLParsedText';
 
 /** Styles **/
-export { default as createAppearanceHelper } from './styles/createAppearanceHelper';
+export { default as createSelectByColorScheme } from './styles/createSelectByColorScheme';
 export { default as createScaleFactor } from './styles/createScaleFactor';
 export { default as createStyleSheet } from './styles/createStyleSheet';
 export { default as createTypography, UIKitTypographyOverrides } from './styles/createTypography';
@@ -52,7 +52,7 @@ export type {
   UIKitTypography,
   FontAttributes,
   BaseHeaderProps,
-  UIKitAppearance,
+  UIKitColorScheme,
   UIKitColors,
   ComponentColorTree,
   UIKitPalette,

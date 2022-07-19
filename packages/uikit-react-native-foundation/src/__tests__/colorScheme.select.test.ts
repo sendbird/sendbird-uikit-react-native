@@ -1,8 +1,8 @@
-import createAppearanceHelper from '../styles/createAppearanceHelper';
+import createSelectByColorScheme from '../styles/createSelectByColorScheme';
 
 describe('styles', function () {
-  test('createAppearanceHelper', function () {
-    const select = createAppearanceHelper('light');
+  test('createSelectByColorScheme', function () {
+    const select = createSelectByColorScheme('light');
     expect(typeof select).toBe('function');
 
     const selected1 = select({ light: 'light-value', dark: 'dark-value', default: 'default-value' });

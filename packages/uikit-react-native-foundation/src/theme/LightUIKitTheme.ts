@@ -2,7 +2,7 @@ import Palette from './Palette';
 import createTheme from './createTheme';
 
 const LightUIKitTheme = createTheme({
-  appearance: 'light',
+  colorScheme: 'light',
   palette: Palette,
   colors: (palette) => ({
     primary: palette.primary300,
