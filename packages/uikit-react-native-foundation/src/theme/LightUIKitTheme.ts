@@ -154,6 +154,21 @@ const LightUIKitTheme = createTheme({
           },
         },
       },
+      groupChannelPreview: {
+        default: {
+          none: {
+            textTitle: palette.onBackgroundLight01,
+            textTitleCaption: palette.onBackgroundLight03,
+            textBody: palette.onBackgroundLight03,
+            bodyIcon: palette.onBackgroundLight02,
+            memberCount: palette.onBackgroundLight02,
+            background: palette.background50,
+            coverBackground: palette.onBackgroundLight04,
+            bodyIconBackground: palette.background100,
+            separator: palette.onBackgroundLight03,
+          },
+        },
+      },
     },
   }),
 });

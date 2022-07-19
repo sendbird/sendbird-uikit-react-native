@@ -154,6 +154,21 @@ const DarkUIKitTheme = createTheme({
           },
         },
       },
+      groupChannelPreview: {
+        default: {
+          none: {
+            textTitle: palette.onBackgroundDark01,
+            textTitleCaption: palette.onBackgroundDark03,
+            textBody: palette.onBackgroundDark03,
+            bodyIcon: palette.onBackgroundDark02,
+            memberCount: palette.onBackgroundDark02,
+            background: palette.background600,
+            coverBackground: palette.onBackgroundDark04,
+            bodyIconBackground: palette.background500,
+            separator: palette.onBackgroundDark04,
+          },
+        },
+      },
     },
   }),
 });

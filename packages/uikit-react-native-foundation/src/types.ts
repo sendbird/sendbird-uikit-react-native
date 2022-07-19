@@ -38,7 +38,8 @@ export type Component =
   | 'Badge'
   | 'Placeholder'
   | 'Message'
-  | 'DateSeparator';
+  | 'DateSeparator'
+  | 'GroupChannelPreview';
 export type GetColorTree<
   Tree extends {
     Variant: {
@@ -63,6 +64,7 @@ export type ComponentColorTree = GetColorTree<{
     Placeholder: 'default';
     Message: 'incoming' | 'outgoing';
     DateSeparator: 'default';
+    GroupChannelPreview: 'default';
   };
   State: {
     Header: 'none';
@@ -73,6 +75,7 @@ export type ComponentColorTree = GetColorTree<{
     Placeholder: 'none';
     Message: 'enabled' | 'pressed';
     DateSeparator: 'none';
+    GroupChannelPreview: 'none';
   };
   ColorPart: {
     Header: 'background' | 'borderBottom';
@@ -83,6 +86,16 @@ export type ComponentColorTree = GetColorTree<{
     Placeholder: 'content' | 'highlight';
     Message: 'textMsg' | 'textEdited' | 'textSenderName' | 'textTime' | 'background';
     DateSeparator: 'text' | 'background';
+    GroupChannelPreview:
+      | 'textTitle'
+      | 'textTitleCaption'
+      | 'textBody'
+      | 'memberCount'
+      | 'bodyIcon'
+      | 'background'
+      | 'coverBackground'
+      | 'bodyIconBackground'
+      | 'separator';
   };
 }>;
 export type ComponentColors<T extends Component> = {
@@ -125,6 +138,7 @@ export interface UIKitColors {
     placeholder: ComponentColors<'Placeholder'>;
     message: ComponentColors<'Message'>;
     dateSeparator: ComponentColors<'DateSeparator'>;
+    groupChannelPreview: ComponentColors<'GroupChannelPreview'>;
   };
 }
 

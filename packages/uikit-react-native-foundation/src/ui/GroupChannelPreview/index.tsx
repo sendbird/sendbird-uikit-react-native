@@ -27,7 +27,6 @@ type Props = {
   notificationOff?: boolean;
 };
 
-//TODO: Extract colors to theme color-set
 const GroupChannelPreview: React.FC<Props> = ({
   customCover,
   coverUrl,
@@ -41,10 +40,11 @@ const GroupChannelPreview: React.FC<Props> = ({
   frozen,
   notificationOff,
 }) => {
-  const { colors, select, palette } = useUIKitTheme();
+  const { colors } = useUIKitTheme();
+  const color = colors.ui.groupChannelPreview;
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={[styles.container, { backgroundColor: color.default.none.background }]}>
       <View style={styles.coverContainer}>
         {conditionChaining(
           [Boolean(customCover)],
@@ -52,7 +52,7 @@ const GroupChannelPreview: React.FC<Props> = ({
             customCover,
             <Image
               resizeMode={'cover'}
-              style={[styles.channelCover, { backgroundColor: colors.onBackground04 }]}
+              style={[styles.channelCover, { backgroundColor: color.default.none.coverBackground }]}
               source={{ uri: coverUrl }}
             />,
           ],
@@ -61,11 +61,11 @@ const GroupChannelPreview: React.FC<Props> = ({
       <View style={styles.rightSection}>
         <View style={styles.rightTopSection}>
           <View style={styles.channelInfo}>
-            <Text numberOfLines={1} subtitle1 style={styles.channelInfoTitle}>
+            <Text numberOfLines={1} subtitle1 style={styles.channelInfoTitle} color={color.default.none.textTitle}>
               {title}
             </Text>
             {Boolean(memberCount) && (
-              <Text caption1 style={styles.channelInfoMemberCount} color={colors.onBackground02}>
+              <Text caption1 style={styles.channelInfoMemberCount} color={color.default.none.memberCount}>
                 {memberCount}
               </Text>
             )}
@@ -75,7 +75,7 @@ const GroupChannelPreview: React.FC<Props> = ({
             {notificationOff && <Icon size={16} icon={'notifications-off-filled'} color={colors.onBackground03} />}
           </View>
           <View style={styles.titleCaption}>
-            <Text caption2 color={colors.onBackground03}>
+            <Text caption2 color={color.default.none.textTitleCaption}>
               {titleCaption}
             </Text>
           </View>
@@ -87,29 +87,27 @@ const GroupChannelPreview: React.FC<Props> = ({
               <Icon
                 size={18}
                 icon={bodyIcon}
-                color={colors.onBackground02}
+                color={color.default.none.bodyIcon}
                 containerStyle={[
                   styles.bodyIcon,
-                  { backgroundColor: select({ light: palette.background100, dark: palette.background500 }) },
+                  { backgroundColor: colors.ui.groupChannelPreview.default.none.bodyIconBackground },
                 ]}
               />
             )}
-            <Text body3 numberOfLines={1} style={styles.bodyText} color={colors.onBackground03}>
+            <Text body3 numberOfLines={1} style={styles.bodyText} color={color.default.none.textBody}>
               {body}
             </Text>
           </View>
           <View>{badgeCount > 0 && <Badge count={badgeCount} maxCount={maxBadgeCount} />}</View>
         </View>
       </View>
-      <Separator />
+      <Separator color={color.default.none.separator} />
     </View>
   );
 };
 
-const Separator = () => {
-  const { colors } = useUIKitTheme();
-  return <View style={[styles.separator, { backgroundColor: colors.onBackground04 }]} />;
-};
+type SeparatorProps = { color: string };
+const Separator = ({ color }: SeparatorProps) => <View style={[styles.separator, { backgroundColor: color }]} />;
 
 const styles = createStyleSheet({
   container: {
