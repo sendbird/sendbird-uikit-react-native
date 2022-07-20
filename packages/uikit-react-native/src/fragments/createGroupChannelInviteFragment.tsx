@@ -1,18 +1,15 @@
 import React, { useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
-import type Sendbird from 'sendbird';
 
 import { useActiveGroupChannel, useUserList } from '@sendbird/uikit-chat-hooks';
-import type { GroupChannelInviteFragment, UserListModule } from '@sendbird/uikit-react-native-core';
-import {
-  StatusComposition,
-  createUserListModule,
-  useLocalization,
-  useSendbirdChat,
-} from '@sendbird/uikit-react-native-core';
-import { Logger } from '@sendbird/uikit-utils';
+import { Logger, SendbirdUser } from '@sendbird/uikit-utils';
 
-import UserSelectableBar from '../ui/UserSelectableBar';
+import StatusComposition from '../components/StatusComposition';
+import UserSelectableBar from '../components/UserSelectableBar';
+import type { GroupChannelInviteFragment } from '../domain/groupChannelUserList/types';
+import createUserListModule from '../domain/userList/module/createUserListModule';
+import type { UserListModule } from '../domain/userList/types';
+import { useLocalization, useSendbirdChat } from '../hooks/useContext';
 
 const defaultUserIdsGenerator = <T,>(users: T[]) => {
   const userIds = users
@@ -37,7 +34,6 @@ const createGroupChannelInviteFragment = <UserType,>(
   const UserListModule = createUserListModule<UserType>(initModule);
 
   return ({
-    Header,
     channel,
     onPressHeaderLeft,
     onInviteMembers,
@@ -62,9 +58,9 @@ const createGroupChannelInviteFragment = <UserType,>(
         }
         if (renderUser) return renderUser(user, selectedUsers, setSelectedUsers);
 
-        const sbUser = user as unknown as Sendbird.User;
-        const sbSelectedUsers = selectedUsers as unknown as Sendbird.User[];
-        const sbSetSelectedUsers = setSelectedUsers as unknown as React.Dispatch<React.SetStateAction<Sendbird.User[]>>;
+        const sbUser = user as unknown as SendbirdUser;
+        const sbSelectedUsers = selectedUsers as unknown as SendbirdUser[];
+        const sbSetSelectedUsers = setSelectedUsers as unknown as React.Dispatch<React.SetStateAction<SendbirdUser[]>>;
 
         const joinedUserIds = activeChannel.members.map((u) => u.userId);
         const userIdx = sbSelectedUsers.findIndex((u) => u.userId === sbUser.userId);
@@ -101,7 +97,6 @@ const createGroupChannelInviteFragment = <UserType,>(
         headerTitle={STRINGS.GROUP_CHANNEL_INVITE.HEADER_TITLE}
       >
         <UserListModule.Header
-          Header={Header}
           onPressHeaderLeft={onPressHeaderLeft}
           onPressHeaderRight={async (users) => {
             const userIds = userIdsGenerator(users);

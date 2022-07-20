@@ -1,8 +1,7 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
 import React from 'react';
 
-import { Text as TextComponent } from '@sendbird/uikit-react-native-foundation';
-import { URLParsedText } from '@sendbird/uikit-react-native-foundation';
+import { Text as TextComponent, URLParsedText } from '@sendbird/uikit-react-native-foundation';
 
 const TextMeta: ComponentMeta<typeof TextComponent> = {
   title: 'Text',

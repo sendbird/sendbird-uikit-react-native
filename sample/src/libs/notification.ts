@@ -6,7 +6,10 @@ import { Platform } from 'react-native';
 
 import { NOOP, isSendbirdNotification, parseSendbirdNotification } from '@sendbird/uikit-utils';
 
-import { Routes, runAfterAppReady } from './navigation';
+import { Routes, navigationRef, runAfterAppReady } from './navigation';
+
+const channelId = 'default';
+Notifee.createChannel({ id: channelId, name: 'Default Channel', importance: 4 });
 
 export const onNotificationAndroid: (event: Event) => Promise<void> = async ({ type, detail }) => {
   if (Platform.OS !== 'android') return;
@@ -14,6 +17,10 @@ export const onNotificationAndroid: (event: Event) => Promise<void> = async ({ t
   if (type === EventType.PRESS && detail.notification && isSendbirdNotification(detail.notification.data)) {
     const sendbird = parseSendbirdNotification(detail.notification.data);
     runAfterAppReady(async (sdk, actions) => {
+      if (Routes.Home === navigationRef.getCurrentRoute()?.name) {
+        actions.push(Routes.GroupChannelTabs, undefined);
+      }
+
       const channel = await sdk.GroupChannel.getChannel(sendbird.channel.channel_url);
       actions.navigate(Routes.GroupChannel, { serializedChannel: channel.serialize() });
     });
@@ -29,6 +36,10 @@ export const onForegroundIOS = () => {
     if (data.userInteraction === 1 && isSendbirdNotification(data)) {
       const sendbird = parseSendbirdNotification(data);
       runAfterAppReady(async (sdk, actions) => {
+        if (Routes.Home === navigationRef.getCurrentRoute()?.name) {
+          actions.push(Routes.GroupChannelTabs, undefined);
+        }
+
         const channel = await sdk.GroupChannel.getChannel(sendbird.channel.channel_url);
         actions.navigate(Routes.GroupChannel, { serializedChannel: channel.serialize() });
       });
@@ -49,7 +60,6 @@ Notifee.onBackgroundEvent(onNotificationAndroid);
 messaging().setBackgroundMessageHandler(async (message: FirebaseMessagingTypes.RemoteMessage) => {
   if (Platform.OS !== 'android') return;
 
-  const channelId = await Notifee.createChannel({ id: 'default', name: 'Default Channel', importance: 4 });
   if (isSendbirdNotification(message.data)) {
     const sendbird = parseSendbirdNotification(message.data);
     await Notifee.displayNotification({

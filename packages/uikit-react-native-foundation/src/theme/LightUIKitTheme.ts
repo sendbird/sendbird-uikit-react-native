@@ -1,14 +1,13 @@
-import { themeFactory } from '../styles/themeFactory';
-import Palette from './Palette';
+import createTheme from './createTheme';
 
-const LightUIKitTheme = themeFactory({
-  appearance: 'light',
-  palette: Palette,
+const LightUIKitTheme = createTheme({
+  colorScheme: 'light',
   colors: (palette) => ({
     primary: palette.primary300,
+    secondary: palette.secondary300,
+    error: palette.error300,
     background: palette.background50,
     text: palette.onBackgroundLight01,
-    notification: palette.error300,
     onBackground01: palette.onBackgroundLight01,
     onBackground02: palette.onBackgroundLight02,
     onBackground03: palette.onBackgroundLight03,
@@ -17,8 +16,6 @@ const LightUIKitTheme = themeFactory({
     onBackgroundReverse02: palette.onBackgroundDark02,
     onBackgroundReverse03: palette.onBackgroundDark03,
     onBackgroundReverse04: palette.onBackgroundDark04,
-    secondary: palette.secondary300,
-    error: palette.error300,
     ui: {
       header: {
         nav: {
@@ -154,6 +151,21 @@ const LightUIKitTheme = themeFactory({
           none: {
             text: palette.onBackgroundDark01,
             background: palette.overlay02,
+          },
+        },
+      },
+      groupChannelPreview: {
+        default: {
+          none: {
+            textTitle: palette.onBackgroundLight01,
+            textTitleCaption: palette.onBackgroundLight03,
+            textBody: palette.onBackgroundLight03,
+            bodyIcon: palette.onBackgroundLight02,
+            memberCount: palette.onBackgroundLight02,
+            background: palette.background50,
+            coverBackground: palette.onBackgroundLight04,
+            bodyIconBackground: palette.background100,
+            separator: palette.onBackgroundLight04,
           },
         },
       },

@@ -1,18 +1,15 @@
 import React, { useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
-import type Sendbird from 'sendbird';
 
 import { useUserList } from '@sendbird/uikit-chat-hooks';
-import type { GroupChannelCreateFragment, UserListModule } from '@sendbird/uikit-react-native-core';
-import {
-  StatusComposition,
-  createUserListModule,
-  useLocalization,
-  useSendbirdChat,
-} from '@sendbird/uikit-react-native-core';
-import { Logger, PASS } from '@sendbird/uikit-utils';
+import { Logger, PASS, SendbirdUser } from '@sendbird/uikit-utils';
 
-import UserSelectableBar from '../ui/UserSelectableBar';
+import StatusComposition from '../components/StatusComposition';
+import UserSelectableBar from '../components/UserSelectableBar';
+import type { GroupChannelCreateFragment } from '../domain/groupChannelUserList/types';
+import createUserListModule from '../domain/userList/module/createUserListModule';
+import type { UserListModule } from '../domain/userList/types';
+import { useLocalization, useSendbirdChat } from '../hooks/useContext';
 
 const defaultUserIdsGenerator = <T,>(users: T[]) => {
   const userIds = users
@@ -24,7 +21,7 @@ const defaultUserIdsGenerator = <T,>(users: T[]) => {
 
   if (userIds.length === 0) {
     Logger.warn(
-      'GroupChannelCreateFragment: Couldn\'t find user ids! if you provided "queryCreator", please provide "userIdsGenerator" as well',
+      'GroupChannelCreateFragment: Couldn\'t find user ids! if you provide "queryCreator", please provide "userIdsGenerator" as well',
     );
   }
 
@@ -37,7 +34,6 @@ const createGroupChannelCreateFragment = <UserType,>(
   const UserListModule = createUserListModule<UserType>(initModule);
 
   return ({
-    Header,
     userIdsGenerator = defaultUserIdsGenerator,
     onPressHeaderLeft,
     onBeforeCreateChannel = PASS,
@@ -61,9 +57,9 @@ const createGroupChannelCreateFragment = <UserType,>(
         }
         if (renderUser) return renderUser(user, selectedUsers, setSelectedUsers);
 
-        const sbUser = user as unknown as Sendbird.User;
-        const sbSelectedUsers = selectedUsers as unknown as Sendbird.User[];
-        const sbSetSelectedUsers = setSelectedUsers as unknown as React.Dispatch<React.SetStateAction<Sendbird.User[]>>;
+        const sbUser = user as unknown as SendbirdUser;
+        const sbSelectedUsers = selectedUsers as unknown as SendbirdUser[];
+        const sbSetSelectedUsers = setSelectedUsers as unknown as React.Dispatch<React.SetStateAction<SendbirdUser[]>>;
 
         const isMe = sbUser.userId === currentUser?.userId;
         if (isMe) return null;
@@ -100,7 +96,6 @@ const createGroupChannelCreateFragment = <UserType,>(
         headerTitle={STRINGS.GROUP_CHANNEL_CREATE.HEADER_TITLE}
       >
         <UserListModule.Header
-          Header={Header}
           onPressHeaderLeft={onPressHeaderLeft}
           onPressHeaderRight={async (users) => {
             const params = new sdk.GroupChannelParams();

@@ -1,14 +1,18 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type Sendbird from 'sendbird';
 
-import type { SendbirdChannel, SendbirdChatSDK } from '@sendbird/uikit-utils';
+import type {
+  SendbirdChannel,
+  SendbirdChatSDK,
+  SendbirdGroupChannel,
+  SendbirdGroupChannelCollection,
+} from '@sendbird/uikit-utils';
 import { arrayToMap, useAsyncEffect, useUniqId } from '@sendbird/uikit-utils';
 
 import { useAppFeatures } from '../common/useAppFeatures';
 import { useChannelHandler } from '../handler/useChannelHandler';
 import type { UseGroupChannelList, UseGroupChannelListOptions } from '../types';
 
-type GroupChannelMap = Record<string, Sendbird.GroupChannel>;
+type GroupChannelMap = Record<string, SendbirdGroupChannel>;
 
 const HOOK_NAME = 'useGroupChannelListWithCollection';
 const createGroupChannelListCollection = (
@@ -23,15 +27,11 @@ const createGroupChannelListCollection = (
   return defaultCollection.setLimit(20).setFilter(filter).build();
 };
 
-export const useGroupChannelListWithCollection = (
-  sdk: SendbirdChatSDK,
-  userId?: string,
-  options?: UseGroupChannelListOptions,
-): UseGroupChannelList => {
+export const useGroupChannelListWithCollection: UseGroupChannelList = (sdk, userId, options) => {
   const id = useUniqId(HOOK_NAME);
   const { deliveryReceiptEnabled } = useAppFeatures(sdk);
 
-  const collectionRef = useRef<Sendbird.GroupChannelCollection>();
+  const collectionRef = useRef<SendbirdGroupChannelCollection>();
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -44,7 +44,7 @@ export const useGroupChannelListWithCollection = (
 
   // ---------- internal methods ---------- //
   const updateChannels = (channels: SendbirdChannel[], clearPrev: boolean) => {
-    const groupChannels = channels.filter((c): c is Sendbird.GroupChannel => c.isGroupChannel());
+    const groupChannels = channels.filter((c): c is SendbirdGroupChannel => c.isGroupChannel());
     if (clearPrev) setGroupChannelMap(arrayToMap(groupChannels, 'url'));
     else setGroupChannelMap((prev) => ({ ...prev, ...arrayToMap(groupChannels, 'url') }));
     if (deliveryReceiptEnabled) groupChannels.forEach((channel) => sdk.markAsDelivered(channel.url));
@@ -80,24 +80,6 @@ export const useGroupChannelListWithCollection = (
     },
     [sdk, options?.collectionCreator],
   );
-
-  useChannelHandler(
-    sdk,
-    HOOK_NAME,
-    {
-      onUserLeft(channel, user) {
-        const isMe = user.userId === userId;
-        if (isMe) deleteChannels([channel.url]);
-        else updateChannels([channel], false);
-      },
-      onUserBanned(channel, user) {
-        const isMe = user.userId === userId;
-        if (isMe) deleteChannels([channel.url]);
-        else updateChannels([channel], false);
-      },
-    },
-    [sdk, userId],
-  );
   // ---------- internal methods ends ---------- //
 
   // ---------- internal hooks ---------- //
@@ -106,6 +88,7 @@ export const useGroupChannelListWithCollection = (
       if (collectionRef.current) collectionRef.current?.dispose();
     };
   }, []);
+
   useAsyncEffect(async () => {
     setLoading(true);
     await init(userId);
@@ -116,17 +99,6 @@ export const useGroupChannelListWithCollection = (
     sdk,
     `${HOOK_NAME}_${id}`,
     {
-      onChannelChanged: (channel) => updateChannels([channel], false),
-      onChannelFrozen: (channel) => updateChannels([channel], false),
-      onChannelUnfrozen: (channel) => updateChannels([channel], false),
-      onChannelMemberCountChanged: (channels) => updateChannels(channels, false),
-      onChannelDeleted: (url) => deleteChannels([url]),
-      onUserJoined: (channel) => updateChannels([channel], false),
-      onUserLeft: (channel, user) => {
-        const isMe = user.userId === userId;
-        if (isMe) deleteChannels([channel.url]);
-        else updateChannels([channel], false);
-      },
       onUserBanned: (channel, user) => {
         const isMe = user.userId === userId;
         if (isMe) deleteChannels([channel.url]);
@@ -145,7 +117,7 @@ export const useGroupChannelListWithCollection = (
   }, [init, userId]);
 
   const update = useCallback(
-    (channel: Sendbird.GroupChannel) => {
+    (channel: SendbirdGroupChannel) => {
       if (deliveryReceiptEnabled) sdk.markAsDelivered(channel.url);
       setGroupChannelMap((prev) => ({ ...prev, [channel.url]: channel }));
     },

@@ -18,7 +18,6 @@ aliases:
         - sample/node_modules
         - packages/uikit-chat-hooks/node_modules
         - packages/uikit-react-native/node_modules
-        - packages/uikit-react-native-core/node_modules
         - packages/uikit-react-native-foundation/node_modules
         - packages/uikit-utils/node_modules
   - &create_app_env

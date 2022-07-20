@@ -1,6 +1,6 @@
-import type { PaletteInterface } from '../types';
+import type { UIKitPalette } from '../types';
 
-const Palette: PaletteInterface = {
+const Palette: UIKitPalette = {
   primary100: '#DBD1FF',
   primary200: '#C2A9FA',
   primary300: '#742DDD',

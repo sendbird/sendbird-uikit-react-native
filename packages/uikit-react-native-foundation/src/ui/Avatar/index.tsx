@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Image, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
 import { conditionChaining } from '@sendbird/uikit-utils';
 
+import Image from '../../components/Image';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import Icon from '../Icon';

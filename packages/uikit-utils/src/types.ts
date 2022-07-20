@@ -30,6 +30,7 @@ export type Optional<T> = T | undefined;
 
 export type ContextValue<T extends React.Context<any>> = T extends React.Context<infer V> ? V : never;
 
+// for v4 migration
 export type SendbirdChatSDK = Sendbird.SendBirdInstance;
 export type SendbirdMessage =
   | Sendbird.BaseMessageInstance
@@ -37,6 +38,21 @@ export type SendbirdMessage =
   | Sendbird.UserMessage
   | Sendbird.AdminMessage;
 export type SendbirdChannel = Sendbird.BaseChannel | Sendbird.GroupChannel | Sendbird.OpenChannel;
+export type SendbirdUserMessage = Sendbird.UserMessage;
+export type SendbirdFileMessage = Sendbird.FileMessage;
+export type SendbirdAdminMessage = Sendbird.AdminMessage;
+export type SendbirdBaseMessage = Sendbird.BaseMessageInstance;
+export type SendbirdFileMessageParams = Sendbird.FileMessageParams;
+export type SendbirdUserMessageParams = Sendbird.UserMessageParams;
+export type SendbirdError = Sendbird.SendBirdError;
+export type SendbirdGroupChannelParams = Sendbird.GroupChannelParams;
+export type SendbirdUser = Sendbird.User;
+export type SendbirdMember = Sendbird.Member;
+export type SendbirdGroupChannel = Sendbird.GroupChannel;
+export type SendbirdBaseChannel = Sendbird.BaseChannel;
+export type SendbirdOpenChannel = Sendbird.OpenChannel;
+export type SendbirdGroupChannelCollection = Sendbird.GroupChannelCollection;
+export type SendbirdMessageCollection = Sendbird.MessageCollection;
 
 export interface SendbirdDataPayload {
   app_id: string;

@@ -47,7 +47,7 @@
   },
   "peerDependencies": {
     "react": ">=16.13.1",
-    "sendbird": "^3.1.16"
+    "sendbird": "^3.1.21"
   },
   "react-native-builder-bob": {
     "source": "src",
@@ -62,5 +62,10 @@
         }
       ]
     ]
+  },
+  "typedoc": {
+    "entryPoint": "./src/index.ts",
+    "readmeFile": "./README.md",
+    "displayName": "@sendbird/uikit-chat-hooks"
   }
 }

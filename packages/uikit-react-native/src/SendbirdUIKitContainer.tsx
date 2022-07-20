@@ -3,22 +3,10 @@ import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Sendbird from 'sendbird';
 
-import type {
-  ClipboardServiceInterface,
-  FileServiceInterface,
-  NotificationServiceInterface,
-  StringSet,
-} from '@sendbird/uikit-react-native-core';
-import {
-  LocalizationProvider,
-  PlatformServiceProvider,
-  SendbirdChatProvider,
-  StringSetEn,
-  useLocalization,
-} from '@sendbird/uikit-react-native-core';
-import type { UIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import type { HeaderStyleContextType, UIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import {
   DialogProvider,
+  Header,
   HeaderStyleProvider,
   LightUIKitTheme,
   ToastProvider,
@@ -28,6 +16,13 @@ import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 
 import InternalErrorBoundary from './InternalErrorBoundary';
 import InternalLocalCacheStorage from './InternalLocalCacheStorage';
+import { LocalizationProvider } from './contexts/Localization';
+import { PlatformServiceProvider } from './contexts/PlatformService';
+import { SendbirdChatProvider } from './contexts/SendbirdChat';
+import { useLocalization } from './hooks/useContext';
+import StringSetEn from './localization/StringSet.en';
+import type { StringSet } from './localization/StringSet.type';
+import type { ClipboardServiceInterface, FileServiceInterface, NotificationServiceInterface } from './platform/types';
 import type { ErrorBoundaryProps, LocalCacheStorage } from './types';
 import VERSION from './version';
 
@@ -36,8 +31,7 @@ export const SendbirdUIKit = Object.freeze({
   PLATFORM: Platform.OS.toLowerCase(),
 });
 
-type StringSets = Record<string, StringSet>;
-type Props<T extends StringSets> = {
+export type SendbirdUIKitContainerProps = {
   children?: React.ReactNode;
   appId: string;
   platformServices: {
@@ -52,13 +46,13 @@ type Props<T extends StringSets> = {
     onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
   };
   localization?: {
-    stringSets?: T;
-    defaultLocale?: keyof T;
+    stringSet?: StringSet;
   };
   styles?: {
     theme?: UIKitTheme;
     statusBarTranslucent?: boolean;
     defaultHeaderTitleAlign?: 'left' | 'center';
+    HeaderComponent?: HeaderStyleContextType['HeaderComponent'];
   };
   toast?: {
     dismissTimeout?: number;
@@ -69,7 +63,7 @@ type Props<T extends StringSets> = {
   };
 };
 
-const SendbirdUIKitContainer = <T extends StringSets>({
+const SendbirdUIKitContainer = ({
   children,
   appId,
   appVersion,
@@ -79,7 +73,7 @@ const SendbirdUIKitContainer = <T extends StringSets>({
   styles,
   toast,
   errorBoundary,
-}: Props<T>) => {
+}: SendbirdUIKitContainerProps) => {
   const getSendbirdSDK = () => {
     let sdk: SendbirdChatSDK;
 
@@ -122,10 +116,7 @@ const SendbirdUIKitContainer = <T extends StringSets>({
         sdkInstance={sdkInstance}
         enableAutoPushTokenRegistration={chatOptions?.enableAutoPushTokenRegistration ?? true}
       >
-        <LocalizationProvider
-          defaultLocale={(localization?.defaultLocale ?? 'en') as 'en'}
-          stringSets={(localization?.stringSets ?? { en: StringSetEn }) as { en: StringSet }}
-        >
+        <LocalizationProvider stringSet={localization?.stringSet ?? StringSetEn}>
           <PlatformServiceProvider
             fileService={platformServices.file}
             notificationService={platformServices.notification}
@@ -133,6 +124,7 @@ const SendbirdUIKitContainer = <T extends StringSets>({
           >
             <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
               <HeaderStyleProvider
+                HeaderComponent={styles?.HeaderComponent ?? Header}
                 defaultTitleAlign={styles?.defaultHeaderTitleAlign ?? 'left'}
                 statusBarTranslucent={styles?.statusBarTranslucent ?? true}
               >

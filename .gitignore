@@ -21,3 +21,5 @@ version.ts
 
 *.app.dSYM.zip
 lerna-debug.log
+
+/docs

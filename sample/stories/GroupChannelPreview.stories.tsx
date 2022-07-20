@@ -1,7 +1,7 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
 import React from 'react';
 
-import { GroupChannelPreview as GroupChannelPreviewComponent } from '@sendbird/uikit-react-native';
+import { GroupChannelPreview as GroupChannelPreviewComponent } from '@sendbird/uikit-react-native-foundation';
 import { Icon } from '@sendbird/uikit-react-native-foundation';
 
 const GroupChannelPreviewMeta: ComponentMeta<typeof GroupChannelPreviewComponent> = {

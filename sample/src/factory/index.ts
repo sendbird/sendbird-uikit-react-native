@@ -4,7 +4,6 @@ import RNFBMessaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import axios from 'axios';
 import { Platform, StatusBar } from 'react-native';
-import * as ReactNativeDeviceInfo from 'react-native-device-info';
 import * as DocumentPicker from 'react-native-document-picker';
 import * as FileAccess from 'react-native-file-access';
 import * as ImagePicker from 'react-native-image-picker';
@@ -14,7 +13,7 @@ import {
   createNativeClipboardService,
   createNativeFileService,
   createNativeNotificationService,
-} from '@sendbird/uikit-react-native-core';
+} from '@sendbird/uikit-react-native';
 import { Logger, SendbirdChatSDK } from '@sendbird/uikit-utils';
 
 import { APP_ID } from '../env';
@@ -24,15 +23,17 @@ export const GetSendbirdSDK = () => AppSendbirdSDK;
 export const SetSendbirdSDK = (sdk: SendbirdChatSDK) => (AppSendbirdSDK = sdk);
 
 export const RootStack = createNativeStackNavigator();
-export const NotificationService = createNativeNotificationService(RNFBMessaging);
 export const ClipboardService = createNativeClipboardService(Clipboard);
+export const NotificationService = createNativeNotificationService({
+  messagingModule: RNFBMessaging,
+  permissionModule: Permissions,
+});
 export const FileService = createNativeFileService({
   imagePickerModule: ImagePicker,
   documentPickerModule: DocumentPicker,
   permissionModule: Permissions,
   fsModule: FileAccess,
   mediaLibraryModule: CameraRoll,
-  deviceInfoModule: ReactNativeDeviceInfo,
 });
 
 export const GetTranslucent = (state = true) => {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { createGroupChannelSettingsFragment } from '@sendbird/uikit-react-native';
-import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
+import { useSendbirdChat } from '@sendbird/uikit-react-native';
 
 import { useAppNavigation } from '../../hooks/useAppNavigation';
 import { Routes } from '../../libs/navigation';
@@ -14,7 +14,7 @@ const GroupChannelSettingsScreen: React.FC = () => {
 
   return (
     <GroupChannelSettingsFragment
-      staleChannel={channel}
+      channel={channel}
       onPressHeaderLeft={() => {
         // Navigate back
         navigation.goBack();
@@ -23,7 +23,7 @@ const GroupChannelSettingsScreen: React.FC = () => {
         // Navigate to group channel members
         navigation.navigate(Routes.GroupChannelMembers, params);
       }}
-      onLeaveChannel={() => {
+      onPressMenuLeaveChannel={() => {
         // Navigate to group channel list
         navigation.navigate(Routes.GroupChannelList);
       }}

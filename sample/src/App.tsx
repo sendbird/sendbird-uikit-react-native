@@ -4,7 +4,7 @@ import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/
 import React, { useEffect } from 'react';
 
 import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
-import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
+import { useSendbirdChat } from '@sendbird/uikit-react-native';
 import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 import { APP_ID } from './env';
@@ -34,6 +34,27 @@ import {
   ThemeColorsScreen,
 } from './screens';
 
+// const UseReactNavigationHeader: HeaderStyleContextType['HeaderComponent'] = ({
+//   title,
+//   right,
+//   left,
+//   onPressLeft,
+//   onPressRight,
+// }) => {
+//   const { navigation } = useAppNavigation();
+//   useEffect(() => {
+//     navigation.setOptions({
+//       headerShown: true,
+//       headerTitleAlign: 'center',
+//       headerBackVisible: false,
+//       headerTitle: () => (typeof title === 'string' ? <Text subtitle2>{title}</Text> : title),
+//       headerLeft: () => <Pressable onPress={onPressLeft}>{left}</Pressable>,
+//       headerRight: () => <Pressable onPress={onPressRight}>{right}</Pressable>,
+//     });
+//   }, [title, right, left, onPressLeft, onPressRight]);
+//   return null;
+// };
+
 const App = () => {
   const { scheme } = useAppearance();
   const isLightTheme = scheme === 'light';
@@ -47,6 +68,7 @@ const App = () => {
         defaultHeaderTitleAlign: 'left', //'center',
         theme: isLightTheme ? LightUIKitTheme : DarkUIKitTheme,
         statusBarTranslucent: GetTranslucent(),
+        // HeaderComponent: UseReactNavigationHeader,
       }}
       errorBoundary={{ ErrorInfoComponent: ErrorInfoScreen }}
     >
