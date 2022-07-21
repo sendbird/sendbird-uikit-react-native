@@ -39,7 +39,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       activeChannel,
       messages,
       nextMessages,
-      newMessagesFromNext,
+      newMessagesFromMembers,
       next,
       prev,
       sendFileMessage,
@@ -127,7 +127,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             renderMessage={_renderMessage}
             messages={messages}
             nextMessages={nextMessages}
-            newMessagesFromNext={newMessagesFromNext}
+            newMessagesFromMembers={newMessagesFromMembers}
             onTopReached={prev}
             onBottomReached={next}
             renderNewMessagesButton={renderNewMessagesButton}

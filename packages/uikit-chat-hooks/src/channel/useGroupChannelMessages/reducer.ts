@@ -1,4 +1,4 @@
-import { useMemo, useReducer } from 'react';
+import { useReducer } from 'react';
 
 import type {
   SendbirdBaseMessage,
@@ -6,7 +6,7 @@ import type {
   SendbirdMessage,
   SendbirdUserMessage,
 } from '@sendbird/uikit-utils';
-import { arrayToMapWithGetter, getMessageUniqId, isMyMessage, isNewMessage } from '@sendbird/uikit-utils';
+import { arrayToMapWithGetter, getMessageUniqId, isMyMessage, isNewMessage, useIIFE } from '@sendbird/uikit-utils';
 
 import type { UseGroupChannelMessagesOptions } from '../../types';
 
@@ -110,12 +110,12 @@ export const useGroupChannelMessagesReducer = (
     dispatch({ type: 'update_refreshing', value: { status } });
   };
 
-  const messages = useMemo(() => {
+  const messages = useIIFE(() => {
     if (sortComparator) return Object.values(messageMap).sort(sortComparator);
     return Object.values(messageMap);
-  }, [sortComparator, messageMap]);
-  const nextMessages = useMemo(() => Object.values(nextMessageMap), [nextMessageMap]);
-  const newMessagesFromNext = useMemo(() => nextMessages.filter((msg) => isNewMessage(msg, userId)), [nextMessages]);
+  });
+  const nextMessages = Object.values(nextMessageMap);
+  const newMessagesFromMembers = nextMessages.filter((msg) => isNewMessage(msg, userId));
 
   return {
     updateLoading,
@@ -129,6 +129,6 @@ export const useGroupChannelMessagesReducer = (
     refreshing,
     messages,
     nextMessages,
-    newMessagesFromNext,
+    newMessagesFromMembers,
   };
 };

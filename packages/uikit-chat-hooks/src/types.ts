@@ -127,7 +127,7 @@ export interface UseGroupChannelMessages {
      * - Not updated message
      * - Not current user's message
      * */
-    newMessagesFromNext: SendbirdMessage[];
+    newMessagesFromMembers: SendbirdMessage[];
 
     /**
      * Fetch next messages to state

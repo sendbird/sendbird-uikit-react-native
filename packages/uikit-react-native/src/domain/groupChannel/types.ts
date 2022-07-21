@@ -53,7 +53,7 @@ export interface GroupChannelProps {
     channel: SendbirdGroupChannel;
     messages: SendbirdMessage[];
     nextMessages: SendbirdMessage[];
-    newMessagesFromNext: SendbirdMessage[];
+    newMessagesFromMembers: SendbirdMessage[];
     onTopReached: () => void;
     onBottomReached: () => void;
 
