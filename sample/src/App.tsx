@@ -3,8 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 
-import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
-import { useSendbirdChat } from '@sendbird/uikit-react-native';
+import { SendbirdUIKitContainer, useSendbirdChat } from '@sendbird/uikit-react-native';
 import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 import { APP_ID } from './env';
