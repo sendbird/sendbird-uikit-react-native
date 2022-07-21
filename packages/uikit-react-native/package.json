@@ -47,6 +47,7 @@
   "devDependencies": {
     "@react-native-clipboard/clipboard": "^1.8.5",
     "@react-native-community/cameraroll": "^4.1.2",
+    "@react-native-community/netinfo": "^9.3.0",
     "@react-native-firebase/app": "^14.4.0",
     "@react-native-firebase/messaging": "^14.4.0",
     "@types/react": "17.0.2",
@@ -74,6 +75,7 @@
   "peerDependencies": {
     "@react-native-clipboard/clipboard": "^1.8.5",
     "@react-native-community/cameraroll": "^4.1.2",
+    "@react-native-community/netinfo": "^9.3.0",
     "@react-native-firebase/messaging": "^14.4.0",
     "date-fns": "^2.28.0",
     "expo-clipboard": "^2.1.1",

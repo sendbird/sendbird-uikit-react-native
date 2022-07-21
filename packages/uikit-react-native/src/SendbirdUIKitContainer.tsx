@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import type NetInfo from '@react-native-community/netinfo';
+import React, { useEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Sendbird from 'sendbird';
@@ -22,6 +23,7 @@ import { SendbirdChatProvider } from './contexts/SendbirdChat';
 import { useLocalization } from './hooks/useContext';
 import StringSetEn from './localization/StringSet.en';
 import type { StringSet } from './localization/StringSet.type';
+import SBUDynamicModule from './platform/dynamicModule';
 import type { ClipboardServiceInterface, FileServiceInterface, NotificationServiceInterface } from './platform/types';
 import type { ErrorBoundaryProps, LocalCacheStorage } from './types';
 import VERSION from './version';
@@ -72,6 +74,7 @@ const SendbirdUIKitContainer = ({
   toast,
   errorBoundary,
 }: SendbirdUIKitContainerProps) => {
+  const unsubscribes = useRef<(() => void)[]>([]).current;
   const getSendbirdSDK = () => {
     let sdk: SendbirdChatSDK;
 
@@ -95,6 +98,20 @@ const SendbirdUIKitContainer = ({
       sdk.addExtension('device-os-platform', SendbirdUIKit.PLATFORM);
     }
 
+    const netInfo = SBUDynamicModule.get<typeof NetInfo>('@react-native-community/netinfo', 'warn');
+    if (netInfo) {
+      const listener = (callback: () => void, callbackType: 'online' | 'offline') => {
+        const unsubscribe = netInfo.addEventListener((state) => {
+          const online = Boolean(state.isConnected) || Boolean(state.isInternetReachable);
+          if (online && callbackType === 'online') callback();
+          if (!online && callbackType === 'offline') callback();
+        });
+        unsubscribes.push(unsubscribe);
+        return unsubscribe;
+      };
+      sdk.setOnlineListener?.((onOnline) => listener(onOnline, 'online'));
+      sdk.setOfflineListener?.((onOffline) => listener(onOffline, 'offline'));
+    }
     return sdk;
   };
 
@@ -102,6 +119,13 @@ const SendbirdUIKitContainer = ({
 
   useEffect(() => {
     setSdkInstance(getSendbirdSDK);
+    return () => {
+      unsubscribes.forEach((u) => {
+        try {
+          u();
+        } catch {}
+      });
+    };
   }, [appId, chatOptions?.localCacheStorage]);
 
   return (

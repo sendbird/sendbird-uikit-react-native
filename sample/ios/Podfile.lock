@@ -353,6 +353,8 @@ PODS:
     - ZIPFoundation (= 0.9.11)
   - react-native-image-picker (4.8.4):
     - React-Core
+  - react-native-netinfo (9.3.0):
+    - React-Core
   - react-native-safe-area-context (3.4.1):
     - React-Core
   - react-native-slider (4.2.4):
@@ -512,6 +514,7 @@ DEPENDENCIES:
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-file-access (from `../node_modules/react-native-file-access`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - "react-native-netinfo (from `../../node_modules/@react-native-community/netinfo`)"
   - react-native-safe-area-context (from `../../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -530,7 +533,7 @@ DEPENDENCIES:
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
   - "RNDateTimePicker (from `../../node_modules/@react-native-community/datetimepicker`)"
-  - RNFastImage (from `../node_modules/react-native-fast-image`)
+  - RNFastImage (from `../../node_modules/react-native-fast-image`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
@@ -620,6 +623,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-file-access"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-netinfo:
+    :path: "../../node_modules/@react-native-community/netinfo"
   react-native-safe-area-context:
     :path: "../../node_modules/react-native-safe-area-context"
   react-native-slider:
@@ -657,7 +662,7 @@ EXTERNAL SOURCES:
   RNDateTimePicker:
     :path: "../../node_modules/@react-native-community/datetimepicker"
   RNFastImage:
-    :path: "../node_modules/react-native-fast-image"
+    :path: "../../node_modules/react-native-fast-image"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBMessaging:
@@ -722,6 +727,7 @@ SPEC CHECKSUMS:
   react-native-document-picker: f68191637788994baed5f57d12994aa32cf8bf88
   react-native-file-access: cb3caef2103575aa15876624f91ac81d37182840
   react-native-image-picker: cffb727cf2f59bd5c0408e30b3dbe0b935f88835
+  react-native-netinfo: 129bd99f607a2dc5bb096168f3e5c150fd1f1c95
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
   react-native-slider: cecabb58ecffad671d2ad3ccc58c7f4d2d029e95
   React-perflogger: 93075d8931c32cd1fce8a98c15d2d5ccc4d891bd

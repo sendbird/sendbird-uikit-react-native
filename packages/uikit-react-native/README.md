@@ -7,16 +7,24 @@ Sendbird UIKit for React-Native
 ### Install uikit
 
 ```sh
-npm install sendbird @sendbird/uikit-react-native
+npm install @sendbird/uikit-react-native
 ```
 
-### Install dependencies
+### Install required dependencies
 
 ```sh
-npm install date-fns react-native-safe-area-context
+npm install sendbird date-fns react-native-safe-area-context
 ```
 
 ### (Optional) Install native modules
+
+#### Local caching
+
+Install if you want to use local caching.
+
+```shell
+npm install @react-native-async-storage/async-storage @react-native-community/netinfo
+```
 
 #### React-Native-CLI
 
@@ -29,8 +37,8 @@ npm install react-native-permissions \
             @react-native-community/cameraroll \
             react-native-file-access \
             @react-native-clipboard/clipboard \
-            @react-native-firebase/messaging @react-native-firebase/app \
-            date-fns
+            @react-native-firebase/messaging \
+            @react-native-firebase/app
 ```
 
 #### Expo-CLI
@@ -43,6 +51,5 @@ expo install expo-image-picker \
              expo-media-library \
              expo-file-system \
              expo-clipboard \
-             expo-notifications \
-             date-fns
+             expo-notifications
 ```
