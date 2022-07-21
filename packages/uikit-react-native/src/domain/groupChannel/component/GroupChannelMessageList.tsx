@@ -232,7 +232,7 @@ const useGetMessagePressActions = ({
           }
 
           fileService
-            .save({ fileUrl: msg.url, fileName: msg.name })
+            .save({ fileUrl: msg.url, fileName: msg.name, fileType: msg.type })
             .then((response) => {
               toast.show(STRINGS.TOAST.DOWNLOAD_OK, 'success');
               Logger.log('File saved to', response);

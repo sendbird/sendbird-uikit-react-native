@@ -34,6 +34,7 @@ export type OpenDocumentOptions = OpenResultListener;
 export interface SaveOptions {
   fileUrl: string;
   fileName: string;
+  fileType?: string | null;
 }
 
 export interface FilePickerServiceInterface {
