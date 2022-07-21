@@ -39,7 +39,6 @@ export type SendbirdUIKitContainerProps = {
     notification: NotificationServiceInterface;
     clipboard: ClipboardServiceInterface;
   };
-  appVersion?: string;
   chatOptions?: {
     localCacheStorage?: LocalCacheStorage;
     enableAutoPushTokenRegistration?: boolean;
@@ -66,7 +65,6 @@ export type SendbirdUIKitContainerProps = {
 const SendbirdUIKitContainer = ({
   children,
   appId,
-  appVersion,
   chatOptions,
   platformServices,
   localization,
@@ -101,10 +99,6 @@ const SendbirdUIKitContainer = ({
   };
 
   const [sdkInstance, setSdkInstance] = useState<SendbirdChatSDK>(getSendbirdSDK);
-
-  useEffect(() => {
-    if (appVersion) Sendbird.setAppVersion(appVersion);
-  }, [appVersion]);
 
   useEffect(() => {
     setSdkInstance(getSendbirdSDK);
