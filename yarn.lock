@@ -3976,7 +3976,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-native@^0.66.15", "@types/react-native@^0.66.16", "@types/react-native@^0.66.4":
+"@types/react-native@^0.66.15", "@types/react-native@^0.66.4":
   version "0.66.21"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.66.21.tgz#0af38b44fb5a4afdc4ef6ecf065ef91ee5bc813f"
   integrity sha512-O/PLXzTWZsNByotNKLxBWe/ePr/qV2km2pXflnMFkaot3KdfMl36E/0c5JVRMKCxxmDVvoazVHkqPuAvnkkgxA==

@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import { Platform } from 'react-native';
 
 const LogLevelEnum = {
   'none': 0,
@@ -13,7 +12,7 @@ type LogLevel = keyof typeof LogLevelEnum;
 
 const logger = (lv: LogLevel = 'warn') => {
   let _logLevel = __DEV__ ? lv : 'none';
-  let _title = `[UIKit_${Platform.OS}]`;
+  let _title = '[UIKit]';
 
   return {
     setTitle(title: string) {
