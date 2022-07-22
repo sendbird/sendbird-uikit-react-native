@@ -256,7 +256,7 @@ const useGetMessagePressActions = ({
       if (fileType === 'image') {
         response.onPress = () => onPressImageMessage?.(msg, getAvailableUriFromFileMessage(msg));
       } else {
-        response.onPress = () => Linking.openURL(msg.url);
+        response.onPress = () => Linking.openURL(msg.url).catch();
       }
     }
 
@@ -269,6 +269,11 @@ const useGetMessagePressActions = ({
       response.onPress = () => {
         onResendFailedMessage(msg).catch(() => toast.show(STRINGS.TOAST.RESEND_MSG_ERROR, 'error'));
       };
+    }
+
+    if (msg.sendingStatus === 'pending') {
+      response.onLongPress = undefined;
+      response.onPress = undefined;
     }
 
     return response;

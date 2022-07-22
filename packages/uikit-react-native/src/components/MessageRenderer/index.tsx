@@ -52,6 +52,7 @@ const MessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
   const messageComponent = useIIFE(() => {
     const pressableProps = {
       style: styles.msgContainer,
+      disabled: !onPress && !onLongPress,
       onPress,
       onLongPress,
       delayLongPress: DEFAULT_LONG_PRESS_DELAY,
