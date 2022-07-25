@@ -8,16 +8,11 @@
   "version": "0.1.2",
   "command": {
     "publish": {
-      "allowBranch": "main",
       "conventionalCommits": true,
       "createRelease": "github",
       "message": "chore(release): publish %v"
     },
     "version": {
-      "allowBranch": [
-        "main",
-        "*/lerna"
-      ],
       "conventionalCommits": true,
       "exact": true,
       "gitRemote": "origin",
