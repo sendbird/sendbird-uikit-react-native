@@ -1,4 +1,3 @@
-import type NetInfo from '@react-native-community/netinfo';
 import React, { useEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -27,6 +26,8 @@ import SBUDynamicModule from './platform/dynamicModule';
 import type { ClipboardServiceInterface, FileServiceInterface, NotificationServiceInterface } from './platform/types';
 import type { ErrorBoundaryProps, LocalCacheStorage } from './types';
 import VERSION from './version';
+
+const NetInfo = SBUDynamicModule.get('@react-native-community/netinfo', 'warn');
 
 export const SendbirdUIKit = Object.freeze({
   VERSION,
@@ -98,10 +99,9 @@ const SendbirdUIKitContainer = ({
       sdk.addExtension('device-os-platform', SendbirdUIKit.PLATFORM);
     }
 
-    const netInfo = SBUDynamicModule.get<typeof NetInfo>('@react-native-community/netinfo', 'warn');
-    if (netInfo) {
+    if (NetInfo) {
       const listener = (callback: () => void, callbackType: 'online' | 'offline') => {
-        const unsubscribe = netInfo.addEventListener((state) => {
+        const unsubscribe = NetInfo.addEventListener((state) => {
           const online = Boolean(state.isConnected) || Boolean(state.isInternetReachable);
           if (online && callbackType === 'online') callback();
           if (!online && callbackType === 'offline') callback();

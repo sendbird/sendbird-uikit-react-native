@@ -101,3 +101,4 @@ export {
 export * from './types';
 
 Logger.setTitle(`[UIKIT_${Platform.OS}]`);
+__DEV__ && Logger.setLogLevel('none');
