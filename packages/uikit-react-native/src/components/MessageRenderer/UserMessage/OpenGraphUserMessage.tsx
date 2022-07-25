@@ -33,7 +33,7 @@ const OpenGraphUserMessage: React.FC<Props> = ({ message, variant, pressed, ogMe
           )}
         </URLParsedText>
       </View>
-      <TouchableOpacity activeOpacity={0.7} onPress={() => Linking.openURL(ogMetaData.url)}>
+      <TouchableOpacity activeOpacity={0.7} onPress={() => Linking.openURL(ogMetaData.url).catch()}>
         <View
           style={[
             styles.ogImageContainer,

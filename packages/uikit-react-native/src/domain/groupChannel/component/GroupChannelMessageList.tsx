@@ -19,6 +19,7 @@ import {
   getFileType,
   isMyMessage,
   messageKeyExtractor,
+  useFreshCallback,
 } from '@sendbird/uikit-utils';
 
 import type { ChatFlatListRef } from '../../../components/ChatFlatList';
@@ -35,7 +36,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   messages,
   renderMessage,
   nextMessages,
-  newMessagesFromNext,
+  newMessagesFromMembers,
   onBottomReached,
   onTopReached,
   renderNewMessagesButton,
@@ -51,7 +52,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   const { left, right } = useSafeAreaInsets();
   const [scrollLeaveBottom, setScrollLeaveBottom] = useState(false);
   const scrollRef = useRef<ChatFlatListRef>(null);
-  const [newMessages, setNewMessages] = useState(() => newMessagesFromNext);
+  const [newMessagesInternalBuffer, setNewMessagesInternalBuffer] = useState(() => newMessagesFromMembers);
   const getMessagePressActions = useGetMessagePressActions({
     onDeleteMessage,
     onPressImageMessage,
@@ -61,8 +62,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
 
   const safeAreaLayout = { paddingLeft: left, paddingRight: right };
 
-  // NOTE: Cannot wrap with useCallback, because prevMessage (always getting from fresh messages)
-  const renderItem: ListRenderItem<SendbirdMessage> = ({ item, index }) => {
+  const renderItem: ListRenderItem<SendbirdMessage> = useFreshCallback(({ item, index }) => {
     const { onPress, onLongPress } = getMessagePressActions(item);
     return renderMessage({
       message: item,
@@ -74,17 +74,19 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
       channel,
       currentUserId,
     });
-  };
+  });
 
   if (!HANDLE_NEXT_MSG_SEPARATELY) {
     useEffect(() => {
-      newMessagesFromNext.length !== 0 && setNewMessages((prev) => prev.concat(newMessagesFromNext));
+      if (newMessagesInternalBuffer.length !== 0) {
+        setNewMessagesInternalBuffer((prev) => prev.concat(newMessagesFromMembers));
+      }
       onBottomReached();
-    }, [newMessagesFromNext]);
+    }, [newMessagesFromMembers]);
   }
 
   const onLeaveScrollBottom = useCallback((val: boolean) => {
-    if (!HANDLE_NEXT_MSG_SEPARATELY) setNewMessages([]);
+    if (!HANDLE_NEXT_MSG_SEPARATELY) setNewMessagesInternalBuffer([]);
     setScrollLeaveBottom(val);
   }, []);
 
@@ -116,7 +118,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
           {renderNewMessagesButton({
             visible: scrollLeaveBottom,
             onPress: () => scrollRef.current?.scrollToBottom(false),
-            newMessages: HANDLE_NEXT_MSG_SEPARATELY ? newMessagesFromNext : newMessages,
+            newMessages: !HANDLE_NEXT_MSG_SEPARATELY ? newMessagesInternalBuffer : newMessagesFromMembers,
           })}
         </View>
       )}
@@ -230,7 +232,7 @@ const useGetMessagePressActions = ({
           }
 
           fileService
-            .save({ fileUrl: msg.url, fileName: msg.name })
+            .save({ fileUrl: msg.url, fileName: msg.name, fileType: msg.type })
             .then((response) => {
               toast.show(STRINGS.TOAST.DOWNLOAD_OK, 'success');
               Logger.log('File saved to', response);
@@ -254,7 +256,7 @@ const useGetMessagePressActions = ({
       if (fileType === 'image') {
         response.onPress = () => onPressImageMessage?.(msg, getAvailableUriFromFileMessage(msg));
       } else {
-        response.onPress = () => Linking.openURL(msg.url);
+        response.onPress = () => Linking.openURL(msg.url).catch();
       }
     }
 
@@ -267,6 +269,11 @@ const useGetMessagePressActions = ({
       response.onPress = () => {
         onResendFailedMessage(msg).catch(() => toast.show(STRINGS.TOAST.RESEND_MSG_ERROR, 'error'));
       };
+    }
+
+    if (msg.sendingStatus === 'pending') {
+      response.onLongPress = undefined;
+      response.onPress = undefined;
     }
 
     return response;

@@ -47,7 +47,7 @@
   },
   "peerDependencies": {
     "react": ">=16.13.1",
-    "sendbird": "^3.1.21"
+    "sendbird": "^3.1.22"
   },
   "react-native-builder-bob": {
     "source": "src",

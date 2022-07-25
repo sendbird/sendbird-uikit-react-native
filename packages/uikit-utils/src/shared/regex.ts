@@ -69,5 +69,6 @@ export const getFileType = (extOrType: string) => {
 };
 export function getFileExtension(filePath: string) {
   const idx = filePath.lastIndexOf('.');
+  if (idx === -1) return '';
   return filePath.slice(idx - filePath.length).toLowerCase();
 }

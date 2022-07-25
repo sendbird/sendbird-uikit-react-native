@@ -20,6 +20,7 @@
     "@react-native-clipboard/clipboard": "^1.8.5",
     "@react-native-community/cameraroll": "^4.1.2",
     "@react-native-community/datetimepicker": "^5.1.0",
+    "@react-native-community/netinfo": "^9.3.0",
     "@react-native-community/push-notification-ios": "^1.10.1",
     "@react-native-community/slider": "^4.2.0",
     "@react-native-firebase/app": "^14.7.0",
@@ -46,7 +47,7 @@
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.10.2",
     "react-native-touch-reload": "sendbird/react-native-touch-reload",
-    "sendbird": "^3.1.21"
+    "sendbird": "^3.1.22"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

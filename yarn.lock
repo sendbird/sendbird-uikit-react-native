@@ -3067,6 +3067,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/eslint-plugin/-/eslint-plugin-1.2.0.tgz#7d6d789ae8edf73dc9bed1246cd48277edea8066"
   integrity sha512-o6aam+0Ug1xGK3ABYmBm0B1YuEKfM/5kaoZO0eHbZwSpw9UzDX4G5y4Nx/K20FHqUmJHkZmLvOUFYwN4N+HqKA==
 
+"@react-native-community/netinfo@^9.3.0":
+  version "9.3.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-9.3.0.tgz#9792c23341eab5c629566baee016146f4f3f6086"
+  integrity sha512-NNdMeIXXqmPCbXrWxVqRzZ1gEZ6L1ykotWnCZLVjQBUgjyGWdL5LiDM/bcIa5DLzqZY7Km08rMgB7BoHUuEmnQ==
+
 "@react-native-community/push-notification-ios@^1.10.1":
   version "1.10.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/push-notification-ios/-/push-notification-ios-1.10.1.tgz#d52a6d69ac1112df0f79e1d17978077629b76784"
@@ -3976,7 +3981,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-native@^0.66.15", "@types/react-native@^0.66.16", "@types/react-native@^0.66.4":
+"@types/react-native@^0.66.15", "@types/react-native@^0.66.4":
   version "0.66.21"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.66.21.tgz#0af38b44fb5a4afdc4ef6ecf065ef91ee5bc813f"
   integrity sha512-O/PLXzTWZsNByotNKLxBWe/ePr/qV2km2pXflnMFkaot3KdfMl36E/0c5JVRMKCxxmDVvoazVHkqPuAvnkkgxA==
@@ -13592,10 +13597,10 @@ send@0.18.0:
     range-parser "~1.2.1"
     statuses "2.0.1"
 
-sendbird@^3.1.21:
-  version "3.1.21"
-  resolved "https://registry.yarnpkg.com/sendbird/-/sendbird-3.1.21.tgz#8ef6a7ac807f899b4ba47721e94665d38f102464"
-  integrity sha512-oD/aovryEqqBiyDoG477lNUyjGRbq2PdNz88NqCTzqvu6Or7X6i36PSHjNyirihp+P04wwMh0lsFAlFlCKvVrw==
+sendbird@^3.1.22:
+  version "3.1.22"
+  resolved "https://registry.yarnpkg.com/sendbird/-/sendbird-3.1.22.tgz#bb7ec5ef236c8d123114a1a05fb54c11acb82062"
+  integrity sha512-FPzlH2AI+VeXz2WThZZKxvlP1cZRue7zkeBGLHptiEeQB4Dn2Qr6MTW43lb/8dH6NBHKQsK0MSIpEwXXtJFfpQ==
   dependencies:
     agentkeepalive "4.1.4"
     axios "^0.27.2"

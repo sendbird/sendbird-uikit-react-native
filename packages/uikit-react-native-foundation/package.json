@@ -52,6 +52,7 @@
   "peerDependencies": {
     "react": ">=16.13.1",
     "react-native": ">=0.63.3",
+    "react-native-fast-image": "^8.5.11",
     "react-native-safe-area-context": "^3.3.2"
   },
   "peerDependenciesMeta": {

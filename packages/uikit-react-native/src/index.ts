@@ -1,4 +1,8 @@
 /** Components **/
+import { Platform } from 'react-native';
+
+import { Logger } from '@sendbird/uikit-utils';
+
 export { default as MessageRenderer } from './components/MessageRenderer';
 export { default as ChannelCover } from './components/ChannelCover';
 export { default as ChatFlatList } from './components/ChatFlatList';
@@ -95,3 +99,6 @@ export {
 } from './SendbirdUIKitContainer';
 
 export * from './types';
+
+Logger.setTitle(`[UIKIT_${Platform.OS}]`);
+__DEV__ && Logger.setLogLevel('none');

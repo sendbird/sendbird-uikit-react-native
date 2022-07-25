@@ -76,7 +76,7 @@ const useConnection = () => {
     Logger.debug('[useConnection]', 'disconnected!');
   }, [sdk, unregisterPushTokenForCurrentUser, features.autoPushTokenRegistrationEnabled]);
 
-  return { connect, disconnect, reconnect: sdk.reconnect };
+  return { connect, disconnect, reconnect: () => sdk.reconnect() };
 };
 
 export default useConnection;
