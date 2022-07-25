@@ -3,9 +3,30 @@
 [![Platform React-Native](https://img.shields.io/badge/Platform-React--Native-orange.svg)](https://reactnative.dev/)
 [![Language TypeScript](https://img.shields.io/badge/Language-TypeScript-orange.svg)](https://www.typescriptlang.org/)
 
+> React-Native based UI kit based on sendbird javascript SDK
+
+## Introduction
+
+Sendbird UIKit for React-Native is a development kit with an user interface that enables an easy and fast integration of standard chat features into new or existing client apps.
+This mono-repository the UIKit source code is consists as explained below.
+
+- [**packages/uikit-react-native**](/packages/uikit-react-native) is where you can find the open source code. Check out [UIKit Open Source Guidelines](/OPENSOURCE_GUIDELINES.md) for more information regarding our stance on open source.
+- [**sample**](/sample) is a chat app with UIKit’s core features in which you can see items such as push notifications, total unread message count and auto sign-in are demonstrated. When you sign in to the sample app, you will only see a list of channels rendered by the [GroupChannelListFragment](https://sendbird.com/docs/uikit/v3/react-native/key-functions/list-channels) on the screen.
+- [**packages/uikit-react-native-foundation**](/packages/uikit-react-native-foundation) is a UI package for `uikit-react-native`.
+- [**packages/uikit-chat-hooks**](/packages/uikit-chat-hooks) is a react hooks package for `uikit-react-native`.
+- [**packages/uikit-utils**](/packages/uikit-utils) is a utility package for `uikit-react-native`.
+
+### More about Sendbird UIKit for React-Native
+
+Find out more about Sendbird UIKit for React-Native at [UIKit for React Native doc](https://sendbird.com/docs/uikit/v3/react-native/overview).
+If you need any help in resolving any issues or have questions, visit [our community](https://community.sendbird.com).
+
+<br/>
+
 ## Requirements
 
 - Nodejs 14 or newer
+- [yarn v1](https://classic.yarnpkg.com/en/docs/install)
 - Watchman
 - JDK 11 or newer
 - XCode
@@ -15,19 +36,55 @@ More details, please see https://reactnative.dev/docs/environment-setup
 
 <br/>
 
-## Development
+## Try the sample app
 
-We tried development on macOS / Linux systems. You might encounter problems in running sample or scripts like `yarn build` in Windows machines. We are using sample app for development, you can check the sample app [here](/sample) and also check the UI components via storybook in the sample app.
+We are using sample app for development, you can check the sample app [here](/sample) and also check the UI components via storybook in the sample app.
 
-### Run sample app
+### Installation
+
+> Every script should be run on the root of the project.
+
+**Install node modules**
 
 ```shell
 yarn install
-npx pod-install
+```
 
+**Linking native modules of sample app**
+
+```shell
+yarn sample:pod-install
+```
+
+**Running sample app**
+
+- Android
+
+```shell
 yarn sample:android
+```
+
+- iOS
+
+```shell
 yarn sample:ios
 ```
+
+### Sample app using your data
+
+Create a file to `sample/src/env.ts` and write the code below to the file you created.
+
+```ts
+export const APP_ID = '2D7B4CDB-932F-4082-9B09-A1153792DC8D';
+```
+
+If you would like to try the sample app specifically fit to your usage, you can do so by replacing the default sample app ID with yours, which you can obtain by creating your [Sendbird application from the dashboard](https://dashboard.sendbird.com/).
+
+<br />
+
+## Development
+
+We tried development on macOS / Linux systems. You might encounter problems in running sample or scripts like `yarn build` in Windows machines.
 
 ### Creating a new key function files
 

@@ -31,6 +31,7 @@
     "lint:prettier": "prettier --check \"sample/src/**/*.{ts,tsx}\" \"packages/*/src/**/*.{ts,tsx}\"",
     "fix:eslint": "eslint --fix packages/*/src --ext ts,tsx -c ./.eslintrc.js",
     "fix:prettier": "prettier --write \"sample/src/**/*.{ts,tsx}\" \"packages/*/src/**/*.{ts,tsx}\"",
+    "sample:pod-install": "cd sample/ios && pod install",
     "sample:ios": "cd sample && yarn ios",
     "sample:android": "cd sample && yarn android",
     "deploy:ios": "cd sample/ios && bundle exec fastlane deploy",
