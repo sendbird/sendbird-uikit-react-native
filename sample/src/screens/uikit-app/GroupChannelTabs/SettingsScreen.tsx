@@ -3,7 +3,7 @@ import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { usePushTrigger } from '@sendbird/uikit-chat-hooks';
-import { useLocalization, usePlatformService, useSendbirdChat } from '@sendbird/uikit-react-native-core';
+import { useLocalization, usePlatformService, useSendbirdChat } from '@sendbird/uikit-react-native';
 import {
   Avatar,
   Divider,
@@ -35,11 +35,11 @@ const SettingsScreen = () => {
   const { STRINGS } = useLocalization();
   const toast = useToast();
   const { openSheet } = useBottomSheet();
-  const { prompt } = usePrompt();
+  const { openPrompt } = usePrompt();
   const { openMenu } = useActionMenu();
 
   const onChangeNickname = () => {
-    prompt({
+    openPrompt({
       title: 'Change nickname',
       submitLabel: 'Save',
       placeholder: 'Enter name',

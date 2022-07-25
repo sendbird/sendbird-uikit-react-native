@@ -1,4 +1,4 @@
-import type { PaletteInterface } from '@sendbird/uikit-react-native-foundation';
+import type { UIKitPalette } from '@sendbird/uikit-react-native-foundation';
 
 export const getContrastColor = (
   color:
@@ -26,7 +26,7 @@ export const getContrastColor = (
   throw new Error('invalid color format:' + color);
 };
 
-export const findColorNameFromPalette = (palette: PaletteInterface, targetHex: string) => {
+export const findColorNameFromPalette = (palette: UIKitPalette, targetHex: string) => {
   const map = Object.entries(palette);
   const color = map.find(([, hex]) => hex === targetHex);
   if (!color) return 'NOT_FOUND';

@@ -22,6 +22,7 @@
     "reset": "find . -type dir -name node_modules | xargs rm -rf",
     "clean": "lerna run clean",
     "build": "lerna run build",
+    "docs": "yarn build && typedoc --out docs --entryPointStrategy packages 'packages/*' && yarn clean",
     "test": "jest --verbose",
     "test:build": "yarn build --stream && yarn clean --stream",
     "lint": "yarn lint:eslint && yarn lint:prettier",
@@ -30,6 +31,7 @@
     "lint:prettier": "prettier --check \"sample/src/**/*.{ts,tsx}\" \"packages/*/src/**/*.{ts,tsx}\"",
     "fix:eslint": "eslint --fix packages/*/src --ext ts,tsx -c ./.eslintrc.js",
     "fix:prettier": "prettier --write \"sample/src/**/*.{ts,tsx}\" \"packages/*/src/**/*.{ts,tsx}\"",
+    "sample:pod-install": "cd sample/ios && pod install",
     "sample:ios": "cd sample && yarn ios",
     "sample:android": "cd sample && yarn android",
     "deploy:ios": "cd sample/ios && bundle exec fastlane deploy",
@@ -57,8 +59,10 @@
     "react": "17.0.2",
     "react-native": "0.66.4",
     "react-native-builder-bob": "^0.18.2",
+    "react-native-fast-image": "^8.5.11",
     "react-native-safe-area-context": "^3.3.2",
     "react-test-renderer": "^17.0.2",
+    "typedoc": "^0.23.7",
     "typescript": "^4.5.4"
   },
   "resolutions": {

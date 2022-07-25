@@ -1,14 +1,13 @@
-import { themeFactory } from '../styles/themeFactory';
-import Palette from './Palette';
+import createTheme from './createTheme';
 
-const DarkUIKitTheme = themeFactory({
-  appearance: 'dark',
-  palette: Palette,
+const DarkUIKitTheme = createTheme({
+  colorScheme: 'dark',
   colors: (palette) => ({
     primary: palette.primary200,
+    secondary: palette.secondary200,
+    error: palette.error200,
     background: palette.background600,
     text: palette.onBackgroundDark01,
-    notification: palette.error200,
     onBackground01: palette.onBackgroundDark01,
     onBackground02: palette.onBackgroundDark02,
     onBackground03: palette.onBackgroundDark03,
@@ -17,8 +16,6 @@ const DarkUIKitTheme = themeFactory({
     onBackgroundReverse02: palette.onBackgroundLight02,
     onBackgroundReverse03: palette.onBackgroundLight03,
     onBackgroundReverse04: palette.onBackgroundLight04,
-    secondary: palette.secondary200,
-    error: palette.error200,
     ui: {
       header: {
         nav: {
@@ -157,7 +154,23 @@ const DarkUIKitTheme = themeFactory({
           },
         },
       },
+      groupChannelPreview: {
+        default: {
+          none: {
+            textTitle: palette.onBackgroundDark01,
+            textTitleCaption: palette.onBackgroundDark03,
+            textBody: palette.onBackgroundDark03,
+            bodyIcon: palette.onBackgroundDark02,
+            memberCount: palette.onBackgroundDark02,
+            background: palette.background600,
+            coverBackground: palette.onBackgroundDark04,
+            bodyIconBackground: palette.background500,
+            separator: palette.onBackgroundDark04,
+          },
+        },
+      },
     },
   }),
 });
+
 export default DarkUIKitTheme;

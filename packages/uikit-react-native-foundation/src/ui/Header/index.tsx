@@ -27,7 +27,7 @@ const AlignMapper = { left: 'flex-start', center: 'center', right: 'flex-end' } 
 const Header: React.FC<HeaderProps> & {
   Button: typeof HeaderButton;
   Title: typeof HeaderTitle;
-  SubTitle: typeof HeaderSubTitle;
+  Subtitle: typeof HeaderSubtitle;
 } = ({
   children,
   titleAlign,
@@ -113,7 +113,7 @@ const HeaderTitle: React.FC<{ children: string } & TextProps> = ({ children, sty
     </Text>
   );
 };
-const HeaderSubTitle: React.FC<{ children: string } & TextProps> = ({ children, style, ...props }) => {
+const HeaderSubtitle: React.FC<{ children: string } & TextProps> = ({ children, style, ...props }) => {
   const { colors } = useUIKitTheme();
   return (
     <Text color={colors.onBackground03} {...props} caption2 numberOfLines={1} style={style}>
@@ -184,5 +184,5 @@ const styles = createStyleSheet({
 
 Header.Button = HeaderButton;
 Header.Title = HeaderTitle;
-Header.SubTitle = HeaderSubTitle;
+Header.Subtitle = HeaderSubtitle;
 export default Header;

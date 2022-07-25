@@ -1,6 +1,4 @@
-import type Sendbird from 'sendbird';
-
-import type { SendbirdDataPayload, SendbirdMessage } from '../types';
+import type { SendbirdDataPayload, SendbirdFileMessage, SendbirdMessage } from '../types';
 import { messageTime } from '../ui-format/common';
 
 export function isNewMessage(msg: SendbirdMessage, currentUserId?: string) {
@@ -83,7 +81,7 @@ export function getMessageUniqId(msg: SendbirdMessage) {
   return String(msg.messageId);
 }
 
-export function getAvailableUriFromFileMessage(message: Sendbird.FileMessage) {
+export function getAvailableUriFromFileMessage(message: SendbirdFileMessage) {
   if (!message.url && message.messageParams && 'uri' in message.messageParams.file) {
     return message.messageParams.file.uri;
   }

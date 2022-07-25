@@ -6,7 +6,7 @@ import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { findColorNameFromPalette, getContrastColor } from '../../libs/utils';
 
 const ThemeColorsScreen: React.FC = () => {
-  const { colors, appearance, select, palette } = useUIKitTheme();
+  const { colors, colorScheme, select, palette } = useUIKitTheme();
 
   const fontColor = select({ light: 'black', dark: 'white' });
   const bgColor = select({ light: 'white', dark: 'black' });
@@ -43,7 +43,7 @@ const ThemeColorsScreen: React.FC = () => {
     <SafeAreaView>
       <ScrollView>
         <Text style={{ color: fontColor, backgroundColor: bgColor, textAlign: 'center', paddingVertical: 12 }}>
-          {`Theme: ${appearance}`}
+          {`Theme: ${colorScheme}`}
         </Text>
         {parseColors(colors)}
       </ScrollView>

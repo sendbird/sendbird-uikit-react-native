@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import { Platform } from 'react-native';
 
 const LogLevelEnum = {
   'none': 0,
@@ -11,9 +10,9 @@ const LogLevelEnum = {
 };
 type LogLevel = keyof typeof LogLevelEnum;
 
-const logger = (lv: LogLevel = 'warn') => {
-  let _logLevel = __DEV__ ? lv : 'none';
-  let _title = `[UIKit_${Platform.OS}]`;
+const createLogger = (level: LogLevel = 'warn') => {
+  let _logLevel = level;
+  let _title = '[UIKit]';
 
   return {
     setTitle(title: string) {
@@ -54,7 +53,7 @@ const logger = (lv: LogLevel = 'warn') => {
 };
 
 export const Logger = {
-  ...logger(),
+  ...createLogger(),
   LogLevelEnum,
-  create: logger,
+  create: createLogger,
 };

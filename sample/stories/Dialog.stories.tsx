@@ -52,8 +52,8 @@ const WrappedActionMenu: React.FC = () => {
           openMenu({
             title: 'Action Menu',
             menuItems: [
-              { title: 'Loooooooooooong ActionMenu button title', onPress: () => {} },
-              { title: 'Close', onPress: () => {} },
+              { title: 'Loooooooooooong ActionMenu button title', onPress: () => null },
+              { title: 'Close', onPress: () => null },
             ],
           })
         }
@@ -77,7 +77,7 @@ const WrappedActionMenu: React.FC = () => {
                 onPress: () => {
                   return new Promise((resolve) => {
                     setTimeout(() => {
-                      resolve(0);
+                      resolve();
                       openMenu({ title: 'Menu1', menuItems: [{ title: 'Hello' }] });
                       openMenu({ title: 'Menu2', menuItems: [{ title: 'Hello' }] });
                     }, 2000);
@@ -151,14 +151,14 @@ const WrappedAlert: React.FC = () => {
 };
 
 const WrappedPrompt: React.FC = () => {
-  const { prompt } = usePrompt();
+  const { openPrompt } = usePrompt();
   const { alert } = useAlert();
   return (
     <>
       <Button
         title={'Open Prompt'}
         onPress={() => {
-          prompt({
+          openPrompt({
             title: 'Input your text',
             submitLabel: 'Save',
             onSubmit: (text) => {

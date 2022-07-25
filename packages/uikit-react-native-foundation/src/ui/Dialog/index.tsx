@@ -29,20 +29,20 @@ type DialogJob =
       props: BottomSheetItem;
     };
 
-type DialogPropsBy<T extends DialogJob['type'], U extends DialogJob = DialogJob> = U extends { type: T }
-  ? U['props']
+type DialogPropsBy<T extends DialogJob['type'], U extends DialogJob = DialogJob> = U extends { type: T; props: infer P }
+  ? P
   : never;
 
 type DialogContextType = {
   openMenu: (props: DialogPropsBy<'ActionMenu'>) => void;
   alert: (props: DialogPropsBy<'Alert'>) => void;
-  prompt: (props: DialogPropsBy<'Prompt'>) => void;
+  openPrompt: (props: DialogPropsBy<'Prompt'>) => void;
   openSheet: (props: DialogPropsBy<'BottomSheet'>) => void;
 };
 
-const ActionMenuContext = React.createContext<Pick<DialogContextType, 'openMenu'> | null>(null);
 const AlertContext = React.createContext<Pick<DialogContextType, 'alert'> | null>(null);
-const PromptContext = React.createContext<Pick<DialogContextType, 'prompt'> | null>(null);
+const ActionMenuContext = React.createContext<Pick<DialogContextType, 'openMenu'> | null>(null);
+const PromptContext = React.createContext<Pick<DialogContextType, 'openPrompt'> | null>(null);
 const BottomSheetContext = React.createContext<Pick<DialogContextType, 'openSheet'> | null>(null);
 
 type Props = {
@@ -105,15 +105,15 @@ export const DialogProvider: React.FC<Props> = ({ defaultLabels, children }) => 
       }
     };
 
-  const openMenu = useCallback(createJob('ActionMenu'), []);
   const alert = useCallback(createJob('Alert'), []);
-  const prompt = useCallback(createJob('Prompt'), []);
+  const openMenu = useCallback(createJob('ActionMenu'), []);
+  const openPrompt = useCallback(createJob('Prompt'), []);
   const openSheet = useCallback(createJob('BottomSheet'), []);
 
   return (
     <AlertContext.Provider value={{ alert }}>
       <ActionMenuContext.Provider value={{ openMenu }}>
-        <PromptContext.Provider value={{ prompt }}>
+        <PromptContext.Provider value={{ openPrompt }}>
           <BottomSheetContext.Provider value={{ openSheet }}>
             {children}
             {workingDialogJob.current?.type === 'ActionMenu' && (

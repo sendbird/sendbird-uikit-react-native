@@ -13,7 +13,11 @@ import Text from '../Text';
 
 export type ActionMenuItem = {
   title?: string;
-  menuItems: { title: string; onPress?: () => void; onError?: () => void }[];
+  menuItems: {
+    title: string;
+    onPress?: (() => Promise<void>) | (() => void);
+    onError?: () => void;
+  }[];
 };
 
 type Props = {

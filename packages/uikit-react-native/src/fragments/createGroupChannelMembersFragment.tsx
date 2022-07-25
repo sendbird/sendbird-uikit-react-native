@@ -1,45 +1,71 @@
 import React, { useCallback } from 'react';
-import type Sendbird from 'sendbird';
 
-import { CustomQuery, useUserList } from '@sendbird/uikit-chat-hooks';
-import type { GroupChannelMembersFragment, UserListModule } from '@sendbird/uikit-react-native-core';
-import { createUserListModule, useLocalization, useSendbirdChat } from '@sendbird/uikit-react-native-core';
-import StatusComposition from '@sendbird/uikit-react-native-core/src/components/StatusComposition';
+import { useActiveGroupChannel, useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { Icon } from '@sendbird/uikit-react-native-foundation';
+import type { SendbirdMember } from '@sendbird/uikit-utils';
+import { useForceUpdate, useUniqId } from '@sendbird/uikit-utils';
 
-import UserActionBar from '../ui/UserActionBar';
+import UserActionBar from '../components/UserActionBar';
+import type { GroupChannelMembersFragment } from '../domain/groupChannelUserList/types';
+import createUserListModule from '../domain/userList/module/createUserListModule';
+import type { UserListModule } from '../domain/userList/types';
+import { useLocalization, useSendbirdChat } from '../hooks/useContext';
 
 const noop = () => '';
-const createMemberListQuery = (channel: Sendbird.GroupChannel) => {
-  const query = channel.createMemberListQuery();
-  query.limit = 50;
-  query.order = 'operator_then_member_alphabetical';
-  return new CustomQuery({
-    hasNext(): boolean {
-      return query.hasNext;
-    },
-    isLoading(): boolean {
-      return query.isLoading;
-    },
-    next() {
-      return query.next();
-    },
-  });
-};
-
+const name = 'createGroupChannelMembersFragment';
 const createGroupChannelMembersFragment = (
-  initModule?: Partial<UserListModule<Sendbird.Member>>,
-): GroupChannelMembersFragment<Sendbird.Member> => {
-  const UserListModule = createUserListModule<Sendbird.Member>(initModule);
+  initModule?: Partial<UserListModule<SendbirdMember>>,
+): GroupChannelMembersFragment<SendbirdMember> => {
+  const UserListModule = createUserListModule<SendbirdMember>(initModule);
 
-  return ({ Header, channel, onPressHeaderLeft, onPressHeaderRight, sortComparator, renderUser }) => {
-    const queryCreator = useCallback(() => createMemberListQuery(channel), [channel]);
+  return ({ channel, onPressHeaderLeft, onPressHeaderRight, renderUser }) => {
+    const uniqId = useUniqId(name);
+    const forceUpdate = useForceUpdate();
     const { sdk, currentUser } = useSendbirdChat();
+    const { activeChannel } = useActiveGroupChannel(sdk, channel);
+
     const { STRINGS } = useLocalization();
-    const { users, refreshing, refresh, next, error, loading } = useUserList(sdk, {
-      queryCreator,
-      sortComparator,
-    });
+
+    useChannelHandler(
+      sdk,
+      `${name}_${uniqId}`,
+      {
+        onUserEntered(channel) {
+          if (channel.url === activeChannel.url) forceUpdate();
+        },
+        onUserLeft(channel) {
+          if (channel.url === activeChannel.url) forceUpdate();
+        },
+        onUserJoined(channel) {
+          if (channel.url === activeChannel.url) forceUpdate();
+        },
+        onUserUnmuted(channel) {
+          if (channel.url === activeChannel.url) forceUpdate();
+        },
+        onUserUnbanned(channel) {
+          if (channel.url === activeChannel.url) forceUpdate();
+        },
+        onUserBanned(channel) {
+          if (channel.url === activeChannel.url) forceUpdate();
+        },
+        onUserMuted(channel) {
+          if (channel.url === activeChannel.url) forceUpdate();
+        },
+        onChannelMemberCountChanged(channels) {
+          if (channels.find((c) => c.url === channel.url)) forceUpdate();
+        },
+        onChannelChanged(channel) {
+          if (channel.url === activeChannel.url) forceUpdate();
+        },
+        onChannelFrozen(channel) {
+          if (channel.url === activeChannel.url) forceUpdate();
+        },
+        onChannelUnfrozen(channel) {
+          if (channel.url === activeChannel.url) forceUpdate();
+        },
+      },
+      [activeChannel],
+    );
 
     const _renderUser: NonNullable<typeof renderUser> = useCallback(
       (user, selectedUsers, setSelectedUsers) => {
@@ -62,31 +88,22 @@ const createGroupChannelMembersFragment = (
       },
       [renderUser],
     );
+
     return (
       <UserListModule.Provider headerRight={noop} headerTitle={STRINGS.GROUP_CHANNEL_MEMBERS.HEADER_TITLE}>
         <UserListModule.Header
           shouldActivateHeaderRight={() => true}
-          Header={Header}
           onPressHeaderLeft={onPressHeaderLeft}
           right={<Icon icon={'plus'} />}
           onPressHeaderRight={async () => onPressHeaderRight()}
         />
 
-        <StatusComposition
-          loading={loading}
-          error={Boolean(error)}
-          LoadingComponent={<UserListModule.StatusLoading />}
-          ErrorComponent={<UserListModule.StatusError onPressRetry={() => refresh()} />}
-        >
-          <UserListModule.List
-            onLoadNext={next}
-            users={users}
-            renderUser={_renderUser}
-            onRefresh={refresh}
-            refreshing={refreshing}
-            ListEmptyComponent={<UserListModule.StatusEmpty />}
-          />
-        </StatusComposition>
+        <UserListModule.List
+          users={activeChannel.members}
+          renderUser={_renderUser}
+          onLoadNext={async () => void 0}
+          ListEmptyComponent={<UserListModule.StatusEmpty />}
+        />
       </UserListModule.Provider>
     );
   };

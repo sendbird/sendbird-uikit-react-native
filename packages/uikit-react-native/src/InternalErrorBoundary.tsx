@@ -1,8 +1,7 @@
 import React, { ErrorInfo } from 'react';
 import { View } from 'react-native';
 
-import { TypedPlaceholder } from '@sendbird/uikit-react-native-core';
-
+import TypedPlaceholder from './components/TypedPlaceholder';
 import type { ErrorBoundaryProps } from './types';
 
 const DefaultErrorBoundaryComponent = (props: ErrorBoundaryProps) => {

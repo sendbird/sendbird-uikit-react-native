@@ -2,36 +2,45 @@
 import type { ReactElement, ReactNode } from 'react';
 import type { TextStyle } from 'react-native';
 
-export type TypoName =
-  | 'h1'
-  | 'h2'
-  | 'subtitle1'
-  | 'subtitle2'
-  | 'body1'
-  | 'body2'
-  | 'body3'
-  | 'button'
-  | 'caption1'
-  | 'caption2'
-  | 'caption3'
-  | 'caption4';
+export interface UIKitTypography {
+  h1: FontAttributes;
+  h2: FontAttributes;
+  subtitle1: FontAttributes;
+  subtitle2: FontAttributes;
+  body1: FontAttributes;
+  body2: FontAttributes;
+  body3: FontAttributes;
+  button: FontAttributes;
+  caption1: FontAttributes;
+  caption2: FontAttributes;
+  caption3: FontAttributes;
+  caption4: FontAttributes;
+}
+export type TypoName = keyof UIKitTypography;
 export type FontAttributes = Pick<TextStyle, 'fontFamily' | 'fontSize' | 'lineHeight' | 'letterSpacing' | 'fontWeight'>;
-export type Typography = Record<TypoName, FontAttributes>;
 
-export type UIKitAppearance = 'light' | 'dark';
+export type UIKitColorScheme = 'light' | 'dark';
 export interface UIKitTheme {
-  appearance: UIKitAppearance;
-  select<T>(options: { light?: T; dark: T; default?: T } | { light: T; dark?: T; default?: T }): T;
+  colorScheme: UIKitColorScheme;
+  select<V>(options: { [key in UIKitColorScheme | 'default']?: V }): V;
 
-  palette: PaletteInterface;
+  palette: UIKitPalette;
   colors: UIKitColors;
 
-  typography: Typography;
-  scaleFactor: (dp: number) => number;
+  typography: UIKitTypography;
 }
 
-type Component = 'Header' | 'Button' | 'Dialog' | 'Input' | 'Badge' | 'Placeholder' | 'Message' | 'DateSeparator';
-type GetColorTree<
+export type Component =
+  | 'Header'
+  | 'Button'
+  | 'Dialog'
+  | 'Input'
+  | 'Badge'
+  | 'Placeholder'
+  | 'Message'
+  | 'DateSeparator'
+  | 'GroupChannelPreview';
+export type GetColorTree<
   Tree extends {
     Variant: {
       [key in Component]: string;
@@ -55,6 +64,7 @@ export type ComponentColorTree = GetColorTree<{
     Placeholder: 'default';
     Message: 'incoming' | 'outgoing';
     DateSeparator: 'default';
+    GroupChannelPreview: 'default';
   };
   State: {
     Header: 'none';
@@ -65,6 +75,7 @@ export type ComponentColorTree = GetColorTree<{
     Placeholder: 'none';
     Message: 'enabled' | 'pressed';
     DateSeparator: 'none';
+    GroupChannelPreview: 'none';
   };
   ColorPart: {
     Header: 'background' | 'borderBottom';
@@ -75,9 +86,19 @@ export type ComponentColorTree = GetColorTree<{
     Placeholder: 'content' | 'highlight';
     Message: 'textMsg' | 'textEdited' | 'textSenderName' | 'textTime' | 'background';
     DateSeparator: 'text' | 'background';
+    GroupChannelPreview:
+      | 'textTitle'
+      | 'textTitleCaption'
+      | 'textBody'
+      | 'memberCount'
+      | 'bodyIcon'
+      | 'background'
+      | 'coverBackground'
+      | 'bodyIconBackground'
+      | 'separator';
   };
 }>;
-type ComponentColors<T extends Component> = {
+export type ComponentColors<T extends Component> = {
   [key in ComponentColorTree['Variant'][T]]: {
     [key in ComponentColorTree['State'][T]]: {
       [key in ComponentColorTree['ColorPart'][T]]: string;
@@ -87,9 +108,10 @@ type ComponentColors<T extends Component> = {
 
 export interface UIKitColors {
   primary: string;
+  secondary: string;
+  error: string;
   background: string;
   text: string;
-  notification: string;
   onBackground01: string;
   onBackground02: string;
   onBackground03: string;
@@ -98,15 +120,13 @@ export interface UIKitColors {
   onBackgroundReverse02: string;
   onBackgroundReverse03: string;
   onBackgroundReverse04: string;
-  secondary: string;
-  error: string;
   /**
    * UI Colors has below structure
    * Component.{Variant}.{State}.{ColorPart}
    * @example
    * ```
    *  const { colors } = useUIKitTheme();
-   *  colors.button.contained.disabled.backgroundColor
+   *  colors.ui.button.contained.disabled.backgroundColor
    * ```
    * */
   ui: {
@@ -118,11 +138,12 @@ export interface UIKitColors {
     placeholder: ComponentColors<'Placeholder'>;
     message: ComponentColors<'Message'>;
     dateSeparator: ComponentColors<'DateSeparator'>;
+    groupChannelPreview: ComponentColors<'GroupChannelPreview'>;
   };
 }
 
-type HeaderElement = string | ReactElement | null;
-type HeaderPartProps = {
+export type HeaderElement = string | ReactElement | null;
+export type HeaderPartProps = {
   title?: HeaderElement;
   right?: HeaderElement;
   left?: HeaderElement;
@@ -134,7 +155,7 @@ export type BaseHeaderProps<HeaderParts extends HeaderPartProps = {}, Additional
   children?: ReactNode;
 } & HeaderParts &
   AdditionalProps;
-export interface PaletteInterface {
+export interface UIKitPalette {
   primary100: string;
   primary200: string;
   primary300: string;

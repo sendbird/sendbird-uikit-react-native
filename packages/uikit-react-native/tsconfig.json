@@ -5,10 +5,10 @@
       "path": "../uikit-chat-hooks"
     },
     {
-      "path": "../uikit-react-native-core"
+      "path": "../uikit-react-native-foundation"
     },
     {
-      "path": "../uikit-react-native-foundation"
+      "path": "../uikit-utils"
     }
   ],
   "compilerOptions": {

@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import type Sendbird from 'sendbird';
 
-import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
+import type { SendbirdChatSDK, SendbirdGroupChannel } from '@sendbird/uikit-utils';
 
-export const useActiveGroupChannel = (sdk: SendbirdChatSDK, staleChannel: Sendbird.GroupChannel) => {
+export const useActiveGroupChannel = (sdk: SendbirdChatSDK, staleChannel: SendbirdGroupChannel) => {
   const [activeChannel, setActiveChannel] = useState(() => staleChannel);
 
   useEffect(() => {

@@ -1,32 +1,32 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
-import type { GroupChannelFragment, GroupChannelModule, GroupChannelProps } from '@sendbird/uikit-react-native-core';
-import { createGroupChannelModule, useSendbirdChat } from '@sendbird/uikit-react-native-core';
-import StatusComposition from '@sendbird/uikit-react-native-core/src/components/StatusComposition';
 import { NOOP, PASS, messageComparator } from '@sendbird/uikit-utils';
 
-import MessageRenderer from '../ui/MessageRenderer';
-import DefaultNewMessagesTooltip from '../ui/NewMessagesTooltip';
-import DefaultScrollToBottomTooltip from '../ui/ScrollToBottomTooltip';
+import MessageRenderer from '../components/MessageRenderer';
+import NewMessagesButton from '../components/NewMessagesButton';
+import ScrollToBottomButton from '../components/ScrollToBottomButton';
+import StatusComposition from '../components/StatusComposition';
+import createGroupChannelModule from '../domain/groupChannel/module/createGroupChannelModule';
+import type { GroupChannelFragment, GroupChannelModule, GroupChannelProps } from '../domain/groupChannel/types';
+import { useSendbirdChat } from '../hooks/useContext';
 
 const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): GroupChannelFragment => {
   const GroupChannelModule = createGroupChannelModule(initModule);
 
   return ({
-    NewMessagesTooltip = DefaultNewMessagesTooltip,
-    ScrollToBottomTooltip = DefaultScrollToBottomTooltip,
+    renderNewMessagesButton = (props) => <NewMessagesButton {...props} />,
+    renderScrollToBottomButton = (props) => <ScrollToBottomButton {...props} />,
     renderMessage,
     enableMessageGrouping = true,
     enableTypingIndicator = true,
-    Header,
     onPressHeaderLeft = NOOP,
     onPressHeaderRight = NOOP,
     onPressImageMessage = NOOP,
     onChannelDeleted = NOOP,
     onBeforeSendFileMessage = PASS,
     onBeforeSendUserMessage = PASS,
-    staleChannel,
+    channel,
     keyboardAvoidOffset,
     queryCreator,
     collectionCreator,
@@ -39,7 +39,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       activeChannel,
       messages,
       nextMessages,
-      newMessagesFromNext,
+      newMessagesFromMembers,
       next,
       prev,
       sendFileMessage,
@@ -49,7 +49,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       resendMessage,
       deleteMessage,
       loading,
-    } = useGroupChannelMessages(sdk, staleChannel, currentUser?.userId, {
+    } = useGroupChannelMessages(sdk, channel, currentUser?.userId, {
       collectionCreator,
       queryCreator,
       sortComparator,
@@ -118,11 +118,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
         enableTypingIndicator={enableTypingIndicator}
         keyboardAvoidOffset={keyboardAvoidOffset}
       >
-        <GroupChannelModule.Header
-          Header={Header}
-          onPressHeaderLeft={onPressHeaderLeft}
-          onPressHeaderRight={onPressHeaderRight}
-        />
+        <GroupChannelModule.Header onPressHeaderLeft={onPressHeaderLeft} onPressHeaderRight={onPressHeaderRight} />
         <StatusComposition loading={loading} LoadingComponent={<GroupChannelModule.StatusLoading />}>
           <GroupChannelModule.MessageList
             enableMessageGrouping={enableMessageGrouping}
@@ -131,11 +127,11 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             renderMessage={_renderMessage}
             messages={messages}
             nextMessages={nextMessages}
-            newMessagesFromNext={newMessagesFromNext}
+            newMessagesFromMembers={newMessagesFromMembers}
             onTopReached={prev}
             onBottomReached={next}
-            NewMessagesTooltip={NewMessagesTooltip}
-            ScrollToBottomTooltip={ScrollToBottomTooltip}
+            renderNewMessagesButton={renderNewMessagesButton}
+            renderScrollToBottomButton={renderScrollToBottomButton}
             onResendFailedMessage={resendMessage}
             onDeleteMessage={deleteMessage}
             onPressImageMessage={onPressImageMessage}

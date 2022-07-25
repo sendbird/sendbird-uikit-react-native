@@ -3,8 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 
-import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
-import { useSendbirdChat } from '@sendbird/uikit-react-native-core';
+import { SendbirdUIKitContainer, useSendbirdChat } from '@sendbird/uikit-react-native';
 import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 import { APP_ID } from './env';
@@ -95,5 +94,46 @@ const Navigations = () => {
     </NavigationContainer>
   );
 };
+
+/**
+ *
+ * @example How to customize UIKit global navigation
+ * ```
+ * const UseReactNavigationHeader: HeaderStyleContextType['HeaderComponent'] = ({
+ *   title,
+ *   right,
+ *   left,
+ *   onPressLeft,
+ *   onPressRight,
+ * }) => {
+ *   const { navigation } = useAppNavigation();
+ *   useEffect(() => {
+ *     navigation.setOptions({
+ *       headerShown: true,
+ *       headerTitleAlign: 'center',
+ *       headerBackVisible: false,
+ *       headerTitle: () => (typeof title === 'string' ? <Text subtitle2>{title}</Text> : title),
+ *       headerLeft: () => <Pressable onPress={onPressLeft}>{left}</Pressable>,
+ *       headerRight: () => <Pressable onPress={onPressRight}>{right}</Pressable>,
+ *     });
+ *   }, [title, right, left, onPressLeft, onPressRight]);
+ *   return null;
+ * };
+ *
+ * const App = () => {
+ *   return (
+ *     <SendbirdUIKitContainer
+ *       appId={APP_ID}
+ *       styles={{
+ *         HeaderComponent: UseReactNavigationHeader,
+ *       }}
+ *     >
+ *       <Navigations />
+ *     </SendbirdUIKitContainer>
+ *   );
+ * };
+ *
+ * ```
+ * */
 
 export default App;
