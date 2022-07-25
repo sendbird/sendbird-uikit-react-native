@@ -90,7 +90,7 @@
     "react-native-image-picker": "^4.7.1",
     "react-native-permissions": "^3.6.0",
     "react-native-safe-area-context": "^3.3.2",
-    "sendbird": "^3.1.21"
+    "sendbird": "^3.1.22"
   },
   "peerDependenciesMeta": {
     "@react-native-clipboard/clipboard": {
