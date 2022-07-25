@@ -1,7 +1,7 @@
 # @sendbird/uikit-react-native
 
-[![Platform React-Native](https://img.shields.io/badge/Platform-React--Native-black.svg)](https://reactnative.dev/)
-[![Language TypeScript](https://img.shields.io/badge/Language-TypeScript-black.svg)](https://www.typescriptlang.org/)
+[![Platform React-Native](https://img.shields.io/badge/Platform-React--Native-orange.svg)](https://reactnative.dev/)
+[![Language TypeScript](https://img.shields.io/badge/Language-TypeScript-orange.svg)](https://www.typescriptlang.org/)
 
 > React-Native based UI kit based on sendbird javascript SDK
 
