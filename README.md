@@ -2,8 +2,6 @@
 
 [![Platform React-Native](https://img.shields.io/badge/Platform-React--Native-black.svg)](https://reactnative.dev/)
 [![Language TypeScript](https://img.shields.io/badge/Language-TypeScript-black.svg)](https://www.typescriptlang.org/)
-[![Build](https://github.com/sendbird/sendbird-uikit-react-native/actions/workflows/status-build.yml/badge.svg)](https://github.com/sendbird/sendbird-uikit-react-native/actions/workflows/status-build.yml)
-[![Test](https://github.com/sendbird/sendbird-uikit-react-native/actions/workflows/status-test.yml/badge.svg)](https://github.com/sendbird/sendbird-uikit-react-native/actions/workflows/status-test.yml)
 
 ## Requirements
 
