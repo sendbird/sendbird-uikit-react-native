@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/uikit-utils",
-  "version": "0.1.2",
+  "version": "1.0.0-rc.0",
   "description": "UIKit utilities",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",

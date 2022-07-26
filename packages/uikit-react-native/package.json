@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/uikit-react-native",
-  "version": "0.1.2",
+  "version": "1.0.0-rc.0",
   "description": "react-native-uikit",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -40,9 +40,9 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@sendbird/uikit-chat-hooks": "0.1.2",
-    "@sendbird/uikit-react-native-foundation": "0.1.2",
-    "@sendbird/uikit-utils": "0.1.2"
+    "@sendbird/uikit-chat-hooks": "1.0.0-rc.0",
+    "@sendbird/uikit-react-native-foundation": "1.0.0-rc.0",
+    "@sendbird/uikit-utils": "1.0.0-rc.0"
   },
   "devDependencies": {
     "@react-native-clipboard/clipboard": "^1.8.5",

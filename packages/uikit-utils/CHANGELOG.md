@@ -1,7 +1,23 @@
-# Change Log
+# Changelog
 
-All notable changes to this project will be documented in this file.
-See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+# [1.0.0-rc.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v0.1.2...v1.0.0-rc.0) (2022-07-26)
+
+
+### Bug Fixes
+
+* **chat-hooks:** rename module ([7a2c30c](https://github.com/sendbird/sendbird-uikit-react-native/commit/7a2c30cf136883ef551ae59e9cc848fea81088ff))
+* improve stability ([72648d1](https://github.com/sendbird/sendbird-uikit-react-native/commit/72648d14e00a01b4c856e7b794a6a22ee7e5b9d7))
+* update sdk, fix locale injection ([a86ad81](https://github.com/sendbird/sendbird-uikit-react-native/commit/a86ad81f05ebbd42dd65f1ae0919e4459cbb9439))
+* **util:** url replacer ([07753b1](https://github.com/sendbird/sendbird-uikit-react-native/commit/07753b19547d13f8a76c2850009ae71fda20aa27))
+
+
+### Features
+
+* **uikit:** added extension ([52de301](https://github.com/sendbird/sendbird-uikit-react-native/commit/52de301bd8cfa7f660162e0c4951e4db53a3238e))
+
+
+
+
 
 ## 0.1.2 (2022-04-26)
 

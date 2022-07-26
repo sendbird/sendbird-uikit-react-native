@@ -1,7 +1,36 @@
-# Change Log
+# Changelog
 
-All notable changes to this project will be documented in this file.
-See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+# [1.0.0-rc.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v0.1.2...v1.0.0-rc.0) (2022-07-26)
+
+
+### Bug Fixes
+
+* apply strings review ([a4c94e3](https://github.com/sendbird/sendbird-uikit-react-native/commit/a4c94e380f64919f929c9a494e9fcfb6ba1263cf))
+* **chat-hooks:** rename module ([7a2c30c](https://github.com/sendbird/sendbird-uikit-react-native/commit/7a2c30cf136883ef551ae59e9cc848fea81088ff))
+* **core:** changed label keys, inject one-source user no name label ([003d46d](https://github.com/sendbird/sendbird-uikit-react-native/commit/003d46d22e3771e6eaec3b2efea79d9715357073))
+* **core:** GroupChannelSettings component segmentation ([4bfdfde](https://github.com/sendbird/sendbird-uikit-react-native/commit/4bfdfdea09e75d61b58967586417ad39a2b8aa2a))
+* **core:** re-naming GroupChannelInfo to GroupChannelSettings ([afc6e23](https://github.com/sendbird/sendbird-uikit-react-native/commit/afc6e23a90ca8dabc4d684b3b27ab3e5817c7caa))
+* **core:** renamed ignoreActiveOnly prop of UserListHeader ([89e80d9](https://github.com/sendbird/sendbird-uikit-react-native/commit/89e80d9672ea20684a4732f2329e26ad4a2f9fb9))
+* **core:** renamed onLeaveChannel prop of GroupChannelFragment ([d5aa8f7](https://github.com/sendbird/sendbird-uikit-react-native/commit/d5aa8f7944e35a6bbeecbc02b332a4f51f9fdf2b))
+* improve stability ([1698bc1](https://github.com/sendbird/sendbird-uikit-react-native/commit/1698bc19b0c1cc3641c27ef627475ea0355e4e9a))
+* improve stability ([72648d1](https://github.com/sendbird/sendbird-uikit-react-native/commit/72648d14e00a01b4c856e7b794a6a22ee7e5b9d7))
+* **uikit:** display username as single line ([fad080b](https://github.com/sendbird/sendbird-uikit-react-native/commit/fad080bcdcc40e65f5214082f4f4916bc7661377))
+* **uikit:** fragment creator params should be partial ([c53ba95](https://github.com/sendbird/sendbird-uikit-react-native/commit/c53ba95c75396a0fe67dde26f8741d039ac97223))
+* **uikit:** prevent crash on open graph ([a5663ca](https://github.com/sendbird/sendbird-uikit-react-native/commit/a5663ca365abf3bb90110d2754fffa299cd3468c))
+* **uikit:** remove sdk injection, support better locale type infer ([13dfe9d](https://github.com/sendbird/sendbird-uikit-react-native/commit/13dfe9df6482be97fc9da249d3ea188561cd21f3))
+* **uikit:** set keyboardAvoidOffset as a prop ([7679e2f](https://github.com/sendbird/sendbird-uikit-react-native/commit/7679e2fd833d23e9ec8a1ec1f544f8fb2c0e7483))
+
+
+### Features
+
+* added status component to GroupChannelList ([8ee6ae5](https://github.com/sendbird/sendbird-uikit-react-native/commit/8ee6ae5542c81be173c6329ed6efca5aa1aa8364))
+* **uikit:** added error boundary ([952cf9c](https://github.com/sendbird/sendbird-uikit-react-native/commit/952cf9cda612a515d5e7910b6dce81d6c2ee6efb))
+* **uikit:** added extension ([52de301](https://github.com/sendbird/sendbird-uikit-react-native/commit/52de301bd8cfa7f660162e0c4951e4db53a3238e))
+* **uikit:** added internal local cache storage ([f78a492](https://github.com/sendbird/sendbird-uikit-react-native/commit/f78a492651ea3a2a1e6b4300d6d33c83eac075d0))
+
+
+
+
 
 ## 0.1.2 (2022-04-26)
 
