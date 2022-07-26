@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/uikit-utils",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "UIKit utilities",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -34,7 +34,8 @@
   },
   "homepage": "https://github.com/sendbird/sendbird-uikit-react-native.git#readme",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "dependencies": {
     "date-fns": "^2.28.0",

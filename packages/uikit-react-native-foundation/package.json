@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/uikit-react-native-foundation",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "react-native-uikit",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -34,10 +34,11 @@
   },
   "homepage": "https://github.com/sendbird/sendbird-uikit-react-native.git#readme",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "dependencies": {
-    "@sendbird/uikit-utils": "0.1.2"
+    "@sendbird/uikit-utils": "1.0.0"
   },
   "devDependencies": {
     "@types/react": "17.0.2",
@@ -52,8 +53,8 @@
   "peerDependencies": {
     "react": ">=16.13.1",
     "react-native": ">=0.63.3",
-    "react-native-fast-image": "^8.5.11",
-    "react-native-safe-area-context": "^3.3.2"
+    "react-native-fast-image": ">=8.5.11",
+    "react-native-safe-area-context": ">=3.3.2"
   },
   "peerDependenciesMeta": {
     "react-native-fast-image": {

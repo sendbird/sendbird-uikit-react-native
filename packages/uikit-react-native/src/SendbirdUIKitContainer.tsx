@@ -99,7 +99,7 @@ const SendbirdUIKitContainer = ({
       sdk.addExtension('device-os-platform', SendbirdUIKit.PLATFORM);
     }
 
-    if (NetInfo) {
+    if (NetInfo?.addEventListener) {
       const listener = (callback: () => void, callbackType: 'online' | 'offline') => {
         const unsubscribe = NetInfo.addEventListener((state) => {
           const online = Boolean(state.isConnected) || Boolean(state.isInternetReachable);

@@ -14,7 +14,6 @@ function getImageModule(): SendbirdImageComponent {
   const hasFastImage = Boolean(NativeModules.FastImageView);
   if (hasFastImage) {
     try {
-      require('react-native-fast-image');
       return require('./Image.fastimage').default;
     } catch (e) {
       return require('./Image.reactnative').default;
