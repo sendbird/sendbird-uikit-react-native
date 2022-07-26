@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/uikit-chat-hooks",
-  "version": "1.0.0-rc.4",
+  "version": "1.0.0",
   "description": "React hooks that built with SendbirdChat SDK",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -38,7 +38,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@sendbird/uikit-utils": "1.0.0-rc.4"
+    "@sendbird/uikit-utils": "1.0.0"
   },
   "devDependencies": {
     "@types/react": "17.0.2",

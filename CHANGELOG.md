@@ -1,5 +1,15 @@
 # Changelog
 
+# [1.0.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.0.0-rc.4...v1.0.0) (2022-07-26)
+
+**Note:** Version bump only for package sendbird-uikit-react-native
+
+
+
+
+
+# Changelog
+
 # [1.0.0-rc.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.0.0-rc.3...v1.0.0-rc.4) (2022-07-26)
 
 **Note:** Version bump only for package sendbird-uikit-react-native
