@@ -34,7 +34,8 @@
   },
   "homepage": "https://github.com/sendbird/sendbird-uikit-react-native.git#readme",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "dependencies": {
     "@sendbird/uikit-utils": "1.0.0-rc.0"
