@@ -1,5 +1,5 @@
 import React from 'react';
-import _FastImage, { FastImageProps, ResizeMode, Source } from 'react-native-fast-image';
+import type { FastImageProps, ResizeMode, Source } from 'react-native-fast-image';
 
 import type { SendbirdImageComponent, SendbirdImageProps } from './index';
 
@@ -46,7 +46,11 @@ function convertResizeMode(mode?: SendbirdImageProps['resizeMode']): ResizeMode 
   }
 }
 
-const FastImage = _FastImage as (props: FastImageProps) => JSX.Element;
+let FastImage: (props: FastImageProps) => JSX.Element | null = () => null;
+
+try {
+  FastImage = require('react-native-fast-image') as (props: FastImageProps) => JSX.Element;
+} catch {}
 
 const Image_FastImage: SendbirdImageComponent = ({ source, resizeMode, onLoad, onError, style, ...props }) => {
   return (
