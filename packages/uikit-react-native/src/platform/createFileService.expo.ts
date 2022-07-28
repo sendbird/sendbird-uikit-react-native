@@ -1,7 +1,7 @@
-import type ExpoDocumentPicker from 'expo-document-picker';
-import type ExpoFs from 'expo-file-system';
-import type ExpoImagePicker from 'expo-image-picker';
-import type ExpoMediaLibrary from 'expo-media-library';
+import type * as ExpoDocumentPicker from 'expo-document-picker';
+import type * as ExpoFs from 'expo-file-system';
+import type * as ExpoImagePicker from 'expo-image-picker';
+import type * as ExpoMediaLibrary from 'expo-media-library';
 
 import { getFileExtension, getFileType } from '@sendbird/uikit-utils';
 
@@ -83,7 +83,6 @@ const createExpoFileService = ({
       return fileTypeGuard({ uri, size, type: `${type}/${ext.slice(1)}`, name: Date.now() + ext });
     }
     async openMediaLibrary(options: OpenMediaLibraryOptions) {
-      const selectionLimit = options?.selectionLimit || 1;
       const hasPermission = await this.hasMediaLibraryPermission('read');
       if (!hasPermission) {
         const granted = await this.requestMediaLibraryPermission('read');
@@ -93,17 +92,14 @@ const createExpoFileService = ({
         }
       }
 
-      const response = await imagePickerModule.launchImageLibraryAsync({ allowsMultipleSelection: true });
+      const response = await imagePickerModule.launchImageLibraryAsync();
       if (response.cancelled) return null;
+      const { uri } = response;
 
-      return Promise.all(
-        response.selected.slice(0, selectionLimit).map(async ({ uri }) => {
-          const { size } = await fsModule.getInfoAsync(uri);
-          const ext = getFileExtension(uri);
-          const type = getFileType(ext);
-          return fileTypeGuard({ uri, size, type: `${type}/${ext.slice(1)}`, name: Date.now() + ext });
-        }),
-      );
+      const { size } = await fsModule.getInfoAsync(uri);
+      const ext = getFileExtension(uri);
+      const type = getFileType(ext);
+      return [fileTypeGuard({ uri, size, type: `${type}/${ext.slice(1)}`, name: Date.now() + ext })];
     }
 
     async openDocument(options?: OpenDocumentOptions): Promise<FilePickerResponse> {
@@ -131,7 +127,9 @@ const createExpoFileService = ({
       const downloadPath = `${basePath}/${options.fileName}`;
 
       const response = await fsModule.downloadAsync(options.fileUrl, downloadPath);
-      await mediaLibraryModule.saveToLibraryAsync(response.uri);
+      if (getFileType(options.fileType || '').match(/video|image/)) {
+        await mediaLibraryModule.saveToLibraryAsync(response.uri);
+      }
       return response.uri;
     }
   }
