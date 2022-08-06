@@ -34,7 +34,7 @@ type Props = {
  * Modal Close: Triggered by Modal.props.onClose() call
  * - Modal.props.onClose() -> visible false -> animation start -> modalVisible false
  * */
-const Modal: React.FC<Props> = ({
+const Modal = ({
   children,
   onClose,
   backgroundStyle,
@@ -45,7 +45,7 @@ const Modal: React.FC<Props> = ({
   enableKeyboardAvoid = false,
   statusBarTranslucent,
   ...props
-}) => {
+}: Props) => {
   const { palette } = useUIKitTheme();
   const { content, backdrop, showTransition, hideTransition } = useModalAnimation(type);
   const panResponder = useModalPanResponder(type, content.translateY, showTransition, onClose);

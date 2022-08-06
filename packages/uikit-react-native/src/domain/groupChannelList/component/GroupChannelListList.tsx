@@ -8,13 +8,13 @@ import { PASS, SendbirdGroupChannel, useFreshCallback } from '@sendbird/uikit-ut
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import type { GroupChannelListProps } from '../types';
 
-const GroupChannelListList: React.FC<GroupChannelListProps['List']> = ({
+const GroupChannelListList = ({
   renderGroupChannelPreview,
   groupChannels,
   onLoadNext,
   flatListProps,
   menuItemCreator = PASS,
-}) => {
+}: GroupChannelListProps['List']) => {
   const toast = useToast();
   const { openMenu } = useActionMenu();
   const { STRINGS } = useLocalization();

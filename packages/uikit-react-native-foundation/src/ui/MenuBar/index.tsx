@@ -23,7 +23,7 @@ export type MenuBarProps = {
   actionLabel?: string;
   actionItem?: React.ReactNode;
 };
-const MenuBar: React.FC<MenuBarProps> = ({
+const MenuBar = ({
   variant = 'default',
   disabled,
   onPress,
@@ -33,7 +33,7 @@ const MenuBar: React.FC<MenuBarProps> = ({
   iconBackgroundColor,
   actionLabel,
   actionItem = null,
-}) => {
+}: MenuBarProps) => {
   const { palette, colors } = useUIKitTheme();
 
   return (

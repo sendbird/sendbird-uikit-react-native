@@ -4,7 +4,7 @@ import { Animated, Platform, Pressable } from 'react-native';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 
-interface SwitchProps {
+type SwitchProps = React.PropsWithChildren<{
   trackColor?: string;
   thumbColor?: string;
   inactiveThumbColor?: string;
@@ -12,15 +12,15 @@ interface SwitchProps {
 
   value: boolean;
   onChangeValue: (val: boolean) => void;
-}
-const Switch: React.FC<SwitchProps> = ({
+}>;
+const Switch = ({
   value,
   onChangeValue,
   inactiveThumbColor,
   inactiveTrackColor,
   trackColor,
   thumbColor,
-}) => {
+}: SwitchProps) => {
   const { select, palette, colors } = useUIKitTheme();
   const position = useRef(new Animated.Value(0)).current;
 

@@ -5,7 +5,7 @@ import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 import { findColorNameFromPalette, getContrastColor } from '../../libs/utils';
 
-const ThemeColorsScreen: React.FC = () => {
+const ThemeColorsScreen = () => {
   const { colors, colorScheme, select, palette } = useUIKitTheme();
 
   const fontColor = select({ light: 'black', dark: 'white' });

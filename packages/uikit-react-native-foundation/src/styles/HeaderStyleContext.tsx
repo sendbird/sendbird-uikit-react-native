@@ -29,12 +29,12 @@ export const HeaderStyleContext = React.createContext<HeaderStyleContextType>({
 });
 
 type Props = Pick<HeaderStyleContextType, 'statusBarTranslucent' | 'defaultTitleAlign' | 'HeaderComponent'>;
-export const HeaderStyleProvider: React.FC<Props> = ({
+export const HeaderStyleProvider = ({
   children,
   HeaderComponent = () => null,
   defaultTitleAlign,
   statusBarTranslucent,
-}) => {
+}: React.PropsWithChildren<Props>) => {
   const { top } = useSafeAreaInsets();
 
   return (

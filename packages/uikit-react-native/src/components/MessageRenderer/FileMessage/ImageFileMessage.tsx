@@ -5,7 +5,7 @@ import { getAvailableUriFromFileMessage } from '@sendbird/uikit-utils';
 
 import type { FileMessageProps } from './index';
 
-const ImageFileMessage: React.FC<FileMessageProps> = ({ message }) => {
+const ImageFileMessage = ({ message }: FileMessageProps) => {
   const { colors } = useUIKitTheme();
   const [imageNotFound, setImageNotFound] = useState(false);
 

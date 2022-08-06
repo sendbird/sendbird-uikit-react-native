@@ -10,7 +10,7 @@ const AppearanceContext = createContext<{ scheme: 'light' | 'dark'; setScheme: (
   setScheme: NOOP,
 });
 
-export const AppearanceProvider: React.FC<{}> = ({ children }) => {
+export const AppearanceProvider = ({ children }: React.PropsWithChildren) => {
   const [scheme, setScheme] = useState<'light' | 'dark'>(Appearance.getColorScheme() ?? DEFAULT_APPEARANCE);
 
   // Handle scheme from Settings screen.

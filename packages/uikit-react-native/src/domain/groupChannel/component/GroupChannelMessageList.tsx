@@ -30,7 +30,7 @@ import type { GroupChannelProps } from '../types';
 
 const HANDLE_NEXT_MSG_SEPARATELY = Platform.select({ default: true });
 
-const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
+const GroupChannelMessageList = ({
   currentUserId,
   channel,
   messages,
@@ -46,7 +46,7 @@ const GroupChannelMessageList: React.FC<GroupChannelProps['MessageList']> = ({
   onPressImageMessage,
   flatListProps,
   enableMessageGrouping,
-}) => {
+}: GroupChannelProps['MessageList']) => {
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
   const { left, right } = useSafeAreaInsets();

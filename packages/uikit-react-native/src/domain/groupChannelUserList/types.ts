@@ -1,8 +1,7 @@
-import type React from 'react';
-
 import type { UseUserListOptions } from '@sendbird/uikit-chat-hooks';
 import type { SendbirdGroupChannel, SendbirdGroupChannelParams } from '@sendbird/uikit-utils';
 
+import type { CommonComponent } from '../../types';
 import type { GroupChannelType } from '../groupChannelList/types';
 import type { UserListProps } from '../userList/types';
 
@@ -23,7 +22,7 @@ export interface GroupChannelCreateProps<User> {
     renderUser?: UserListProps<User>['List']['renderUser'];
   };
 }
-export type GroupChannelCreateFragment<User> = React.FC<GroupChannelCreateProps<User>['Fragment']>;
+export type GroupChannelCreateFragment<User> = CommonComponent<GroupChannelCreateProps<User>['Fragment']>;
 
 export interface GroupChannelInviteProps<User> {
   Fragment: {
@@ -36,7 +35,7 @@ export interface GroupChannelInviteProps<User> {
     sortComparator?: UseUserListOptions<User>['sortComparator'];
   };
 }
-export type GroupChannelInviteFragment<User> = React.FC<GroupChannelInviteProps<User>['Fragment']>;
+export type GroupChannelInviteFragment<User> = CommonComponent<GroupChannelInviteProps<User>['Fragment']>;
 
 export interface GroupChannelMembersProps<User> {
   Fragment: {
@@ -47,4 +46,4 @@ export interface GroupChannelMembersProps<User> {
     renderUser?: UserListProps<User>['List']['renderUser'];
   };
 }
-export type GroupChannelMembersFragment<User> = React.FC<GroupChannelMembersProps<User>['Fragment']>;
+export type GroupChannelMembersFragment<User> = CommonComponent<GroupChannelMembersProps<User>['Fragment']>;

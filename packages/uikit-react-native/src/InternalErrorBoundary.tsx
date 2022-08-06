@@ -15,6 +15,7 @@ const DefaultErrorBoundaryComponent = (props: ErrorBoundaryProps) => {
 class InternalErrorBoundary extends React.PureComponent<{
   onError?: (props: ErrorBoundaryProps) => void;
   ErrorInfoComponent?: (props: ErrorBoundaryProps) => JSX.Element;
+  children?: React.ReactNode;
 }> {
   static defaultProps = {
     ErrorInfoComponent: DefaultErrorBoundaryComponent,

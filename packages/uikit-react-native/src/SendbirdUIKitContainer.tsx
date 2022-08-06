@@ -34,8 +34,7 @@ export const SendbirdUIKit = Object.freeze({
   PLATFORM: Platform.OS.toLowerCase(),
 });
 
-export type SendbirdUIKitContainerProps = {
-  children?: React.ReactNode;
+export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   appId: string;
   platformServices: {
     file: FileServiceInterface;
@@ -63,7 +62,7 @@ export type SendbirdUIKitContainerProps = {
     onError?: (props: ErrorBoundaryProps) => void;
     ErrorInfoComponent?: (props: ErrorBoundaryProps) => JSX.Element;
   };
-};
+}>;
 
 const SendbirdUIKitContainer = ({
   children,
@@ -160,7 +159,7 @@ const SendbirdUIKitContainer = ({
   );
 };
 
-const LocalizedDialogProvider: React.FC = ({ children }) => {
+const LocalizedDialogProvider = ({ children }: React.PropsWithChildren) => {
   const { STRINGS } = useLocalization();
   return (
     <DialogProvider

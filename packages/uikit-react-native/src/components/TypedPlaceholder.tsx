@@ -16,7 +16,7 @@ type Props = {
     | 'loading';
   onPressRetry?: () => void;
 };
-const TypedPlaceholder: React.FC<Props> = ({ type, onPressRetry }) => {
+const TypedPlaceholder = ({ type, onPressRetry }: Props) => {
   const { STRINGS } = useLocalization();
   switch (type) {
     case 'no-banned-members':

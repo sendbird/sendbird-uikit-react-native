@@ -6,8 +6,12 @@ import type { SendbirdMessage } from '@sendbird/uikit-utils';
 
 import { useLocalization } from '../../hooks/useContext';
 
-type Props = { message: SendbirdMessage; grouping: boolean; style?: StyleProp<ViewStyle> };
-const MessageTime: React.FC<Props> = ({ message, grouping, style }) => {
+type Props = {
+  message: SendbirdMessage;
+  grouping: boolean;
+  style?: StyleProp<ViewStyle>;
+};
+const MessageTime = ({ message, grouping, style }: Props) => {
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
   if (grouping) return null;

@@ -16,7 +16,7 @@ type Props = {
   size?: 'small' | 'default';
 };
 
-const Badge: React.FC<Props> = ({ count, maxCount, badgeColor, textColor, style, size = 'default' }) => {
+const Badge = ({ count, maxCount, badgeColor, textColor, style, size = 'default' }: Props) => {
   const { colors } = useUIKitTheme();
   const isSmall = size === 'small';
   return (

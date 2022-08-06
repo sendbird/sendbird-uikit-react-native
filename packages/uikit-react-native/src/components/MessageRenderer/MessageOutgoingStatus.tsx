@@ -14,7 +14,7 @@ import { useSendbirdChat } from '../../hooks/useContext';
 const SIZE = 16;
 
 type Props = { channel: SendbirdGroupChannel; message: SendbirdMessage };
-const MessageOutgoingStatus: React.FC<Props> = ({ channel, message }) => {
+const MessageOutgoingStatus = ({ channel, message }: Props) => {
   if (!message.isUserMessage() && !message.isFileMessage()) return null;
 
   const handlerId = useUniqId('MessageOutgoingStatus');

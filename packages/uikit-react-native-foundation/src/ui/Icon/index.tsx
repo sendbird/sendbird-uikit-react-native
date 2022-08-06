@@ -15,8 +15,13 @@ type Props = {
   style?: StyleProp<ImageStyle>;
   containerStyle?: StyleProp<ViewStyle>;
 };
-
-const Icon: React.FC<Props> & { Assets: typeof IconAssets } = ({ icon, color, size = 24, containerStyle, style }) => {
+const Icon: ((props: Props) => JSX.Element) & { Assets: typeof IconAssets } = ({
+  icon,
+  color,
+  size = 24,
+  containerStyle,
+  style,
+}) => {
   const sizeStyle = sizeStyles[size as SizeFactor] ?? { width: size, height: size };
   const { colors } = useUIKitTheme();
   return (

@@ -12,13 +12,13 @@ type Context = { show(text: string, type?: ToastType): void };
 
 const ToastContext = createContext<Context | null>(null);
 
-type Props = {
+type Props = React.PropsWithChildren<{
   top?: number;
   bottom?: number;
   visible: boolean;
   type: ToastType;
   children: string;
-};
+}>;
 
 const useOpacity = () => {
   const opacity = useRef(new Animated.Value(0)).current;
@@ -32,7 +32,8 @@ const useOpacity = () => {
     hide: () => transition(0),
   };
 };
-const Toast: React.FC<Props> = ({ visible, type, children, top, bottom }) => {
+
+const Toast = ({ visible, type, children, top, bottom }: Props) => {
   const { colors, select, palette } = useUIKitTheme();
   const { opacity, show, hide } = useOpacity();
 
@@ -67,7 +68,10 @@ const Toast: React.FC<Props> = ({ visible, type, children, top, bottom }) => {
 };
 
 const VISIBLE_MS = 3000;
-export const ToastProvider: React.FC<{ dismissTimeout?: number }> = ({ children, dismissTimeout = VISIBLE_MS }) => {
+export const ToastProvider = ({
+  children,
+  dismissTimeout = VISIBLE_MS,
+}: React.PropsWithChildren<{ dismissTimeout?: number }>) => {
   const [state, setState] = useState({ visible: false, type: 'error' as ToastType, text: '' });
   const { bottom } = useSafeAreaInsets();
 

@@ -10,7 +10,7 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
-const LoadingSpinner: React.FC<Props> = ({ size = 24, color, style }) => {
+const LoadingSpinner = ({ size = 24, color, style }: Props) => {
   const { colors } = useUIKitTheme();
   return (
     <Rotate style={style}>
@@ -37,7 +37,7 @@ const useLoopAnimated = (duration: number, useNativeDriver = true) => {
   return animated;
 };
 
-const Rotate: React.FC<{ style: StyleProp<ViewStyle> }> = ({ children, style }) => {
+const Rotate = ({ children, style }: React.PropsWithChildren<{ style: StyleProp<ViewStyle> }>) => {
   const loop = useLoopAnimated(1000);
   const rotate = loop.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '360deg'] });
   return <Animated.View style={[style, { transform: [{ rotate }] }]}>{children}</Animated.View>;

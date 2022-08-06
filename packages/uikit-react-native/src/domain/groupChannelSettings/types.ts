@@ -41,10 +41,10 @@ export interface GroupChannelSettingsContextsType {
   }>;
 }
 export interface GroupChannelSettingsModule {
-  Provider: React.FC<GroupChannelSettingsProps['Provider']>;
+  Provider: CommonComponent<GroupChannelSettingsProps['Provider']>;
   Header: CommonComponent<GroupChannelSettingsProps['Header']>;
   Info: CommonComponent<GroupChannelSettingsProps['Info']>;
   Menu: CommonComponent<GroupChannelSettingsProps['Menu']>;
 }
 
-export type GroupChannelSettingsFragment = React.FC<GroupChannelSettingsProps['Fragment']>;
+export type GroupChannelSettingsFragment = CommonComponent<GroupChannelSettingsProps['Fragment']>;

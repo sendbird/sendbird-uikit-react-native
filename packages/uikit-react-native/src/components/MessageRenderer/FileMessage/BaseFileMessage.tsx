@@ -8,12 +8,10 @@ import type { FileMessageProps } from './index';
 
 const iconMapper = { audio: 'file-audio', image: 'photo', video: 'play', file: 'file-document' } as const;
 
-const BaseFileMessage: React.FC<FileMessageProps & { type: 'image' | 'audio' | 'video' | 'file' }> = ({
-  message,
-  variant,
-  pressed,
-  type,
-}) => {
+type Props = FileMessageProps & {
+  type: 'image' | 'audio' | 'video' | 'file';
+};
+const BaseFileMessage = ({ message, variant, pressed, type }: Props) => {
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
   const color = colors.ui.message[variant][pressed ? 'pressed' : 'enabled'];

@@ -11,7 +11,7 @@ import EditInput from './EditInput';
 import SendInput from './SendInput';
 
 const KEYBOARD_AVOID_VIEW_BEHAVIOR = Platform.select({ ios: 'padding' as const, default: undefined });
-const GroupChannelInput: React.FC<GroupChannelProps['Input']> = (props) => {
+const GroupChannelInput = (props: GroupChannelProps['Input']) => {
   const { channel } = props;
 
   const { left, right, bottom } = useSafeAreaInsets();
@@ -65,7 +65,7 @@ const GroupChannelInput: React.FC<GroupChannelProps['Input']> = (props) => {
     </KeyboardAvoidingView>
   );
 };
-const SafeAreaBottom: React.FC<{ height: number }> = ({ height }) => {
+const SafeAreaBottom = ({ height }: { height: number }) => {
   return <View style={{ height }} />;
 };
 

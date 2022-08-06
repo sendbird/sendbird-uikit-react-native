@@ -56,7 +56,7 @@ export interface UserListContextsType<User> {
 }
 
 export interface UserListModule<User> {
-  Provider: React.FC<UserListProps<User>['Provider']>;
+  Provider: CommonComponent<UserListProps<User>['Provider']>;
   Header: CommonComponent<UserListProps<User>['Header']>;
   List: CommonComponent<UserListProps<User>['List']>;
   StatusEmpty: CommonComponent;

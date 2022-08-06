@@ -1,4 +1,3 @@
-import type React from 'react';
 import type { ImageProps as NativeImageProps } from 'react-native';
 import { NativeModules } from 'react-native';
 
@@ -8,7 +7,7 @@ export interface SendbirdImageProps extends Omit<NativeImageProps, 'onLoad' | 'o
   tintColor?: string;
 }
 
-export type SendbirdImageComponent = React.FC<SendbirdImageProps>;
+export type SendbirdImageComponent = (props: SendbirdImageProps) => JSX.Element;
 
 function getImageModule(): SendbirdImageComponent {
   const hasFastImage = Boolean(NativeModules.FastImageView);

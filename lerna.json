@@ -14,6 +14,76 @@
     },
     "version": {
       "conventionalCommits": true,
+      "changelogPreset": {
+        "name": "conventional-changelog-conventionalcommits",
+        "types": [
+          {
+            "type": "feat",
+            "section": "Features"
+          },
+          {
+            "type": "feature",
+            "section": "Features"
+          },
+          {
+            "type": "fix",
+            "section": "Bug Fixes"
+          },
+          {
+            "type": "refactor",
+            "section": "Improvements"
+          },
+          {
+            "type": "enhancement",
+            "section": "Improvements"
+          },
+          {
+            "type": "perf",
+            "section": "Improvements"
+          },
+          {
+            "type": "docs",
+            "section": "Documentation"
+          },
+          {
+            "type": "revert",
+            "section": "Reverts",
+            "hidden": true
+          },
+          {
+            "type": "style",
+            "section": "Styles",
+            "hidden": true
+          },
+          {
+            "type": "chore",
+            "section": "Miscellaneous Chores",
+            "hidden": true
+          },
+          {
+            "type": "test",
+            "section": "Tests",
+            "hidden": true
+          },
+          {
+            "type": "build",
+            "section": "Build System",
+            "hidden": true
+          },
+          {
+            "type": "ci",
+            "section": "Continuous Integration",
+            "hidden": true
+          }
+        ],
+        "issuePrefixes": [
+          "#"
+        ],
+        "issueUrlFormat": "{{host}}/{{owner}}/{{repository}}/issues/{{id}}",
+        "commitUrlFormat": "{{host}}/{{owner}}/{{repository}}/commit/{{hash}}",
+        "compareUrlFormat": "{{host}}/{{owner}}/{{repository}}/compare/{{previousTag}}...{{currentTag}}",
+        "userUrlFormat": "{{host}}/{{user}}"
+      },
       "exact": true,
       "gitRemote": "origin",
       "message": "chore(release): release packages %s"
