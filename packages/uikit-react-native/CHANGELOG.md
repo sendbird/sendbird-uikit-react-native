@@ -1,14 +1,13 @@
 # Changelog
 
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
 # [1.0.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.0.0-rc.4...v1.0.0) (2022-07-26)
 
 **Note:** Version bump only for package @sendbird/uikit-react-native
 
 
-
-
-
-# Changelog
 
 # [1.0.0-rc.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.0.0-rc.3...v1.0.0-rc.4) (2022-07-26)
 
@@ -16,19 +15,11 @@
 
 
 
-
-
-# Changelog
-
 # [1.0.0-rc.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.0.0-rc.2...v1.0.0-rc.3) (2022-07-26)
 
 **Note:** Version bump only for package @sendbird/uikit-react-native
 
 
-
-
-
-# Changelog
 
 # [1.0.0-rc.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.0.0-rc.1...v1.0.0-rc.2) (2022-07-26)
 
@@ -36,19 +27,11 @@
 
 
 
-
-
-# Changelog
-
 # [1.0.0-rc.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.0.0-rc.0...v1.0.0-rc.1) (2022-07-26)
 
 **Note:** Version bump only for package @sendbird/uikit-react-native
 
 
-
-
-
-# Changelog
 
 # [1.0.0-rc.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v0.1.2...v1.0.0-rc.0) (2022-07-26)
 
@@ -77,8 +60,6 @@
 * **uikit:** added error boundary ([952cf9c](https://github.com/sendbird/sendbird-uikit-react-native/commit/952cf9cda612a515d5e7910b6dce81d6c2ee6efb))
 * **uikit:** added extension ([52de301](https://github.com/sendbird/sendbird-uikit-react-native/commit/52de301bd8cfa7f660162e0c4951e4db53a3238e))
 * **uikit:** added internal local cache storage ([f78a492](https://github.com/sendbird/sendbird-uikit-react-native/commit/f78a492651ea3a2a1e6b4300d6d33c83eac075d0))
-
-
 
 
 
