@@ -41,8 +41,8 @@
     "@sendbird/uikit-utils": "1.0.0"
   },
   "devDependencies": {
-    "@types/react": "17.0.2",
-    "@types/react-native": "^0.66.15",
+    "@types/react": "*",
+    "@types/react-native": "*",
     "react": "17.0.2",
     "react-native": "0.66.4",
     "react-native-builder-bob": "^0.18.0",

@@ -15,8 +15,10 @@ import { conditionChaining } from '@sendbird/uikit-utils';
 import { useLocalization } from '../../../hooks/useContext';
 import type { UserMessageProps } from './index';
 
-type Props = UserMessageProps & { ogMetaData: Sendbird.OGMetaData };
-const OpenGraphUserMessage: React.FC<Props> = ({ message, variant, pressed, ogMetaData }) => {
+type Props = UserMessageProps & {
+  ogMetaData: Sendbird.OGMetaData;
+};
+const OpenGraphUserMessage = ({ message, variant, pressed, ogMetaData }: Props) => {
   const { STRINGS } = useLocalization();
   const { colors, select, palette } = useUIKitTheme();
   const color = colors.ui.message[variant][pressed ? 'pressed' : 'enabled'];

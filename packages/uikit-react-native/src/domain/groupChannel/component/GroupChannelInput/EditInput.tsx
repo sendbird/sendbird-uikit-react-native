@@ -15,7 +15,7 @@ type EditInputProps = GroupChannelProps['Input'] & {
 };
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
-const EditInput: React.FC<EditInputProps> = ({ text, setText, editMessage, setEditMessage, onUpdateUserMessage }) => {
+const EditInput = ({ text, setText, editMessage, setEditMessage, onUpdateUserMessage }: EditInputProps) => {
   const { STRINGS } = useLocalization();
   const inputRef = useRef<RNTextInput>(null);
   const toast = useToast();

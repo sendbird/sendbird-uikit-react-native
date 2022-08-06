@@ -6,7 +6,7 @@ import type { TypoName, UIKitTheme } from '../../types';
 
 type TypographyProps = Partial<Record<TypoName, boolean>>;
 export type TextProps = RNTextProps & TypographyProps & { color?: ((colors: UIKitTheme['colors']) => string) | string };
-const Text: React.FC<TextProps> = ({ children, color, style, ...props }) => {
+const Text = ({ children, color, style, ...props }: TextProps) => {
   const { colors } = useUIKitTheme();
   const typoStyle = useTypographyFilter(props);
   return (

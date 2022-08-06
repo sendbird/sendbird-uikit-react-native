@@ -22,7 +22,7 @@ type Props = {
   onError?: (error: unknown) => void;
   onDismiss?: () => void;
 } & BottomSheetItem;
-const BottomSheet: React.FC<Props> = ({ onDismiss, onHide, visible, sheetItems }) => {
+const BottomSheet = ({ onDismiss, onHide, visible, sheetItems }: Props) => {
   const { statusBarTranslucent } = useHeaderStyle();
   const { width } = useWindowDimensions();
   const { bottom, left, right } = useSafeAreaInsets();

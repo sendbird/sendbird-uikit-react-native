@@ -12,7 +12,7 @@ type Props = {
   containerStyle?: StyleProp<ViewStyle>;
 };
 
-const ChannelCover: React.FC<Props> = ({ channel, ...avatarProps }) => {
+const ChannelCover = ({ channel, ...avatarProps }: Props) => {
   const { currentUser } = useSendbirdChat();
 
   // channel cover

@@ -26,7 +26,7 @@ type Props = {
   onError?: (error: unknown) => void;
   onDismiss?: () => void;
 } & ActionMenuItem;
-const ActionMenu: React.FC<Props> = ({ visible, onHide, onError, onDismiss, title, menuItems }) => {
+const ActionMenu = ({ visible, onHide, onError, onDismiss, title, menuItems }: Props) => {
   const { statusBarTranslucent } = useHeaderStyle();
   const { colors } = useUIKitTheme();
   const [pending, setPending] = useState(false);

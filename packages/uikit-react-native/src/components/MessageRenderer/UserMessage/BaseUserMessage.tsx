@@ -6,7 +6,7 @@ import { Text, URLParsedText, createStyleSheet, useUIKitTheme } from '@sendbird/
 import { useLocalization } from '../../../hooks/useContext';
 import type { UserMessageProps } from './index';
 
-const BaseUserMessage: React.FC<UserMessageProps> = ({ message, variant, pressed }) => {
+const BaseUserMessage = ({ message, variant, pressed }: UserMessageProps) => {
   const { colors } = useUIKitTheme();
   const color = colors.ui.message[variant][pressed ? 'pressed' : 'enabled'];
   const { STRINGS } = useLocalization();

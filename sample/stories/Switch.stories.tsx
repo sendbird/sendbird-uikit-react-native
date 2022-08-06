@@ -34,7 +34,7 @@ export default SwitchMeta;
 type SwitchStory = ComponentStory<typeof SwitchComponent>;
 export const Default: SwitchStory = (args) => <WrappedSwitch {...args} />;
 
-const WrappedSwitch: React.FC = (props) => {
+const WrappedSwitch = (props: object) => {
   const [value, setValue] = useState(false);
   return <SwitchComponent value={value} onChangeValue={setValue} {...props} />;
 };

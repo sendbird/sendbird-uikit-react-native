@@ -28,7 +28,7 @@ type Props = {
   onDismiss?: () => void;
   autoFocus?: boolean;
 } & PromptItem;
-const Prompt: React.FC<Props> = ({
+const Prompt = ({
   onDismiss,
   visible,
   onHide,
@@ -40,7 +40,7 @@ const Prompt: React.FC<Props> = ({
   onCancel = NOOP,
   submitLabel = 'Submit',
   cancelLabel = 'Cancel',
-}) => {
+}: Props) => {
   const { statusBarTranslucent } = useHeaderStyle();
   const { colors } = useUIKitTheme();
   const inputRef = useRef<RNTextInput>(null);

@@ -11,7 +11,7 @@ type Props = {
   backgroundColor?: string;
   containerStyle?: StyleProp<ViewStyle>;
 };
-const AvatarIcon: React.FC<Props> = ({ size = 56, icon, containerStyle, backgroundColor }) => {
+const AvatarIcon = ({ size = 56, icon, containerStyle, backgroundColor }: Props) => {
   const { colors, palette } = useUIKitTheme();
   return (
     <View

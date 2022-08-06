@@ -114,7 +114,7 @@ export interface GroupChannelContextsType {
   }>;
 }
 export interface GroupChannelModule {
-  Provider: React.FC<GroupChannelProps['Provider']>;
+  Provider: CommonComponent<GroupChannelProps['Provider']>;
   Header: CommonComponent<GroupChannelProps['Header']>;
   MessageList: CommonComponent<GroupChannelProps['MessageList']>;
   Input: CommonComponent<GroupChannelProps['Input']>;
@@ -122,4 +122,4 @@ export interface GroupChannelModule {
   StatusLoading: CommonComponent;
 }
 
-export type GroupChannelFragment = React.FC<GroupChannelProps['Fragment']>;
+export type GroupChannelFragment = CommonComponent<GroupChannelProps['Fragment']>;

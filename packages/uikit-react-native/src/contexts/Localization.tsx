@@ -2,10 +2,9 @@ import React from 'react';
 
 import type { StringSet } from '../localization/StringSet.type';
 
-type Props = {
+type Props = React.PropsWithChildren<{
   stringSet: StringSet;
-  children?: React.ReactNode;
-};
+}>;
 
 export type LocalizationContextType = {
   STRINGS: StringSet;

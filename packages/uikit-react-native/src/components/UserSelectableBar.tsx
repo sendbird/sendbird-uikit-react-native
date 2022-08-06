@@ -10,7 +10,7 @@ type Props = {
   selected: boolean;
   disabled: boolean;
 };
-const UserSelectableBar: React.FC<Props> = ({ uri, name, selected, disabled }) => {
+const UserSelectableBar = ({ uri, name, selected, disabled }: Props) => {
   const { colors } = useUIKitTheme();
 
   const iconColor = conditionChaining(

@@ -5,7 +5,7 @@ import { Icon, Text, useHeaderStyle, useUIKitTheme } from '@sendbird/uikit-react
 import { GroupChannelSettingsContexts } from '../module/moduleContext';
 import type { GroupChannelSettingsProps } from '../types';
 
-const GroupChannelSettingsHeader: React.FC<GroupChannelSettingsProps['Header']> = ({ onPressHeaderLeft }) => {
+const GroupChannelSettingsHeader = ({ onPressHeaderLeft }: GroupChannelSettingsProps['Header']) => {
   const { colors } = useUIKitTheme();
   const { headerTitle, headerRight, onPressHeaderRight } = useContext(GroupChannelSettingsContexts.Fragment);
 

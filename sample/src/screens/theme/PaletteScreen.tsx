@@ -5,7 +5,7 @@ import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 import { getContrastColor } from '../../libs/utils';
 
-const PaletteScreen: React.FC = () => {
+const PaletteScreen = () => {
   const { palette } = useUIKitTheme();
   return (
     <SafeAreaView>

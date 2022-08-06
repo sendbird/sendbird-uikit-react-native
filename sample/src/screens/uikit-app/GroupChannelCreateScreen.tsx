@@ -8,7 +8,7 @@ import { Routes } from '../../libs/navigation';
 
 const GroupChannelCreateFragment = createGroupChannelCreateFragment<SendbirdUser>();
 
-const GroupChannelCreateScreen: React.FC = () => {
+const GroupChannelCreateScreen = () => {
   const { navigation, params } = useAppNavigation<Routes.GroupChannelCreate>();
 
   return (

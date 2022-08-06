@@ -4,7 +4,7 @@ import { NOOP } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization } from '../../../hooks/useContext';
-import type { GroupChannelListContextsType } from '../types';
+import type { GroupChannelListContextsType, GroupChannelListModule } from '../types';
 
 export const GroupChannelListContexts: GroupChannelListContextsType = {
   Fragment: createContext({
@@ -18,7 +18,7 @@ export const GroupChannelListContexts: GroupChannelListContextsType = {
   }),
 };
 
-export const GroupChannelListContextsProvider: React.FC = ({ children }) => {
+export const GroupChannelListContextsProvider: GroupChannelListModule['Provider'] = ({ children }) => {
   const { STRINGS } = useLocalization();
 
   // Type selector

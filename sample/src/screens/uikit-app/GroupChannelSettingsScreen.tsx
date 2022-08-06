@@ -7,7 +7,7 @@ import { useAppNavigation } from '../../hooks/useAppNavigation';
 import { Routes } from '../../libs/navigation';
 
 const GroupChannelSettingsFragment = createGroupChannelSettingsFragment();
-const GroupChannelSettingsScreen: React.FC = () => {
+const GroupChannelSettingsScreen = () => {
   const { sdk } = useSendbirdChat();
   const { navigation, params } = useAppNavigation<Routes.GroupChannelSettings>();
   const [channel] = useState(() => sdk.GroupChannel.buildFromSerializedData(params.serializedChannel));

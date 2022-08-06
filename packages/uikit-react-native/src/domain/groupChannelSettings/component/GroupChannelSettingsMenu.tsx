@@ -8,11 +8,11 @@ import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelSettingsContexts } from '../module/moduleContext';
 import type { GroupChannelSettingsProps } from '../types';
 
-const GroupChannelSettingsMenu: React.FC<GroupChannelSettingsProps['Menu']> = ({
+const GroupChannelSettingsMenu = ({
   onPressMenuMembers,
   onPressMenuLeaveChannel,
   menuItemsCreator = (menu) => menu,
-}) => {
+}: GroupChannelSettingsProps['Menu']) => {
   const { sdk } = useSendbirdChat();
   const { channel } = useContext(GroupChannelSettingsContexts.Fragment);
   const { STRINGS } = useLocalization();

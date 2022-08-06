@@ -37,7 +37,7 @@ const HomeItems: { title: string; desc?: string; image?: any; route?: Routes }[]
   },
 ];
 
-const HomeScreen: React.FC = () => {
+const HomeScreen = () => {
   const { top, bottom, left, right } = useSafeAreaInsets();
   const { navigation } = useAppNavigation();
   const { signOut } = useAppAuth();

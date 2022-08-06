@@ -18,7 +18,7 @@ type Props = TextProps & {
   onPressUrl?: OnPressUrl;
   strict?: boolean;
 };
-const URLParsedText: React.FC<Props> = ({ children, onPressUrl = openUrl, strict, ...props }) => {
+const URLParsedText = ({ children, onPressUrl = openUrl, strict, ...props }: Props) => {
   const parsedChildren = useMemo((): React.ReactNode => {
     return React.Children.map(React.Children.toArray(children), (child) => {
       if (typeof child === 'string') {

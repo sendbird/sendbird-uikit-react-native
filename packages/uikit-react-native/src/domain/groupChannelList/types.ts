@@ -80,7 +80,7 @@ export interface GroupChannelListContextsType {
   }>;
 }
 export interface GroupChannelListModule {
-  Provider: React.FC;
+  Provider: CommonComponent;
   Header: CommonComponent<GroupChannelListProps['Header']>;
   List: CommonComponent<GroupChannelListProps['List']>;
   TypeSelector: CommonComponent<GroupChannelListProps['TypeSelector']>;
@@ -88,5 +88,5 @@ export interface GroupChannelListModule {
   StatusLoading: CommonComponent;
 }
 
-export type GroupChannelListFragment = React.FC<GroupChannelListProps['Fragment']>;
+export type GroupChannelListFragment = CommonComponent<GroupChannelListProps['Fragment']>;
 export type GroupChannelType = 'GROUP' | 'SUPER_GROUP' | 'BROADCAST';

@@ -7,7 +7,7 @@ import { Button, Text, TextInput, useUIKitTheme } from '@sendbird/uikit-react-na
 import { SendbirdAPI } from '../factory';
 import { useAppAuth } from '../libs/authentication';
 
-const SignInScreen: React.FC = () => {
+const SignInScreen = () => {
   const [userId, setUserId] = useState('');
   const [nickname, setNickname] = useState('');
 

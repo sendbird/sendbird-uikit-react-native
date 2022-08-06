@@ -12,7 +12,7 @@ type Props = {
   prevMessage?: SendbirdMessage;
 };
 
-const MessageDateSeparator: React.FC<Props> = ({ message, prevMessage }) => {
+const MessageDateSeparator = ({ message, prevMessage }: Props) => {
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
   const sameDay = isSameDay(message.createdAt, prevMessage?.createdAt ?? 0);
