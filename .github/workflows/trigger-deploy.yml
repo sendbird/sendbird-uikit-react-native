@@ -1,4 +1,4 @@
-name: TRIGGER_DEPLOY
+name: deployment trigger
 
 on:
   workflow_dispatch:
