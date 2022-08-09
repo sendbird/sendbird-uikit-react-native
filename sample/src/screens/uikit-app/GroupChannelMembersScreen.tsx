@@ -8,7 +8,7 @@ import { Routes } from '../../libs/navigation';
 
 const GroupChannelMembersFragment = createGroupChannelMembersFragment();
 
-const GroupChannelMembersScreen: React.FC = () => {
+const GroupChannelMembersScreen = () => {
   const { navigation, params } = useAppNavigation<Routes.GroupChannelInvite>();
   const { sdk } = useSendbirdChat();
 

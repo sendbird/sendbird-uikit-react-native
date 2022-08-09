@@ -27,7 +27,7 @@ type Props = {
   notificationOff?: boolean;
 };
 
-const GroupChannelPreview: React.FC<Props> = ({
+const GroupChannelPreview = ({
   customCover,
   coverUrl,
   memberCount,
@@ -39,7 +39,7 @@ const GroupChannelPreview: React.FC<Props> = ({
   titleCaption,
   frozen,
   notificationOff,
-}) => {
+}: Props) => {
   const { colors } = useUIKitTheme();
   const color = colors.ui.groupChannelPreview;
 

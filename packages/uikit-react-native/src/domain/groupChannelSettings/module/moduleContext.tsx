@@ -14,7 +14,7 @@ import {
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../../hooks/useContext';
-import type { GroupChannelSettingsContextsType, GroupChannelSettingsProps } from '../types';
+import type { GroupChannelSettingsContextsType, GroupChannelSettingsModule } from '../types';
 
 export const GroupChannelSettingsContexts: GroupChannelSettingsContextsType = {
   Fragment: createContext({
@@ -26,10 +26,7 @@ export const GroupChannelSettingsContexts: GroupChannelSettingsContextsType = {
 };
 
 const HOOK_NAME = 'GroupChannelSettingsContextsProvider';
-export const GroupChannelSettingsContextsProvider: React.FC<GroupChannelSettingsProps['Provider']> = ({
-  children,
-  channel,
-}) => {
+export const GroupChannelSettingsContextsProvider: GroupChannelSettingsModule['Provider'] = ({ children, channel }) => {
   const uniqId = useUniqId(HOOK_NAME);
   const forceUpdate = useForceUpdate();
   const { STRINGS } = useLocalization();

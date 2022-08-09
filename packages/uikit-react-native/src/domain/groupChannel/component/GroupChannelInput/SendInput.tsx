@@ -19,7 +19,7 @@ type SendInputProps = GroupChannelProps['Input'] & {
   setText: (val: string) => void;
   disabled: boolean;
 };
-const SendInput: React.FC<SendInputProps> = ({ onSendUserMessage, onSendFileMessage, text, setText, disabled }) => {
+const SendInput = ({ onSendUserMessage, onSendFileMessage, text, setText, disabled }: SendInputProps) => {
   const { STRINGS } = useLocalization();
   const { openSheet } = useBottomSheet();
   const { fileService } = usePlatformService();

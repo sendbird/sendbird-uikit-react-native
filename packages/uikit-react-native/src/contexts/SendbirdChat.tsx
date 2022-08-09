@@ -7,13 +7,13 @@ import { useForceUpdate } from '@sendbird/uikit-utils';
 
 import type { FileType } from '../platform/types';
 
-type Props = {
+type Props = React.PropsWithChildren<{
   sdkInstance: SendbirdChatSDK;
 
   enableAutoPushTokenRegistration: boolean;
   // enableChannelListTypingIndicator: boolean;
   // enableChannelListMessageReceiptStatus: boolean;
-};
+}>;
 
 type Context = {
   sdk: SendbirdChatSDK;
@@ -39,7 +39,7 @@ type Context = {
 };
 
 export const SendbirdChatContext = React.createContext<Context | null>(null);
-export const SendbirdChatProvider: React.FC<Props> = ({ children, sdkInstance, enableAutoPushTokenRegistration }) => {
+export const SendbirdChatProvider = ({ children, sdkInstance, enableAutoPushTokenRegistration }: Props) => {
   const [currentUser, _setCurrentUser] = useState<SendbirdUser>();
   const forceUpdate = useForceUpdate();
   const appFeatures = useAppFeatures(sdkInstance);

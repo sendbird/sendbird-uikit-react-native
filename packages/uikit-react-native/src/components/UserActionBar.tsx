@@ -12,7 +12,7 @@ type Props = {
   disabled: boolean;
   onPressActionMenu?: () => void;
 };
-const UserActionBar: React.FC<Props> = ({ muted, uri, name, disabled, onPressActionMenu, label }) => {
+const UserActionBar = ({ muted, uri, name, disabled, onPressActionMenu, label }: Props) => {
   const { colors } = useUIKitTheme();
 
   const iconColor = conditionChaining([disabled], [colors.onBackground04, colors.onBackground01]);

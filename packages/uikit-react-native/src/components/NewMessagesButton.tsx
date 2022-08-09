@@ -11,7 +11,7 @@ type Props = {
   visible: boolean;
   onPress: () => void;
 };
-const NewMessagesButton: React.FC<Props> = ({ newMessages, visible, onPress }) => {
+const NewMessagesButton = ({ newMessages, visible, onPress }: Props) => {
   const { STRINGS } = useLocalization();
   const { select, palette, colors } = useUIKitTheme();
   if (newMessages.length === 0 || !visible) return null;

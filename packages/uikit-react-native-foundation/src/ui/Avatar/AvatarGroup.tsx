@@ -3,8 +3,11 @@ import { StyleProp, View, ViewStyle } from 'react-native';
 
 const MAX = 4;
 
-type Props = { size?: number; containerStyle?: StyleProp<ViewStyle> };
-const AvatarGroup: React.FC<Props> = ({ children, containerStyle, size = 56 }) => {
+type Props = React.PropsWithChildren<{
+  size?: number;
+  containerStyle?: StyleProp<ViewStyle>;
+}>;
+const AvatarGroup = ({ children, containerStyle, size = 56 }: Props) => {
   const childAmount = React.Children.count(children);
 
   if (childAmount === 0) {

@@ -2,7 +2,7 @@
 import React, { createContext } from 'react';
 
 import ProviderLayout from '../../../components/ProviderLayout';
-import type { __domain__ContextsType } from '../types';
+import type { __domain__ContextsType, __domain__Module } from '../types';
 
 export const __domain__Contexts: __domain__ContextsType = {
   Fragment: createContext({
@@ -10,7 +10,7 @@ export const __domain__Contexts: __domain__ContextsType = {
   }),
 };
 
-export const __domain__ContextsProvider: React.FC = ({ children }) => {
+export const __domain__ContextsProvider: __domain__Module['Provider'] = ({ children }) => {
   // const [visible, setVisible] = useState(false);
 
   return (

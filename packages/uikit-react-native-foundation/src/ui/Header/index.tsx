@@ -24,7 +24,7 @@ type HeaderProps = BaseHeaderProps<
 >;
 
 const AlignMapper = { left: 'flex-start', center: 'center', right: 'flex-end' } as const;
-const Header: React.FC<HeaderProps> & {
+const Header: ((props: HeaderProps) => JSX.Element) & {
   Button: typeof HeaderButton;
   Title: typeof HeaderTitle;
   Subtitle: typeof HeaderSubtitle;
@@ -82,7 +82,7 @@ const Header: React.FC<HeaderProps> & {
   );
 };
 
-const LeftSide: React.FC<HeaderProps> = ({ titleAlign, onPressLeft, left }) => {
+const LeftSide = ({ titleAlign, onPressLeft, left }: HeaderProps) => {
   if (titleAlign === 'center') {
     return <View style={styles.left}>{left && <HeaderButton onPress={onPressLeft}>{left}</HeaderButton>}</View>;
   }
@@ -94,7 +94,7 @@ const LeftSide: React.FC<HeaderProps> = ({ titleAlign, onPressLeft, left }) => {
   );
 };
 
-const RightSide: React.FC<HeaderProps> = ({ titleAlign, onPressRight, right }) => {
+const RightSide = ({ titleAlign, onPressRight, right }: HeaderProps) => {
   if (titleAlign === 'center') {
     return <View style={styles.right}>{right && <HeaderButton onPress={onPressRight}>{right}</HeaderButton>}</View>;
   }
@@ -106,14 +106,14 @@ const RightSide: React.FC<HeaderProps> = ({ titleAlign, onPressRight, right }) =
   );
 };
 
-const HeaderTitle: React.FC<{ children: string } & TextProps> = ({ children, style, ...props }) => {
+const HeaderTitle = ({ children, style, ...props }: TextProps) => {
   return (
     <Text {...props} h1 numberOfLines={1} style={style}>
       {children}
     </Text>
   );
 };
-const HeaderSubtitle: React.FC<{ children: string } & TextProps> = ({ children, style, ...props }) => {
+const HeaderSubtitle = ({ children, style, ...props }: TextProps) => {
   const { colors } = useUIKitTheme();
   return (
     <Text color={colors.onBackground03} {...props} caption2 numberOfLines={1} style={style}>
@@ -121,13 +121,7 @@ const HeaderSubtitle: React.FC<{ children: string } & TextProps> = ({ children, 
     </Text>
   );
 };
-const HeaderButton: React.FC<TouchableOpacityProps & { color?: string }> = ({
-  children,
-  disabled,
-  onPress,
-  color,
-  ...props
-}) => {
+const HeaderButton = ({ children, disabled, onPress, color, ...props }: TouchableOpacityProps & { color?: string }) => {
   return (
     <TouchableOpacity
       style={styles.button}

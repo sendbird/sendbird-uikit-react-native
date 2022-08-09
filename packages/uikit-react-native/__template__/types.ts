@@ -26,11 +26,11 @@ export type __domain__ContextsType = {
   }>;
 };
 export interface __domain__Module {
-  Provider: React.FC;
+  Provider: CommonComponent;
   Header: CommonComponent<__domain__Props['Header']>;
   View: CommonComponent<__domain__Props['View']>;
   StatusEmpty: CommonComponent;
   StatusLoading: CommonComponent;
 }
 
-export type __domain__Fragment = React.FC<__domain__Props['Fragment']>;
+export type __domain__Fragment = CommonComponent<__domain__Props['Fragment']>;

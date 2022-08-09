@@ -42,7 +42,7 @@ export const BottomSheet: DialogStory = () => (
   </DialogProvider>
 );
 
-const WrappedActionMenu: React.FC = () => {
+const WrappedActionMenu = () => {
   const { openMenu } = useActionMenu();
   return (
     <>
@@ -92,7 +92,7 @@ const WrappedActionMenu: React.FC = () => {
   );
 };
 
-const WrappedAlert: React.FC = () => {
+const WrappedAlert = () => {
   const { alert } = useAlert();
   return (
     <>
@@ -150,7 +150,7 @@ const WrappedAlert: React.FC = () => {
   );
 };
 
-const WrappedPrompt: React.FC = () => {
+const WrappedPrompt = () => {
   const { openPrompt } = usePrompt();
   const { alert } = useAlert();
   return (
@@ -171,7 +171,7 @@ const WrappedPrompt: React.FC = () => {
   );
 };
 
-const WrappedBottomSheet: React.FC = () => {
+const WrappedBottomSheet = () => {
   const { openSheet } = useBottomSheet();
   const { alert } = useAlert();
   return (

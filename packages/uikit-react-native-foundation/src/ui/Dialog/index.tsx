@@ -45,14 +45,14 @@ const ActionMenuContext = React.createContext<Pick<DialogContextType, 'openMenu'
 const PromptContext = React.createContext<Pick<DialogContextType, 'openPrompt'> | null>(null);
 const BottomSheetContext = React.createContext<Pick<DialogContextType, 'openSheet'> | null>(null);
 
-type Props = {
+type Props = React.PropsWithChildren<{
   defaultLabels?: {
     alert?: { ok?: string };
     prompt?: { placeholder?: string; ok?: string; cancel?: string };
   };
-};
+}>;
 const DISMISS_TIMEOUT = 3000;
-export const DialogProvider: React.FC<Props> = ({ defaultLabels, children }) => {
+export const DialogProvider = ({ defaultLabels, children }: Props) => {
   const waitDismissTimeout = useRef<NodeJS.Timeout>();
   const waitDismissPromise = useRef<() => void>();
   const waitDismiss = useCallback((resolver: () => void) => {

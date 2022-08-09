@@ -6,7 +6,7 @@ import useUIKitTheme from '../../theme/useUIKitTheme';
 import Icon from '../Icon';
 import Text from '../Text';
 
-type Props = {
+type Props = React.PropsWithChildren<{
   style?: StyleProp<ViewStyle>;
   icon?: keyof typeof Icon.Assets;
   variant?: 'contained' | 'text';
@@ -14,8 +14,8 @@ type Props = {
   onPress?: () => void;
   buttonColor?: string;
   contentColor?: string;
-};
-const Button: React.FC<Props> = ({
+}>;
+const Button = ({
   icon,
   variant = 'contained',
   buttonColor,
@@ -24,7 +24,7 @@ const Button: React.FC<Props> = ({
   onPress,
   style,
   children,
-}) => {
+}: Props) => {
   const { colors } = useUIKitTheme();
 
   const getStateColor = (pressed: boolean, disabled?: boolean) => {

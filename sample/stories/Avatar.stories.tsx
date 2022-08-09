@@ -19,7 +19,7 @@ export default AvatarMeta;
 
 export const Avatar: AvatarStory = () => <DefaultAvatar />;
 export const AvatarGroup: AvatarStory = () => <GroupedAvatar />;
-const DefaultAvatar: React.FC = () => {
+const DefaultAvatar = () => {
   const { colors } = useUIKitTheme();
 
   const [img1, img2] = useMemo(() => [getMockImage(), getMockImage()], []);
@@ -33,7 +33,7 @@ const DefaultAvatar: React.FC = () => {
     </>
   );
 };
-const GroupedAvatar: React.FC = () => {
+const GroupedAvatar = () => {
   const [img1, img2, img3] = useMemo(() => [getMockImage(), getMockImage(), getMockImage()], []);
   return (
     <>

@@ -3,8 +3,13 @@ import { Image, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
-type Props = { onPress: () => void; title: string; desc: string; image: any };
-const HomeListItem: React.FC<Props> = ({ title, desc, image, onPress }) => {
+type Props = React.PropsWithChildren<{
+  onPress: () => void;
+  title: string;
+  desc: string;
+  image: any;
+}>;
+const HomeListItem = ({ title, desc, image, onPress }: Props) => {
   const { select, colors } = useUIKitTheme();
   return (
     <Pressable

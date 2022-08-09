@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import { createStyleSheet } from '@sendbird/uikit-react-native-foundation';
 
-const MessageContainer: React.FC = ({ children }) => {
+const MessageContainer = ({ children }: React.PropsWithChildren) => {
   return <View style={styles.container}>{children}</View>;
 };
 

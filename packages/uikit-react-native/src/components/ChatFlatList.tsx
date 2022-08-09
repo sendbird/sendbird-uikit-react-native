@@ -48,7 +48,7 @@ const ChatFlatList = forwardRef<ChatFlatListRef, Props>(function CustomFlatList(
     }
   }, [onBottomReached, nextMessages, currentUserId]);
 
-  const _onScroll: Props['onScroll'] = useCallback(
+  const _onScroll = useCallback<NonNullable<Props['onScroll']>>(
     (event) => {
       const { contentOffset } = event.nativeEvent;
       if (BOTTOM_DETECT_THRESHOLD < yPos.current && contentOffset.y <= BOTTOM_DETECT_THRESHOLD) {

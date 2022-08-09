@@ -9,7 +9,7 @@ type Props = {
   space?: number;
 };
 
-const Divider: React.FC<Props> = ({ style, space }) => {
+const Divider = ({ style, space }: Props) => {
   const { colors } = useUIKitTheme();
   return (
     <View style={[style, styles.divider, { paddingHorizontal: space }]}>

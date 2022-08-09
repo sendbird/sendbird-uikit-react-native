@@ -7,7 +7,7 @@ type Props = {
   visible: boolean;
   onPress: () => void;
 };
-const ScrollToBottomButton: React.FC<Props> = ({ visible, onPress }) => {
+const ScrollToBottomButton = ({ visible, onPress }: Props) => {
   const { palette, select } = useUIKitTheme();
   return (
     <TouchableOpacity

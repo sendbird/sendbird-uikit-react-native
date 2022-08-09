@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/uikit-react-native",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "react-native-uikit",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -41,9 +41,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@sendbird/uikit-chat-hooks": "1.0.0",
-    "@sendbird/uikit-react-native-foundation": "1.0.0",
-    "@sendbird/uikit-utils": "1.0.0"
+    "@sendbird/uikit-chat-hooks": "1.0.1",
+    "@sendbird/uikit-react-native-foundation": "1.0.1",
+    "@sendbird/uikit-utils": "1.0.1"
   },
   "devDependencies": {
     "@react-native-clipboard/clipboard": "^1.8.5",
@@ -51,8 +51,8 @@
     "@react-native-community/netinfo": "^9.3.0",
     "@react-native-firebase/app": "^14.4.0",
     "@react-native-firebase/messaging": "^14.4.0",
-    "@types/react": "17.0.2",
-    "@types/react-native": "^0.66.15",
+    "@types/react": "*",
+    "@types/react-native": "*",
     "date-fns": "^2.28.0",
     "expo-clipboard": "^2.1.1",
     "expo-document-picker": "^10.1.3",

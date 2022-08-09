@@ -20,14 +20,7 @@ type Props = {
   onHide: () => void;
   onDismiss?: () => void;
 } & AlertItem;
-const Alert: React.FC<Props> = ({
-  onDismiss,
-  visible,
-  onHide,
-  title = '',
-  message = '',
-  buttons = [{ text: 'OK' }],
-}) => {
+const Alert = ({ onDismiss, visible, onHide, title = '', message = '', buttons = [{ text: 'OK' }] }: Props) => {
   const { statusBarTranslucent } = useHeaderStyle();
   const { colors } = useUIKitTheme();
 

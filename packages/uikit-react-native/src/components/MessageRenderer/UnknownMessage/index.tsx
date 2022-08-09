@@ -7,7 +7,7 @@ import { useLocalization } from '../../../hooks/useContext';
 import type { MessageRendererInterface } from '../index';
 
 export type UnknownMessageProps = MessageRendererInterface;
-const UnknownMessage: React.FC<UnknownMessageProps> = ({ message, variant, pressed }) => {
+const UnknownMessage = ({ message, variant, pressed }: UnknownMessageProps) => {
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
   const color = colors.ui.message[variant][pressed ? 'pressed' : 'enabled'];

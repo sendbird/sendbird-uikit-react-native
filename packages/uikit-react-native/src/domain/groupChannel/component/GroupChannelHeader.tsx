@@ -8,7 +8,7 @@ import { useLocalization } from '../../../hooks/useContext';
 import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
 
-const GroupChannelHeader: React.FC<GroupChannelProps['Header']> = ({ onPressHeaderLeft, onPressHeaderRight }) => {
+const GroupChannelHeader = ({ onPressHeaderLeft, onPressHeaderRight }: GroupChannelProps['Header']) => {
   const { headerTitle, channel } = useContext(GroupChannelContexts.Fragment);
   const { typingUsers } = useContext(GroupChannelContexts.TypingIndicator);
   const { STRINGS } = useLocalization();

@@ -10,7 +10,10 @@ import Icon from '../Icon';
 import AvatarGroup from './AvatarGroup';
 import AvatarIcon from './AvatarIcon';
 
-type SubComponents = { Group: typeof AvatarGroup; Icon: typeof AvatarIcon };
+type SubComponents = {
+  Group: typeof AvatarGroup;
+  Icon: typeof AvatarIcon;
+};
 type Props = {
   uri?: string;
   size?: number;
@@ -18,7 +21,13 @@ type Props = {
   muted?: boolean;
   containerStyle?: StyleProp<ViewStyle>;
 };
-const Avatar: React.FC<Props> & SubComponents = ({ uri, square, muted = false, size = 56, containerStyle }) => {
+const Avatar: ((props: Props) => JSX.Element) & SubComponents = ({
+  uri,
+  square,
+  muted = false,
+  size = 56,
+  containerStyle,
+}) => {
   const { colors, palette } = useUIKitTheme();
   const [loadFailure, setLoadFailure] = useState(false);
 
@@ -47,7 +56,7 @@ const Avatar: React.FC<Props> & SubComponents = ({ uri, square, muted = false, s
   );
 };
 
-const MutedOverlay: React.FC<{ size: number }> = ({ size }) => {
+const MutedOverlay = ({ size }: { size: number }) => {
   const { palette } = useUIKitTheme();
   return (
     <View style={[styles.container, StyleSheet.absoluteFill]}>

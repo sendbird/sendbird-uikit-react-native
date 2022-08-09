@@ -6,10 +6,10 @@ import useUIKitTheme from '../../theme/useUIKitTheme';
 import Icon from '../Icon';
 import Text from '../Text';
 
-type Props = {
+type Props = React.PropsWithChildren<{
   style?: StyleProp<ViewStyle>;
-};
-const DialogSheet: React.FC<Props> & { Item: typeof SheetItem } = ({ style, children }) => {
+}>;
+const DialogSheet: ((props: Props) => JSX.Element) & { Item: typeof SheetItem } = ({ style, children }) => {
   const { colors } = useUIKitTheme();
   return (
     <View style={[styles.container, { backgroundColor: colors.ui.dialog.default.none.background }, style]}>
@@ -24,7 +24,7 @@ export type SheetItemProps = {
   title: string;
   titleColor?: string;
 };
-const SheetItem: React.FC<SheetItemProps> = ({ icon, title, iconColor, titleColor }) => {
+const SheetItem = ({ icon, title, iconColor, titleColor }: SheetItemProps) => {
   const { colors } = useUIKitTheme();
   return (
     <View style={[styles.sheetItemContainer, { backgroundColor: colors.ui.dialog.default.none.background }]}>

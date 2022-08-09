@@ -19,7 +19,7 @@ type Props = {
   onPressRetry?: () => void;
 };
 
-const Placeholder: React.FC<Props> = ({ icon, loading = false, message = '', errorRetryLabel, onPressRetry }) => {
+const Placeholder = ({ icon, loading = false, message = '', errorRetryLabel, onPressRetry }: Props) => {
   const { colors } = useUIKitTheme();
 
   // loading ? styles.containerLoading : errorRetryLabel ? styles.containerError : styles.container

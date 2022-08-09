@@ -1,14 +1,22 @@
 # Changelog
 
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [1.0.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.0.0...v1.0.1) (2022-08-09)
+
+
+### Improvements
+
+* remove React.FC ([303f80b](https://github.com/sendbird/sendbird-uikit-react-native/commit/303f80be04cc4631a6103dad61c4540d9ad7596a))
+
+
+
 # [1.0.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.0.0-rc.4...v1.0.0) (2022-07-26)
 
 **Note:** Version bump only for package @sendbird/uikit-react-native-foundation
 
 
-
-
-
-# Changelog
 
 # [1.0.0-rc.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.0.0-rc.3...v1.0.0-rc.4) (2022-07-26)
 
@@ -16,19 +24,11 @@
 
 
 
-
-
-# Changelog
-
 # [1.0.0-rc.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.0.0-rc.2...v1.0.0-rc.3) (2022-07-26)
 
 **Note:** Version bump only for package @sendbird/uikit-react-native-foundation
 
 
-
-
-
-# Changelog
 
 # [1.0.0-rc.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.0.0-rc.1...v1.0.0-rc.2) (2022-07-26)
 
@@ -36,19 +36,11 @@
 
 
 
-
-
-# Changelog
-
 # [1.0.0-rc.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.0.0-rc.0...v1.0.0-rc.1) (2022-07-26)
 
 **Note:** Version bump only for package @sendbird/uikit-react-native-foundation
 
 
-
-
-
-# Changelog
 
 # [1.0.0-rc.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v0.1.2...v1.0.0-rc.0) (2022-07-26)
 
@@ -65,8 +57,6 @@
 
 * added status component to GroupChannelList ([8ee6ae5](https://github.com/sendbird/sendbird-uikit-react-native/commit/8ee6ae5542c81be173c6329ed6efca5aa1aa8364))
 * **foundation:** added typography option to themeFactory ([28b47d5](https://github.com/sendbird/sendbird-uikit-react-native/commit/28b47d58ebc83821060f0a091bf80de75d21a62f))
-
-
 
 
 

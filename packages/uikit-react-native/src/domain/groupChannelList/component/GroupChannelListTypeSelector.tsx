@@ -22,11 +22,11 @@ const TYPE_ICONS: Record<GroupChannelType, keyof typeof Icon.Assets> = {
   'BROADCAST': 'broadcast',
 };
 
-const GroupChannelListTypeSelector: React.FC<GroupChannelListProps['TypeSelector']> = ({
+const GroupChannelListTypeSelector = ({
   Header = DefaultHeader,
   skipTypeSelection,
   onSelectType,
-}) => {
+}: GroupChannelListProps['TypeSelector']) => {
   const { statusBarTranslucent } = useHeaderStyle();
   const { colors } = useUIKitTheme();
   const typeSelector = useContext(GroupChannelListContexts.TypeSelector);
@@ -82,11 +82,11 @@ const GroupChannelListTypeSelector: React.FC<GroupChannelListProps['TypeSelector
   );
 };
 
-const DefaultTypeIcon: React.FC<{ type: GroupChannelType }> = ({ type }) => {
+const DefaultTypeIcon = ({ type }: { type: GroupChannelType }) => {
   return <Icon size={24} icon={TYPE_ICONS[type]} containerStyle={styles.icon} />;
 };
 
-const DefaultTypeText: React.FC<{ type: GroupChannelType }> = ({ type }) => {
+const DefaultTypeText = ({ type }: { type: GroupChannelType }) => {
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
   return (
