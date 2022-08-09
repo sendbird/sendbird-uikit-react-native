@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/uikit-react-native",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "react-native-uikit",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -41,9 +41,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@sendbird/uikit-chat-hooks": "1.0.0",
-    "@sendbird/uikit-react-native-foundation": "1.0.0",
-    "@sendbird/uikit-utils": "1.0.0"
+    "@sendbird/uikit-chat-hooks": "1.0.1",
+    "@sendbird/uikit-react-native-foundation": "1.0.1",
+    "@sendbird/uikit-utils": "1.0.1"
   },
   "devDependencies": {
     "@react-native-clipboard/clipboard": "^1.8.5",
