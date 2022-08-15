@@ -362,7 +362,7 @@ const SignInScreen = () => {
           alignItems: 'center',
           justifyContent: 'center',
         }}
-        onPress={() => connect('USER_ID', { nickname: 'NICK_NAME' })}
+        onPress={() => connect('USER_ID', { nickname: 'NICKNAME' })}
       >
         <Text>{'Sign in'}</Text>
       </Pressable>
