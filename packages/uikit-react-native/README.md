@@ -188,12 +188,12 @@ expo install expo-image-picker \
 ```
 
 ```ts
-import ExpoClipboard from 'expo-clipboard';
-import ExpoDocumentPicker from 'expo-document-picker';
-import ExpoFS from 'expo-file-system';
-import ExpoImagePicker from 'expo-image-picker';
-import ExpoMediaLibrary from 'expo-media-library';
-import ExpoNotifications from 'expo-notifications';
+import * as ExpoClipboard from 'expo-clipboard';
+import * as ExpoDocumentPicker from 'expo-document-picker';
+import * as ExpoFS from 'expo-file-system';
+import * as ExpoImagePicker from 'expo-image-picker';
+import * as ExpoMediaLibrary from 'expo-media-library';
+import * as ExpoNotifications from 'expo-notifications';
 
 const NotificationService = createExpoNotificationService(ExpoNotifications);
 const ClipboardService = createExpoClipboardService(ExpoClipboard);
