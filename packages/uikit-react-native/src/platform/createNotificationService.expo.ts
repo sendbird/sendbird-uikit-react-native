@@ -1,4 +1,4 @@
-import type ExpoNotification from 'expo-notifications';
+import type * as ExpoNotification from 'expo-notifications';
 
 import type { ExpoPushPermissionResponse } from '../utils/expoPermissionGranted';
 import type { NotificationServiceInterface } from './types';
