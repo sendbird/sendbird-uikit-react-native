@@ -100,5 +100,5 @@ export {
 
 export * from './types';
 
+Logger.setLogLevel(__DEV__ ? 'warn' : 'none');
 Logger.setTitle(`[UIKIT_${Platform.OS}]`);
-__DEV__ && Logger.setLogLevel('none');
