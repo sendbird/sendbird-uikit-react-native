@@ -1,9 +1,16 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { AppState, Pressable } from 'react-native';
 
 import { useGroupChannelList } from '@sendbird/uikit-chat-hooks';
 import { GroupChannelPreview } from '@sendbird/uikit-react-native-foundation';
-import { Logger, PASS, channelComparator, getFileExtension, getFileType } from '@sendbird/uikit-utils';
+import {
+  Logger,
+  PASS,
+  channelComparator,
+  getFileExtension,
+  getFileType,
+  useFreshCallback,
+} from '@sendbird/uikit-utils';
 
 import ChannelCover from '../components/ChannelCover';
 import StatusComposition from '../components/StatusComposition';
@@ -47,7 +54,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
       }, []);
     }
 
-    const _renderGroupChannelPreview: GroupChannelListProps['List']['renderGroupChannelPreview'] = useCallback(
+    const _renderGroupChannelPreview: GroupChannelListProps['List']['renderGroupChannelPreview'] = useFreshCallback(
       (channel, onLongPressChannel) => {
         if (renderGroupChannelPreview) return renderGroupChannelPreview(channel, onLongPressChannel);
         return (
@@ -75,7 +82,6 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
           </Pressable>
         );
       },
-      [STRINGS, onPressChannel, currentUser?.userId],
     );
 
     if (!currentUser) {

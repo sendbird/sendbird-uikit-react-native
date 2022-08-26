@@ -1,8 +1,8 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { TouchableOpacity } from 'react-native';
 
 import { useUserList } from '@sendbird/uikit-chat-hooks';
-import { Logger, PASS, SendbirdUser } from '@sendbird/uikit-utils';
+import { Logger, PASS, SendbirdUser, useFreshCallback } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import UserSelectableBar from '../components/UserSelectableBar';
@@ -50,45 +50,42 @@ const createGroupChannelCreateFragment = <UserType,>(
       sortComparator,
     });
 
-    const _renderUser: NonNullable<typeof renderUser> = useCallback(
-      (user, selectedUsers, setSelectedUsers) => {
-        if (queryCreator && !renderUser) {
-          throw new Error('You should provide "renderUser" when providing "queryCreator"');
-        }
-        if (renderUser) return renderUser(user, selectedUsers, setSelectedUsers);
+    const _renderUser: NonNullable<typeof renderUser> = useFreshCallback((user, selectedUsers, setSelectedUsers) => {
+      if (queryCreator && !renderUser) {
+        throw new Error('You should provide "renderUser" when providing "queryCreator"');
+      }
+      if (renderUser) return renderUser(user, selectedUsers, setSelectedUsers);
 
-        const sbUser = user as unknown as SendbirdUser;
-        const sbSelectedUsers = selectedUsers as unknown as SendbirdUser[];
-        const sbSetSelectedUsers = setSelectedUsers as unknown as React.Dispatch<React.SetStateAction<SendbirdUser[]>>;
+      const sbUser = user as unknown as SendbirdUser;
+      const sbSelectedUsers = selectedUsers as unknown as SendbirdUser[];
+      const sbSetSelectedUsers = setSelectedUsers as unknown as React.Dispatch<React.SetStateAction<SendbirdUser[]>>;
 
-        const isMe = sbUser.userId === currentUser?.userId;
-        if (isMe) return null;
+      const isMe = sbUser.userId === currentUser?.userId;
+      if (isMe) return null;
 
-        const userIdx = sbSelectedUsers.findIndex((u) => u.userId === sbUser.userId);
-        const isSelected = userIdx > -1;
+      const userIdx = sbSelectedUsers.findIndex((u) => u.userId === sbUser.userId);
+      const isSelected = userIdx > -1;
 
-        return (
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={() => {
-              sbSetSelectedUsers(([...draft]) => {
-                if (isSelected) draft.splice(userIdx, 1);
-                else draft.push(sbUser);
-                return draft;
-              });
-            }}
-          >
-            <UserSelectableBar
-              uri={sbUser.profileUrl}
-              name={sbUser.nickname || STRINGS.LABELS.USER_NO_NAME}
-              selected={isSelected}
-              disabled={false}
-            />
-          </TouchableOpacity>
-        );
-      },
-      [renderUser, queryCreator],
-    );
+      return (
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => {
+            sbSetSelectedUsers(([...draft]) => {
+              if (isSelected) draft.splice(userIdx, 1);
+              else draft.push(sbUser);
+              return draft;
+            });
+          }}
+        >
+          <UserSelectableBar
+            uri={sbUser.profileUrl}
+            name={sbUser.nickname || STRINGS.LABELS.USER_NO_NAME}
+            selected={isSelected}
+            disabled={false}
+          />
+        </TouchableOpacity>
+      );
+    });
 
     return (
       <UserListModule.Provider
