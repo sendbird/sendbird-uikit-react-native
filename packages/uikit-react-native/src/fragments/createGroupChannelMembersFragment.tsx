@@ -26,46 +26,41 @@ const createGroupChannelMembersFragment = (
 
     const { STRINGS } = useLocalization();
 
-    useChannelHandler(
-      sdk,
-      `${name}_${uniqId}`,
-      {
-        onUserEntered(channel) {
-          if (channel.url === activeChannel.url) forceUpdate();
-        },
-        onUserLeft(channel) {
-          if (channel.url === activeChannel.url) forceUpdate();
-        },
-        onUserJoined(channel) {
-          if (channel.url === activeChannel.url) forceUpdate();
-        },
-        onUserUnmuted(channel) {
-          if (channel.url === activeChannel.url) forceUpdate();
-        },
-        onUserUnbanned(channel) {
-          if (channel.url === activeChannel.url) forceUpdate();
-        },
-        onUserBanned(channel) {
-          if (channel.url === activeChannel.url) forceUpdate();
-        },
-        onUserMuted(channel) {
-          if (channel.url === activeChannel.url) forceUpdate();
-        },
-        onChannelMemberCountChanged(channels) {
-          if (channels.find((c) => c.url === channel.url)) forceUpdate();
-        },
-        onChannelChanged(channel) {
-          if (channel.url === activeChannel.url) forceUpdate();
-        },
-        onChannelFrozen(channel) {
-          if (channel.url === activeChannel.url) forceUpdate();
-        },
-        onChannelUnfrozen(channel) {
-          if (channel.url === activeChannel.url) forceUpdate();
-        },
+    useChannelHandler(sdk, `${name}_${uniqId}`, {
+      onUserEntered(channel) {
+        if (channel.url === activeChannel.url) forceUpdate();
       },
-      [activeChannel],
-    );
+      onUserLeft(channel) {
+        if (channel.url === activeChannel.url) forceUpdate();
+      },
+      onUserJoined(channel) {
+        if (channel.url === activeChannel.url) forceUpdate();
+      },
+      onUserUnmuted(channel) {
+        if (channel.url === activeChannel.url) forceUpdate();
+      },
+      onUserUnbanned(channel) {
+        if (channel.url === activeChannel.url) forceUpdate();
+      },
+      onUserBanned(channel) {
+        if (channel.url === activeChannel.url) forceUpdate();
+      },
+      onUserMuted(channel) {
+        if (channel.url === activeChannel.url) forceUpdate();
+      },
+      onChannelMemberCountChanged(channels) {
+        if (channels.find((c) => c.url === channel.url)) forceUpdate();
+      },
+      onChannelChanged(channel) {
+        if (channel.url === activeChannel.url) forceUpdate();
+      },
+      onChannelFrozen(channel) {
+        if (channel.url === activeChannel.url) forceUpdate();
+      },
+      onChannelUnfrozen(channel) {
+        if (channel.url === activeChannel.url) forceUpdate();
+      },
+    });
 
     const _renderUser: NonNullable<typeof renderUser> = useCallback(
       (user, selectedUsers, setSelectedUsers) => {

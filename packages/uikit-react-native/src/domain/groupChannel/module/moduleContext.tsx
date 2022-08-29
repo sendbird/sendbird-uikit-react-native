@@ -41,20 +41,15 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
   const [typingUsers, setTypingUsers] = useState<SendbirdUser[]>([]);
   const [editMessage, setEditMessage] = useState<SendbirdUserMessage | SendbirdFileMessage>();
 
-  useChannelHandler(
-    sdk,
-    `GroupChannelContextsProvider_${id}`,
-    {
-      onTypingStatusUpdated(eventChannel) {
-        if (isDifferentChannel(channel, eventChannel)) return;
-        if (!enableTypingIndicator) return;
+  useChannelHandler(sdk, `GroupChannelContextsProvider_${id}`, {
+    onTypingStatusUpdated(eventChannel) {
+      if (isDifferentChannel(channel, eventChannel)) return;
+      if (!enableTypingIndicator) return;
 
-        const usersWithoutMe = eventChannel.getTypingUsers().filter((u) => u.userId !== currentUser?.userId);
-        setTypingUsers(usersWithoutMe);
-      },
+      const usersWithoutMe = eventChannel.getTypingUsers().filter((u) => u.userId !== currentUser?.userId);
+      setTypingUsers(usersWithoutMe);
     },
-    [channel, currentUser?.userId, enableTypingIndicator],
-  );
+  });
 
   return (
     <ProviderLayout>
