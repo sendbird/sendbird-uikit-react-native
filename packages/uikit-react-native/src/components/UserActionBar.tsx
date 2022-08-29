@@ -70,4 +70,4 @@ const styles = createStyleSheet({
   },
 });
 
-export default React.memo(UserActionBar);
+export default UserActionBar;

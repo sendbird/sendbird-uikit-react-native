@@ -71,29 +71,24 @@ export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, o
     setLoading(false);
   }, [init, userId]);
 
-  useChannelHandler(
-    sdk,
-    HOOK_NAME,
-    {
-      onChannelChanged: (channel) => updateChannels([channel], false),
-      onChannelFrozen: (channel) => updateChannels([channel], false),
-      onChannelUnfrozen: (channel) => updateChannels([channel], false),
-      onChannelMemberCountChanged: (channels) => updateChannels(channels, false),
-      onChannelDeleted: (url) => deleteChannels([url]),
-      onUserJoined: (channel) => updateChannels([channel], false),
-      onUserLeft: (channel, user) => {
-        const isMe = user.userId === userId;
-        if (isMe) deleteChannels([channel.url]);
-        else updateChannels([channel], false);
-      },
-      onUserBanned(channel, user) {
-        const isMe = user.userId === userId;
-        if (isMe) deleteChannels([channel.url]);
-        else updateChannels([channel], false);
-      },
+  useChannelHandler(sdk, HOOK_NAME, {
+    onChannelChanged: (channel) => updateChannels([channel], false),
+    onChannelFrozen: (channel) => updateChannels([channel], false),
+    onChannelUnfrozen: (channel) => updateChannels([channel], false),
+    onChannelMemberCountChanged: (channels) => updateChannels(channels, false),
+    onChannelDeleted: (url) => deleteChannels([url]),
+    onUserJoined: (channel) => updateChannels([channel], false),
+    onUserLeft: (channel, user) => {
+      const isMe = user.userId === userId;
+      if (isMe) deleteChannels([channel.url]);
+      else updateChannels([channel], false);
     },
-    [sdk, userId],
-  );
+    onUserBanned(channel, user) {
+      const isMe = user.userId === userId;
+      if (isMe) deleteChannels([channel.url]);
+      else updateChannels([channel], false);
+    },
+  });
   // ---------- internal hooks ends ---------- //
 
   // ---------- returns methods ---------- //

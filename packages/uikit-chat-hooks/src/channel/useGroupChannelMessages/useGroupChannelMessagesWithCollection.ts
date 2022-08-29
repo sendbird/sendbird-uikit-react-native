@@ -73,7 +73,6 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
 
   const updateChannel = (channel: SendbirdChannel) => {
     if (channel.isGroupChannel() && !isDifferentChannel(channel, activeChannel)) {
-      setActiveChannel(channel);
       forceUpdate();
     }
   };
@@ -153,24 +152,19 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     [sdk, activeChannel.url, options?.collectionCreator],
   );
 
-  useChannelHandler(
-    sdk,
-    HOOK_NAME,
-    {
-      onUserBanned(channel, bannedUser) {
-        disposeManuallyAfterUnmounted();
-        if (channel.isGroupChannel() && !isDifferentChannel(channel, activeChannel)) {
-          if (bannedUser.userId === sdk.currentUser.userId) {
-            options?.onChannelDeleted?.();
-          } else {
-            setActiveChannel(channel);
-            forceUpdate();
-          }
+  useChannelHandler(sdk, HOOK_NAME, {
+    onUserBanned(channel, bannedUser) {
+      disposeManuallyAfterUnmounted();
+      if (channel.isGroupChannel() && !isDifferentChannel(channel, activeChannel)) {
+        if (bannedUser.userId === sdk.currentUser.userId) {
+          options?.onChannelDeleted?.();
+        } else {
+          setActiveChannel(channel);
+          forceUpdate();
         }
-      },
+      }
     },
-    [sdk],
-  );
+  });
 
   useEffect(() => {
     // NOTE: Cache read is heavy synchronous task, and it prevents smooth ui transition

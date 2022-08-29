@@ -95,18 +95,13 @@ export const useGroupChannelListWithCollection: UseGroupChannelList = (sdk, user
     setLoading(false);
   }, [init, userId]);
 
-  useChannelHandler(
-    sdk,
-    `${HOOK_NAME}_${id}`,
-    {
-      onUserBanned: (channel, user) => {
-        const isMe = user.userId === userId;
-        if (isMe) deleteChannels([channel.url]);
-        else updateChannels([channel], false);
-      },
+  useChannelHandler(sdk, `${HOOK_NAME}_${id}`, {
+    onUserBanned: (channel, user) => {
+      const isMe = user.userId === userId;
+      if (isMe) deleteChannels([channel.url]);
+      else updateChannels([channel], false);
     },
-    [sdk, userId],
-  );
+  });
   // ---------- internal hooks ends ---------- //
 
   // ---------- returns methods ---------- //

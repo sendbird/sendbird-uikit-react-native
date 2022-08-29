@@ -55,4 +55,4 @@ const styles = createStyleSheet({
   },
 });
 
-export default React.memo(UserSelectableBar);
+export default UserSelectableBar;

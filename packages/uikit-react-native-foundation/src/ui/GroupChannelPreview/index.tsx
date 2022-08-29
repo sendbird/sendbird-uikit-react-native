@@ -15,7 +15,10 @@ type Props = {
   coverUrl: string;
 
   title: string;
+
   titleCaption: string;
+  titleCaptionLeft?: React.ReactElement;
+
   bodyIcon?: keyof typeof Icon.Assets;
   body: string;
 
@@ -37,6 +40,7 @@ const GroupChannelPreview = ({
   bodyIcon,
   title,
   titleCaption,
+  titleCaptionLeft,
   frozen,
   notificationOff,
 }: Props) => {
@@ -60,7 +64,7 @@ const GroupChannelPreview = ({
       </View>
       <View style={styles.rightSection}>
         <View style={styles.rightTopSection}>
-          <View style={styles.channelInfo}>
+          <View style={styles.channelInfoContainer}>
             <Text numberOfLines={1} subtitle1 style={styles.channelInfoTitle} color={color.default.none.textTitle}>
               {title}
             </Text>
@@ -74,8 +78,9 @@ const GroupChannelPreview = ({
             )}
             {notificationOff && <Icon size={16} icon={'notifications-off-filled'} color={colors.onBackground03} />}
           </View>
-          <View style={styles.titleCaption}>
-            <Text caption2 color={color.default.none.textTitleCaption}>
+          <View style={styles.titleCaptionContainer}>
+            {titleCaptionLeft}
+            <Text caption2 color={color.default.none.textTitleCaption} style={styles.titleCaptionText}>
               {titleCaption}
             </Text>
           </View>
@@ -132,7 +137,7 @@ const styles = createStyleSheet({
     flexDirection: 'row',
     marginBottom: 4,
   },
-  channelInfo: {
+  channelInfoContainer: {
     flex: 1,
     marginRight: 4,
     alignItems: 'center',
@@ -149,9 +154,13 @@ const styles = createStyleSheet({
   channelInfoFrozen: {
     marginRight: 4,
   },
-  titleCaption: {
+  titleCaptionContainer: {
+    alignItems: 'flex-start',
+    flexDirection: 'row',
     marginLeft: 4,
-    paddingTop: 2,
+  },
+  titleCaptionText: {
+    marginTop: 2,
   },
   rightBottomSection: {
     flex: 1,
@@ -190,4 +199,4 @@ const styles = createStyleSheet({
   },
 });
 
-export default React.memo(GroupChannelPreview);
+export default GroupChannelPreview;

@@ -41,16 +41,11 @@ export const GroupChannelSettingsContextsProvider: GroupChannelSettingsModule['P
     forceUpdate();
   };
 
-  useChannelHandler(
-    sdk,
-    `${HOOK_NAME}_${uniqId}`,
-    {
-      onChannelChanged: onChannelChanged,
-      onChannelFrozen: onChannelChanged,
-      onChannelUnfrozen: onChannelChanged,
-    },
-    [activeChannel],
-  );
+  useChannelHandler(sdk, `${HOOK_NAME}_${uniqId}`, {
+    onChannelChanged: onChannelChanged,
+    onChannelFrozen: onChannelChanged,
+    onChannelUnfrozen: onChannelChanged,
+  });
 
   const toast = useToast();
   const { openSheet } = useBottomSheet();

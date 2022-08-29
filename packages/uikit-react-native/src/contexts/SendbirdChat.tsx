@@ -11,8 +11,8 @@ type Props = React.PropsWithChildren<{
   sdkInstance: SendbirdChatSDK;
 
   enableAutoPushTokenRegistration: boolean;
-  // enableChannelListTypingIndicator: boolean;
-  // enableChannelListMessageReceiptStatus: boolean;
+  enableChannelListTypingIndicator: boolean;
+  enableChannelListMessageReceiptStatus: boolean;
 }>;
 
 type Context = {
@@ -27,8 +27,8 @@ type Context = {
   features: {
     // UIKit features
     autoPushTokenRegistrationEnabled: boolean;
-    // channelListTypingIndicatorEnabled: boolean;
-    // channelListMessageReceiptStateEnabled: boolean;
+    channelListTypingIndicatorEnabled: boolean;
+    channelListMessageReceiptStatusEnabled: boolean;
 
     // Sendbird application features
     deliveryReceiptEnabled: boolean;
@@ -39,7 +39,13 @@ type Context = {
 };
 
 export const SendbirdChatContext = React.createContext<Context | null>(null);
-export const SendbirdChatProvider = ({ children, sdkInstance, enableAutoPushTokenRegistration }: Props) => {
+export const SendbirdChatProvider = ({
+  children,
+  sdkInstance,
+  enableAutoPushTokenRegistration,
+  enableChannelListMessageReceiptStatus,
+  enableChannelListTypingIndicator,
+}: Props) => {
   const [currentUser, _setCurrentUser] = useState<SendbirdUser>();
   const forceUpdate = useForceUpdate();
   const appFeatures = useAppFeatures(sdkInstance);
@@ -103,6 +109,8 @@ export const SendbirdChatProvider = ({ children, sdkInstance, enableAutoPushToke
     features: {
       ...appFeatures,
       autoPushTokenRegistrationEnabled: enableAutoPushTokenRegistration,
+      channelListTypingIndicatorEnabled: enableChannelListTypingIndicator,
+      channelListMessageReceiptStatusEnabled: enableChannelListMessageReceiptStatus,
     },
   };
 

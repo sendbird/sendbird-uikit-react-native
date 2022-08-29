@@ -43,8 +43,10 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   };
   chatOptions?: {
     localCacheStorage?: LocalCacheStorage;
-    enableAutoPushTokenRegistration?: boolean;
     onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
+    enableAutoPushTokenRegistration?: boolean;
+    enableChannelListTypingIndicator?: boolean;
+    enableChannelListMessageReceiptStatus?: boolean;
   };
   localization?: {
     stringSet?: StringSet;
@@ -132,6 +134,8 @@ const SendbirdUIKitContainer = ({
       <SendbirdChatProvider
         sdkInstance={sdkInstance}
         enableAutoPushTokenRegistration={chatOptions?.enableAutoPushTokenRegistration ?? true}
+        enableChannelListTypingIndicator={chatOptions?.enableChannelListTypingIndicator ?? false}
+        enableChannelListMessageReceiptStatus={chatOptions?.enableChannelListMessageReceiptStatus ?? false}
       >
         <LocalizationProvider stringSet={localization?.stringSet ?? StringSetEn}>
           <PlatformServiceProvider
