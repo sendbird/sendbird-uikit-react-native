@@ -1,13 +1,11 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 
-import { LocalizationContext, LocalizationContextType } from '../contexts/Localization';
+import { LocalizationContext } from '../contexts/Localization';
 import { PlatformServiceContext } from '../contexts/PlatformService';
 import { SendbirdChatContext } from '../contexts/SendbirdChat';
 
 export const useLocalization = () => {
-  const value = useContext<LocalizationContextType | null>(
-    LocalizationContext as React.Context<LocalizationContextType | null>,
-  );
+  const value = useContext(LocalizationContext);
   if (!value) throw new Error('LocalizationContext is not provided');
   return value;
 };
