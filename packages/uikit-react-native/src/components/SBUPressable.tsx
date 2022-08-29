@@ -34,7 +34,7 @@ function getComponent(as?: Components) {
 const SBUPressable = <T extends Components>({ as, ...props }: Props<T>) => {
   const Renderer = getComponent(as);
   // @ts-ignore
-  return <Renderer {...props} delayLongPress={DEFAULT_LONG_PRESS_DELAY} />;
+  return <Renderer delayLongPress={DEFAULT_LONG_PRESS_DELAY} {...props} />;
 };
 
 export default SBUPressable;

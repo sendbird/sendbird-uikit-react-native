@@ -40,8 +40,8 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
   const forceUpdate = useForceUpdate();
 
   if (features.channelListTypingIndicatorEnabled) {
-    const id = useUniqId('GroupChannelPreviewContainer');
-    useChannelHandler(sdk, `GroupChannelPreviewContainer_TypingIndicator_${id}`, {
+    const typingId = useUniqId('GroupChannelPreviewContainer');
+    useChannelHandler(sdk, `GroupChannelPreviewContainer_TypingIndicator_${typingId}`, {
       onTypingStatusUpdated(eventChannel) {
         if (isDifferentChannel(channel, eventChannel)) return;
         setTypingUsers(eventChannel.getTypingUsers());
@@ -50,8 +50,8 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
   }
 
   if (features.channelListMessageReceiptStatusEnabled) {
-    const id = useUniqId('GroupChannelPreviewContainer');
-    useChannelHandler(sdk, `GroupChannelPreviewContainer_ReceiptStatus_${id}`, {
+    const receiptId = useUniqId('GroupChannelPreviewContainer');
+    useChannelHandler(sdk, `GroupChannelPreviewContainer_ReceiptStatus_${receiptId}`, {
       onDeliveryReceiptUpdated(eventChannel) {
         if (isDifferentChannel(channel, eventChannel)) return;
         if (!eventChannel.isGroupChannel() || !eventChannel.lastMessage) return;

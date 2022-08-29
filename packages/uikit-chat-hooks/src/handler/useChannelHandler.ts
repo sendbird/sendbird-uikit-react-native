@@ -19,12 +19,10 @@ export const useChannelHandler = (
     const handler = new sdk.ChannelHandler();
     const handlerKeys = Object.keys(handler) as (keyof typeof handler)[];
     handlerKeys.forEach((key) => {
-      if (handlerRef.current[key]) {
-        handler[key] = (...args: unknown[]) => {
-          // @ts-ignore
-          handlerRef.current[key](...args);
-        };
-      }
+      handler[key] = (...args: unknown[]) => {
+        // @ts-ignore
+        handlerRef.current[key]?.(...args);
+      };
     });
 
     sdk.addChannelHandler(handlerId, handler);
