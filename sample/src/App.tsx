@@ -40,7 +40,12 @@ const App = () => {
   return (
     <SendbirdUIKitContainer
       appId={APP_ID}
-      chatOptions={{ localCacheStorage: AsyncStorage, onInitialized: SetSendbirdSDK }}
+      chatOptions={{
+        localCacheStorage: AsyncStorage,
+        onInitialized: SetSendbirdSDK,
+        enableChannelListTypingIndicator: true,
+        enableChannelListMessageReceiptStatus: true,
+      }}
       platformServices={{ file: FileService, notification: NotificationService, clipboard: ClipboardService }}
       styles={{
         defaultHeaderTitleAlign: 'left', //'center',

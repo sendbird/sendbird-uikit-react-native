@@ -73,7 +73,6 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
 
   const updateChannel = (channel: SendbirdChannel) => {
     if (channel.isGroupChannel() && !isDifferentChannel(channel, activeChannel)) {
-      setActiveChannel(channel);
       forceUpdate();
     }
   };

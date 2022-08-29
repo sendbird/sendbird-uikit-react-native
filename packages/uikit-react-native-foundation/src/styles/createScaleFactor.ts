@@ -6,7 +6,8 @@ const DESIGNED_DEVICE_WIDTH = 360;
 
 const createScaleFactor = (deviceWidth = DESIGNED_DEVICE_WIDTH) => {
   const ratio = Math.min(width, height) / deviceWidth;
-  return (dp: number) => PixelRatio.roundToNearestPixel(dp * ratio);
+  const rangedRatio = Math.min(Math.max(0.85, ratio), 1.25);
+  return (dp: number) => PixelRatio.roundToNearestPixel(dp * rangedRatio);
 };
 
 createScaleFactor.updateScaleFactor = (scaleFactor: (dp: number) => number) => {

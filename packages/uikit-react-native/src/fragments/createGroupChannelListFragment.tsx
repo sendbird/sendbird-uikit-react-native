@@ -1,29 +1,19 @@
 import React, { useEffect } from 'react';
-import { AppState, Pressable } from 'react-native';
+import { AppState } from 'react-native';
 
 import { useGroupChannelList } from '@sendbird/uikit-chat-hooks';
-import { GroupChannelPreview } from '@sendbird/uikit-react-native-foundation';
-import {
-  Logger,
-  PASS,
-  channelComparator,
-  getFileExtension,
-  getFileType,
-  useFreshCallback,
-} from '@sendbird/uikit-utils';
+import { Logger, PASS, channelComparator, useFreshCallback } from '@sendbird/uikit-utils';
 
-import ChannelCover from '../components/ChannelCover';
+import GroupChannelPreviewContainer from '../components/GroupChannelPreviewContainer';
 import StatusComposition from '../components/StatusComposition';
-import { DEFAULT_LONG_PRESS_DELAY } from '../constants';
 import createGroupChannelListModule from '../domain/groupChannelList/module/createGroupChannelListModule';
 import type {
   GroupChannelListFragment,
   GroupChannelListModule,
   GroupChannelListProps,
 } from '../domain/groupChannelList/types';
-import { useLocalization, useSendbirdChat } from '../hooks/useContext';
+import { useSendbirdChat } from '../hooks/useContext';
 
-const iconMapper = { audio: 'file-audio', image: 'photo', video: 'play', file: 'file-document' } as const;
 const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListModule>): GroupChannelListFragment => {
   const GroupChannelListModule = createGroupChannelListModule(initModule);
   return ({
@@ -38,7 +28,6 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     menuItemCreator = PASS,
   }) => {
     const { sdk, currentUser, features, markAsDeliveredWithChannel } = useSendbirdChat();
-    const { STRINGS } = useLocalization();
     const { groupChannels, next, loading } = useGroupChannelList(sdk, currentUser?.userId, {
       queryCreator,
       sortComparator,
@@ -58,28 +47,11 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
       (channel, onLongPressChannel) => {
         if (renderGroupChannelPreview) return renderGroupChannelPreview(channel, onLongPressChannel);
         return (
-          <Pressable
+          <GroupChannelPreviewContainer
+            channel={channel}
             onPress={() => onPressChannel(channel)}
-            onLongPress={onLongPressChannel}
-            delayLongPress={DEFAULT_LONG_PRESS_DELAY}
-          >
-            <GroupChannelPreview
-              customCover={<ChannelCover channel={channel} size={56} />}
-              coverUrl={channel.coverUrl}
-              title={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE(currentUser?.userId ?? '', channel)}
-              titleCaption={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE_CAPTION(channel)}
-              body={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_BODY(channel)}
-              badgeCount={channel.unreadMessageCount}
-              bodyIcon={
-                channel.lastMessage?.isFileMessage()
-                  ? iconMapper[getFileType(channel.lastMessage.type || getFileExtension(channel.lastMessage.name))]
-                  : undefined
-              }
-              frozen={channel.isFrozen}
-              notificationOff={channel.myPushTriggerOption === 'off'}
-              memberCount={channel.memberCount > 2 ? channel.memberCount : undefined}
-            />
-          </Pressable>
+            onLongPress={() => onLongPressChannel()}
+          />
         );
       },
     );

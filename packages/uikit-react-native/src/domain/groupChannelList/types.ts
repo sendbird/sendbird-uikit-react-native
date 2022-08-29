@@ -42,6 +42,7 @@ export interface GroupChannelListProps {
     groupChannels: SendbirdGroupChannel[];
     /** Method to render GroupChannel preview **/
     renderGroupChannelPreview: (
+      // FIXME/BREAKING: Changed to props object
       channel: SendbirdGroupChannel,
       onLongPressChannel: () => void,
     ) => React.ReactElement | null;
