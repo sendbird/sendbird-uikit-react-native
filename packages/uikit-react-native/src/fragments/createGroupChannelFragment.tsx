@@ -1,7 +1,7 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
-import { NOOP, PASS, messageComparator } from '@sendbird/uikit-utils';
+import { NOOP, PASS, messageComparator, useFreshCallback } from '@sendbird/uikit-utils';
 
 import MessageRenderer from '../components/MessageRenderer';
 import NewMessagesButton from '../components/NewMessagesButton';
@@ -23,6 +23,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     onPressHeaderLeft = NOOP,
     onPressHeaderRight = NOOP,
     onPressImageMessage = NOOP,
+    onPressMediaMessage = NOOP,
     onChannelDeleted = NOOP,
     onBeforeSendFileMessage = PASS,
     onBeforeSendUserMessage = PASS,
@@ -57,13 +58,10 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       enableCollectionWithoutLocalCache: true,
     });
 
-    const _renderMessage: GroupChannelProps['MessageList']['renderMessage'] = useCallback(
-      (props) => {
-        if (renderMessage) return renderMessage(props);
-        return <MessageRenderer {...props} />;
-      },
-      [renderMessage],
-    );
+    const _renderMessage: GroupChannelProps['MessageList']['renderMessage'] = useFreshCallback((props) => {
+      if (renderMessage) return renderMessage(props);
+      return <MessageRenderer {...props} />;
+    });
 
     const memoizedFlatListProps = useMemo(
       () => ({
@@ -74,42 +72,33 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       [loading, flatListProps],
     );
 
-    const onSendFileMessage: GroupChannelProps['Input']['onSendFileMessage'] = useCallback(
-      async (file) => {
-        const params = new sdk.FileMessageParams();
-        params.file = file;
-        const processedParams = await onBeforeSendFileMessage(params);
-        await sendFileMessage(processedParams);
-      },
-      [sdk, sendFileMessage, onBeforeSendFileMessage],
-    );
-
-    const onSendUserMessage: GroupChannelProps['Input']['onSendUserMessage'] = useCallback(
-      async (text) => {
-        const params = new sdk.UserMessageParams();
-        params.message = text;
-        const processedParams = await onBeforeSendUserMessage(params);
-        await sendUserMessage(processedParams);
-      },
-      [sdk, sendUserMessage, onBeforeSendUserMessage],
-    );
-    const onUpdateFileMessage: GroupChannelProps['Input']['onUpdateFileMessage'] = useCallback(
+    const onSendFileMessage: GroupChannelProps['Input']['onSendFileMessage'] = useFreshCallback(async (file) => {
+      const params = new sdk.FileMessageParams();
+      params.file = file;
+      const processedParams = await onBeforeSendFileMessage(params);
+      await sendFileMessage(processedParams);
+    });
+    const onSendUserMessage: GroupChannelProps['Input']['onSendUserMessage'] = useFreshCallback(async (text) => {
+      const params = new sdk.UserMessageParams();
+      params.message = text;
+      const processedParams = await onBeforeSendUserMessage(params);
+      await sendUserMessage(processedParams);
+    });
+    const onUpdateFileMessage: GroupChannelProps['Input']['onUpdateFileMessage'] = useFreshCallback(
       async (editedFile, message) => {
         const params = new sdk.FileMessageParams();
         params.file = editedFile;
         const processedParams = await onBeforeSendFileMessage(params);
         await updateFileMessage(message.messageId, processedParams);
       },
-      [sdk, updateFileMessage, onBeforeSendFileMessage],
     );
-    const onUpdateUserMessage: GroupChannelProps['Input']['onUpdateUserMessage'] = useCallback(
+    const onUpdateUserMessage: GroupChannelProps['Input']['onUpdateUserMessage'] = useFreshCallback(
       async (editedText, message) => {
         const params = new sdk.UserMessageParams();
         params.message = editedText;
         const processedParams = await onBeforeSendUserMessage(params);
         await updateUserMessage(message.messageId, processedParams);
       },
-      [sdk, updateUserMessage, onBeforeSendUserMessage],
     );
 
     return (
@@ -135,6 +124,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             onResendFailedMessage={resendMessage}
             onDeleteMessage={deleteMessage}
             onPressImageMessage={onPressImageMessage}
+            onPressMediaMessage={onPressMediaMessage}
             flatListProps={memoizedFlatListProps}
           />
           <GroupChannelModule.Input

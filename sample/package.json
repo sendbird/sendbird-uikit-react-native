@@ -39,6 +39,7 @@
     "fbjs": "^3.0.4",
     "react": "17.0.2",
     "react-native": "0.66.4",
+    "react-native-create-thumbnail": "^1.5.1",
     "react-native-document-picker": "^8.0.0",
     "react-native-fast-image": "^8.5.11",
     "react-native-file-access": "^2.4.3",
@@ -47,6 +48,7 @@
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.10.2",
     "react-native-touch-reload": "sendbird/react-native-touch-reload",
+    "react-native-video": "^5.2.0",
     "sendbird": "^3.1.22"
   },
   "devDependencies": {

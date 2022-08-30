@@ -3,6 +3,7 @@ export type DownloadedPath = string;
 export type FilePickerResponse = FileType | null;
 export type FileType = { uri: string; size: number; name: string; type: string };
 
+// ---------- NotificationService ---------- //
 export interface NotificationServiceInterface {
   hasPushPermission(): Promise<boolean>;
   requestPushPermission(): Promise<boolean>;
@@ -12,11 +13,13 @@ export interface NotificationServiceInterface {
   onTokenRefresh(handler: (token: string) => void): Unsubscribe;
 }
 
+// ---------- ClipboardService ---------- //
 export interface ClipboardServiceInterface {
   setString(text: string): void;
   getString(): Promise<string>;
 }
 
+// ---------- FileService ---------- //
 export interface FileServiceInterface extends FilePickerServiceInterface, FileSystemServiceInterface {}
 
 export interface OpenResultListener {
@@ -28,7 +31,7 @@ export interface OpenMediaLibraryOptions extends OpenResultListener {
 }
 export interface OpenCameraOptions extends OpenResultListener {
   cameraType?: 'front' | 'back';
-  mediaType?: 'photo' | 'video';
+  mediaType?: 'photo' | 'video' | 'all';
 }
 export type OpenDocumentOptions = OpenResultListener;
 export interface SaveOptions {
@@ -48,4 +51,25 @@ export interface FileSystemServiceInterface {
   // - Supports opening documents in place
   // - Application supports iTunes file sharing
   save(options?: SaveOptions): Promise<DownloadedPath | null>;
+}
+
+// ---------- MediaService ---------- //
+interface VideoProps {
+  source: { uri: string } | number;
+  resizeMode?: 'cover' | 'contain' | 'stretch';
+}
+interface GetVideoThumbnailOptions {
+  url: string;
+  timeMills?: number;
+  quality?: number;
+}
+export interface MediaServiceInterface {
+  VideoComponent<Props = {}>(props: VideoProps & Props): JSX.Element;
+  getVideoThumbnail(options: GetVideoThumbnailOptions): Promise<{ path: string } | null>;
+  // compressImage(options: {
+  //   path: string;
+  //   compressionRate: number;
+  //   resizingWidth: number;
+  //   resizingHeight: number;
+  // }): Promise<{ path: string }>;
 }

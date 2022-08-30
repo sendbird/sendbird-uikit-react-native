@@ -38,7 +38,7 @@ const SendInput = ({ onSendUserMessage, onSendFileMessage, text, setText, disabl
           icon: 'camera',
           onPress: async () => {
             const photo = await fileService.openCamera({
-              mediaType: 'photo',
+              mediaType: 'all',
               onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_CAMERA_ERROR, 'error'),
             });
 

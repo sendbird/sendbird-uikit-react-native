@@ -75,9 +75,9 @@ const GroupChannelScreen = () => {
   return (
     <GroupChannelFragment
       channel={channel}
-      onPressImageMessage={(msg, uri) => {
-        // Navigate to photo preview
-        Logger.log('file uri', msg.name, uri);
+      onPressMediaMessage={(msg, uri, fileType) => {
+        // Navigate to media view
+        Logger.log('file uri', msg.name, uri, fileType);
       }}
       onChannelDeleted={() => {
         // Should leave channel, navigate to channel list

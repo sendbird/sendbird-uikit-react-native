@@ -28,7 +28,7 @@ export interface GroupChannelProps {
     onBeforeSendUserMessage?: (
       params: SendbirdUserMessageParams,
     ) => SendbirdUserMessageParams | Promise<SendbirdUserMessageParams>;
-    onPressImageMessage?: GroupChannelProps['MessageList']['onPressImageMessage'];
+    onPressMediaMessage?: GroupChannelProps['MessageList']['onPressMediaMessage'];
 
     renderMessage?: GroupChannelProps['MessageList']['renderMessage'];
     renderNewMessagesButton?: GroupChannelProps['MessageList']['renderNewMessagesButton'];
@@ -42,6 +42,9 @@ export interface GroupChannelProps {
     sortComparator?: UseGroupChannelMessagesOptions['sortComparator'];
     collectionCreator?: UseGroupChannelMessagesOptions['collectionCreator'];
     queryCreator?: UseGroupChannelMessagesOptions['queryCreator'];
+
+    /** @deprecated `onPressImageMessage` is deprecated, please use `onPressMediaMessage` instead **/
+    onPressImageMessage?: GroupChannelProps['MessageList']['onPressImageMessage'];
   };
   Header: {
     onPressHeaderLeft: () => void;
@@ -59,7 +62,7 @@ export interface GroupChannelProps {
 
     onResendFailedMessage: (failedMessage: SendbirdUserMessage | SendbirdFileMessage) => Promise<void>;
     onDeleteMessage: (message: SendbirdUserMessage | SendbirdFileMessage) => Promise<void>;
-    onPressImageMessage?: (message: SendbirdFileMessage, uri: string) => void;
+    onPressMediaMessage?: (message: SendbirdFileMessage, uri: string, fileType: 'audio' | 'video' | 'image') => void;
 
     renderMessage: (props: {
       message: SendbirdMessage;
@@ -81,6 +84,9 @@ export interface GroupChannelProps {
       onPress: () => void;
     }>;
     flatListProps?: Omit<FlatListProps<SendbirdMessage>, 'data' | 'renderItem'>;
+
+    /** @deprecated `onPressImageMessage` is deprecated, please use `onPressMediaMessage` instead **/
+    onPressImageMessage?: (message: SendbirdFileMessage, uri: string) => void;
   };
   Input: {
     channel: SendbirdGroupChannel;

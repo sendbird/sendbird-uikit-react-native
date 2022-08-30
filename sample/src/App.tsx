@@ -11,6 +11,7 @@ import {
   ClipboardService,
   FileService,
   GetTranslucent,
+  MediaService,
   NotificationService,
   RootStack,
   SetSendbirdSDK,
@@ -43,10 +44,16 @@ const App = () => {
       chatOptions={{
         localCacheStorage: AsyncStorage,
         onInitialized: SetSendbirdSDK,
+        enableAutoPushTokenRegistration: true,
         enableChannelListTypingIndicator: true,
         enableChannelListMessageReceiptStatus: true,
       }}
-      platformServices={{ file: FileService, notification: NotificationService, clipboard: ClipboardService }}
+      platformServices={{
+        file: FileService,
+        notification: NotificationService,
+        clipboard: ClipboardService,
+        media: MediaService,
+      }}
       styles={{
         defaultHeaderTitleAlign: 'left', //'center',
         theme: isLightTheme ? LightUIKitTheme : DarkUIKitTheme,
