@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.0.2...v1.1.0) (2022-08-31)
+
+
+### Features
+
+* **uikit:** added file viewer component ([9b9d52b](https://github.com/sendbird/sendbird-uikit-react-native/commit/9b9d52b58dd508bce5c577ec5975cd2ef21ccd77))
+* **uikit:** added TypingIndicator and MessageReceiptStatus in Channel List ([39c54fc](https://github.com/sendbird/sendbird-uikit-react-native/commit/39c54fcfa617def1f2b1dcb05eaa990dd19abc52))
+* **uikit:** added video message component and media service ([15713e5](https://github.com/sendbird/sendbird-uikit-react-native/commit/15713e5ca052c5b3a7f5ad6e79ef40252652675d))
+
+
+### Bug Fixes
+
+* **uikit:** changed type of createExpoNotificationService param ([e030128](https://github.com/sendbird/sendbird-uikit-react-native/commit/e0301285bbd17902bf36e510f142c109aa68858e))
+
+
+### Documentation
+
+* **uikit:** update README.md ([5c5bbe5](https://github.com/sendbird/sendbird-uikit-react-native/commit/5c5bbe5c36338e0e863e0ef9bc12df88b10b9592))
+* **uikit:** update README.md ([3a4b055](https://github.com/sendbird/sendbird-uikit-react-native/commit/3a4b055d73736da9215b0a7c5d01950a6e71997b))
+
+
+### Improvements
+
+* **chat-hooks:** remove deps from useChannelHandler ([fe4ec27](https://github.com/sendbird/sendbird-uikit-react-native/commit/fe4ec27b1ab6df84aa08fea2e48fb8fb89b943c9))
+
+
+
 ## [1.0.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.0.0...v1.0.2) (2022-08-09)
 
 
