@@ -35,16 +35,12 @@ const VideoFileMessage = ({ message }: FileMessageProps) => {
       });
   }, []);
 
-  if (state.loading) {
+  if (state.loading || state.imageNotFound) {
     return (
       <View style={[style, styles.container]}>
         <PlayIcon />
       </View>
     );
-  }
-
-  if (state.imageNotFound) {
-    return <Icon containerStyle={style} icon={'thumbnail-none'} size={48} color={colors.onBackground02} />;
   }
 
   return (
