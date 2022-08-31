@@ -11,6 +11,7 @@ import {
   ClipboardService,
   FileService,
   GetTranslucent,
+  MediaService,
   NotificationService,
   RootStack,
   SetSendbirdSDK,
@@ -32,6 +33,7 @@ import {
   StorybookScreen,
   ThemeColorsScreen,
 } from './screens';
+import FileViewerScreen from './screens/uikit-app/FileViewerScreen';
 
 const App = () => {
   const { scheme } = useAppearance();
@@ -43,10 +45,16 @@ const App = () => {
       chatOptions={{
         localCacheStorage: AsyncStorage,
         onInitialized: SetSendbirdSDK,
+        enableAutoPushTokenRegistration: true,
         enableChannelListTypingIndicator: true,
         enableChannelListMessageReceiptStatus: true,
       }}
-      platformServices={{ file: FileService, notification: NotificationService, clipboard: ClipboardService }}
+      platformServices={{
+        file: FileService,
+        notification: NotificationService,
+        clipboard: ClipboardService,
+        media: MediaService,
+      }}
       styles={{
         defaultHeaderTitleAlign: 'left', //'center',
         theme: isLightTheme ? LightUIKitTheme : DarkUIKitTheme,
@@ -87,6 +95,10 @@ const Navigations = () => {
             <RootStack.Screen name={Routes.GroupChannelCreate} component={GroupChannelCreateScreen} />
             <RootStack.Screen name={Routes.GroupChannelInvite} component={GroupChannelInviteScreen} />
             <RootStack.Screen name={Routes.GroupChannelMembers} component={GroupChannelMembersScreen} />
+
+            <RootStack.Group screenOptions={{ presentation: 'containedModal', headerShown: false }}>
+              <RootStack.Screen name={Routes.FileViewer} component={FileViewerScreen} />
+            </RootStack.Group>
 
             <RootStack.Group screenOptions={{ headerShown: true }}>
               <RootStack.Screen name={Routes.ThemeColors} component={ThemeColorsScreen} />

@@ -1,12 +1,11 @@
 import React from 'react';
-import { TouchableOpacity, TouchableOpacityProps, View, useWindowDimensions } from 'react-native';
+import { TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { conditionChaining } from '@sendbird/uikit-utils';
 
 import type { BaseHeaderProps } from '../../index';
 import createStyleSheet from '../../styles/createStyleSheet';
-import getDefaultHeaderHeight from '../../styles/getDefaultHeaderHeight';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import Text, { TextProps } from '../Text';
@@ -38,8 +37,7 @@ const Header: ((props: HeaderProps) => JSX.Element) & {
   onPressRight,
   clearTitleMargin = false,
 }) => {
-  const { topInset, defaultTitleAlign } = useHeaderStyle();
-  const { width, height } = useWindowDimensions();
+  const { topInset, defaultTitleAlign, defaultHeight } = useHeaderStyle();
   const { colors } = useUIKitTheme();
   const { left: paddingLeft, right: paddingRight } = useSafeAreaInsets();
 
@@ -64,7 +62,7 @@ const Header: ((props: HeaderProps) => JSX.Element) & {
         },
       ]}
     >
-      <View style={[styles.header, { height: getDefaultHeaderHeight(width > height) }]}>
+      <View style={[styles.header, { height: defaultHeight }]}>
         <LeftSide titleAlign={actualTitleAlign} left={left} onPressLeft={onPressLeft} />
         <View
           style={[

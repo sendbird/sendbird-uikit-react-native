@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 import { createGroupChannelFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
-import { Logger } from '@sendbird/uikit-utils';
 
 import { useAppNavigation } from '../../hooks/useAppNavigation';
 import { Routes } from '../../libs/navigation';
@@ -75,9 +74,12 @@ const GroupChannelScreen = () => {
   return (
     <GroupChannelFragment
       channel={channel}
-      onPressImageMessage={(msg, uri) => {
-        // Navigate to photo preview
-        Logger.log('file uri', msg.name, uri);
+      onPressMediaMessage={(fileMessage, deleteMessage) => {
+        // Navigate to media viewer
+        navigation.navigate(Routes.FileViewer, {
+          serializedFileMessage: fileMessage.serialize(),
+          deleteMessage,
+        });
       }}
       onChannelDeleted={() => {
         // Should leave channel, navigate to channel list

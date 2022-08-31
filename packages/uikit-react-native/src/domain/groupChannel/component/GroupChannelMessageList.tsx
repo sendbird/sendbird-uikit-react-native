@@ -19,11 +19,13 @@ import {
   getFileType,
   isMyMessage,
   messageKeyExtractor,
+  toMegabyte,
   useFreshCallback,
 } from '@sendbird/uikit-utils';
 
 import type { ChatFlatListRef } from '../../../components/ChatFlatList';
 import ChatFlatList from '../../../components/ChatFlatList';
+import { DEPRECATION_WARNING } from '../../../constants';
 import { useLocalization, usePlatformService } from '../../../hooks/useContext';
 import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
@@ -44,6 +46,7 @@ const GroupChannelMessageList = ({
   onResendFailedMessage,
   onDeleteMessage,
   onPressImageMessage,
+  onPressMediaMessage,
   flatListProps,
   enableMessageGrouping,
 }: GroupChannelProps['MessageList']) => {
@@ -56,6 +59,7 @@ const GroupChannelMessageList = ({
   const getMessagePressActions = useGetMessagePressActions({
     onDeleteMessage,
     onPressImageMessage,
+    onPressMediaMessage,
     currentUserId,
     onResendFailedMessage,
   });
@@ -135,15 +139,15 @@ const GroupChannelMessageList = ({
 };
 
 type HandleableMessage = SendbirdUserMessage | SendbirdFileMessage;
-const toMegabyte = (byte: number) => byte / 1024 / 1024;
 const useGetMessagePressActions = ({
   onPressImageMessage,
+  onPressMediaMessage,
   onDeleteMessage,
   onResendFailedMessage,
   currentUserId,
 }: Pick<
   GroupChannelProps['MessageList'],
-  'onDeleteMessage' | 'onResendFailedMessage' | 'onPressImageMessage' | 'currentUserId'
+  'onDeleteMessage' | 'onResendFailedMessage' | 'currentUserId' | 'onPressImageMessage' | 'onPressMediaMessage'
 >) => {
   const { colors } = useUIKitTheme();
   const { STRINGS } = useLocalization();
@@ -253,10 +257,23 @@ const useGetMessagePressActions = ({
       }
 
       const fileType = getFileType(msg.type || getFileExtension(msg.name));
-      if (fileType === 'image') {
-        response.onPress = () => onPressImageMessage?.(msg, getAvailableUriFromFileMessage(msg));
-      } else {
-        response.onPress = () => Linking.openURL(msg.url).catch();
+      switch (fileType) {
+        case 'image':
+        case 'video':
+        case 'audio': {
+          response.onPress = () => {
+            if (onPressImageMessage && fileType === 'image') {
+              Logger.warn(DEPRECATION_WARNING.GROUP_CHANNEL.ON_PRESS_IMAGE_MESSAGE);
+              onPressImageMessage(msg, getAvailableUriFromFileMessage(msg));
+            }
+            onPressMediaMessage?.(msg, () => onDeleteMessage(msg), getAvailableUriFromFileMessage(msg));
+          };
+          break;
+        }
+        default: {
+          response.onPress = () => Linking.openURL(msg.url).catch();
+          break;
+        }
       }
     }
 

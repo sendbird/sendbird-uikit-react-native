@@ -67,8 +67,10 @@ const createExpoFileService = ({
               return imagePickerModule.MediaTypeOptions.Images;
             case 'video':
               return imagePickerModule.MediaTypeOptions.Videos;
-            default:
+            case 'all':
               return imagePickerModule.MediaTypeOptions.All;
+            default:
+              return imagePickerModule.MediaTypeOptions.Images;
           }
         })(),
       });
@@ -92,7 +94,20 @@ const createExpoFileService = ({
         }
       }
 
-      const response = await imagePickerModule.launchImageLibraryAsync();
+      const response = await imagePickerModule.launchImageLibraryAsync({
+        mediaTypes: (() => {
+          switch (options?.mediaType) {
+            case 'photo':
+              return imagePickerModule.MediaTypeOptions.Images;
+            case 'video':
+              return imagePickerModule.MediaTypeOptions.Videos;
+            case 'all':
+              return imagePickerModule.MediaTypeOptions.All;
+            default:
+              return imagePickerModule.MediaTypeOptions.Images;
+          }
+        })(),
+      });
       if (response.cancelled) return null;
       const { uri } = response;
 

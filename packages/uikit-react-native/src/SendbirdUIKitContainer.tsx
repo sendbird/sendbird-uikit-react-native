@@ -23,7 +23,12 @@ import { useLocalization } from './hooks/useContext';
 import StringSetEn from './localization/StringSet.en';
 import type { StringSet } from './localization/StringSet.type';
 import SBUDynamicModule from './platform/dynamicModule';
-import type { ClipboardServiceInterface, FileServiceInterface, NotificationServiceInterface } from './platform/types';
+import type {
+  ClipboardServiceInterface,
+  FileServiceInterface,
+  MediaServiceInterface,
+  NotificationServiceInterface,
+} from './platform/types';
 import type { ErrorBoundaryProps, LocalCacheStorage } from './types';
 import VERSION from './version';
 
@@ -40,6 +45,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
     file: FileServiceInterface;
     notification: NotificationServiceInterface;
     clipboard: ClipboardServiceInterface;
+    media?: MediaServiceInterface;
   };
   chatOptions?: {
     localCacheStorage?: LocalCacheStorage;
@@ -55,6 +61,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
     theme?: UIKitTheme;
     statusBarTranslucent?: boolean;
     defaultHeaderTitleAlign?: 'left' | 'center';
+    defaultHeaderHeight?: number;
     HeaderComponent?: HeaderStyleContextType['HeaderComponent'];
   };
   toast?: {
@@ -142,6 +149,7 @@ const SendbirdUIKitContainer = ({
             fileService={platformServices.file}
             notificationService={platformServices.notification}
             clipboardService={platformServices.clipboard}
+            mediaService={platformServices.media}
           >
             <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
               <HeaderStyleProvider

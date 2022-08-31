@@ -24,6 +24,8 @@ export * from './sendbird/attrs';
 export const NOOP: () => void = () => void 0;
 export const ASYNC_NOOP = async () => void 0;
 export const PASS = <T>(val: T) => val;
+export const toMegabyte = (byte: number) => byte / 1024 / 1024;
+
 export type {
   FilterByValueType,
   UnionToIntersection,

@@ -54,7 +54,7 @@ const createNativeFileService = ({
   fsModule: typeof FileAccess;
 }): FileServiceInterface => {
   const cameraPermissions: Permission[] = Platform.select({
-    ios: [permissionModule.PERMISSIONS.IOS.CAMERA],
+    ios: [permissionModule.PERMISSIONS.IOS.CAMERA, permissionModule.PERMISSIONS.IOS.MICROPHONE],
     android: [permissionModule.PERMISSIONS.ANDROID.CAMERA],
     default: [],
   });
@@ -94,7 +94,18 @@ const createNativeFileService = ({
 
       const response = await imagePickerModule.launchCamera({
         cameraType: options?.cameraType ?? 'back',
-        mediaType: options?.mediaType ?? 'photo',
+        mediaType: (() => {
+          switch (options?.mediaType) {
+            case 'photo':
+              return 'photo';
+            case 'video':
+              return 'video';
+            case 'all':
+              return 'mixed';
+            default:
+              return 'photo';
+          }
+        })(),
       });
       if (response.didCancel) return null;
       if (response.errorCode === 'camera_unavailable') {
@@ -128,8 +139,10 @@ const createNativeFileService = ({
               return 'photo';
             case 'video':
               return 'video';
-            default:
+            case 'all':
               return 'mixed';
+            default:
+              return 'photo';
           }
         })(),
       });
