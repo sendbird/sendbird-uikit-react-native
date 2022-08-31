@@ -11,7 +11,7 @@ import './src/libs/notification';
 
 // Sendbird.setLogLevel(Sendbird.LogLevel.DEBUG);
 Logger.setLogLevel('warn');
-LogBox.ignoreLogs(['UIKit Warning', "Warning: Can't perform"]);
+LogBox.ignoreLogs(['UIKit Warning', "Warning: Can't perform", 'FileViewer > params.deleteMessage (Function)']);
 
 const App = withTouchReload(withAppearance(AppRoot));
 function HeadlessCheck({ isHeadless }) {

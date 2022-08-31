@@ -6,6 +6,7 @@ import { Logger } from '@sendbird/uikit-utils';
 export { default as MessageRenderer } from './components/MessageRenderer';
 export { default as ChannelCover } from './components/ChannelCover';
 export { default as ChatFlatList } from './components/ChatFlatList';
+export { default as FileViewer } from './components/FileViewer';
 export { default as NewMessagesButton } from './components/NewMessagesButton';
 export { default as ProviderLayout } from './components/ProviderLayout';
 export { default as ScrollToBottomButton } from './components/ScrollToBottomButton';

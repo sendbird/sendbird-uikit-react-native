@@ -62,7 +62,7 @@ export interface GroupChannelProps {
 
     onResendFailedMessage: (failedMessage: SendbirdUserMessage | SendbirdFileMessage) => Promise<void>;
     onDeleteMessage: (message: SendbirdUserMessage | SendbirdFileMessage) => Promise<void>;
-    onPressMediaMessage?: (message: SendbirdFileMessage, uri: string, fileType: 'audio' | 'video' | 'image') => void;
+    onPressMediaMessage?: (message: SendbirdFileMessage, deleteMessage: () => Promise<void>, uri: string) => void;
 
     renderMessage: (props: {
       message: SendbirdMessage;

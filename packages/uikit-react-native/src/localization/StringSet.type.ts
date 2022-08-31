@@ -131,6 +131,10 @@ export interface StringSet {
     CHANNEL_NO_MEMBERS: string;
     TYPING_INDICATOR_TYPINGS: (users: SendbirdUser[]) => string | undefined;
   };
+  FILE_VIEWER: {
+    TITLE: (message: SendbirdFileMessage) => string;
+    SUBTITLE: (message: SendbirdFileMessage) => string;
+  };
   PLACEHOLDER: {
     NO_BANNED_MEMBERS: string;
     NO_USERS: string;
@@ -291,6 +295,10 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
         return 'Several people are typing...';
       },
       ...overrides?.LABELS,
+    },
+    FILE_VIEWER: {
+      TITLE: (message) => message.sender?.nickname || USER_NO_NAME,
+      SUBTITLE: (message) => messageTime(new Date(message.createdAt), dateLocale),
     },
     PLACEHOLDER: {
       NO_BANNED_MEMBERS: 'No banned members',

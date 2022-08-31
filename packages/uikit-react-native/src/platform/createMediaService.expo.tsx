@@ -11,10 +11,10 @@ type Modules = {
 
 const createExpoMediaService = ({ avModule, thumbnailModule }: Modules): MediaServiceInterface => {
   return {
-    VideoComponent({ source, resizeMode, ...props }) {
+    VideoComponent({ source, resizeMode, onLoad, ...props }) {
       // FIXME: type error https://github.com/expo/expo/issues/17101
       // @ts-ignore
-      return <avModule.Video {...props} source={source} resizeMode={resizeMode} useNativeControls />;
+      return <avModule.Video {...props} source={source} resizeMode={resizeMode} onLoad={onLoad} useNativeControls />;
     },
     async getVideoThumbnail({ url, quality, timeMills }) {
       try {

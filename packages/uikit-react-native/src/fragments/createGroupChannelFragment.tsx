@@ -22,7 +22,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     enableTypingIndicator = true,
     onPressHeaderLeft = NOOP,
     onPressHeaderRight = NOOP,
-    onPressImageMessage = NOOP,
+    onPressImageMessage,
     onPressMediaMessage = NOOP,
     onChannelDeleted = NOOP,
     onBeforeSendFileMessage = PASS,

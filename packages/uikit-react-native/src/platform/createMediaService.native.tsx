@@ -15,8 +15,8 @@ function hash(str: string) {
 
 const createNativeMediaService = ({ VideoComponent, thumbnailModule }: Modules): MediaServiceInterface => {
   return {
-    VideoComponent({ source, resizeMode, ...props }) {
-      return <VideoComponent {...props} source={source} resizeMode={resizeMode} controls />;
+    VideoComponent({ source, resizeMode, onLoad, ...props }) {
+      return <VideoComponent {...props} source={source} resizeMode={resizeMode} onLoad={onLoad} controls />;
     },
     async getVideoThumbnail({ url, timeMills }) {
       try {

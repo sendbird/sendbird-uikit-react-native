@@ -19,6 +19,7 @@ import {
   getFileType,
   isMyMessage,
   messageKeyExtractor,
+  toMegabyte,
   useFreshCallback,
 } from '@sendbird/uikit-utils';
 
@@ -138,7 +139,6 @@ const GroupChannelMessageList = ({
 };
 
 type HandleableMessage = SendbirdUserMessage | SendbirdFileMessage;
-const toMegabyte = (byte: number) => byte / 1024 / 1024;
 const useGetMessagePressActions = ({
   onPressImageMessage,
   onPressMediaMessage,
@@ -266,7 +266,7 @@ const useGetMessagePressActions = ({
               Logger.warn(DEPRECATION_WARNING.GROUP_CHANNEL.ON_PRESS_IMAGE_MESSAGE);
               onPressImageMessage(msg, getAvailableUriFromFileMessage(msg));
             }
-            onPressMediaMessage?.(msg, getAvailableUriFromFileMessage(msg), fileType);
+            onPressMediaMessage?.(msg, () => onDeleteMessage(msg), getAvailableUriFromFileMessage(msg));
           };
           break;
         }

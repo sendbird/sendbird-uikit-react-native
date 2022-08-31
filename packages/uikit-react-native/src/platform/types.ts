@@ -57,6 +57,7 @@ export interface FileSystemServiceInterface {
 interface VideoProps {
   source: { uri: string } | number;
   resizeMode?: 'cover' | 'contain' | 'stretch';
+  onLoad?: () => void;
 }
 interface GetVideoThumbnailOptions {
   url: string;

@@ -33,6 +33,7 @@ import {
   StorybookScreen,
   ThemeColorsScreen,
 } from './screens';
+import FileViewerScreen from './screens/uikit-app/FileViewerScreen';
 
 const App = () => {
   const { scheme } = useAppearance();
@@ -94,6 +95,10 @@ const Navigations = () => {
             <RootStack.Screen name={Routes.GroupChannelCreate} component={GroupChannelCreateScreen} />
             <RootStack.Screen name={Routes.GroupChannelInvite} component={GroupChannelInviteScreen} />
             <RootStack.Screen name={Routes.GroupChannelMembers} component={GroupChannelMembersScreen} />
+
+            <RootStack.Group screenOptions={{ presentation: 'containedModal', headerShown: false }}>
+              <RootStack.Screen name={Routes.FileViewer} component={FileViewerScreen} />
+            </RootStack.Group>
 
             <RootStack.Group screenOptions={{ headerShown: true }}>
               <RootStack.Screen name={Routes.ThemeColors} component={ThemeColorsScreen} />

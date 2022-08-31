@@ -23,6 +23,7 @@ export enum Routes {
   GroupChannelInvite = 'GroupChannelInvite',
   GroupChannelMembers = 'GroupChannelMembers',
   Settings = 'Settings',
+  FileViewer = 'FileViewer',
 }
 
 export type RouteParamsUnion =
@@ -77,6 +78,13 @@ export type RouteParamsUnion =
   | {
       route: Routes.GroupChannelTabs;
       params: undefined;
+    }
+  | {
+      route: Routes.FileViewer;
+      params: {
+        serializedFileMessage: object;
+        deleteMessage: () => Promise<void>;
+      };
     };
 
 type ExtractParams<R extends Routes, U extends RouteParamsUnion> = U extends { route: R; params: infer P } ? P : never;

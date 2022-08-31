@@ -61,6 +61,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
     theme?: UIKitTheme;
     statusBarTranslucent?: boolean;
     defaultHeaderTitleAlign?: 'left' | 'center';
+    defaultHeaderHeight?: number;
     HeaderComponent?: HeaderStyleContextType['HeaderComponent'];
   };
   toast?: {
