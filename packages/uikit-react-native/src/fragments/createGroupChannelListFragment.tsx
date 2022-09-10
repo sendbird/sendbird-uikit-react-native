@@ -21,6 +21,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     onPressChannel,
     onPressCreateChannel,
     queryCreator,
+    collectionCreator,
     sortComparator = channelComparator,
     renderGroupChannelPreview,
     // skipTypeSelection = true,
@@ -30,8 +31,9 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     const { sdk, currentUser, features, markAsDeliveredWithChannel } = useSendbirdChat();
     const { groupChannels, next, loading } = useGroupChannelList(sdk, currentUser?.userId, {
       queryCreator,
+      collectionCreator,
       sortComparator,
-      enableCollectionWithoutLocalCache: true,
+      enableCollectionWithoutLocalCache: !queryCreator,
     });
 
     if (features.deliveryReceiptEnabled) {
