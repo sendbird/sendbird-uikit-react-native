@@ -4,8 +4,8 @@ import { AppState } from 'react-native';
 import { useGroupChannelList } from '@sendbird/uikit-chat-hooks';
 import { Logger, PASS, channelComparator, useFreshCallback } from '@sendbird/uikit-utils';
 
-import GroupChannelPreviewContainer from '../components/GroupChannelPreviewContainer';
 import StatusComposition from '../components/StatusComposition';
+import GroupChannelPreviewContainer from '../containers/GroupChannelPreviewContainer';
 import createGroupChannelListModule from '../domain/groupChannelList/module/createGroupChannelListModule';
 import type {
   GroupChannelListFragment,
@@ -21,6 +21,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     onPressChannel,
     onPressCreateChannel,
     queryCreator,
+    collectionCreator,
     sortComparator = channelComparator,
     renderGroupChannelPreview,
     // skipTypeSelection = true,
@@ -30,8 +31,9 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     const { sdk, currentUser, features, markAsDeliveredWithChannel } = useSendbirdChat();
     const { groupChannels, next, loading } = useGroupChannelList(sdk, currentUser?.userId, {
       queryCreator,
+      collectionCreator,
       sortComparator,
-      enableCollectionWithoutLocalCache: true,
+      enableCollectionWithoutLocalCache: !queryCreator,
     });
 
     if (features.deliveryReceiptEnabled) {

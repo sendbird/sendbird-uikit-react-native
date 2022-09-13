@@ -100,7 +100,7 @@ export {
   default as SendbirdUIKitContainer,
   SendbirdUIKit,
   SendbirdUIKitContainerProps,
-} from './SendbirdUIKitContainer';
+} from './containers/SendbirdUIKitContainer';
 
 export * from './types';
 

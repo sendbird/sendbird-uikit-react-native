@@ -1,4 +1,4 @@
-import type { KeyValuePairGet, KeyValuePairSet, LocalCacheStorage } from './types';
+import type { KeyValuePairGet, KeyValuePairSet, LocalCacheStorage } from '../types';
 
 export default class InternalLocalCacheStorage implements LocalCacheStorage {
   constructor(private storage: LocalCacheStorage) {}

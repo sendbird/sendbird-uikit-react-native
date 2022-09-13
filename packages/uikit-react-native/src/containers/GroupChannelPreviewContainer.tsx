@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
+import { Pressable } from 'react-native';
 
-import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
+import { useChannelHandler, useMessageOutgoingStatus } from '@sendbird/uikit-chat-hooks';
 import {
   GroupChannelPreview,
+  Icon,
   LoadingSpinner,
   createStyleSheet,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import Icon from '@sendbird/uikit-react-native-foundation/src/ui/Icon';
 import {
   SendbirdGroupChannel,
   SendbirdUser,
@@ -15,14 +16,13 @@ import {
   getFileType,
   isDifferentChannel,
   isMyMessage,
-  useForceUpdate,
   useIIFE,
   useUniqId,
 } from '@sendbird/uikit-utils';
 
+import ChannelCover from '../components/ChannelCover';
+import { DEFAULT_LONG_PRESS_DELAY } from '../constants';
 import { useLocalization, useSendbirdChat } from '../hooks/useContext';
-import ChannelCover from './ChannelCover';
-import SBUPressable from './SBUPressable';
 
 const iconMapper = { audio: 'file-audio', image: 'photo', video: 'play', file: 'file-document' } as const;
 
@@ -37,7 +37,6 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
   const { colors } = useUIKitTheme();
 
   const [typingUsers, setTypingUsers] = useState<SendbirdUser[]>([]);
-  const forceUpdate = useForceUpdate();
 
   if (features.channelListTypingIndicatorEnabled) {
     const typingId = useUniqId('GroupChannelPreviewContainer');
@@ -49,25 +48,7 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
     });
   }
 
-  if (features.channelListMessageReceiptStatusEnabled) {
-    const receiptId = useUniqId('GroupChannelPreviewContainer');
-    useChannelHandler(sdk, `GroupChannelPreviewContainer_ReceiptStatus_${receiptId}`, {
-      onDeliveryReceiptUpdated(eventChannel) {
-        if (isDifferentChannel(channel, eventChannel)) return;
-        if (!eventChannel.isGroupChannel() || !eventChannel.lastMessage) return;
-        if (!isMyMessage(eventChannel.lastMessage, currentUser?.userId)) return;
-
-        forceUpdate();
-      },
-      onReadReceiptUpdated(eventChannel) {
-        if (isDifferentChannel(channel, eventChannel)) return;
-        if (!eventChannel.isGroupChannel() || !eventChannel.lastMessage) return;
-        if (!isMyMessage(eventChannel.lastMessage, currentUser?.userId)) return;
-
-        forceUpdate();
-      },
-    });
-  }
+  const outgoingStatus = useMessageOutgoingStatus(sdk, channel, channel.lastMessage);
 
   const bodyText = useIIFE(() => {
     if (typingUsers.length > 0) return STRINGS.LABELS.TYPING_INDICATOR_TYPINGS(typingUsers) || '';
@@ -76,6 +57,7 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
 
   const bodyIcon = useIIFE(() => {
     if (!channel.lastMessage?.isFileMessage()) return undefined;
+    if (typingUsers.length > 0) return undefined;
     return iconMapper[getFileType(channel.lastMessage.type || getFileExtension(channel.lastMessage.name))];
   });
 
@@ -84,30 +66,31 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
     if (!features.channelListMessageReceiptStatusEnabled) return undefined;
     if (!isMyMessage(channel.lastMessage, currentUser?.userId)) return undefined;
 
-    if (channel.lastMessage.sendingStatus === 'pending') {
+    if (outgoingStatus === 'PENDING') {
       return <LoadingSpinner size={16} style={styles.titleCaptionIcon} />;
     }
 
-    if (channel.lastMessage.sendingStatus === 'failed') {
+    if (outgoingStatus === 'FAILED') {
       return <Icon icon={'error'} size={16} color={colors.error} style={styles.titleCaptionIcon} />;
     }
 
-    if (channel.getUnreadMemberCount(channel.lastMessage) === 0) {
-      return <Icon icon={'done-all'} size={16} color={colors.secondary} style={styles.titleCaptionIcon} />;
-    }
-
-    if (features.deliveryReceiptEnabled) {
-      if (channel.getUndeliveredMemberCount(channel.lastMessage) === 0) {
-        return <Icon icon={'done-all'} size={16} color={colors.onBackground03} style={styles.titleCaptionIcon} />;
-      }
+    if (outgoingStatus === 'UNDELIVERED') {
       return <Icon icon={'done'} size={16} color={colors.onBackground03} containerStyle={styles.titleCaptionIcon} />;
     }
 
-    return <Icon icon={'done-all'} size={16} color={colors.onBackground03} style={styles.titleCaptionIcon} />;
+    if (outgoingStatus === 'DELIVERED' || outgoingStatus === 'UNREAD') {
+      return <Icon icon={'done-all'} size={16} color={colors.onBackground03} style={styles.titleCaptionIcon} />;
+    }
+
+    if (outgoingStatus === 'READ') {
+      return <Icon icon={'done-all'} size={16} color={colors.secondary} style={styles.titleCaptionIcon} />;
+    }
+
+    return undefined;
   });
 
   return (
-    <SBUPressable onPress={onPress} onLongPress={onLongPress}>
+    <Pressable delayLongPress={DEFAULT_LONG_PRESS_DELAY} onPress={onPress} onLongPress={onLongPress}>
       <GroupChannelPreview
         customCover={<ChannelCover channel={channel} size={56} />}
         coverUrl={channel.coverUrl}
@@ -121,7 +104,7 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
         frozen={channel.isFrozen}
         notificationOff={channel.myPushTriggerOption === 'off'}
       />
-    </SBUPressable>
+    </Pressable>
   );
 };
 

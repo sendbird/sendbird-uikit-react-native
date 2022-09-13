@@ -27,6 +27,8 @@ export interface GroupChannelListProps {
     // skipTypeSelection?: boolean;
     /** Custom Query creator for channels query **/
     queryCreator?: UseGroupChannelListOptions['queryCreator'];
+    /** Custom Collection creator for group channel collection **/
+    collectionCreator?: UseGroupChannelListOptions['collectionCreator'];
     /** Sort comparator for sort channels **/
     sortComparator?: UseGroupChannelListOptions['sortComparator'];
     /** FlatList props for GroupChannelList.List **/

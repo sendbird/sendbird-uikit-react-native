@@ -55,7 +55,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       queryCreator,
       sortComparator,
       onChannelDeleted,
-      enableCollectionWithoutLocalCache: true,
+      enableCollectionWithoutLocalCache: !queryCreator,
     });
 
     const _renderMessage: GroupChannelProps['MessageList']['renderMessage'] = useFreshCallback((props) => {

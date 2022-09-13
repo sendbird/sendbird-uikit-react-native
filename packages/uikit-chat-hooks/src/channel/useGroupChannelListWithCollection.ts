@@ -22,9 +22,20 @@ const createGroupChannelListCollection = (
   const passedCollection = collectionCreator?.();
   if (passedCollection) return passedCollection;
 
-  const defaultCollection = sdk.GroupChannel.createGroupChannelCollection();
-  const filter = new sdk.GroupChannelFilter();
-  return defaultCollection.setLimit(20).setFilter(filter).build();
+  const defaultOptions = {
+    includeEmpty: false,
+    limit: 20,
+    order: sdk.GroupChannelCollection.GroupChannelOrder.LATEST_LAST_MESSAGE,
+  };
+  const collectionBuilder = sdk.GroupChannel.createGroupChannelCollection();
+  const groupChannelFilter = new sdk.GroupChannelFilter();
+  groupChannelFilter.includeEmpty = defaultOptions.includeEmpty;
+
+  return collectionBuilder
+    .setFilter(groupChannelFilter)
+    .setLimit(defaultOptions.limit)
+    .setOrder(defaultOptions.order)
+    .build();
 };
 
 export const useGroupChannelListWithCollection: UseGroupChannelList = (sdk, userId, options) => {

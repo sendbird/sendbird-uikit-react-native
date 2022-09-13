@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StatusBar, StyleSheet, View } from 'react-native';
+import { StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -17,7 +17,6 @@ import type { SendbirdFileMessage } from '@sendbird/uikit-utils';
 import { Logger, getFileExtension, getFileType, isMyMessage, toMegabyte, useIIFE } from '@sendbird/uikit-utils';
 
 import { useLocalization, usePlatformService, useSendbirdChat } from '../hooks/useContext';
-import SBUPressable from './SBUPressable';
 
 type Props = {
   fileMessage: SendbirdFileMessage;
@@ -191,9 +190,9 @@ const FileViewerHeader = ({ topInset, onClose, subtitle, title }: HeaderProps) =
         { paddingTop: topInset, height: defaultHeight + topInset, backgroundColor: palette.overlay01 },
       ]}
     >
-      <SBUPressable as={'TouchableOpacity'} onPress={onClose} style={styles.barButton}>
+      <TouchableOpacity onPress={onClose} style={styles.barButton}>
         <Icon icon={'close'} size={24} color={palette.onBackgroundDark01} />
-      </SBUPressable>
+      </TouchableOpacity>
       <View style={styles.barTitleContainer}>
         <Text h2 color={palette.onBackgroundDark01} style={styles.headerTitle}>
           {title}
@@ -233,13 +232,13 @@ const FileViewerFooter = ({ bottomInset, deleteShown, onPressDelete, onPressDown
         },
       ]}
     >
-      <SBUPressable as={'TouchableOpacity'} onPress={onPressDownload} style={styles.barButton}>
+      <TouchableOpacity onPress={onPressDownload} style={styles.barButton}>
         <Icon icon={'download'} size={24} color={palette.onBackgroundDark01} />
-      </SBUPressable>
+      </TouchableOpacity>
       <View style={styles.barTitleContainer} />
-      <SBUPressable as={'TouchableOpacity'} onPress={onPressDelete} style={styles.barButton} disabled={!deleteShown}>
+      <TouchableOpacity onPress={onPressDelete} style={styles.barButton} disabled={!deleteShown}>
         {deleteShown && <Icon icon={'delete'} size={24} color={palette.onBackgroundDark01} />}
-      </SBUPressable>
+      </TouchableOpacity>
     </View>
   );
 };
