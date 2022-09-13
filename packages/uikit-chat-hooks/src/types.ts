@@ -49,13 +49,6 @@ export interface UseGroupChannelList {
     refresh: () => Promise<void>;
 
     /**
-     * Update channel, update or insert channel to state
-     * @param {SendbirdGroupChannel} channel
-     * @return {void}
-     * */
-    update: (channel: SendbirdGroupChannel) => void;
-
-    /**
      * Get group channels state
      * */
     groupChannels: SendbirdGroupChannel[];
@@ -68,7 +61,6 @@ export interface UseGroupChannelList {
   };
 }
 export type UseGroupChannelListOptions = {
-  sortComparator?: (a: SendbirdGroupChannel, b: SendbirdGroupChannel) => number;
   queryCreator?: () => Sendbird.GroupChannelListQuery;
   collectionCreator?: () => SendbirdGroupChannelCollection;
   enableCollectionWithoutLocalCache?: boolean;

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { AppState } from 'react-native';
 
 import { useGroupChannelList } from '@sendbird/uikit-chat-hooks';
-import { Logger, PASS, channelComparator, useFreshCallback } from '@sendbird/uikit-utils';
+import { Logger, PASS, useFreshCallback } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import GroupChannelPreviewContainer from '../containers/GroupChannelPreviewContainer';
@@ -22,7 +22,6 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     onPressCreateChannel,
     queryCreator,
     collectionCreator,
-    sortComparator = channelComparator,
     renderGroupChannelPreview,
     // skipTypeSelection = true,
     flatListProps = {},
@@ -32,7 +31,6 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     const { groupChannels, next, loading } = useGroupChannelList(sdk, currentUser?.userId, {
       queryCreator,
       collectionCreator,
-      sortComparator,
       enableCollectionWithoutLocalCache: !queryCreator,
     });
 

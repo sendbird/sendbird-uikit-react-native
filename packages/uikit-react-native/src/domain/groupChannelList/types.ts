@@ -29,8 +29,6 @@ export interface GroupChannelListProps {
     queryCreator?: UseGroupChannelListOptions['queryCreator'];
     /** Custom Collection creator for group channel collection **/
     collectionCreator?: UseGroupChannelListOptions['collectionCreator'];
-    /** Sort comparator for sort channels **/
-    sortComparator?: UseGroupChannelListOptions['sortComparator'];
     /** FlatList props for GroupChannelList.List **/
     flatListProps?: GroupChannelListProps['List']['flatListProps'];
     /** Action menu item creator for onLongPress **/

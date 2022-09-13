@@ -1,17 +1,4 @@
-import type { SendbirdBaseChannel, SendbirdGroupChannel } from '../types';
-
-/**
- * Default sort comparator for channel
- * @param {SendbirdBaseChannel} a
- * @param {SendbirdBaseChannel} b
- * @returns {number}
- * */
-export function channelComparator<T extends SendbirdBaseChannel>(a: T, b: T): number {
-  if (a.isGroupChannel() && b.isGroupChannel()) {
-    return (b.lastMessage?.createdAt ?? b.createdAt) - (a.lastMessage?.createdAt ?? a.createdAt);
-  }
-  return b.createdAt - a.createdAt;
-}
+import type { SendbirdBaseChannel, SendbirdChannel, SendbirdGroupChannel, SendbirdOpenChannel } from '../types';
 
 /**
  * Diff utils for channel
@@ -34,4 +21,12 @@ export function isDefaultCoverImage(coverUrl: string) {
 
 export function getMembersExcludeMe(channel: SendbirdGroupChannel, currentUserId?: string) {
   return channel.members.filter((m) => m.userId !== currentUserId);
+}
+
+export function getGroupChannels(channels: SendbirdChannel[]): SendbirdGroupChannel[] {
+  return channels.filter((c): c is SendbirdGroupChannel => c.isGroupChannel());
+}
+
+export function getOpenChannels(channels: SendbirdChannel[]): SendbirdOpenChannel[] {
+  return channels.filter((c): c is SendbirdOpenChannel => c.isOpenChannel());
 }

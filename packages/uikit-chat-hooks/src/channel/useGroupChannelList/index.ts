@@ -1,4 +1,4 @@
-import type { UseGroupChannelList } from '../types';
+import type { UseGroupChannelList } from '../../types';
 import { useGroupChannelListWithCollection } from './useGroupChannelListWithCollection';
 import { useGroupChannelListWithQuery } from './useGroupChannelListWithQuery';
 
