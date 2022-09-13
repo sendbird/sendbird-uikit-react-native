@@ -87,21 +87,23 @@ const GroupChannelPreview = ({
         </View>
 
         <View style={styles.rightBottomSection}>
-          <View style={[styles.body, bodyIcon && { alignItems: 'center' }]}>
-            {bodyIcon && (
-              <Icon
-                size={18}
-                icon={bodyIcon}
-                color={color.default.none.bodyIcon}
-                containerStyle={[
-                  styles.bodyIcon,
-                  { backgroundColor: colors.ui.groupChannelPreview.default.none.bodyIconBackground },
-                ]}
-              />
-            )}
-            <Text body3 numberOfLines={1} style={styles.bodyText} color={color.default.none.textBody}>
-              {body}
-            </Text>
+          <View style={styles.body}>
+            <View style={styles.bodyWrapper}>
+              {bodyIcon && (
+                <Icon
+                  size={18}
+                  icon={bodyIcon}
+                  color={color.default.none.bodyIcon}
+                  containerStyle={[
+                    styles.bodyIcon,
+                    { backgroundColor: colors.ui.groupChannelPreview.default.none.bodyIconBackground },
+                  ]}
+                />
+              )}
+              <Text body3 numberOfLines={1} style={styles.bodyText} color={color.default.none.textBody}>
+                {body}
+              </Text>
+            </View>
           </View>
           <View>{badgeCount > 0 && <Badge count={badgeCount} maxCount={maxBadgeCount} />}</View>
         </View>
@@ -116,10 +118,11 @@ const Separator = ({ color }: SeparatorProps) => <View style={[styles.separator,
 
 const styles = createStyleSheet({
   container: {
+    height: 76,
     width: '100%',
     flexDirection: 'row',
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingTop: 10,
     alignItems: 'center',
   },
   coverContainer: {
@@ -170,9 +173,12 @@ const styles = createStyleSheet({
   body: {
     marginRight: 4,
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
     flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  bodyWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   bodyText: {
     flex: 1,
