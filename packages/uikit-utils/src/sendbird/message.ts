@@ -8,7 +8,8 @@ export function isNewMessage(msg: SendbirdMessage, currentUserId?: string) {
   return msg.updatedAt === 0;
 }
 
-export function isMyMessage(msg: SendbirdMessage, currentUserId = '##__USER_ID_IS_NOT_PROVIDED__##') {
+export function isMyMessage(msg?: SendbirdMessage | null, currentUserId = '##__USER_ID_IS_NOT_PROVIDED__##') {
+  if (!msg) return false;
   return (
     ('sender' in msg && msg.sender?.userId === currentUserId) ||
     msg.sendingStatus === 'pending' ||

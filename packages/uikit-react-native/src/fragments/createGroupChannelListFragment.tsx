@@ -4,8 +4,8 @@ import { AppState } from 'react-native';
 import { useGroupChannelList } from '@sendbird/uikit-chat-hooks';
 import { Logger, PASS, channelComparator, useFreshCallback } from '@sendbird/uikit-utils';
 
-import GroupChannelPreviewContainer from '../components/GroupChannelPreviewContainer';
 import StatusComposition from '../components/StatusComposition';
+import GroupChannelPreviewContainer from '../containers/GroupChannelPreviewContainer';
 import createGroupChannelListModule from '../domain/groupChannelList/module/createGroupChannelListModule';
 import type {
   GroupChannelListFragment,
