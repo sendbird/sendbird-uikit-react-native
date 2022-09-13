@@ -64,7 +64,7 @@ messaging().setBackgroundMessageHandler(async (message: FirebaseMessagingTypes.R
     const sendbird = parseSendbirdNotification(message.data);
     await Notifee.displayNotification({
       id: String(sendbird.message_id),
-      title: sendbird.channel.name || sendbird.sender?.name || 'Message received',
+      title: `[RN]${sendbird.channel.name || sendbird.sender?.name || 'Message received'}`,
       body: sendbird.message,
       data: message.data,
       android: {

@@ -1,8 +1,8 @@
 import React, { ErrorInfo } from 'react';
 import { View } from 'react-native';
 
-import TypedPlaceholder from './components/TypedPlaceholder';
-import type { ErrorBoundaryProps } from './types';
+import TypedPlaceholder from '../components/TypedPlaceholder';
+import type { ErrorBoundaryProps } from '../types';
 
 const DefaultErrorBoundaryComponent = (props: ErrorBoundaryProps) => {
   return (
@@ -12,7 +12,7 @@ const DefaultErrorBoundaryComponent = (props: ErrorBoundaryProps) => {
   );
 };
 
-class InternalErrorBoundary extends React.PureComponent<{
+class InternalErrorBoundaryContainer extends React.PureComponent<{
   onError?: (props: ErrorBoundaryProps) => void;
   ErrorInfoComponent?: (props: ErrorBoundaryProps) => JSX.Element;
   children?: React.ReactNode;
@@ -50,4 +50,4 @@ class InternalErrorBoundary extends React.PureComponent<{
   };
 }
 
-export default InternalErrorBoundary;
+export default InternalErrorBoundaryContainer;

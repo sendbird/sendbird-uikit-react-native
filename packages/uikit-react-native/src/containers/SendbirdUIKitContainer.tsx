@@ -14,23 +14,23 @@ import {
 } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 
-import InternalErrorBoundary from './InternalErrorBoundary';
-import InternalLocalCacheStorage from './InternalLocalCacheStorage';
-import { LocalizationProvider } from './contexts/Localization';
-import { PlatformServiceProvider } from './contexts/PlatformService';
-import { SendbirdChatProvider } from './contexts/SendbirdChat';
-import { useLocalization } from './hooks/useContext';
-import StringSetEn from './localization/StringSet.en';
-import type { StringSet } from './localization/StringSet.type';
-import SBUDynamicModule from './platform/dynamicModule';
+import { LocalizationProvider } from '../contexts/Localization';
+import { PlatformServiceProvider } from '../contexts/PlatformService';
+import { SendbirdChatProvider } from '../contexts/SendbirdChat';
+import { useLocalization } from '../hooks/useContext';
+import InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
+import StringSetEn from '../localization/StringSet.en';
+import type { StringSet } from '../localization/StringSet.type';
+import SBUDynamicModule from '../platform/dynamicModule';
 import type {
   ClipboardServiceInterface,
   FileServiceInterface,
   MediaServiceInterface,
   NotificationServiceInterface,
-} from './platform/types';
-import type { ErrorBoundaryProps, LocalCacheStorage } from './types';
-import VERSION from './version';
+} from '../platform/types';
+import type { ErrorBoundaryProps, LocalCacheStorage } from '../types';
+import VERSION from '../version';
+import InternalErrorBoundaryContainer from './InternalErrorBoundaryContainer';
 
 const NetInfo = SBUDynamicModule.get('@react-native-community/netinfo', 'warn');
 
@@ -159,7 +159,7 @@ const SendbirdUIKitContainer = ({
               >
                 <LocalizedDialogProvider>
                   <ToastProvider dismissTimeout={toast?.dismissTimeout}>
-                    <InternalErrorBoundary {...errorBoundary}>{children}</InternalErrorBoundary>
+                    <InternalErrorBoundaryContainer {...errorBoundary}>{children}</InternalErrorBoundaryContainer>
                   </ToastProvider>
                 </LocalizedDialogProvider>
               </HeaderStyleProvider>
