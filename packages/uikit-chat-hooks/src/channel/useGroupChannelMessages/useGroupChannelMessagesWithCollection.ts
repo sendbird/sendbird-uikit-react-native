@@ -62,12 +62,12 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     try {
       if (deliveryReceiptEnabled) sdk.markAsDelivered(activeChannel.url);
     } catch (e) {
-      Logger.error(`[${HOOK_NAME}/channelMarkAs/Delivered]`, e);
+      Logger.warn(`[${HOOK_NAME}/channelMarkAs/Delivered]`, e);
     }
     try {
       await sdk.markAsReadWithChannelUrls([activeChannel.url]);
     } catch (e) {
-      Logger.error(`[${HOOK_NAME}/channelMarkAs/Read]`, e);
+      Logger.warn(`[${HOOK_NAME}/channelMarkAs/Read]`, e);
     }
   };
 
@@ -99,7 +99,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
             }
           })
           .onApiResult((err, messages) => {
-            if (err) Logger.error(`[${HOOK_NAME}/onApiResult]`, err);
+            if (err) Logger.warn(`[${HOOK_NAME}/onApiResult]`, err);
             else {
               Logger.debug(`[${HOOK_NAME}/onApiResult]`, 'message length:', messages.length);
               updateMessages(messages, true, sdk.currentUser.userId);

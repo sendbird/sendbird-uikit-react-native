@@ -49,12 +49,12 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
     try {
       if (deliveryReceiptEnabled) sdk.markAsDelivered(activeChannel.url);
     } catch (e) {
-      Logger.error(`[${HOOK_NAME}/channelMarkAs/Delivered]`, e);
+      Logger.warn(`[${HOOK_NAME}/channelMarkAs/Delivered]`, e);
     }
     try {
       await sdk.markAsReadWithChannelUrls([activeChannel.url]);
     } catch (e) {
-      Logger.error(`[${HOOK_NAME}/channelMarkAs/Read]`, e);
+      Logger.warn(`[${HOOK_NAME}/channelMarkAs/Read]`, e);
     }
   };
 
