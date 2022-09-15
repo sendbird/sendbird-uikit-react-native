@@ -14,7 +14,15 @@ import {
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdFileMessage } from '@sendbird/uikit-utils';
-import { Logger, getFileExtension, getFileType, isMyMessage, toMegabyte, useIIFE } from '@sendbird/uikit-utils';
+import {
+  Logger,
+  getFileExtension,
+  getFileType,
+  isMyMessage,
+  toMegabyte,
+  truncate,
+  useIIFE,
+} from '@sendbird/uikit-utils';
 
 import { useLocalization, usePlatformService, useSendbirdChat } from '../hooks/useContext';
 
@@ -194,10 +202,10 @@ const FileViewerHeader = ({ topInset, onClose, subtitle, title }: HeaderProps) =
         <Icon icon={'close'} size={24} color={palette.onBackgroundDark01} />
       </TouchableOpacity>
       <View style={styles.barTitleContainer}>
-        <Text h2 color={palette.onBackgroundDark01} style={styles.headerTitle}>
-          {title}
+        <Text h2 color={palette.onBackgroundDark01} style={styles.headerTitle} numberOfLines={1}>
+          {truncate(title, { mode: 'mid', maxLen: 18 })}
         </Text>
-        <Text caption2 color={palette.onBackgroundDark01}>
+        <Text caption2 color={palette.onBackgroundDark01} numberOfLines={1}>
           {subtitle}
         </Text>
       </View>
