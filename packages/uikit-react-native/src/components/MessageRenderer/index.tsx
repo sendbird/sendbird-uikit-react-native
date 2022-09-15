@@ -107,9 +107,9 @@ const MessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
             </View>
           )}
           {isIncoming && <MessageIncomingAvatar message={message} grouping={groupWithNext} />}
-          <View>
+          <View style={styles.bubbleContainer}>
             {isIncoming && <MessageIncomingSenderName message={message} grouping={groupWithPrev} />}
-            <View style={styles.bubbleContainer}>
+            <View style={styles.bubbleWrapper}>
               {messageComponent}
               {isIncoming && <MessageTime message={message} grouping={groupWithNext} style={styles.timeIncoming} />}
             </View>
@@ -150,6 +150,9 @@ const styles = createStyleSheet({
     maxWidth: 240,
   },
   bubbleContainer: {
+    flexShrink: 1,
+  },
+  bubbleWrapper: {
     flexDirection: 'row',
     alignItems: 'flex-end',
   },
