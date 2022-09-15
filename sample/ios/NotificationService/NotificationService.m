@@ -20,7 +20,11 @@
 - (void)didReceiveNotificationRequest:(UNNotificationRequest *)request withContentHandler:(void (^)(UNNotificationContent * _Nonnull))contentHandler {
   self.contentHandler = contentHandler;
   self.bestAttemptContent = [request.content mutableCopy];
-  self.bestAttemptContent.title = [NSString stringWithFormat:@"[RN]%@", self.bestAttemptContent.title];
+  if (self.bestAttemptContent.title) {
+    self.bestAttemptContent.title = [NSString stringWithFormat:@"[RN]%@", self.bestAttemptContent.title];
+  } else {
+    self.bestAttemptContent.title = @"[RN]SendbirdUIKitSample";
+  }
   self.contentHandler(self.bestAttemptContent);
   [NotifeeExtensionHelper populateNotificationContent:request
                                           withContent: self.bestAttemptContent
