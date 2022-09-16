@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 
 import { Icon, Image, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
@@ -7,35 +7,49 @@ import { getAvailableUriFromFileMessage } from '@sendbird/uikit-utils';
 import { usePlatformService } from '../../../hooks/useContext';
 import type { FileMessageProps } from './index';
 
+const useRetry = (videoFileUrl: string, retryCount = 5) => {
+  const [state, setState] = useState({ thumbnail: null as null | string, loading: true });
+  const retryCountRef = useRef(0);
+  const retryTimeoutRef = useRef<NodeJS.Timeout>();
+
+  const { mediaService } = usePlatformService();
+
+  const fetchThumbnail = () => {
+    return mediaService?.getVideoThumbnail({ url: videoFileUrl, timeMills: 1000 }).then((result) => {
+      setState({ loading: false, thumbnail: result?.path ?? null });
+    });
+  };
+
+  useEffect(() => {
+    if (!state.thumbnail) {
+      const reloadReservation = () => {
+        if (retryCountRef.current < retryCount) {
+          retryTimeoutRef.current = setTimeout(() => {
+            retryCountRef.current++;
+            reloadReservation();
+            fetchThumbnail();
+          }, retryCountRef.current * 5000);
+        }
+      };
+
+      return reloadReservation();
+    } else {
+      return clearTimeout(retryTimeoutRef.current);
+    }
+  }, [state.thumbnail]);
+
+  return state;
+};
+
 const VideoFileMessage = ({ message }: FileMessageProps) => {
   const { colors } = useUIKitTheme();
 
-  const { mediaService } = usePlatformService();
   const fileUrl = getAvailableUriFromFileMessage(message);
   const style = [styles.image, { backgroundColor: colors.onBackground04 }];
 
-  const [state, setState] = useState({
-    thumbnail: null as null | string,
-    loading: true,
-    imageNotFound: false,
-  });
+  const { loading, thumbnail } = useRetry(fileUrl);
 
-  useEffect(() => {
-    mediaService
-      ?.getVideoThumbnail({ url: fileUrl, timeMills: 1000 })
-      .then((result) => {
-        if (result?.path) {
-          setState((prev) => ({ ...prev, loading: false, thumbnail: result.path }));
-        } else {
-          throw new Error('Cannot generate thumbnail');
-        }
-      })
-      .catch(() => {
-        setState((prev) => ({ ...prev, loading: false, imageNotFound: true }));
-      });
-  }, []);
-
-  if (state.loading || state.imageNotFound) {
+  if (loading) {
     return (
       <View style={[style, styles.container]}>
         <PlayIcon />
@@ -45,13 +59,7 @@ const VideoFileMessage = ({ message }: FileMessageProps) => {
 
   return (
     <View style={styles.container}>
-      <Image
-        source={{ uri: state.thumbnail || fileUrl }}
-        style={style}
-        resizeMode={'cover'}
-        resizeMethod={'resize'}
-        onError={() => setState((prev) => ({ ...prev, imageNotFound: true }))}
-      />
+      <Image source={{ uri: thumbnail || fileUrl }} style={style} resizeMode={'cover'} resizeMethod={'resize'} />
       <PlayIcon />
     </View>
   );

@@ -27,7 +27,7 @@ const useRetry = (hasError: boolean, retryCount = 5) => {
 
       return reloadReservation();
     } else {
-      clearTimeout(retryTimeoutRef.current);
+      return clearTimeout(retryTimeoutRef.current);
     }
   }, [hasError]);
 
