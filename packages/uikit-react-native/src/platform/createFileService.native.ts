@@ -197,7 +197,7 @@ const createNativeFileService = ({
         const dirType = { 'file': 'downloads', 'audio': 'audio', 'image': 'images', 'video': 'video' } as const;
         await fsModule.FileSystem.cpExternal(
           downloadPath,
-          normalizeFileName(options.fileName, getFileExtension(options.fileUrl)) + '.mov',
+          normalizeFileName(options.fileName, getFileExtension(options.fileUrl)),
           dirType[fileType],
         );
       }
