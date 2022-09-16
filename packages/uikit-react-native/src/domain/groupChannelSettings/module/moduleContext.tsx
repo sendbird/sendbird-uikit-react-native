@@ -1,7 +1,7 @@
 import React, { createContext, useCallback } from 'react';
 
 import { useActiveGroupChannel, useChannelHandler } from '@sendbird/uikit-chat-hooks';
-import { useActionMenu, useBottomSheet, usePrompt, useToast } from '@sendbird/uikit-react-native-foundation';
+import { useActionMenu, useAlert, useBottomSheet, usePrompt, useToast } from '@sendbird/uikit-react-native-foundation';
 import {
   NOOP,
   SendbirdGroupChannel,
@@ -34,6 +34,7 @@ export const GroupChannelSettingsContextsProvider: GroupChannelSettingsModule['P
   const { STRINGS } = useLocalization();
   const { sdk } = useSendbirdChat();
   const { fileService } = usePlatformService();
+  const { alert } = useAlert();
 
   const { activeChannel, setActiveChannel } = useActiveGroupChannel(sdk, channel);
 

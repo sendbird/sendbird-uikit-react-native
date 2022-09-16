@@ -13,6 +13,7 @@ import {
   Switch,
   Text,
   useActionMenu,
+  useAlert,
   usePrompt,
   useToast,
   useUIKitTheme,
@@ -39,6 +40,7 @@ const SettingsScreen = () => {
   const { openSheet } = useBottomSheet();
   const { openPrompt } = usePrompt();
   const { openMenu } = useActionMenu();
+  const { alert } = useAlert();
 
   const onChangeNickname = () => {
     openPrompt({
