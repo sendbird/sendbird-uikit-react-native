@@ -8,6 +8,7 @@ import type { Permission } from 'react-native-permissions';
 
 import { getFileExtension, getFileType } from '@sendbird/uikit-utils';
 
+import SBUError from '../libs/SBUError';
 import fileTypeGuard from '../utils/fileTypeGuard';
 import nativePermissionGranted from '../utils/nativePermissionGranted';
 import type {
@@ -87,7 +88,7 @@ const createNativeFileService = ({
       if (!hasPermission) {
         const granted = await this.requestCameraPermission();
         if (!granted) {
-          options?.onOpenFailureWithToastMessage?.();
+          options?.onOpenFailure?.(SBUError.PERMISSIONS_DENIED);
           return null;
         }
       }
@@ -109,7 +110,7 @@ const createNativeFileService = ({
       });
       if (response.didCancel) return null;
       if (response.errorCode === 'camera_unavailable') {
-        options?.onOpenFailureWithToastMessage?.();
+        options?.onOpenFailure?.(SBUError.DEVICE_UNAVAILABLE, new Error(response.errorMessage));
         return null;
       }
 
@@ -126,7 +127,7 @@ const createNativeFileService = ({
       if (!hasPermission) {
         const granted = await this.requestMediaLibraryPermission();
         if (!granted) {
-          options?.onOpenFailureWithToastMessage?.();
+          options?.onOpenFailure?.(SBUError.PERMISSIONS_DENIED);
           return null;
         }
       }
@@ -148,7 +149,7 @@ const createNativeFileService = ({
       });
       if (response.didCancel) return null;
       if (response.errorCode === 'camera_unavailable') {
-        options?.onOpenFailureWithToastMessage?.();
+        options?.onOpenFailure?.(SBUError.DEVICE_UNAVAILABLE, new Error(response.errorMessage));
         return null;
       }
 
@@ -162,7 +163,7 @@ const createNativeFileService = ({
         return fileTypeGuard({ uri, size, name, type });
       } catch (e) {
         if (!documentPickerModule.isCancel(e) && documentPickerModule.isInProgress(e)) {
-          options?.onOpenFailureWithToastMessage?.();
+          options?.onOpenFailure?.(SBUError.UNKNOWN, e);
         }
         return null;
       }

@@ -5,6 +5,7 @@ import type * as ExpoMediaLibrary from 'expo-media-library';
 
 import { getFileExtension, getFileType } from '@sendbird/uikit-utils';
 
+import SBUError from '../libs/SBUError';
 import type { ExpoMediaLibraryPermissionResponse, ExpoPermissionResponse } from '../utils/expoPermissionGranted';
 import expoPermissionGranted from '../utils/expoPermissionGranted';
 import fileTypeGuard from '../utils/fileTypeGuard';
@@ -55,7 +56,7 @@ const createExpoFileService = ({
       if (!hasPermission) {
         const granted = await this.requestCameraPermission();
         if (!granted) {
-          options?.onOpenFailureWithToastMessage?.();
+          options?.onOpenFailure?.(SBUError.PERMISSIONS_DENIED);
           return null;
         }
       }
@@ -89,7 +90,7 @@ const createExpoFileService = ({
       if (!hasPermission) {
         const granted = await this.requestMediaLibraryPermission('read');
         if (!granted) {
-          options?.onOpenFailureWithToastMessage?.();
+          options?.onOpenFailure?.(SBUError.PERMISSIONS_DENIED);
           return null;
         }
       }
@@ -123,8 +124,8 @@ const createExpoFileService = ({
         if (response.type === 'cancel') return null;
         const { mimeType, uri, size, name } = response;
         return fileTypeGuard({ uri, size, name, type: mimeType });
-      } catch {
-        options?.onOpenFailureWithToastMessage?.();
+      } catch (e) {
+        options?.onOpenFailure?.(SBUError.UNKNOWN, e);
         return null;
       }
     }

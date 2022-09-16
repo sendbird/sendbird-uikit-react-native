@@ -1,3 +1,5 @@
+import type SBUError from '../libs/SBUError';
+
 export type Unsubscribe = () => void | undefined;
 export type DownloadedPath = string;
 export type FilePickerResponse = FileType | null;
@@ -23,7 +25,7 @@ export interface ClipboardServiceInterface {
 export interface FileServiceInterface extends FilePickerServiceInterface, FileSystemServiceInterface {}
 
 export interface OpenResultListener {
-  onOpenFailureWithToastMessage?: () => void;
+  onOpenFailure?: (error: SBUError, originError?: unknown) => void;
 }
 export interface OpenMediaLibraryOptions extends OpenResultListener {
   selectionLimit?: number;

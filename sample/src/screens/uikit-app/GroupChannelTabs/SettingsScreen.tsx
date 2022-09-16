@@ -18,6 +18,8 @@ import {
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
 import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
+import SBUError from '@sendbird/uikit-react-native/src/libs/SBUError';
+import SBUUtils from '@sendbird/uikit-react-native/src/libs/SBUUtils';
 
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
 import useAppearance from '../../../hooks/useAppearance';
@@ -56,7 +58,17 @@ const SettingsScreen = () => {
           onPress: async () => {
             const photo = await fileService.openCamera({
               mediaType: 'photo',
-              onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_CAMERA_ERROR, 'error'),
+              onOpenFailure: (error) => {
+                if (error.code === SBUError.CODE.ERR_PERMISSIONS_DENIED) {
+                  alert({
+                    title: STRINGS.DIALOG.ALERT_PERMISSIONS_TITLE,
+                    message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE('camera', 'UIKitSample'),
+                    buttons: [{ text: STRINGS.DIALOG.ALERT_PERMISSIONS_OK, onPress: () => SBUUtils.openSettings() }],
+                  });
+                } else {
+                  toast.show(STRINGS.TOAST.OPEN_CAMERA_ERROR, 'error');
+                }
+              },
             });
 
             if (!photo) return;
@@ -70,7 +82,17 @@ const SettingsScreen = () => {
             const files = await fileService.openMediaLibrary({
               selectionLimit: 1,
               mediaType: 'photo',
-              onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_PHOTO_LIBRARY_ERROR, 'error'),
+              onOpenFailure: (error) => {
+                if (error.code === SBUError.CODE.ERR_PERMISSIONS_DENIED) {
+                  alert({
+                    title: STRINGS.DIALOG.ALERT_PERMISSIONS_TITLE,
+                    message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE('device storage', 'UIKitSample'),
+                    buttons: [{ text: STRINGS.DIALOG.ALERT_PERMISSIONS_OK, onPress: () => SBUUtils.openSettings() }],
+                  });
+                } else {
+                  toast.show(STRINGS.TOAST.OPEN_PHOTO_LIBRARY_ERROR, 'error');
+                }
+              },
             });
             if (!files || !files[0]) return;
 
