@@ -7,6 +7,7 @@ import type * as Permissions from 'react-native-permissions';
 import type { Permission } from 'react-native-permissions';
 
 import { getFileExtension, getFileType } from '@sendbird/uikit-utils';
+import { normalizeFileName } from '@sendbird/uikit-utils/src/shared/regex';
 
 import SBUError from '../libs/SBUError';
 import fileTypeGuard from '../utils/fileTypeGuard';
@@ -194,7 +195,11 @@ const createNativeFileService = ({
 
       if (Platform.OS === 'android') {
         const dirType = { 'file': 'downloads', 'audio': 'audio', 'image': 'images', 'video': 'video' } as const;
-        await fsModule.FileSystem.cpExternal(downloadPath, options.fileName, dirType[fileType]);
+        await fsModule.FileSystem.cpExternal(
+          downloadPath,
+          normalizeFileName(options.fileName, getFileExtension(options.fileUrl)) + '.mov',
+          dirType[fileType],
+        );
       }
       return downloadPath;
     }
