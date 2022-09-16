@@ -5,6 +5,7 @@ import {
   Icon,
   TextInput,
   createStyleSheet,
+  useAlert,
   useBottomSheet,
   useToast,
   useUIKitTheme,
@@ -12,6 +13,8 @@ import {
 import { conditionChaining } from '@sendbird/uikit-utils';
 
 import { useLocalization, usePlatformService } from '../../../../hooks/useContext';
+import SBUError from '../../../../libs/SBUError';
+import SBUUtils from '../../../../libs/SBUUtils';
 import type { GroupChannelProps } from '../../types';
 
 type SendInputProps = GroupChannelProps['Input'] & {
@@ -21,9 +24,10 @@ type SendInputProps = GroupChannelProps['Input'] & {
 };
 const SendInput = ({ onSendUserMessage, onSendFileMessage, text, setText, disabled }: SendInputProps) => {
   const { STRINGS } = useLocalization();
-  const { openSheet } = useBottomSheet();
   const { fileService } = usePlatformService();
   const { colors } = useUIKitTheme();
+  const { openSheet } = useBottomSheet();
+  const { alert } = useAlert();
   const toast = useToast();
 
   const onPressSend = () => {
@@ -39,7 +43,17 @@ const SendInput = ({ onSendUserMessage, onSendFileMessage, text, setText, disabl
           onPress: async () => {
             const photo = await fileService.openCamera({
               mediaType: 'all',
-              onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_CAMERA_ERROR, 'error'),
+              onOpenFailure: (error) => {
+                if (error.code === SBUError.CODE.ERR_PERMISSIONS_DENIED) {
+                  alert({
+                    title: STRINGS.DIALOG.ALERT_PERMISSIONS_TITLE,
+                    message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE('camera', 'UIKitSample'),
+                    buttons: [{ text: STRINGS.DIALOG.ALERT_PERMISSIONS_OK, onPress: () => SBUUtils.openSettings() }],
+                  });
+                } else {
+                  toast.show(STRINGS.TOAST.OPEN_CAMERA_ERROR, 'error');
+                }
+              },
             });
 
             if (photo) {
@@ -54,7 +68,17 @@ const SendInput = ({ onSendUserMessage, onSendFileMessage, text, setText, disabl
             const photo = await fileService.openMediaLibrary({
               selectionLimit: 1,
               mediaType: 'all',
-              onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_PHOTO_LIBRARY_ERROR, 'error'),
+              onOpenFailure: (error) => {
+                if (error.code === SBUError.CODE.ERR_PERMISSIONS_DENIED) {
+                  alert({
+                    title: STRINGS.DIALOG.ALERT_PERMISSIONS_TITLE,
+                    message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE('device storage', 'UIKitSample'),
+                    buttons: [{ text: STRINGS.DIALOG.ALERT_PERMISSIONS_OK, onPress: () => SBUUtils.openSettings() }],
+                  });
+                } else {
+                  toast.show(STRINGS.TOAST.OPEN_PHOTO_LIBRARY_ERROR, 'error');
+                }
+              },
             });
 
             if (photo && photo[0]) {
@@ -67,7 +91,7 @@ const SendInput = ({ onSendUserMessage, onSendFileMessage, text, setText, disabl
           icon: 'document',
           onPress: async () => {
             const file = await fileService.openDocument({
-              onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_FILES_ERROR, 'error'),
+              onOpenFailure: () => toast.show(STRINGS.TOAST.OPEN_FILES_ERROR, 'error'),
             });
 
             if (file) {

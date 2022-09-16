@@ -72,3 +72,14 @@ export function getFileExtension(filePath: string) {
   if (idx === -1) return '';
   return filePath.slice(idx - filePath.length).toLowerCase();
 }
+export function normalizeFileName(fileName: string, extension: string) {
+  if (fileName.indexOf(extension) > -1) {
+    return fileName;
+  } else {
+    if (extension.indexOf('.') === 0) {
+      return `${fileName}${extension}`;
+    } else {
+      return `${fileName}.${extension}`;
+    }
+  }
+}

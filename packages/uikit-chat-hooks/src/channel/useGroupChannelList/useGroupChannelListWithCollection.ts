@@ -19,7 +19,7 @@ const createGroupChannelListCollection = (
 
   const defaultOptions = {
     includeEmpty: false,
-    limit: 5,
+    limit: 20,
     order: sdk.GroupChannelCollection.GroupChannelOrder.LATEST_LAST_MESSAGE,
   };
   const collectionBuilder = sdk.GroupChannel.createGroupChannelCollection();

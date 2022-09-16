@@ -149,6 +149,11 @@ export interface StringSet {
   };
   DIALOG: {
     ALERT_DEFAULT_OK: string;
+
+    ALERT_PERMISSIONS_TITLE: string;
+    ALERT_PERMISSIONS_MESSAGE: (permission: string, appName: string) => string;
+    ALERT_PERMISSIONS_OK: string;
+
     PROMPT_DEFAULT_OK: string;
     PROMPT_DEFAULT_CANCEL: string;
     PROMPT_DEFAULT_PLACEHOLDER: string;
@@ -316,6 +321,11 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     },
     DIALOG: {
       ALERT_DEFAULT_OK: 'OK',
+      ALERT_PERMISSIONS_TITLE: 'Allow permission',
+      ALERT_PERMISSIONS_MESSAGE: (permission, appName = 'Application') => {
+        return `${appName} need permission to access your ${permission}. Go to Settings to allow access`;
+      },
+      ALERT_PERMISSIONS_OK: 'SETTINGS',
       PROMPT_DEFAULT_OK: 'Submit',
       PROMPT_DEFAULT_CANCEL: 'Cancel',
       PROMPT_DEFAULT_PLACEHOLDER: 'Enter',

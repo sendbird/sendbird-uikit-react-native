@@ -18,7 +18,7 @@ const MessageIncomingSenderName = ({ message, grouping }: Props) => {
   return (
     <View style={styles.sender}>
       {(message.isFileMessage() || message.isUserMessage()) && (
-        <Text caption1 color={colors.ui.message.incoming.enabled.textSenderName}>
+        <Text caption1 color={colors.ui.message.incoming.enabled.textSenderName} numberOfLines={1}>
           {message.sender?.nickname || STRINGS.LABELS.USER_NO_NAME}
         </Text>
       )}

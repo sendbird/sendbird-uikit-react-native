@@ -1,7 +1,7 @@
 import React, { createContext, useCallback } from 'react';
 
 import { useActiveGroupChannel, useChannelHandler } from '@sendbird/uikit-chat-hooks';
-import { useActionMenu, useBottomSheet, usePrompt, useToast } from '@sendbird/uikit-react-native-foundation';
+import { useActionMenu, useAlert, useBottomSheet, usePrompt, useToast } from '@sendbird/uikit-react-native-foundation';
 import {
   NOOP,
   SendbirdGroupChannel,
@@ -14,6 +14,8 @@ import {
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../../hooks/useContext';
+import SBUError from '../../../libs/SBUError';
+import SBUUtils from '../../../libs/SBUUtils';
 import type { GroupChannelSettingsContextsType, GroupChannelSettingsModule } from '../types';
 
 export const GroupChannelSettingsContexts: GroupChannelSettingsContextsType = {
@@ -32,6 +34,7 @@ export const GroupChannelSettingsContextsProvider: GroupChannelSettingsModule['P
   const { STRINGS } = useLocalization();
   const { sdk } = useSendbirdChat();
   const { fileService } = usePlatformService();
+  const { alert } = useAlert();
 
   const { activeChannel, setActiveChannel } = useActiveGroupChannel(sdk, channel);
 
@@ -84,7 +87,17 @@ export const GroupChannelSettingsContextsProvider: GroupChannelSettingsModule['P
           onPress: async () => {
             const file = await fileService.openCamera({
               mediaType: 'photo',
-              onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_CAMERA_ERROR, 'error'),
+              onOpenFailure: (error) => {
+                if (error.code === SBUError.CODE.ERR_PERMISSIONS_DENIED) {
+                  alert({
+                    title: STRINGS.DIALOG.ALERT_PERMISSIONS_TITLE,
+                    message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE('camera', 'UIKitSample'),
+                    buttons: [{ text: STRINGS.DIALOG.ALERT_PERMISSIONS_OK, onPress: () => SBUUtils.openSettings() }],
+                  });
+                } else {
+                  toast.show(STRINGS.TOAST.OPEN_CAMERA_ERROR, 'error');
+                }
+              },
             });
             if (!file) return;
 
@@ -99,7 +112,17 @@ export const GroupChannelSettingsContextsProvider: GroupChannelSettingsModule['P
             const files = await fileService.openMediaLibrary({
               selectionLimit: 1,
               mediaType: 'photo',
-              onOpenFailureWithToastMessage: () => toast.show(STRINGS.TOAST.OPEN_PHOTO_LIBRARY_ERROR, 'error'),
+              onOpenFailure: (error) => {
+                if (error.code === SBUError.CODE.ERR_PERMISSIONS_DENIED) {
+                  alert({
+                    title: STRINGS.DIALOG.ALERT_PERMISSIONS_TITLE,
+                    message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE('device storage', 'UIKitSample'),
+                    buttons: [{ text: STRINGS.DIALOG.ALERT_PERMISSIONS_OK, onPress: () => SBUUtils.openSettings() }],
+                  });
+                } else {
+                  toast.show(STRINGS.TOAST.OPEN_PHOTO_LIBRARY_ERROR, 'error');
+                }
+              },
             });
             if (!files || !files[0]) return;
 
