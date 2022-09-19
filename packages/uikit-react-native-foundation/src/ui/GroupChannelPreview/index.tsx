@@ -107,8 +107,8 @@ const GroupChannelPreview = ({
           </View>
           <View>{badgeCount > 0 && <Badge count={badgeCount} maxCount={maxBadgeCount} />}</View>
         </View>
+        <Separator color={color.default.none.separator} />
       </View>
-      <Separator color={color.default.none.separator} />
     </View>
   );
 };
@@ -121,11 +121,11 @@ const styles = createStyleSheet({
     height: 76,
     width: '100%',
     flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingTop: 10,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   coverContainer: {
+    marginLeft: 16,
     marginRight: 16,
   },
   channelCover: {
@@ -135,6 +135,8 @@ const styles = createStyleSheet({
   },
   rightSection: {
     flex: 1,
+    paddingTop: 10,
+    paddingRight: 16,
   },
   rightTopSection: {
     flexDirection: 'row',
@@ -198,10 +200,10 @@ const styles = createStyleSheet({
   },
   separator: {
     position: 'absolute',
-    right: 0,
+    left: 0,
+    right: -16,
     bottom: 0,
     height: 1,
-    width: '84.5%',
   },
 });
 
