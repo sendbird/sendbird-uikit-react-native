@@ -13631,10 +13631,10 @@ send@0.18.0:
     range-parser "~1.2.1"
     statuses "2.0.1"
 
-sendbird@^3.1.22:
-  version "3.1.23"
-  resolved "https://registry.yarnpkg.com/sendbird/-/sendbird-3.1.23.tgz#e1a744d8f435f711c5570726f6c5a00471cbe617"
-  integrity sha512-96PZasb+Asmf77pHyog4H+8ZQOhUUadbt1E0ua5yusWwIx/1MosTpklqjOhPpIEYgpEQOC+eJToz8Xr4oQ6cWg==
+sendbird@^3.1.26:
+  version "3.1.26"
+  resolved "https://registry.yarnpkg.com/sendbird/-/sendbird-3.1.26.tgz#5a74e2af11ca9c0ba38bf2f09fe047e2ac495377"
+  integrity sha512-u+Chad6FEq1t3EevH5aac+TYygzKsq7/pi06hV1IKx6On/WbZqL+tBAefy3ZW/A/lmD+QWu/t8ZKD5U2kj7P3w==
   dependencies:
     agentkeepalive "4.1.4"
     axios "^0.27.2"
