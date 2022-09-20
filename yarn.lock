@@ -3196,6 +3196,11 @@
   dependencies:
     nanoid "^3.1.23"
 
+"@sendbird/chat@^4.0.11":
+  version "4.0.11"
+  resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.0.11.tgz#7124678992fcd7ec6dfb4a74c00a8833c1cf889f"
+  integrity sha512-5ngAsts9llXUOZnQfWjpivCw5PAG0lzO6VJcp+aNJqenIje4DYlY8Gi5v4/xZFK+cWuDTYcZcUxilhCtknnXFg==
+
 "@sideway/address@^4.1.3":
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/@sideway/address/-/address-4.1.4.tgz#03dccebc6ea47fdc226f7d3d1ad512955d4783f0"
@@ -4485,15 +4490,6 @@ agent-base@6, agent-base@^6.0.2:
   integrity sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==
   dependencies:
     debug "4"
-
-agentkeepalive@4.1.4:
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/agentkeepalive/-/agentkeepalive-4.1.4.tgz#d928028a4862cb11718e55227872e842a44c945b"
-  integrity sha512-+V/rGa3EuU74H6wR04plBb7Ks10FbtUQgRj/FQOG7uUIEuaINI+AiqJR1k6t3SVNs7o7ZjIdus6706qqzVq8jQ==
-  dependencies:
-    debug "^4.1.0"
-    depd "^1.1.2"
-    humanize-ms "^1.2.1"
 
 agentkeepalive@^4.2.1:
   version "4.2.1"
@@ -13631,16 +13627,6 @@ send@0.18.0:
     range-parser "~1.2.1"
     statuses "2.0.1"
 
-sendbird@^3.1.26:
-  version "3.1.26"
-  resolved "https://registry.yarnpkg.com/sendbird/-/sendbird-3.1.26.tgz#5a74e2af11ca9c0ba38bf2f09fe047e2ac495377"
-  integrity sha512-u+Chad6FEq1t3EevH5aac+TYygzKsq7/pi06hV1IKx6On/WbZqL+tBAefy3ZW/A/lmD+QWu/t8ZKD5U2kj7P3w==
-  dependencies:
-    agentkeepalive "4.1.4"
-    axios "^0.27.2"
-    form-data "^4.0.0"
-    ws "^7.5.5"
-
 serialize-error@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/serialize-error/-/serialize-error-2.1.0.tgz#50b679d5635cdf84667bdc8e59af4e5b81d5f60a"
@@ -15451,7 +15437,7 @@ ws@^6.1.4:
   dependencies:
     async-limiter "~1.0.0"
 
-ws@^7, ws@^7.4.6, ws@^7.5.5:
+ws@^7, ws@^7.4.6:
   version "7.5.9"
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.9.tgz#54fa7db29f4c7cec68b1ddd3a89de099942bb591"
   integrity sha512-F+P9Jil7UiSKSkppIiD94dN07AwvFixvLIj1Og1Rl9GGMuNipJnV9JzjD6XuqmAeiswGvUmNLjr5cFuXwNS77Q==
