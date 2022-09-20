@@ -15,7 +15,7 @@ const GroupChannelSettingsInfo = (_: GroupChannelSettingsProps['Info']) => {
   const { STRINGS } = useLocalization();
 
   if (!currentUser) {
-    Logger.warn('Cannot render GroupChannelSettingsInfo, User is not connected');
+    Logger.warn('Cannot render GroupChannelSettingsInfo, please connect using `useConnection()` hook first');
     return null;
   }
 

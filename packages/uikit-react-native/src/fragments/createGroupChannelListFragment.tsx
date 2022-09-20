@@ -57,7 +57,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     );
 
     if (!currentUser) {
-      Logger.warn('Cannot render GroupChannelListFragment, User is not connected');
+      Logger.warn('Cannot render GroupChannelListFragment, please connect using `useConnection()` hook first');
       return null;
     }
 
