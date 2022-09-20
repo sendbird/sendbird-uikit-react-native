@@ -1,7 +1,7 @@
 import { useRef } from 'react';
-import type Sendbird from 'sendbird';
 
-import type { SendbirdChannel, SendbirdChatSDK } from '@sendbird/uikit-utils';
+import { GroupChannelListOrder } from '@sendbird/chat/groupChannel';
+import type { SendbirdChannel, SendbirdChatSDK, SendbirdGroupChannelListQuery } from '@sendbird/uikit-utils';
 import { useAsyncEffect, useFreshCallback } from '@sendbird/uikit-utils';
 
 import { useAppFeatures } from '../../common/useAppFeatures';
@@ -18,21 +18,16 @@ const createGroupChannelListQuery = (
   const passedQuery = queryCreator?.();
   if (passedQuery) return passedQuery;
 
-  const defaultOptions = {
+  return sdk.groupChannel.createMyGroupChannelListQuery({
     includeEmpty: false,
     limit: 20,
-    order: 'latest_last_message',
-  } as const;
-  const defaultQuery = sdk.GroupChannel.createMyGroupChannelListQuery();
-  defaultQuery.limit = defaultOptions.limit;
-  defaultQuery.order = defaultOptions.order;
-  defaultQuery.includeEmpty = defaultOptions.includeEmpty;
-  return defaultQuery;
+    order: GroupChannelListOrder.LATEST_LAST_MESSAGE,
+  });
 };
 
 export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, options) => {
   const { deliveryReceiptEnabled } = useAppFeatures(sdk);
-  const queryRef = useRef<Sendbird.GroupChannelListQuery>();
+  const queryRef = useRef<SendbirdGroupChannelListQuery>();
 
   const {
     loading,
@@ -48,7 +43,7 @@ export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, o
 
   const updateChannelsAndMarkAsDelivered = (channels: SendbirdChannel[]) => {
     updateChannels(channels);
-    if (deliveryReceiptEnabled) channels.forEach((channel) => sdk.markAsDelivered(channel.url));
+    if (deliveryReceiptEnabled) channels.forEach((channel) => sdk.groupChannel.markAsDelivered(channel.url));
   };
 
   const init = useFreshCallback(async (uid?: string) => {
@@ -60,7 +55,7 @@ export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, o
         const channels = await queryRef.current.next();
 
         setChannels(channels, true);
-        if (deliveryReceiptEnabled) channels.forEach((channel) => sdk.markAsDelivered(channel.url));
+        if (deliveryReceiptEnabled) channels.forEach((channel) => sdk.groupChannel.markAsDelivered(channel.url));
       }
     }
   });
@@ -100,7 +95,7 @@ export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, o
     if (queryRef.current?.hasNext) {
       const channels = await queryRef.current.next();
       setChannels(channels, false);
-      if (deliveryReceiptEnabled) channels.forEach((channel) => sdk.markAsDelivered(channel.url));
+      if (deliveryReceiptEnabled) channels.forEach((channel) => sdk.groupChannel.markAsDelivered(channel.url));
     }
   });
 

@@ -1,5 +1,5 @@
 import type { UseUserListOptions } from '@sendbird/uikit-chat-hooks';
-import type { SendbirdGroupChannel, SendbirdGroupChannelParams } from '@sendbird/uikit-utils';
+import type { SendbirdGroupChannel, SendbirdGroupChannelCreateParams } from '@sendbird/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 import type { GroupChannelType } from '../groupChannelList/types';
@@ -14,9 +14,9 @@ export interface GroupChannelCreateProps<User> {
     channelType?: GroupChannelType;
     userIdsGenerator?: (users: User[]) => UserIds;
     onBeforeCreateChannel?: (
-      params: SendbirdGroupChannelParams,
+      params: SendbirdGroupChannelCreateParams,
       users: User[],
-    ) => SendbirdGroupChannelParams | Promise<SendbirdGroupChannelParams>;
+    ) => SendbirdGroupChannelCreateParams | Promise<SendbirdGroupChannelCreateParams>;
     sortComparator?: UseUserListOptions<User>['sortComparator'];
     queryCreator?: UseUserListOptions<User>['queryCreator'];
     renderUser?: UserListProps<User>['List']['renderUser'];

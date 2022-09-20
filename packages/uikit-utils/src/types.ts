@@ -2,7 +2,34 @@
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import type React from 'react';
-import type Sendbird from 'sendbird';
+
+import type SendbirdChat from '@sendbird/chat';
+import type { BaseChannel, SendbirdError as SBError, User, UserUpdateParams } from '@sendbird/chat';
+import type {
+  GroupChannel,
+  GroupChannelCollection,
+  GroupChannelCreateParams,
+  GroupChannelListQuery,
+  GroupChannelModule,
+  GroupChannelUpdateParams,
+  Member,
+  MessageCollection,
+} from '@sendbird/chat/groupChannel';
+import type { ModuleNamespaces, SendableMessage } from '@sendbird/chat/lib/__definition';
+import type {
+  AdminMessage,
+  BaseMessage,
+  FileMessage,
+  FileMessageCreateParams,
+  FileMessageUpdateParams,
+  PreviousMessageListQuery,
+  UserMessage,
+  UserMessageCreateParams,
+  UserMessageUpdateParams,
+} from '@sendbird/chat/message';
+import type { OpenChannel, OpenChannelModule } from '@sendbird/chat/openChannel';
+
+import './';
 
 export type FilterByValueType<T extends object, Type> = {
   [K in keyof T as T[K] extends Type ? K : never]: T[K];
@@ -30,29 +57,33 @@ export type Optional<T> = T | undefined;
 
 export type ContextValue<T extends React.Context<any>> = T extends React.Context<infer V> ? V : never;
 
-// for v4 migration
-export type SendbirdChatSDK = Sendbird.SendBirdInstance;
-export type SendbirdMessage =
-  | Sendbird.BaseMessageInstance
-  | Sendbird.FileMessage
-  | Sendbird.UserMessage
-  | Sendbird.AdminMessage;
-export type SendbirdChannel = Sendbird.BaseChannel | Sendbird.GroupChannel | Sendbird.OpenChannel;
-export type SendbirdUserMessage = Sendbird.UserMessage;
-export type SendbirdFileMessage = Sendbird.FileMessage;
-export type SendbirdAdminMessage = Sendbird.AdminMessage;
-export type SendbirdBaseMessage = Sendbird.BaseMessageInstance;
-export type SendbirdFileMessageParams = Sendbird.FileMessageParams;
-export type SendbirdUserMessageParams = Sendbird.UserMessageParams;
-export type SendbirdError = Sendbird.SendBirdError;
-export type SendbirdGroupChannelParams = Sendbird.GroupChannelParams;
-export type SendbirdUser = Sendbird.User;
-export type SendbirdMember = Sendbird.Member;
-export type SendbirdGroupChannel = Sendbird.GroupChannel;
-export type SendbirdBaseChannel = Sendbird.BaseChannel;
-export type SendbirdOpenChannel = Sendbird.OpenChannel;
-export type SendbirdGroupChannelCollection = Sendbird.GroupChannelCollection;
-export type SendbirdMessageCollection = Sendbird.MessageCollection;
+export type SendbirdChatSDK = SendbirdChat & ModuleNamespaces<[GroupChannelModule, OpenChannelModule]>;
+export type SendbirdMessage = BaseMessage | FileMessage | UserMessage | AdminMessage | SendableMessage;
+export type SendbirdChannel = BaseChannel | GroupChannel | OpenChannel;
+export type SendbirdUserMessage = UserMessage;
+export type SendbirdFileMessage = FileMessage;
+export type SendbirdAdminMessage = AdminMessage;
+export type SendbirdBaseMessage = BaseMessage;
+export type SendbirdSendableMessage = SendableMessage;
+export type SendbirdFileMessageCreateParams = FileMessageCreateParams;
+export type SendbirdFileMessageUpdateParams = FileMessageUpdateParams;
+export type SendbirdUserMessageCreateParams = UserMessageCreateParams;
+export type SendbirdUserMessageUpdateParams = UserMessageUpdateParams;
+export type SendbirdGroupChannelCreateParams = GroupChannelCreateParams;
+export type SendbirdGroupChannelUpdateParams = GroupChannelUpdateParams;
+export type SendbirdUserUpdateParams = UserUpdateParams;
+export type SendbirdUser = User;
+export type SendbirdMember = Member;
+export type SendbirdGroupChannel = GroupChannel;
+export type SendbirdBaseChannel = BaseChannel;
+export type SendbirdOpenChannel = OpenChannel;
+
+export type SendbirdGroupChannelCollection = GroupChannelCollection;
+export type SendbirdGroupChannelListQuery = GroupChannelListQuery;
+export type SendbirdMessageCollection = MessageCollection;
+export type SendbirdPreviousMessageListQuery = PreviousMessageListQuery;
+
+export type SendbirdError = SBError;
 
 export interface SendbirdDataPayload {
   app_id: string;

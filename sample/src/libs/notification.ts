@@ -21,7 +21,7 @@ export const onNotificationAndroid: (event: Event) => Promise<void> = async ({ t
         actions.push(Routes.GroupChannelTabs, undefined);
       }
 
-      const channel = await sdk.GroupChannel.getChannel(sendbird.channel.channel_url);
+      const channel = await sdk.groupChannel.getChannel(sendbird.channel.channel_url);
       actions.navigate(Routes.GroupChannel, { serializedChannel: channel.serialize() });
     });
   }
@@ -40,7 +40,7 @@ export const onForegroundIOS = () => {
           actions.push(Routes.GroupChannelTabs, undefined);
         }
 
-        const channel = await sdk.GroupChannel.getChannel(sendbird.channel.channel_url);
+        const channel = await sdk.groupChannel.getChannel(sendbird.channel.channel_url);
         actions.navigate(Routes.GroupChannel, { serializedChannel: channel.serialize() });
       });
     }

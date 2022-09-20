@@ -6,8 +6,7 @@ import type * as ImagePicker from 'react-native-image-picker';
 import type * as Permissions from 'react-native-permissions';
 import type { Permission } from 'react-native-permissions';
 
-import { getFileExtension, getFileType } from '@sendbird/uikit-utils';
-import { normalizeFileName } from '@sendbird/uikit-utils/src/shared/regex';
+import { getFileExtension, getFileType, normalizeFileName } from '@sendbird/uikit-utils';
 
 import SBUError from '../libs/SBUError';
 import fileTypeGuard from '../utils/fileTypeGuard';

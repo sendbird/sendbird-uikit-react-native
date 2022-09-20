@@ -43,5 +43,13 @@ export const getGroupChannelLastMessage = (channel: SendbirdGroupChannel, EMPTY_
     return truncate(message.name, { maxLen: MAX_LEN });
   }
 
-  return message.message ?? EMPTY_MESSAGE;
+  if (message.isUserMessage()) {
+    return message.message ?? EMPTY_MESSAGE;
+  }
+
+  if (message.isAdminMessage()) {
+    return message.message ?? EMPTY_MESSAGE;
+  }
+
+  return EMPTY_MESSAGE;
 };

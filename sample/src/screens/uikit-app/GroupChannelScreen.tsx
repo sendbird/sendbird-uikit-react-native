@@ -69,7 +69,7 @@ const GroupChannelFragment = createGroupChannelFragment();
 const GroupChannelScreen = () => {
   const { navigation, params } = useAppNavigation<Routes.GroupChannel>();
   const { sdk } = useSendbirdChat();
-  const [channel] = useState(() => sdk.GroupChannel.buildFromSerializedData(params.serializedChannel));
+  const [channel] = useState(() => sdk.groupChannel.buildGroupChannelFromSerializedData(params.serializedChannel));
 
   return (
     <GroupChannelFragment

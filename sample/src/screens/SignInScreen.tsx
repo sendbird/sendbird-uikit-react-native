@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 
+import { SessionHandler } from '@sendbird/chat';
 import { useConnection, useSendbirdChat } from '@sendbird/uikit-react-native';
 import { Button, Text, TextInput, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
@@ -16,7 +17,7 @@ const SignInScreen = () => {
 
   const connectWith = async (userId: string, nickname?: string, useSessionToken = false) => {
     if (useSessionToken) {
-      const sessionHandler = new sdk.SessionHandler();
+      const sessionHandler = new SessionHandler();
       sessionHandler.onSessionTokenRequired = (onSuccess, onFail) => {
         SendbirdAPI.getSessionToken(userId)
           .then(({ token }) => onSuccess(token))

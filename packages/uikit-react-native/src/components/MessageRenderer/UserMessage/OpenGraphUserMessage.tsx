@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Linking, TouchableOpacity, View } from 'react-native';
-import type Sendbird from 'sendbird';
 
+import type { OGMetaData } from '@sendbird/chat/message';
 import {
   Icon,
   Image,
@@ -16,7 +16,7 @@ import { useLocalization } from '../../../hooks/useContext';
 import type { UserMessageProps } from './index';
 
 type Props = UserMessageProps & {
-  ogMetaData: Sendbird.OGMetaData;
+  ogMetaData: OGMetaData;
 };
 const OpenGraphUserMessage = ({ message, variant, pressed, ogMetaData }: Props) => {
   const { STRINGS } = useLocalization();

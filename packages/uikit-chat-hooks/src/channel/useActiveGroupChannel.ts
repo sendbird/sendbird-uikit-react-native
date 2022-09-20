@@ -6,7 +6,7 @@ export const useActiveGroupChannel = (sdk: SendbirdChatSDK, staleChannel: Sendbi
   const [activeChannel, setActiveChannel] = useState(() => staleChannel);
 
   useEffect(() => {
-    sdk.GroupChannel.getChannel(staleChannel.url).then(setActiveChannel);
+    sdk.groupChannel.getChannel(staleChannel.url).then(setActiveChannel);
   }, [staleChannel.url]);
 
   return { activeChannel, setActiveChannel };

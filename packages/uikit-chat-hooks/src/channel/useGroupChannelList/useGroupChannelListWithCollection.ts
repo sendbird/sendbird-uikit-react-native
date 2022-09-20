@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 
+import { GroupChannelFilter, GroupChannelListOrder } from '@sendbird/chat/groupChannel';
 import type { SendbirdChatSDK, SendbirdGroupChannelCollection } from '@sendbird/uikit-utils';
 import { useAsyncEffect, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
 
@@ -17,20 +18,14 @@ const createGroupChannelListCollection = (
   const passedCollection = collectionCreator?.();
   if (passedCollection) return passedCollection;
 
-  const defaultOptions = {
-    includeEmpty: false,
-    limit: 20,
-    order: sdk.GroupChannelCollection.GroupChannelOrder.LATEST_LAST_MESSAGE,
-  };
-  const collectionBuilder = sdk.GroupChannel.createGroupChannelCollection();
-  const groupChannelFilter = new sdk.GroupChannelFilter();
-  groupChannelFilter.includeEmpty = defaultOptions.includeEmpty;
+  const filter = new GroupChannelFilter();
+  filter.includeEmpty = false;
 
-  return collectionBuilder
-    .setFilter(groupChannelFilter)
-    .setLimit(defaultOptions.limit)
-    .setOrder(defaultOptions.order)
-    .build();
+  return sdk.groupChannel.createGroupChannelCollection({
+    filter,
+    limit: 20,
+    order: GroupChannelListOrder.LATEST_LAST_MESSAGE,
+  });
 };
 
 export const useGroupChannelListWithCollection: UseGroupChannelList = (sdk, userId, options) => {
@@ -43,9 +38,11 @@ export const useGroupChannelListWithCollection: UseGroupChannelList = (sdk, user
     useGroupChannelListReducer();
 
   const updateChannelsAndMarkAsDelivered = (markAsDelivered: boolean) => {
-    const channels = collectionRef.current?.channelList ?? [];
+    const channels = collectionRef.current?.channels ?? [];
     setChannels(channels, true);
-    if (markAsDelivered && deliveryReceiptEnabled) channels.forEach((channel) => sdk.markAsDelivered(channel.url));
+    if (markAsDelivered && deliveryReceiptEnabled) {
+      channels.forEach((channel) => sdk.groupChannel.markAsDelivered(channel.url));
+    }
   };
 
   const init = useFreshCallback(async (uid?: string) => {

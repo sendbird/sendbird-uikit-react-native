@@ -1,3 +1,5 @@
+import { ASYNC_NOOP } from '@sendbird/uikit-utils';
+
 import type { KeyValuePairGet, KeyValuePairSet, LocalCacheStorage } from '../types';
 
 export default class InternalLocalCacheStorage implements LocalCacheStorage {
@@ -42,4 +44,7 @@ export default class InternalLocalCacheStorage implements LocalCacheStorage {
       await Promise.all(keyValuePairs.map(([key, value]) => this.storage.setItem(key, value)));
     }
   }
+
+  clear = ASYNC_NOOP;
+  flushGetRequests = ASYNC_NOOP;
 }

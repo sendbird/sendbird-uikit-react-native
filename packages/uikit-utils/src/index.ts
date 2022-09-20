@@ -12,6 +12,9 @@ export {
   getFileType,
   getFileExtension,
   replaceUrlAsComponents,
+  normalizeFileName,
+  emailRegex,
+  phoneRegex,
 } from './shared/regex';
 
 export * from './hooks';
@@ -45,9 +48,9 @@ export type {
   SendbirdUserMessage,
   SendbirdFileMessage,
   SendbirdAdminMessage,
-  SendbirdGroupChannelParams,
-  SendbirdFileMessageParams,
-  SendbirdUserMessageParams,
+  SendbirdGroupChannelCreateParams,
+  SendbirdFileMessageCreateParams,
+  SendbirdUserMessageCreateParams,
   SendbirdError,
   SendbirdMessageCollection,
   SendbirdGroupChannelCollection,
@@ -56,4 +59,11 @@ export type {
   NotificationTranslations,
   PartialNullable,
   SendbirdDataPayload,
+  SendbirdPreviousMessageListQuery,
+  SendbirdSendableMessage,
+  SendbirdGroupChannelListQuery,
+  SendbirdGroupChannelUpdateParams,
+  SendbirdUserMessageUpdateParams,
+  SendbirdFileMessageUpdateParams,
+  SendbirdUserUpdateParams,
 } from './types';

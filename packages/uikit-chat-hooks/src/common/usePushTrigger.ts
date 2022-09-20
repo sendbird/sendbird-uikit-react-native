@@ -1,17 +1,24 @@
 import { useCallback, useState } from 'react';
 
+import { PushTriggerOption } from '@sendbird/chat';
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 import { Logger, useAsyncEffect } from '@sendbird/uikit-utils';
 
-type PushTriggerOptionType = 'all' | 'mention_only' | 'off';
+const PushTriggerMap = {
+  'all': PushTriggerOption.ALL,
+  'mention_only': PushTriggerOption.MENTION_ONLY,
+  'off': PushTriggerOption.OFF,
+  'default': PushTriggerOption.DEFAULT,
+};
+
 export const usePushTrigger = (sdk: SendbirdChatSDK) => {
-  const [option, setOption] = useState<PushTriggerOptionType>('off');
+  const [option, setOption] = useState<PushTriggerOption>(PushTriggerOption.DEFAULT);
 
   const updateOption = useCallback(
-    async (value: PushTriggerOptionType) => {
+    async (value: keyof typeof PushTriggerMap) => {
       try {
-        await sdk.setPushTriggerOption(value);
-        setOption(value);
+        const _option = PushTriggerMap[value];
+        await sdk.setPushTriggerOption(_option).then(() => setOption(_option));
       } catch (e) {
         Logger.warn('[usePushTrigger]', 'Cannot update push trigger option', e);
       }
@@ -20,8 +27,7 @@ export const usePushTrigger = (sdk: SendbirdChatSDK) => {
   );
 
   useAsyncEffect(async () => {
-    const currentOption = await sdk.getPushTriggerOption();
-    setOption(currentOption as PushTriggerOptionType);
+    setOption(await sdk.getPushTriggerOption());
   }, [sdk, sdk.currentUser]);
 
   return {

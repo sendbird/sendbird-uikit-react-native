@@ -1,10 +1,4 @@
-import type {
-  SendbirdAdminMessage,
-  SendbirdChatSDK,
-  SendbirdFileMessage,
-  SendbirdGroupChannel,
-  SendbirdUserMessage,
-} from '@sendbird/uikit-utils';
+import type { SendbirdChatSDK, SendbirdGroupChannel, SendbirdMessage } from '@sendbird/uikit-utils';
 import { isDifferentChannel, isMyMessage, useForceUpdate, useUniqId } from '@sendbird/uikit-utils';
 
 import { useChannelHandler } from '../handler/useChannelHandler';
@@ -17,7 +11,7 @@ export type SBUOutgoingStatus = 'NONE' | 'PENDING' | 'FAILED' | 'UNDELIVERED' | 
 export const useMessageOutgoingStatus = (
   sdk: SendbirdChatSDK,
   channel: SendbirdGroupChannel,
-  message?: SendbirdFileMessage | SendbirdUserMessage | SendbirdAdminMessage | null,
+  message?: SendbirdMessage | null,
 ): SBUOutgoingStatus => {
   const features = useAppFeatures(sdk);
   const forceUpdate = useForceUpdate();
@@ -25,13 +19,13 @@ export const useMessageOutgoingStatus = (
 
   const uniqId = useUniqId(HOOK_NAME);
   useChannelHandler(sdk, `${HOOK_NAME}_${uniqId}`, {
-    onDeliveryReceiptUpdated(eventChannel) {
+    onUndeliveredMemberStatusUpdated(eventChannel) {
       if (isDifferentChannel(channel, eventChannel)) return;
       if (!isMyMessage(message, currentUser?.userId)) return;
 
       forceUpdate();
     },
-    onReadReceiptUpdated(eventChannel) {
+    onUnreadMemberStatusUpdated(eventChannel) {
       if (isDifferentChannel(channel, eventChannel)) return;
       if (!isMyMessage(message, currentUser?.userId)) return;
 
@@ -41,9 +35,10 @@ export const useMessageOutgoingStatus = (
 
   if (!message) return 'NONE';
 
-  if (message.sendingStatus === 'pending') return 'PENDING';
-
-  if (message.sendingStatus === 'failed') return 'FAILED';
+  if ('sendingStatus' in message) {
+    if (message.sendingStatus === 'pending') return 'PENDING';
+    if (message.sendingStatus === 'failed') return 'FAILED';
+  }
 
   if (channel.getUnreadMemberCount(message) === 0) return 'READ';
 

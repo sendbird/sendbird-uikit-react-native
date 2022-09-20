@@ -73,30 +73,22 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     );
 
     const onSendFileMessage: GroupChannelProps['Input']['onSendFileMessage'] = useFreshCallback(async (file) => {
-      const params = new sdk.FileMessageParams();
-      params.file = file;
-      const processedParams = await onBeforeSendFileMessage(params);
+      const processedParams = await onBeforeSendFileMessage({ file });
       await sendFileMessage(processedParams);
     });
     const onSendUserMessage: GroupChannelProps['Input']['onSendUserMessage'] = useFreshCallback(async (text) => {
-      const params = new sdk.UserMessageParams();
-      params.message = text;
-      const processedParams = await onBeforeSendUserMessage(params);
+      const processedParams = await onBeforeSendUserMessage({ message: text });
       await sendUserMessage(processedParams);
     });
     const onUpdateFileMessage: GroupChannelProps['Input']['onUpdateFileMessage'] = useFreshCallback(
       async (editedFile, message) => {
-        const params = new sdk.FileMessageParams();
-        params.file = editedFile;
-        const processedParams = await onBeforeSendFileMessage(params);
+        const processedParams = await onBeforeSendFileMessage({ file: editedFile });
         await updateFileMessage(message.messageId, processedParams);
       },
     );
     const onUpdateUserMessage: GroupChannelProps['Input']['onUpdateUserMessage'] = useFreshCallback(
       async (editedText, message) => {
-        const params = new sdk.UserMessageParams();
-        params.message = editedText;
-        const processedParams = await onBeforeSendUserMessage(params);
+        const processedParams = await onBeforeSendUserMessage({ message: editedText });
         await updateUserMessage(message.messageId, processedParams);
       },
     );
