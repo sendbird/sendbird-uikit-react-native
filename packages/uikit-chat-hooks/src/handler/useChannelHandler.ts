@@ -1,12 +1,12 @@
 import { useEffect, useLayoutEffect, useRef } from 'react';
-import type Sendbird from 'sendbird';
 
+import { GroupChannelHandler } from '@sendbird/chat/groupChannel';
 import { Logger, SendbirdChatSDK } from '@sendbird/uikit-utils';
 
 export const useChannelHandler = (
   sdk: SendbirdChatSDK,
   handlerId: string,
-  hookHandler: Partial<Sendbird.ChannelHandler>,
+  hookHandler: Partial<GroupChannelHandler>,
 ) => {
   const handlerRef = useRef(hookHandler);
   useLayoutEffect(() => {
@@ -16,7 +16,7 @@ export const useChannelHandler = (
   useEffect(() => {
     Logger.debug('[useChannelHandler] hook called by', handlerId);
 
-    const handler = new sdk.ChannelHandler();
+    const handler = new GroupChannelHandler();
     const handlerKeys = Object.keys(handler) as (keyof typeof handler)[];
     handlerKeys.forEach((key) => {
       handler[key] = (...args: unknown[]) => {
@@ -25,7 +25,7 @@ export const useChannelHandler = (
       };
     });
 
-    sdk.addChannelHandler(handlerId, handler);
-    return () => sdk.removeChannelHandler(handlerId);
+    sdk.groupChannel.addGroupChannelHandler(handlerId, handler);
+    return () => sdk.groupChannel.removeGroupChannelHandler(handlerId);
   }, [sdk, handlerId]);
 };

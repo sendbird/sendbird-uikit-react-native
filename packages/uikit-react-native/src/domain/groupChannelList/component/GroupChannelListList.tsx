@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { FlatList, ListRenderItem } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { PushTriggerOption } from '@sendbird/chat';
 import { useActionMenu, useToast } from '@sendbird/uikit-react-native-foundation';
 import { PASS, SendbirdGroupChannel, useFreshCallback } from '@sendbird/uikit-utils';
 
@@ -29,9 +30,9 @@ const GroupChannelListList = ({
           title: STRINGS.GROUP_CHANNEL_LIST.DIALOG_CHANNEL_NOTIFICATION(channel),
           onPress: async () => {
             if (action === 'on') {
-              await channel.setMyPushTriggerOption('default');
+              await channel.setMyPushTriggerOption(PushTriggerOption.DEFAULT);
             } else {
-              await channel.setMyPushTriggerOption('off');
+              await channel.setMyPushTriggerOption(PushTriggerOption.OFF);
             }
           },
           onError: () => {

@@ -1,22 +1,22 @@
 import React, { useEffect } from 'react';
-import type Sendbird from 'sendbird';
 
+import { ConnectionHandler } from '@sendbird/chat';
 import { Logger, SendbirdChatSDK } from '@sendbird/uikit-utils';
 
 export const useConnectionHandler = (
   sdk: SendbirdChatSDK,
   handlerId: string,
-  hookHandler: Partial<Sendbird.ConnectionHandler>,
+  hookHandler: Partial<ConnectionHandler>,
   deps: React.DependencyList = [],
 ) => {
   useEffect(() => {
     Logger.info('[useConnectionHandler]', handlerId);
 
-    const handler = new sdk.ConnectionHandler();
+    const handler = new ConnectionHandler();
     const handlerKeys = Object.keys(handler) as (keyof typeof handler)[];
     handlerKeys.forEach((key) => {
-      const hookHandlerFn = hookHandler[key];
-      if (hookHandlerFn) handler[key] = hookHandlerFn;
+      // @ts-ignore
+      if (hookHandler[key]) handler[key] = hookHandler[key];
     });
 
     sdk.addConnectionHandler(handlerId, handler);

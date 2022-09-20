@@ -15,11 +15,13 @@ export const useTotalUnreadChannelCount = (sdk: SendbirdChatSDK, params?: Params
   const [unreadChannelCount, setUnreadChannelCount] = useState(0);
 
   useAsyncEffect(async () => {
-    setUnreadChannelCount(await sdk.getTotalUnreadChannelCount());
+    setUnreadChannelCount(await sdk.groupChannel.getTotalUnreadChannelCount());
   }, [sdk]);
 
   useUserEventHandler(sdk, HOOK_NAME + id, {
-    onTotalUnreadMessageCountUpdated: async () => setUnreadChannelCount(await sdk.getTotalUnreadChannelCount()),
+    onTotalUnreadMessageCountUpdated: async () => {
+      setUnreadChannelCount(await sdk.groupChannel.getTotalUnreadChannelCount());
+    },
   });
 
   return truncatedBadgeCount(unreadChannelCount, params?.maxCount);

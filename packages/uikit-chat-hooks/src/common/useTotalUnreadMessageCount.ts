@@ -1,43 +1,32 @@
 import { useState } from 'react';
-import type Sendbird from 'sendbird';
 
+import { SuperChannelFilter, TotalUnreadMessageCountParams } from '@sendbird/chat/groupChannel';
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
-import { truncatedBadgeCount, useAsyncEffect } from '@sendbird/uikit-utils';
-import { useUniqId } from '@sendbird/uikit-utils';
+import { truncatedBadgeCount, useAsyncEffect, useUniqId } from '@sendbird/uikit-utils';
 
 import { useUserEventHandler } from '../handler/useUserEventHandler';
 
-type Params = {
-  paramCreator?: () => Sendbird.GroupChannelTotalUnreadMessageCountParams;
+type Options = {
+  params?: TotalUnreadMessageCountParams;
   maxCount?: number;
 };
 
 const HOOK_NAME = 'useTotalUnreadMessageCount';
-export const useTotalUnreadMessageCount = (sdk: SendbirdChatSDK, params?: Params) => {
+export const useTotalUnreadMessageCount = (sdk: SendbirdChatSDK, options?: Options) => {
   const id = useUniqId(HOOK_NAME);
   const [unreadMessageCount, setUnreadMessageCount] = useState(0);
 
   useAsyncEffect(async () => {
-    let param;
-    if (params?.paramCreator) {
-      param = params.paramCreator();
-    } else {
-      const params = new sdk.GroupChannelTotalUnreadMessageCountParams();
-      params.superChannelFilter = 'all';
-      param = params;
-    }
-    const unreadCount = await sdk.getTotalUnreadMessageCount(param);
+    const unreadCount = await sdk.groupChannel.getTotalUnreadMessageCount({
+      superChannelFilter: SuperChannelFilter.ALL,
+      ...options?.params,
+    });
     setUnreadMessageCount(unreadCount);
-  }, [sdk, params?.paramCreator]);
+  }, [sdk, options?.params?.superChannelFilter, options?.params?.channelCustomTypesFilter]);
 
-  useUserEventHandler(
-    sdk,
-    `${HOOK_NAME}_${id}`,
-    {
-      onTotalUnreadMessageCountUpdated: (totalCount: number) => setUnreadMessageCount(totalCount),
-    },
-    [sdk],
-  );
+  useUserEventHandler(sdk, `${HOOK_NAME}_${id}`, {
+    onTotalUnreadMessageCountUpdated: (totalCount: number) => setUnreadMessageCount(totalCount),
+  });
 
-  return truncatedBadgeCount(unreadMessageCount, params?.maxCount);
+  return truncatedBadgeCount(unreadMessageCount, options?.maxCount);
 };

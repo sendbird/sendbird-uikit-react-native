@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { View } from 'react-native';
 
+import { PushTriggerOption } from '@sendbird/chat';
 import type { MenuBarProps } from '@sendbird/uikit-react-native-foundation';
 import { Icon, MenuBar, Switch, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
@@ -20,9 +21,9 @@ const GroupChannelSettingsMenu = ({
 
   const toggleNotification = async () => {
     if (channel.myPushTriggerOption === 'off') {
-      await channel.setMyPushTriggerOption('default');
+      await channel.setMyPushTriggerOption(PushTriggerOption.DEFAULT);
     } else {
-      await channel.setMyPushTriggerOption('off');
+      await channel.setMyPushTriggerOption(PushTriggerOption.OFF);
     }
   };
 

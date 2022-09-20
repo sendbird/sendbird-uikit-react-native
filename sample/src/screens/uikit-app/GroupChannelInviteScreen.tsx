@@ -13,7 +13,7 @@ const GroupChannelInviteScreen = () => {
   const { navigation, params } = useAppNavigation<Routes.GroupChannelInvite>();
   const { sdk } = useSendbirdChat();
 
-  const [channel] = useState(() => sdk.GroupChannel.buildFromSerializedData(params.serializedChannel));
+  const [channel] = useState(() => sdk.groupChannel.buildGroupChannelFromSerializedData(params.serializedChannel));
 
   return (
     <GroupChannelInviteFragment

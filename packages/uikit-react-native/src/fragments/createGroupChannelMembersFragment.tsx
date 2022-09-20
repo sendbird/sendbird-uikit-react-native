@@ -27,9 +27,10 @@ const createGroupChannelMembersFragment = (
     const { STRINGS } = useLocalization();
 
     useChannelHandler(sdk, `${name}_${uniqId}`, {
-      onUserEntered(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
-      },
+      // Note: Removed from v4
+      // onUserEntered(channel) {
+      //   if (channel.url === activeChannel.url) forceUpdate();
+      // },
       onUserLeft(channel) {
         if (channel.url === activeChannel.url) forceUpdate();
       },
