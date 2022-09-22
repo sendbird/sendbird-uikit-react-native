@@ -7,7 +7,14 @@ import type {
   SendbirdGroupChannel,
   SendbirdMessageCollection,
 } from '@sendbird/uikit-utils';
-import { Logger, isDifferentChannel, useForceUpdate, useIsMountedRef } from '@sendbird/uikit-utils';
+import {
+  Logger,
+  confirmAndMarkAsDelivered,
+  confirmAndMarkAsRead,
+  isDifferentChannel,
+  useForceUpdate,
+  useIsMountedRef,
+} from '@sendbird/uikit-utils';
 
 import { useAppFeatures } from '../../common/useAppFeatures';
 import { useChannelHandler } from '../../handler/useChannelHandler';
@@ -57,12 +64,12 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
 
   const channelMarkAs = async () => {
     try {
-      if (deliveryReceiptEnabled) sdk.groupChannel.markAsDelivered(activeChannel.url);
+      if (deliveryReceiptEnabled) await confirmAndMarkAsDelivered(sdk, activeChannel);
     } catch (e) {
       Logger.warn(`[${HOOK_NAME}/channelMarkAs/Delivered]`, e);
     }
     try {
-      await sdk.groupChannel.markAsReadWithChannelUrls([activeChannel.url]);
+      await confirmAndMarkAsRead(sdk, [activeChannel]);
     } catch (e) {
       Logger.warn(`[${HOOK_NAME}/channelMarkAs/Read]`, e);
     }
