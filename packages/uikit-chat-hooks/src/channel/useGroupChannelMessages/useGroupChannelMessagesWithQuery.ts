@@ -1,7 +1,14 @@
 import { useCallback, useRef } from 'react';
 
 import type { SendbirdBaseChannel, SendbirdGroupChannel } from '@sendbird/uikit-utils';
-import { Logger, isDifferentChannel, useAsyncEffect, useForceUpdate } from '@sendbird/uikit-utils';
+import {
+  Logger,
+  confirmAndMarkAsDelivered,
+  confirmAndMarkAsRead,
+  isDifferentChannel,
+  useAsyncEffect,
+  useForceUpdate,
+} from '@sendbird/uikit-utils';
 import type { SendbirdPreviousMessageListQuery } from '@sendbird/uikit-utils';
 
 import { useAppFeatures } from '../../common/useAppFeatures';
@@ -47,12 +54,12 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
 
   const channelMarkAs = async () => {
     try {
-      if (deliveryReceiptEnabled) sdk.groupChannel.markAsDelivered(activeChannel.url);
+      if (deliveryReceiptEnabled) await confirmAndMarkAsDelivered(sdk, activeChannel);
     } catch (e) {
       Logger.warn(`[${HOOK_NAME}/channelMarkAs/Delivered]`, e);
     }
     try {
-      await sdk.groupChannel.markAsReadWithChannelUrls([activeChannel.url]);
+      await confirmAndMarkAsRead(sdk, [activeChannel]);
     } catch (e) {
       Logger.warn(`[${HOOK_NAME}/channelMarkAs/Read]`, e);
     }
@@ -62,7 +69,7 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
     async (uid?: string) => {
       if (uid) {
         queryRef.current = createMessageQuery(activeChannel, options?.queryCreator);
-        channelMarkAs();
+        channelMarkAs().catch();
         if (queryRef.current?.hasNext) {
           const list = await queryRef.current?.load();
           updateMessages(list, true, sdk.currentUser.userId);

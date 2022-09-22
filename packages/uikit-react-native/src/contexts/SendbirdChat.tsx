@@ -8,7 +8,7 @@ import type {
   SendbirdUser,
   SendbirdUserUpdateParams,
 } from '@sendbird/uikit-utils';
-import { useForceUpdate } from '@sendbird/uikit-utils';
+import { confirmAndMarkAsDelivered, useForceUpdate } from '@sendbird/uikit-utils';
 
 import type { FileType } from '../platform/types';
 
@@ -87,9 +87,7 @@ export const SendbirdChatProvider = ({
 
   const markAsDeliveredWithChannel: Context['markAsDeliveredWithChannel'] = useCallback(
     (channel: SendbirdGroupChannel) => {
-      if (appFeatures.deliveryReceiptEnabled && channel.unreadMessageCount > 0) {
-        sdkInstance.groupChannel.markAsDelivered(channel.url);
-      }
+      if (appFeatures.deliveryReceiptEnabled) confirmAndMarkAsDelivered(sdkInstance, channel);
     },
     [sdkInstance, appFeatures.deliveryReceiptEnabled],
   );

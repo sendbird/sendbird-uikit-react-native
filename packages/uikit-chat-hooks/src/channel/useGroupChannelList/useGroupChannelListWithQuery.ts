@@ -2,7 +2,7 @@ import { useRef } from 'react';
 
 import { GroupChannelListOrder } from '@sendbird/chat/groupChannel';
 import type { SendbirdChannel, SendbirdChatSDK, SendbirdGroupChannelListQuery } from '@sendbird/uikit-utils';
-import { useAsyncEffect, useFreshCallback } from '@sendbird/uikit-utils';
+import { confirmAndMarkAsDelivered, useAsyncEffect, useFreshCallback } from '@sendbird/uikit-utils';
 
 import { useAppFeatures } from '../../common/useAppFeatures';
 import { useChannelHandler } from '../../handler/useChannelHandler';
@@ -43,7 +43,7 @@ export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, o
 
   const updateChannelsAndMarkAsDelivered = (channels: SendbirdChannel[]) => {
     updateChannels(channels);
-    if (deliveryReceiptEnabled) channels.forEach((channel) => sdk.groupChannel.markAsDelivered(channel.url));
+    if (deliveryReceiptEnabled) channels.forEach((channel) => confirmAndMarkAsDelivered(sdk, channel));
   };
 
   const init = useFreshCallback(async (uid?: string) => {
@@ -55,7 +55,7 @@ export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, o
         const channels = await queryRef.current.next();
 
         setChannels(channels, true);
-        if (deliveryReceiptEnabled) channels.forEach((channel) => sdk.groupChannel.markAsDelivered(channel.url));
+        if (deliveryReceiptEnabled) channels.forEach((channel) => confirmAndMarkAsDelivered(sdk, channel));
       }
     }
   });
@@ -95,7 +95,7 @@ export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, o
     if (queryRef.current?.hasNext) {
       const channels = await queryRef.current.next();
       setChannels(channels, false);
-      if (deliveryReceiptEnabled) channels.forEach((channel) => sdk.groupChannel.markAsDelivered(channel.url));
+      if (deliveryReceiptEnabled) channels.forEach((channel) => confirmAndMarkAsDelivered(sdk, channel));
     }
   });
 

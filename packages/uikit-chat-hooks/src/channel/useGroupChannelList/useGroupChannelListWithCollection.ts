@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 import { GroupChannelFilter, GroupChannelListOrder } from '@sendbird/chat/groupChannel';
 import type { SendbirdChatSDK, SendbirdGroupChannelCollection } from '@sendbird/uikit-utils';
-import { useAsyncEffect, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
+import { confirmAndMarkAsDelivered, useAsyncEffect, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
 
 import { useAppFeatures } from '../../common/useAppFeatures';
 import { useChannelHandler } from '../../handler/useChannelHandler';
@@ -41,7 +41,7 @@ export const useGroupChannelListWithCollection: UseGroupChannelList = (sdk, user
     const channels = collectionRef.current?.channels ?? [];
     setChannels(channels, true);
     if (markAsDelivered && deliveryReceiptEnabled) {
-      channels.forEach((channel) => sdk.groupChannel.markAsDelivered(channel.url));
+      channels.forEach((channel) => confirmAndMarkAsDelivered(sdk, channel));
     }
   };
 
