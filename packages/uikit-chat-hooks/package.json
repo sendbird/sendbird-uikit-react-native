@@ -47,7 +47,7 @@
     "typescript": "^4.1.3"
   },
   "peerDependencies": {
-    "@sendbird/chat": "^4.0.11",
+    "@sendbird/chat": "^4.0.12",
     "react": ">=16.13.1"
   },
   "react-native-builder-bob": {
