@@ -4,7 +4,8 @@
   "workspaces": {
     "packages": [
       "packages/*",
-      "sample"
+      "sample",
+      "docs-validation"
     ],
     "nohoist": [
       "**/react",
