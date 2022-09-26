@@ -80,6 +80,8 @@ const OpenGraphUserMessage = ({ message, variant, pressed, ogMetaData }: Props) 
 
 const styles = createStyleSheet({
   container: {
+    width: 240,
+    maxWidth: 240,
     borderRadius: 16,
     overflow: 'hidden',
   },
@@ -93,7 +95,7 @@ const styles = createStyleSheet({
     paddingBottom: 12,
   },
   ogImageContainer: {
-    width: 240,
+    flex: 1,
     height: 136,
   },
   ogImage: {
