@@ -1,7 +1,8 @@
 {
   "packages": [
     "packages/*",
-    "sample"
+    "sample",
+    "docs-validation"
   ],
   "npmClient": "yarn",
   "useWorkspaces": true,

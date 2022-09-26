@@ -5,3 +5,4 @@ ios
 .eslintrc.js
 **/*.config.js
 **/scripts/*.js
+docs-validation/*
