@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.1.1...v1.1.2) (2022-09-28)
+
+
+### Bug Fixes
+
+* fixed createFileService.native to save media files properly on Android (QM-1766) ([939d2b4](https://github.com/sendbird/sendbird-uikit-react-native/commit/939d2b4d637cf46de8f38ea16ed0460ab90f1f8f))
+
+
+
 ## [1.1.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.1.0...v1.1.1) (2022-09-14)
 
 

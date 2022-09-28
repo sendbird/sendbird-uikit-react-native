@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.1.1...v1.1.2) (2022-09-28)
+
+
+### Features
+
+* added an alert to go to app settings when permission is not granted (QM-1799) ([dfb9322](https://github.com/sendbird/sendbird-uikit-react-native/commit/dfb9322dc0b1f26e8c0f69f761966f6a2f326e67))
+
+
+### Bug Fixes
+
+* ellipsis name in the message (QM-1788, QM-1790) ([cf39461](https://github.com/sendbird/sendbird-uikit-react-native/commit/cf39461810161a23599860964ebdd78e35192e4a))
+* fixed createFileService.native to save media files properly on Android (QM-1766) ([939d2b4](https://github.com/sendbird/sendbird-uikit-react-native/commit/939d2b4d637cf46de8f38ea16ed0460ab90f1f8f))
+* fixed createFileService.native to save video files properly on iOS13 (QM-1765) ([811039b](https://github.com/sendbird/sendbird-uikit-react-native/commit/811039b57d1a4d1024130ff2d78ce164c92af0fa))
+* truncate file viewer header title(QM-1798) ([6c34292](https://github.com/sendbird/sendbird-uikit-react-native/commit/6c3429243075cfd0f05026526a8e3945cc0e0b8f))
+
+
+
 ## [1.1.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.1.0...v1.1.1) (2022-09-14)
 
 

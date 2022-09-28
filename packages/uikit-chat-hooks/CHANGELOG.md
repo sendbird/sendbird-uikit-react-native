@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.1.1...v1.1.2) (2022-09-28)
+
+
+### Bug Fixes
+
+* changed default limit in useGroupChannelListWithCollection hook ([260fa6c](https://github.com/sendbird/sendbird-uikit-react-native/commit/260fa6c802e06f97a669394d9a8331ce961f1019))
+
+
+
 ## [1.1.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.1.0...v1.1.1) (2022-09-14)
 
 
