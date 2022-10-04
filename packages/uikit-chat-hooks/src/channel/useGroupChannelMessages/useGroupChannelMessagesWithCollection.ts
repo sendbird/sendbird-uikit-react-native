@@ -13,7 +13,6 @@ import {
   confirmAndMarkAsRead,
   isDifferentChannel,
   useForceUpdate,
-  useIsMountedRef,
 } from '@sendbird/uikit-utils';
 
 import { useAppFeatures } from '../../common/useAppFeatures';
@@ -33,13 +32,7 @@ const createMessageCollection = (
 
 const HOOK_NAME = 'useGroupChannelMessagesWithCollection';
 
-// FIXME: MessageCollection event handler bug, initialize(run async addObserver) -> dispose -> removeObserver -> addObserver called
 export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (sdk, channel, userId, options) => {
-  const isMounted = useIsMountedRef();
-  const disposeManuallyAfterUnmounted = () => {
-    if (!isMounted.current && collectionRef.current) collectionRef.current.dispose();
-  };
-
   const { deliveryReceiptEnabled } = useAppFeatures(sdk);
 
   const collectionRef = useRef<SendbirdMessageCollection>();
@@ -117,33 +110,26 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
 
         collectionRef.current?.setMessageCollectionHandler({
           onMessagesAdded(_, channel, messages) {
-            disposeManuallyAfterUnmounted();
             channelMarkAs();
             updateNextMessages(messages, false, sdk.currentUser.userId);
             updateChannel(channel);
           },
           onMessagesUpdated(_, channel, messages) {
-            disposeManuallyAfterUnmounted();
             updateMessages(messages, false, sdk.currentUser.userId);
             updateChannel(channel);
           },
           onMessagesDeleted(_, channel, messageIds) {
-            disposeManuallyAfterUnmounted();
-
             deleteMessages(messageIds, []);
             deleteNextMessages(messageIds, []);
             updateChannel(channel);
           },
           onChannelDeleted() {
-            disposeManuallyAfterUnmounted();
             options?.onChannelDeleted?.();
           },
           onChannelUpdated(_, channel) {
-            disposeManuallyAfterUnmounted();
             updateChannel(channel);
           },
           onHugeGapDetected() {
-            disposeManuallyAfterUnmounted();
             init(uid);
           },
         });
@@ -154,7 +140,6 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
 
   useChannelHandler(sdk, HOOK_NAME, {
     onUserBanned(channel, bannedUser) {
-      disposeManuallyAfterUnmounted();
       if (channel.isGroupChannel() && !isDifferentChannel(channel, activeChannel)) {
         if (bannedUser.userId === sdk.currentUser.userId) {
           options?.onChannelDeleted?.();
