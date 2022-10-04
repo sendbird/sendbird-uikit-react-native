@@ -64,6 +64,7 @@ const styles = createStyleSheet({
     marginLeft: 16,
   },
   sheetItemText: {
+    flex: 1,
     marginHorizontal: 24,
   },
 });
