@@ -75,6 +75,7 @@ const ChatFlatList = forwardRef<ChatFlatListRef, Props>(function CustomFlatList(
 
   return (
     <FlatList
+      keyboardDismissMode={'on-drag'}
       {...props}
       // FIXME: inverted list of ListEmptyComponent is reversed {@link https://github.com/facebook/react-native/issues/21196#issuecomment-836937743}
       inverted={Boolean(props.data?.length)}
