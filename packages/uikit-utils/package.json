@@ -49,7 +49,7 @@
     "typescript": "^4.1.3"
   },
   "peerDependencies": {
-    "@sendbird/chat": "^4.0.12",
+    "@sendbird/chat": "^4.0.13",
     "react": ">=16.13.1"
   },
   "peerDependenciesMeta": {
