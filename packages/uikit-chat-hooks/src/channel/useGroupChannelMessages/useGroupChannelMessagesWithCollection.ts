@@ -83,6 +83,32 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
         updateNextMessages([], true, sdk.currentUser.userId);
         channelMarkAs();
 
+        collectionRef.current?.setMessageCollectionHandler({
+          onMessagesAdded: (_, channel, messages) => {
+            channelMarkAs();
+            updateNextMessages(messages, false, sdk.currentUser.userId);
+            updateChannel(channel);
+          },
+          onMessagesUpdated: (_, channel, messages) => {
+            updateMessages(messages, false, sdk.currentUser.userId);
+            updateChannel(channel);
+          },
+          onMessagesDeleted: (_, channel, messageIds) => {
+            deleteMessages(messageIds, []);
+            deleteNextMessages(messageIds, []);
+            updateChannel(channel);
+          },
+          onChannelDeleted: () => {
+            options?.onChannelDeleted?.();
+          },
+          onChannelUpdated: (_, channel) => {
+            updateChannel(channel);
+          },
+          onHugeGapDetected: () => {
+            init(uid);
+          },
+        });
+
         collectionRef.current
           .initialize(MessageCollectionInitPolicy.CACHE_AND_REPLACE_BY_API)
           .onCacheResult((err, messages) => {
@@ -107,32 +133,6 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
             }
             callback?.();
           });
-
-        collectionRef.current?.setMessageCollectionHandler({
-          onMessagesAdded(_, channel, messages) {
-            channelMarkAs();
-            updateNextMessages(messages, false, sdk.currentUser.userId);
-            updateChannel(channel);
-          },
-          onMessagesUpdated(_, channel, messages) {
-            updateMessages(messages, false, sdk.currentUser.userId);
-            updateChannel(channel);
-          },
-          onMessagesDeleted(_, channel, messageIds) {
-            deleteMessages(messageIds, []);
-            deleteNextMessages(messageIds, []);
-            updateChannel(channel);
-          },
-          onChannelDeleted() {
-            options?.onChannelDeleted?.();
-          },
-          onChannelUpdated(_, channel) {
-            updateChannel(channel);
-          },
-          onHugeGapDetected() {
-            init(uid);
-          },
-        });
       }
     },
     [sdk, activeChannel.url, options?.collectionCreator],

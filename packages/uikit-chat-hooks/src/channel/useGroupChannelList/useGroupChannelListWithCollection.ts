@@ -51,22 +51,22 @@ export const useGroupChannelListWithCollection: UseGroupChannelList = (sdk, user
     if (uid) {
       collectionRef.current = createGroupChannelListCollection(sdk, options?.collectionCreator);
 
+      collectionRef.current?.setGroupChannelCollectionHandler({
+        onChannelsAdded: () => {
+          updateChannelsAndMarkAsDelivered(true);
+        },
+        onChannelsUpdated: () => {
+          updateChannelsAndMarkAsDelivered(true);
+        },
+        onChannelsDeleted: () => {
+          updateChannelsAndMarkAsDelivered(false);
+        },
+      });
+
       if (collectionRef.current?.hasMore) {
         await collectionRef.current?.loadMore();
         updateChannelsAndMarkAsDelivered(true);
       }
-
-      collectionRef.current?.setGroupChannelCollectionHandler({
-        onChannelsAdded() {
-          updateChannelsAndMarkAsDelivered(true);
-        },
-        onChannelsUpdated() {
-          updateChannelsAndMarkAsDelivered(true);
-        },
-        onChannelsDeleted() {
-          updateChannelsAndMarkAsDelivered(false);
-        },
-      });
     }
   });
 
