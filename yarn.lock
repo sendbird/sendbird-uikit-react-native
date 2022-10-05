@@ -3196,10 +3196,10 @@
   dependencies:
     nanoid "^3.1.23"
 
-"@sendbird/chat@^4.0.12":
-  version "4.0.12"
-  resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.0.12.tgz#f6c1c6860e3a300dc5dbf94d5b025a41f510f7ed"
-  integrity sha512-1xZe1DTZRU8wpaz3T9G2pwcFrMQfB8Od0pWnMlnSxF+kIzzss26vrYCwb/Vv/pb6Mh0SeEi7CYfjE7HSZsRYXQ==
+"@sendbird/chat@^4.0.13":
+  version "4.0.13"
+  resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.0.13.tgz#21b737eecf9053ca87e0db5713cd17446eb8f302"
+  integrity sha512-vmIJldcVa8m5Wd9YBhbrfAX9w+N5iDAZnkeBnYQs5I4ov9txIs02+GqpobSWi77ywx/dgPVLm1+7nIkyuiCTLw==
 
 "@sideway/address@^4.1.3":
   version "4.1.4"
