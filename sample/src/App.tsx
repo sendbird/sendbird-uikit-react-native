@@ -96,7 +96,7 @@ const Navigations = () => {
             <RootStack.Screen name={Routes.GroupChannelInvite} component={GroupChannelInviteScreen} />
             <RootStack.Screen name={Routes.GroupChannelMembers} component={GroupChannelMembersScreen} />
 
-            <RootStack.Group screenOptions={{ presentation: 'containedModal', headerShown: false }}>
+            <RootStack.Group screenOptions={{ presentation: 'transparentModal', headerShown: false }}>
               <RootStack.Screen name={Routes.FileViewer} component={FileViewerScreen} />
             </RootStack.Group>
 
