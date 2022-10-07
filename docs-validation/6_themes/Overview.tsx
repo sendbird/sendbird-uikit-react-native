@@ -1,17 +1,12 @@
 import React from 'react';
-import { Text, View, useColorScheme } from 'react-native';
 
-import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
 import {
-  DarkUIKitTheme,
-  LightUIKitTheme,
   Palette,
   UIKitColorScheme,
   UIKitPalette,
   UIKitTheme,
-  useUIKitTheme,
+  createTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import { createTheme } from '@sendbird/uikit-react-native-foundation';
 
 const CustomPalette: UIKitPalette = Palette;
 
@@ -19,18 +14,18 @@ const CustomPalette: UIKitPalette = Palette;
  * Themes
  * {@link https://sendbird.com/docs/uikit/v3/react-native/themes/overview#1-themes}
  * */
-// TODO: import React
+import { useColorScheme, View, Text } from 'react-native';
+
+import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
+import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+
 const App = () => {
   const colorScheme = useColorScheme();
   const theme = colorScheme === 'light' ? LightUIKitTheme : DarkUIKitTheme;
 
   return (
     // @ts-ignore
-    <SendbirdUIKitContainer
-      styles={{
-        theme,
-      }}
-    >
+    <SendbirdUIKitContainer styles={{ theme }}>
       {/* ... */}
     </SendbirdUIKitContainer>
   );
@@ -60,7 +55,8 @@ function theme(_: UIKitTheme) {
  * How to use
  * {@link https://sendbird.com/docs/uikit/v3/react-native/themes/overview#2-how-to-use}
  * */
-// TODO: import useUIKitTheme
+import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+
 const Component = () => {
   const { colors } = useUIKitTheme();
   return (
@@ -75,11 +71,12 @@ const Component = () => {
  * Customize the theme
  * {@link https://sendbird.com/docs/uikit/v3/react-native/themes/overview#2-customize-the-theme}
  * */
+// import { DarkUIKitTheme, createTheme } from '@sendbird/uikit-react-native-foundation';
+
 const MyCustomDarkTheme = createTheme({
   colorScheme: 'dark',
   palette: CustomPalette,
   colors: (palette) => ({
-    // TODO: spread DarkUIKitTheme.colors
     ...DarkUIKitTheme.colors,
     primary: palette.primary200,
     secondary: palette.secondary200,

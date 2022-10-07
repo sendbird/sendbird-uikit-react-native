@@ -1,9 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useEffect } from 'react';
-import { Pressable, View } from 'react-native';
-
-import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
-import { Button, HeaderStyleContextType, Text } from '@sendbird/uikit-react-native-foundation';
+import { Button } from '@sendbird/uikit-react-native-foundation';
 
 const Analytics = { logError: (_: unknown) => 0 };
 
@@ -11,7 +6,12 @@ const Analytics = { logError: (_: unknown) => 0 };
  * HeaderComponent
  * {@link https://sendbird.com/docs/uikit/v3/react-native/customization/overview#2-sendbirduikitcontainer-3-headercomponent}
  * */
-// TODO: import useNavigation, useEffect, Pressable, SendbirdUIKitContainer, Button, Text, React
+import React, { useEffect } from 'react';
+import { Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
+import { HeaderStyleContextType, Text } from '@sendbird/uikit-react-native-foundation';
+
 const UseReactNavigationHeader: HeaderStyleContextType['HeaderComponent'] = ({
   title,
   right,
@@ -45,6 +45,9 @@ const App = () => {
  * ErrorBoundary
  * {@link https://sendbird.com/docs/uikit/v3/react-native/customization/overview#2-sendbirduikitcontainer-3-errorboundary}
  * */
+import { View } from 'react-native';
+// import { Text, Button } from '@sendbird/uikit-react-native-foundation';
+
 const App2 = () => {
   return (
     //@ts-ignore
