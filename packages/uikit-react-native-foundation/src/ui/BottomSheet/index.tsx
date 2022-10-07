@@ -2,10 +2,10 @@ import React from 'react';
 import { TouchableOpacity, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import type Icon from '../../components/Icon';
+import Modal from '../../components/Modal';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import DialogSheet from '../Dialog/DialogSheet';
-import type Icon from '../Icon';
-import Modal from '../Modal';
 
 export type BottomSheetItem = {
   sheetItems: {

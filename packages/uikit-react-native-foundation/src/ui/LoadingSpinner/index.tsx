@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, Easing, StyleProp, ViewStyle } from 'react-native';
 
+import Icon from '../../components/Icon';
 import useUIKitTheme from '../../theme/useUIKitTheme';
-import Icon from '../Icon';
 
 type Props = {
   size?: number;

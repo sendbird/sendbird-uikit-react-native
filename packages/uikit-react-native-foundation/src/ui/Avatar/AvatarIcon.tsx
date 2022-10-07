@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 
+import Icon from '../../components/Icon';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
-import Icon from '../Icon';
 
 type Props = {
   icon: keyof typeof Icon.Assets;

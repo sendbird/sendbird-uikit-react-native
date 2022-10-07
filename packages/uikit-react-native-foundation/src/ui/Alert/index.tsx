@@ -1,13 +1,13 @@
 import React from 'react';
 import { AlertButton, View } from 'react-native';
 
+import Modal from '../../components/Modal';
+import Text from '../../components/Text';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import Button from '../Button';
 import DialogBox from '../Dialog/DialogBox';
-import Modal from '../Modal';
-import Text from '../Text';
 
 export type AlertItem = {
   title?: string;
