@@ -2,10 +2,10 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useR
 import { Animated } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import Icon from '../../components/Icon';
+import Text from '../../components/Text';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
-import Icon from '../Icon';
-import Text from '../Text';
 
 type ToastType = 'normal' | 'error' | 'success';
 type Context = { show(text: string, type?: ToastType): void };

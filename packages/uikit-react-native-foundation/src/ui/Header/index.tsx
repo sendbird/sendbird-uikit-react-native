@@ -4,11 +4,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { conditionChaining } from '@sendbird/uikit-utils';
 
+import Text, { TextProps } from '../../components/Text';
 import type { BaseHeaderProps } from '../../index';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import useUIKitTheme from '../../theme/useUIKitTheme';
-import Text, { TextProps } from '../Text';
 
 type HeaderElement = string | React.ReactElement | null;
 type HeaderProps = BaseHeaderProps<

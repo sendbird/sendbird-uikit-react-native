@@ -3,9 +3,9 @@ import { Platform, StyleProp, View, ViewStyle } from 'react-native';
 
 import { truncatedBadgeCount } from '@sendbird/uikit-utils';
 
+import Text from '../../components/Text';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
-import Text from '../Text';
 
 type Props = {
   count: number;
