@@ -1,10 +1,8 @@
-import React, { useContext } from 'react';
+
 
 import {
   UserActionBar,
   UserListContextsType,
-  createGroupChannelMembersFragment,
-  useSendbirdChat,
 } from '@sendbird/uikit-react-native';
 import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
 
@@ -12,11 +10,13 @@ import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
  *
  * {@link }
  * */
-// TODO: params type, import useState, sdk.groupChannel
+import React, { useState } from 'react';
+import { useSendbirdChat, createGroupChannelMembersFragment } from '@sendbird/uikit-react-native';
+
 const GroupChannelMembersFragment = createGroupChannelMembersFragment();
-const GroupChannelMembersScreen = ({ params }) => {
+const GroupChannelMembersScreen = ({ params }: { params: { serializedChannel: object } }) => {
   const { sdk } = useSendbirdChat();
-  const [channel] = useState(() => sdk.GroupChannel.buildFromSerializedData(params.serializedChannel));
+  const [channel] = useState(() => sdk.groupChannel.buildGroupChannelFromSerializedData(params.serializedChannel));
 
   const navigateToBack = () => {};
   const navigateToGroupChannelInvite = () => {};
@@ -25,8 +25,7 @@ const GroupChannelMembersScreen = ({ params }) => {
     <GroupChannelMembersFragment
       channel={channel}
       onPressHeaderLeft={navigateToBack}
-      // TODO: onInviteMembers -> onPressHeaderRight
-      onInviteMembers={navigateToGroupChannelInvite}
+      onPressHeaderRight={navigateToGroupChannelInvite}
     />
   );
 };
@@ -38,12 +37,12 @@ const GroupChannelMembersScreen = ({ params }) => {
  * */
 function _context<T>(_: UserListContextsType<T>) {
   const fragment = useContext(_.Fragment);
-  _fragment.headerTitle;
-  _fragment.headerRight;
+  fragment.headerTitle;
+  fragment.headerRight;
 
   const list = useContext(_.List);
-  _list.selectedUsers;
-  _list.setSelectedUsers;
+  list.selectedUsers;
+  list.setSelectedUsers;
 }
 /** ------------------ **/
 
@@ -51,27 +50,38 @@ function _context<T>(_: UserListContextsType<T>) {
  *
  * {@link }
  * */
-// TODO: import useContext, UserListContexts
-const { headerTitle, headerRight } = useContext(UserListContexts.Fragment);
+import { useContext } from 'react';
+import { UserListContexts } from "@sendbird/uikit-react-native";
+
+const Component = () => {
+  const { headerTitle, headerRight } = useContext(UserListContexts.Fragment);
+};
 /** ------------------ **/
 
 /**
  *
  * {@link }
  * */
-// TODO: import useContext, UserListContexts
-const { selectedUsers, setSelectedUsers } = useContext(UserListContexts.List);
+// import { useContext } from 'react';
+// import { UserListContexts } from "@sendbird/uikit-react-native";
+
+const Component2 = () => {
+  const { selectedUsers, setSelectedUsers } = useContext(UserListContexts.List);
+};
 /** ------------------ **/
 
 /**
  *
  * {@link }
  * */
-// TODO: params type, remove MyAppUser generic, import useState
+// import React, { useState } from 'react';
+// import { useSendbirdChat, createGroupChannelMembersFragment, UserActionBar } from '@sendbird/uikit-react-native';
+// import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
+
 const GroupChannelMembersFragment2 = createGroupChannelMembersFragment();
-const GroupChannelMembersScreen2 = ({ params }) => {
+const GroupChannelMembersScreen2 = ({ params }: { params: { serializedChannel: object } }) => {
   const { sdk } = useSendbirdChat();
-  const [channel] = useState(() => sdk.GroupChannel.buildFromSerializedData(params.serializedChannel));
+  const [channel] = useState(() => sdk.groupChannel.buildGroupChannelFromSerializedData(params.serializedChannel));
 
   const { openSheet } = useBottomSheet();
 
@@ -82,8 +92,7 @@ const GroupChannelMembersScreen2 = ({ params }) => {
     <GroupChannelMembersFragment2
       channel={channel}
       onPressHeaderLeft={navigateToBack}
-      // TODO: onInviteMembers -> onPressHeaderRight
-      onInviteMembers={navigateToGroupChannelInvite}
+      onPressHeaderRight={navigateToGroupChannelInvite}
       renderUser={(user) => {
         return (
           <UserActionBar

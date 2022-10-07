@@ -1,23 +1,16 @@
-import React, { useContext, useState } from 'react';
-import { Share } from 'react-native';
-
-import {
-  GroupChannelSettingsContextsType,
-  createGroupChannelSettingsFragment,
-  useSendbirdChat,
-} from '@sendbird/uikit-react-native';
-import { Icon } from '@sendbird/uikit-react-native-foundation';
+import type { GroupChannelSettingsContextsType } from '@sendbird/uikit-react-native';
 
 /**
  * Usage
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/configuring-channel-settings/configure-group-channel-settings#2-usage}
  * */
-/** ------------------ **/
-// TODO: params type, sdk.groupChannel
+import React, { useState } from 'react';
+import { useSendbirdChat, createGroupChannelSettingsFragment } from '@sendbird/uikit-react-native';
+
 const GroupChannelSettingsFragment = createGroupChannelSettingsFragment();
-const GroupChannelSettingsScreen = ({ params }) => {
+const GroupChannelSettingsScreen = ({ params }: { params: { serializedChannel: object } }) => {
   const { sdk } = useSendbirdChat();
-  const [channel] = useState(() => sdk.GroupChannel.buildFromSerializedData(params.serializedChannel));
+  const [channel] = useState(() => sdk.groupChannel.buildGroupChannelFromSerializedData(params.serializedChannel));
 
   const navigateToBack = () => {};
   const navigateToGroupChannelListScreen = () => {};
@@ -27,8 +20,7 @@ const GroupChannelSettingsScreen = ({ params }) => {
     <GroupChannelSettingsFragment
       channel={channel}
       onPressHeaderLeft={navigateToBack}
-      // TODO: onLeaveChannel -> onPressMenuLeaveChannel
-      onLeaveChannel={navigateToGroupChannelListScreen}
+      onPressMenuLeaveChannel={navigateToGroupChannelListScreen}
       onPressMenuMembers={navigateToGroupChannelMembersScreen}
     />
   );
@@ -41,10 +33,10 @@ const GroupChannelSettingsScreen = ({ params }) => {
  * */
 function _context(_: GroupChannelSettingsContextsType) {
   const fragment = useContext(_.Fragment);
-  _fragment.headerTitle;
-  _fragment.headerRight;
-  _fragment.channel;
-  _fragment.onPressHeaderRight;
+  fragment.headerTitle;
+  fragment.headerRight;
+  fragment.channel;
+  fragment.onPressHeaderRight;
 }
 /** ------------------ **/
 
@@ -52,19 +44,26 @@ function _context(_: GroupChannelSettingsContextsType) {
  * Fragment
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/configuring-channel-settings/configure-group-channel-settings#2-context-3-fragment}
  * */
-// TODO: import useContext, GroupChannelSettingsContexts
-const { channel, headerTitle, headerRight, onPressHeaderRight } = useContext(GroupChannelSettingsContexts.Fragment);
+import { useContext } from 'react';
+import { GroupChannelSettingsContexts } from '@sendbird/uikit-react-native';
+
+const Component = () => {
+  const { channel, headerTitle, headerRight, onPressHeaderRight } = useContext(GroupChannelSettingsContexts.Fragment);
+}
 /** ------------------ **/
 
 /**
  * Customization
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/configuring-channel-settings/configure-group-channel-settings#2-customization}
  * */
+import { Share } from 'react-native';
+
+import { Icon } from '@sendbird/uikit-react-native-foundation';
+
 const GroupChannelSettingsFragment2 = createGroupChannelSettingsFragment();
-// TODO: params type, sdk.groupChannel
-const GroupChannelSettingsScreen2 = ({ params }) => {
+const GroupChannelSettingsScreen2 = ({ params }: { params: { serializedChannel: object } }) => {
   const { sdk } = useSendbirdChat();
-  const [channel] = useState(() => sdk.GroupChannel.buildFromSerializedData(params.serializedChannel));
+  const [channel] = useState(() => sdk.groupChannel.buildGroupChannelFromSerializedData(params.serializedChannel));
 
   const navigateToBack = () => {};
   const navigateToGroupChannelListScreen = () => {};
@@ -74,8 +73,7 @@ const GroupChannelSettingsScreen2 = ({ params }) => {
     <GroupChannelSettingsFragment2
       channel={channel}
       onPressHeaderLeft={navigateToBack}
-      // TODO: onLeaveChannel -> onPressMenuLeaveChannel
-      onLeaveChannel={navigateToGroupChannelListScreen}
+      onPressMenuLeaveChannel={navigateToGroupChannelListScreen}
       onPressMenuMembers={navigateToGroupChannelMembersScreen}
       menuItemsCreator={(items) => {
         items.unshift({
