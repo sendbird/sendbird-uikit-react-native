@@ -1,10 +1,7 @@
-import type { FileServiceInterface } from '@sendbird/uikit-react-native';
-import { usePlatformService } from '@sendbird/uikit-react-native';
-import type SBUError from '@sendbird/uikit-react-native/src/libs/SBUError';
 import type { MediaServiceInterface } from '@sendbird/uikit-react-native/src/platform/types';
 
 const isMediaFile = (_: string) => 0;
-const documentPickerModule = {
+const MyDocumentPickerModule = {
   getDocumentAsync: async (_: object) => ({ type: '', mimeType: '', uri: '', size: 0, name: '' }),
 };
 const MyMediaLibraryModule = { requestPermission: async () => 0, saveToLibrary: async (_: string) => 0 };
@@ -18,7 +15,7 @@ type GetFileRes = null | FileCompat;
  * FileServiceInterface
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/provider/platformserviceprovider#2-fileserviceinterface}
  * */
-async function _fileServiceInterface(service: FileServiceInterface) {
+async function fileServiceInterface(service: FileServiceInterface) {
   const mediaType = '' as 'photo' | 'video' | 'all' | undefined;
   const onOpenFailure = (() => 0) as (error?: SBUError, originError?: unknown) => void;
   const cameraType = '' as 'front' | 'back' | undefined;
@@ -36,7 +33,7 @@ async function _fileServiceInterface(service: FileServiceInterface) {
  * MediaServiceInterface
  * {@link }
  * */
-async function _mediaServiceInterface(service: MediaServiceInterface) {
+async function mediaServiceInterface(service: MediaServiceInterface) {
   const jsx: JSX.Element = service.VideoComponent({
     source: 0 as number | { uri: string },
     resizeMode: '' as 'cover' | 'stretch' | 'contain' | undefined,
@@ -54,22 +51,36 @@ async function _mediaServiceInterface(service: MediaServiceInterface) {
  * Usage
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/provider/platformserviceprovider#2-usage}
  * */
-// TODO: import usePlatformService
-const { clipboardService } = usePlatformService();
+import { usePlatformService } from '@sendbird/uikit-react-native';
+
+const Component = () => {
+  const { clipboardService } = usePlatformService();
+};
 /** ------------------ **/
 
 /**
  * Direct implementation
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/provider/platformserviceprovider#2-direct-implementation}
  * */
-// TODO: import OpenCameraOptions, OpenMediaLibraryOptions, OpenDocumentOptions, SaveOptions, FilePickerResponse
+import {
+  FilePickerResponse,
+  FileServiceInterface,
+  OpenCameraOptions,
+  OpenDocumentOptions,
+  OpenMediaLibraryOptions,
+  SaveOptions,
+  SBUError,
+} from '@sendbird/uikit-react-native';
+
 class MyFileService implements FileServiceInterface {
+  // @ts-ignore
   async openCamera(_options?: OpenCameraOptions): Promise<FilePickerResponse> {
     // Check camera permission.
     // Request media file with camera.
     // Returns media file info.
   }
 
+  // @ts-ignore
   async openMediaLibrary(_options: OpenMediaLibraryOptions): Promise<null | FilePickerResponse[]> {
     // Check media library permission.
     // Request media file from media library.
@@ -78,15 +89,14 @@ class MyFileService implements FileServiceInterface {
 
   async openDocument(options?: OpenDocumentOptions): Promise<FilePickerResponse> {
     try {
-      const response = await documentPickerModule.getDocumentAsync({
+      const response = await MyDocumentPickerModule.getDocumentAsync({
         type: '*/*',
       });
       if (response.type === 'cancel') return null;
       const { mimeType, uri, size, name } = response;
       return { uri, size, name, type: mimeType };
     } catch {
-      // TODO: Provide SBUError.UNKNOWN as params
-      options?.onOpenFailure?.();
+      options?.onOpenFailure?.(SBUError.UNKNOWN);
       return null;
     }
   }
