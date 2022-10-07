@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Linking, TouchableOpacity, View } from 'react-native';
-import type Sendbird from 'sendbird';
 
+import type { OGMetaData } from '@sendbird/chat/message';
 import {
   Icon,
   Image,
@@ -16,7 +16,7 @@ import { useLocalization } from '../../../hooks/useContext';
 import type { UserMessageProps } from './index';
 
 type Props = UserMessageProps & {
-  ogMetaData: Sendbird.OGMetaData;
+  ogMetaData: OGMetaData;
 };
 const OpenGraphUserMessage = ({ message, variant, pressed, ogMetaData }: Props) => {
   const { STRINGS } = useLocalization();
@@ -80,6 +80,8 @@ const OpenGraphUserMessage = ({ message, variant, pressed, ogMetaData }: Props) 
 
 const styles = createStyleSheet({
   container: {
+    width: 240,
+    maxWidth: 240,
     borderRadius: 16,
     overflow: 'hidden',
   },
@@ -93,7 +95,7 @@ const styles = createStyleSheet({
     paddingBottom: 12,
   },
   ogImageContainer: {
-    width: 240,
+    flex: 1,
     height: 136,
   },
   ogImage: {

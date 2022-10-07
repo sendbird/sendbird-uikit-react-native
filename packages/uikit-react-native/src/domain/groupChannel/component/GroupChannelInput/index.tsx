@@ -3,7 +3,7 @@ import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { groupChannelChatUnavailable, useIIFE } from '@sendbird/uikit-utils';
+import { isGroupChannelChatUnavailable, useIIFE } from '@sendbird/uikit-utils';
 
 import { GroupChannelContexts } from '../../module/moduleContext';
 import type { GroupChannelProps } from '../../types';
@@ -20,7 +20,7 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
 
   const [text, setText] = useState('');
   const textTmpRef = useRef('');
-  const disabled = groupChannelChatUnavailable(channel);
+  const isChatUnavailable = isGroupChannelChatUnavailable(channel);
 
   useEffect(() => {
     if (text.length === 0) channel.endTyping();
@@ -28,13 +28,13 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
   }, [text]);
 
   useEffect(() => {
-    if (disabled) {
+    if (isChatUnavailable) {
       textTmpRef.current = text;
       setText('');
     } else {
       setText(textTmpRef.current);
     }
-  }, [disabled]);
+  }, [isChatUnavailable]);
 
   const inputMode = useIIFE(() => {
     if (!editMessage) return 'send';
@@ -49,7 +49,7 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
     >
       <View style={{ paddingLeft: left, paddingRight: right, backgroundColor: colors.background }}>
         <View style={{ justifyContent: 'center', width: '100%' }}>
-          {inputMode === 'send' && <SendInput {...props} text={text} setText={setText} disabled={disabled} />}
+          {inputMode === 'send' && <SendInput {...props} text={text} setText={setText} disabled={isChatUnavailable} />}
           {inputMode === 'edit' && editMessage && (
             <EditInput
               {...props}

@@ -2,8 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
 
 import { useAppFeatures } from '@sendbird/uikit-chat-hooks';
-import type { SendbirdChatSDK, SendbirdGroupChannel, SendbirdUser } from '@sendbird/uikit-utils';
-import { useForceUpdate } from '@sendbird/uikit-utils';
+import type {
+  SendbirdChatSDK,
+  SendbirdGroupChannel,
+  SendbirdUser,
+  SendbirdUserUpdateParams,
+} from '@sendbird/uikit-utils';
+import { confirmAndMarkAsDelivered, useForceUpdate } from '@sendbird/uikit-utils';
 
 import type { FileType } from '../platform/types';
 
@@ -21,7 +26,7 @@ type Context = {
   setCurrentUser: React.Dispatch<React.SetStateAction<SendbirdUser | undefined>>;
 
   // helper functions
-  updateCurrentUserInfo: (nickname: string, profile?: string | FileType) => Promise<SendbirdUser>;
+  updateCurrentUserInfo: (nickname?: string, profile?: string | FileType) => Promise<SendbirdUser>;
   markAsDeliveredWithChannel: (channel: SendbirdGroupChannel) => void;
 
   features: {
@@ -62,15 +67,17 @@ export const SendbirdChatProvider = ({
 
       if (!user) throw new Error('Current user is not defined, please connect using `useConnection()` hook first');
 
-      if (typeof profile === 'undefined') {
-        user = await sdkInstance.updateCurrentUserInfo(nickname, sdkInstance.currentUser.profileUrl);
-      } else if (typeof profile === 'string') {
-        user = await sdkInstance.updateCurrentUserInfo(nickname, profile);
+      const params: SendbirdUserUpdateParams = { nickname };
+
+      if (typeof profile === 'string') {
+        params.profileUrl = profile;
       } else if (typeof profile === 'object') {
-        user = await sdkInstance.updateCurrentUserInfoWithProfileImage(nickname, profile);
+        params.profileImage = profile;
       } else {
         throw new Error(`Cannot update profile, not supported profile type(${typeof profile})`);
       }
+
+      user = await sdkInstance.updateCurrentUserInfo(params);
 
       setCurrentUser(user);
       return user;
@@ -80,9 +87,7 @@ export const SendbirdChatProvider = ({
 
   const markAsDeliveredWithChannel: Context['markAsDeliveredWithChannel'] = useCallback(
     (channel: SendbirdGroupChannel) => {
-      if (appFeatures.deliveryReceiptEnabled && channel.unreadMessageCount > 0) {
-        sdkInstance.markAsDelivered(channel.url);
-      }
+      if (appFeatures.deliveryReceiptEnabled) confirmAndMarkAsDelivered(sdkInstance, channel);
     },
     [sdkInstance, appFeatures.deliveryReceiptEnabled],
   );
@@ -90,8 +95,8 @@ export const SendbirdChatProvider = ({
   useEffect(() => {
     const listener = (status: AppStateStatus) => {
       // 'active' | 'background' | 'inactive' | 'unknown' | 'extension';
-      if (status === 'active') sdkInstance.getConnectionState() === 'CLOSED' && sdkInstance.setForegroundState();
-      else sdkInstance.getConnectionState() === 'OPEN' && sdkInstance.setBackgroundState();
+      if (status === 'active') sdkInstance.connectionState === 'CLOSED' && sdkInstance.setForegroundState();
+      else sdkInstance.connectionState === 'OPEN' && sdkInstance.setBackgroundState();
     };
 
     const subscriber = AppState.addEventListener('change', listener);

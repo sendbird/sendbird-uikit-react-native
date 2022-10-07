@@ -1,4 +1,10 @@
-import type { SendbirdDataPayload, SendbirdFileMessage, SendbirdMessage } from '../types';
+import type {
+  SendbirdBaseMessage,
+  SendbirdDataPayload,
+  SendbirdFileMessage,
+  SendbirdMessage,
+  SendbirdSendableMessage,
+} from '../types';
 import { messageTime } from '../ui-format/common';
 
 export function isNewMessage(msg: SendbirdMessage, currentUserId?: string) {
@@ -8,8 +14,12 @@ export function isNewMessage(msg: SendbirdMessage, currentUserId?: string) {
   return msg.updatedAt === 0;
 }
 
+export function isSendableMessage(msg?: SendbirdMessage | null): msg is SendbirdSendableMessage {
+  return msg !== undefined && msg !== null && 'sendingStatus' in msg;
+}
+
 export function isMyMessage(msg?: SendbirdMessage | null, currentUserId = '##__USER_ID_IS_NOT_PROVIDED__##') {
-  if (!msg) return false;
+  if (!isSendableMessage(msg)) return false;
   return (
     ('sender' in msg && msg.sender?.userId === currentUserId) ||
     msg.sendingStatus === 'pending' ||
@@ -30,12 +40,12 @@ export function messageKeyExtractor(message: SendbirdMessage): string {
 // |     failed        |    timestamp(A)   |        0        |         ?         |
 // |     succeeded     | timestamp(A) / '' |    id from DB   |    timestamp(C)   |
 // |-------------------|-------------------|-----------------|-------------------|
-export function messageComparator<T extends SendbirdMessage>(a: T, b: T) {
+export function messageComparator(a: SendbirdMessage, b: SendbirdMessage) {
   let aStatusOffset = 0;
   let bStatusOffset = 0;
 
-  if (a.sendingStatus !== 'succeeded') aStatusOffset = 999999;
-  if (b.sendingStatus !== 'succeeded') bStatusOffset = 999999;
+  if (isSendableMessage(a) && a.sendingStatus !== 'succeeded') aStatusOffset = 999999;
+  if (isSendableMessage(b) && b.sendingStatus !== 'succeeded') bStatusOffset = 999999;
 
   return b.createdAt + bStatusOffset - (a.createdAt + aStatusOffset);
 }
@@ -73,7 +83,7 @@ export function calcMessageGrouping(
   return { groupWithPrev: getPrev(), groupWithNext: getNext() };
 }
 
-export function getMessageUniqId(msg: SendbirdMessage) {
+export function getMessageUniqId(msg: SendbirdBaseMessage) {
   if (msg.isUserMessage() || msg.isFileMessage()) {
     if (msg.sendingStatus === 'succeeded') return String(msg.messageId);
     return msg.reqId;
@@ -83,7 +93,7 @@ export function getMessageUniqId(msg: SendbirdMessage) {
 }
 
 export function getAvailableUriFromFileMessage(message: SendbirdFileMessage) {
-  if (!message.url && message.messageParams && 'uri' in message.messageParams.file) {
+  if (!message.url && message.messageParams.file && 'uri' in message.messageParams.file) {
     return message.messageParams.file.uri;
   }
   return message.url;

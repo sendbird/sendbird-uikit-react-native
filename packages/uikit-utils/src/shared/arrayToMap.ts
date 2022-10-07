@@ -58,10 +58,7 @@ export default function arrayToMap<T extends Record<K, unknown>, K extends keyof
   }, {} as Record<string, T>);
 }
 
-export function arrayToMapWithGetter<T extends Record<K, unknown>, K extends keyof T = keyof T>(
-  arr: T[],
-  getSelector: (item: T) => string,
-) {
+export function arrayToMapWithGetter<T>(arr: T[], getSelector: (item: T) => string) {
   return arr.reduce((accum, curr) => {
     const _key = getSelector(curr);
     accum[_key] = curr;

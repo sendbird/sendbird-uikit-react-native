@@ -4,9 +4,9 @@ import { useActiveGroupChannel, useChannelHandler } from '@sendbird/uikit-chat-h
 import { useActionMenu, useAlert, useBottomSheet, usePrompt, useToast } from '@sendbird/uikit-react-native-foundation';
 import {
   NOOP,
+  SendbirdBaseChannel,
   SendbirdGroupChannel,
-  SendbirdGroupChannelParams,
-  SendbirdOpenChannel,
+  SendbirdGroupChannelUpdateParams,
   isDifferentChannel,
   useForceUpdate,
   useUniqId,
@@ -38,7 +38,7 @@ export const GroupChannelSettingsContextsProvider: GroupChannelSettingsModule['P
 
   const { activeChannel, setActiveChannel } = useActiveGroupChannel(sdk, channel);
 
-  const onChannelChanged = (channel: SendbirdGroupChannel | SendbirdOpenChannel) => {
+  const onChannelChanged = (channel: SendbirdBaseChannel) => {
     if (isDifferentChannel(channel, activeChannel) || !channel.isGroupChannel()) return;
     setActiveChannel(channel);
     forceUpdate();
@@ -56,7 +56,7 @@ export const GroupChannelSettingsContextsProvider: GroupChannelSettingsModule['P
   const { openMenu } = useActionMenu();
 
   const updateChannel = useCallback(
-    async (params: SendbirdGroupChannelParams) => {
+    async (params: SendbirdGroupChannelUpdateParams) => {
       const updatedChannel = await activeChannel.updateChannel(params);
       setActiveChannel(updatedChannel);
       forceUpdate();
@@ -70,11 +70,7 @@ export const GroupChannelSettingsContextsProvider: GroupChannelSettingsModule['P
       submitLabel: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME_PROMPT_OK,
       placeholder: STRINGS.GROUP_CHANNEL_SETTINGS.DIALOG_CHANGE_NAME_PROMPT_PLACEHOLDER,
       defaultValue: activeChannel.name,
-      onSubmit: async (channelName) => {
-        const params = new sdk.GroupChannelParams();
-        params.name = channelName;
-        await updateChannel(params);
-      },
+      onSubmit: (channelName) => updateChannel({ name: channelName }),
     });
   }, [STRINGS, updateChannel, activeChannel.name]);
 
@@ -101,9 +97,7 @@ export const GroupChannelSettingsContextsProvider: GroupChannelSettingsModule['P
             });
             if (!file) return;
 
-            const params = new sdk.GroupChannelParams();
-            params.coverImage = file;
-            await updateChannel(params);
+            await updateChannel({ coverImage: file });
           },
         },
         {
@@ -126,9 +120,7 @@ export const GroupChannelSettingsContextsProvider: GroupChannelSettingsModule['P
             });
             if (!files || !files[0]) return;
 
-            const params = new sdk.GroupChannelParams();
-            params.coverImage = files[0];
-            await updateChannel(params);
+            await updateChannel({ coverImage: files[0] });
           },
         },
       ],

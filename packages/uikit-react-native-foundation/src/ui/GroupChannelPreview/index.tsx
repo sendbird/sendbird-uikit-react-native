@@ -3,12 +3,12 @@ import { View } from 'react-native';
 
 import { conditionChaining } from '@sendbird/uikit-utils';
 
+import Icon from '../../components/Icon';
 import Image from '../../components/Image';
+import Text from '../../components/Text';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import Badge from '../Badge';
-import Icon from '../Icon';
-import Text from '../Text';
 
 type Props = {
   customCover?: React.ReactElement;

@@ -14,11 +14,11 @@ const usePushTokenRegistration = () => {
     return [
       Platform.select({
         ios: (token: string) => sdk.registerAPNSPushTokenForCurrentUser(token),
-        default: (token: string) => sdk.registerGCMPushTokenForCurrentUser(token),
+        default: (token: string) => sdk.registerFCMPushTokenForCurrentUser(token),
       }),
       Platform.select({
         ios: (token: string) => sdk.unregisterAPNSPushTokenForCurrentUser(token),
-        default: (token: string) => sdk.unregisterGCMPushTokenForCurrentUser(token),
+        default: (token: string) => sdk.unregisterFCMPushTokenForCurrentUser(token),
       }),
       Platform.select({
         ios: notificationService.getAPNSToken,

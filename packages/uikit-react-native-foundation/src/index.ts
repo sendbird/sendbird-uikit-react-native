@@ -1,7 +1,15 @@
 /** Assets **/
 export { default as IconAssets } from './assets/icon';
+
 /** Component **/
+export { default as Divider } from './components/Divider';
+export { default as Icon } from './components/Icon';
 export { default as Image } from './components/Image';
+export { default as Modal } from './components/Modal';
+export { default as Switch } from './components/Switch';
+export { default as Text } from './components/Text';
+export { default as TextInput } from './components/TextInput';
+export { default as URLParsedText } from './components/URLParsedText';
 
 /** UI **/
 export { default as ActionMenu, ActionMenuItem } from './ui/ActionMenu';
@@ -12,20 +20,13 @@ export { default as BottomSheet, BottomSheetItem } from './ui/BottomSheet';
 export { default as Button } from './ui/Button';
 export { default as ChannelFrozenBanner } from './ui/ChannelFrozenBanner';
 export { DialogProvider, useActionMenu, useAlert, usePrompt, useBottomSheet } from './ui/Dialog';
-export { default as Divider } from './ui/Divider';
 export { default as GroupChannelPreview } from './ui/GroupChannelPreview';
 export { default as Header } from './ui/Header';
-export { default as Icon } from './ui/Icon';
 export { default as LoadingSpinner } from './ui/LoadingSpinner';
 export { default as MenuBar, MenuBarProps } from './ui/MenuBar';
-export { default as Modal } from './ui/Modal';
 export { default as Placeholder } from './ui/Placeholder';
 export { default as Prompt } from './ui/Prompt';
-export { default as Switch } from './ui/Switch';
-export { default as Text } from './ui/Text';
-export { default as TextInput } from './ui/TextInput';
 export { default as Toast, useToast, ToastProvider } from './ui/Toast';
-export { default as URLParsedText } from './ui/URLParsedText';
 
 /** Styles **/
 export { default as createSelectByColorScheme } from './styles/createSelectByColorScheme';

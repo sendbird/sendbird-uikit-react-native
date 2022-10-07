@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 
+import Icon from '../../components/Icon';
+import Text from '../../components/Text';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
-import Icon from '../Icon';
-import Text from '../Text';
 
 type Props = React.PropsWithChildren<{
   style?: StyleProp<ViewStyle>;
@@ -64,6 +64,7 @@ const styles = createStyleSheet({
     marginLeft: 16,
   },
   sheetItemText: {
+    flex: 1,
     marginHorizontal: 24,
   },
 });

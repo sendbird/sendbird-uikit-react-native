@@ -1,4 +1,10 @@
-import type { SendbirdBaseChannel, SendbirdChannel, SendbirdGroupChannel, SendbirdOpenChannel } from '../types';
+import type {
+  SendbirdBaseChannel,
+  SendbirdChannel,
+  SendbirdChatSDK,
+  SendbirdGroupChannel,
+  SendbirdOpenChannel,
+} from '../types';
 
 /**
  * Diff utils for channel
@@ -11,8 +17,19 @@ export function isDifferentChannel<T extends SendbirdBaseChannel>(a?: T, b?: T):
   return a.url !== b.url;
 }
 
-export const groupChannelChatUnavailable = (channel: SendbirdGroupChannel) => {
+export const isGroupChannelChatUnavailable = (channel: SendbirdGroupChannel) => {
   return channel.myMutedState === 'muted' || (channel.isFrozen && channel.myRole !== 'operator');
+};
+
+export const confirmAndMarkAsRead = async (sdk: SendbirdChatSDK, channels: SendbirdBaseChannel[]) => {
+  const channelUrls = channels.filter((it) => it.isGroupChannel() && it.unreadMessageCount > 0).map((it) => it.url);
+  await sdk.groupChannel.markAsReadWithChannelUrls(channelUrls);
+};
+
+export const confirmAndMarkAsDelivered = async (sdk: SendbirdChatSDK, channel: SendbirdBaseChannel) => {
+  if (channel.isGroupChannel() && channel.unreadMessageCount > 0) {
+    await sdk.groupChannel.markAsDelivered(channel.url);
+  }
 };
 
 export function isDefaultCoverImage(coverUrl: string) {

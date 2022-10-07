@@ -4,12 +4,12 @@ import type { FlatListProps } from 'react-native';
 import type { UseGroupChannelMessagesOptions } from '@sendbird/uikit-chat-hooks';
 import type {
   SendbirdFileMessage,
-  SendbirdFileMessageParams,
+  SendbirdFileMessageCreateParams,
   SendbirdGroupChannel,
   SendbirdMessage,
   SendbirdUser,
   SendbirdUserMessage,
-  SendbirdUserMessageParams,
+  SendbirdUserMessageCreateParams,
 } from '@sendbird/uikit-utils';
 
 import type { FileType } from '../../platform/types';
@@ -23,11 +23,11 @@ export interface GroupChannelProps {
     onPressHeaderRight: GroupChannelProps['Header']['onPressHeaderRight'];
 
     onBeforeSendFileMessage?: (
-      params: SendbirdFileMessageParams,
-    ) => SendbirdFileMessageParams | Promise<SendbirdFileMessageParams>;
+      params: SendbirdFileMessageCreateParams,
+    ) => SendbirdFileMessageCreateParams | Promise<SendbirdFileMessageCreateParams>;
     onBeforeSendUserMessage?: (
-      params: SendbirdUserMessageParams,
-    ) => SendbirdUserMessageParams | Promise<SendbirdUserMessageParams>;
+      params: SendbirdUserMessageCreateParams,
+    ) => SendbirdUserMessageCreateParams | Promise<SendbirdUserMessageCreateParams>;
     onPressMediaMessage?: GroupChannelProps['MessageList']['onPressMediaMessage'];
 
     renderMessage?: GroupChannelProps['MessageList']['renderMessage'];

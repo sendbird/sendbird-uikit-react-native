@@ -1,11 +1,6 @@
 import { useReducer } from 'react';
 
-import type {
-  SendbirdBaseMessage,
-  SendbirdFileMessage,
-  SendbirdMessage,
-  SendbirdUserMessage,
-} from '@sendbird/uikit-utils';
+import type { SendbirdBaseMessage, SendbirdFileMessage, SendbirdUserMessage } from '@sendbird/uikit-utils';
 import { arrayToMapWithGetter, getMessageUniqId, isMyMessage, isNewMessage, useIIFE } from '@sendbird/uikit-utils';
 
 import type { UseGroupChannelMessagesOptions } from '../../types';
@@ -27,8 +22,8 @@ type Action =
 type State = {
   loading: boolean;
   refreshing: boolean;
-  messageMap: Record<string, SendbirdMessage>;
-  nextMessageMap: Record<string, SendbirdMessage>;
+  messageMap: Record<string, SendbirdBaseMessage>;
+  nextMessageMap: Record<string, SendbirdBaseMessage>;
 };
 
 const defaultReducer = ({ ...draft }: State, action: Action) => {
@@ -42,7 +37,7 @@ const defaultReducer = ({ ...draft }: State, action: Action) => {
     }
     case 'update_messages':
     case 'update_next_messages': {
-      const key = action.type === 'update_messages' ? 'messageMap' : 'nextMessageMap';
+      const key = action.type === 'update_messages' ? 'messageMap' : ('nextMessageMap' as const);
       const messageMap = arrayToMapWithGetter(action.value.messages, getMessageUniqId);
       if (action.value.clearPrev) {
         draft[key] = messageMap;

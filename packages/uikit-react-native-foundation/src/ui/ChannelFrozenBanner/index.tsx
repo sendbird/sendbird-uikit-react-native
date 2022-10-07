@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 
+import Text from '../../components/Text';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
-import Text from '../Text';
 
 type Props = {
   style?: StyleProp<ViewStyle>;

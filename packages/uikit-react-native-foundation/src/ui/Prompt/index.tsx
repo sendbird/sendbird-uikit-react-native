@@ -3,14 +3,14 @@ import { Keyboard, Platform, TextInput as RNTextInput, View, useWindowDimensions
 
 import { NOOP } from '@sendbird/uikit-utils';
 
+import Modal from '../../components/Modal';
+import Text from '../../components/Text';
+import TextInput from '../../components/TextInput';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import Button from '../Button';
 import DialogBox from '../Dialog/DialogBox';
-import Modal from '../Modal';
-import Text from '../Text';
-import TextInput from '../TextInput';
 
 export type PromptItem = {
   title: string;

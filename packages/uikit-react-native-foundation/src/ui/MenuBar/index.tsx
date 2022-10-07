@@ -3,11 +3,11 @@ import { Pressable, View } from 'react-native';
 
 import { conditionChaining } from '@sendbird/uikit-utils';
 
+import Divider from '../../components/Divider';
+import Icon from '../../components/Icon';
+import Text from '../../components/Text';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
-import Divider from '../Divider';
-import Icon from '../Icon';
-import Text from '../Text';
 
 export type MenuBarProps = {
   variant?: 'default' | 'contained';

@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Sendbird from 'sendbird';
 
+import Sendbird from '@sendbird/chat';
+import { GroupChannelModule } from '@sendbird/chat/groupChannel';
+import { OpenChannelModule } from '@sendbird/chat/openChannel';
 import type { HeaderStyleContextType, UIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import {
   DialogProvider,
@@ -87,23 +89,25 @@ const SendbirdUIKitContainer = ({
   const getSendbirdSDK = () => {
     let sdk: SendbirdChatSDK;
 
-    if (chatOptions?.localCacheStorage) {
-      sdk = new Sendbird({ appId, localCacheEnabled: true });
-      sdk.useAsyncStorageAsDatabase(new InternalLocalCacheStorage(chatOptions.localCacheStorage));
-    } else {
-      sdk = new Sendbird({ appId });
-    }
+    sdk = Sendbird.init({
+      appId,
+      modules: [new GroupChannelModule(), new OpenChannelModule()],
+      localCacheEnabled: Boolean(chatOptions?.localCacheStorage),
+      // @ts-ignore
+      useAsyncStorageStore: chatOptions?.localCacheStorage
+        ? new InternalLocalCacheStorage(chatOptions.localCacheStorage)
+        : undefined,
+    });
 
     if (chatOptions?.onInitialized) {
       sdk = chatOptions?.onInitialized(sdk);
     }
 
     if (SendbirdUIKit.VERSION) {
-      // @ts-ignore
       sdk.addExtension('sb_uikit', SendbirdUIKit.VERSION);
     }
+
     if (SendbirdUIKit.PLATFORM) {
-      // @ts-ignore
       sdk.addExtension('device-os-platform', SendbirdUIKit.PLATFORM);
     }
 

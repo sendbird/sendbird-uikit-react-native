@@ -2,6 +2,7 @@ import Notifee from '@notifee/react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import React, { useEffect } from 'react';
+import { AppState } from 'react-native';
 
 import { SendbirdUIKitContainer, useSendbirdChat } from '@sendbird/uikit-react-native';
 import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
@@ -68,16 +69,22 @@ const App = () => {
 };
 
 const Navigations = () => {
-  const { currentUser } = useSendbirdChat();
+  const { sdk, currentUser } = useSendbirdChat();
   const { scheme } = useAppearance();
   const isLightTheme = scheme === 'light';
 
   useEffect(() => {
-    Notifee.setBadgeCount(0);
     const unsubscribes = [onForegroundAndroid(), onForegroundIOS()];
     return () => {
       unsubscribes.forEach((fn) => fn());
     };
+  }, []);
+
+  useEffect(() => {
+    AppState.addEventListener('change', async () => {
+      const count = await sdk.groupChannel.getTotalUnreadMessageCount();
+      Notifee.setBadgeCount(count);
+    });
   }, []);
 
   return (
@@ -96,7 +103,7 @@ const Navigations = () => {
             <RootStack.Screen name={Routes.GroupChannelInvite} component={GroupChannelInviteScreen} />
             <RootStack.Screen name={Routes.GroupChannelMembers} component={GroupChannelMembersScreen} />
 
-            <RootStack.Group screenOptions={{ presentation: 'containedModal', headerShown: false }}>
+            <RootStack.Group screenOptions={{ animation: 'slide_from_bottom', headerShown: false }}>
               <RootStack.Screen name={Routes.FileViewer} component={FileViewerScreen} />
             </RootStack.Group>
 

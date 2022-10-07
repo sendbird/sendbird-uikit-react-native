@@ -3,12 +3,12 @@ import { View } from 'react-native';
 
 import { conditionChaining } from '@sendbird/uikit-utils';
 
+import Icon from '../../components/Icon';
+import Text from '../../components/Text';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import Button from '../Button';
-import Icon from '../Icon';
 import LoadingSpinner from '../LoadingSpinner';
-import Text from '../Text';
 
 type Props = {
   loading?: boolean;
