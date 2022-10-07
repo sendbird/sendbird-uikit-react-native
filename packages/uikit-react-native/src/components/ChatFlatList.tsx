@@ -75,17 +75,17 @@ const ChatFlatList = forwardRef<ChatFlatListRef, Props>(function CustomFlatList(
 
   return (
     <FlatList
+      bounces={false}
+      removeClippedSubviews
       keyboardDismissMode={'on-drag'}
+      keyboardShouldPersistTaps={'handled'}
+      indicatorStyle={select({ light: 'black', dark: 'white' })}
       {...props}
       // FIXME: inverted list of ListEmptyComponent is reversed {@link https://github.com/facebook/react-native/issues/21196#issuecomment-836937743}
       inverted={Boolean(props.data?.length)}
       // FIXME: maintainVisibleContentPosition is not working on Android {@link https://github.com/facebook/react-native/issues/25239}
       // maintainVisibleContentPosition={{ minIndexForVisible: 1, autoscrollToTopThreshold: AUTO_SCROLL_TO_TOP_THRESHOLD }}
       ref={scrollRef}
-      bounces={false}
-      keyboardShouldPersistTaps={'handled'}
-      indicatorStyle={select({ light: 'black', dark: 'white' })}
-      removeClippedSubviews
       onEndReachedThreshold={0.5}
       onEndReached={onTopReached}
       scrollEventThrottle={16}
