@@ -3,7 +3,6 @@ import { Text, View } from 'react-native';
 
 import {
   Palette as CustomPalette,
-  LightUIKitTheme,
   UIKitColors,
   createTheme,
 } from '@sendbird/uikit-react-native-foundation';
@@ -12,7 +11,8 @@ import {
  * UIKitPalette
  * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/color-resource#2-uikitpalette}
  * */
-// TODO: import UIKitPalette
+import type { UIKitPalette } from '@sendbird/uikit-react-native-foundation';
+
 const Palette: UIKitPalette = {
   primary100: '#DBD1FF',
   primary200: '#C2A9FA',
@@ -85,17 +85,22 @@ function uikitColors(_: UIKitColors) {
 
 // --------
 
-//TODO: import useUIKitTheme
-const { colors } = useUIKitTheme();
-const buttonBackground = colors.ui.button.contained.disabled.backgroundColor;
+import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+
+const Component = () => {
+  const { colors } = useUIKitTheme();
+  const buttonBackground = colors.ui.button.contained.disabled.background;
+}
 /** ------------------ **/
 
 /**
  * How to use
  * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/color-resource#2-how-to-use}
  * */
-//TODO: import useUIKitTheme
-const Component = () => {
+// import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+// import { View, Text } from 'react-native';
+
+const Component2 = () => {
   const { palette, colors } = useUIKitTheme();
 
   return (
@@ -110,7 +115,8 @@ const Component = () => {
  * Customize with default themes
  * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/color-resource#2-customize-the-colors-3-customize-with-default-themes}
  * */
-// TODO: remove Palette import
+import { LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+
 LightUIKitTheme.palette = {
   ...Palette,
   primary100: 'red',
@@ -140,10 +146,11 @@ LightUIKitTheme.colors.ui.button.contained = {
  * Customize the createTheme()
  * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/color-resource#2-customize-the-colors-3-customize-with-createtheme-}
  * */
-// TODO: import SendbirdUIKitContainer
+import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
+// import { createTheme } from '@sendbird/uikit-react-native-foundation';
+
 const CustomTheme = createTheme({
-  // TODO: appearance -> colorScheme
-  appearance: 'light',
+  colorScheme: 'light',
   palette: CustomPalette,
   colors: (palette) => ({
     ...LightUIKitTheme.colors,
@@ -186,11 +193,7 @@ const CustomTheme = createTheme({
 const App = () => {
   return (
     // @ts-ignore
-    <SendbirdUIKitContainer
-      styles={{
-        theme: CustomTheme,
-      }}
-    >
+    <SendbirdUIKitContainer styles={{ theme: CustomTheme }}>
       {/* ... */}
     </SendbirdUIKitContainer>
   );

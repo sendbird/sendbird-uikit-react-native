@@ -1,13 +1,16 @@
-import dateLocale from 'date-fns/locale/ko';
-
-import { SendbirdUIKitContainer, StringSetEn, createBaseStringSet } from '@sendbird/uikit-react-native';
+import React from 'react';
+const useMyLocale = () => ({ locale: 'en' as const, setLocale: (_: 'en' | 'ko') => 'en' });
+const Navigations = () => <></>;
 
 /**
  * Customize the StringSet
  * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/string-resource#2-customize-the-stringset}
  * */
-// TODO: import useLocalization, View, Text, Button
-const useYourLocale = () => ({ locale: 'en' as const, setLocale: (_: 'en' | 'ko') => 'en' });
+import { View } from 'react-native';
+import dateLocale from 'date-fns/locale/ko';
+import { StringSetEn, createBaseStringSet, SendbirdUIKitContainer, useLocalization } from '@sendbird/uikit-react-native';
+import { Text, Button } from '@sendbird/uikit-react-native-foundation';
+
 const StringSetKo = createBaseStringSet({
   dateLocale,
   overrides: {
@@ -26,23 +29,19 @@ const StringSets = {
   'en': StringSetEn,
   'ko': StringSetKo,
 };
+
 const App = () => {
-  const { locale, setLocale } = useYourLocale();
+  const { locale, setLocale } = useMyLocale();
   return (
     // @ts-ignore
-    <SendbirdUIKitContainer
-      // ...
-      localization={{
-        stringSet: StringSets[locale],
-      }}
-    >
+    <SendbirdUIKitContainer localization={{ stringSet: StringSets[locale] }}>
       <Navigations />
     </SendbirdUIKitContainer>
   );
 };
 
 const SwitchLanguageButton = () => {
-  const { locale, setLocale } = useYourLocale();
+  const { locale, setLocale } = useMyLocale();
   const { STRINGS } = useLocalization();
   const nextLocale = locale === 'en' ? 'ko' : 'en';
 
@@ -53,5 +52,4 @@ const SwitchLanguageButton = () => {
     </View>
   );
 };
-
 /** ------------------ **/

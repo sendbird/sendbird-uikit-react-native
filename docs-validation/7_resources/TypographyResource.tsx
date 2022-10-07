@@ -1,15 +1,10 @@
 import React from 'react';
-import { Text as RNText } from 'react-native';
-
-import { Text } from '@sendbird/uikit-react-native-foundation';
-import { LightUIKitTheme, createTypography } from '@sendbird/uikit-react-native-foundation';
-import { createTheme } from '@sendbird/uikit-react-native-foundation';
+import { Text, createTheme } from '@sendbird/uikit-react-native-foundation';
 
 /**
  * Text component
  * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/typography-resource#2-how-to-use-3-text-component}
  * */
-// TODO: Remove TextButton
 const TextList = () => {
   return (
     <>
@@ -28,11 +23,13 @@ const TextList = () => {
  * Typography property
  * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/typography-resource#2-how-to-use-3-typography-property}
  * */
-// TODO: import useUIKitTheme
+import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+// import { Text } from 'react-native';
+
 const Component = () => {
   const { typography } = useUIKitTheme();
 
-  return <RNText style={typography.h1}>{'Text'}</RNText>;
+  return <Text style={typography.h1}>{'Text'}</Text>;
 };
 /** ------------------ **/
 
@@ -40,6 +37,7 @@ const Component = () => {
  * Customize with default themes
  * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/typography-resource#2-customize-the-typography-3-customize-with-default-themes}
  * */
+import { LightUIKitTheme, createTypography } from '@sendbird/uikit-react-native-foundation';
 
 // Override typography.
 LightUIKitTheme.typography = createTypography({
@@ -67,9 +65,10 @@ LightUIKitTheme.typography.h1 = {};
  * Customize with createTheme()
  * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/typography-resource#2-customize-the-typography-3-customize-with-createtheme-}
  * */
+// import { createTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+
 const CustomTheme = createTheme({
-  // TODO: appearance -> colorScheme
-  appearance: 'light',
+  colorScheme: 'light',
   colors: () => LightUIKitTheme.colors,
   typography: {
     h1: {
