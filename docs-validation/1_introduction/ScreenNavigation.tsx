@@ -1,25 +1,15 @@
 import React from 'react';
 
-import { createGroupChannelListFragment } from '@sendbird/uikit-react-native';
-
 const GroupChannelScreen = () => <React.Fragment />;
-const Navigation = {
-  push: (_id: string, _data: object) => 0,
-  registerComponent: (_name: string, _get: Function) => 0,
-};
-
-//
-//
-//
-//
-//
-//
 
 /**
  * Set up navigation in a fragment
  * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/screen-navigation#2-set-up-navigation-in-a-fragment}
  * */
-// TODO: import createGroupChannelListFragment
+// @ts-ignore
+import { Navigation } from 'react-native-navigation';
+import { createGroupChannelListFragment } from '@sendbird/uikit-react-native';
+
 const GroupChannelListFragment = createGroupChannelListFragment();
 
 const GroupChannelListScreen = (props: { componentId: string }) => {
