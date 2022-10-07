@@ -1,45 +1,51 @@
 import React from 'react';
 
 const CustomHeader = () => <></>;
+
 /**
  * Create a module
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/architecture/module#2-create-a-module}
  * */
-// TODO: import createGroupChannelModule
+import { createGroupChannelModule } from '@sendbird/uikit-react-native';
 const GroupChannelModule = createGroupChannelModule();
 
 const RenderModule = () => {
   return (
+    // @ts-ignore
     <GroupChannelModule.Provider>
+      {/* @ts-ignore */}
       <GroupChannelModule.Header />
+      {/* @ts-ignore */}
       <GroupChannelModule.MessageList />
+      {/* @ts-ignore */}
       <GroupChannelModule.Input />
     </GroupChannelModule.Provider>
   );
 };
-
 /** ------------------ **/
 
 /**
- * Create a module
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/architecture/module#2-create-a-module}
+ * Customize a module
+ * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/architecture/module#2-customize-a-module}
  * */
-// TODO: import createGroupChannelModule, createGroupChannelFragment
-const GroupChannelModule = createGroupChannelModule({ Header: CustomHeader });
+import { createGroupChannelFragment } from '@sendbird/uikit-react-native';
+
+const GroupChannelModule2 = createGroupChannelModule({ Header: CustomHeader });
 
 // Or use the following code.
 const GroupChannelFragment = createGroupChannelFragment({ Header: CustomHeader });
-
 /** ------------------ **/
 
 /**
- * Create a module
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/architecture/module#2-create-a-module}
+ * Customize a module component
+ * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/architecture/module#2-customize-a-module-3-customize-a-module-component}
  * */
-// TODO: import GroupChannelProps, Text
-const CustomHeader = (_: GroupChannelProps['Header']) => {
+import { Text } from 'react-native';
+import type { GroupChannelProps } from '@sendbird/uikit-react-native';
+
+const MyHeader = (_: GroupChannelProps['Header']) => {
   // props.onPressHeaderLeft
   // props.onPressHeaderRight
-  return <Text>{'CustomHeader'}</Text>;
+  return <Text>{'MyHeader'}</Text>;
 };
 /** ------------------ **/
