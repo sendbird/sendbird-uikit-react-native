@@ -38,9 +38,9 @@
     "sample:android": "cd sample && yarn android",
     "deploy:ios": "cd sample/ios && bundle exec fastlane deploy",
     "deploy:android": "cd sample/android && bundle exec fastlane deploy",
-    "bump:major": "lerna version major --no-git-tag-version --no-private",
-    "bump:minor": "lerna version minor --no-git-tag-version --no-private",
-    "bump:patch": "lerna version patch --no-git-tag-version --no-private",
+    "bump:major": "lerna version major --no-git-tag-version",
+    "bump:minor": "lerna version minor --no-git-tag-version",
+    "bump:patch": "lerna version patch --no-git-tag-version",
     "deploy:npm": "lerna publish from-git"
   },
   "devDependencies": {
