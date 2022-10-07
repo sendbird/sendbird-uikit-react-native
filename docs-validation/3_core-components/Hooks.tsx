@@ -2,126 +2,162 @@
  * useSendbirdChat
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-usesendbirdchat-}
  * */
-// TODO: import useSendbirdChat, wrap with component
-const { sdk, currentUser, updateCurrentUserInfo } = useSendbirdChat();
+import { useSendbirdChat } from '@sendbird/uikit-react-native';
 
-const updatedUser = await updateCurrentUserInfo('NICKNAME', 'PROFILE_URL');
+const Component = () => {
+  const { sdk, currentUser, updateCurrentUserInfo } = useSendbirdChat();
+
+  const onPress = async () => {
+    const updatedUser = await updateCurrentUserInfo('NICKNAME', 'PROFILE_URL');
+  }
+}
 /** ------------------ **/
 
 /**
  * useConnection
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-useconnection-}
  * */
-// TODO: import useConnection, wrap with component
-const { connect, disconnect } = useConnection();
+import { useConnection, SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
 
-connect('USER_ID', { nickname: 'NICKNAME', accessToken: 'ACCESS_TOKEN' });
-disconnect();
+const Component2 = () => {
+  const { connect, disconnect } = useConnection();
+
+  const onPress = async () => {
+    await connect('USER_ID', { nickname: 'NICKNAME', accessToken: 'ACCESS_TOKEN' });
+    await disconnect();
+  }
+}
 
 // ------------
 
-// TODO: import SendbirdUIKitContainer, wrap with component
-<SendbirdUIKitContainer chatOptions={{ enableAutoPushTokenRegistration: false }} />;
+const App = () => {
+  // @ts-ignore
+  return <SendbirdUIKitContainer chatOptions={{ enableAutoPushTokenRegistration: false }} />;
+}
 /** ------------------ **/
 
 /**
  * useUIKitTheme
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-useuikittheme-}
  * */
-// TODO: import useUIKitTheme, wrap with component
-const { colors, _palette, _colorScheme, _typography, select } = useUIKitTheme();
+import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
-const backgroundColor = select({ dark: 'black', light: 'white' });
-const textColor = colors.text;
+const Component3 = () => {
+  const { colors, palette, colorScheme, typography, select } = useUIKitTheme();
+
+  const backgroundColor = select({ dark: 'black', light: 'white' });
+  const textColor = colors.text;
+}
 /** ------------------ **/
 
 /**
  * usePlatformService
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-useplatformservice-}
  * */
-// TODO: import usePlatformService, Alert, wrap with component
-const { fileService, notificationService, clipboardService } = usePlatformService();
+import { usePlatformService } from '@sendbird/uikit-react-native';
 
-const photo = await fileService.openCamera({
-  mediaType: 'photo',
-  onOpenFailure: () => Alert.alert("Couldn't open camera"),
-});
+const Component4 = () => {
+  const { fileService, notificationService, clipboardService } = usePlatformService();
+
+  const onPress = async () => {
+    const photo = await fileService.openCamera({
+      mediaType: 'photo',
+      onOpenFailure: () => console.log("Couldn't open camera"),
+    });
+  }
+}
 /** ------------------ **/
 
 /**
  * useLocalization
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-uselocalization-}
  * */
-// TODO: import useLocalization
-const { STRINGS } = useLocalization();
+import { useLocalization } from '@sendbird/uikit-react-native';
+
+const Component5 = () => {
+  const { STRINGS } = useLocalization();
+}
 /** ------------------ **/
 
 /**
  * useToast
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-usetoast-}
  * */
-// TODO: import useToast
-const toast = useToast();
+import { useToast } from '@sendbird/uikit-react-native-foundation';
 
-toast.show('Show message', 'success');
+const Component6 = () => {
+  const toast = useToast();
+  toast.show('Show message', 'success');
+}
 /** ------------------ **/
 
 /**
  * usePrompt
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-useprompt-}
  * */
-// TODO: import usePrompt
-const { openPrompt } = usePrompt();
+import { usePrompt } from '@sendbird/uikit-react-native-foundation';
 
-openPrompt({
-  title: 'Prompt',
-  submitLabel: 'Submit',
-  onSubmit: (text) => console.log(text),
-});
+const Component7 = () => {
+  const { openPrompt } = usePrompt();
+  openPrompt({
+    title: 'Prompt',
+    submitLabel: 'Submit',
+    onSubmit: (text) => console.log(text),
+  });
+}
 /** ------------------ **/
 
 /**
  * useBottomSheet
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-usebottomsheet-}
  * */
-// TODO: import useBottomSheet
-const { openSheet } = useBottomSheet();
+import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
 
-openSheet({
-  sheetItems: [
-    { title: 'Camera', icon: 'camera', onPress: () => alert({ title: 'Camera selected' }) },
-    { title: 'Photo', icon: 'photo', onPress: () => alert({ title: 'Photo selected' }) },
-    { title: 'Document', icon: 'file-document', onPress: () => alert({ title: 'Document selected' }) },
-  ],
-});
+const Component8 = () => {
+  const { openSheet } = useBottomSheet();
+
+  openSheet({
+    sheetItems: [
+      { title: 'Camera', icon: 'camera', onPress: () => console.log('Camera selected') },
+      { title: 'Photo', icon: 'photo', onPress: () => console.log('Photo selected') },
+      { title: 'Document', icon: 'file-document', onPress: () => console.log('Document selected') },
+    ],
+  });
+}
 /** ------------------ **/
 
 /**
  * useActionMenu
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-useactionmenu-}
  * */
-// TODO: import useActionMenu
-const { openMenu } = useActionMenu();
+import { useActionMenu } from '@sendbird/uikit-react-native-foundation';
 
-openMenu({
-  title: 'Action Menu',
-  menuItems: [
-    { title: 'Title', onPress: () => null },
-    { title: 'Close', onPress: () => null },
-  ],
-});
+const Component9 = () => {
+  const { openMenu } = useActionMenu();
+
+  openMenu({
+    title: 'Action Menu',
+    menuItems: [
+      { title: 'Title', onPress: () => null },
+      { title: 'Close', onPress: () => null },
+    ],
+  });
+}
 /** ------------------ **/
 
 /**
  * useAlert
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-usealert-}
  * */
-// TODO: import useAlert
-const { alert } = useAlert();
+import { useAlert } from '@sendbird/uikit-react-native-foundation';
 
-alert({
-  title: 'Title',
-  message: 'Message',
-  buttons: [{ text: 'Edit' }, { text: 'Send' }, { text: 'Cancel', style: 'destructive' }],
-});
+const Component10 = () => {
+  const { alert } = useAlert();
+
+  alert({
+    title: 'Title',
+    message: 'Message',
+    buttons: [{ text: 'Edit' }, { text: 'Send' }, { text: 'Cancel', style: 'destructive' }],
+  });
+}
 /** ------------------ **/

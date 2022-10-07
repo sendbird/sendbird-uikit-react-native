@@ -1,15 +1,15 @@
 import React from 'react';
 
-import { Button, Text } from '@sendbird/uikit-react-native-foundation';
 
 /**
  * SendbirdChatProvider
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/provider/sendbirdchatprovider#1-sendbirdchatprovider}
  * */
-// TODO: import useSendbirdChat, useConnection, React
-// TODO: remove sdk
+import { useConnection, useSendbirdChat } from '@sendbird/uikit-react-native';
+import { Button, Text } from '@sendbird/uikit-react-native-foundation';
+
 const Component = () => {
-  const { sdk, currentUser, updateCurrentUserInfo } = useSendbirdChat();
+  const { currentUser, updateCurrentUserInfo } = useSendbirdChat();
   const { connect, disconnect } = useConnection();
 
   if (!currentUser) {
