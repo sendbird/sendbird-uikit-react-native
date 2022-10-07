@@ -1,35 +1,26 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Clipboard from '@react-native-clipboard/clipboard';
-import CameraRoll from '@react-native-community/cameraroll';
-import RNFBMessaging from '@react-native-firebase/messaging';
-import { NavigationContainer, useNavigation, useRoute } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
-import * as CreateThumbnail from 'react-native-create-thumbnail';
-import * as DocumentPicker from 'react-native-document-picker';
-import * as FileAccess from 'react-native-file-access';
-import * as ImagePicker from 'react-native-image-picker';
-import * as Permissions from 'react-native-permissions';
-import Video from 'react-native-video';
-
-import {
-  SendbirdUIKitContainer,
-  createGroupChannelCreateFragment,
-  createGroupChannelFragment,
-  createGroupChannelListFragment,
-  createNativeClipboardService,
-  createNativeFileService,
-  createNativeMediaService,
-  createNativeNotificationService,
-  useConnection,
-  useSendbirdChat,
-} from '@sendbird/uikit-react-native';
 
 /**
  * Implement platform service interfaces using native modules
  * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-4-implement-platform-service-interfaces-using-native-modules}
  * */
+import {
+  createNativeClipboardService,
+  createNativeFileService,
+  createNativeMediaService,
+  createNativeNotificationService,
+} from '@sendbird/uikit-react-native';
+
+import Clipboard from '@react-native-clipboard/clipboard';
+import CameraRoll from '@react-native-community/cameraroll';
+import RNFBMessaging from '@react-native-firebase/messaging';
+import Video from 'react-native-video';
+import * as DocumentPicker from 'react-native-document-picker';
+import * as FileAccess from 'react-native-file-access';
+import * as ImagePicker from 'react-native-image-picker';
+import * as Permissions from 'react-native-permissions';
+import * as CreateThumbnail from 'react-native-create-thumbnail';
+
 const ClipboardService = createNativeClipboardService(Clipboard);
 const NotificationService = createNativeNotificationService({
   messagingModule: RNFBMessaging,
@@ -52,11 +43,13 @@ const MediaService = createNativeMediaService({
  * Wrap your app in SendbirdUIKitContainer
  * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-5-wrap-your-app-in-sendbirduikitcontainer}
  * */
-// TODO: APP_ID to string
+import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const App = () => {
   return (
     <SendbirdUIKitContainer
-      appId={APP_ID}
+      appId={'APP_ID'}
       chatOptions={{ localCacheStorage: AsyncStorage }}
       platformServices={{
         file: FileService,
@@ -75,7 +68,14 @@ const App = () => {
  * Create a fragment and module components
  * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-7-create-a-fragment-and-module-components}
  * */
-//TODO: import useSendbirdChat
+import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  useSendbirdChat,
+  createGroupChannelListFragment,
+  createGroupChannelCreateFragment,
+  createGroupChannelFragment,
+} from '@sendbird/uikit-react-native';
+
 const GroupChannelListFragment = createGroupChannelListFragment();
 const GroupChannelCreateFragment = createGroupChannelCreateFragment();
 const GroupChannelFragment = createGroupChannelFragment();
@@ -122,7 +122,7 @@ const GroupChannelScreen = () => {
   const { params } = useRoute<any>();
 
   const { sdk } = useSendbirdChat();
-  const channel = sdk.GroupChannel.buildFromSerializedData(params.serializedChannel);
+  const channel = sdk.groupChannel.buildGroupChannelFromSerializedData(params.serializedChannel);
 
   return (
     <GroupChannelFragment
@@ -150,11 +150,10 @@ const GroupChannelScreen = () => {
  * Register navigation library to the screen
  * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-8-register-navigation-library-to-the-screen}
  * */
-// TODO: APP_ID to string
-// TODO: import NavigationContainer
-// TODO: remove import useConnection
-const RootStack = createNativeStackNavigator();
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+const RootStack = createNativeStackNavigator();
 const Navigation = () => {
   const { currentUser } = useSendbirdChat();
 
@@ -178,7 +177,7 @@ const Navigation = () => {
 const App2 = () => {
   return (
     <SendbirdUIKitContainer
-      appId={APP_ID}
+      appId={'APP_ID'}
       chatOptions={{ localCacheStorage: AsyncStorage }}
       platformServices={{
         file: FileService,
@@ -196,7 +195,9 @@ const App2 = () => {
  * Connect to the Sendbird server
  * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-9-connect-to-the-sendbird-server}
  * */
-// TODO: import useConnection
+import { Pressable, Text, View } from 'react-native';
+import { useConnection } from '@sendbird/uikit-react-native';
+
 const SignInScreen = () => {
   const { connect } = useConnection();
 
