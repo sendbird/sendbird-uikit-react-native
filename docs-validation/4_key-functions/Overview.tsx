@@ -1,5 +1,3 @@
-import React, { createContext, useContext } from 'react';
-import { Text } from 'react-native';
 
 const useHooksForChat = () => ({ dataA: '', dataB: '' });
 
@@ -7,7 +5,9 @@ const useHooksForChat = () => ({ dataA: '', dataB: '' });
  * Key functions
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/overview}
  * */
-// TODO: replace all
+import React, { createContext, useContext } from 'react';
+import { Text } from 'react-native';
+
 const KeyFunctionContext = {
   Fragment: createContext<{ dataA?: string }>({}),
 };

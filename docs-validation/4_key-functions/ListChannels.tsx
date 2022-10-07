@@ -1,23 +1,16 @@
-import { useNavigation } from '@react-navigation/native';
+import type { GroupChannelListContextsType, GroupChannelListModule } from '@sendbird/uikit-react-native';
 import React, { useContext, useLayoutEffect } from 'react';
-import { Pressable } from 'react-native';
-
-import {
-  GroupChannelListContexts,
-  GroupChannelListContextsType,
-  GroupChannelListModule,
-  createGroupChannelListFragment,
-} from '@sendbird/uikit-react-native';
-import { Icon } from '@sendbird/uikit-react-native-foundation';
 
 /**
  * Usage
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/list-channels#2-usage}
  * */
+import { createGroupChannelListFragment } from '@sendbird/uikit-react-native';
+
 const GroupChannelListFragment = createGroupChannelListFragment();
 const GroupChannelListScreen = () => {
-  const navigateToGroupChannelCreateScreen = () => void 0;
-  const navigateToGroupChannelScreen = () => void 0;
+  const navigateToGroupChannelCreateScreen = () => {};
+  const navigateToGroupChannelScreen = () => {};
 
   return (
     <GroupChannelListFragment
@@ -34,13 +27,13 @@ const GroupChannelListScreen = () => {
  * */
 function _context(_: GroupChannelListContextsType) {
   const fragment = useContext(_.Fragment);
-  _fragment.headerTitle.length;
+  fragment.headerTitle.length;
 
   const list = useContext(_.TypeSelector);
-  _list.visible;
-  _list.show();
-  _list.hide();
-  _list.headerTitle.length;
+  list.visible;
+  list.show();
+  list.hide();
+  list.headerTitle.length;
 }
 /** ------------------ **/
 
@@ -48,24 +41,39 @@ function _context(_: GroupChannelListContextsType) {
  * Fragment
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/list-channels#2-context-3-fragment}
  * */
-// TODO: import useContext, GroupChannelListContexts
-const { headerTitle: _ } = useContext(GroupChannelListContexts.Fragment);
+// import { useContext } from 'react';
+import { GroupChannelListContexts } from '@sendbird/uikit-react-native';
+
+const Component = () => {
+  const { headerTitle } = useContext(GroupChannelListContexts.Fragment);
+};
 /** ------------------ **/
 
 /**
  * TypeSelector
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/list-channels#2-context-3-typeselector}
  * */
-// TODO: import useContext, GroupChannelListContexts
-const { headerTitle, visible, show, hide } = useContext(GroupChannelListContexts.TypeSelector);
+// import { useContext } from 'react';
+// import { GroupChannelListContexts } from '@sendbird/uikit-react-native';
+
+const Component2 = () => {
+  const { headerTitle, visible, show, hide } = useContext(GroupChannelListContexts.TypeSelector);
+};
 /** ------------------ **/
 
 /**
  * Customization
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/list-channels#2-customization}
  * */
+// import React, { useContext, useLayoutEffect } from 'react';
+import { Pressable } from 'react-native';
+
+import { useNavigation } from '@react-navigation/native';
+
+// import { createGroupChannelListFragment, GroupChannelListContexts, GroupChannelListModule } from '@sendbird/uikit-react-native';
+import { Icon } from '@sendbird/uikit-react-native-foundation';
+
 const UseReactNavigationHeader: GroupChannelListModule['Header'] = () => {
-  // TODO: no destructure navigation
   const navigation = useNavigation();
   const fragment = useContext(GroupChannelListContexts.Fragment);
   const typeSelector = useContext(GroupChannelListContexts.TypeSelector);
@@ -92,8 +100,8 @@ const GroupChannelListFragment2 = createGroupChannelListFragment({
 });
 
 const CustomGroupChannelListScreen2 = () => {
-  const navigateToGroupChannelCreateScreen = () => void 0;
-  const navigateToGroupChannelScreen = () => void 0;
+  const navigateToGroupChannelCreateScreen = () => {};
+  const navigateToGroupChannelScreen = () => {};
 
   return (
     <GroupChannelListFragment2
