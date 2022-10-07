@@ -1,48 +1,48 @@
 import React from 'react';
 
-import { CustomQuery, useUserList } from '@sendbird/uikit-chat-hooks';
-import { createUserListModule, useSendbirdChat } from '@sendbird/uikit-react-native';
-import type { SendbirdChatSDK, SendbirdUser } from '@sendbird/uikit-utils';
-
 const FriendsHeader = () => <></>;
 const FriendComponent = (_: { user: SendbirdUser }) => <></>;
 
 /**
- *
- * {@link }
+ * Customize a Fragment
+ * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/architecture/fragment#2-customize-a-fragment}
  * */
-// TODO: sdk params
+import { CustomQuery, useUserList } from '@sendbird/uikit-chat-hooks';
+import { createUserListModule, useSendbirdChat } from '@sendbird/uikit-react-native';
+import type { SendbirdChatSDK, SendbirdUser } from '@sendbird/uikit-utils';
+
 const friendMemberListQueryCreator = (sdk: SendbirdChatSDK) => {
   const friendListQuery = sdk.createFriendListQuery();
   return new CustomQuery({
     next: () => friendListQuery.next(),
     isLoading: () => friendListQuery.isLoading,
-    // TODO: hasMore -> hasNext
     hasNext: () => friendListQuery.hasNext,
   });
 };
 
-const FriendsModule = createUserListModule<SendbirdUser>({ Header: FriendsHeader });
+const FriendsModule = createUserListModule<SendbirdUser>({
+  Header: FriendsHeader // Custom Header
+});
 
 const FriendsFragment = () => {
-  // TODO: import useSendbirdChat
   const { sdk } = useSendbirdChat();
   const { users, refreshing, refresh, next } = useUserList(sdk, {
-    queryCreator: () => friendMemberListQueryCreator(sdk),
+    queryCreator: () => friendMemberListQueryCreator(sdk), // Custom queryCreator
   });
 
   return (
-    <FriendsModule.Provider headerRight={() => ''} headerTitle={''}>
-      <FriendsModule.Header onPressHeaderLeft={() => 0} onPressHeaderRight={() => 0} />
+    // @ts-ignore
+    <FriendsModule.Provider>
+      {/* @ts-ignore */}
+      <FriendsModule.Header />
       <FriendsModule.List
         onLoadNext={next}
         users={users}
-        renderUser={(user) => <FriendComponent user={user} />}
+        renderUser={(user) => <FriendComponent user={user} />} // Custom renderUser
         onRefresh={refresh}
         refreshing={refreshing}
       />
     </FriendsModule.Provider>
-    // TODO: missing ')'
   );
 };
 /** ------------------ **/
