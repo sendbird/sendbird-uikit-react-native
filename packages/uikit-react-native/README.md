@@ -46,7 +46,7 @@ UIKit for React-Native can be installed through either `yarn` or `npm`
 
 ```sh
 npm i @sendbird/uikit-react-native \
-      sendbird \
+      @sendbird/chat \
       date-fns \
       react-native-safe-area-context \
       @react-native-community/netinfo
