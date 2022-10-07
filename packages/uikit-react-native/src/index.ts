@@ -101,6 +101,7 @@ export {
   SendbirdUIKit,
   SendbirdUIKitContainerProps,
 } from './containers/SendbirdUIKitContainer';
+export { default as SBUError } from './libs/SBUError';
 
 export * from './types';
 
