@@ -1,18 +1,20 @@
 import React from 'react';
 
-import { MessageRenderer, StringSet, createGroupChannelFragment } from '@sendbird/uikit-react-native';
+import type { StringSet } from '@sendbird/uikit-react-native';
 import { Icon } from '@sendbird/uikit-react-native-foundation';
 import type { UIKitColors } from '@sendbird/uikit-react-native-foundation';
 
-const ImageResizer = { createResizedImage: async (_: string) => ({ uri: '', size: 0 }) };
 const CustomFileMessage = (_: object) => <React.Fragment />;
-const getFileExtension = (x: string) => x;
+const isImageFile = (x: string) => x;
 
 /**
  * Customize the UI for file sharing
  * {@link https://sendbird.com/docs/uikit/v3/react-native/features/file-sharing#2-customize-the-ui-for-file-sharing}
  * */
+import { createGroupChannelFragment, MessageRenderer } from '@sendbird/uikit-react-native';
+
 const GroupChannelFragment = createGroupChannelFragment();
+
 const GroupChannelScreen = () => {
   return (
     // @ts-ignore
@@ -82,13 +84,16 @@ function _stringResource(str: StringSet) {
  * Image compression
  * {@link https://sendbird.com/docs/uikit/v3/react-native/features/file-sharing#2-image-compression}
  * */
+// @ts-ignore
+import ImageResizer from 'react-native-image-resizer';
+
 const GroupChannelScreen2 = () => {
   return (
     // @ts-ignore
     <GroupChannelFragment
       onBeforeSendFileMessage={async (params) => {
         if (params.file && 'uri' in params.file) {
-          if (getFileExtension(params.file.name).match(/jpeg|png/i)) {
+          if (isImageFile(params.file.name)) {
             const { uri, size } = await ImageResizer.createResizedImage(params.file.uri);
             params.file = { ...params.file, uri, size };
           }
