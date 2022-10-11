@@ -112,6 +112,9 @@
     "@react-native-firebase/messaging": {
       "optional": true
     },
+    "expo-av": {
+      "optional": true
+    },
     "expo-clipboard": {
       "optional": true
     },
@@ -127,6 +130,12 @@
     "expo-notifications": {
       "optional": true
     },
+    "expo-video-thumbnails": {
+      "optional": true
+    },
+    "react-native-create-thumbnail": {
+      "optional": true
+    },
     "react-native-document-picker": {
       "optional": true
     },
@@ -137,6 +146,9 @@
       "optional": true
     },
     "react-native-permissions": {
+      "optional": true
+    },
+    "react-native-video": {
       "optional": true
     }
   },
