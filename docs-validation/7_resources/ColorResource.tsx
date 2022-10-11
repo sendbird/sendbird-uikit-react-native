@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View } from 'react-native';
 
 import {
+  LightUIKitTheme,
   Palette as CustomPalette,
   UIKitColors,
   createTheme,
@@ -115,7 +116,7 @@ const Component2 = () => {
  * Customize with default themes
  * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/color-resource#2-customize-the-colors-3-customize-with-default-themes}
  * */
-import { LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+// import { LightUIKitTheme, Palette } from '@sendbird/uikit-react-native-foundation';
 
 LightUIKitTheme.palette = {
   ...Palette,
