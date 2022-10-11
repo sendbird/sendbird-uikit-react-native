@@ -1,5 +1,5 @@
 {
-  "name": "@sendbird/sample",
+  "name": "@sendbird/uikit-sample-cli",
   "version": "2.0.0",
   "private": true,
   "scripts": {
