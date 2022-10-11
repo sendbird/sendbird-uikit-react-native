@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-rc.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.1.2...v2.0.0-rc.0) (2022-10-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* migrated to Chat SDK v4
+
+### Features
+
+* migrated to Chat SDK v4 ([5ce9e4f](https://github.com/sendbird/sendbird-uikit-react-native/commit/5ce9e4f99bfac790ce66cc13c7e390e578f08713))
+
+
+### Documentation
+
+* update README ([a1b7452](https://github.com/sendbird/sendbird-uikit-react-native/commit/a1b74524741af306b32736b9338d28ead3769bc7))
+
+
+
 ## [1.1.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.1.1...v1.1.2) (2022-09-28)
 
 
