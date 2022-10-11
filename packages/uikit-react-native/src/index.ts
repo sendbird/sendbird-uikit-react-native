@@ -96,11 +96,8 @@ export type { UserListProps, UserListModule, UserListContextsType } from './doma
 export * from './domain/groupChannelUserList/types';
 
 /** UIKit **/
-export {
-  default as SendbirdUIKitContainer,
-  SendbirdUIKit,
-  SendbirdUIKitContainerProps,
-} from './containers/SendbirdUIKitContainer';
+export { default as SendbirdUIKitContainer, SendbirdUIKit } from './containers/SendbirdUIKitContainer';
+export type { SendbirdUIKitContainerProps } from './containers/SendbirdUIKitContainer';
 export { default as SBUError } from './libs/SBUError';
 
 export * from './types';

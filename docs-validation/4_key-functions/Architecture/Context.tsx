@@ -9,6 +9,6 @@ import { GroupChannelContexts } from '@sendbird/uikit-react-native';
 const CustomTypingUsersComponent = () => {
   const { typingUsers } = useContext(GroupChannelContexts.TypingIndicator);
   if (typingUsers.length === 0) return null;
-  return <Text>{`several people are typings (${typingUsers.length})`}</Text>;
+  return <Text>{`several people are typing (${typingUsers.length})`}</Text>;
 };
 /** ------------------ **/
