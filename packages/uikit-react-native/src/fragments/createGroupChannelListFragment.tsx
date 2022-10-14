@@ -23,7 +23,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     queryCreator,
     collectionCreator,
     renderGroupChannelPreview,
-    // skipTypeSelection = true,
+    skipTypeSelection = false,
     flatListProps = {},
     menuItemCreator = PASS,
   }) => {
@@ -78,8 +78,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
           />
         </StatusComposition>
         <GroupChannelListModule.TypeSelector
-          // NOTE: not included in first iteration
-          skipTypeSelection
+          skipTypeSelection={skipTypeSelection}
           Header={TypeSelectorHeader}
           onSelectType={onPressCreateChannel}
         />
