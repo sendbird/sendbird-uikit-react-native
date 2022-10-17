@@ -89,10 +89,24 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
     return undefined;
   });
 
+  const customCover = useIIFE(() => {
+    if (channel.isBroadcast) {
+      return (
+        <Icon
+          icon={'broadcast'}
+          size={32}
+          color={colors.onBackgroundReverse01}
+          containerStyle={[styles.broadcastCover, { backgroundColor: colors.secondary }]}
+        />
+      );
+    }
+    return <ChannelCover channel={channel} size={56} />;
+  });
+
   return (
     <Pressable delayLongPress={DEFAULT_LONG_PRESS_DELAY} onPress={onPress} onLongPress={onLongPress}>
       <GroupChannelPreview
-        customCover={<ChannelCover channel={channel} size={56} />}
+        customCover={customCover}
         coverUrl={channel.coverUrl}
         title={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE(currentUser?.userId ?? '', channel)}
         titleCaptionLeft={titleCaptionIcon}
@@ -102,6 +116,7 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
         badgeCount={channel.unreadMessageCount}
         memberCount={channel.memberCount > 2 ? channel.memberCount : undefined}
         frozen={channel.isFrozen}
+        broadcast={channel.isBroadcast}
         notificationOff={channel.myPushTriggerOption === 'off'}
       />
     </Pressable>
@@ -111,6 +126,10 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
 const styles = createStyleSheet({
   titleCaptionIcon: {
     marginRight: 4,
+  },
+  broadcastCover: {
+    padding: 12,
+    borderRadius: 28,
   },
 });
 

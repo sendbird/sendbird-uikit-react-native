@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 
 import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
-import { NOOP, PASS, messageComparator, useFreshCallback } from '@sendbird/uikit-utils';
+import { NOOP, PASS, SendbirdGroupChannel, messageComparator, useFreshCallback } from '@sendbird/uikit-utils';
 
 import MessageRenderer from '../components/MessageRenderer';
 import NewMessagesButton from '../components/NewMessagesButton';
@@ -119,17 +119,27 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             onPressMediaMessage={onPressMediaMessage}
             flatListProps={memoizedFlatListProps}
           />
-          <GroupChannelModule.Input
-            channel={activeChannel}
-            onSendFileMessage={onSendFileMessage}
-            onSendUserMessage={onSendUserMessage}
-            onUpdateFileMessage={onUpdateFileMessage}
-            onUpdateUserMessage={onUpdateUserMessage}
-          />
+          {shouldRenderInput(channel) && (
+            <GroupChannelModule.Input
+              channel={activeChannel}
+              onSendFileMessage={onSendFileMessage}
+              onSendUserMessage={onSendUserMessage}
+              onUpdateFileMessage={onUpdateFileMessage}
+              onUpdateUserMessage={onUpdateUserMessage}
+            />
+          )}
         </StatusComposition>
       </GroupChannelModule.Provider>
     );
   };
 };
+
+function shouldRenderInput(channel: SendbirdGroupChannel) {
+  if (channel.isBroadcast) {
+    return channel.myRole === 'operator';
+  }
+
+  return true;
+}
 
 export default createGroupChannelFragment;

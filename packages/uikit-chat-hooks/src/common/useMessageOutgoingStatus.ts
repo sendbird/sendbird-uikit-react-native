@@ -33,6 +33,7 @@ export const useMessageOutgoingStatus = (
     },
   });
 
+  if (channel.isBroadcast || channel.isSuper) return 'NONE';
   if (!message) return 'NONE';
 
   if ('sendingStatus' in message) {
