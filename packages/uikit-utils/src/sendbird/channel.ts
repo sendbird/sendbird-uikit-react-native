@@ -1,3 +1,4 @@
+import { createBufferedRequest } from '../shared/bufferedRequest';
 import type {
   SendbirdBaseChannel,
   SendbirdChannel,
@@ -5,6 +6,9 @@ import type {
   SendbirdGroupChannel,
   SendbirdOpenChannel,
 } from '../types';
+
+const markAsReadBuffReq = createBufferedRequest(10);
+const markAsDeliveredBuffReq = createBufferedRequest(10);
 
 /**
  * Diff utils for channel
@@ -23,12 +27,14 @@ export const isGroupChannelChatUnavailable = (channel: SendbirdGroupChannel) => 
 
 export const confirmAndMarkAsRead = async (sdk: SendbirdChatSDK, channels: SendbirdBaseChannel[]) => {
   const channelUrls = channels.filter((it) => it.isGroupChannel() && it.unreadMessageCount > 0).map((it) => it.url);
-  await sdk.groupChannel.markAsReadWithChannelUrls(channelUrls);
+  if (channelUrls.length > 0) {
+    markAsReadBuffReq.push(() => sdk.groupChannel.markAsReadWithChannelUrls(channelUrls));
+  }
 };
 
 export const confirmAndMarkAsDelivered = async (sdk: SendbirdChatSDK, channel: SendbirdBaseChannel) => {
   if (channel.isGroupChannel() && channel.unreadMessageCount > 0) {
-    await sdk.groupChannel.markAsDelivered(channel.url);
+    markAsDeliveredBuffReq.push(() => sdk.groupChannel.markAsDelivered(channel.url));
   }
 };
 

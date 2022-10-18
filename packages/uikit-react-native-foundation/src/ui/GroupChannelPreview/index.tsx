@@ -28,6 +28,7 @@ type Props = {
 
   frozen?: boolean;
   notificationOff?: boolean;
+  broadcast?: boolean;
 };
 
 const GroupChannelPreview = ({
@@ -43,6 +44,7 @@ const GroupChannelPreview = ({
   titleCaptionLeft,
   frozen,
   notificationOff,
+  broadcast,
 }: Props) => {
   const { colors } = useUIKitTheme();
   const color = colors.ui.groupChannelPreview;
@@ -65,6 +67,14 @@ const GroupChannelPreview = ({
       <View style={styles.rightSection}>
         <View style={styles.rightTopSection}>
           <View style={styles.channelInfoContainer}>
+            {broadcast && (
+              <Icon
+                size={16}
+                icon={'broadcast'}
+                color={colors.secondary}
+                containerStyle={styles.channelInfoBroadcast}
+              />
+            )}
             <Text numberOfLines={1} subtitle1 style={styles.channelInfoTitle} color={color.default.none.textTitle}>
               {title}
             </Text>
@@ -147,6 +157,9 @@ const styles = createStyleSheet({
     marginRight: 4,
     alignItems: 'center',
     flexDirection: 'row',
+  },
+  channelInfoBroadcast: {
+    marginRight: 4,
   },
   channelInfoTitle: {
     flexShrink: 1,

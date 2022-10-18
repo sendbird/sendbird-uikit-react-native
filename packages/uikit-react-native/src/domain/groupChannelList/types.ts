@@ -23,8 +23,8 @@ export interface GroupChannelListProps {
       channel: SendbirdGroupChannel,
       onLongPressChannel: () => void,
     ) => React.ReactElement | null;
-    // /** Skip type selection, When this is set to true 'channelType' only receive 'GROUP' type **/
-    // skipTypeSelection?: boolean;
+    /** Skip type selection, When this is set to true 'channelType' only receive 'GROUP' type **/
+    skipTypeSelection?: boolean;
     /** Custom Query creator for channels query **/
     queryCreator?: UseGroupChannelListOptions['queryCreator'];
     /** Custom Collection creator for group channel collection **/
