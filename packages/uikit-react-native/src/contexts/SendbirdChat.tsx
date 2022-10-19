@@ -91,7 +91,7 @@ export const SendbirdChatProvider = ({
     const listener = (status: AppStateStatus) => {
       // 'active' | 'background' | 'inactive' | 'unknown' | 'extension';
       if (status === 'active') sdkInstance.getConnectionState() === 'CLOSED' && sdkInstance.setForegroundState();
-      else sdkInstance.getConnectionState() === 'OPEN' && sdkInstance.setBackgroundState();
+      else if (status === 'background') sdkInstance.getConnectionState() === 'OPEN' && sdkInstance.setBackgroundState();
     };
 
     const subscriber = AppState.addEventListener('change', listener);

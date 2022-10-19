@@ -1,5 +1,5 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { Animated } from 'react-native';
+import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { Animated, KeyboardAvoidingView, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import createStyleSheet from '../../styles/createStyleSheet';
@@ -22,10 +22,10 @@ type Props = React.PropsWithChildren<{
 
 const useOpacity = () => {
   const opacity = useRef(new Animated.Value(0)).current;
-  const transition = useCallback(
-    (value: number) => Animated.timing(opacity, { toValue: value, duration: 500, useNativeDriver: true }).start(),
-    [],
-  );
+  const transition = (value: number) => {
+    Animated.timing(opacity, { toValue: value, duration: 500, useNativeDriver: true }).start();
+  };
+
   return {
     opacity,
     show: () => transition(1),
@@ -87,9 +87,15 @@ export const ToastProvider = ({
   return (
     <ToastContext.Provider value={{ show: (text, type = 'normal') => text && setState({ text, type, visible: true }) }}>
       {children}
-      <Toast type={state.type} visible={state.visible} bottom={bottom + styles.toastPosition.bottom}>
-        {state.text}
-      </Toast>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'position' : undefined}
+        keyboardVerticalOffset={-bottom}
+        pointerEvents={'none'}
+      >
+        <Toast type={state.type} visible={state.visible} bottom={bottom + styles.toastPosition.bottom}>
+          {state.text}
+        </Toast>
+      </KeyboardAvoidingView>
     </ToastContext.Provider>
   );
 };
