@@ -1,6 +1,7 @@
 import React from 'react';
 import { AppRegistry, LogBox } from 'react-native';
 import { withTouchReload } from 'react-native-touch-reload';
+// import Sendbird from 'sendbird';
 
 import { Logger } from '@sendbird/uikit-utils';
 
