@@ -17,7 +17,7 @@ import {
   SetSendbirdSDK,
 } from './factory';
 import useAppearance from './hooks/useAppearance';
-import createLogView from './libs/logView';
+// import createLogView from './libs/logView';
 import { Routes, navigationRef } from './libs/navigation';
 import { onForegroundAndroid, onForegroundIOS } from './libs/notification';
 import {
@@ -68,7 +68,7 @@ const App = () => {
   );
 };
 
-const LogView = createLogView();
+// const LogView = createLogView();
 
 const Navigations = () => {
   const { currentUser } = useSendbirdChat();
@@ -85,7 +85,7 @@ const Navigations = () => {
 
   return (
     <NavigationContainer ref={navigationRef} theme={isLightTheme ? DefaultTheme : DarkTheme}>
-      <LogView />
+      {/*<LogView />*/}
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
         {!currentUser ? (
           <RootStack.Screen name={Routes.SignIn} component={SignInScreen} />
