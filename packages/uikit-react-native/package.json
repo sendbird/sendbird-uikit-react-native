@@ -46,8 +46,8 @@
     "@sendbird/uikit-utils": "2.0.0"
   },
   "devDependencies": {
+    "@react-native-camera-roll/camera-roll": "^5.0.4",
     "@react-native-clipboard/clipboard": "^1.8.5",
-    "@react-native-community/cameraroll": "^4.1.2",
     "@react-native-community/netinfo": "^9.3.0",
     "@react-native-firebase/app": "^14.4.0",
     "@react-native-firebase/messaging": "^14.4.0",
@@ -79,8 +79,8 @@
     "typescript": "^4.1.3"
   },
   "peerDependencies": {
+    "@react-native-camera-roll/camera-roll": ">=5.0.0",
     "@react-native-clipboard/clipboard": ">=1.8.5",
-    "@react-native-community/cameraroll": ">=4.1.2",
     "@react-native-community/netinfo": ">=9.3.0",
     "@react-native-firebase/messaging": ">=14.4.0",
     "@sendbird/chat": "^4.0.13",
@@ -103,10 +103,10 @@
     "react-native-video": ">=5.2.0"
   },
   "peerDependenciesMeta": {
-    "@react-native-clipboard/clipboard": {
+    "@react-native-camera-roll/camera-roll": {
       "optional": true
     },
-    "@react-native-community/cameraroll": {
+    "@react-native-clipboard/clipboard": {
       "optional": true
     },
     "@react-native-firebase/messaging": {
