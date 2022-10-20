@@ -12,7 +12,7 @@ import {
 } from '@sendbird/uikit-react-native';
 
 import Clipboard from '@react-native-clipboard/clipboard';
-import CameraRoll from '@react-native-community/cameraroll';
+import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import RNFBMessaging from '@react-native-firebase/messaging';
 import Video from 'react-native-video';
 import * as DocumentPicker from 'react-native-document-picker';

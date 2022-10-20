@@ -1,4 +1,4 @@
-import type CameraRoll from '@react-native-community/cameraroll';
+import type { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import { Platform } from 'react-native';
 import type * as DocumentPicker from 'react-native-document-picker';
 import type * as FileAccess from 'react-native-file-access';

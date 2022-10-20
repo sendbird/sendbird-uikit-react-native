@@ -142,7 +142,7 @@ You can use `createNativeClipboardService`, `createNativeNotificationService` an
 npm install react-native-permissions \
             react-native-image-picker \
             react-native-document-picker \
-            @react-native-community/cameraroll \
+            @react-native-camera-roll/camera-roll \
             react-native-file-access \
             @react-native-clipboard/clipboard \
             @react-native-firebase/app \
@@ -153,7 +153,7 @@ npx pod-install
 
 ```ts
 import Clipboard from '@react-native-clipboard/clipboard';
-import CameraRoll from '@react-native-community/cameraroll';
+import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import RNFBMessaging from '@react-native-firebase/messaging';
 import * as DocumentPicker from 'react-native-document-picker';
 import * as FileAccess from 'react-native-file-access';

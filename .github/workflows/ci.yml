@@ -9,6 +9,7 @@ on:
 env:
   CACHE_NODE_MODULES_PATH: |
     node_modules
+    */node_modules
     */*/node_modules
 
 jobs:

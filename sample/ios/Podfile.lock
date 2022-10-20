@@ -346,7 +346,7 @@ PODS:
   - React-jsinspector (0.67.4)
   - React-logger (0.67.4):
     - glog
-  - react-native-cameraroll (4.1.2):
+  - react-native-cameraroll (5.0.4):
     - React-Core
   - react-native-create-thumbnail (1.5.1):
     - React-Core
@@ -521,7 +521,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
-  - "react-native-cameraroll (from `../node_modules/@react-native-community/cameraroll`)"
+  - "react-native-cameraroll (from `../../node_modules/@react-native-camera-roll/camera-roll`)"
   - react-native-create-thumbnail (from `../../node_modules/react-native-create-thumbnail`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-file-access (from `../node_modules/react-native-file-access`)
@@ -631,7 +631,7 @@ EXTERNAL SOURCES:
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-cameraroll:
-    :path: "../node_modules/@react-native-community/cameraroll"
+    :path: "../../node_modules/@react-native-camera-roll/camera-roll"
   react-native-create-thumbnail:
     :path: "../../node_modules/react-native-create-thumbnail"
   react-native-document-picker:
@@ -743,7 +743,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: cbdf37cebdc4f5d8b3d0bf5ccaa6147fd9de9f3d
   React-jsinspector: f4775ea9118cbe1f72b834f0f842baa7a99508d8
   React-logger: a1f028f6d8639a3f364ef80419e5e862e1115250
-  react-native-cameraroll: 2957f2bce63ae896a848fbe0d5352c1bd4d20866
+  react-native-cameraroll: 38b40d9033e4077b6c603f92f95c6d05fa7907df
   react-native-create-thumbnail: dedcb7cd3d14a4b6cc2026563197242081edb52b
   react-native-document-picker: f68191637788994baed5f57d12994aa32cf8bf88
   react-native-file-access: 83c9eeea2c79ecc3f998c04e7a377bccfba175dc

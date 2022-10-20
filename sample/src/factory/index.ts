@@ -1,5 +1,5 @@
+import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import Clipboard from '@react-native-clipboard/clipboard';
-import CameraRoll from '@react-native-community/cameraroll';
 import RNFBMessaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import axios from 'axios';
