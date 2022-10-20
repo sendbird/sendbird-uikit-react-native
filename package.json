@@ -27,6 +27,7 @@
     "docs": "yarn build && typedoc --out docs --entryPointStrategy packages 'packages/*' && yarn clean",
     "test": "jest --verbose",
     "test:build": "yarn build --stream && yarn clean --stream",
+    "test:docs-validation": "yarn build && yarn workspace @sendbird/docs-validation run test && yarn clean",
     "lint": "yarn lint:eslint && yarn lint:prettier",
     "fix": "yarn fix:eslint && yarn fix:prettier",
     "lint:eslint": "eslint packages/*/src --ext ts,tsx -c ./.eslintrc.js",

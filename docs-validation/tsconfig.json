@@ -1,5 +1,5 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "../tsconfig",
   "references": [
     {
       "path": "../packages/uikit-chat-hooks"
@@ -15,6 +15,9 @@
     }
   ],
   "compilerOptions": {
-    "noUnusedLocals": false
+    "outDir": "./lib/typescript",
+    "noEmit": true,
+    "noUnusedLocals": false,
+    "noImplicitAny": false
   }
 }
