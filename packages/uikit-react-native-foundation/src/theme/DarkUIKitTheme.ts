@@ -169,6 +169,16 @@ const DarkUIKitTheme = createTheme({
           },
         },
       },
+      profileCard: {
+        default: {
+          none: {
+            textUsername: palette.onBackgroundDark01,
+            textBodyLabel: palette.onBackgroundDark02,
+            textBody: palette.onBackgroundDark01,
+            background: palette.background500,
+          },
+        },
+      },
     },
   }),
 });

@@ -169,6 +169,16 @@ const LightUIKitTheme = createTheme({
           },
         },
       },
+      profileCard: {
+        default: {
+          none: {
+            textUsername: palette.onBackgroundLight01,
+            textBodyLabel: palette.onBackgroundLight02,
+            textBody: palette.onBackgroundLight01,
+            background: palette.background50,
+          },
+        },
+      },
     },
   }),
 });

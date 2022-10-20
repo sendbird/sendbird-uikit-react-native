@@ -25,6 +25,7 @@ export { default as Header } from './ui/Header';
 export { default as LoadingSpinner } from './ui/LoadingSpinner';
 export { default as MenuBar, MenuBarProps } from './ui/MenuBar';
 export { default as Placeholder } from './ui/Placeholder';
+export { default as ProfileCard } from './ui/ProfileCard';
 export { default as Prompt } from './ui/Prompt';
 export { default as Toast, useToast, ToastProvider } from './ui/Toast';
 
