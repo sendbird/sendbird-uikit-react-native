@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, StyleProp, View, ViewStyle } from 'react-native';
+import { View } from 'react-native';
 
 import Divider from '../../components/Divider';
 import Text from '../../components/Text';
@@ -11,27 +11,13 @@ type Props = {
   uri: string;
   username: string;
 
+  button?: JSX.Element;
+
   bodyLabel: string;
   body: string;
 };
 
-// TODO: Extract as component
-type OutlinedButtonProps = {
-  children: string;
-  containerStyle?: StyleProp<ViewStyle>;
-};
-
-const OutlinedButton = ({ children, containerStyle }: OutlinedButtonProps) => {
-  return (
-    <Pressable style={[styles.outlinedButton, containerStyle]}>
-      <Text button numberOfLines={1} style={styles.outlinedButtonText}>
-        {children}
-      </Text>
-    </Pressable>
-  );
-};
-
-const ProfileCard = ({ uri, username, bodyLabel, body }: Props) => {
+const ProfileCard = ({ uri, username, bodyLabel, body, button }: Props) => {
   const { colors } = useUIKitTheme();
   const color = colors.ui.profileCard.default.none;
 
@@ -43,7 +29,7 @@ const ProfileCard = ({ uri, username, bodyLabel, body }: Props) => {
           {username}
         </Text>
       </View>
-      <OutlinedButton containerStyle={styles.messageButton}>{'Message'}</OutlinedButton>
+      {button && <View style={styles.messageButtonArea}>{button}</View>}
       <Divider space={16} />
       <View style={styles.profileInfoContainer}>
         <Text body2 color={color.textBodyLabel} style={styles.profileInfoBodyLabel}>
@@ -58,18 +44,6 @@ const ProfileCard = ({ uri, username, bodyLabel, body }: Props) => {
 };
 
 const styles = createStyleSheet({
-  outlinedButton: {
-    borderRadius: 4,
-    padding: 16,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  outlinedButtonText: {
-    textAlign: 'center',
-    width: '100%',
-  },
-
   container: {
     paddingTop: 32,
     width: '100%',
@@ -88,7 +62,7 @@ const styles = createStyleSheet({
   profileInfoBodyLabel: {
     marginBottom: 4,
   },
-  messageButton: {
+  messageButtonArea: {
     marginHorizontal: 24,
     marginBottom: 24,
   },
