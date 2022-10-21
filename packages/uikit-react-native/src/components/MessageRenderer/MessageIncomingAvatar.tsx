@@ -1,18 +1,25 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import { Avatar, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
+
+import { useProfileCard } from '../../hooks/useContext';
 
 type Props = {
   message: SendbirdMessage;
   grouping: boolean;
 };
 const MessageIncomingAvatar = ({ message, grouping }: Props) => {
+  const { show } = useProfileCard();
   if (grouping) return <View style={styles.avatar} />;
   return (
     <View style={styles.avatar}>
-      {(message.isFileMessage() || message.isUserMessage()) && <Avatar size={26} uri={message.sender?.profileUrl} />}
+      {(message.isFileMessage() || message.isUserMessage()) && (
+        <Pressable onPress={() => show(message.sender)}>
+          <Avatar size={26} uri={message.sender?.profileUrl} />
+        </Pressable>
+      )}
     </View>
   );
 };

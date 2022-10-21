@@ -3196,6 +3196,11 @@
   resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.0.13.tgz#21b737eecf9053ca87e0db5713cd17446eb8f302"
   integrity sha512-vmIJldcVa8m5Wd9YBhbrfAX9w+N5iDAZnkeBnYQs5I4ov9txIs02+GqpobSWi77ywx/dgPVLm1+7nIkyuiCTLw==
 
+"@sendbird/chat@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.1.0.tgz#07994edaa5aa498b78b2758d0f8628ab4edefa79"
+  integrity sha512-LL8wA55xh/32SISmyIX3pNm//a7ANlum5rUA2iWzhLHN52yXNqeBCIqEXMakGDm7hkIbaRLTzDWAESXuy/a78w==
+
 "@sideway/address@^4.1.3":
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/@sideway/address/-/address-4.1.4.tgz#03dccebc6ea47fdc226f7d3d1ad512955d4783f0"

@@ -24,14 +24,15 @@ export { default as createGroupChannelListFragment } from './fragments/createGro
 export { default as createGroupChannelMembersFragment } from './fragments/createGroupChannelMembersFragment';
 
 /** Context **/
-export { SendbirdChatContext, SendbirdChatProvider } from './contexts/SendbirdChat';
-export { PlatformServiceContext, PlatformServiceProvider } from './contexts/PlatformService';
-export { LocalizationContext, LocalizationProvider } from './contexts/Localization';
+export { SendbirdChatContext, SendbirdChatProvider } from './contexts/SendbirdChatCtx';
+export { PlatformServiceContext, PlatformServiceProvider } from './contexts/PlatformServiceCtx';
+export { ProfileCardContext, ProfileCardProvider } from './contexts/ProfileCardCtx';
+export { LocalizationContext, LocalizationProvider } from './contexts/LocalizationCtx';
 
 /** Hooks **/
 export { default as useConnection } from './hooks/useConnection';
 export { default as usePushTokenRegistration } from './hooks/usePushTokenRegistration';
-export { useLocalization, usePlatformService, useSendbirdChat } from './hooks/useContext';
+export { useLocalization, usePlatformService, useSendbirdChat, useProfileCard } from './hooks/useContext';
 
 /** Localization **/
 export { default as StringSetEn } from './localization/StringSet.en';

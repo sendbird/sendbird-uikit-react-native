@@ -1,5 +1,6 @@
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { Pressable, TouchableOpacity, View } from 'react-native';
+import type { GestureResponderEvent } from 'react-native';
 
 import { Avatar, Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { conditionChaining } from '@sendbird/uikit-utils';
@@ -8,18 +9,23 @@ type Props = {
   uri: string;
   name: string;
   label?: string;
+
   muted: boolean;
   disabled: boolean;
-  onPressActionMenu?: () => void;
+
+  onPressActionMenu?: (ev: GestureResponderEvent) => void;
+  onPressAvatar?: (ev: GestureResponderEvent) => void;
 };
-const UserActionBar = ({ muted, uri, name, disabled, onPressActionMenu, label }: Props) => {
+const UserActionBar = ({ muted, uri, name, disabled, label, onPressActionMenu, onPressAvatar }: Props) => {
   const { colors } = useUIKitTheme();
 
   const iconColor = conditionChaining([disabled], [colors.onBackground04, colors.onBackground01]);
 
   return (
     <View style={styles.container}>
-      <Avatar muted={muted} size={36} uri={uri} containerStyle={styles.avatar} />
+      <Pressable onPress={onPressAvatar} style={styles.avatar}>
+        <Avatar muted={muted} size={36} uri={uri} />
+      </Pressable>
       <View style={[styles.infoContainer, { borderBottomColor: colors.onBackground04 }]}>
         <Text subtitle2 numberOfLines={1} style={styles.name} color={colors.onBackground01}>
           {name}

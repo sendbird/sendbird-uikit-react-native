@@ -11,10 +11,13 @@ type OutlinedButtonProps = {
   onPress?: () => void;
 };
 
-const OutlinedButton = ({ children, containerStyle }: OutlinedButtonProps) => {
+const OutlinedButton = ({ children, onPress, containerStyle }: OutlinedButtonProps) => {
   const { colors } = useUIKitTheme();
   return (
-    <Pressable style={[styles.outlinedButton, { borderColor: colors.onBackground01 }, containerStyle]}>
+    <Pressable
+      onPress={onPress}
+      style={[styles.outlinedButton, { borderColor: colors.onBackground01 }, containerStyle]}
+    >
       <Text button color={colors.onBackground01} numberOfLines={1} style={styles.outlinedButtonText}>
         {children}
       </Text>

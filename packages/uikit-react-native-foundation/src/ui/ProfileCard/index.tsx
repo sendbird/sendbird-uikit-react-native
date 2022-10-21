@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 
 import Divider from '../../components/Divider';
 import Text from '../../components/Text';
@@ -15,17 +15,19 @@ type Props = {
 
   bodyLabel: string;
   body: string;
+
+  containerStyle?: StyleProp<ViewStyle>;
 };
 
-const ProfileCard = ({ uri, username, bodyLabel, body, button }: Props) => {
+const ProfileCard = ({ uri, username, bodyLabel, body, button, containerStyle }: Props) => {
   const { colors } = useUIKitTheme();
   const color = colors.ui.profileCard.default.none;
 
   return (
-    <View style={[styles.container, { backgroundColor: color.background }]}>
+    <View style={[styles.container, { backgroundColor: color.background }, containerStyle]}>
       <View style={styles.profileContainer}>
         <Avatar uri={uri} size={80} containerStyle={styles.profileAvatar} />
-        <Text h1 color={color.textUsername}>
+        <Text h1 color={color.textUsername} numberOfLines={1}>
           {username}
         </Text>
       </View>
@@ -35,7 +37,7 @@ const ProfileCard = ({ uri, username, bodyLabel, body, button }: Props) => {
         <Text body2 color={color.textBodyLabel} style={styles.profileInfoBodyLabel}>
           {bodyLabel}
         </Text>
-        <Text body3 color={color.textBody}>
+        <Text body3 numberOfLines={1} color={color.textBody}>
           {body}
         </Text>
       </View>
