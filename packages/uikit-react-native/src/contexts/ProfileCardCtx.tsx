@@ -50,31 +50,41 @@ export const ProfileCardProvider = ({ children, onCreateChannel, onBeforeCreateC
   if (!chatContext) throw new Error('SendbirdChatContext is not provided');
   if (!localizationContext) throw new Error('LocalizationContext is not provided');
 
-  const isMe = chatContext.currentUser && user?.userId === chatContext.currentUser.userId;
-  const messageToUser = async () => {
-    if (user) {
-      const params: SendbirdGroupChannelCreateParams = {
-        invitedUserIds: [user.userId],
-        name: '',
-        coverUrl: '',
-        isDistinct: false,
-      };
+  const profileCardButton = useIIFE(() => {
+    const isMe = chatContext.currentUser && user?.userId === chatContext.currentUser.userId;
+    if (isMe) return undefined;
 
-      if (chatContext.currentUser) params.operatorUserIds = [chatContext.currentUser.userId];
-      const processedParams = await onBeforeCreateChannel(params, [user]);
+    const onPressMessageButton = async () => {
+      if (user) {
+        const params: SendbirdGroupChannelCreateParams = {
+          invitedUserIds: [user.userId],
+          name: '',
+          coverUrl: '',
+          isDistinct: false,
+        };
 
-      hide();
-      const channel = await chatContext.sdk.groupChannel.createChannel(processedParams);
+        if (chatContext.currentUser) params.operatorUserIds = [chatContext.currentUser.userId];
+        const processedParams = await onBeforeCreateChannel(params, [user]);
 
-      if (onCreateChannel) {
-        onCreateChannel(channel);
-      } else {
-        Logger.warn(
-          'Please set `onCreateChannel` before message to user from profile card, see `profileCard` prop in the `SendbirdUIKitContainer` props',
-        );
+        hide();
+        const channel = await chatContext.sdk.groupChannel.createChannel(processedParams);
+
+        if (onCreateChannel) {
+          onCreateChannel(channel);
+        } else {
+          Logger.warn(
+            'Please set `onCreateChannel` before message to user from profile card, see `profileCard` prop in the `SendbirdUIKitContainer` props',
+          );
+        }
       }
-    }
-  };
+    };
+
+    return (
+      <OutlinedButton onPress={onPressMessageButton}>
+        {localizationContext.STRINGS.PROFILE_CARD.BUTTON_MESSAGE}
+      </OutlinedButton>
+    );
+  });
 
   return (
     <ProfileCardContext.Provider value={{ show, hide }}>
@@ -96,14 +106,7 @@ export const ProfileCardProvider = ({ children, onCreateChannel, onBeforeCreateC
             username={user.nickname || localizationContext.STRINGS.LABELS.USER_NO_NAME}
             bodyLabel={localizationContext.STRINGS.PROFILE_CARD.BODY_LABEL}
             body={localizationContext.STRINGS.PROFILE_CARD.BODY(user)}
-            button={useIIFE(() => {
-              if (isMe) return undefined;
-              return (
-                <OutlinedButton onPress={messageToUser}>
-                  {localizationContext.STRINGS.PROFILE_CARD.BUTTON_MESSAGE}
-                </OutlinedButton>
-              );
-            })}
+            button={profileCardButton}
           />
         )}
       </Modal>
