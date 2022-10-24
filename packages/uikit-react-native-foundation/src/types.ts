@@ -39,7 +39,9 @@ export type Component =
   | 'Placeholder'
   | 'Message'
   | 'DateSeparator'
-  | 'GroupChannelPreview';
+  | 'GroupChannelPreview'
+  | 'ProfileCard';
+
 export type GetColorTree<
   Tree extends {
     Variant: {
@@ -65,6 +67,7 @@ export type ComponentColorTree = GetColorTree<{
     Message: 'incoming' | 'outgoing';
     DateSeparator: 'default';
     GroupChannelPreview: 'default';
+    ProfileCard: 'default';
   };
   State: {
     Header: 'none';
@@ -76,6 +79,7 @@ export type ComponentColorTree = GetColorTree<{
     Message: 'enabled' | 'pressed';
     DateSeparator: 'none';
     GroupChannelPreview: 'none';
+    ProfileCard: 'none';
   };
   ColorPart: {
     Header: 'background' | 'borderBottom';
@@ -96,6 +100,7 @@ export type ComponentColorTree = GetColorTree<{
       | 'coverBackground'
       | 'bodyIconBackground'
       | 'separator';
+    ProfileCard: 'textUsername' | 'textBodyLabel' | 'textBody' | 'background';
   };
 }>;
 export type ComponentColors<T extends Component> = {
@@ -139,6 +144,7 @@ export interface UIKitColors {
     message: ComponentColors<'Message'>;
     dateSeparator: ComponentColors<'DateSeparator'>;
     groupChannelPreview: ComponentColors<'GroupChannelPreview'>;
+    profileCard: ComponentColors<'ProfileCard'>;
   };
 }
 

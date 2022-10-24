@@ -14,11 +14,18 @@ import {
   ToastProvider,
   UIKitThemeProvider,
 } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
+import type {
+  SendbirdChatSDK,
+  SendbirdGroupChannel,
+  SendbirdGroupChannelCreateParams,
+  SendbirdMember,
+  SendbirdUser,
+} from '@sendbird/uikit-utils';
 
-import { LocalizationProvider } from '../contexts/Localization';
-import { PlatformServiceProvider } from '../contexts/PlatformService';
-import { SendbirdChatProvider } from '../contexts/SendbirdChat';
+import { LocalizationProvider } from '../contexts/LocalizationCtx';
+import { PlatformServiceProvider } from '../contexts/PlatformServiceCtx';
+import { ProfileCardProvider } from '../contexts/ProfileCardCtx';
+import { SendbirdChatProvider } from '../contexts/SendbirdChatCtx';
 import { useLocalization } from '../hooks/useContext';
 import InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
 import StringSetEn from '../localization/StringSet.en';
@@ -69,6 +76,13 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   toast?: {
     dismissTimeout?: number;
   };
+  profileCard?: {
+    onCreateChannel: (channel: SendbirdGroupChannel) => void;
+    onBeforeCreateChannel?: (
+      channelParams: SendbirdGroupChannelCreateParams,
+      users: SendbirdUser[] | SendbirdMember[],
+    ) => SendbirdGroupChannelCreateParams | Promise<SendbirdGroupChannelCreateParams>;
+  };
   errorBoundary?: {
     onError?: (props: ErrorBoundaryProps) => void;
     ErrorInfoComponent?: (props: ErrorBoundaryProps) => JSX.Element;
@@ -83,6 +97,7 @@ const SendbirdUIKitContainer = ({
   localization,
   styles,
   toast,
+  profileCard,
   errorBoundary,
 }: SendbirdUIKitContainerProps) => {
   const unsubscribes = useRef<(() => void)[]>([]).current;
@@ -163,7 +178,12 @@ const SendbirdUIKitContainer = ({
               >
                 <LocalizedDialogProvider>
                   <ToastProvider dismissTimeout={toast?.dismissTimeout}>
-                    <InternalErrorBoundaryContainer {...errorBoundary}>{children}</InternalErrorBoundaryContainer>
+                    <ProfileCardProvider
+                      onCreateChannel={profileCard?.onCreateChannel}
+                      onBeforeCreateChannel={profileCard?.onBeforeCreateChannel}
+                    >
+                      <InternalErrorBoundaryContainer {...errorBoundary}>{children}</InternalErrorBoundaryContainer>
+                    </ProfileCardProvider>
                   </ToastProvider>
                 </LocalizedDialogProvider>
               </HeaderStyleProvider>

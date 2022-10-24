@@ -18,7 +18,7 @@ import {
   SetSendbirdSDK,
 } from './factory';
 import useAppearance from './hooks/useAppearance';
-import { Routes, navigationRef } from './libs/navigation';
+import { Routes, navigationActions, navigationRef } from './libs/navigation';
 import { onForegroundAndroid, onForegroundIOS } from './libs/notification';
 import {
   ErrorInfoScreen,
@@ -62,6 +62,13 @@ const App = () => {
         statusBarTranslucent: GetTranslucent(),
       }}
       errorBoundary={{ ErrorInfoComponent: ErrorInfoScreen }}
+      profileCard={{
+        onCreateChannel: (channel) => {
+          navigationActions.push(Routes.GroupChannel, {
+            serializedChannel: channel.serialize(),
+          });
+        },
+      }}
     >
       <Navigations />
     </SendbirdUIKitContainer>
@@ -81,10 +88,11 @@ const Navigations = () => {
   }, []);
 
   useEffect(() => {
-    AppState.addEventListener('change', async () => {
+    const { remove } = AppState.addEventListener('change', async () => {
       const count = await sdk.groupChannel.getTotalUnreadMessageCount();
       Notifee.setBadgeCount(count);
     });
+    return () => remove();
   }, []);
 
   return (

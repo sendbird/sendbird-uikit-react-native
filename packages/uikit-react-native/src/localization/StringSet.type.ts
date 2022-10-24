@@ -4,6 +4,7 @@ import type {
   PartialDeep,
   SendbirdFileMessage,
   SendbirdGroupChannel,
+  SendbirdMember,
   SendbirdMessage,
   SendbirdUser,
 } from '@sendbird/uikit-utils';
@@ -173,6 +174,11 @@ export interface StringSet {
     TURN_ON_NOTIFICATIONS_ERROR: string;
     TURN_OFF_NOTIFICATIONS_ERROR: string;
     LEAVE_CHANNEL_ERROR: string;
+  };
+  PROFILE_CARD: {
+    BUTTON_MESSAGE: string;
+    BODY_LABEL: string;
+    BODY: (user: SendbirdUser | SendbirdMember) => string;
   };
 }
 
@@ -347,6 +353,12 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       TURN_OFF_NOTIFICATIONS_ERROR: "Couldn't turn off notifications.",
       LEAVE_CHANNEL_ERROR: "Couldn't leave channel.",
       ...overrides?.TOAST,
+    },
+    PROFILE_CARD: {
+      BUTTON_MESSAGE: 'Message',
+      BODY_LABEL: 'User ID',
+      BODY: (user) => user.userId,
+      ...overrides?.PROFILE_CARD,
     },
   };
 };

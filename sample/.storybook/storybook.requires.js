@@ -24,7 +24,10 @@ if (parameters) {
   addParameters(parameters);
 }
 
-argsEnhancers.forEach((enhancer) => addArgsEnhancer(enhancer));
+// temporary fix for https://github.com/storybookjs/react-native/issues/327 whilst the issue is investigated
+try {
+  argsEnhancers.forEach((enhancer) => addArgsEnhancer(enhancer));
+} catch {}
 
 const getStories = () => {
   return [
@@ -35,6 +38,7 @@ const getStories = () => {
     require("../stories/GroupChannelPreview.stories.tsx"),
     require("../stories/Icon.stories.tsx"),
     require("../stories/Placeholder.stories.tsx"),
+    require("../stories/ProfileCard.stories.tsx"),
     require("../stories/Switch.stories.tsx"),
     require("../stories/Text.stories.tsx"),
   ];
