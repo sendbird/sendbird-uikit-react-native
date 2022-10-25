@@ -25,6 +25,15 @@ export const NOOP: () => void = () => void 0;
 export const ASYNC_NOOP = async () => void 0;
 export const PASS = <T>(val: T) => val;
 export const toMegabyte = (byte: number) => byte / 1024 / 1024;
+export const isFunction = <T>(param?: T): param is NonNullable<T> => typeof param === 'function';
+export const SBErrorCode = {
+  NON_AUTHORIZED: 400108,
+};
+export const SBErrorMessage = {
+  ACL:
+    "An error occurred because you don't have access to the user list in your application.\n" +
+    'In order to gain access, you can turn on this attribute in the Access Control List settings on Sendbird Dashboard.',
+};
 
 export type {
   FilterByValueType,
