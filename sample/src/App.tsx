@@ -6,6 +6,7 @@ import React, { useEffect } from 'react';
 import { SendbirdUIKitContainer, useSendbirdChat } from '@sendbird/uikit-react-native';
 import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
+// import LogView from './components/LogView';
 import { APP_ID } from './env';
 import {
   ClipboardService,
@@ -17,7 +18,6 @@ import {
   SetSendbirdSDK,
 } from './factory';
 import useAppearance from './hooks/useAppearance';
-// import createLogView from './libs/logView';
 import { Routes, navigationRef } from './libs/navigation';
 import { onForegroundAndroid, onForegroundIOS } from './libs/notification';
 import {
@@ -67,8 +67,6 @@ const App = () => {
     </SendbirdUIKitContainer>
   );
 };
-
-// const LogView = createLogView();
 
 const Navigations = () => {
   const { currentUser } = useSendbirdChat();
