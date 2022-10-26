@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.1.2...v1.1.3) (2022-10-26)
+
+
+### Bug Fixes
+
+* **foundation:** position of toast when keyboard is up on iOS ([ccd0ff2](https://github.com/sendbird/sendbird-uikit-react-native/commit/ccd0ff2b4cce6badb9fa7f24d268857740a2ac7c))
+
+
+
 ## [1.1.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.1.1...v1.1.2) (2022-09-28)
 
 **Note:** Version bump only for package @sendbird/uikit-react-native-foundation

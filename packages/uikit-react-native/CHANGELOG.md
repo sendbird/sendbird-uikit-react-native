@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.1.2...v1.1.3) (2022-10-26)
+
+
+### Bug Fixes
+
+* **uikit:** call setBackgroundState only on background status ([505ed2b](https://github.com/sendbird/sendbird-uikit-react-native/commit/505ed2b4665e6a14ad469574863aba6e73d0828d))
+
+
+
 ## [1.1.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.1.1...v1.1.2) (2022-09-28)
 
 
