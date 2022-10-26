@@ -1,11 +1,13 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 
-import { Optional, SendbirdChatSDK, SendbirdUser, useAsyncEffect } from '@sendbird/uikit-utils';
+import type { Optional, SendbirdChatSDK, SendbirdUser } from '@sendbird/uikit-utils';
+import { Logger, SBErrorCode, SBErrorMessage, useAsyncEffect } from '@sendbird/uikit-utils';
 
 import type { CustomQueryInterface, UseUserListOptions, UseUserListReturn } from '../types';
 
 const createUserQuery = <User>(sdk: SendbirdChatSDK, queryCreator?: UseUserListOptions<User>['queryCreator']) => {
   if (queryCreator) return queryCreator();
+  // In order to use the API, the option must be turned on in the dashboard.
   return sdk.createApplicationUserListQuery() as unknown as CustomQueryInterface<User>;
 };
 
@@ -57,7 +59,11 @@ export const useUserList = <
   const init = useCallback(async () => {
     query.current = createUserQuery<QueriedUser>(sdk, options?.queryCreator);
     if (query.current?.hasNext) {
-      const users = await query.current?.next();
+      const users = await query.current?.next().catch((err) => {
+        Logger.error(error);
+        if (err.code === SBErrorCode.NON_AUTHORIZED) Logger.warn(SBErrorMessage.ACL);
+        throw error;
+      });
       updateUsers(users, true);
     }
   }, [sdk, options?.queryCreator]);
@@ -88,7 +94,12 @@ export const useUserList = <
 
   const next = useCallback(async () => {
     if (query.current && query.current?.hasNext) {
-      updateUsers(await query.current?.next(), false);
+      const nextUsers = await query.current.next().catch((err) => {
+        Logger.error(error);
+        if (err.code === SBErrorCode.NON_AUTHORIZED) Logger.warn(SBErrorMessage.ACL);
+        throw error;
+      });
+      updateUsers(nextUsers, false);
     }
   }, []);
 
