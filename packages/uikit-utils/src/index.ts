@@ -23,6 +23,7 @@ export * from './ui-format/common';
 export * from './sendbird/channel';
 export * from './sendbird/message';
 export * from './sendbird/attrs';
+export * from './sendbird/user';
 
 export const NOOP: () => void = () => void 0;
 export const ASYNC_NOOP = async () => void 0;
