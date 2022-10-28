@@ -76,4 +76,5 @@ export type {
   SendbirdUserMessageUpdateParams,
   SendbirdFileMessageUpdateParams,
   SendbirdUserUpdateParams,
+  SendbirdRestrictedUser,
 } from './types';

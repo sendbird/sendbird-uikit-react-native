@@ -23,6 +23,7 @@ import { Routes, navigationActions, navigationRef } from './libs/navigation';
 import { onForegroundAndroid, onForegroundIOS } from './libs/notification';
 import {
   ErrorInfoScreen,
+  GroupChannelBannedUsersScreen,
   GroupChannelCreateScreen,
   GroupChannelInviteScreen,
   GroupChannelMembersScreen,
@@ -117,6 +118,7 @@ const Navigations = () => {
               <RootStack.Screen name={Routes.GroupChannelModerations} component={GroupChannelModerationsScreen} />
               <RootStack.Screen name={Routes.GroupChannelOperators} component={GroupChannelOperatorsScreen} />
               <RootStack.Screen name={Routes.GroupChannelMutedMembers} component={GroupChannelMutedMembersScreen} />
+              <RootStack.Screen name={Routes.GroupChannelBannedUsers} component={GroupChannelBannedUsersScreen} />
             </RootStack.Group>
             <RootStack.Screen name={Routes.GroupChannelCreate} component={GroupChannelCreateScreen} />
             <RootStack.Screen name={Routes.GroupChannelInvite} component={GroupChannelInviteScreen} />

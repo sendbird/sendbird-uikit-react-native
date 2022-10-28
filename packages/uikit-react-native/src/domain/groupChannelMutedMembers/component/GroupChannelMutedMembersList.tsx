@@ -20,6 +20,7 @@ const GroupChannelMutedMembersList = ({
       renderItem={renderItem}
       contentContainerStyle={{ paddingLeft: left, paddingRight: right, flexGrow: 1 }}
       ListEmptyComponent={ListEmptyComponent}
+      bounces={false}
     />
   );
 };

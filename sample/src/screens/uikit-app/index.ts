@@ -7,3 +7,4 @@ export { default as GroupChannelMembersScreen } from './GroupChannelMembersScree
 export { default as GroupChannelModerationsScreen } from './GroupChannelModerationsScreen';
 export { default as GroupChannelOperatorsScreen } from './GroupChannelOperatorsScreen';
 export { default as GroupChannelMutedMembersScreen } from './GroupChannelMutedMembersScreen';
+export { default as GroupChannelBannedUsersScreen } from './GroupChannelBannedUsersScreen';

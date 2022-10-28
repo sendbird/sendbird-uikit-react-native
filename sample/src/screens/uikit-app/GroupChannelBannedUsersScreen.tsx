@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 
-import { createGroupChannelMutedMembersFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
+import { createGroupChannelBannedUsersFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
 import { SendbirdGroupChannel, useAsyncEffect } from '@sendbird/uikit-utils';
 
 import { useAppNavigation } from '../../hooks/useAppNavigation';
 import type { Routes } from '../../libs/navigation';
 
-const GroupChannelMutedMembersFragment = createGroupChannelMutedMembersFragment();
-const GroupChannelMutedMembersScreen = () => {
+const GroupChannelBannedUsersFragment = createGroupChannelBannedUsersFragment();
+const GroupChannelBannedUsersScreen = () => {
   const { sdk } = useSendbirdChat();
-  const { navigation, params } = useAppNavigation<Routes.GroupChannelMutedMembers>();
+  const { navigation, params } = useAppNavigation<Routes.GroupChannelBannedUsers>();
 
   const [channel, setChannel] = useState<SendbirdGroupChannel>();
 
@@ -20,7 +20,7 @@ const GroupChannelMutedMembersScreen = () => {
   if (!channel) return null;
 
   return (
-    <GroupChannelMutedMembersFragment
+    <GroupChannelBannedUsersFragment
       channel={channel}
       onPressHeaderLeft={() => {
         // Navigate back
@@ -30,4 +30,4 @@ const GroupChannelMutedMembersScreen = () => {
   );
 };
 
-export default GroupChannelMutedMembersScreen;
+export default GroupChannelBannedUsersScreen;

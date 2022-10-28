@@ -4,7 +4,7 @@
 import type React from 'react';
 
 import type SendbirdChat from '@sendbird/chat';
-import type { BaseChannel, SendbirdError as SBError, User, UserUpdateParams } from '@sendbird/chat';
+import type { BaseChannel, RestrictedUser, SendbirdError as SBError, User, UserUpdateParams } from '@sendbird/chat';
 import type {
   GroupChannel,
   GroupChannelCollection,
@@ -73,6 +73,7 @@ export type SendbirdGroupChannelCreateParams = GroupChannelCreateParams;
 export type SendbirdGroupChannelUpdateParams = GroupChannelUpdateParams;
 export type SendbirdUserUpdateParams = UserUpdateParams;
 export type SendbirdUser = User;
+export type SendbirdRestrictedUser = RestrictedUser;
 export type SendbirdMember = Member;
 export type SendbirdGroupChannel = GroupChannel;
 export type SendbirdBaseChannel = BaseChannel;

@@ -25,6 +25,7 @@ export { default as createGroupChannelMembersFragment } from './fragments/create
 export { default as createGroupChannelModerationsFragment } from './fragments/createGroupChannelModerationsFragment';
 export { default as createGroupChannelOperatorsFragment } from './fragments/createGroupChannelOperatorsFragment';
 export { default as createGroupChannelMutedMembersFragment } from './fragments/createGroupChannelMutedMembersFragment';
+export { default as createGroupChannelBannedUsersFragment } from './fragments/createGroupChannelBannedUsersFragment';
 
 /** Context **/
 export { SendbirdChatContext, SendbirdChatProvider } from './contexts/SendbirdChatCtx';

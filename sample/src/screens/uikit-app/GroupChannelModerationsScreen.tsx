@@ -32,6 +32,7 @@ const GroupChannelModerationsScreen = () => {
       }}
       onPressMenuBannedUsers={() => {
         // Navigate to group channel banned users
+        navigation.navigate(Routes.GroupChannelBannedUsers, params);
       }}
       onPressHeaderLeft={() => {
         // Navigate back

@@ -9,7 +9,7 @@ import type { Routes } from '../../libs/navigation';
 const GroupChannelOperatorsFragment = createGroupChannelOperatorsFragment();
 const GroupChannelOperatorsScreen = () => {
   const { sdk } = useSendbirdChat();
-  const { navigation, params } = useAppNavigation<Routes.GroupChannelModerations>();
+  const { navigation, params } = useAppNavigation<Routes.GroupChannelOperators>();
 
   const [channel, setChannel] = useState<SendbirdGroupChannel>();
 
