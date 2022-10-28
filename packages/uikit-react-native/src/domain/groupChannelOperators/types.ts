@@ -37,7 +37,6 @@ export interface GroupChannelOperatorsModule {
   Header: CommonComponent<GroupChannelOperatorsProps['Header']>;
   List: CommonComponent<GroupChannelOperatorsProps['List']>;
   StatusEmpty: CommonComponent;
-  StatusLoading: CommonComponent;
 }
 
 export type GroupChannelOperatorsFragment = CommonComponent<GroupChannelOperatorsProps['Fragment']>;

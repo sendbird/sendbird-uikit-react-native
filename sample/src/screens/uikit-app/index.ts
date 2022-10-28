@@ -6,3 +6,4 @@ export { default as GroupChannelInviteScreen } from './GroupChannelInviteScreen'
 export { default as GroupChannelMembersScreen } from './GroupChannelMembersScreen';
 export { default as GroupChannelModerationsScreen } from './GroupChannelModerationsScreen';
 export { default as GroupChannelOperatorsScreen } from './GroupChannelOperatorsScreen';
+export { default as GroupChannelMutedMembersScreen } from './GroupChannelMutedMembersScreen';

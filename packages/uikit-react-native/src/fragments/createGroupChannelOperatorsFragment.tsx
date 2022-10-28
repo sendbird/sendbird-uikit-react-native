@@ -50,6 +50,7 @@ const createGroupChannelOperatorsFragment = (
             (user.userId === currentUser?.userId ? STRINGS.LABELS.USER_BAR_ME_POSTFIX : '')
           }
           disabled={user.userId === currentUser?.userId}
+          onPressAvatar={() => show(user)}
           onPressActionMenu={ifOperator(channel.myRole, () => {
             openMenu({
               title: user.nickname || STRINGS.LABELS.USER_NO_NAME,
@@ -65,7 +66,6 @@ const createGroupChannelOperatorsFragment = (
               ],
             });
           })}
-          onPressAvatar={() => show(user)}
         />
       );
     });

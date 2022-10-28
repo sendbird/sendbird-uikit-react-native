@@ -28,6 +28,7 @@ const GroupChannelModerationsScreen = () => {
       }}
       onPressMenuMutedMembers={() => {
         // Navigate to group channel muted members
+        navigation.navigate(Routes.GroupChannelMutedMembers, params);
       }}
       onPressMenuBannedUsers={() => {
         // Navigate to group channel banned users
