@@ -13,7 +13,14 @@ const createGroupChannelSettingsFragment = (
 ): GroupChannelSettingsFragment => {
   const GroupChannelSettingsModule = createGroupChannelSettingsModule(initModule);
 
-  return ({ onPressHeaderLeft = NOOP, channel, onPressMenuMembers, onPressMenuLeaveChannel, menuItemsCreator }) => {
+  return ({
+    onPressHeaderLeft = NOOP,
+    channel,
+    onPressMenuModerations,
+    onPressMenuMembers,
+    onPressMenuLeaveChannel,
+    menuItemsCreator,
+  }) => {
     const { colors } = useUIKitTheme();
     const { left, right } = useSafeAreaInsets();
 
@@ -30,6 +37,7 @@ const createGroupChannelSettingsFragment = (
           <GroupChannelSettingsModule.Info />
           <GroupChannelSettingsModule.Menu
             menuItemsCreator={menuItemsCreator}
+            onPressMenuModerations={onPressMenuModerations}
             onPressMenuMembers={onPressMenuMembers}
             onPressMenuLeaveChannel={onPressMenuLeaveChannel}
           />

@@ -26,6 +26,7 @@ import {
   GroupChannelCreateScreen,
   GroupChannelInviteScreen,
   GroupChannelMembersScreen,
+  GroupChannelModerationsScreen,
   GroupChannelScreen,
   GroupChannelSettingsScreen,
   GroupChannelTabs,
@@ -108,10 +109,13 @@ const Navigations = () => {
 
             <RootStack.Screen name={Routes.GroupChannelTabs} component={GroupChannelTabs} />
             <RootStack.Screen name={Routes.GroupChannel} component={GroupChannelScreen} />
-            <RootStack.Screen name={Routes.GroupChannelSettings} component={GroupChannelSettingsScreen} />
+            <RootStack.Group>
+              <RootStack.Screen name={Routes.GroupChannelSettings} component={GroupChannelSettingsScreen} />
+              <RootStack.Screen name={Routes.GroupChannelMembers} component={GroupChannelMembersScreen} />
+              <RootStack.Screen name={Routes.GroupChannelModerations} component={GroupChannelModerationsScreen} />
+            </RootStack.Group>
             <RootStack.Screen name={Routes.GroupChannelCreate} component={GroupChannelCreateScreen} />
             <RootStack.Screen name={Routes.GroupChannelInvite} component={GroupChannelInviteScreen} />
-            <RootStack.Screen name={Routes.GroupChannelMembers} component={GroupChannelMembersScreen} />
 
             <RootStack.Group screenOptions={{ animation: 'slide_from_bottom', headerShown: false }}>
               <RootStack.Screen name={Routes.FileViewer} component={FileViewerScreen} />

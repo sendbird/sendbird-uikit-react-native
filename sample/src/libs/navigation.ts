@@ -18,10 +18,16 @@ export enum Routes {
   GroupChannelTabs = 'GroupChannelTabs',
   GroupChannelList = 'GroupChannelList',
   GroupChannel = 'GroupChannel',
+
   GroupChannelSettings = 'GroupChannelSettings',
+  GroupChannelMembers = 'GroupChannelMembers',
+  GroupChannelModerations = 'GroupChannelModerations',
+  GroupChannelOperators = 'GroupChannelOperators',
+  GroupChannelMutedMembers = 'GroupChannelMutedMembers',
+  GroupChannelBannedUsers = 'GroupChannelBannedUsers',
+
   GroupChannelCreate = 'GroupChannelCreate',
   GroupChannelInvite = 'GroupChannelInvite',
-  GroupChannelMembers = 'GroupChannelMembers',
   Settings = 'Settings',
   FileViewer = 'FileViewer',
 }
@@ -68,6 +74,22 @@ export type RouteParamsUnion =
       params: { channelUrl: string };
     }
   | {
+      route: Routes.GroupChannelModerations;
+      params: { channelUrl: string };
+    }
+  | {
+      route: Routes.GroupChannelOperators;
+      params: { channelUrl: string };
+    }
+  | {
+      route: Routes.GroupChannelMutedMembers;
+      params: { channelUrl: string };
+    }
+  | {
+      route: Routes.GroupChannelBannedUsers;
+      params: { channelUrl: string };
+    }
+  | {
       route: Routes.GroupChannelInvite;
       params: { channelUrl: string };
     }
@@ -88,6 +110,7 @@ export type RouteParamsUnion =
     };
 
 type ExtractParams<R extends Routes, U extends RouteParamsUnion> = U extends { route: R; params: infer P } ? P : never;
+// type ExtractNavigatorParams<R extends Routes[]> = { [key in R[number]]: ExtractParams<key, RouteParamsUnion> };
 export type RouteParams<R extends Routes> = ExtractParams<R, RouteParamsUnion>;
 export type ParamListBase<T extends RouteParamsUnion = RouteParamsUnion> = {
   [k in T['route']]: T extends { route: k; params: infer P } ? P : never;
