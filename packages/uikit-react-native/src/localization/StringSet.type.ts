@@ -93,6 +93,18 @@ export interface StringSet {
     MENU_BANNED_USERS: string;
     MENU_FREEZE_CHANNEL: string;
   };
+  GROUP_CHANNEL_OPERATORS: {
+    /** GroupChannelOperators > Header */
+    HEADER_TITLE: string;
+  };
+  GROUP_CHANNEL_MUTED_MEMBERS: {
+    /** GroupChannelMutedMembers > Header */
+    HEADER_TITLE: string;
+  };
+  GROUP_CHANNEL_BANNED_USERS: {
+    /** GroupChannelBannedUsers > Header */
+    HEADER_TITLE: string;
+  };
   GROUP_CHANNEL_LIST: {
     /** GroupChannelList > Header */
     HEADER_TITLE: string;
@@ -118,16 +130,10 @@ export interface StringSet {
     /** GroupChannelMembers > Header */
     HEADER_TITLE: string;
 
-    /** GroupChannelMembers > UserBar */
+    /** @deprecated Please use in LABELS **/
     USER_BAR_ME_POSTFIX: string;
+    /** @deprecated Please use in LABELS **/
     USER_BAR_OPERATOR: string;
-
-    /** GroupChannelMembers > Dialog */
-    DIALOG_USER_REGISTER_AS_OPERATOR: string;
-    DIALOG_USER_UNREGISTER_OPERATOR: string;
-    DIALOG_USER_MUTE: string;
-    DIALOG_USER_UNMUTE: string;
-    DIALOG_USER_BAN: string;
   };
   GROUP_CHANNEL_INVITE: {
     /** GroupChannelInvite > Header */
@@ -144,6 +150,16 @@ export interface StringSet {
     USER_NO_NAME: string;
     CHANNEL_NO_MEMBERS: string;
     TYPING_INDICATOR_TYPINGS: (users: SendbirdUser[]) => string | undefined;
+
+    USER_BAR_ME_POSTFIX: string;
+    USER_BAR_OPERATOR: string;
+
+    REGISTER_AS_OPERATOR: string;
+    UNREGISTER_OPERATOR: string;
+    MUTE: string;
+    UNMUTE: string;
+    BAN: string;
+    UNBAN: string;
   };
   FILE_VIEWER: {
     TITLE: (message: SendbirdFileMessage) => string;
@@ -270,6 +286,18 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       MENU_FREEZE_CHANNEL: 'Freeze channel',
       ...overrides?.GROUP_CHANNEL_MODERATIONS,
     },
+    GROUP_CHANNEL_OPERATORS: {
+      HEADER_TITLE: 'Operators',
+      ...overrides?.GROUP_CHANNEL_OPERATORS,
+    },
+    GROUP_CHANNEL_MUTED_MEMBERS: {
+      HEADER_TITLE: 'Muted members',
+      ...overrides?.GROUP_CHANNEL_MUTED_MEMBERS,
+    },
+    GROUP_CHANNEL_BANNED_USERS: {
+      HEADER_TITLE: 'Banned users',
+      ...overrides?.GROUP_CHANNEL_BANNED_USERS,
+    },
     GROUP_CHANNEL_LIST: {
       HEADER_TITLE: 'Channels',
       CHANNEL_PREVIEW_TITLE: (currentUserId, channel) =>
@@ -292,13 +320,10 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     },
     GROUP_CHANNEL_MEMBERS: {
       HEADER_TITLE: 'Members',
+      /** @deprecated Please use in LABELS **/
       USER_BAR_ME_POSTFIX: ' (You)',
+      /** @deprecated Please use in LABELS **/
       USER_BAR_OPERATOR: 'Operator',
-      DIALOG_USER_REGISTER_AS_OPERATOR: 'Register as operator',
-      DIALOG_USER_UNREGISTER_OPERATOR: 'Unregister operator',
-      DIALOG_USER_MUTE: 'Mute',
-      DIALOG_USER_UNMUTE: 'Unmute',
-      DIALOG_USER_BAN: 'Ban',
       ...overrides?.GROUP_CHANNEL_MEMBERS,
     },
     GROUP_CHANNEL_CREATE: {
@@ -329,6 +354,14 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
         if (users.length === 2) return `${userNames.join(' and ')} are typing...`;
         return 'Several people are typing...';
       },
+      USER_BAR_ME_POSTFIX: ' (You)',
+      USER_BAR_OPERATOR: 'Operator',
+      REGISTER_AS_OPERATOR: 'Register as operator',
+      UNREGISTER_OPERATOR: 'Unregister operator',
+      MUTE: 'Mute',
+      UNMUTE: 'Unmute',
+      BAN: 'Ban',
+      UNBAN: 'Unban',
       ...overrides?.LABELS,
     },
     FILE_VIEWER: {

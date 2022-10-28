@@ -6,7 +6,7 @@ import { GroupChannelModerationsContexts } from '../module/moduleContext';
 import type { GroupChannelModerationsProps } from '../types';
 
 const GroupChannelModerationsHeader = ({ onPressHeaderLeft }: GroupChannelModerationsProps['Header']) => {
-  const { headerTitle } = useContext(GroupChannelModerationsContexts['Fragment']);
+  const { headerTitle } = useContext(GroupChannelModerationsContexts.Fragment);
   const { HeaderComponent } = useHeaderStyle();
   return <HeaderComponent title={headerTitle} left={<Icon icon={'arrow-left'} />} onPressLeft={onPressHeaderLeft} />;
 };

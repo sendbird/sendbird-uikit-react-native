@@ -4,7 +4,7 @@ import { createGroupChannelModerationsFragment, useSendbirdChat } from '@sendbir
 import { SendbirdGroupChannel, useAsyncEffect } from '@sendbird/uikit-utils';
 
 import { useAppNavigation } from '../../hooks/useAppNavigation';
-import type { Routes } from '../../libs/navigation';
+import { Routes } from '../../libs/navigation';
 
 const GroupChannelModerationsFragment = createGroupChannelModerationsFragment();
 const GroupChannelModerationsScreen = () => {
@@ -24,6 +24,7 @@ const GroupChannelModerationsScreen = () => {
       channel={channel}
       onPressMenuOperators={() => {
         // Navigate to group channel operators
+        navigation.navigate(Routes.GroupChannelOperators, params);
       }}
       onPressMenuMutedMembers={() => {
         // Navigate to group channel muted members

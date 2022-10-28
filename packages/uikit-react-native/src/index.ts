@@ -23,6 +23,7 @@ export { default as createGroupChannelInviteFragment } from './fragments/createG
 export { default as createGroupChannelListFragment } from './fragments/createGroupChannelListFragment';
 export { default as createGroupChannelMembersFragment } from './fragments/createGroupChannelMembersFragment';
 export { default as createGroupChannelModerationsFragment } from './fragments/createGroupChannelModerationsFragment';
+export { default as createGroupChannelOperatorsFragment } from './fragments/createGroupChannelOperatorsFragment';
 
 /** Context **/
 export { SendbirdChatContext, SendbirdChatProvider } from './contexts/SendbirdChatCtx';

@@ -73,21 +73,17 @@ const createGroupChannelMembersFragment = (
         <UserActionBar
           muted={user.isMuted}
           uri={user.profileUrl}
-          label={user.role === 'operator' ? STRINGS.GROUP_CHANNEL_MEMBERS.USER_BAR_OPERATOR : ''}
+          label={user.role === 'operator' ? STRINGS.LABELS.USER_BAR_OPERATOR : ''}
           name={
             (user.nickname || STRINGS.LABELS.USER_NO_NAME) +
-            (user.userId === currentUser?.userId ? STRINGS.GROUP_CHANNEL_MEMBERS.USER_BAR_ME_POSTFIX : '')
+            (user.userId === currentUser?.userId ? STRINGS.LABELS.USER_BAR_ME_POSTFIX : '')
           }
           disabled={user.userId === currentUser?.userId}
           onPressActionMenu={ifOperator(channel.myRole, () => {
             const menuItems: ActionMenuItem['menuItems'] = [];
 
             menuItems.push({
-              title: ifOperator(
-                user.role,
-                STRINGS.GROUP_CHANNEL_MEMBERS.DIALOG_USER_UNREGISTER_OPERATOR,
-                STRINGS.GROUP_CHANNEL_MEMBERS.DIALOG_USER_REGISTER_AS_OPERATOR,
-              ),
+              title: ifOperator(user.role, STRINGS.LABELS.UNREGISTER_OPERATOR, STRINGS.LABELS.REGISTER_AS_OPERATOR),
               onPress: ifOperator(
                 user.role,
                 () => channel.removeOperators([user.userId]),
@@ -97,11 +93,7 @@ const createGroupChannelMembersFragment = (
 
             if (!channel.isBroadcast) {
               menuItems.push({
-                title: ifMuted(
-                  user.isMuted,
-                  STRINGS.GROUP_CHANNEL_MEMBERS.DIALOG_USER_UNMUTE,
-                  STRINGS.GROUP_CHANNEL_MEMBERS.DIALOG_USER_MUTE,
-                ),
+                title: ifMuted(user.isMuted, STRINGS.LABELS.UNMUTE, STRINGS.LABELS.MUTE),
                 onPress: ifMuted(
                   user.isMuted,
                   () => channel.unmuteUser(user),
@@ -111,7 +103,7 @@ const createGroupChannelMembersFragment = (
             }
 
             menuItems.push({
-              title: STRINGS.GROUP_CHANNEL_MEMBERS.DIALOG_USER_BAN,
+              title: STRINGS.LABELS.BAN,
               style: 'destructive',
               onPress: () => channel.banUser(user),
             });
