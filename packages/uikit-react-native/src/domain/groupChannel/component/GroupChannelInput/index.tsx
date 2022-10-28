@@ -12,11 +12,9 @@ import SendInput from './SendInput';
 
 const KEYBOARD_AVOID_VIEW_BEHAVIOR = Platform.select({ ios: 'padding' as const, default: undefined });
 const GroupChannelInput = (props: GroupChannelProps['Input']) => {
-  const { channel } = props;
-
   const { left, right, bottom } = useSafeAreaInsets();
   const { colors } = useUIKitTheme();
-  const { editMessage, setEditMessage, keyboardAvoidOffset = 0 } = useContext(GroupChannelContexts.Fragment);
+  const { channel, editMessage, setEditMessage, keyboardAvoidOffset = 0 } = useContext(GroupChannelContexts.Fragment);
 
   const [text, setText] = useState('');
   const textTmpRef = useRef('');

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { createGroupChannelFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
+import { SendbirdGroupChannel, useAsyncEffect } from '@sendbird/uikit-utils';
 
 import { useAppNavigation } from '../../hooks/useAppNavigation';
 import { Routes } from '../../libs/navigation';
@@ -69,7 +70,13 @@ const GroupChannelFragment = createGroupChannelFragment();
 const GroupChannelScreen = () => {
   const { navigation, params } = useAppNavigation<Routes.GroupChannel>();
   const { sdk } = useSendbirdChat();
-  const [channel] = useState(() => sdk.groupChannel.buildGroupChannelFromSerializedData(params.serializedChannel));
+  const [channel, setChannel] = useState<SendbirdGroupChannel>();
+
+  useAsyncEffect(async () => {
+    setChannel(await sdk.groupChannel.getChannel(params.channelUrl));
+  }, []);
+
+  if (!channel) return null;
 
   return (
     <GroupChannelFragment
@@ -91,7 +98,7 @@ const GroupChannelScreen = () => {
       }}
       onPressHeaderRight={() => {
         // Navigate to group channel settings
-        navigation.navigate(Routes.GroupChannelSettings, { serializedChannel: params.serializedChannel });
+        navigation.navigate(Routes.GroupChannelSettings, params);
       }}
     />
   );

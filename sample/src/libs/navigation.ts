@@ -57,19 +57,19 @@ export type RouteParamsUnion =
     }
   | {
       route: Routes.GroupChannel;
-      params: { serializedChannel: object };
+      params: { channelUrl: string };
     }
   | {
       route: Routes.GroupChannelSettings;
-      params: { serializedChannel: object };
+      params: { channelUrl: string };
     }
   | {
       route: Routes.GroupChannelMembers;
-      params: { serializedChannel: object };
+      params: { channelUrl: string };
     }
   | {
       route: Routes.GroupChannelInvite;
-      params: { serializedChannel: object };
+      params: { channelUrl: string };
     }
   | {
       route: Routes.Settings;

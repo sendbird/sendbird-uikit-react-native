@@ -37,7 +37,6 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     const { sdk, currentUser } = useSendbirdChat();
 
     const {
-      activeChannel,
       messages,
       nextMessages,
       newMessagesFromMembers,
@@ -95,16 +94,16 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
 
     return (
       <GroupChannelModule.Provider
-        channel={activeChannel}
+        channel={channel}
         enableTypingIndicator={enableTypingIndicator}
         keyboardAvoidOffset={keyboardAvoidOffset}
       >
         <GroupChannelModule.Header onPressHeaderLeft={onPressHeaderLeft} onPressHeaderRight={onPressHeaderRight} />
         <StatusComposition loading={loading} LoadingComponent={<GroupChannelModule.StatusLoading />}>
           <GroupChannelModule.MessageList
+            channel={channel}
             enableMessageGrouping={enableMessageGrouping}
             currentUserId={currentUser?.userId}
-            channel={activeChannel}
             renderMessage={_renderMessage}
             messages={messages}
             nextMessages={nextMessages}
@@ -121,7 +120,6 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
           />
           {shouldRenderInput(channel) && (
             <GroupChannelModule.Input
-              channel={activeChannel}
               onSendFileMessage={onSendFileMessage}
               onSendUserMessage={onSendUserMessage}
               onUpdateFileMessage={onUpdateFileMessage}

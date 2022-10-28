@@ -66,7 +66,7 @@ const App = () => {
       profileCard={{
         onCreateChannel: (channel) => {
           navigationActions.push(Routes.GroupChannel, {
-            serializedChannel: channel.serialize(),
+            channelUrl: channel.url,
           });
         },
       }}
