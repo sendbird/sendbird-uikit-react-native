@@ -85,8 +85,8 @@ const createGroupChannelMembersFragment = (
             menuItems.push({
               title: ifOperator(
                 user.role,
-                STRINGS.GROUP_CHANNEL_MEMBERS.DIALOG_USER_DISMISS_OPERATOR,
-                STRINGS.GROUP_CHANNEL_MEMBERS.DIALOG_USER_PROMOTE_TO_OPERATOR,
+                STRINGS.GROUP_CHANNEL_MEMBERS.DIALOG_USER_UNREGISTER_OPERATOR,
+                STRINGS.GROUP_CHANNEL_MEMBERS.DIALOG_USER_REGISTER_AS_OPERATOR,
               ),
               onPress: ifOperator(
                 user.role,

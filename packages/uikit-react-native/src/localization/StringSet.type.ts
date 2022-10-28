@@ -112,8 +112,8 @@ export interface StringSet {
     USER_BAR_OPERATOR: string;
 
     /** GroupChannelMembers > Dialog */
-    DIALOG_USER_PROMOTE_TO_OPERATOR: string;
-    DIALOG_USER_DISMISS_OPERATOR: string;
+    DIALOG_USER_REGISTER_AS_OPERATOR: string;
+    DIALOG_USER_UNREGISTER_OPERATOR: string;
     DIALOG_USER_MUTE: string;
     DIALOG_USER_UNMUTE: string;
     DIALOG_USER_BAN: string;
@@ -274,8 +274,8 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       HEADER_TITLE: 'Members',
       USER_BAR_ME_POSTFIX: ' (You)',
       USER_BAR_OPERATOR: 'Operator',
-      DIALOG_USER_PROMOTE_TO_OPERATOR: 'Promote to operator',
-      DIALOG_USER_DISMISS_OPERATOR: 'Dismiss operator',
+      DIALOG_USER_REGISTER_AS_OPERATOR: 'Register as operator',
+      DIALOG_USER_UNREGISTER_OPERATOR: 'Unregister operator',
       DIALOG_USER_MUTE: 'Mute',
       DIALOG_USER_UNMUTE: 'Unmute',
       DIALOG_USER_BAN: 'Ban',
