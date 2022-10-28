@@ -139,7 +139,7 @@ export interface StringSet {
     SUBTITLE: (message: SendbirdFileMessage) => string;
   };
   PLACEHOLDER: {
-    NO_BANNED_MEMBERS: string;
+    NO_BANNED_USERS: string;
     NO_USERS: string;
     NO_CHANNELS: string;
     NO_MESSAGES: string;
@@ -316,7 +316,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       SUBTITLE: (message) => messageTime(new Date(message.createdAt), dateLocale),
     },
     PLACEHOLDER: {
-      NO_BANNED_MEMBERS: 'No banned members',
+      NO_BANNED_USERS: 'No banned users',
       NO_USERS: 'No users',
       NO_CHANNELS: 'No channels',
       NO_MESSAGES: 'No messages',
