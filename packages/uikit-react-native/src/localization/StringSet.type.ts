@@ -97,6 +97,11 @@ export interface StringSet {
     /** GroupChannelOperators > Header */
     HEADER_TITLE: string;
   };
+  GROUP_CHANNEL_OPERATORS_ADD: {
+    /** GroupChannelOperatorsAdd > Header */
+    HEADER_TITLE: string;
+    HEADER_RIGHT: (params: { selectedUsers: Array<SendbirdMember> }) => string;
+  };
   GROUP_CHANNEL_MUTED_MEMBERS: {
     /** GroupChannelMutedMembers > Header */
     HEADER_TITLE: string;
@@ -288,6 +293,15 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     },
     GROUP_CHANNEL_OPERATORS: {
       HEADER_TITLE: 'Operators',
+      ...overrides?.GROUP_CHANNEL_OPERATORS,
+    },
+    GROUP_CHANNEL_OPERATORS_ADD: {
+      HEADER_TITLE: 'Set as operators',
+      HEADER_RIGHT: ({ selectedUsers }) => {
+        const len = selectedUsers.length;
+        if (len === 0) return 'Add';
+        return `Add (${len})`;
+      },
       ...overrides?.GROUP_CHANNEL_OPERATORS,
     },
     GROUP_CHANNEL_MUTED_MEMBERS: {

@@ -23,6 +23,7 @@ export enum Routes {
   GroupChannelMembers = 'GroupChannelMembers',
   GroupChannelModerations = 'GroupChannelModerations',
   GroupChannelOperators = 'GroupChannelOperators',
+  GroupChannelOperatorsAdd = 'GroupChannelOperatorsAdd',
   GroupChannelMutedMembers = 'GroupChannelMutedMembers',
   GroupChannelBannedUsers = 'GroupChannelBannedUsers',
 
@@ -79,6 +80,10 @@ export type RouteParamsUnion =
     }
   | {
       route: Routes.GroupChannelOperators;
+      params: { channelUrl: string };
+    }
+  | {
+      route: Routes.GroupChannelOperatorsAdd;
       params: { channelUrl: string };
     }
   | {

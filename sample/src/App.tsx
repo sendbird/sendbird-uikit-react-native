@@ -29,6 +29,7 @@ import {
   GroupChannelMembersScreen,
   GroupChannelModerationsScreen,
   GroupChannelMutedMembersScreen,
+  GroupChannelOperatorsAddScreen,
   GroupChannelOperatorsScreen,
   GroupChannelScreen,
   GroupChannelSettingsScreen,
@@ -116,9 +117,12 @@ const Navigations = () => {
               <RootStack.Screen name={Routes.GroupChannelSettings} component={GroupChannelSettingsScreen} />
               <RootStack.Screen name={Routes.GroupChannelMembers} component={GroupChannelMembersScreen} />
               <RootStack.Screen name={Routes.GroupChannelModerations} component={GroupChannelModerationsScreen} />
-              <RootStack.Screen name={Routes.GroupChannelOperators} component={GroupChannelOperatorsScreen} />
               <RootStack.Screen name={Routes.GroupChannelMutedMembers} component={GroupChannelMutedMembersScreen} />
               <RootStack.Screen name={Routes.GroupChannelBannedUsers} component={GroupChannelBannedUsersScreen} />
+              <RootStack.Group>
+                <RootStack.Screen name={Routes.GroupChannelOperators} component={GroupChannelOperatorsScreen} />
+                <RootStack.Screen name={Routes.GroupChannelOperatorsAdd} component={GroupChannelOperatorsAddScreen} />
+              </RootStack.Group>
             </RootStack.Group>
             <RootStack.Screen name={Routes.GroupChannelCreate} component={GroupChannelCreateScreen} />
             <RootStack.Screen name={Routes.GroupChannelInvite} component={GroupChannelInviteScreen} />
