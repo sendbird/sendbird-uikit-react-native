@@ -6,15 +6,18 @@ import type { GroupChannelSettingsContextsType } from '@sendbird/uikit-react-nat
  * */
 import React, { useState } from 'react';
 import { useSendbirdChat, createGroupChannelSettingsFragment } from '@sendbird/uikit-react-native';
+import { useGroupChannel } from "@sendbird/uikit-chat-hooks";
 
 const GroupChannelSettingsFragment = createGroupChannelSettingsFragment();
-const GroupChannelSettingsScreen = ({ params }: { params: { serializedChannel: object } }) => {
+const GroupChannelSettingsScreen = ({ params }: { params: { channelUrl: string } }) => {
   const { sdk } = useSendbirdChat();
-  const [channel] = useState(() => sdk.groupChannel.buildGroupChannelFromSerializedData(params.serializedChannel));
+  const { channel } = useGroupChannel(sdk, params.channelUrl);
+  if (!channel) return null;
 
   const navigateToBack = () => {};
   const navigateToGroupChannelListScreen = () => {};
   const navigateToGroupChannelMembersScreen = () => {};
+  const navigateToGroupChannelModerationsScreen = () => {};
 
   return (
     <GroupChannelSettingsFragment
@@ -22,6 +25,7 @@ const GroupChannelSettingsScreen = ({ params }: { params: { serializedChannel: o
       onPressHeaderLeft={navigateToBack}
       onPressMenuLeaveChannel={navigateToGroupChannelListScreen}
       onPressMenuMembers={navigateToGroupChannelMembersScreen}
+      onPressMenuModerations={navigateToGroupChannelModerationsScreen}
     />
   );
 };
@@ -59,15 +63,18 @@ const Component = () => {
 import { Share } from 'react-native';
 
 import { Icon } from '@sendbird/uikit-react-native-foundation';
+// import { useGroupChannel } from "@sendbird/uikit-chat-hooks";
 
 const GroupChannelSettingsFragment2 = createGroupChannelSettingsFragment();
-const GroupChannelSettingsScreen2 = ({ params }: { params: { serializedChannel: object } }) => {
+const GroupChannelSettingsScreen2 = ({ params }: { params: { channelUrl: string } }) => {
   const { sdk } = useSendbirdChat();
-  const [channel] = useState(() => sdk.groupChannel.buildGroupChannelFromSerializedData(params.serializedChannel));
+  const { channel } = useGroupChannel(sdk, params.channelUrl);
+  if (!channel) return null;
 
   const navigateToBack = () => {};
   const navigateToGroupChannelListScreen = () => {};
   const navigateToGroupChannelMembersScreen = () => {};
+  const navigateToGroupChannelModerationsScreen = () => {};
 
   return (
     <GroupChannelSettingsFragment2
@@ -75,6 +82,7 @@ const GroupChannelSettingsScreen2 = ({ params }: { params: { serializedChannel: 
       onPressHeaderLeft={navigateToBack}
       onPressMenuLeaveChannel={navigateToGroupChannelListScreen}
       onPressMenuMembers={navigateToGroupChannelMembersScreen}
+      onPressMenuModerations={navigateToGroupChannelModerationsScreen}
       menuItemsCreator={(items) => {
         items.unshift({
           icon: 'channels',

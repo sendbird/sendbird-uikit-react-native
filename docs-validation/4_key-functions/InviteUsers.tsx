@@ -16,11 +16,13 @@ const createMyAppUserQuery = () => ({
 import { useState } from 'react';
 import { useSendbirdChat, createGroupChannelInviteFragment } from "@sendbird/uikit-react-native";
 import type { SendbirdUser } from "@sendbird/uikit-utils";
+import { useGroupChannel } from "@sendbird/uikit-chat-hooks";
 
 const GroupChannelInviteFragment = createGroupChannelInviteFragment<SendbirdUser>();
-const GroupChannelInviteScreen = ({ params }: { params: { serializedChannel: object } }) => {
+const GroupChannelInviteScreen = ({ params }: { params: { channelUrl: string } }) => {
   const { sdk } = useSendbirdChat();
-  const [channel] = useState(() => sdk.groupChannel.buildGroupChannelFromSerializedData(params.serializedChannel));
+  const { channel } = useGroupChannel(sdk, params.channelUrl);
+  if (!channel) return null;
 
   const navigateToBack = () => {};
   const navigateToGroupChannel = () => {};
@@ -82,6 +84,7 @@ const Component2 = () => {
  * */
 import { CustomQuery } from '@sendbird/uikit-chat-hooks';
 // import { useSendbirdChat, createGroupChannelInviteFragment } from '@sendbird/uikit-react-native';
+// import { useGroupChannel } from '@sendbird/uikit-chat-hooks';
 
 type MyAppUser = { uid: string; name: string; profile: string };
 
@@ -101,9 +104,10 @@ const myAppUserQueryCreator = () => {
 };
 
 const GroupChannelInviteFragment2 = createGroupChannelInviteFragment<MyAppUser>();
-const GroupChannelInviteScreen2 = ({ params }: { params: { serializedChannel: object } }) => {
+const GroupChannelInviteScreen2 = ({ params }: { params: { channelUrl: string } }) => {
   const { sdk } = useSendbirdChat();
-  const [channel] = useState(() => sdk.groupChannel.buildGroupChannelFromSerializedData(params.serializedChannel));
+  const { channel } = useGroupChannel(sdk, params.channelUrl);
+  if (!channel) return null;
 
   const navigateToBack = () => {};
   const navigateToGroupChannel = () => {};

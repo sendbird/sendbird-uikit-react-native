@@ -12,11 +12,13 @@ import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
  * */
 import React, { useState } from 'react';
 import { useSendbirdChat, createGroupChannelMembersFragment } from '@sendbird/uikit-react-native';
+import { useGroupChannel } from "@sendbird/uikit-chat-hooks";
 
 const GroupChannelMembersFragment = createGroupChannelMembersFragment();
-const GroupChannelMembersScreen = ({ params }: { params: { serializedChannel: object } }) => {
+const GroupChannelMembersScreen = ({ params }: { params: { channelUrl: string } }) => {
   const { sdk } = useSendbirdChat();
-  const [channel] = useState(() => sdk.groupChannel.buildGroupChannelFromSerializedData(params.serializedChannel));
+  const { channel } = useGroupChannel(sdk, params.channelUrl);
+  if (!channel) return null;
 
   const navigateToBack = () => {};
   const navigateToGroupChannelInvite = () => {};
@@ -79,11 +81,12 @@ const Component2 = () => {
 // import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
 
 const GroupChannelMembersFragment2 = createGroupChannelMembersFragment();
-const GroupChannelMembersScreen2 = ({ params }: { params: { serializedChannel: object } }) => {
-  const { sdk } = useSendbirdChat();
-  const [channel] = useState(() => sdk.groupChannel.buildGroupChannelFromSerializedData(params.serializedChannel));
-
+const GroupChannelMembersScreen2 = ({ params }: { params: { channelUrl: string } }) => {
   const { openSheet } = useBottomSheet();
+
+  const { sdk } = useSendbirdChat();
+  const { channel } = useGroupChannel(sdk, params.channelUrl);
+  if (!channel) return null;
 
   const navigateToBack = () => {};
   const navigateToGroupChannelInvite = () => {};
