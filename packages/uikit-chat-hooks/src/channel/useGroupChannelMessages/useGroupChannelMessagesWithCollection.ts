@@ -18,7 +18,6 @@ import {
 import { useAppFeatures } from '../../common/useAppFeatures';
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';
-import { useActiveGroupChannel } from '../useActiveGroupChannel';
 import { useGroupChannelMessagesReducer } from './reducer';
 
 const createMessageCollection = (
@@ -34,12 +33,9 @@ const HOOK_NAME = 'useGroupChannelMessagesWithCollection';
 
 export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (sdk, channel, userId, options) => {
   const { deliveryReceiptEnabled } = useAppFeatures(sdk);
+  const forceUpdate = useForceUpdate();
 
   const collectionRef = useRef<SendbirdMessageCollection>();
-
-  // NOTE: We cannot determine the channel object of Sendbird SDK is stale or not, so force update af
-  const { activeChannel, setActiveChannel } = useActiveGroupChannel(sdk, channel);
-  const forceUpdate = useForceUpdate();
 
   const {
     loading,
@@ -57,29 +53,30 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
 
   const channelMarkAs = async () => {
     try {
-      if (deliveryReceiptEnabled) await confirmAndMarkAsDelivered(sdk, activeChannel);
+      if (deliveryReceiptEnabled) await confirmAndMarkAsDelivered(sdk, channel);
     } catch (e) {
       Logger.warn(`[${HOOK_NAME}/channelMarkAs/Delivered]`, e);
     }
     try {
-      await confirmAndMarkAsRead(sdk, [activeChannel]);
+      await confirmAndMarkAsRead(sdk, [channel]);
     } catch (e) {
       Logger.warn(`[${HOOK_NAME}/channelMarkAs/Read]`, e);
     }
   };
 
   const updateChannel = (channel: SendbirdChannel) => {
-    if (channel.isGroupChannel() && !isDifferentChannel(channel, activeChannel)) {
+    if (channel.isGroupChannel() && !isDifferentChannel(channel, channel)) {
       forceUpdate();
     }
   };
 
   const init = useCallback(
-    async (uid?: string, callback?: () => void) => {
+    async (uid?: string, callback?: (freshChannel: SendbirdGroupChannel) => void) => {
+      const freshChannel = await sdk.groupChannel.getChannel(channel.url);
       if (collectionRef.current) collectionRef.current?.dispose();
 
       if (uid) {
-        collectionRef.current = createMessageCollection(activeChannel, options?.collectionCreator);
+        collectionRef.current = createMessageCollection(freshChannel, options?.collectionCreator);
         updateNextMessages([], true, sdk.currentUser.userId);
         channelMarkAs();
 
@@ -118,8 +115,8 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
               updateMessages(messages, true, sdk.currentUser.userId);
               updateMessages(collectionRef.current?.pendingMessages ?? [], false, sdk.currentUser.userId);
               updateMessages(collectionRef.current?.failedMessages ?? [], false, sdk.currentUser.userId);
-              if (messages?.length) callback?.();
             }
+            callback?.(freshChannel);
           })
           .onApiResult((err, messages) => {
             if (err) Logger.warn(`[${HOOK_NAME}/onApiResult]`, err);
@@ -131,20 +128,19 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
                 updateMessages(collectionRef.current?.failedMessages ?? [], false, sdk.currentUser.userId);
               }
             }
-            callback?.();
+            callback?.(freshChannel);
           });
       }
     },
-    [sdk, activeChannel.url, options?.collectionCreator],
+    [sdk, channel.url, options?.collectionCreator],
   );
 
   useChannelHandler(sdk, HOOK_NAME, {
     onUserBanned(channel, bannedUser) {
-      if (channel.isGroupChannel() && !isDifferentChannel(channel, activeChannel)) {
+      if (channel.isGroupChannel() && !isDifferentChannel(channel, channel)) {
         if (bannedUser.userId === sdk.currentUser.userId) {
           options?.onChannelDeleted?.();
         } else {
-          setActiveChannel(channel);
           forceUpdate();
         }
       }
@@ -199,7 +195,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
   const sendUserMessage: ReturnType<UseGroupChannelMessages>['sendUserMessage'] = useCallback(
     (params, onPending) => {
       return new Promise((resolve, reject) => {
-        activeChannel
+        channel
           .sendUserMessage(params)
           .onPending((pendingMessage) => {
             if (pendingMessage.isUserMessage()) {
@@ -218,12 +214,12 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
           });
       });
     },
-    [activeChannel],
+    [channel],
   );
   const sendFileMessage: ReturnType<UseGroupChannelMessages>['sendFileMessage'] = useCallback(
     (params, onPending) => {
       return new Promise((resolve, reject) => {
-        activeChannel
+        channel
           .sendFileMessage(params)
           .onPending((pendingMessage) => {
             if (pendingMessage.isFileMessage()) {
@@ -242,43 +238,41 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
           });
       });
     },
-    [activeChannel],
+    [channel],
   );
   const updateUserMessage: ReturnType<UseGroupChannelMessages>['updateUserMessage'] = useCallback(
     async (messageId, params) => {
-      const updatedMessage = await activeChannel.updateUserMessage(messageId, params);
+      const updatedMessage = await channel.updateUserMessage(messageId, params);
       updateMessages([updatedMessage], false, sdk.currentUser.userId);
       return updatedMessage;
     },
-    [activeChannel],
+    [channel],
   );
   const updateFileMessage: ReturnType<UseGroupChannelMessages>['updateFileMessage'] = useCallback(
     async (messageId, params) => {
-      const updatedMessage = await activeChannel.updateFileMessage(messageId, params);
+      const updatedMessage = await channel.updateFileMessage(messageId, params);
       updateMessages([updatedMessage], false, sdk.currentUser.userId);
       return updatedMessage;
     },
-    [activeChannel],
+    [channel],
   );
   const resendMessage: ReturnType<UseGroupChannelMessages>['resendMessage'] = useCallback(
     async (failedMessage) => {
       const message = await (() => {
-        if (failedMessage.isUserMessage()) return activeChannel.resendUserMessage(failedMessage);
-        // FIXME: v4 bugs
-        // @ts-ignore
-        if (failedMessage.isFileMessage()) return activeChannel.resendFileMessage(failedMessage);
+        if (failedMessage.isUserMessage()) return channel.resendUserMessage(failedMessage);
+        if (failedMessage.isFileMessage()) return channel.resendFileMessage(failedMessage);
         return null;
       })();
 
       if (message) updateMessages([message], false, sdk.currentUser.userId);
     },
-    [activeChannel],
+    [channel],
   );
   const deleteMessage: ReturnType<UseGroupChannelMessages>['deleteMessage'] = useCallback(
     async (message) => {
       if (message.sendingStatus === 'succeeded') {
-        if (message.isUserMessage()) await activeChannel.deleteMessage(message);
-        if (message.isFileMessage()) await activeChannel.deleteMessage(message);
+        if (message.isUserMessage()) await channel.deleteMessage(message);
+        if (message.isFileMessage()) await channel.deleteMessage(message);
       } else {
         try {
           await collectionRef.current?.removeFailedMessage(message.reqId);
@@ -287,7 +281,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
         }
       }
     },
-    [activeChannel],
+    [channel],
   );
 
   return {
@@ -305,6 +299,5 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     updateFileMessage,
     resendMessage,
     deleteMessage,
-    activeChannel,
   };
 };

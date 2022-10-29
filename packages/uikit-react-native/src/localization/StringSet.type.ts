@@ -67,6 +67,7 @@ export interface StringSet {
     HEADER_RIGHT: string;
 
     /** GroupChannelSettings > Menu */
+    MENU_MODERATIONS: string;
     MENU_NOTIFICATION: string;
     MENU_MEMBERS: string;
     MENU_LEAVE_CHANNEL: string;
@@ -81,6 +82,33 @@ export interface StringSet {
     DIALOG_CHANGE_IMAGE_MENU_TITLE: string;
     DIALOG_CHANGE_IMAGE_MENU_CAMERA: string;
     DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY: string;
+  };
+  GROUP_CHANNEL_MODERATIONS: {
+    /** GroupChannelModerations > Header */
+    HEADER_TITLE: string;
+
+    /** GroupChannelModerations > Menu */
+    MENU_OPERATORS: string;
+    MENU_MUTED_MEMBERS: string;
+    MENU_BANNED_USERS: string;
+    MENU_FREEZE_CHANNEL: string;
+  };
+  GROUP_CHANNEL_OPERATORS: {
+    /** GroupChannelOperators > Header */
+    HEADER_TITLE: string;
+  };
+  GROUP_CHANNEL_OPERATORS_ADD: {
+    /** GroupChannelOperatorsAdd > Header */
+    HEADER_TITLE: string;
+    HEADER_RIGHT: (params: { selectedUsers: Array<SendbirdMember> }) => string;
+  };
+  GROUP_CHANNEL_MUTED_MEMBERS: {
+    /** GroupChannelMutedMembers > Header */
+    HEADER_TITLE: string;
+  };
+  GROUP_CHANNEL_BANNED_USERS: {
+    /** GroupChannelBannedUsers > Header */
+    HEADER_TITLE: string;
   };
   GROUP_CHANNEL_LIST: {
     /** GroupChannelList > Header */
@@ -107,14 +135,10 @@ export interface StringSet {
     /** GroupChannelMembers > Header */
     HEADER_TITLE: string;
 
-    /** GroupChannelMembers > UserBar */
+    /** @deprecated Please use in LABELS **/
     USER_BAR_ME_POSTFIX: string;
+    /** @deprecated Please use in LABELS **/
     USER_BAR_OPERATOR: string;
-
-    /** GroupChannelMembers > Dialog */
-    DIALOG_USER_DISMISS_OPERATOR: string;
-    DIALOG_USER_MUTE: string;
-    DIALOG_USER_BAN: string;
   };
   GROUP_CHANNEL_INVITE: {
     /** GroupChannelInvite > Header */
@@ -131,13 +155,23 @@ export interface StringSet {
     USER_NO_NAME: string;
     CHANNEL_NO_MEMBERS: string;
     TYPING_INDICATOR_TYPINGS: (users: SendbirdUser[]) => string | undefined;
+
+    USER_BAR_ME_POSTFIX: string;
+    USER_BAR_OPERATOR: string;
+
+    REGISTER_AS_OPERATOR: string;
+    UNREGISTER_OPERATOR: string;
+    MUTE: string;
+    UNMUTE: string;
+    BAN: string;
+    UNBAN: string;
   };
   FILE_VIEWER: {
     TITLE: (message: SendbirdFileMessage) => string;
     SUBTITLE: (message: SendbirdFileMessage) => string;
   };
   PLACEHOLDER: {
-    NO_BANNED_MEMBERS: string;
+    NO_BANNED_USERS: string;
     NO_USERS: string;
     NO_CHANNELS: string;
     NO_MESSAGES: string;
@@ -234,6 +268,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     GROUP_CHANNEL_SETTINGS: {
       HEADER_TITLE: 'Channel information',
       HEADER_RIGHT: 'Edit',
+      MENU_MODERATIONS: 'Moderations',
       MENU_NOTIFICATION: 'Notifications',
       MENU_MEMBERS: 'Members',
       MENU_LEAVE_CHANNEL: 'Leave channel',
@@ -247,6 +282,35 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       DIALOG_CHANGE_IMAGE_MENU_CAMERA: 'Take photo',
       DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY: 'Choose photo',
       ...overrides?.GROUP_CHANNEL_SETTINGS,
+    },
+    GROUP_CHANNEL_MODERATIONS: {
+      HEADER_TITLE: 'Moderations',
+      MENU_OPERATORS: 'Operators',
+      MENU_MUTED_MEMBERS: 'Muted members',
+      MENU_BANNED_USERS: 'Banned users',
+      MENU_FREEZE_CHANNEL: 'Freeze channel',
+      ...overrides?.GROUP_CHANNEL_MODERATIONS,
+    },
+    GROUP_CHANNEL_OPERATORS: {
+      HEADER_TITLE: 'Operators',
+      ...overrides?.GROUP_CHANNEL_OPERATORS,
+    },
+    GROUP_CHANNEL_OPERATORS_ADD: {
+      HEADER_TITLE: 'Set as operators',
+      HEADER_RIGHT: ({ selectedUsers }) => {
+        const len = selectedUsers.length;
+        if (len === 0) return 'Add';
+        return `Add (${len})`;
+      },
+      ...overrides?.GROUP_CHANNEL_OPERATORS,
+    },
+    GROUP_CHANNEL_MUTED_MEMBERS: {
+      HEADER_TITLE: 'Muted members',
+      ...overrides?.GROUP_CHANNEL_MUTED_MEMBERS,
+    },
+    GROUP_CHANNEL_BANNED_USERS: {
+      HEADER_TITLE: 'Banned users',
+      ...overrides?.GROUP_CHANNEL_BANNED_USERS,
     },
     GROUP_CHANNEL_LIST: {
       HEADER_TITLE: 'Channels',
@@ -270,11 +334,10 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     },
     GROUP_CHANNEL_MEMBERS: {
       HEADER_TITLE: 'Members',
+      /** @deprecated Please use in LABELS **/
       USER_BAR_ME_POSTFIX: ' (You)',
+      /** @deprecated Please use in LABELS **/
       USER_BAR_OPERATOR: 'Operator',
-      DIALOG_USER_DISMISS_OPERATOR: 'Dismiss operator',
-      DIALOG_USER_MUTE: 'Mute',
-      DIALOG_USER_BAN: 'Ban',
       ...overrides?.GROUP_CHANNEL_MEMBERS,
     },
     GROUP_CHANNEL_CREATE: {
@@ -305,6 +368,14 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
         if (users.length === 2) return `${userNames.join(' and ')} are typing...`;
         return 'Several people are typing...';
       },
+      USER_BAR_ME_POSTFIX: ' (You)',
+      USER_BAR_OPERATOR: 'Operator',
+      REGISTER_AS_OPERATOR: 'Register as operator',
+      UNREGISTER_OPERATOR: 'Unregister operator',
+      MUTE: 'Mute',
+      UNMUTE: 'Unmute',
+      BAN: 'Ban',
+      UNBAN: 'Unban',
       ...overrides?.LABELS,
     },
     FILE_VIEWER: {
@@ -312,7 +383,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       SUBTITLE: (message) => messageTime(new Date(message.createdAt), dateLocale),
     },
     PLACEHOLDER: {
-      NO_BANNED_MEMBERS: 'No banned members',
+      NO_BANNED_USERS: 'No banned users',
       NO_USERS: 'No users',
       NO_CHANNELS: 'No channels',
       NO_MESSAGES: 'No messages',

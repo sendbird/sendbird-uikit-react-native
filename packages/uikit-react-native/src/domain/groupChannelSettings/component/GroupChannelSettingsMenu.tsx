@@ -10,6 +10,7 @@ import { GroupChannelSettingsContexts } from '../module/moduleContext';
 import type { GroupChannelSettingsProps } from '../types';
 
 const GroupChannelSettingsMenu = ({
+  onPressMenuModerations,
   onPressMenuMembers,
   onPressMenuLeaveChannel,
   menuItemsCreator = (menu) => menu,
@@ -28,6 +29,12 @@ const GroupChannelSettingsMenu = ({
   };
 
   const menuItems: MenuBarProps[] = menuItemsCreator([
+    {
+      icon: 'moderations',
+      name: STRINGS.GROUP_CHANNEL_SETTINGS.MENU_MODERATIONS,
+      onPress: () => onPressMenuModerations(),
+      actionItem: <Icon icon={'chevron-right'} color={colors.onBackground01} />,
+    },
     {
       icon: 'notifications',
       name: STRINGS.GROUP_CHANNEL_SETTINGS.MENU_NOTIFICATION,

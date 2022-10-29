@@ -6,11 +6,11 @@ import { useLocalization } from '../hooks/useContext';
 
 type Props = {
   type:
-    | 'no-banned-members'
+    | 'no-muted-members'
+    | 'no-banned-users'
     | 'no-channels'
     | 'no-messages'
     | 'no-users'
-    | 'no-muted-members'
     | 'no-results-found'
     | 'error-wrong'
     | 'loading';
@@ -19,8 +19,8 @@ type Props = {
 const TypedPlaceholder = ({ type, onPressRetry }: Props) => {
   const { STRINGS } = useLocalization();
   switch (type) {
-    case 'no-banned-members':
-      return <Placeholder icon={'ban'} message={STRINGS.PLACEHOLDER.NO_BANNED_MEMBERS} />;
+    case 'no-banned-users':
+      return <Placeholder icon={'ban'} message={STRINGS.PLACEHOLDER.NO_BANNED_USERS} />;
     case 'no-channels':
       return <Placeholder icon={'chat'} message={STRINGS.PLACEHOLDER.NO_CHANNELS} />;
     case 'no-messages':

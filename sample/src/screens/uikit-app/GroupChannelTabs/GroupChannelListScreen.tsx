@@ -53,7 +53,7 @@ const GroupChannelListScreen = () => {
         navigation.navigate(Routes.GroupChannelCreate, { channelType });
       }}
       onPressChannel={(channel) => {
-        navigation.navigate(Routes.GroupChannel, { serializedChannel: channel.serialize() });
+        navigation.navigate(Routes.GroupChannel, { channelUrl: channel.url });
       }}
     />
   );

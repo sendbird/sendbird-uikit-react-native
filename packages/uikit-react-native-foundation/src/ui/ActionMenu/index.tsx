@@ -15,6 +15,7 @@ export type ActionMenuItem = {
   title?: string;
   menuItems: {
     title: string;
+    style?: 'destructive';
     onPress?: (() => Promise<void>) | (() => void);
     onError?: () => void;
   }[];
@@ -83,7 +84,15 @@ const ActionMenu = ({ visible, onHide, onError, onDismiss, title, menuItems }: P
                   }
                 }}
               >
-                <Text subtitle2 color={colors.ui.dialog.default.none.text} numberOfLines={1}>
+                <Text
+                  subtitle2
+                  color={
+                    item.style === 'destructive'
+                      ? colors.ui.dialog.default.none.destructive
+                      : colors.ui.dialog.default.none.text
+                  }
+                  numberOfLines={1}
+                >
                   {item.title}
                 </Text>
               </TouchableOpacity>

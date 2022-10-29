@@ -20,7 +20,7 @@ const GroupChannelCreateScreen = () => {
       }}
       onCreateChannel={async (channel) => {
         // Navigate to created group channel
-        navigation.replace(Routes.GroupChannel, { serializedChannel: channel.serialize() });
+        navigation.replace(Routes.GroupChannel, { channelUrl: channel.url });
       }}
       onPressHeaderLeft={() => {
         // Navigate back

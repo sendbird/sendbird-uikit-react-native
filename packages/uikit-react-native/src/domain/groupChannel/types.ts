@@ -89,7 +89,6 @@ export interface GroupChannelProps {
     onPressImageMessage?: (message: SendbirdFileMessage, uri: string) => void;
   };
   Input: {
-    channel: SendbirdGroupChannel;
     onSendFileMessage: (file: FileType) => Promise<void>;
     onSendUserMessage: (text: string) => Promise<void>;
     onUpdateFileMessage: (editedFile: FileType, message: SendbirdFileMessage) => Promise<void>;

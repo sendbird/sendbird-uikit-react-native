@@ -8,12 +8,14 @@ const AdvertiseMessage = (_:object) => <></>
  * */
 import { useState } from 'react';
 import { useSendbirdChat, createGroupChannelFragment } from "@sendbird/uikit-react-native";
+import { useGroupChannel } from "@sendbird/uikit-chat-hooks";
 
 const GroupChannelFragment = createGroupChannelFragment();
 
-const GroupChannelScreen = ({ params }: { params: { serializedChannel: object } }) => {
+const GroupChannelScreen = ({ params }: { params: { channelUrl: string } }) => {
   const { sdk } = useSendbirdChat();
-  const [channel] = useState(() => sdk.groupChannel.buildGroupChannelFromSerializedData(params.serializedChannel));
+  const { channel } = useGroupChannel(sdk, params.channelUrl);
+  if (!channel) return null;
 
   const navigateToGroupChannelListScreen = () => {};
   const navigateToGroupChannelSettingsScreen = () => {};
@@ -111,15 +113,16 @@ const UseReactNavigationHeader: GroupChannelModule['Header'] = ({ onPressHeaderR
 const GroupChannelFragment2 = createGroupChannelFragment({
   Header: UseReactNavigationHeader, // Hide header and use react-navigation header
 });
-const GroupChannelScreen2 = ({ params }: { params: { serializedChannel: object } }) => {
+const GroupChannelScreen2 = ({ params }: { params: { channelUrl: string } }) => {
+  const height = useHeaderHeight();
+
   const { sdk } = useSendbirdChat();
-  const [channel] = useState(() => sdk.groupChannel.buildGroupChannelFromSerializedData(params.serializedChannel));
+  const { channel } = useGroupChannel(sdk, params.channelUrl);
+  if (!channel) return null;
 
   const navigateToGroupChannelListScreen = () => {};
   const navigateToGroupChannelSettingsScreen = () => {};
   const navigateToBack = () => {};
-
-  const height = useHeaderHeight();
 
   return (
     <GroupChannelFragment2

@@ -1,7 +1,7 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 import type { Optional, SendbirdChatSDK, SendbirdUser } from '@sendbird/uikit-utils';
-import { Logger, SBErrorCode, SBErrorMessage, useAsyncEffect } from '@sendbird/uikit-utils';
+import { Logger, SBErrorCode, SBErrorMessage, useAsyncEffect, useFreshCallback } from '@sendbird/uikit-utils';
 
 import type { CustomQueryInterface, UseUserListOptions, UseUserListReturn } from '../types';
 
@@ -56,7 +56,7 @@ export const useUserList = <
     else setUsers((prev) => prev.concat(users));
   };
 
-  const init = useCallback(async () => {
+  const init = useFreshCallback(async () => {
     query.current = createUserQuery<QueriedUser>(sdk, options?.queryCreator);
     if (query.current?.hasNext) {
       const users = await query.current?.next().catch((err) => {
@@ -66,7 +66,7 @@ export const useUserList = <
       });
       updateUsers(users, true);
     }
-  }, [sdk, options?.queryCreator]);
+  });
 
   useAsyncEffect(async () => {
     setLoading(true);
@@ -78,9 +78,9 @@ export const useUserList = <
     } finally {
       setLoading(false);
     }
-  }, [init]);
+  }, []);
 
-  const refresh = useCallback(async () => {
+  const refresh = useFreshCallback(async () => {
     setRefreshing(true);
     setError(null);
     try {
@@ -90,9 +90,9 @@ export const useUserList = <
     } finally {
       setRefreshing(false);
     }
-  }, [init]);
+  });
 
-  const next = useCallback(async () => {
+  const next = useFreshCallback(async () => {
     if (query.current && query.current?.hasNext) {
       const nextUsers = await query.current.next().catch((err) => {
         Logger.error(error);
@@ -101,7 +101,7 @@ export const useUserList = <
       });
       updateUsers(nextUsers, false);
     }
-  }, []);
+  });
 
   return {
     loading,

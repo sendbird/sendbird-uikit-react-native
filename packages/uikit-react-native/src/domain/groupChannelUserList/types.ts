@@ -1,5 +1,5 @@
 import type { UseUserListOptions } from '@sendbird/uikit-chat-hooks';
-import type { SendbirdGroupChannel, SendbirdGroupChannelCreateParams } from '@sendbird/uikit-utils';
+import type { SendbirdGroupChannel, SendbirdGroupChannelCreateParams, SendbirdMember } from '@sendbird/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 import type { GroupChannelType } from '../groupChannelList/types';
@@ -47,3 +47,14 @@ export interface GroupChannelMembersProps<User> {
   };
 }
 export type GroupChannelMembersFragment<User> = CommonComponent<GroupChannelMembersProps<User>['Fragment']>;
+
+export interface GroupChannelOperatorsAddProps<User = SendbirdMember> {
+  Fragment: {
+    channel: SendbirdGroupChannel;
+    onPressHeaderLeft: () => void;
+    onPressHeaderRight: (channel: SendbirdGroupChannel) => void;
+    sortComparator?: UseUserListOptions<User>['sortComparator'];
+    renderUser?: UserListProps<User>['List']['renderUser'];
+  };
+}
+export type GroupChannelOperatorsAddFragment<User> = CommonComponent<GroupChannelOperatorsAddProps<User>['Fragment']>;

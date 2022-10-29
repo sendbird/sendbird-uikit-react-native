@@ -1,9 +1,10 @@
 import React from 'react';
 
 import { useActiveGroupChannel, useChannelHandler } from '@sendbird/uikit-chat-hooks';
-import { Icon } from '@sendbird/uikit-react-native-foundation';
+import { Icon, useActionMenu } from '@sendbird/uikit-react-native-foundation';
+import type { ActionMenuItem } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMember } from '@sendbird/uikit-utils';
-import { useForceUpdate, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
+import { ifMuted, ifOperator, useForceUpdate, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
 
 import UserActionBar from '../components/UserActionBar';
 import type { GroupChannelMembersFragment } from '../domain/groupChannelUserList/types';
@@ -24,43 +25,43 @@ const createGroupChannelMembersFragment = (
 
     const { STRINGS } = useLocalization();
     const { sdk, currentUser } = useSendbirdChat();
+    const { openMenu } = useActionMenu();
     const { show } = useProfileCard();
 
     const { activeChannel } = useActiveGroupChannel(sdk, channel);
 
     useChannelHandler(sdk, `${name}_${uniqId}`, {
-      // Note: Removed from v4
-      // onUserEntered(channel) {
-      //   if (channel.url === activeChannel.url) forceUpdate();
-      // },
-      onUserLeft(channel) {
+      onChannelMemberCountChanged(channels) {
+        if (channels.some((c) => c.url === channel.url)) forceUpdate();
+      },
+      onChannelChanged(channel) {
         if (channel.url === activeChannel.url) forceUpdate();
       },
       onUserJoined(channel) {
         if (channel.url === activeChannel.url) forceUpdate();
       },
-      onUserUnmuted(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
-      },
-      onUserUnbanned(channel) {
+      onUserLeft(channel) {
         if (channel.url === activeChannel.url) forceUpdate();
       },
       onUserBanned(channel) {
         if (channel.url === activeChannel.url) forceUpdate();
       },
+      onUserUnbanned(channel) {
+        if (channel.url === activeChannel.url) forceUpdate();
+      },
       onUserMuted(channel) {
         if (channel.url === activeChannel.url) forceUpdate();
       },
-      onChannelMemberCountChanged(channels) {
-        if (channels.find((c) => c.url === channel.url)) forceUpdate();
-      },
-      onChannelChanged(channel) {
+      onUserUnmuted(channel) {
         if (channel.url === activeChannel.url) forceUpdate();
       },
       onChannelFrozen(channel) {
         if (channel.url === activeChannel.url) forceUpdate();
       },
       onChannelUnfrozen(channel) {
+        if (channel.url === activeChannel.url) forceUpdate();
+      },
+      onOperatorUpdated(channel) {
         if (channel.url === activeChannel.url) forceUpdate();
       },
     });
@@ -72,14 +73,43 @@ const createGroupChannelMembersFragment = (
         <UserActionBar
           muted={user.isMuted}
           uri={user.profileUrl}
-          label={user.role === 'operator' ? STRINGS.GROUP_CHANNEL_MEMBERS.USER_BAR_OPERATOR : ''}
+          label={user.role === 'operator' ? STRINGS.LABELS.USER_BAR_OPERATOR : ''}
           name={
             (user.nickname || STRINGS.LABELS.USER_NO_NAME) +
-            (user.userId === currentUser?.userId ? STRINGS.GROUP_CHANNEL_MEMBERS.USER_BAR_ME_POSTFIX : '')
+            (user.userId === currentUser?.userId ? STRINGS.LABELS.USER_BAR_ME_POSTFIX : '')
           }
           disabled={user.userId === currentUser?.userId}
-          // TODO: implement ban/mute actions, use channel.members with handlers instead member query
-          onPressActionMenu={undefined}
+          onPressActionMenu={ifOperator(channel.myRole, () => {
+            const menuItems: ActionMenuItem['menuItems'] = [];
+
+            menuItems.push({
+              title: ifOperator(user.role, STRINGS.LABELS.UNREGISTER_OPERATOR, STRINGS.LABELS.REGISTER_AS_OPERATOR),
+              onPress: ifOperator(
+                user.role,
+                () => channel.removeOperators([user.userId]),
+                () => channel.addOperators([user.userId]),
+              ),
+            });
+
+            if (!channel.isBroadcast) {
+              menuItems.push({
+                title: ifMuted(user.isMuted, STRINGS.LABELS.UNMUTE, STRINGS.LABELS.MUTE),
+                onPress: ifMuted(
+                  user.isMuted,
+                  () => channel.unmuteUser(user),
+                  () => channel.muteUser(user),
+                ),
+              });
+            }
+
+            menuItems.push({
+              title: STRINGS.LABELS.BAN,
+              style: 'destructive',
+              onPress: () => channel.banUser(user),
+            });
+
+            openMenu({ title: user.nickname || STRINGS.LABELS.USER_NO_NAME, menuItems });
+          })}
           onPressAvatar={() => show(user)}
         />
       );

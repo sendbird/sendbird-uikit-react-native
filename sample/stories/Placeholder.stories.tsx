@@ -24,7 +24,7 @@ export const Placeholder: PlaceholderStory = () => (
 export const TypedPlaceholder: PlaceholderStory = () => (
   <View style={{ flex: 1, height: '100%', justifyContent: 'center', alignItems: 'center' }}>
     <ScrollView horizontal>
-      <TypedPlaceholderComponent type={'no-banned-members'} />
+      <TypedPlaceholderComponent type={'no-banned-users'} />
       <TypedPlaceholderComponent type={'no-channels'} />
       <TypedPlaceholderComponent type={'no-messages'} />
       <TypedPlaceholderComponent type={'no-users'} />

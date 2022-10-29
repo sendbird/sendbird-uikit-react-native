@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { createGroupChannelMembersFragment } from '@sendbird/uikit-react-native';
-import { useSendbirdChat } from '@sendbird/uikit-react-native';
+import { useGroupChannel } from '@sendbird/uikit-chat-hooks';
+import { createGroupChannelMembersFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
 
 import { useAppNavigation } from '../../hooks/useAppNavigation';
 import { Routes } from '../../libs/navigation';
@@ -10,9 +10,10 @@ const GroupChannelMembersFragment = createGroupChannelMembersFragment();
 
 const GroupChannelMembersScreen = () => {
   const { navigation, params } = useAppNavigation<Routes.GroupChannelInvite>();
-  const { sdk } = useSendbirdChat();
 
-  const [channel] = useState(() => sdk.groupChannel.buildGroupChannelFromSerializedData(params.serializedChannel));
+  const { sdk } = useSendbirdChat();
+  const { channel } = useGroupChannel(sdk, params.channelUrl);
+  if (!channel) return null;
 
   return (
     <GroupChannelMembersFragment
@@ -21,7 +22,7 @@ const GroupChannelMembersScreen = () => {
         navigation.goBack();
       }}
       onPressHeaderRight={() => {
-        navigation.navigate(Routes.GroupChannelInvite, params);
+        navigation.push(Routes.GroupChannelInvite, params);
       }}
     />
   );

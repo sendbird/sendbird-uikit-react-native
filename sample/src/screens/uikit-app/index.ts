@@ -4,3 +4,8 @@ export { default as GroupChannelSettingsScreen } from './GroupChannelSettingsScr
 export { default as GroupChannelCreateScreen } from './GroupChannelCreateScreen';
 export { default as GroupChannelInviteScreen } from './GroupChannelInviteScreen';
 export { default as GroupChannelMembersScreen } from './GroupChannelMembersScreen';
+export { default as GroupChannelModerationsScreen } from './GroupChannelModerationsScreen';
+export { default as GroupChannelOperatorsScreen } from './GroupChannelOperatorsScreen';
+export { default as GroupChannelOperatorsAddScreen } from './GroupChannelOperatorsAddScreen';
+export { default as GroupChannelMutedMembersScreen } from './GroupChannelMutedMembersScreen';
+export { default as GroupChannelBannedUsersScreen } from './GroupChannelBannedUsersScreen';

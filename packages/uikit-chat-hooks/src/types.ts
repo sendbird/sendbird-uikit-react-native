@@ -178,11 +178,6 @@ export interface UseGroupChannelMessages {
      * @return {Promise<void>}
      * */
     deleteMessage: (message: SendbirdFileMessage | SendbirdUserMessage) => Promise<void>;
-
-    /**
-     * Activated channel
-     * */
-    activeChannel: SendbirdGroupChannel;
   };
 }
 

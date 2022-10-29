@@ -69,6 +69,7 @@ const App = () => {
  * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-7-create-a-fragment-and-module-components}
  * */
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useGroupChannel } from '@sendbird/uikit-chat-hooks';
 import {
   useSendbirdChat,
   createGroupChannelListFragment,
@@ -90,9 +91,7 @@ const GroupChannelListScreen = () => {
       }}
       onPressChannel={(channel) => {
         // Navigate to GroupChannel function.
-        navigation.navigate('GroupChannel', {
-          serializedChannel: channel.serialize(),
-        });
+        navigation.navigate('GroupChannel', { channelUrl: channel.url });
       }}
     />
   );
@@ -105,9 +104,7 @@ const GroupChannelCreateScreen = () => {
     <GroupChannelCreateFragment
       onCreateChannel={async (channel) => {
         // Navigate to GroupChannel function.
-        navigation.replace('GroupChannel', {
-          serializedChannel: channel.serialize(),
-        });
+        navigation.replace('GroupChannel', { channelUrl: channel.url });
       }}
       onPressHeaderLeft={() => {
         // Go back to the previous screen.
@@ -122,7 +119,8 @@ const GroupChannelScreen = () => {
   const { params } = useRoute<any>();
 
   const { sdk } = useSendbirdChat();
-  const channel = sdk.groupChannel.buildGroupChannelFromSerializedData(params.serializedChannel);
+  const { channel } = useGroupChannel(sdk, params.channelUrl);
+  if (!channel) return null;
 
   return (
     <GroupChannelFragment
@@ -137,9 +135,7 @@ const GroupChannelScreen = () => {
       }}
       onPressHeaderRight={() => {
         // Navigate to GroupChannelSettings function.
-        navigation.navigate('GroupChannelSettings', {
-          serializedChannel: params.serializedChannel,
-        });
+        navigation.navigate('GroupChannelSettings', { channelUrl: params.channelUrl });
       }}
     />
   );
