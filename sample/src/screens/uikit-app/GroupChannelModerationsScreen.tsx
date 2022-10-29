@@ -24,15 +24,15 @@ const GroupChannelModerationsScreen = () => {
       channel={channel}
       onPressMenuOperators={() => {
         // Navigate to group channel operators
-        navigation.navigate(Routes.GroupChannelOperators, params);
+        navigation.push(Routes.GroupChannelOperators, params);
       }}
       onPressMenuMutedMembers={() => {
         // Navigate to group channel muted members
-        navigation.navigate(Routes.GroupChannelMutedMembers, params);
+        navigation.push(Routes.GroupChannelMutedMembers, params);
       }}
       onPressMenuBannedUsers={() => {
         // Navigate to group channel banned users
-        navigation.navigate(Routes.GroupChannelBannedUsers, params);
+        navigation.push(Routes.GroupChannelBannedUsers, params);
       }}
       onPressHeaderLeft={() => {
         // Navigate back

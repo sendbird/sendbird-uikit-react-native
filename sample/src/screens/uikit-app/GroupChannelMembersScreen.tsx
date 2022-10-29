@@ -28,7 +28,7 @@ const GroupChannelMembersScreen = () => {
         navigation.goBack();
       }}
       onPressHeaderRight={() => {
-        navigation.navigate(Routes.GroupChannelInvite, params);
+        navigation.push(Routes.GroupChannelInvite, params);
       }}
     />
   );

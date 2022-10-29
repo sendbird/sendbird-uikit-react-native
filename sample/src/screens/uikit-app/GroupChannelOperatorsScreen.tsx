@@ -28,6 +28,7 @@ const GroupChannelOperatorsScreen = () => {
       }}
       onPressHeaderRight={() => {
         // Navigate to group channel set as operators
+        channel?.createMemberListQuery({ limit: 20 });
       }}
     />
   );

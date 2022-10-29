@@ -28,11 +28,11 @@ const GroupChannelSettingsScreen = () => {
       }}
       onPressMenuModerations={() => {
         // Navigate to group channel moderations
-        navigation.navigate(Routes.GroupChannelModerations, params);
+        navigation.push(Routes.GroupChannelModerations, params);
       }}
       onPressMenuMembers={() => {
         // Navigate to group channel members
-        navigation.navigate(Routes.GroupChannelMembers, params);
+        navigation.push(Routes.GroupChannelMembers, params);
       }}
       onPressMenuLeaveChannel={() => {
         // Navigate to group channel list

@@ -98,7 +98,7 @@ const GroupChannelScreen = () => {
       }}
       onPressHeaderRight={() => {
         // Navigate to group channel settings
-        navigation.navigate(Routes.GroupChannelSettings, params);
+        navigation.push(Routes.GroupChannelSettings, params);
       }}
     />
   );
