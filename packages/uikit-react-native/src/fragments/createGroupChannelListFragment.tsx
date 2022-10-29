@@ -17,7 +17,6 @@ import { useSendbirdChat } from '../hooks/useContext';
 const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListModule>): GroupChannelListFragment => {
   const GroupChannelListModule = createGroupChannelListModule(initModule);
   return ({
-    TypeSelectorHeader,
     onPressChannel,
     onPressCreateChannel,
     queryCreator,
@@ -79,7 +78,6 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
         </StatusComposition>
         <GroupChannelListModule.TypeSelector
           skipTypeSelection={skipTypeSelection}
-          Header={TypeSelectorHeader}
           onSelectType={onPressCreateChannel}
         />
       </GroupChannelListModule.Provider>

@@ -1,8 +1,7 @@
 import React, { useContext, useEffect } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { Platform, TouchableOpacity, View } from 'react-native';
 
 import {
-  Header as DefaultHeader,
   Icon,
   Modal,
   Text,
@@ -22,12 +21,8 @@ const TYPE_ICONS: Record<GroupChannelType, keyof typeof Icon.Assets> = {
   'BROADCAST': 'broadcast',
 };
 
-const GroupChannelListTypeSelector = ({
-  Header = DefaultHeader,
-  skipTypeSelection,
-  onSelectType,
-}: GroupChannelListProps['TypeSelector']) => {
-  const { statusBarTranslucent } = useHeaderStyle();
+const GroupChannelListTypeSelector = ({ skipTypeSelection, onSelectType }: GroupChannelListProps['TypeSelector']) => {
+  const { statusBarTranslucent, HeaderComponent } = useHeaderStyle();
   const { colors } = useUIKitTheme();
   const typeSelector = useContext(GroupChannelListContexts.TypeSelector);
   const { visible, hide } = typeSelector;
@@ -42,42 +37,30 @@ const GroupChannelListTypeSelector = ({
 
   if (skipTypeSelection) return null;
 
-  const renderButtons = () => (
-    <View style={styles.buttonArea}>
-      {TYPES.map((type) => {
-        return (
-          <TouchableOpacity key={type} activeOpacity={0.6} onPress={createOnPressType(type)} style={styles.typeButton}>
-            <DefaultTypeIcon type={type} />
-            <DefaultTypeText type={type} />
-          </TouchableOpacity>
-        );
-      })}
-    </View>
-  );
-
-  const renderHeader = () => {
-    if (Header) {
-      return (
-        <Header
-          title={typeSelector.headerTitle}
-          right={<Icon icon={'close'} color={colors.onBackground01} />}
-          onPressRight={typeSelector.hide}
-        >
-          {renderButtons()}
-        </Header>
-      );
-    }
-
-    return (
-      <DefaultHeader title={null} right={null} left={null}>
-        {renderButtons()}
-      </DefaultHeader>
-    );
-  };
-
   return (
     <Modal visible={visible} onClose={hide} statusBarTranslucent={statusBarTranslucent}>
-      {renderHeader()}
+      <HeaderComponent
+        title={typeSelector.headerTitle}
+        right={<Icon icon={'close'} color={colors.onBackground01} />}
+        onPressRight={typeSelector.hide}
+        statusBarTopInsetAs={Platform.select({ android: 'margin', default: 'padding' })}
+      >
+        <View style={styles.buttonArea}>
+          {TYPES.map((type) => {
+            return (
+              <TouchableOpacity
+                key={type}
+                activeOpacity={0.6}
+                onPress={createOnPressType(type)}
+                style={styles.typeButton}
+              >
+                <DefaultTypeIcon type={type} />
+                <DefaultTypeText type={type} />
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </HeaderComponent>
     </Modal>
   );
 };
