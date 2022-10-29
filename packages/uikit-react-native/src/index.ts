@@ -24,6 +24,7 @@ export { default as createGroupChannelListFragment } from './fragments/createGro
 export { default as createGroupChannelMembersFragment } from './fragments/createGroupChannelMembersFragment';
 export { default as createGroupChannelModerationsFragment } from './fragments/createGroupChannelModerationsFragment';
 export { default as createGroupChannelOperatorsFragment } from './fragments/createGroupChannelOperatorsFragment';
+export { default as createGroupChannelOperatorsAddFragment } from './fragments/createGroupChannelOperatorsAddFragment';
 export { default as createGroupChannelMutedMembersFragment } from './fragments/createGroupChannelMutedMembersFragment';
 export { default as createGroupChannelBannedUsersFragment } from './fragments/createGroupChannelBannedUsersFragment';
 

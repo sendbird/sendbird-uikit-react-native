@@ -1,6 +1,7 @@
 export { useGroupChannelList } from './channel/useGroupChannelList';
 export { useGroupChannelMessages } from './channel/useGroupChannelMessages';
 export { useActiveGroupChannel } from './channel/useActiveGroupChannel';
+export { useGroupChannel } from './channel/useGroupChannel';
 
 export { useAppFeatures } from './common/useAppFeatures';
 export { useMessageOutgoingStatus } from './common/useMessageOutgoingStatus';
