@@ -2,22 +2,11 @@ import React from 'react';
 import { StatusBar, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import type { BaseHeaderProps, HeaderElement } from '../types';
+import type { HeaderProps } from '../ui/Header';
 import getDefaultHeaderHeight from './getDefaultHeaderHeight';
 
 export type HeaderStyleContextType = {
-  HeaderComponent: (
-    props: BaseHeaderProps<
-      {
-        title?: HeaderElement;
-        left?: HeaderElement;
-        right?: HeaderElement;
-        onPressLeft?: () => void;
-        onPressRight?: () => void;
-      },
-      { clearTitleMargin?: boolean }
-    >,
-  ) => React.ReactElement | null;
+  HeaderComponent: (props: HeaderProps) => React.ReactElement | null;
   defaultTitleAlign: 'left' | 'center';
   statusBarTranslucent: boolean;
   topInset: number;
