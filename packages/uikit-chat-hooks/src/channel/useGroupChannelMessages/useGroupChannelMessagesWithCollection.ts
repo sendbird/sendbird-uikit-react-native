@@ -57,12 +57,11 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
   };
 
   const init = useCallback(
-    async (uid?: string, callback?: (freshChannel: SendbirdGroupChannel) => void) => {
-      const freshChannel = await sdk.groupChannel.getChannel(channel.url);
+    async (uid?: string, callback?: () => void) => {
       if (collectionRef.current) collectionRef.current?.dispose();
 
       if (uid) {
-        collectionRef.current = createMessageCollection(freshChannel, options?.collectionCreator);
+        collectionRef.current = createMessageCollection(channel, options?.collectionCreator);
         updateNextMessages([], true, sdk.currentUser.userId);
         channelMarkAs();
 
@@ -108,7 +107,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
               updateMessages(collectionRef.current?.pendingMessages ?? [], false, sdk.currentUser.userId);
               updateMessages(collectionRef.current?.failedMessages ?? [], false, sdk.currentUser.userId);
             }
-            callback?.(freshChannel);
+            callback?.();
           })
           .onApiResult((err, messages) => {
             if (err) Logger.warn(`[${HOOK_NAME}/onApiResult]`, err);
@@ -120,7 +119,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
                 updateMessages(collectionRef.current?.failedMessages ?? [], false, sdk.currentUser.userId);
               }
             }
-            callback?.(freshChannel);
+            callback?.();
           });
       }
     },
@@ -140,7 +139,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
   });
 
   useEffect(() => {
-    // NOTE: Cache read is heavy synchronous task, and it prevents smooth ui transition
+    // NOTE: Cache read is heavy task, and it prevents smooth ui transition
     setTimeout(async () => {
       updateLoading(true);
       init(userId, () => updateLoading(false));
