@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { useActiveGroupChannel, useChannelHandler } from '@sendbird/uikit-chat-hooks';
-import { Icon, useActionMenu } from '@sendbird/uikit-react-native-foundation';
+import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import type { ActionMenuItem } from '@sendbird/uikit-react-native-foundation';
+import { Icon, useActionMenu } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMember } from '@sendbird/uikit-utils';
 import { ifMuted, ifOperator, useForceUpdate, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
 
@@ -28,41 +28,39 @@ const createGroupChannelMembersFragment = (
     const { openMenu } = useActionMenu();
     const { show } = useProfileCard();
 
-    const { activeChannel } = useActiveGroupChannel(sdk, channel);
-
     useChannelHandler(sdk, `${name}_${uniqId}`, {
       onChannelMemberCountChanged(channels) {
         if (channels.some((c) => c.url === channel.url)) forceUpdate();
       },
-      onChannelChanged(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
+      onChannelChanged(eventChannel) {
+        if (eventChannel.url === channel.url) forceUpdate();
       },
-      onUserJoined(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
+      onUserJoined(eventChannel) {
+        if (eventChannel.url === channel.url) forceUpdate();
       },
-      onUserLeft(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
+      onUserLeft(eventChannel) {
+        if (eventChannel.url === channel.url) forceUpdate();
       },
-      onUserBanned(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
+      onUserBanned(eventChannel) {
+        if (eventChannel.url === channel.url) forceUpdate();
       },
-      onUserUnbanned(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
+      onUserUnbanned(eventChannel) {
+        if (eventChannel.url === channel.url) forceUpdate();
       },
-      onUserMuted(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
+      onUserMuted(eventChannel) {
+        if (eventChannel.url === channel.url) forceUpdate();
       },
-      onUserUnmuted(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
+      onUserUnmuted(eventChannel) {
+        if (eventChannel.url === channel.url) forceUpdate();
       },
-      onChannelFrozen(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
+      onChannelFrozen(eventChannel) {
+        if (eventChannel.url === channel.url) forceUpdate();
       },
-      onChannelUnfrozen(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
+      onChannelUnfrozen(eventChannel) {
+        if (eventChannel.url === channel.url) forceUpdate();
       },
-      onOperatorUpdated(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
+      onOperatorUpdated(eventChannel) {
+        if (eventChannel.url === channel.url) forceUpdate();
       },
     });
 
@@ -125,7 +123,7 @@ const createGroupChannelMembersFragment = (
         />
 
         <UserListModule.List
-          users={activeChannel.members}
+          users={channel.members}
           renderUser={_renderUser}
           onLoadNext={async () => void 0}
           ListEmptyComponent={<UserListModule.StatusEmpty />}
