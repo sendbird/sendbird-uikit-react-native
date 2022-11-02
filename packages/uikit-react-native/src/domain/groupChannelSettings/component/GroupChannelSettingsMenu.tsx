@@ -31,6 +31,7 @@ const GroupChannelSettingsMenu = ({
   const menuItems: MenuBarProps[] = menuItemsCreator([
     {
       icon: 'moderations',
+      visible: channel.myRole === 'operator',
       name: STRINGS.GROUP_CHANNEL_SETTINGS.MENU_MODERATIONS,
       onPress: () => onPressMenuModerations(),
       actionItem: <Icon icon={'chevron-right'} color={colors.onBackground01} />,
@@ -70,6 +71,7 @@ const GroupChannelSettingsMenu = ({
             onPress={menu.onPress}
             name={menu.name}
             disabled={menu.disabled}
+            visible={menu.visible}
             icon={menu.icon}
             iconColor={menu.iconColor}
             iconBackgroundColor={menu.iconBackgroundColor}
