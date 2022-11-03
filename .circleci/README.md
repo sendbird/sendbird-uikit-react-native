@@ -14,9 +14,10 @@
 - FASTLANE_ANDROID_SERVICE_ACCOUNT
   - Create service-account(firebase_app_distribution role) from google cloud console
   - Download JSON key file
-  - Decode as a base64
-    - `cat service-account.json | base64 >> decoded.txt`
-  - Save decoded text to environment
+  - Encode as a base64
+    - `cat service-account.json | base64`
+  - Save encoded text to environment
+    - You can decode text like `echo "encoded-base64-text" | base64 --decode`
 - FASTLANE_ANDROID_APP_ID
   - Open your firebase project settings > general
   - Find your android app (formatted like 1:xxxxxxxxxxxxxxxx)
