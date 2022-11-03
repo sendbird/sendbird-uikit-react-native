@@ -39,6 +39,7 @@ const GroupChannelModerationsMenu = ({
     },
     {
       icon: 'mute',
+      visible: !channel.isBroadcast,
       name: STRINGS.GROUP_CHANNEL_MODERATIONS.MENU_MUTED_MEMBERS,
       onPress: () => onPressMenuMutedMembers(),
       actionItem: <Icon icon={'chevron-right'} color={colors.onBackground01} />,
@@ -51,6 +52,7 @@ const GroupChannelModerationsMenu = ({
     },
     {
       icon: 'freeze',
+      visible: !channel.isBroadcast,
       name: STRINGS.GROUP_CHANNEL_MODERATIONS.MENU_FREEZE_CHANNEL,
       actionItem: <Switch value={isFrozen} onChangeValue={toggleFreeze} />,
       onPress: toggleFreeze,
@@ -66,6 +68,7 @@ const GroupChannelModerationsMenu = ({
             onPress={menu.onPress}
             name={menu.name}
             disabled={menu.disabled}
+            visible={menu.visible}
             icon={menu.icon}
             iconColor={menu.iconColor}
             iconBackgroundColor={menu.iconBackgroundColor}
