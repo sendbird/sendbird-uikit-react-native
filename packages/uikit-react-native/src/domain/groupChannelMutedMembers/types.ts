@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import type { SendbirdGroupChannel, SendbirdMember } from '@sendbird/uikit-utils';
+import type { SendbirdGroupChannel, SendbirdRestrictedUser } from '@sendbird/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 
@@ -14,9 +14,13 @@ export type GroupChannelMutedMembersProps = {
     onPressHeaderLeft: () => void;
   };
   List: {
-    renderUser: (props: { user: SendbirdMember }) => React.ReactElement | null;
-    mutedMembers: SendbirdMember[];
+    renderUser: (props: { user: SendbirdRestrictedUser }) => React.ReactElement | null;
+    onLoadNext: () => void;
+    mutedMembers: SendbirdRestrictedUser[];
     ListEmptyComponent?: React.ReactElement;
+  };
+  StatusError: {
+    onPressRetry: () => void;
   };
 };
 
@@ -35,6 +39,8 @@ export interface GroupChannelMutedMembersModule {
   Header: CommonComponent<GroupChannelMutedMembersProps['Header']>;
   List: CommonComponent<GroupChannelMutedMembersProps['List']>;
   StatusEmpty: CommonComponent;
+  StatusLoading: CommonComponent;
+  StatusError: CommonComponent<GroupChannelMutedMembersProps['StatusError']>;
 }
 
 export type GroupChannelMutedMembersFragment = CommonComponent<GroupChannelMutedMembersProps['Fragment']>;

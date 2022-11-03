@@ -189,11 +189,15 @@ export type UseGroupChannelMessagesOptions = {
   onChannelDeleted?: () => void;
 };
 
+export interface UserStruct {
+  userId: string;
+}
+
 /**
  * @interface UseUserListReturn
  * @description interface for user list hook return value
  * */
-export interface UseUserListReturn<User> {
+export interface UseUserListReturn<User extends UserStruct> {
   /**
    * Loading state, only available on first render
    * */
@@ -221,13 +225,23 @@ export interface UseUserListReturn<User> {
   users: User[];
 
   /**
+   * Update or Insert user to list
+   * */
+  upsertUser: (user: User) => void;
+
+  /**
+   * Delete user from list
+   * */
+  deleteUser: (userId: User['userId']) => void;
+
+  /**
    * Fetch next users to state
    * @return {Promise<void>}
    * */
   next: () => Promise<void>;
 }
 
-export type UseUserListOptions<User> = {
+export type UseUserListOptions<User extends UserStruct> = {
   sortComparator?: (a: User, b: User) => number;
   queryCreator?: () => CustomQueryInterface<User>;
 };

@@ -37,6 +37,9 @@ export interface UserListProps<User> {
     headerTitle: string;
     headerRight: (selectedUsers: Array<User>) => string;
   };
+  StatusError: {
+    onPressRetry: () => void;
+  };
 }
 
 /**
@@ -61,5 +64,5 @@ export interface UserListModule<User> {
   List: CommonComponent<UserListProps<User>['List']>;
   StatusEmpty: CommonComponent;
   StatusLoading: CommonComponent;
-  StatusError: CommonComponent<{ onPressRetry: () => void }>;
+  StatusError: CommonComponent<UserListProps<User>['StatusError']>;
 }

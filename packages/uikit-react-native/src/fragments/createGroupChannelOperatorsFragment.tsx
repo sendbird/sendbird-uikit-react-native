@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
+import { useChannelHandler, useUserList } from '@sendbird/uikit-chat-hooks';
 import { useActionMenu } from '@sendbird/uikit-react-native-foundation';
-import { ifOperator, useForceUpdate, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
+import { ifOperator, isDifferentChannel, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
 
+import StatusComposition from '../components/StatusComposition';
 import UserActionBar from '../components/UserActionBar';
 import { createGroupChannelOperatorsModule } from '../domain/groupChannelOperators';
 import type { GroupChannelOperatorsFragment, GroupChannelOperatorsModule } from '../domain/groupChannelOperators/types';
@@ -17,22 +18,29 @@ const createGroupChannelOperatorsFragment = (
 
   return ({ channel, onPressHeaderLeft, onPressHeaderRight, renderUser }) => {
     const uniqId = useUniqId(name);
-    const forceUpdate = useForceUpdate();
 
     const { STRINGS } = useLocalization();
     const { sdk, currentUser } = useSendbirdChat();
     const { openMenu } = useActionMenu();
     const { show } = useProfileCard();
 
+    const { users, deleteUser, upsertUser, loading, refresh, next, error } = useUserList(sdk, {
+      queryCreator: () => channel.createOperatorListQuery({ limit: 20 }),
+    });
+
     useChannelHandler(sdk, `${name}_${uniqId}`, {
-      onUserLeft(channel) {
-        if (channel.url === channel.url) forceUpdate();
+      onUserLeft(eventChannel, user) {
+        if (isDifferentChannel(eventChannel, channel)) return;
+        deleteUser(user.userId);
       },
-      onUserBanned(channel) {
-        if (channel.url === channel.url) forceUpdate();
+      onUserBanned(eventChannel, user) {
+        if (isDifferentChannel(eventChannel, channel)) return;
+        deleteUser(user.userId);
       },
-      onOperatorUpdated(channel) {
-        if (channel.url === channel.url) forceUpdate();
+      onOperatorUpdated(eventChannel, updatedUsers) {
+        if (isDifferentChannel(eventChannel, channel)) return;
+        const operatorsAdded = users.length < updatedUsers.length;
+        if (operatorsAdded) updatedUsers.forEach(upsertUser);
       },
     });
 
@@ -44,7 +52,6 @@ const createGroupChannelOperatorsFragment = (
         <UserActionBar
           muted={false}
           uri={user.profileUrl}
-          label={user.role === 'operator' ? STRINGS.LABELS.USER_BAR_OPERATOR : ''}
           name={
             (user.nickname || STRINGS.LABELS.USER_NO_NAME) +
             (user.userId === currentUser?.userId ? STRINGS.LABELS.USER_BAR_ME_POSTFIX : '')
@@ -56,12 +63,8 @@ const createGroupChannelOperatorsFragment = (
               title: user.nickname || STRINGS.LABELS.USER_NO_NAME,
               menuItems: [
                 {
-                  title: ifOperator(user.role, STRINGS.LABELS.UNREGISTER_OPERATOR, STRINGS.LABELS.REGISTER_AS_OPERATOR),
-                  onPress: ifOperator(
-                    user.role,
-                    () => channel.removeOperators([user.userId]),
-                    () => channel.addOperators([user.userId]),
-                  ),
+                  title: STRINGS.LABELS.UNREGISTER_OPERATOR,
+                  onPress: () => channel.removeOperators([user.userId]).then(() => deleteUser(user.userId)),
                 },
               ],
             });
@@ -77,11 +80,19 @@ const createGroupChannelOperatorsFragment = (
           onPressHeaderRight={async () => onPressHeaderRight()}
         />
 
-        <GroupChannelOperatorsModule.List
-          operators={channel.members.filter((it) => it.role === 'operator')}
-          renderUser={_renderUser}
-          ListEmptyComponent={<GroupChannelOperatorsModule.StatusEmpty />}
-        />
+        <StatusComposition
+          loading={loading}
+          LoadingComponent={<GroupChannelOperatorsModule.StatusLoading />}
+          error={Boolean(error)}
+          ErrorComponent={<GroupChannelOperatorsModule.StatusError onPressRetry={refresh} />}
+        >
+          <GroupChannelOperatorsModule.List
+            operators={users}
+            renderUser={_renderUser}
+            onLoadNext={next}
+            ListEmptyComponent={<GroupChannelOperatorsModule.StatusEmpty />}
+          />
+        </StatusComposition>
       </GroupChannelOperatorsModule.Provider>
     );
   };

@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import type { SendbirdGroupChannel, SendbirdMember } from '@sendbird/uikit-utils';
+import type { SendbirdGroupChannel, SendbirdUser } from '@sendbird/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 
@@ -16,9 +16,13 @@ export type GroupChannelOperatorsProps = {
     onPressHeaderRight: () => void;
   };
   List: {
-    renderUser: (props: { user: SendbirdMember }) => React.ReactElement | null;
-    operators: SendbirdMember[];
+    renderUser: (props: { user: SendbirdUser }) => React.ReactElement | null;
+    onLoadNext: () => void;
+    operators: SendbirdUser[];
     ListEmptyComponent?: React.ReactElement;
+  };
+  StatusError: {
+    onPressRetry: () => void;
   };
 };
 
@@ -37,6 +41,8 @@ export interface GroupChannelOperatorsModule {
   Header: CommonComponent<GroupChannelOperatorsProps['Header']>;
   List: CommonComponent<GroupChannelOperatorsProps['List']>;
   StatusEmpty: CommonComponent;
+  StatusLoading: CommonComponent;
+  StatusError: CommonComponent<GroupChannelOperatorsProps['StatusError']>;
 }
 
 export type GroupChannelOperatorsFragment = CommonComponent<GroupChannelOperatorsProps['Fragment']>;

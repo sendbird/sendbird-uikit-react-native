@@ -1,18 +1,15 @@
-import type { UseUserListOptions } from '@sendbird/uikit-chat-hooks';
+import type { UseUserListOptions, UserStruct } from '@sendbird/uikit-chat-hooks';
 import type { SendbirdGroupChannel, SendbirdGroupChannelCreateParams, SendbirdMember } from '@sendbird/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 import type { GroupChannelType } from '../groupChannelList/types';
 import type { UserListProps } from '../userList/types';
 
-type UserIds = string[];
-
-export interface GroupChannelCreateProps<User> {
+export interface GroupChannelCreateProps<User extends UserStruct> {
   Fragment: {
     onPressHeaderLeft: () => void;
     onCreateChannel: (channel: SendbirdGroupChannel) => void;
     channelType?: GroupChannelType;
-    userIdsGenerator?: (users: User[]) => UserIds;
     onBeforeCreateChannel?: (
       params: SendbirdGroupChannelCreateParams,
       users: User[],
@@ -22,22 +19,25 @@ export interface GroupChannelCreateProps<User> {
     renderUser?: UserListProps<User>['List']['renderUser'];
   };
 }
-export type GroupChannelCreateFragment<User> = CommonComponent<GroupChannelCreateProps<User>['Fragment']>;
+export type GroupChannelCreateFragment<User extends UserStruct> = CommonComponent<
+  GroupChannelCreateProps<User>['Fragment']
+>;
 
-export interface GroupChannelInviteProps<User> {
+export interface GroupChannelInviteProps<User extends UserStruct> {
   Fragment: {
     channel: SendbirdGroupChannel;
     onPressHeaderLeft: () => void;
     onInviteMembers: (channel: SendbirdGroupChannel) => void;
-    userIdsGenerator?: (users: User[]) => UserIds;
     queryCreator?: UseUserListOptions<User>['queryCreator'];
     renderUser?: UserListProps<User>['List']['renderUser'];
     sortComparator?: UseUserListOptions<User>['sortComparator'];
   };
 }
-export type GroupChannelInviteFragment<User> = CommonComponent<GroupChannelInviteProps<User>['Fragment']>;
+export type GroupChannelInviteFragment<User extends UserStruct> = CommonComponent<
+  GroupChannelInviteProps<User>['Fragment']
+>;
 
-export interface GroupChannelMembersProps<User> {
+export interface GroupChannelMembersProps<User extends UserStruct> {
   Fragment: {
     channel: SendbirdGroupChannel;
     onPressHeaderLeft: () => void;
@@ -46,9 +46,11 @@ export interface GroupChannelMembersProps<User> {
     renderUser?: UserListProps<User>['List']['renderUser'];
   };
 }
-export type GroupChannelMembersFragment<User> = CommonComponent<GroupChannelMembersProps<User>['Fragment']>;
+export type GroupChannelMembersFragment<User extends UserStruct> = CommonComponent<
+  GroupChannelMembersProps<User>['Fragment']
+>;
 
-export interface GroupChannelOperatorsAddProps<User = SendbirdMember> {
+export interface GroupChannelOperatorsAddProps<User extends UserStruct = SendbirdMember> {
   Fragment: {
     channel: SendbirdGroupChannel;
     onPressHeaderLeft: () => void;
@@ -57,4 +59,6 @@ export interface GroupChannelOperatorsAddProps<User = SendbirdMember> {
     renderUser?: UserListProps<User>['List']['renderUser'];
   };
 }
-export type GroupChannelOperatorsAddFragment<User> = CommonComponent<GroupChannelOperatorsAddProps<User>['Fragment']>;
+export type GroupChannelOperatorsAddFragment<User extends UserStruct> = CommonComponent<
+  GroupChannelOperatorsAddProps<User>['Fragment']
+>;

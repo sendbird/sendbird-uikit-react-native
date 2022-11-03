@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, ListRenderItem } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { SendbirdMember, useFreshCallback } from '@sendbird/uikit-utils';
+import { SendbirdRestrictedUser, useFreshCallback } from '@sendbird/uikit-utils';
 
 import type { GroupChannelMutedMembersProps } from '../types';
 
@@ -11,7 +11,9 @@ const GroupChannelMutedMembersList = ({
   mutedMembers,
   ListEmptyComponent,
 }: GroupChannelMutedMembersProps['List']) => {
-  const renderItem: ListRenderItem<SendbirdMember> = useFreshCallback(({ item }) => renderUser?.({ user: item }));
+  const renderItem: ListRenderItem<SendbirdRestrictedUser> = useFreshCallback(({ item }) =>
+    renderUser?.({ user: item }),
+  );
   const { left, right } = useSafeAreaInsets();
 
   return (

@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import { CustomQuery, useUserList } from '@sendbird/uikit-chat-hooks';
-import type { SendbirdGroupChannel, SendbirdMember } from '@sendbird/uikit-utils';
+import { useUserList } from '@sendbird/uikit-chat-hooks';
+import type { SendbirdMember } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import UserSelectableBar from '../components/UserSelectableBar';
@@ -10,23 +10,6 @@ import type { GroupChannelOperatorsAddFragment } from '../domain/groupChannelUse
 import createUserListModule from '../domain/userList/module/createUserListModule';
 import type { UserListModule } from '../domain/userList/types';
 import { useLocalization, useSendbirdChat } from '../hooks/useContext';
-
-const createQueryCreator = (channel: SendbirdGroupChannel) => {
-  return () => {
-    const memberQuery = channel.createMemberListQuery({ limit: 20 });
-    return new CustomQuery({
-      isLoading: () => {
-        return memberQuery.isLoading;
-      },
-      next: () => {
-        return memberQuery.next();
-      },
-      hasNext: () => {
-        return memberQuery.hasNext;
-      },
-    });
-  };
-};
 
 const createGroupChannelOperatorsAddFragment = (
   initModule?: Partial<UserListModule<SendbirdMember>>,
@@ -37,7 +20,7 @@ const createGroupChannelOperatorsAddFragment = (
     const { sdk, currentUser } = useSendbirdChat();
     const { STRINGS } = useLocalization();
     const { users, refreshing, refresh, next, error, loading } = useUserList(sdk, {
-      queryCreator: createQueryCreator(channel),
+      queryCreator: () => channel.createMemberListQuery({ limit: 20 }),
       sortComparator,
     });
 
@@ -45,11 +28,9 @@ const createGroupChannelOperatorsAddFragment = (
       (user, selectedUsers, setSelectedUsers) => {
         if (renderUser) return renderUser(user, selectedUsers, setSelectedUsers);
 
-        const operatorIds = channel.members.filter((it) => it.role === 'operator').map((u) => u.userId);
         const userIdx = selectedUsers.findIndex((u) => u.userId === user.userId);
         const isSelected = userIdx > -1;
-
-        const isOperator = operatorIds.includes(user.userId);
+        const isOperator = user.role === 'operator';
 
         return (
           <TouchableOpacity

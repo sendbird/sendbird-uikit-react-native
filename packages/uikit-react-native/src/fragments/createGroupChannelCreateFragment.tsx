@@ -1,8 +1,8 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import { useUserList } from '@sendbird/uikit-chat-hooks';
-import { Logger, PASS, SendbirdGroupChannelCreateParams, SendbirdUser, useFreshCallback } from '@sendbird/uikit-utils';
+import { UserStruct, useUserList } from '@sendbird/uikit-chat-hooks';
+import { PASS, SendbirdGroupChannelCreateParams, SendbirdUser, useFreshCallback } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import UserSelectableBar from '../components/UserSelectableBar';
@@ -11,30 +11,12 @@ import createUserListModule from '../domain/userList/module/createUserListModule
 import type { UserListModule } from '../domain/userList/types';
 import { useLocalization, useSendbirdChat } from '../hooks/useContext';
 
-const defaultUserIdsGenerator = <T,>(users: T[]) => {
-  const userIds = users
-    .map((user) => {
-      // @ts-ignore
-      return user.userId as string | undefined;
-    })
-    .filter((u): u is string => Boolean(u));
-
-  if (userIds.length === 0) {
-    Logger.warn(
-      'GroupChannelCreateFragment: Couldn\'t find user ids! if you provide "queryCreator", please provide "userIdsGenerator" as well',
-    );
-  }
-
-  return userIds;
-};
-
-const createGroupChannelCreateFragment = <UserType,>(
+const createGroupChannelCreateFragment = <UserType extends UserStruct>(
   initModule?: Partial<UserListModule<UserType>>,
 ): GroupChannelCreateFragment<UserType> => {
   const UserListModule = createUserListModule<UserType>(initModule);
 
   return ({
-    userIdsGenerator = defaultUserIdsGenerator,
     onPressHeaderLeft,
     onBeforeCreateChannel = PASS,
     onCreateChannel,
@@ -96,7 +78,7 @@ const createGroupChannelCreateFragment = <UserType,>(
           onPressHeaderLeft={onPressHeaderLeft}
           onPressHeaderRight={async (users) => {
             const params: SendbirdGroupChannelCreateParams = {
-              invitedUserIds: userIdsGenerator(users),
+              invitedUserIds: users.map((it) => it.userId),
               name: '',
               coverUrl: '',
               isDistinct: false,

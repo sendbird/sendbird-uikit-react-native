@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
-import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
+import { useChannelHandler, useUserList } from '@sendbird/uikit-chat-hooks';
 import type { ActionMenuItem } from '@sendbird/uikit-react-native-foundation';
 import { Icon, useActionMenu } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMember } from '@sendbird/uikit-utils';
-import { ifMuted, ifOperator, useForceUpdate, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
+import { ifMuted, ifOperator, isDifferentChannel, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
 
+import StatusComposition from '../components/StatusComposition';
 import UserActionBar from '../components/UserActionBar';
 import type { GroupChannelMembersFragment } from '../domain/groupChannelUserList/types';
 import createUserListModule from '../domain/userList/module/createUserListModule';
@@ -13,54 +14,62 @@ import type { UserListModule } from '../domain/userList/types';
 import { useLocalization, useProfileCard, useSendbirdChat } from '../hooks/useContext';
 
 const noop = () => '';
-const name = 'createGroupChannelMembersFragment';
+const HOOK_NAME = 'createGroupChannelMembersFragment';
 const createGroupChannelMembersFragment = (
   initModule?: Partial<UserListModule<SendbirdMember>>,
 ): GroupChannelMembersFragment<SendbirdMember> => {
   const UserListModule = createUserListModule<SendbirdMember>(initModule);
 
   return ({ channel, onPressHeaderLeft, onPressHeaderRight, renderUser }) => {
-    const uniqId = useUniqId(name);
-    const forceUpdate = useForceUpdate();
+    const uniqId = useUniqId(HOOK_NAME);
 
+    const refreshSchedule = useRef<NodeJS.Timeout>();
     const { STRINGS } = useLocalization();
     const { sdk, currentUser } = useSendbirdChat();
     const { openMenu } = useActionMenu();
     const { show } = useProfileCard();
 
-    useChannelHandler(sdk, `${name}_${uniqId}`, {
-      onChannelMemberCountChanged(channels) {
-        if (channels.some((c) => c.url === channel.url)) forceUpdate();
+    const { users, refresh, loading, next, error, upsertUser, deleteUser } = useUserList(sdk, {
+      queryCreator: () => channel.createMemberListQuery({ limit: 20 }),
+    });
+
+    useChannelHandler(sdk, `${HOOK_NAME}_${uniqId}`, {
+      onUserLeft(eventChannel, user) {
+        if (isDifferentChannel(eventChannel, channel)) return;
+        deleteUser(user.userId);
       },
-      onChannelChanged(eventChannel) {
-        if (eventChannel.url === channel.url) forceUpdate();
-      },
-      onUserJoined(eventChannel) {
-        if (eventChannel.url === channel.url) forceUpdate();
-      },
-      onUserLeft(eventChannel) {
-        if (eventChannel.url === channel.url) forceUpdate();
-      },
-      onUserBanned(eventChannel) {
-        if (eventChannel.url === channel.url) forceUpdate();
-      },
-      onUserUnbanned(eventChannel) {
-        if (eventChannel.url === channel.url) forceUpdate();
-      },
-      onUserMuted(eventChannel) {
-        if (eventChannel.url === channel.url) forceUpdate();
-      },
-      onUserUnmuted(eventChannel) {
-        if (eventChannel.url === channel.url) forceUpdate();
-      },
-      onChannelFrozen(eventChannel) {
-        if (eventChannel.url === channel.url) forceUpdate();
-      },
-      onChannelUnfrozen(eventChannel) {
-        if (eventChannel.url === channel.url) forceUpdate();
+      onUserBanned(eventChannel, user) {
+        if (isDifferentChannel(eventChannel, channel)) return;
+        deleteUser(user.userId);
       },
       onOperatorUpdated(eventChannel) {
-        if (eventChannel.url === channel.url) forceUpdate();
+        if (isDifferentChannel(eventChannel, channel)) return;
+        if (refreshSchedule.current) clearTimeout(refreshSchedule.current);
+        refreshSchedule.current = setTimeout(() => refresh(), 500);
+      },
+      onUserMuted(eventChannel, user) {
+        if (isDifferentChannel(eventChannel, channel) || !eventChannel.isGroupChannel()) return;
+
+        const memberFromChannel = eventChannel.members.find((it) => it.userId === user.userId);
+        if (memberFromChannel) return upsertUser(memberFromChannel);
+
+        const memberFromList = users.find((it) => it.userId === user.userId);
+        if (memberFromList) {
+          memberFromList.isMuted = true;
+          upsertUser(memberFromList);
+        }
+      },
+      onUserUnmuted(eventChannel, user) {
+        if (isDifferentChannel(eventChannel, channel) || !eventChannel.isGroupChannel()) return;
+
+        const memberFromChannel = eventChannel.members.find((it) => it.userId === user.userId);
+        if (memberFromChannel) return upsertUser(memberFromChannel);
+
+        const memberFromList = users.find((it) => it.userId === user.userId);
+        if (memberFromList) {
+          memberFromList.isMuted = false;
+          upsertUser(memberFromList);
+        }
       },
     });
 
@@ -121,13 +130,19 @@ const createGroupChannelMembersFragment = (
           right={<Icon icon={'plus'} />}
           onPressHeaderRight={async () => onPressHeaderRight()}
         />
-
-        <UserListModule.List
-          users={channel.members}
-          renderUser={_renderUser}
-          onLoadNext={async () => void 0}
-          ListEmptyComponent={<UserListModule.StatusEmpty />}
-        />
+        <StatusComposition
+          loading={loading}
+          LoadingComponent={<UserListModule.StatusLoading />}
+          error={Boolean(error)}
+          ErrorComponent={<UserListModule.StatusError onPressRetry={refresh} />}
+        >
+          <UserListModule.List
+            users={users}
+            renderUser={_renderUser}
+            onLoadNext={next}
+            ListEmptyComponent={<UserListModule.StatusEmpty />}
+          />
+        </StatusComposition>
       </UserListModule.Provider>
     );
   };

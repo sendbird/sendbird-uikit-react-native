@@ -201,6 +201,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
             }
           })
           .onFailed((err) => {
+            console.log('sendUserMessage error', err);
             reject(err);
           });
       });
