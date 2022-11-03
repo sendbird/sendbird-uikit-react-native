@@ -1,19 +1,39 @@
 import React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
+import { View } from 'react-native';
 
-import { Avatar } from '@sendbird/uikit-react-native-foundation';
+import { Avatar, Icon, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { SendbirdGroupChannel, getMembersExcludeMe, isDefaultCoverImage } from '@sendbird/uikit-utils';
 
 import { useSendbirdChat } from '../hooks/useContext';
 
 type Props = {
   channel: SendbirdGroupChannel;
-  size?: number;
+  size: number;
   containerStyle?: StyleProp<ViewStyle>;
 };
 
 const ChannelCover = ({ channel, ...avatarProps }: Props) => {
   const { currentUser } = useSendbirdChat();
+  const { colors } = useUIKitTheme();
+
+  // broadcast channel cover
+  if (channel.isBroadcast) {
+    return (
+      <View style={avatarProps.containerStyle}>
+        <Icon
+          icon={'broadcast'}
+          size={avatarProps.size * (4 / 7)}
+          color={colors.onBackgroundReverse01}
+          containerStyle={{
+            backgroundColor: colors.secondary,
+            borderRadius: avatarProps.size * 0.5,
+            padding: avatarProps.size * (3 / 7) * 0.5,
+          }}
+        />
+      </View>
+    );
+  }
 
   // channel cover
   if (!isDefaultCoverImage(channel.coverUrl) || !currentUser) {

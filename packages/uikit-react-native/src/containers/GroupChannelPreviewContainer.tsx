@@ -89,24 +89,10 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
     return undefined;
   });
 
-  const customCover = useIIFE(() => {
-    if (channel.isBroadcast) {
-      return (
-        <Icon
-          icon={'broadcast'}
-          size={32}
-          color={colors.onBackgroundReverse01}
-          containerStyle={[styles.broadcastCover, { backgroundColor: colors.secondary }]}
-        />
-      );
-    }
-    return <ChannelCover channel={channel} size={56} />;
-  });
-
   return (
     <Pressable delayLongPress={DEFAULT_LONG_PRESS_DELAY} onPress={onPress} onLongPress={onLongPress}>
       <GroupChannelPreview
-        customCover={customCover}
+        customCover={<ChannelCover channel={channel} size={56} />}
         coverUrl={channel.coverUrl}
         title={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE(currentUser?.userId ?? '', channel)}
         titleCaptionLeft={titleCaptionIcon}
