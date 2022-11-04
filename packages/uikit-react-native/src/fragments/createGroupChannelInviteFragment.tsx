@@ -27,7 +27,8 @@ const createGroupChannelInviteFragment = <UserType extends UserStruct>(
     const _renderUser: NonNullable<typeof renderUser> = useCallback(
       (user, selectedUsers, setSelectedUsers) => {
         if (queryCreator && !renderUser) {
-          throw new Error('You should provide "renderUser" when providing "queryCreator"');
+          const hasRequiredKey = Object.hasOwn(user, 'profileUrl') && Object.hasOwn(user, 'nickname');
+          if (!hasRequiredKey) throw new Error('You should provide "renderUser" when providing "queryCreator"');
         }
 
         if (renderUser) return renderUser(user, selectedUsers, setSelectedUsers);

@@ -34,34 +34,32 @@ const createGroupChannelCreateFragment = <UserType extends UserStruct>(
 
     const _renderUser: NonNullable<typeof renderUser> = useFreshCallback((user, selectedUsers, setSelectedUsers) => {
       if (queryCreator && !renderUser) {
-        throw new Error('You should provide "renderUser" when providing "queryCreator"');
+        const hasRequiredKey = Object.hasOwn(user, 'profileUrl') && Object.hasOwn(user, 'nickname');
+        if (!hasRequiredKey) throw new Error('You should provide "renderUser" when providing "queryCreator"');
       }
+
       if (renderUser) return renderUser(user, selectedUsers, setSelectedUsers);
 
-      const sbUser = user as unknown as SendbirdUser;
-      const sbSelectedUsers = selectedUsers as unknown as SendbirdUser[];
-      const sbSetSelectedUsers = setSelectedUsers as unknown as React.Dispatch<React.SetStateAction<SendbirdUser[]>>;
-
-      const isMe = sbUser.userId === currentUser?.userId;
+      const isMe = user.userId === currentUser?.userId;
       if (isMe) return null;
 
-      const userIdx = sbSelectedUsers.findIndex((u) => u.userId === sbUser.userId);
+      const userIdx = selectedUsers.findIndex((u) => u.userId === user.userId);
       const isSelected = userIdx > -1;
 
       return (
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => {
-            sbSetSelectedUsers(([...draft]) => {
+            setSelectedUsers(([...draft]) => {
               if (isSelected) draft.splice(userIdx, 1);
-              else draft.push(sbUser);
+              else draft.push(user);
               return draft;
             });
           }}
         >
           <UserSelectableBar
-            uri={sbUser.profileUrl}
-            name={sbUser.nickname || STRINGS.LABELS.USER_NO_NAME}
+            uri={(user as unknown as SendbirdUser).profileUrl}
+            name={(user as unknown as SendbirdUser).nickname || STRINGS.LABELS.USER_NO_NAME}
             selected={isSelected}
             disabled={false}
           />
