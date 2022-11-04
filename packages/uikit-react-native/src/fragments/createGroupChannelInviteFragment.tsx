@@ -71,12 +71,8 @@ const createGroupChannelInviteFragment = <UserType extends UserStruct>(
         <UserListModule.Header
           onPressHeaderLeft={onPressHeaderLeft}
           onPressHeaderRight={async (users) => {
-            console.log('before', channel.memberCount);
             const userIds = users.map((it) => it.userId);
-            const updatedChannel = await channel.inviteWithUserIds(userIds).then((x) => {
-              console.log('after', x.memberCount);
-              return x;
-            });
+            const updatedChannel = await channel.inviteWithUserIds(userIds);
             onInviteMembers(updatedChannel);
           }}
         />
