@@ -12969,6 +12969,11 @@ react-native-file-access@^2.4.3:
   resolved "https://registry.yarnpkg.com/react-native-file-access/-/react-native-file-access-2.4.4.tgz#4ed95d81b04c5d7dbba5a9ae0c0deff0c8950a8a"
   integrity sha512-P4lHb2244qGXaUPAoOsWnc9Py+igiQEpwsK5qQj3lilyiumbl/kCS5b4AbJtfObXwNn5u/drl2JEVVX4+zRQ3w==
 
+react-native-file-access@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/react-native-file-access/-/react-native-file-access-2.5.0.tgz#df6916e5edacaaed73a1ea20bea79d4be13b3faf"
+  integrity sha512-12Dq2NJ4pcTi+nATwT6ZwotpFn1iHZt/W5fOYNcCOuxIg2JnV4KlyDHEBI2WwwEXn6BvEkg9SZDYFk4rkQFttA==
+
 react-native-image-picker@^4.7.1, react-native-image-picker@^4.7.3:
   version "4.8.4"
   resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-4.8.4.tgz#ac52f1e265458e944664adf1dcd0a9ee408fe083"

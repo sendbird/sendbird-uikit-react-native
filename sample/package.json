@@ -43,7 +43,7 @@
     "react-native-create-thumbnail": "^1.5.1",
     "react-native-document-picker": "^8.0.0",
     "react-native-fast-image": "^8.5.11",
-    "react-native-file-access": "^2.4.3",
+    "react-native-file-access": "^2.5.0",
     "react-native-image-picker": "^4.7.3",
     "react-native-permissions": "^3.6.0",
     "react-native-safe-area-context": "^3.3.2",
