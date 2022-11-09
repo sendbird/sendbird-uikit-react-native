@@ -17,6 +17,11 @@ const ChannelCover = ({ channel, ...avatarProps }: Props) => {
   const { currentUser } = useSendbirdChat();
   const { colors } = useUIKitTheme();
 
+  // custom channel cover
+  if (!isDefaultCoverImage(channel.coverUrl) || !currentUser) {
+    return <Avatar uri={channel.coverUrl} {...avatarProps} />;
+  }
+
   // broadcast channel cover
   if (channel.isBroadcast) {
     return (
@@ -33,11 +38,6 @@ const ChannelCover = ({ channel, ...avatarProps }: Props) => {
         />
       </View>
     );
-  }
-
-  // channel cover
-  if (!isDefaultCoverImage(channel.coverUrl) || !currentUser) {
-    return <Avatar uri={channel.coverUrl} {...avatarProps} />;
   }
 
   // no members, use anonymous profile
