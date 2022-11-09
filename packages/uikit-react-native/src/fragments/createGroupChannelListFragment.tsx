@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { AppState } from 'react-native';
 
 import { useGroupChannelList } from '@sendbird/uikit-chat-hooks';
-import { Logger, PASS, useFreshCallback } from '@sendbird/uikit-utils';
+import { PASS, useFreshCallback } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import GroupChannelPreviewContainer from '../containers/GroupChannelPreviewContainer';
@@ -54,11 +54,6 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
         );
       },
     );
-
-    if (!currentUser) {
-      Logger.warn('Cannot render GroupChannelListFragment, please connect using `useConnection()` hook first');
-      return null;
-    }
 
     return (
       <GroupChannelListModule.Provider>
