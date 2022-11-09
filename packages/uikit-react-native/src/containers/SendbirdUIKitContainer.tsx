@@ -26,6 +26,7 @@ import { LocalizationProvider } from '../contexts/LocalizationCtx';
 import { PlatformServiceProvider } from '../contexts/PlatformServiceCtx';
 import { ProfileCardProvider } from '../contexts/ProfileCardCtx';
 import { SendbirdChatProvider } from '../contexts/SendbirdChatCtx';
+import type { UIKitFeaturesInSendbirdChatContext } from '../contexts/SendbirdChatCtx';
 import { useLocalization } from '../hooks/useContext';
 import InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
 import StringSetEn from '../localization/StringSet.en';
@@ -59,10 +60,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   chatOptions?: {
     localCacheStorage?: LocalCacheStorage;
     onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
-    enableAutoPushTokenRegistration?: boolean;
-    enableChannelListTypingIndicator?: boolean;
-    enableChannelListMessageReceiptStatus?: boolean;
-  };
+  } & Partial<UIKitFeaturesInSendbirdChatContext>;
   localization?: {
     stringSet?: StringSet;
   };
@@ -162,6 +160,7 @@ const SendbirdUIKitContainer = ({
         enableAutoPushTokenRegistration={chatOptions?.enableAutoPushTokenRegistration ?? true}
         enableChannelListTypingIndicator={chatOptions?.enableChannelListTypingIndicator ?? false}
         enableChannelListMessageReceiptStatus={chatOptions?.enableChannelListMessageReceiptStatus ?? false}
+        enableUseUserIdForNickname={chatOptions?.enableUseUserIdForNickname ?? false}
       >
         <LocalizationProvider stringSet={localization?.stringSet ?? StringSetEn}>
           <PlatformServiceProvider

@@ -24,6 +24,8 @@ const useConnection = () => {
             .updateCurrentUserInfo({ nickname: opts.nickname })
             .then((updatedUser) => (user = updatedUser))
             .catch((e) => Logger.warn('[useConnection]', 'nickname-sync failure', e));
+        } else if (features.useUserIdForNicknameEnabled) {
+          await sdk.updateCurrentUserInfo({ nickname: userId }).then((updatedUser) => (user = updatedUser));
         }
 
         if (features.autoPushTokenRegistrationEnabled) {

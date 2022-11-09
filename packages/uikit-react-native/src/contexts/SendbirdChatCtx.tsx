@@ -12,13 +12,16 @@ import { confirmAndMarkAsDelivered, useForceUpdate } from '@sendbird/uikit-utils
 
 import type { FileType } from '../platform/types';
 
-type Props = React.PropsWithChildren<{
-  sdkInstance: SendbirdChatSDK;
-
+export interface UIKitFeaturesInSendbirdChatContext {
   enableAutoPushTokenRegistration: boolean;
   enableChannelListTypingIndicator: boolean;
   enableChannelListMessageReceiptStatus: boolean;
-}>;
+  enableUseUserIdForNickname: boolean;
+}
+
+interface Props extends UIKitFeaturesInSendbirdChatContext, React.PropsWithChildren {
+  sdkInstance: SendbirdChatSDK;
+}
 
 type Context = {
   sdk: SendbirdChatSDK;
@@ -34,6 +37,7 @@ type Context = {
     autoPushTokenRegistrationEnabled: boolean;
     channelListTypingIndicatorEnabled: boolean;
     channelListMessageReceiptStatusEnabled: boolean;
+    useUserIdForNicknameEnabled: boolean;
 
     // Sendbird application features
     deliveryReceiptEnabled: boolean;
@@ -50,6 +54,7 @@ export const SendbirdChatProvider = ({
   enableAutoPushTokenRegistration,
   enableChannelListMessageReceiptStatus,
   enableChannelListTypingIndicator,
+  enableUseUserIdForNickname,
 }: Props) => {
   const [currentUser, _setCurrentUser] = useState<SendbirdUser>();
   const forceUpdate = useForceUpdate();
@@ -116,6 +121,7 @@ export const SendbirdChatProvider = ({
       autoPushTokenRegistrationEnabled: enableAutoPushTokenRegistration,
       channelListTypingIndicatorEnabled: enableChannelListTypingIndicator,
       channelListMessageReceiptStatusEnabled: enableChannelListMessageReceiptStatus,
+      useUserIdForNicknameEnabled: enableUseUserIdForNickname,
     },
   };
 

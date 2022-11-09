@@ -24,6 +24,7 @@ import SBUUtils from '@sendbird/uikit-react-native/src/libs/SBUUtils';
 
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
 import useAppearance from '../../../hooks/useAppearance';
+import { useAppAuth } from '../../../libs/authentication';
 import { Routes } from '../../../libs/navigation';
 
 const SettingsScreen = () => {
@@ -42,15 +43,21 @@ const SettingsScreen = () => {
   const { openMenu } = useActionMenu();
   const { alert } = useAlert();
 
+  const { authManager } = useAppAuth();
+
   const onChangeNickname = () => {
     openPrompt({
       title: 'Change nickname',
       submitLabel: 'Save',
       placeholder: 'Enter name',
       defaultValue: currentUser?.nickname ?? '',
-      onSubmit: (nickname) => updateCurrentUserInfo(nickname, sdk.currentUser.plainProfileUrl),
+      onSubmit: async (nickname) => {
+        const user = await updateCurrentUserInfo(nickname, sdk.currentUser.plainProfileUrl);
+        await authManager.authenticate({ userId: user.userId, nickname: user.nickname });
+      },
     });
   };
+
   const onChangeProfileImage = () => {
     openMenu({
       title: 'Change profile image',
