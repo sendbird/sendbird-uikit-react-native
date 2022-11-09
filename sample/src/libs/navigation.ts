@@ -55,7 +55,15 @@ export type RouteParamsUnion =
       params: undefined;
     }
   | {
+      route: Routes.GroupChannelTabs;
+      params: { channelUrl?: string } | undefined;
+    }
+  | {
       route: Routes.GroupChannelList;
+      params: { channelUrl?: string } | undefined;
+    }
+  | {
+      route: Routes.Settings;
       params: undefined;
     }
   | {
@@ -97,14 +105,6 @@ export type RouteParamsUnion =
   | {
       route: Routes.GroupChannelInvite;
       params: { channelUrl: string };
-    }
-  | {
-      route: Routes.Settings;
-      params: undefined;
-    }
-  | {
-      route: Routes.GroupChannelTabs;
-      params: undefined;
     }
   | {
       route: Routes.FileViewer;
@@ -158,7 +158,7 @@ export const runAfterAppReady = (callback: (sdk: SendbirdChatSDK, actions: typeo
   const id = setInterval(async () => {
     if (navigationRef.isReady() && authManager.hasAuthentication() && GetSendbirdSDK()) {
       const sdk = GetSendbirdSDK();
-      if (sdk.connectionState === 'OPEN') {
+      if (sdk.currentUser) {
         clearInterval(id);
         callback(sdk, navigationActions);
       }
