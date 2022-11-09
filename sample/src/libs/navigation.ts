@@ -158,7 +158,7 @@ export const runAfterAppReady = (callback: (sdk: SendbirdChatSDK, actions: typeo
   const id = setInterval(async () => {
     if (navigationRef.isReady() && authManager.hasAuthentication() && GetSendbirdSDK()) {
       const sdk = GetSendbirdSDK();
-      if (sdk.currentUser) {
+      if (sdk.connectionState === 'OPEN') {
         clearInterval(id);
         callback(sdk, navigationActions);
       }
