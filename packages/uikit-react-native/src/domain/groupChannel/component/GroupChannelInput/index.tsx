@@ -40,6 +40,10 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
     return 'edit';
   });
 
+  if (!props.shouldRenderInput) {
+    return <SafeAreaBottom height={bottom} />;
+  }
+
   return (
     <KeyboardAvoidingView
       keyboardVerticalOffset={-bottom + keyboardAvoidOffset}
