@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
 
 import { UserStruct, useUserList } from '@sendbird/uikit-chat-hooks';
-import type { SendbirdUser } from '@sendbird/uikit-utils';
+import type { SendbirdGroupChannel, SendbirdUser } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import UserSelectableBar from '../components/UserSelectableBar';
@@ -24,6 +24,8 @@ const createGroupChannelInviteFragment = <UserType extends UserStruct>(
       sortComparator,
     });
 
+    const memberIds = shouldFilterMember(channel) ? channel.members.map((it) => it.userId) : [];
+
     const _renderUser: NonNullable<typeof renderUser> = useCallback(
       (user, selectedUsers, setSelectedUsers) => {
         if (queryCreator && !renderUser) {
@@ -33,19 +35,19 @@ const createGroupChannelInviteFragment = <UserType extends UserStruct>(
 
         if (renderUser) return renderUser(user, selectedUsers, setSelectedUsers);
 
-        const joinedUserIds = channel.members.map((it) => it.userId);
-        const userIdx = selectedUsers.findIndex((it) => it.userId === user.userId);
-        const isSelected = userIdx > -1;
+        const userIdxInMembers = memberIds.indexOf(user.userId);
+        const userIdxInSelectedUsers = selectedUsers.findIndex((it) => it.userId === user.userId);
 
-        const isAlreadyJoined = joinedUserIds.includes(user.userId);
+        const isMember = userIdxInMembers > -1;
+        const isSelected = userIdxInSelectedUsers > -1;
 
         return (
           <TouchableOpacity
             activeOpacity={0.7}
-            disabled={isAlreadyJoined}
+            disabled={isMember}
             onPress={() => {
               setSelectedUsers(([...draft]) => {
-                if (isSelected) draft.splice(userIdx, 1);
+                if (isSelected) draft.splice(userIdxInSelectedUsers, 1);
                 else draft.push(user);
                 return draft;
               });
@@ -54,8 +56,8 @@ const createGroupChannelInviteFragment = <UserType extends UserStruct>(
             <UserSelectableBar
               uri={(user as unknown as SendbirdUser).profileUrl}
               name={(user as unknown as SendbirdUser).nickname || STRINGS.LABELS.USER_NO_NAME}
-              selected={isAlreadyJoined || isSelected}
-              disabled={isAlreadyJoined}
+              selected={isMember || isSelected}
+              disabled={isMember}
             />
           </TouchableOpacity>
         );
@@ -95,5 +97,9 @@ const createGroupChannelInviteFragment = <UserType extends UserStruct>(
     );
   };
 };
+
+function shouldFilterMember(channel: SendbirdGroupChannel) {
+  return !channel.isSuper && !channel.isBroadcast;
+}
 
 export default createGroupChannelInviteFragment;
