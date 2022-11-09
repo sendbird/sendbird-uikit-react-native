@@ -23,7 +23,7 @@ const GroupChannelOperatorsScreen = () => {
       }}
       onPressHeaderRight={() => {
         // Navigate to group channel set as operators
-        navigation.navigate(Routes.GroupChannelOperatorsAdd, params);
+        navigation.navigate(Routes.GroupChannelRegisterOperator, params);
       }}
     />
   );

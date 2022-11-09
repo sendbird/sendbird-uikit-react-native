@@ -50,7 +50,7 @@ export type GroupChannelMembersFragment<User extends UserStruct> = CommonCompone
   GroupChannelMembersProps<User>['Fragment']
 >;
 
-export interface GroupChannelOperatorsAddProps<User extends UserStruct = SendbirdMember> {
+export interface GroupChannelRegisterOperatorProps<User extends UserStruct = SendbirdMember> {
   Fragment: {
     channel: SendbirdGroupChannel;
     onPressHeaderLeft: () => void;
@@ -59,6 +59,6 @@ export interface GroupChannelOperatorsAddProps<User extends UserStruct = Sendbir
     renderUser?: UserListProps<User>['List']['renderUser'];
   };
 }
-export type GroupChannelOperatorsAddFragment<User extends UserStruct> = CommonComponent<
-  GroupChannelOperatorsAddProps<User>['Fragment']
+export type GroupChannelRegisterOperatorFragment<User extends UserStruct> = CommonComponent<
+  GroupChannelRegisterOperatorProps<User>['Fragment']
 >;

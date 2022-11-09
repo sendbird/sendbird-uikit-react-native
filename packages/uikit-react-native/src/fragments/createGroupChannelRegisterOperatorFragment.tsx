@@ -6,14 +6,14 @@ import type { SendbirdMember } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import UserSelectableBar from '../components/UserSelectableBar';
-import type { GroupChannelOperatorsAddFragment } from '../domain/groupChannelUserList/types';
+import type { GroupChannelRegisterOperatorFragment } from '../domain/groupChannelUserList/types';
 import createUserListModule from '../domain/userList/module/createUserListModule';
 import type { UserListModule } from '../domain/userList/types';
 import { useLocalization, useSendbirdChat } from '../hooks/useContext';
 
-const createGroupChannelOperatorsAddFragment = (
+const createGroupChannelRegisterOperatorFragment = (
   initModule?: Partial<UserListModule<SendbirdMember>>,
-): GroupChannelOperatorsAddFragment<SendbirdMember> => {
+): GroupChannelRegisterOperatorFragment<SendbirdMember> => {
   const UserListModule = createUserListModule<SendbirdMember>(initModule);
 
   return ({ channel, onPressHeaderLeft, sortComparator, renderUser, onPressHeaderRight }) => {
@@ -60,8 +60,8 @@ const createGroupChannelOperatorsAddFragment = (
     );
     return (
       <UserListModule.Provider
-        headerRight={(selectedUsers) => STRINGS.GROUP_CHANNEL_OPERATORS_ADD.HEADER_RIGHT({ selectedUsers })}
-        headerTitle={STRINGS.GROUP_CHANNEL_OPERATORS_ADD.HEADER_TITLE}
+        headerRight={(selectedUsers) => STRINGS.GROUP_CHANNEL_REGISTER_OPERATOR.HEADER_RIGHT({ selectedUsers })}
+        headerTitle={STRINGS.GROUP_CHANNEL_REGISTER_OPERATOR.HEADER_TITLE}
       >
         <UserListModule.Header
           shouldActivateHeaderRight={(selectedUsers) => selectedUsers.length > 0}
@@ -91,4 +91,4 @@ const createGroupChannelOperatorsAddFragment = (
   };
 };
 
-export default createGroupChannelOperatorsAddFragment;
+export default createGroupChannelRegisterOperatorFragment;
