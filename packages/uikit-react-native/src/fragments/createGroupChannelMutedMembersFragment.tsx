@@ -70,7 +70,7 @@ const createGroupChannelMutedMembersFragment = (
     });
 
     return (
-      <GroupChannelMutedMembersModule.Provider>
+      <GroupChannelMutedMembersModule.Provider channel={channel}>
         <GroupChannelMutedMembersModule.Header onPressHeaderLeft={onPressHeaderLeft} />
         <StatusComposition
           loading={loading}

@@ -22,6 +22,9 @@ export type GroupChannelMutedMembersProps = {
   StatusError: {
     onPressRetry: () => void;
   };
+  Provider: {
+    channel: SendbirdGroupChannel;
+  };
 };
 
 /**
@@ -32,10 +35,11 @@ export type GroupChannelMutedMembersProps = {
 export type GroupChannelMutedMembersContextsType = {
   Fragment: React.Context<{
     headerTitle: string;
+    channel: SendbirdGroupChannel;
   }>;
 };
 export interface GroupChannelMutedMembersModule {
-  Provider: CommonComponent;
+  Provider: CommonComponent<GroupChannelMutedMembersProps['Provider']>;
   Header: CommonComponent<GroupChannelMutedMembersProps['Header']>;
   List: CommonComponent<GroupChannelMutedMembersProps['List']>;
   StatusEmpty: CommonComponent;
