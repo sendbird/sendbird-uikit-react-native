@@ -57,7 +57,7 @@ const createGroupChannelBannedUsersFragment = (
     });
 
     return (
-      <GroupChannelBannedUsersModule.Provider>
+      <GroupChannelBannedUsersModule.Provider channel={channel}>
         <GroupChannelBannedUsersModule.Header onPressHeaderLeft={onPressHeaderLeft} />
         <StatusComposition
           loading={loading}
