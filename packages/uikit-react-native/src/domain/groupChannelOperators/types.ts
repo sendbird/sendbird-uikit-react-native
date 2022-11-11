@@ -16,13 +16,16 @@ export type GroupChannelOperatorsProps = {
     onPressHeaderRight: () => void;
   };
   List: {
-    renderUser: (props: { user: SendbirdUser }) => React.ReactElement | null;
-    onLoadNext: () => void;
     operators: SendbirdUser[];
+    onLoadNext: () => void;
+    renderUser: (props: { user: SendbirdUser }) => React.ReactElement | null;
     ListEmptyComponent?: React.ReactElement;
   };
   StatusError: {
     onPressRetry: () => void;
+  };
+  Provider: {
+    channel: SendbirdGroupChannel;
   };
 };
 
@@ -34,10 +37,11 @@ export type GroupChannelOperatorsProps = {
 export type GroupChannelOperatorsContextsType = {
   Fragment: React.Context<{
     headerTitle: string;
+    channel: SendbirdGroupChannel;
   }>;
 };
 export interface GroupChannelOperatorsModule {
-  Provider: CommonComponent;
+  Provider: CommonComponent<GroupChannelOperatorsProps['Provider']>;
   Header: CommonComponent<GroupChannelOperatorsProps['Header']>;
   List: CommonComponent<GroupChannelOperatorsProps['List']>;
   StatusEmpty: CommonComponent;

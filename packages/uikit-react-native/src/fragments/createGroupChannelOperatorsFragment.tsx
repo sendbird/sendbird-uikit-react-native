@@ -74,10 +74,10 @@ const createGroupChannelOperatorsFragment = (
     });
 
     return (
-      <GroupChannelOperatorsModule.Provider>
+      <GroupChannelOperatorsModule.Provider channel={channel}>
         <GroupChannelOperatorsModule.Header
           onPressHeaderLeft={onPressHeaderLeft}
-          onPressHeaderRight={async () => onPressHeaderRight()}
+          onPressHeaderRight={onPressHeaderRight}
         />
 
         <StatusComposition
