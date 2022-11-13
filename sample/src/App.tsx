@@ -70,9 +70,9 @@ const App = () => {
       errorBoundary={{ ErrorInfoComponent: ErrorInfoScreen }}
       profileCard={{
         onCreateChannel: (channel) => {
-          navigationActions.push(Routes.GroupChannel, {
-            channelUrl: channel.url,
-          });
+          if (channel.isGroupChannel()) {
+            navigationActions.push(Routes.GroupChannel, { channelUrl: channel.url });
+          }
         },
       }}
     >

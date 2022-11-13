@@ -15,8 +15,8 @@ import {
   UIKitThemeProvider,
 } from '@sendbird/uikit-react-native-foundation';
 import type {
+  SendbirdBaseChannel,
   SendbirdChatSDK,
-  SendbirdGroupChannel,
   SendbirdGroupChannelCreateParams,
   SendbirdMember,
   SendbirdUser,
@@ -25,8 +25,8 @@ import type {
 import { LocalizationProvider } from '../contexts/LocalizationCtx';
 import { PlatformServiceProvider } from '../contexts/PlatformServiceCtx';
 import { ProfileCardProvider } from '../contexts/ProfileCardCtx';
-import { SendbirdChatProvider } from '../contexts/SendbirdChatCtx';
 import type { UIKitFeaturesInSendbirdChatContext } from '../contexts/SendbirdChatCtx';
+import { SendbirdChatProvider } from '../contexts/SendbirdChatCtx';
 import { useLocalization } from '../hooks/useContext';
 import InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
 import StringSetEn from '../localization/StringSet.en';
@@ -75,7 +75,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
     dismissTimeout?: number;
   };
   profileCard?: {
-    onCreateChannel: (channel: SendbirdGroupChannel) => void;
+    onCreateChannel: (channel: SendbirdBaseChannel) => void;
     onBeforeCreateChannel?: (
       channelParams: SendbirdGroupChannelCreateParams,
       users: SendbirdUser[] | SendbirdMember[],
