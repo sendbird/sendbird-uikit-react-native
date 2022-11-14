@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Modal, OutlinedButton, ProfileCard, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
@@ -33,22 +33,23 @@ export const ProfileCardContext = React.createContext<ProfileCardContextType | n
 export const ProfileCardProvider = ({ children, onCreateChannel, onBeforeCreateChannel = PASS }: Props) => {
   const chatContext = useContext(SendbirdChatContext);
   const localizationContext = useContext(LocalizationContext);
+
+  if (!chatContext) throw new Error('SendbirdChatContext is not provided');
+  if (!localizationContext) throw new Error('LocalizationContext is not provided');
+
   const { bottom, left, right } = useSafeAreaInsets();
 
   const [user, setUser] = useState<SendbirdUser | SendbirdMember>();
   const [visible, setVisible] = useState(false);
 
-  const show: ProfileCardContextType['show'] = (user) => {
+  const show: ProfileCardContextType['show'] = useCallback((user) => {
     setUser(user);
     setVisible(true);
-  };
+  }, []);
 
-  const hide: ProfileCardContextType['hide'] = () => {
+  const hide: ProfileCardContextType['hide'] = useCallback(() => {
     setVisible(false);
-  };
-
-  if (!chatContext) throw new Error('SendbirdChatContext is not provided');
-  if (!localizationContext) throw new Error('LocalizationContext is not provided');
+  }, []);
 
   const profileCardButton = useIIFE(() => {
     const isMe = chatContext.currentUser && user?.userId === chatContext.currentUser.userId;
