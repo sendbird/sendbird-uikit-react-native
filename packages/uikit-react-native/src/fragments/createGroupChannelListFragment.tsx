@@ -55,6 +55,8 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
       },
     );
 
+    const isChannelTypeAvailable = features.broadcastChannelEnabled || features.superGroupChannelEnabled;
+
     return (
       <GroupChannelListModule.Provider>
         <GroupChannelListModule.Header />
@@ -72,7 +74,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
           />
         </StatusComposition>
         <GroupChannelListModule.TypeSelector
-          skipTypeSelection={skipTypeSelection}
+          skipTypeSelection={isChannelTypeAvailable ? skipTypeSelection : true}
           onSelectType={onPressCreateChannel}
         />
       </GroupChannelListModule.Provider>

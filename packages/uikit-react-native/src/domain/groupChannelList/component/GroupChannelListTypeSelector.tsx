@@ -10,7 +10,7 @@ import {
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
 
-import { useLocalization } from '../../../hooks/useContext';
+import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelListContexts } from '../module/moduleContext';
 import type { GroupChannelListProps, GroupChannelType } from '../types';
 
@@ -20,12 +20,15 @@ const TYPE_ICONS: Record<GroupChannelType, keyof typeof Icon.Assets> = {
   'SUPER_GROUP': 'supergroup',
   'BROADCAST': 'broadcast',
 };
+const STATUS_BAR_TOP_INSET_AS: 'margin' | 'padding' = Platform.select({ android: 'margin', default: 'padding' });
 
 const GroupChannelListTypeSelector = ({ skipTypeSelection, onSelectType }: GroupChannelListProps['TypeSelector']) => {
   const { statusBarTranslucent, HeaderComponent } = useHeaderStyle();
   const { colors } = useUIKitTheme();
+  const { features } = useSendbirdChat();
   const typeSelector = useContext(GroupChannelListContexts.TypeSelector);
   const { visible, hide } = typeSelector;
+
   const createOnPressType = (type: GroupChannelType) => () => {
     hide();
     onSelectType(type);
@@ -43,10 +46,18 @@ const GroupChannelListTypeSelector = ({ skipTypeSelection, onSelectType }: Group
         title={typeSelector.headerTitle}
         right={<Icon icon={'close'} color={colors.onBackground01} />}
         onPressRight={typeSelector.hide}
-        statusBarTopInsetAs={Platform.select({ android: 'margin', default: 'padding' })}
+        statusBarTopInsetAs={STATUS_BAR_TOP_INSET_AS}
       >
         <View style={styles.buttonArea}>
           {TYPES.map((type) => {
+            if (type === 'SUPER_GROUP' && !features.superGroupChannelEnabled) {
+              return null;
+            }
+
+            if (type === 'BROADCAST' && !features.broadcastChannelEnabled) {
+              return null;
+            }
+
             return (
               <TouchableOpacity
                 key={type}
