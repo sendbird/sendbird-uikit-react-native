@@ -27,6 +27,7 @@ export interface MessageRendererInterface<T = SendbirdMessage> {
   groupWithPrev: boolean;
   groupWithNext: boolean;
   pressed: boolean;
+  children?: React.ReactElement;
 }
 
 const MessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({

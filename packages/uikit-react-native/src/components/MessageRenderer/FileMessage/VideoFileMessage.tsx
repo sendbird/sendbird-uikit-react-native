@@ -41,26 +41,33 @@ const useRetry = (videoFileUrl: string, retryCount = 5) => {
   return state;
 };
 
-const VideoFileMessage = ({ message }: FileMessageProps) => {
+const VideoFileMessage = ({ message, variant, children }: FileMessageProps) => {
   const { colors } = useUIKitTheme();
 
   const fileUrl = getAvailableUriFromFileMessage(message);
-  const style = [styles.image, { backgroundColor: colors.onBackground04 }];
+  const style = [styles.video, { backgroundColor: colors.onBackground04 }];
 
   const { loading, thumbnail } = useRetry(fileUrl);
 
   if (loading) {
     return (
-      <View style={[style, styles.container]}>
-        <PlayIcon />
+      <View style={[styles.bubbleContainer, { backgroundColor: colors.ui.message[variant].enabled.background }]}>
+        <View style={styles.bubbleContainer}>
+          <View style={style} />
+          <PlayIcon />
+        </View>
+        {children}
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
-      <Image source={{ uri: thumbnail || fileUrl }} style={style} resizeMode={'cover'} resizeMethod={'resize'} />
-      <PlayIcon />
+    <View style={[styles.bubbleContainer, { backgroundColor: colors.ui.message[variant].enabled.background }]}>
+      <View style={styles.bubbleContainer}>
+        <Image source={{ uri: thumbnail || fileUrl }} style={style} resizeMode={'cover'} resizeMethod={'resize'} />
+        <PlayIcon />
+      </View>
+      {children}
     </View>
   );
 };
@@ -79,15 +86,16 @@ const PlayIcon = () => {
 };
 
 const styles = createStyleSheet({
-  container: {
+  bubbleContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 16,
+    overflow: 'hidden',
   },
-  image: {
+  video: {
     width: 240,
     maxWidth: 240,
     height: 160,
-    borderRadius: 16,
   },
   playIcon: {
     position: 'absolute',
