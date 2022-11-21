@@ -56,6 +56,16 @@ export const useIsMountedRef = () => {
   return isMounted;
 };
 
+export const useIsFirstMount = () => {
+  const isFirstMount = useRef(true);
+
+  useLayoutEffect(() => {
+    isFirstMount.current = false;
+  }, []);
+
+  return isFirstMount.current;
+};
+
 export const useFreshCallback = <T extends (...args: any[]) => any>(callback: T): T => {
   const ref = useRef<T>(callback);
   ref.current = callback;

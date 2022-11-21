@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -21,13 +21,14 @@ import type {
   SendbirdMember,
   SendbirdUser,
 } from '@sendbird/uikit-utils';
+import { useIsFirstMount } from '@sendbird/uikit-utils';
 
-import { LocalizationProvider } from '../contexts/LocalizationCtx';
+import { LocalizationContext, LocalizationProvider } from '../contexts/LocalizationCtx';
 import { PlatformServiceProvider } from '../contexts/PlatformServiceCtx';
 import type { UIKitFeaturesInSendbirdChatContext } from '../contexts/SendbirdChatCtx';
 import { SendbirdChatProvider } from '../contexts/SendbirdChatCtx';
 import { UserProfileProvider } from '../contexts/UserProfileCtx';
-import { useLocalization } from '../hooks/useContext';
+import EmojiManager from '../libs/EmojiManager';
 import InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
 import StringSetEn from '../localization/StringSet.en';
 import type { StringSet } from '../localization/StringSet.type';
@@ -98,71 +99,51 @@ const SendbirdUIKitContainer = ({
   userProfile,
   errorBoundary,
 }: SendbirdUIKitContainerProps) => {
-  const unsubscribes = useRef<(() => void)[]>([]).current;
-  const getSendbirdSDK = () => {
-    let sdk: SendbirdChatSDK;
+  const defaultStringSet = localization?.stringSet ?? StringSetEn;
 
-    sdk = Sendbird.init({
-      appId,
-      modules: [new GroupChannelModule(), new OpenChannelModule()],
-      localCacheEnabled: Boolean(chatOptions?.localCacheStorage),
-      // @ts-ignore
-      useAsyncStorageStore: chatOptions?.localCacheStorage
-        ? new InternalLocalCacheStorage(chatOptions.localCacheStorage)
-        : undefined,
-    });
+  const isFirstMount = useIsFirstMount();
+  const unsubscribes = useRef<Array<() => void>>([]);
+  const internalStorage = useMemo(
+    () => (chatOptions?.localCacheStorage ? new InternalLocalCacheStorage(chatOptions.localCacheStorage) : undefined),
+    [chatOptions?.localCacheStorage],
+  );
 
-    if (chatOptions?.onInitialized) {
-      sdk = chatOptions?.onInitialized(sdk);
+  const [sdkInstance, setSdkInstance] = useState<SendbirdChatSDK>(() => {
+    const sendbird = initializeSendbird(appId, internalStorage, chatOptions?.onInitialized);
+    unsubscribes.current = sendbird.unsubscribes;
+    return sendbird.chatSDK;
+  });
+  const emojiManager = useMemo(() => new EmojiManager(internalStorage), [internalStorage]);
+
+  useLayoutEffect(() => {
+    if (!isFirstMount) {
+      const sendbird = initializeSendbird(appId, internalStorage, chatOptions?.onInitialized);
+      setSdkInstance(sendbird.chatSDK);
+      unsubscribes.current = sendbird.unsubscribes;
     }
 
-    if (SendbirdUIKit.VERSION) {
-      sdk.addExtension('sb_uikit', SendbirdUIKit.VERSION);
-    }
-
-    if (SendbirdUIKit.PLATFORM) {
-      sdk.addExtension('device-os-platform', SendbirdUIKit.PLATFORM);
-    }
-
-    if (NetInfo?.addEventListener) {
-      const listener = (callback: () => void, callbackType: 'online' | 'offline') => {
-        const unsubscribe = NetInfo.addEventListener((state) => {
-          const online = Boolean(state.isConnected) || Boolean(state.isInternetReachable);
-          if (online && callbackType === 'online') callback();
-          if (!online && callbackType === 'offline') callback();
-        });
-        unsubscribes.push(unsubscribe);
-        return unsubscribe;
-      };
-      sdk.setOnlineListener?.((onOnline) => listener(onOnline, 'online'));
-      sdk.setOfflineListener?.((onOffline) => listener(onOffline, 'offline'));
-    }
-    return sdk;
-  };
-
-  const [sdkInstance, setSdkInstance] = useState<SendbirdChatSDK>(getSendbirdSDK);
-
-  useEffect(() => {
-    setSdkInstance(getSendbirdSDK);
     return () => {
-      unsubscribes.forEach((u) => {
-        try {
-          u();
-        } catch {}
-      });
+      if (!isFirstMount) {
+        unsubscribes.current.forEach((u) => {
+          try {
+            u();
+          } catch {}
+        });
+      }
     };
-  }, [appId, chatOptions?.localCacheStorage]);
+  }, [appId, internalStorage]);
 
   return (
     <SafeAreaProvider>
       <SendbirdChatProvider
         sdkInstance={sdkInstance}
+        emojiManager={emojiManager}
         enableAutoPushTokenRegistration={chatOptions?.enableAutoPushTokenRegistration ?? true}
         enableChannelListTypingIndicator={chatOptions?.enableChannelListTypingIndicator ?? false}
         enableChannelListMessageReceiptStatus={chatOptions?.enableChannelListMessageReceiptStatus ?? false}
         enableUseUserIdForNickname={chatOptions?.enableUseUserIdForNickname ?? false}
       >
-        <LocalizationProvider stringSet={localization?.stringSet ?? StringSetEn}>
+        <LocalizationProvider stringSet={defaultStringSet}>
           <PlatformServiceProvider
             fileService={platformServices.file}
             notificationService={platformServices.notification}
@@ -175,16 +156,34 @@ const SendbirdUIKitContainer = ({
                 defaultTitleAlign={styles?.defaultHeaderTitleAlign ?? 'left'}
                 statusBarTranslucent={styles?.statusBarTranslucent ?? true}
               >
-                <LocalizedDialogProvider>
-                  <ToastProvider dismissTimeout={toast?.dismissTimeout}>
-                    <UserProfileProvider
-                      onCreateChannel={userProfile?.onCreateChannel}
-                      onBeforeCreateChannel={userProfile?.onBeforeCreateChannel}
-                    >
-                      <InternalErrorBoundaryContainer {...errorBoundary}>{children}</InternalErrorBoundaryContainer>
-                    </UserProfileProvider>
-                  </ToastProvider>
-                </LocalizedDialogProvider>
+                <LocalizationContext.Consumer>
+                  {(value) => {
+                    const STRINGS = value?.STRINGS || defaultStringSet;
+                    return (
+                      <DialogProvider
+                        defaultLabels={{
+                          alert: { ok: STRINGS.DIALOG.ALERT_DEFAULT_OK },
+                          prompt: {
+                            ok: STRINGS.DIALOG.PROMPT_DEFAULT_OK,
+                            cancel: STRINGS.DIALOG.PROMPT_DEFAULT_CANCEL,
+                            placeholder: STRINGS.DIALOG.PROMPT_DEFAULT_PLACEHOLDER,
+                          },
+                        }}
+                      >
+                        <ToastProvider dismissTimeout={toast?.dismissTimeout}>
+                          <UserProfileProvider
+                            onCreateChannel={userProfile?.onCreateChannel}
+                            onBeforeCreateChannel={userProfile?.onBeforeCreateChannel}
+                          >
+                            <InternalErrorBoundaryContainer {...errorBoundary}>
+                              {children}
+                            </InternalErrorBoundaryContainer>
+                          </UserProfileProvider>
+                        </ToastProvider>
+                      </DialogProvider>
+                    );
+                  }}
+                </LocalizationContext.Consumer>
               </HeaderStyleProvider>
             </UIKitThemeProvider>
           </PlatformServiceProvider>
@@ -194,24 +193,48 @@ const SendbirdUIKitContainer = ({
   );
 };
 
-const LocalizedDialogProvider = ({ children }: React.PropsWithChildren) => {
-  const { STRINGS } = useLocalization();
-  return (
-    <DialogProvider
-      defaultLabels={{
-        alert: {
-          ok: STRINGS.DIALOG.ALERT_DEFAULT_OK,
-        },
-        prompt: {
-          ok: STRINGS.DIALOG.PROMPT_DEFAULT_OK,
-          cancel: STRINGS.DIALOG.PROMPT_DEFAULT_CANCEL,
-          placeholder: STRINGS.DIALOG.PROMPT_DEFAULT_PLACEHOLDER,
-        },
-      }}
-    >
-      {children}
-    </DialogProvider>
-  );
+const initializeSendbird = (
+  appId: string,
+  internalStorage?: InternalLocalCacheStorage,
+  onInitialized?: (sdk: SendbirdChatSDK) => SendbirdChatSDK,
+) => {
+  const unsubscribes: Array<() => void> = [];
+  let chatSDK: SendbirdChatSDK;
+
+  chatSDK = Sendbird.init({
+    appId,
+    modules: [new GroupChannelModule(), new OpenChannelModule()],
+    localCacheEnabled: Boolean(internalStorage),
+    useAsyncStorageStore: internalStorage as never,
+    newInstance: true,
+  });
+
+  if (onInitialized) {
+    chatSDK = onInitialized(chatSDK);
+  }
+
+  if (SendbirdUIKit.VERSION) {
+    chatSDK.addExtension('sb_uikit', SendbirdUIKit.VERSION);
+  }
+
+  if (SendbirdUIKit.PLATFORM) {
+    chatSDK.addExtension('device-os-platform', SendbirdUIKit.PLATFORM);
+  }
+
+  if (NetInfo?.addEventListener) {
+    const listener = (callback: () => void, callbackType: 'online' | 'offline') => {
+      const unsubscribe = NetInfo.addEventListener((state) => {
+        const online = Boolean(state.isConnected) || Boolean(state.isInternetReachable);
+        if (online && callbackType === 'online') callback();
+        if (!online && callbackType === 'offline') callback();
+      });
+      unsubscribes.push(unsubscribe);
+      return unsubscribe;
+    };
+    chatSDK.setOnlineListener?.((onOnline) => listener(onOnline, 'online'));
+    chatSDK.setOfflineListener?.((onOffline) => listener(onOffline, 'offline'));
+  }
+  return { chatSDK, unsubscribes };
 };
 
 export default SendbirdUIKitContainer;
