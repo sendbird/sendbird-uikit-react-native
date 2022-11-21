@@ -30,36 +30,27 @@ class EmojiManager {
     private internalStorage: InternalLocalCacheStorage = new InternalLocalCacheStorage(new MemoryStorage()),
   ) {}
 
-  public emojiCategoryMap: Record<string, EmojiCategory> = {};
-  public allEmojiMap: Record<string, Emoji> = {};
   private emojiStorage = {
-    timeout: undefined as undefined | NodeJS.Timeout,
     data: null as null | EmojiContainer,
     get: async () => {
       if (!this.emojiStorage.data) {
         const strItem = await this.internalStorage.getItem(EmojiManager.key);
-        if (strItem) this.emojiStorage.data = JSON.parse(strItem);
+        if (strItem) this.emojiStorage.data = Object.freeze(JSON.parse(strItem));
       }
       return this.emojiStorage.data;
     },
-    set: async (data: EmojiContainer, noThrottle = false) => {
-      this.emojiStorage.data = data;
-
-      if (noThrottle) {
-        this.emojiStorage.timeout = undefined;
-        await this.internalStorage.setItem(EmojiManager.key, JSON.stringify(data));
-      } else {
-        if (this.emojiStorage.timeout) clearTimeout(this.emojiStorage.timeout);
-        this.emojiStorage.timeout = setTimeout(() => {
-          this.emojiStorage.timeout = undefined;
-          this.internalStorage.setItem(EmojiManager.key, JSON.stringify(data));
-        }, 1000);
-      }
+    set: async (data: EmojiContainer) => {
+      this.emojiStorage.data = Object.freeze(data);
+      await this.internalStorage.setItem(EmojiManager.key, JSON.stringify(data));
     },
   };
 
-  init = async (emojiContainer?: EmojiContainer) => {
-    if (emojiContainer) await this.emojiStorage.set(emojiContainer, true);
+  public emojiCategoryMap: Record<string, EmojiCategory> = {};
+
+  public allEmojiMap: Record<string, Emoji> = {};
+
+  public init = async (emojiContainer?: EmojiContainer) => {
+    if (emojiContainer) await this.emojiStorage.set(emojiContainer);
 
     const container = await this.emojiStorage.get();
 
