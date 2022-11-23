@@ -38,15 +38,16 @@ export const truncate = (str: string, opts: Partial<TruncateOption> = defaultOpt
 };
 
 /**
- * Badge count truncate util
+ * Count truncate util
  * If count exceed the limit, it comes in the form of "MAX+"
  *
  * @param {number} count
  * @param {number} MAX default 99
+ * @param {string} MAX_SUFFIX default +
  * @returns {string}
  * */
-export const truncatedBadgeCount = (count: number, MAX = 99) => {
-  if (count >= MAX) return `${MAX}+`;
+export const truncatedCount = (count: number, MAX = 99, MAX_SUFFIX = '+') => {
+  if (count >= MAX) return `${MAX}${MAX_SUFFIX}`;
   return `${count}`;
 };
 

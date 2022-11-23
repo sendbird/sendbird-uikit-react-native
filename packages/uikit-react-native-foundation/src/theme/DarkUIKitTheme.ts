@@ -179,6 +179,28 @@ const DarkUIKitTheme = createTheme({
           },
         },
       },
+      reaction: {
+        default: {
+          enabled: {
+            background: palette.transparent,
+            highlight: palette.onBackgroundDark03,
+          },
+          selected: {
+            background: palette.primary500,
+            highlight: palette.primary200,
+          },
+        },
+        rounded: {
+          enabled: {
+            background: palette.background400,
+            highlight: palette.transparent,
+          },
+          selected: {
+            background: palette.primary500,
+            highlight: palette.transparent,
+          },
+        },
+      },
     },
   }),
 });
