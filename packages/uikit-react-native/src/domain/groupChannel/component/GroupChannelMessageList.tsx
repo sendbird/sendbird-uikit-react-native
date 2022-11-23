@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Linking, ListRenderItem, Platform, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -25,8 +25,9 @@ import {
 
 import type { ChatFlatListRef } from '../../../components/ChatFlatList';
 import ChatFlatList from '../../../components/ChatFlatList';
+import { BottomSheetReactionAddon } from '../../../components/ReactionAddons';
 import { DEPRECATION_WARNING } from '../../../constants';
-import { useLocalization, usePlatformService } from '../../../hooks/useContext';
+import { useLocalization, usePlatformService, useReaction } from '../../../hooks/useContext';
 import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
 
@@ -57,11 +58,12 @@ const GroupChannelMessageList = ({
   const scrollRef = useRef<ChatFlatListRef>(null);
   const [newMessagesInternalBuffer, setNewMessagesInternalBuffer] = useState(() => newMessagesFromMembers);
   const getMessagePressActions = useGetMessagePressActions({
+    channel,
+    currentUserId,
     onDeleteMessage,
+    onResendFailedMessage,
     onPressImageMessage,
     onPressMediaMessage,
-    currentUserId,
-    onResendFailedMessage,
   });
 
   const safeAreaLayout = { paddingLeft: left, paddingRight: right };
@@ -140,14 +142,20 @@ const GroupChannelMessageList = ({
 
 type HandleableMessage = SendbirdUserMessage | SendbirdFileMessage;
 const useGetMessagePressActions = ({
+  channel,
+  currentUserId,
+  onResendFailedMessage,
+  onDeleteMessage,
   onPressImageMessage,
   onPressMediaMessage,
-  onDeleteMessage,
-  onResendFailedMessage,
-  currentUserId,
 }: Pick<
   GroupChannelProps['MessageList'],
-  'onDeleteMessage' | 'onResendFailedMessage' | 'currentUserId' | 'onPressImageMessage' | 'onPressMediaMessage'
+  | 'channel'
+  | 'currentUserId'
+  | 'onResendFailedMessage'
+  | 'onDeleteMessage'
+  | 'onPressImageMessage'
+  | 'onPressMediaMessage'
 >) => {
   const { colors } = useUIKitTheme();
   const { STRINGS } = useLocalization();
@@ -156,6 +164,7 @@ const useGetMessagePressActions = ({
   const { alert } = useAlert();
   const { clipboardService, fileService } = usePlatformService();
   const { setEditMessage } = useContext(GroupChannelContexts.Fragment);
+  const { setFocusedMessage } = useReaction();
 
   const handleFailedMessage = (message: HandleableMessage) => {
     openSheet({
@@ -278,7 +287,18 @@ const useGetMessagePressActions = ({
     }
 
     if (sheetItems.length > 0) {
-      response.onLongPress = () => openSheet({ sheetItems });
+      response.onLongPress = () => {
+        openSheet({
+          sheetItems,
+          HeaderComponent: ({ onClose }) => {
+            // TODO: check should render reaction addon
+            useLayoutEffect(() => {
+              setFocusedMessage({ channel, message: msg });
+            }, []);
+            return <BottomSheetReactionAddon onClose={onClose} />;
+          },
+        });
+      };
     }
 
     if (msg.sendingStatus === 'failed') {

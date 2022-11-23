@@ -7,6 +7,8 @@ import { calcMessageGrouping, conditionChaining, isMyMessage, useIIFE } from '@s
 
 import { DEFAULT_LONG_PRESS_DELAY } from '../../constants';
 import type { GroupChannelProps } from '../../domain/groupChannel/types';
+import { useSendbirdChat } from '../../hooks/useContext';
+import { MessageReactionAddon } from '../ReactionAddons';
 import AdminMessage from './AdminMessage';
 import FileMessage from './FileMessage';
 import MessageContainer from './MessageContainer';
@@ -27,7 +29,7 @@ export interface MessageRendererInterface<T = SendbirdMessage> {
   groupWithPrev: boolean;
   groupWithNext: boolean;
   pressed: boolean;
-  children?: React.ReactElement;
+  children?: React.ReactElement | null;
 }
 
 const MessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
@@ -50,6 +52,21 @@ const MessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
     rest.nextMessage,
   );
 
+  const { features } = useSendbirdChat();
+
+  const reactionChildren = useIIFE(() => {
+    const shouldRender =
+      channel.isGroupChannel() &&
+      !channel.isBroadcast &&
+      !channel.isSuper &&
+      features.reactionEnabled &&
+      message.reactions &&
+      message.reactions.length > 0;
+
+    if (shouldRender) return <MessageReactionAddon message={message} />;
+    return null;
+  });
+
   const messageComponent = useIIFE(() => {
     const pressableProps = {
       style: styles.msgContainer,
@@ -63,7 +80,11 @@ const MessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
     if (message.isUserMessage()) {
       return (
         <Pressable {...pressableProps}>
-          {({ pressed }) => <UserMessage message={message} pressed={pressed} {...messageProps} />}
+          {({ pressed }) => (
+            <UserMessage message={message} pressed={pressed} {...messageProps}>
+              {reactionChildren}
+            </UserMessage>
+          )}
         </Pressable>
       );
     }
@@ -71,7 +92,11 @@ const MessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
     if (message.isFileMessage()) {
       return (
         <Pressable {...pressableProps}>
-          {({ pressed }) => <FileMessage message={message} pressed={pressed} {...messageProps} />}
+          {({ pressed }) => (
+            <FileMessage message={message} pressed={pressed} {...messageProps}>
+              {reactionChildren}
+            </FileMessage>
+          )}
         </Pressable>
       );
     }

@@ -7,6 +7,7 @@ import Modal from '../../components/Modal';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import DialogSheet from '../Dialog/DialogSheet';
 
+type HeaderProps = { onClose: () => void };
 export type BottomSheetItem = {
   sheetItems: {
     icon?: keyof typeof Icon.Assets;
@@ -15,7 +16,7 @@ export type BottomSheetItem = {
     titleColor?: string;
     onPress: () => void;
   }[];
-  HeaderComponent?: () => JSX.Element;
+  HeaderComponent?: (props: HeaderProps) => JSX.Element;
 };
 type Props = {
   visible: boolean;
@@ -37,7 +38,7 @@ const BottomSheet = ({ onDismiss, onHide, visible, sheetItems, HeaderComponent }
       backgroundStyle={{ alignItems: 'center', justifyContent: 'flex-end' }}
     >
       <DialogSheet style={{ width, paddingBottom: bottom }}>
-        {HeaderComponent && <HeaderComponent />}
+        {HeaderComponent && <HeaderComponent onClose={onHide} />}
         {sheetItems.map(({ onPress, ...props }, idx) => (
           <TouchableOpacity
             activeOpacity={0.75}

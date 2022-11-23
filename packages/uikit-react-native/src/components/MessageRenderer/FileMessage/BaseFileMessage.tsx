@@ -40,7 +40,6 @@ const styles = createStyleSheet({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
     paddingHorizontal: 12,
     paddingVertical: 6,
   },

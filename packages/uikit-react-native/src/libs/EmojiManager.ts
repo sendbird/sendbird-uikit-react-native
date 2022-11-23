@@ -45,9 +45,20 @@ class EmojiManager {
     },
   };
 
-  public emojiCategoryMap: Record<string, EmojiCategory> = {};
+  public _emojiCategoryMap: Record<string, EmojiCategory> = {};
+  get emojiCategoryMap() {
+    return this._emojiCategoryMap;
+  }
 
-  public allEmojiMap: Record<string, Emoji> = {};
+  public _allEmojiMap: Record<string, Emoji> = {};
+  get allEmojiMap() {
+    return this._allEmojiMap;
+  }
+
+  public _allEmoji: Emoji[] = [];
+  get allEmoji() {
+    return this._allEmoji;
+  }
 
   public init = async (emojiContainer?: EmojiContainer) => {
     if (emojiContainer) await this.emojiStorage.set(emojiContainer);
@@ -56,11 +67,12 @@ class EmojiManager {
 
     if (container) {
       for (const category of container.emojiCategories) {
-        this.emojiCategoryMap[category.id] = category;
+        this._emojiCategoryMap[category.id] = category;
         for (const emoji of category.emojis) {
-          this.allEmojiMap[emoji.key] = emoji;
+          this._allEmojiMap[emoji.key] = emoji;
         }
       }
+      this._allEmoji = Object.values(this._allEmojiMap);
     }
   };
 }

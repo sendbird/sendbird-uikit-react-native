@@ -25,6 +25,7 @@ import { useIsFirstMount } from '@sendbird/uikit-utils';
 
 import { LocalizationContext, LocalizationProvider } from '../contexts/LocalizationCtx';
 import { PlatformServiceProvider } from '../contexts/PlatformServiceCtx';
+import { ReactionProvider } from '../contexts/ReactionCtx';
 import type { UIKitFeaturesInSendbirdChatContext } from '../contexts/SendbirdChatCtx';
 import { SendbirdChatProvider } from '../contexts/SendbirdChatCtx';
 import { UserProfileProvider } from '../contexts/UserProfileCtx';
@@ -156,34 +157,36 @@ const SendbirdUIKitContainer = ({
                 defaultTitleAlign={styles?.defaultHeaderTitleAlign ?? 'left'}
                 statusBarTranslucent={styles?.statusBarTranslucent ?? true}
               >
-                <LocalizationContext.Consumer>
-                  {(value) => {
-                    const STRINGS = value?.STRINGS || defaultStringSet;
-                    return (
-                      <DialogProvider
-                        defaultLabels={{
-                          alert: { ok: STRINGS.DIALOG.ALERT_DEFAULT_OK },
-                          prompt: {
-                            ok: STRINGS.DIALOG.PROMPT_DEFAULT_OK,
-                            cancel: STRINGS.DIALOG.PROMPT_DEFAULT_CANCEL,
-                            placeholder: STRINGS.DIALOG.PROMPT_DEFAULT_PLACEHOLDER,
-                          },
+                <ToastProvider dismissTimeout={toast?.dismissTimeout}>
+                  <UserProfileProvider
+                    onCreateChannel={userProfile?.onCreateChannel}
+                    onBeforeCreateChannel={userProfile?.onBeforeCreateChannel}
+                  >
+                    <ReactionProvider>
+                      <LocalizationContext.Consumer>
+                        {(value) => {
+                          const STRINGS = value?.STRINGS || defaultStringSet;
+                          return (
+                            <DialogProvider
+                              defaultLabels={{
+                                alert: { ok: STRINGS.DIALOG.ALERT_DEFAULT_OK },
+                                prompt: {
+                                  ok: STRINGS.DIALOG.PROMPT_DEFAULT_OK,
+                                  cancel: STRINGS.DIALOG.PROMPT_DEFAULT_CANCEL,
+                                  placeholder: STRINGS.DIALOG.PROMPT_DEFAULT_PLACEHOLDER,
+                                },
+                              }}
+                            >
+                              <InternalErrorBoundaryContainer {...errorBoundary}>
+                                {children}
+                              </InternalErrorBoundaryContainer>
+                            </DialogProvider>
+                          );
                         }}
-                      >
-                        <ToastProvider dismissTimeout={toast?.dismissTimeout}>
-                          <UserProfileProvider
-                            onCreateChannel={userProfile?.onCreateChannel}
-                            onBeforeCreateChannel={userProfile?.onBeforeCreateChannel}
-                          >
-                            <InternalErrorBoundaryContainer {...errorBoundary}>
-                              {children}
-                            </InternalErrorBoundaryContainer>
-                          </UserProfileProvider>
-                        </ToastProvider>
-                      </DialogProvider>
-                    );
-                  }}
-                </LocalizationContext.Consumer>
+                      </LocalizationContext.Consumer>
+                    </ReactionProvider>
+                  </UserProfileProvider>
+                </ToastProvider>
               </HeaderStyleProvider>
             </UIKitThemeProvider>
           </PlatformServiceProvider>
