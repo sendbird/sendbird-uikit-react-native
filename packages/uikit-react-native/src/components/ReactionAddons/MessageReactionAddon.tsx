@@ -2,8 +2,9 @@ import React from 'react';
 import { Pressable } from 'react-native';
 
 import type { Emoji } from '@sendbird/chat';
+import type { Reaction } from '@sendbird/chat/message';
 import { createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdBaseMessage } from '@sendbird/uikit-utils';
+import type { SendbirdBaseChannel, SendbirdBaseMessage } from '@sendbird/uikit-utils';
 
 import { UNKNOWN_USER_ID } from '../../constants';
 import { useSendbirdChat } from '../../hooks/useContext';
@@ -12,30 +13,65 @@ import ReactionRoundedButton from './ReactionRoundedButton';
 const NUM_COL = 4;
 const REACTION_MORE_KEY = 'reaction-more-button';
 const createReactionButtons = (
+  channel: SendbirdBaseChannel,
   message: SendbirdBaseMessage,
   getEmoji: (key: string) => Emoji,
+  emojiLimit: number,
   currentUserId?: string,
 ) => {
-  return (message.reactions ?? [])
-    .map((reaction, index) => (
-      <ReactionRoundedButton
-        key={reaction.key}
-        url={getEmoji(reaction.key).url}
-        count={reaction.userIds.length}
-        reacted={reaction.userIds.indexOf(currentUserId ?? UNKNOWN_USER_ID) > -1}
-        style={[index % NUM_COL !== 3 && styles.marginRight, index < NUM_COL && styles.marginBottom]}
-      />
-    ))
-    .concat(<ReactionRoundedButton.More key={REACTION_MORE_KEY} />);
+  const isReacted = (reaction: Reaction) => {
+    return reaction.userIds.indexOf(currentUserId ?? UNKNOWN_USER_ID) > -1;
+  };
+
+  const createOnPressReaction = (reaction: Reaction) => {
+    return () => {
+      if (isReacted(reaction)) {
+        return channel.deleteReaction(message, reaction.key);
+      } else {
+        return channel.addReaction(message, reaction.key);
+      }
+    };
+  };
+
+  const reactions = message.reactions ?? [];
+  const buttons = reactions.map((reaction, index) => (
+    <Pressable key={reaction.key} onPress={createOnPressReaction(reaction)}>
+      {({ pressed }) => {
+        return (
+          <ReactionRoundedButton
+            url={getEmoji(reaction.key).url}
+            count={reaction.userIds.length}
+            reacted={pressed || isReacted(reaction)}
+            style={[
+              index % NUM_COL !== 3 && styles.marginRight,
+              index < NUM_COL && reactions.length >= NUM_COL && styles.marginBottom,
+            ]}
+          />
+        );
+      }}
+    </Pressable>
+  ));
+
+  if (buttons.length < emojiLimit) {
+    buttons.push(<ReactionRoundedButton.More key={REACTION_MORE_KEY} />);
+  }
+
+  return buttons;
 };
 
-const MessageReactionAddon = ({ message }: { message: SendbirdBaseMessage }) => {
+const MessageReactionAddon = ({ channel, message }: { channel: SendbirdBaseChannel; message: SendbirdBaseMessage }) => {
   const { colors } = useUIKitTheme();
   const { emojiManager, currentUser } = useSendbirdChat();
 
   if (!message.reactions?.length) return null;
 
-  const reactionButtons = createReactionButtons(message, (key) => emojiManager.allEmojiMap[key], currentUser?.userId);
+  const reactionButtons = createReactionButtons(
+    channel,
+    message,
+    (key) => emojiManager.allEmojiMap[key],
+    emojiManager.allEmoji.length,
+    currentUser?.userId,
+  );
 
   return (
     <Pressable

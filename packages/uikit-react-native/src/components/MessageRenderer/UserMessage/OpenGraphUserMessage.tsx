@@ -39,7 +39,11 @@ const OpenGraphUserMessage = ({ message, variant, pressed, ogMetaData, children 
             )}
           </URLParsedText>
         </View>
-        <TouchableOpacity activeOpacity={0.7} onPress={() => Linking.openURL(ogMetaData.url).catch()}>
+        <TouchableOpacity
+          style={{ backgroundColor: select({ dark: palette.background500, light: palette.background200 }) }}
+          activeOpacity={0.85}
+          onPress={() => Linking.openURL(ogMetaData.url).catch()}
+        >
           <View
             style={[
               styles.ogImageContainer,

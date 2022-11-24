@@ -45,18 +45,18 @@ class EmojiManager {
     },
   };
 
-  public _emojiCategoryMap: Record<string, EmojiCategory> = {};
-  get emojiCategoryMap() {
+  private _emojiCategoryMap: Record<string, EmojiCategory> = {};
+  public get emojiCategoryMap() {
     return this._emojiCategoryMap;
   }
 
-  public _allEmojiMap: Record<string, Emoji> = {};
-  get allEmojiMap() {
+  private _allEmojiMap: Record<string, Emoji> = {};
+  public get allEmojiMap() {
     return this._allEmojiMap;
   }
 
-  public _allEmoji: Emoji[] = [];
-  get allEmoji() {
+  private _allEmoji: Emoji[] = [];
+  public get allEmoji() {
     return this._allEmoji;
   }
 

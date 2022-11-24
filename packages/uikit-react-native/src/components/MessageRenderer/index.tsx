@@ -63,7 +63,7 @@ const MessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
       message.reactions &&
       message.reactions.length > 0;
 
-    if (shouldRender) return <MessageReactionAddon message={message} />;
+    if (shouldRender) return <MessageReactionAddon channel={channel} message={message} />;
     return null;
   });
 
