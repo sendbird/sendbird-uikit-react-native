@@ -41,22 +41,21 @@ export const ReactionProvider = ({ children }: Props) => {
     else setState({});
   }, []);
 
+  const reactionCtx = { ...state, openReactionList, openReactionUserList, updateReactionFocusedItem };
+
   return (
-    <ReactionContext.Provider
-      value={{
-        ...state,
-        openReactionList,
-        openReactionUserList,
-        updateReactionFocusedItem,
-      }}
-    >
+    <ReactionContext.Provider value={reactionCtx}>
       {children}
       <ReactionBottomSheets.UserList
+        chatCtx={chatCtx}
+        reactionCtx={reactionCtx}
         visible={reactionUserListVisible}
         onDismiss={() => setState({})}
         onClose={() => setReactionUserListVisible(false)}
       />
       <ReactionBottomSheets.ReactionList
+        chatCtx={chatCtx}
+        reactionCtx={reactionCtx}
         visible={reactionListVisible}
         onDismiss={() => setState({})}
         onClose={() => setReactionListVisible(false)}

@@ -1,25 +1,23 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { FlatList, Pressable, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { SendbirdChatContext } from '@sendbird/uikit-react-native';
 import { Image, Modal, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 import { UNKNOWN_USER_ID } from '../constants';
-import { ReactionContext } from '../contexts/ReactionCtx';
+import type { ReactionContext } from '../contexts/ReactionCtx';
+import type { SendbirdChatContext } from '../contexts/SendbirdChatCtx';
 
+type GetFromContext<T> = T extends React.Context<infer Value> ? NonNullable<Value> : never;
 type ReactionBottomSheetProps = {
   visible: boolean;
   onDismiss: () => void;
   onClose: () => void;
+  chatCtx: GetFromContext<typeof SendbirdChatContext>;
+  reactionCtx: GetFromContext<typeof ReactionContext>;
 };
 
-const ReactionUserListBottomSheet = ({ visible, onClose, onDismiss }: ReactionBottomSheetProps) => {
-  const reactionCtx = useContext(ReactionContext);
-  const chatCtx = useContext(SendbirdChatContext);
-  if (!chatCtx) throw new Error('SendbirdChatContext is not provided');
-  if (!reactionCtx) throw new Error('ReactionContext is not provided');
-
+const ReactionUserListBottomSheet = ({ visible, onClose, onDismiss, reactionCtx }: ReactionBottomSheetProps) => {
   const { width } = useWindowDimensions();
   const { bottom, left, right } = useSafeAreaInsets();
   const { colors } = useUIKitTheme();
@@ -53,12 +51,7 @@ const ReactionUserListBottomSheet = ({ visible, onClose, onDismiss }: ReactionBo
 };
 
 const NUM_COLUMN = 6;
-const ReactionListBottomSheet = ({ visible, onClose, onDismiss }: ReactionBottomSheetProps) => {
-  const reactionCtx = useContext(ReactionContext);
-  const chatCtx = useContext(SendbirdChatContext);
-  if (!chatCtx) throw new Error('SendbirdChatContext is not provided');
-  if (!reactionCtx) throw new Error('ReactionContext is not provided');
-
+const ReactionListBottomSheet = ({ visible, onClose, onDismiss, reactionCtx, chatCtx }: ReactionBottomSheetProps) => {
   const { width } = useWindowDimensions();
   const { bottom, left, right } = useSafeAreaInsets();
   const { colors } = useUIKitTheme();
@@ -92,6 +85,7 @@ const ReactionListBottomSheet = ({ visible, onClose, onDismiss }: ReactionBottom
           numColumns={NUM_COLUMN}
           keyExtractor={(item) => item.key}
           contentContainerStyle={styles.flatlist}
+          ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
           renderItem={({ item: { key, url } }) => {
             const reactedUserIds = message?.reactions?.find((it) => it.key === key)?.userIds ?? [];
 
