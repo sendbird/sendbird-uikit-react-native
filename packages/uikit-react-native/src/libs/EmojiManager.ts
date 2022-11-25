@@ -1,6 +1,6 @@
-import type { Emoji, EmojiCategory, EmojiContainer } from '@sendbird/chat';
-import type { LocalCacheStorage } from '@sendbird/uikit-react-native';
+import type { SendbirdEmoji, SendbirdEmojiCategory, SendbirdEmojiContainer } from '@sendbird/uikit-utils';
 
+import type { LocalCacheStorage } from '../types';
 import InternalLocalCacheStorage from './InternalLocalCacheStorage';
 
 class MemoryStorage implements LocalCacheStorage {
@@ -31,7 +31,7 @@ class EmojiManager {
   ) {}
 
   private emojiStorage = {
-    data: null as null | EmojiContainer,
+    data: null as null | SendbirdEmojiContainer,
     get: async () => {
       if (!this.emojiStorage.data) {
         const strItem = await this.internalStorage.getItem(EmojiManager.key);
@@ -39,28 +39,28 @@ class EmojiManager {
       }
       return this.emojiStorage.data;
     },
-    set: async (data: EmojiContainer) => {
+    set: async (data: SendbirdEmojiContainer) => {
       this.emojiStorage.data = Object.freeze(data);
       await this.internalStorage.setItem(EmojiManager.key, JSON.stringify(data));
     },
   };
 
-  private _emojiCategoryMap: Record<string, EmojiCategory> = {};
+  private _emojiCategoryMap: Record<string, SendbirdEmojiCategory> = {};
   public get emojiCategoryMap() {
     return this._emojiCategoryMap;
   }
 
-  private _allEmojiMap: Record<string, Emoji> = {};
+  private _allEmojiMap: Record<string, SendbirdEmoji> = {};
   public get allEmojiMap() {
     return this._allEmojiMap;
   }
 
-  private _allEmoji: Emoji[] = [];
+  private _allEmoji: SendbirdEmoji[] = [];
   public get allEmoji() {
     return this._allEmoji;
   }
 
-  public init = async (emojiContainer?: EmojiContainer) => {
+  public init = async (emojiContainer?: SendbirdEmojiContainer) => {
     if (emojiContainer) await this.emojiStorage.set(emojiContainer);
 
     const container = await this.emojiStorage.get();

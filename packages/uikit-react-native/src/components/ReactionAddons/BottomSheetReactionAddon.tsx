@@ -3,22 +3,27 @@ import { Pressable, View } from 'react-native';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { Icon, Image, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { useUniqId } from '@sendbird/uikit-utils';
+import { SendbirdBaseChannel, SendbirdBaseMessage, useUniqId } from '@sendbird/uikit-utils';
 
 import { UNKNOWN_USER_ID } from '../../constants';
 import { useReaction, useSendbirdChat } from '../../hooks/useContext';
 
-const COMONENT_NAME = 'BottomSheetReactionAddon';
-const BottomSheetReactionAddon = ({ onClose }: { onClose: () => void }) => {
-  const { emojiManager, currentUser, sdk, features } = useSendbirdChat();
-  const { channel, message, setFocusedMessage } = useReaction();
+type Props = {
+  onClose: () => Promise<void>;
+  channel: SendbirdBaseChannel;
+  message: SendbirdBaseMessage;
+};
+const COMPONENT_NAME = 'BottomSheetReactionAddon';
+const BottomSheetReactionAddon = ({ onClose, message, channel }: Props) => {
+  const { emojiManager, currentUser, sdk } = useSendbirdChat();
+  const { updateReactionFocusedItem, openReactionList } = useReaction();
   const { colors } = useUIKitTheme();
-  const id = useUniqId(COMONENT_NAME);
+  const id = useUniqId(COMPONENT_NAME);
 
-  useChannelHandler(sdk, COMONENT_NAME + id, {
+  useChannelHandler(sdk, COMPONENT_NAME + id, {
     async onReactionUpdated(eventChannel, event) {
       if (channel?.url === eventChannel.url && event.messageId === message?.messageId) {
-        setFocusedMessage({
+        updateReactionFocusedItem({
           message: await sdk.message.getMessage({
             includeReactions: true,
             messageId: message.messageId,
@@ -30,8 +35,6 @@ const BottomSheetReactionAddon = ({ onClose }: { onClose: () => void }) => {
     },
   });
 
-  if (!features.reactionEnabled || !channel || !message) return null;
-
   const emojiAll = emojiManager.allEmoji.slice(0, 5);
   const color = colors.ui.reaction.default;
 
@@ -41,19 +44,19 @@ const BottomSheetReactionAddon = ({ onClose }: { onClose: () => void }) => {
         const reactedUserIds = message?.reactions?.find((it) => it.key === key)?.userIds ?? [];
 
         const idx = reactedUserIds.indexOf(currentUser?.userId ?? UNKNOWN_USER_ID);
-        const hasReaction = idx > -1;
+        const reacted = idx > -1;
 
         return (
           <Pressable
             key={key}
             onPress={() => {
-              if (hasReaction) channel.deleteReaction(message, key);
+              if (reacted) channel.deleteReaction(message, key);
               else channel.addReaction(message, key);
               onClose();
             }}
             style={({ pressed }) => [
               styles.button,
-              { backgroundColor: hasReaction || pressed ? color.selected.background : color.enabled.background },
+              { backgroundColor: reacted || pressed ? color.selected.background : color.enabled.background },
             ]}
           >
             <Image source={{ uri: url }} style={styles.emoji} />
@@ -62,6 +65,10 @@ const BottomSheetReactionAddon = ({ onClose }: { onClose: () => void }) => {
       })}
 
       <Pressable
+        onPress={async () => {
+          await onClose();
+          openReactionList({ channel, message });
+        }}
         style={({ pressed }) => [
           styles.button,
           { backgroundColor: pressed ? color.selected.background : color.enabled.background },

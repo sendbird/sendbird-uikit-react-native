@@ -4,7 +4,16 @@
 import type React from 'react';
 
 import type SendbirdChat from '@sendbird/chat';
-import type { BaseChannel, RestrictedUser, SendbirdError as SBError, User, UserUpdateParams } from '@sendbird/chat';
+import type {
+  BaseChannel,
+  Emoji,
+  EmojiCategory,
+  EmojiContainer,
+  RestrictedUser,
+  SendbirdError as SBError,
+  User,
+  UserUpdateParams,
+} from '@sendbird/chat';
 import type {
   GroupChannel,
   GroupChannelCollection,
@@ -23,13 +32,12 @@ import type {
   FileMessageCreateParams,
   FileMessageUpdateParams,
   PreviousMessageListQuery,
+  Reaction,
   UserMessage,
   UserMessageCreateParams,
   UserMessageUpdateParams,
 } from '@sendbird/chat/message';
 import type { OpenChannel, OpenChannelModule } from '@sendbird/chat/openChannel';
-
-import './';
 
 export type FilterByValueType<T extends object, Type> = {
   [K in keyof T as T[K] extends Type ? K : never]: T[K];
@@ -78,6 +86,11 @@ export type SendbirdMember = Member;
 export type SendbirdGroupChannel = GroupChannel;
 export type SendbirdBaseChannel = BaseChannel;
 export type SendbirdOpenChannel = OpenChannel;
+
+export type SendbirdReaction = Reaction;
+export type SendbirdEmoji = Emoji;
+export type SendbirdEmojiCategory = EmojiCategory;
+export type SendbirdEmojiContainer = EmojiContainer;
 
 export type SendbirdGroupChannelCollection = GroupChannelCollection;
 export type SendbirdGroupChannelListQuery = GroupChannelListQuery;

@@ -2,58 +2,69 @@ import React from 'react';
 import { Pressable } from 'react-native';
 
 import type { Emoji } from '@sendbird/chat';
-import type { Reaction } from '@sendbird/chat/message';
 import { createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdBaseChannel, SendbirdBaseMessage } from '@sendbird/uikit-utils';
+import type { SendbirdBaseChannel, SendbirdBaseMessage, SendbirdReaction } from '@sendbird/uikit-utils';
 
 import { UNKNOWN_USER_ID } from '../../constants';
-import { useSendbirdChat } from '../../hooks/useContext';
+import { useReaction, useSendbirdChat } from '../../hooks/useContext';
 import ReactionRoundedButton from './ReactionRoundedButton';
 
 const NUM_COL = 4;
 const REACTION_MORE_KEY = 'reaction-more-button';
+
+const getUserReacted = (reaction: SendbirdReaction, userId?: string) => {
+  return reaction.userIds.indexOf(userId ?? UNKNOWN_USER_ID) > -1;
+};
+
+const createOnPressReaction = (
+  reaction: SendbirdReaction,
+  channel: SendbirdBaseChannel,
+  message: SendbirdBaseMessage,
+  reacted: boolean,
+) => {
+  return () => {
+    if (reacted) {
+      return channel.deleteReaction(message, reaction.key);
+    } else {
+      return channel.addReaction(message, reaction.key);
+    }
+  };
+};
+
 const createReactionButtons = (
   channel: SendbirdBaseChannel,
   message: SendbirdBaseMessage,
   getEmoji: (key: string) => Emoji,
   emojiLimit: number,
+  onPressMore: () => void,
   currentUserId?: string,
 ) => {
-  const isReacted = (reaction: Reaction) => {
-    return reaction.userIds.indexOf(currentUserId ?? UNKNOWN_USER_ID) > -1;
-  };
-
-  const createOnPressReaction = (reaction: Reaction) => {
-    return () => {
-      if (isReacted(reaction)) {
-        return channel.deleteReaction(message, reaction.key);
-      } else {
-        return channel.addReaction(message, reaction.key);
-      }
-    };
-  };
-
   const reactions = message.reactions ?? [];
-  const buttons = reactions.map((reaction, index) => (
-    <Pressable key={reaction.key} onPress={createOnPressReaction(reaction)}>
-      {({ pressed }) => {
-        return (
+  const buttons = reactions.map((reaction, index) => {
+    const isNotLastOfRow = index % NUM_COL !== NUM_COL - 1;
+    const isNotLastOfCol = index < NUM_COL && reactions.length >= NUM_COL;
+    return (
+      <Pressable
+        key={reaction.key}
+        onPress={createOnPressReaction(reaction, channel, message, getUserReacted(reaction, currentUserId))}
+      >
+        {({ pressed }) => (
           <ReactionRoundedButton
             url={getEmoji(reaction.key).url}
             count={reaction.userIds.length}
-            reacted={pressed || isReacted(reaction)}
-            style={[
-              index % NUM_COL !== 3 && styles.marginRight,
-              index < NUM_COL && reactions.length >= NUM_COL && styles.marginBottom,
-            ]}
+            reacted={pressed || getUserReacted(reaction, currentUserId)}
+            style={[isNotLastOfRow && styles.marginRight, isNotLastOfCol && styles.marginBottom]}
           />
-        );
-      }}
-    </Pressable>
-  ));
-
+        )}
+      </Pressable>
+    );
+  });
   if (buttons.length < emojiLimit) {
-    buttons.push(<ReactionRoundedButton.More key={REACTION_MORE_KEY} />);
+    buttons.push(
+      <Pressable key={REACTION_MORE_KEY} onPress={onPressMore}>
+        {({ pressed }) => <ReactionRoundedButton.More pressed={pressed} />}
+      </Pressable>,
+    );
   }
 
   return buttons;
@@ -62,6 +73,7 @@ const createReactionButtons = (
 const MessageReactionAddon = ({ channel, message }: { channel: SendbirdBaseChannel; message: SendbirdBaseMessage }) => {
   const { colors } = useUIKitTheme();
   const { emojiManager, currentUser } = useSendbirdChat();
+  const { openReactionList } = useReaction();
 
   if (!message.reactions?.length) return null;
 
@@ -70,6 +82,7 @@ const MessageReactionAddon = ({ channel, message }: { channel: SendbirdBaseChann
     message,
     (key) => emojiManager.allEmojiMap[key],
     emojiManager.allEmoji.length,
+    () => openReactionList({ channel, message }),
     currentUser?.userId,
   );
 

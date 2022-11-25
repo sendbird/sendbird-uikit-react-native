@@ -31,12 +31,17 @@ const ReactionRoundedButton = ({ url, count, reacted, style }: Props) => {
   );
 };
 
-ReactionRoundedButton.More = () => {
+ReactionRoundedButton.More = ({ pressed }: { pressed: boolean }) => {
   const { colors } = useUIKitTheme();
   const color = colors.ui.reaction.rounded;
 
   return (
-    <View style={[styles.reactionContainer, { backgroundColor: color.enabled.background }]}>
+    <View
+      style={[
+        styles.reactionContainer,
+        { backgroundColor: pressed ? color.selected.background : color.enabled.background },
+      ]}
+    >
       <Icon icon={'emoji-more'} color={colors.onBackground03} size={20} />
     </View>
   );

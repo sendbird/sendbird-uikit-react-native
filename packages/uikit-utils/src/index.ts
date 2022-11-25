@@ -80,4 +80,8 @@ export type {
   SendbirdFileMessageUpdateParams,
   SendbirdUserUpdateParams,
   SendbirdRestrictedUser,
+  SendbirdReaction,
+  SendbirdEmojiContainer,
+  SendbirdEmoji,
+  SendbirdEmojiCategory,
 } from './types';

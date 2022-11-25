@@ -7,7 +7,7 @@ import Modal from '../../components/Modal';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import DialogSheet from '../Dialog/DialogSheet';
 
-type HeaderProps = { onClose: () => void };
+type HeaderProps = { onClose: () => Promise<void> };
 export type BottomSheetItem = {
   sheetItems: {
     icon?: keyof typeof Icon.Assets;

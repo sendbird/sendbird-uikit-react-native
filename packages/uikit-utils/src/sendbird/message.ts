@@ -1,4 +1,5 @@
 import type {
+  SendbirdBaseChannel,
   SendbirdBaseMessage,
   SendbirdDataPayload,
   SendbirdFileMessage,
@@ -109,4 +110,8 @@ export function isSendbirdNotification(dataPayload?: {
 
 export function parseSendbirdNotification(dataPayload: RawSendbirdDataPayload): SendbirdDataPayload {
   return typeof dataPayload.sendbird === 'string' ? JSON.parse(dataPayload.sendbird) : dataPayload.sendbird;
+}
+
+export function shouldRenderReaction(channel: SendbirdBaseChannel, reactionEnabled: boolean) {
+  return channel.isGroupChannel() && !channel.isBroadcast && !channel.isSuper && reactionEnabled;
 }

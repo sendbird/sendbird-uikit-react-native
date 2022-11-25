@@ -3,7 +3,13 @@ import { Pressable, View } from 'react-native';
 
 import { createStyleSheet } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
-import { calcMessageGrouping, conditionChaining, isMyMessage, useIIFE } from '@sendbird/uikit-utils';
+import {
+  calcMessageGrouping,
+  conditionChaining,
+  isMyMessage,
+  shouldRenderReaction,
+  useIIFE,
+} from '@sendbird/uikit-utils';
 
 import { DEFAULT_LONG_PRESS_DELAY } from '../../constants';
 import type { GroupChannelProps } from '../../domain/groupChannel/types';
@@ -55,15 +61,9 @@ const MessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
   const { features } = useSendbirdChat();
 
   const reactionChildren = useIIFE(() => {
-    const shouldRender =
-      channel.isGroupChannel() &&
-      !channel.isBroadcast &&
-      !channel.isSuper &&
-      features.reactionEnabled &&
-      message.reactions &&
-      message.reactions.length > 0;
-
-    if (shouldRender) return <MessageReactionAddon channel={channel} message={message} />;
+    if (shouldRenderReaction(channel, features.reactionEnabled) && message.reactions && message.reactions.length > 0) {
+      return <MessageReactionAddon channel={channel} message={message} />;
+    }
     return null;
   });
 
