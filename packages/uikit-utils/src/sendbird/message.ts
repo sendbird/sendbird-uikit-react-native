@@ -4,6 +4,7 @@ import type {
   SendbirdDataPayload,
   SendbirdFileMessage,
   SendbirdMessage,
+  SendbirdReaction,
   SendbirdSendableMessage,
 } from '../types';
 import { messageTime } from '../ui-format/common';
@@ -114,4 +115,8 @@ export function parseSendbirdNotification(dataPayload: RawSendbirdDataPayload): 
 
 export function shouldRenderReaction(channel: SendbirdBaseChannel, reactionEnabled: boolean) {
   return channel.isGroupChannel() && !channel.isBroadcast && !channel.isSuper && reactionEnabled;
+}
+
+export function getReactionCount(reaction: SendbirdReaction) {
+  return reaction.userIds.length;
 }

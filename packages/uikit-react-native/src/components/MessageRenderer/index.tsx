@@ -14,7 +14,7 @@ import {
 import { DEFAULT_LONG_PRESS_DELAY } from '../../constants';
 import type { GroupChannelProps } from '../../domain/groupChannel/types';
 import { useSendbirdChat } from '../../hooks/useContext';
-import { MessageReactionAddon } from '../ReactionAddons';
+import { ReactionAddons } from '../ReactionAddons';
 import AdminMessage from './AdminMessage';
 import FileMessage from './FileMessage';
 import MessageContainer from './MessageContainer';
@@ -62,7 +62,7 @@ const MessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
 
   const reactionChildren = useIIFE(() => {
     if (shouldRenderReaction(channel, features.reactionEnabled) && message.reactions && message.reactions.length > 0) {
-      return <MessageReactionAddon channel={channel} message={message} />;
+      return <ReactionAddons.Message channel={channel} message={message} />;
     }
     return null;
   });

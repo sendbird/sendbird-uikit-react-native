@@ -4,16 +4,17 @@ import { Pressable } from 'react-native';
 import type { Emoji } from '@sendbird/chat';
 import { createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdBaseChannel, SendbirdBaseMessage, SendbirdReaction } from '@sendbird/uikit-utils';
+import { getReactionCount } from '@sendbird/uikit-utils';
 
-import { UNKNOWN_USER_ID } from '../../constants';
+import { DEFAULT_LONG_PRESS_DELAY, UNKNOWN_USER_ID } from '../../constants';
 import { useReaction, useSendbirdChat } from '../../hooks/useContext';
 import ReactionRoundedButton from './ReactionRoundedButton';
 
 const NUM_COL = 4;
 const REACTION_MORE_KEY = 'reaction-more-button';
 
-const getUserReacted = (reaction: SendbirdReaction, userId?: string) => {
-  return reaction.userIds.indexOf(userId ?? UNKNOWN_USER_ID) > -1;
+const getUserReacted = (reaction: SendbirdReaction, userId = UNKNOWN_USER_ID) => {
+  return reaction.userIds.indexOf(userId) > -1;
 };
 
 const createOnPressReaction = (
@@ -36,7 +37,8 @@ const createReactionButtons = (
   message: SendbirdBaseMessage,
   getEmoji: (key: string) => Emoji,
   emojiLimit: number,
-  onPressMore: () => void,
+  onOpenReactionList: () => void,
+  onOpenReactionUserList: (focusIndex: number) => void,
   currentUserId?: string,
 ) => {
   const reactions = message.reactions ?? [];
@@ -47,11 +49,13 @@ const createReactionButtons = (
       <Pressable
         key={reaction.key}
         onPress={createOnPressReaction(reaction, channel, message, getUserReacted(reaction, currentUserId))}
+        onLongPress={() => onOpenReactionUserList(index)}
+        delayLongPress={DEFAULT_LONG_PRESS_DELAY}
       >
         {({ pressed }) => (
           <ReactionRoundedButton
             url={getEmoji(reaction.key).url}
-            count={reaction.userIds.length}
+            count={getReactionCount(reaction)}
             reacted={pressed || getUserReacted(reaction, currentUserId)}
             style={[isNotLastOfRow && styles.marginRight, isNotLastOfCol && styles.marginBottom]}
           />
@@ -61,7 +65,7 @@ const createReactionButtons = (
   });
   if (buttons.length < emojiLimit) {
     buttons.push(
-      <Pressable key={REACTION_MORE_KEY} onPress={onPressMore}>
+      <Pressable key={REACTION_MORE_KEY} onPress={onOpenReactionList}>
         {({ pressed }) => <ReactionRoundedButton.More pressed={pressed} />}
       </Pressable>,
     );
@@ -73,7 +77,7 @@ const createReactionButtons = (
 const MessageReactionAddon = ({ channel, message }: { channel: SendbirdBaseChannel; message: SendbirdBaseMessage }) => {
   const { colors } = useUIKitTheme();
   const { emojiManager, currentUser } = useSendbirdChat();
-  const { openReactionList } = useReaction();
+  const { openReactionList, openReactionUserList } = useReaction();
 
   if (!message.reactions?.length) return null;
 
@@ -83,6 +87,7 @@ const MessageReactionAddon = ({ channel, message }: { channel: SendbirdBaseChann
     (key) => emojiManager.allEmojiMap[key],
     emojiManager.allEmoji.length,
     () => openReactionList({ channel, message }),
+    (focusIndex) => openReactionUserList({ channel, message, focusIndex }),
     currentUser?.userId,
   );
 

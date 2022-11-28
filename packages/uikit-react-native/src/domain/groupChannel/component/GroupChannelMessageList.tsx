@@ -26,7 +26,7 @@ import {
 
 import type { ChatFlatListRef } from '../../../components/ChatFlatList';
 import ChatFlatList from '../../../components/ChatFlatList';
-import { BottomSheetReactionAddon } from '../../../components/ReactionAddons';
+import { ReactionAddons } from '../../../components/ReactionAddons';
 import { DEPRECATION_WARNING } from '../../../constants';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelContexts } from '../module/moduleContext';
@@ -292,7 +292,7 @@ const useGetMessagePressActions = ({
         openSheet({
           sheetItems,
           HeaderComponent: shouldRenderReaction(channel, features.reactionEnabled)
-            ? ({ onClose }) => <BottomSheetReactionAddon message={msg} channel={channel} onClose={onClose} />
+            ? ({ onClose }) => <ReactionAddons.BottomSheet message={msg} channel={channel} onClose={onClose} />
             : undefined,
         });
       };

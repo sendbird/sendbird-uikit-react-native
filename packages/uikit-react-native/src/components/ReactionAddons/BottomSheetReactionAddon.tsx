@@ -41,19 +41,20 @@ const BottomSheetReactionAddon = ({ onClose, message, channel }: Props) => {
   return (
     <View style={styles.container}>
       {emojiAll.map(({ key, url }) => {
-        const reactedUserIds = message?.reactions?.find((it) => it.key === key)?.userIds ?? [];
+        const reactionUserIds = message?.reactions?.find((it) => it.key === key)?.userIds ?? [];
+        const currentUserIdx = reactionUserIds.indexOf(currentUser?.userId ?? UNKNOWN_USER_ID);
+        const reacted = currentUserIdx > -1;
 
-        const idx = reactedUserIds.indexOf(currentUser?.userId ?? UNKNOWN_USER_ID);
-        const reacted = idx > -1;
+        const onPress = () => {
+          if (reacted) channel.deleteReaction(message, key);
+          else channel.addReaction(message, key);
+          onClose();
+        };
 
         return (
           <Pressable
             key={key}
-            onPress={() => {
-              if (reacted) channel.deleteReaction(message, key);
-              else channel.addReaction(message, key);
-              onClose();
-            }}
+            onPress={onPress}
             style={({ pressed }) => [
               styles.button,
               { backgroundColor: reacted || pressed ? color.selected.background : color.enabled.background },

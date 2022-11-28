@@ -186,7 +186,7 @@ const DarkUIKitTheme = createTheme({
             highlight: palette.onBackgroundDark03,
           },
           selected: {
-            background: palette.primary400,
+            background: palette.primary500,
             highlight: palette.primary200,
           },
         },
@@ -196,7 +196,7 @@ const DarkUIKitTheme = createTheme({
             highlight: palette.transparent,
           },
           selected: {
-            background: palette.primary400,
+            background: palette.primary500,
             highlight: palette.transparent,
           },
         },

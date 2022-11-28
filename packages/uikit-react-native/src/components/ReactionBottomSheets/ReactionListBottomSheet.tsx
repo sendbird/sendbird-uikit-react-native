@@ -4,51 +4,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Image, Modal, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
-import { UNKNOWN_USER_ID } from '../constants';
-import type { ReactionContext } from '../contexts/ReactionCtx';
-import type { SendbirdChatContext } from '../contexts/SendbirdChatCtx';
-
-type GetFromContext<T> = T extends React.Context<infer Value> ? NonNullable<Value> : never;
-type ReactionBottomSheetProps = {
-  visible: boolean;
-  onDismiss: () => void;
-  onClose: () => void;
-  chatCtx: GetFromContext<typeof SendbirdChatContext>;
-  reactionCtx: GetFromContext<typeof ReactionContext>;
-};
-
-const ReactionUserListBottomSheet = ({ visible, onClose, onDismiss, reactionCtx }: ReactionBottomSheetProps) => {
-  const { width } = useWindowDimensions();
-  const { bottom, left, right } = useSafeAreaInsets();
-  const { colors } = useUIKitTheme();
-
-  // const { currentUser, emojiManager } = chatCtx;
-  const { channel, message } = reactionCtx;
-  // const color = colors.ui.reaction.default;
-
-  return (
-    <Modal
-      type={'slide'}
-      visible={Boolean(visible && channel && message)}
-      onClose={onClose}
-      onDismiss={onDismiss}
-      backgroundStyle={styles.modal}
-    >
-      <View
-        style={[
-          styles.container,
-          {
-            width,
-            paddingBottom: bottom,
-            backgroundColor: colors.ui.dialog.default.none.background,
-            paddingLeft: left + styles.container.paddingHorizontal,
-            paddingRight: right + styles.container.paddingHorizontal,
-          },
-        ]}
-      ></View>
-    </Modal>
-  );
-};
+import { UNKNOWN_USER_ID } from '../../constants';
+import type { ReactionBottomSheetProps } from './index';
 
 const NUM_COLUMN = 6;
 const ReactionListBottomSheet = ({ visible, onClose, onDismiss, reactionCtx, chatCtx }: ReactionBottomSheetProps) => {
@@ -153,7 +110,4 @@ const styles = createStyleSheet({
   },
 });
 
-export const ReactionBottomSheets = {
-  ReactionList: ReactionListBottomSheet,
-  UserList: ReactionUserListBottomSheet,
-};
+export default ReactionListBottomSheet;

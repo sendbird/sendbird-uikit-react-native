@@ -1,8 +1,10 @@
-import React, { useCallback, useContext, useReducer, useState } from 'react';
+import React, { useCallback, useContext, useReducer, useRef, useState } from 'react';
 
 import type { SendbirdBaseChannel, SendbirdBaseMessage } from '@sendbird/uikit-utils';
 
 import { ReactionBottomSheets } from '../components/ReactionBottomSheets';
+import { LocalizationContext } from '../contexts/LocalizationCtx';
+import { ProfileCardContext } from '../contexts/ProfileCardCtx';
 import { SendbirdChatContext } from '../contexts/SendbirdChatCtx';
 
 type State = {
@@ -11,8 +13,9 @@ type State = {
 };
 export type ReactionContextType = {
   openReactionList(param: Required<State>): void;
-  openReactionUserList(param: Required<State>): void;
+  openReactionUserList(param: Required<State> & { focusIndex?: number }): void;
   updateReactionFocusedItem(param?: State): void;
+  focusIndex: number;
 } & State;
 
 type Props = React.PropsWithChildren<{}>;
@@ -20,45 +23,78 @@ type Props = React.PropsWithChildren<{}>;
 export const ReactionContext = React.createContext<ReactionContextType | null>(null);
 export const ReactionProvider = ({ children }: Props) => {
   const chatCtx = useContext(SendbirdChatContext);
+  const localizationCtx = useContext(LocalizationContext);
+  const userProfileCtx = useContext(ProfileCardContext);
   if (!chatCtx) throw new Error('SendbirdChatContext is not provided');
+  if (!localizationCtx) throw new Error('LocalizationContext is not provided');
+  if (!userProfileCtx) throw new Error('ProfileCardContext is not provided');
 
   const [state, setState] = useReducer((prev: State, next: State) => ({ ...prev, ...next }), {});
   const [reactionListVisible, setReactionListVisible] = useState(false);
   const [reactionUserListVisible, setReactionUserListVisible] = useState(false);
+  const [reactionUserListFocusIndex, setReactionUserListFocusIndex] = useState(0);
+
+  const closeResolver = useRef<() => void>(() => {});
 
   const openReactionList: ReactionContextType['openReactionList'] = useCallback((params) => {
     setState(params);
     setReactionListVisible(true);
   }, []);
 
-  const openReactionUserList: ReactionContextType['openReactionUserList'] = useCallback((params) => {
-    setState(params);
-    setReactionUserListVisible(true);
-  }, []);
+  const openReactionUserList: ReactionContextType['openReactionUserList'] = useCallback(
+    ({ channel, message, focusIndex = 0 }) => {
+      setState({ channel, message });
+      setReactionUserListFocusIndex(focusIndex);
+      setReactionUserListVisible(true);
+    },
+    [],
+  );
 
   const updateReactionFocusedItem: ReactionContextType['updateReactionFocusedItem'] = useCallback((params) => {
     if (params) setState(params);
     else setState({});
   }, []);
 
-  const reactionCtx = { ...state, openReactionList, openReactionUserList, updateReactionFocusedItem };
+  const createOnCloseWithResolver = (callback: () => void) => {
+    return () => {
+      return new Promise<void>((resolve) => {
+        closeResolver.current = resolve;
+        callback();
+      });
+    };
+  };
+
+  const reactionCtx = {
+    ...state,
+    openReactionList,
+    openReactionUserList,
+    updateReactionFocusedItem,
+    focusIndex: reactionUserListFocusIndex,
+  };
+
+  const sheetProps = {
+    chatCtx,
+    reactionCtx,
+    localizationCtx,
+    userProfileCtx,
+    onDismiss: () => {
+      setState({});
+      closeResolver.current?.();
+    },
+  };
 
   return (
     <ReactionContext.Provider value={reactionCtx}>
       {children}
       <ReactionBottomSheets.UserList
-        chatCtx={chatCtx}
-        reactionCtx={reactionCtx}
+        {...sheetProps}
         visible={reactionUserListVisible}
-        onDismiss={() => setState({})}
-        onClose={() => setReactionUserListVisible(false)}
+        onClose={createOnCloseWithResolver(() => setReactionUserListVisible(false))}
       />
       <ReactionBottomSheets.ReactionList
-        chatCtx={chatCtx}
-        reactionCtx={reactionCtx}
+        {...sheetProps}
         visible={reactionListVisible}
-        onDismiss={() => setState({})}
-        onClose={() => setReactionListVisible(false)}
+        onClose={createOnCloseWithResolver(() => setReactionListVisible(false))}
       />
     </ReactionContext.Provider>
   );
