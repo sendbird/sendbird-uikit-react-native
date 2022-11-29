@@ -12,7 +12,7 @@ type EditInputProps = GroupChannelProps['Input'] & {
   setText: (val: string) => void;
   editMessage: SendbirdUserMessage | SendbirdFileMessage;
   setEditMessage: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
-  disabled: boolean
+  disabled: boolean;
 };
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
