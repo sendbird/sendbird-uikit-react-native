@@ -8,7 +8,7 @@ import StatusComposition from '../components/StatusComposition';
 import UserActionBar from '../components/UserActionBar';
 import { createGroupChannelOperatorsModule } from '../domain/groupChannelOperators';
 import type { GroupChannelOperatorsFragment, GroupChannelOperatorsModule } from '../domain/groupChannelOperators/types';
-import { useLocalization, useProfileCard, useSendbirdChat } from '../hooks/useContext';
+import { useLocalization, useSendbirdChat, useUserProfile } from '../hooks/useContext';
 
 const name = 'createGroupChannelOperatorsFragment';
 const createGroupChannelOperatorsFragment = (
@@ -22,7 +22,7 @@ const createGroupChannelOperatorsFragment = (
     const { STRINGS } = useLocalization();
     const { sdk, currentUser } = useSendbirdChat();
     const { openMenu } = useActionMenu();
-    const { show } = useProfileCard();
+    const { show } = useUserProfile();
 
     const { users, deleteUser, upsertUser, loading, refresh, next, error } = useUserList(sdk, {
       queryCreator: () => channel.createOperatorListQuery({ limit: 20 }),

@@ -24,9 +24,9 @@ import type {
 
 import { LocalizationProvider } from '../contexts/LocalizationCtx';
 import { PlatformServiceProvider } from '../contexts/PlatformServiceCtx';
-import { ProfileCardProvider } from '../contexts/ProfileCardCtx';
 import type { UIKitFeaturesInSendbirdChatContext } from '../contexts/SendbirdChatCtx';
 import { SendbirdChatProvider } from '../contexts/SendbirdChatCtx';
+import { UserProfileProvider } from '../contexts/UserProfileCtx';
 import { useLocalization } from '../hooks/useContext';
 import InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
 import StringSetEn from '../localization/StringSet.en';
@@ -74,7 +74,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   toast?: {
     dismissTimeout?: number;
   };
-  profileCard?: {
+  userProfile?: {
     onCreateChannel: (channel: SendbirdBaseChannel) => void;
     onBeforeCreateChannel?: (
       channelParams: SendbirdGroupChannelCreateParams,
@@ -95,7 +95,7 @@ const SendbirdUIKitContainer = ({
   localization,
   styles,
   toast,
-  profileCard,
+  userProfile,
   errorBoundary,
 }: SendbirdUIKitContainerProps) => {
   const unsubscribes = useRef<(() => void)[]>([]).current;
@@ -177,12 +177,12 @@ const SendbirdUIKitContainer = ({
               >
                 <LocalizedDialogProvider>
                   <ToastProvider dismissTimeout={toast?.dismissTimeout}>
-                    <ProfileCardProvider
-                      onCreateChannel={profileCard?.onCreateChannel}
-                      onBeforeCreateChannel={profileCard?.onBeforeCreateChannel}
+                    <UserProfileProvider
+                      onCreateChannel={userProfile?.onCreateChannel}
+                      onBeforeCreateChannel={userProfile?.onBeforeCreateChannel}
                     >
                       <InternalErrorBoundaryContainer {...errorBoundary}>{children}</InternalErrorBoundaryContainer>
-                    </ProfileCardProvider>
+                    </UserProfileProvider>
                   </ToastProvider>
                 </LocalizedDialogProvider>
               </HeaderStyleProvider>

@@ -31,13 +31,13 @@ export { default as createGroupChannelBannedUsersFragment } from './fragments/cr
 /** Context **/
 export { SendbirdChatContext, SendbirdChatProvider } from './contexts/SendbirdChatCtx';
 export { PlatformServiceContext, PlatformServiceProvider } from './contexts/PlatformServiceCtx';
-export { ProfileCardContext, ProfileCardProvider } from './contexts/ProfileCardCtx';
+export { UserProfileContext, UserProfileProvider } from './contexts/UserProfileCtx';
 export { LocalizationContext, LocalizationProvider } from './contexts/LocalizationCtx';
 
 /** Hooks **/
 export { default as useConnection } from './hooks/useConnection';
 export { default as usePushTokenRegistration } from './hooks/usePushTokenRegistration';
-export { useLocalization, usePlatformService, useSendbirdChat, useProfileCard } from './hooks/useContext';
+export { useLocalization, usePlatformService, useSendbirdChat, useUserProfile } from './hooks/useContext';
 
 /** Localization **/
 export { default as StringSetEn } from './localization/StringSet.en';

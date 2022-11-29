@@ -11,7 +11,7 @@ import UserActionBar from '../components/UserActionBar';
 import type { GroupChannelMembersFragment } from '../domain/groupChannelUserList/types';
 import createUserListModule from '../domain/userList/module/createUserListModule';
 import type { UserListModule } from '../domain/userList/types';
-import { useLocalization, useProfileCard, useSendbirdChat } from '../hooks/useContext';
+import { useLocalization, useSendbirdChat, useUserProfile } from '../hooks/useContext';
 
 const noop = () => '';
 const HOOK_NAME = 'createGroupChannelMembersFragment';
@@ -27,7 +27,7 @@ const createGroupChannelMembersFragment = (
     const { STRINGS } = useLocalization();
     const { sdk, currentUser } = useSendbirdChat();
     const { openMenu } = useActionMenu();
-    const { show } = useProfileCard();
+    const { show } = useUserProfile();
 
     const { users, refresh, loading, next, error, upsertUser, deleteUser } = useUserList(sdk, {
       queryCreator: () => channel.createMemberListQuery({ limit: 20 }),

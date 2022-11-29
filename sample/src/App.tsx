@@ -68,7 +68,7 @@ const App = () => {
         statusBarTranslucent: GetTranslucent(),
       }}
       errorBoundary={{ ErrorInfoComponent: ErrorInfoScreen }}
-      profileCard={{
+      userProfile={{
         onCreateChannel: (channel) => {
           if (channel.isGroupChannel()) {
             navigationActions.push(Routes.GroupChannel, { channelUrl: channel.url });
