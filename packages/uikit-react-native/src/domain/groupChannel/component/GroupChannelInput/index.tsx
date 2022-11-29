@@ -3,7 +3,7 @@ import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { isGroupChannelChatUnavailable, useIIFE } from '@sendbird/uikit-utils';
+import { isGroupChannelChatAvailableState, useIIFE } from '@sendbird/uikit-utils';
 
 import { GroupChannelContexts } from '../../module/moduleContext';
 import type { GroupChannelProps } from '../../types';
@@ -18,7 +18,7 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
 
   const [text, setText] = useState('');
   const textTmpRef = useRef('');
-  const isChatUnavailable = isGroupChannelChatUnavailable(channel);
+  const chatAvailableState = isGroupChannelChatAvailableState(channel);
 
   useEffect(() => {
     if (text.length === 0) channel.endTyping();
@@ -26,13 +26,13 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
   }, [text]);
 
   useEffect(() => {
-    if (isChatUnavailable) {
+    if (chatAvailableState.disabled) {
       textTmpRef.current = text;
       setText('');
     } else {
       setText(textTmpRef.current);
     }
-  }, [isChatUnavailable]);
+  }, [chatAvailableState.disabled]);
 
   const inputMode = useIIFE(() => {
     if (!editMessage) return 'send';
@@ -51,7 +51,7 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
     >
       <View style={{ paddingLeft: left, paddingRight: right, backgroundColor: colors.background }}>
         <View style={{ justifyContent: 'center', width: '100%' }}>
-          {inputMode === 'send' && <SendInput {...props} text={text} setText={setText} disabled={isChatUnavailable} />}
+          {inputMode === 'send' && <SendInput {...props} text={text} setText={setText} {...chatAvailableState} />}
           {inputMode === 'edit' && editMessage && (
             <EditInput
               {...props}
@@ -59,6 +59,7 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
               setText={setText}
               editMessage={editMessage}
               setEditMessage={setEditMessage}
+              disabled={chatAvailableState.disabled}
             />
           )}
         </View>

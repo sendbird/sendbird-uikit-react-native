@@ -40,6 +40,7 @@ export interface StringSet {
     /** GroupChannel > Input */
     INPUT_PLACEHOLDER_ACTIVE: string;
     INPUT_PLACEHOLDER_DISABLED: string;
+    INPUT_PLACEHOLDER_MUTED: string;
     INPUT_EDIT_OK: string;
     INPUT_EDIT_CANCEL: string;
 
@@ -247,6 +248,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
 
       INPUT_PLACEHOLDER_ACTIVE: 'Enter message',
       INPUT_PLACEHOLDER_DISABLED: 'Chat is unavailable in this channel',
+      INPUT_PLACEHOLDER_MUTED: "You're muted",
       INPUT_EDIT_OK: 'Save',
       INPUT_EDIT_CANCEL: 'Cancel',
 

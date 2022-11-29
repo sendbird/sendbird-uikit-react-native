@@ -12,10 +12,11 @@ type EditInputProps = GroupChannelProps['Input'] & {
   setText: (val: string) => void;
   editMessage: SendbirdUserMessage | SendbirdFileMessage;
   setEditMessage: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
+  disabled: boolean
 };
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
-const EditInput = ({ text, setText, editMessage, setEditMessage, onUpdateUserMessage }: EditInputProps) => {
+const EditInput = ({ text, setText, editMessage, setEditMessage, onUpdateUserMessage, disabled }: EditInputProps) => {
   const { STRINGS } = useLocalization();
   const inputRef = useRef<RNTextInput>(null);
   const toast = useToast();
@@ -45,6 +46,7 @@ const EditInput = ({ text, setText, editMessage, setEditMessage, onUpdateUserMes
     <View style={styles.editInputContainer}>
       <View style={styles.inputWrapper}>
         <TextInput
+          editable={!disabled}
           autoFocus={AUTO_FOCUS}
           ref={inputRef}
           multiline
