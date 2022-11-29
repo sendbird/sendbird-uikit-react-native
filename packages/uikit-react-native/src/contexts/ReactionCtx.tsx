@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useReducer, useRef, useState } from 'react';
 
 import type { SendbirdBaseChannel, SendbirdBaseMessage } from '@sendbird/uikit-utils';
+import { NOOP } from '@sendbird/uikit-utils';
 
 import { ReactionBottomSheets } from '../components/ReactionBottomSheets';
 import { LocalizationContext } from '../contexts/LocalizationCtx';
@@ -34,7 +35,7 @@ export const ReactionProvider = ({ children }: Props) => {
   const [reactionUserListVisible, setReactionUserListVisible] = useState(false);
   const [reactionUserListFocusIndex, setReactionUserListFocusIndex] = useState(0);
 
-  const closeResolver = useRef<() => void>(() => {});
+  const closeResolver = useRef<() => void>(NOOP);
 
   const openReactionList: ReactionContextType['openReactionList'] = useCallback((params) => {
     setState(params);
