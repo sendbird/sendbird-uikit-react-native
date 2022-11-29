@@ -12,10 +12,11 @@ export function isDifferentChannel<T extends SendbirdBaseChannel>(a?: T, b?: T):
   return a.url !== b.url;
 }
 
-export const isGroupChannelChatAvailableState = (channel: SendbirdGroupChannel) => {
+export const getGroupChannelChatAvailableState = (channel: SendbirdGroupChannel) => {
   const frozen = channel.isFrozen && channel.myRole !== 'operator';
   const muted = channel.myMutedState === 'muted';
-  return { disabled: frozen || muted, frozen, muted };
+  const disabled = frozen || muted;
+  return { disabled, frozen, muted };
 };
 
 export const confirmAndMarkAsRead = async (channels: SendbirdBaseChannel[]) => {

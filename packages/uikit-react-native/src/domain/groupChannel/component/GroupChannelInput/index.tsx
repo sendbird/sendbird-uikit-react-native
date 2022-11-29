@@ -3,7 +3,7 @@ import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { isGroupChannelChatAvailableState, useIIFE } from '@sendbird/uikit-utils';
+import { getGroupChannelChatAvailableState, useIIFE } from '@sendbird/uikit-utils';
 
 import { GroupChannelContexts } from '../../module/moduleContext';
 import type { GroupChannelProps } from '../../types';
@@ -18,7 +18,7 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
 
   const [text, setText] = useState('');
   const textTmpRef = useRef('');
-  const chatAvailableState = isGroupChannelChatAvailableState(channel);
+  const chatAvailableState = getGroupChannelChatAvailableState(channel);
 
   useEffect(() => {
     if (text.length === 0) channel.endTyping();
