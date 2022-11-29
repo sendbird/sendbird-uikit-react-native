@@ -17,7 +17,7 @@ const GroupChannelSettingsScreen = ({ params }: { params: { channelUrl: string }
   const navigateToBack = () => {};
   const navigateToGroupChannelListScreen = () => {};
   const navigateToGroupChannelMembersScreen = () => {};
-  const navigateToGroupChannelModerationsScreen = () => {};
+  const navigateToGroupChannelModerationScreen = () => {};
 
   return (
     <GroupChannelSettingsFragment
@@ -25,7 +25,7 @@ const GroupChannelSettingsScreen = ({ params }: { params: { channelUrl: string }
       onPressHeaderLeft={navigateToBack}
       onPressMenuLeaveChannel={navigateToGroupChannelListScreen}
       onPressMenuMembers={navigateToGroupChannelMembersScreen}
-      onPressMenuModerations={navigateToGroupChannelModerationsScreen}
+      onPressMenuModeration={navigateToGroupChannelModerationScreen}
     />
   );
 };
@@ -74,7 +74,7 @@ const GroupChannelSettingsScreen2 = ({ params }: { params: { channelUrl: string 
   const navigateToBack = () => {};
   const navigateToGroupChannelListScreen = () => {};
   const navigateToGroupChannelMembersScreen = () => {};
-  const navigateToGroupChannelModerationsScreen = () => {};
+  const navigateToGroupChannelModerationScreen = () => {};
 
   return (
     <GroupChannelSettingsFragment2
@@ -82,7 +82,7 @@ const GroupChannelSettingsScreen2 = ({ params }: { params: { channelUrl: string 
       onPressHeaderLeft={navigateToBack}
       onPressMenuLeaveChannel={navigateToGroupChannelListScreen}
       onPressMenuMembers={navigateToGroupChannelMembersScreen}
-      onPressMenuModerations={navigateToGroupChannelModerationsScreen}
+      onPressMenuModeration={navigateToGroupChannelModerationScreen}
       menuItemsCreator={(items) => {
         items.unshift({
           icon: 'channels',

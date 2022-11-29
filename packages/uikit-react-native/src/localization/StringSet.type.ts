@@ -68,7 +68,7 @@ export interface StringSet {
     HEADER_RIGHT: string;
 
     /** GroupChannelSettings > Menu */
-    MENU_MODERATIONS: string;
+    MENU_MODERATION: string;
     MENU_NOTIFICATION: string;
     MENU_MEMBERS: string;
     MENU_LEAVE_CHANNEL: string;
@@ -84,11 +84,11 @@ export interface StringSet {
     DIALOG_CHANGE_IMAGE_MENU_CAMERA: string;
     DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY: string;
   };
-  GROUP_CHANNEL_MODERATIONS: {
-    /** GroupChannelModerations > Header */
+  GROUP_CHANNEL_MODERATION: {
+    /** GroupChannelModeration > Header */
     HEADER_TITLE: string;
 
-    /** GroupChannelModerations > Menu */
+    /** GroupChannelModeration > Menu */
     MENU_OPERATORS: string;
     MENU_MUTED_MEMBERS: string;
     MENU_BANNED_USERS: string;
@@ -270,7 +270,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     GROUP_CHANNEL_SETTINGS: {
       HEADER_TITLE: 'Channel information',
       HEADER_RIGHT: 'Edit',
-      MENU_MODERATIONS: 'Moderations',
+      MENU_MODERATION: 'Moderation',
       MENU_NOTIFICATION: 'Notifications',
       MENU_MEMBERS: 'Members',
       MENU_LEAVE_CHANNEL: 'Leave channel',
@@ -285,13 +285,13 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY: 'Choose photo',
       ...overrides?.GROUP_CHANNEL_SETTINGS,
     },
-    GROUP_CHANNEL_MODERATIONS: {
-      HEADER_TITLE: 'Moderations',
+    GROUP_CHANNEL_MODERATION: {
+      HEADER_TITLE: 'Moderation',
       MENU_OPERATORS: 'Operators',
       MENU_MUTED_MEMBERS: 'Muted members',
       MENU_BANNED_USERS: 'Banned users',
       MENU_FREEZE_CHANNEL: 'Freeze channel',
-      ...overrides?.GROUP_CHANNEL_MODERATIONS,
+      ...overrides?.GROUP_CHANNEL_MODERATION,
     },
     GROUP_CHANNEL_OPERATORS: {
       HEADER_TITLE: 'Operators',

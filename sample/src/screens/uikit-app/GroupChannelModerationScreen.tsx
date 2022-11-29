@@ -1,21 +1,21 @@
 import React from 'react';
 
 import { useGroupChannel } from '@sendbird/uikit-chat-hooks';
-import { createGroupChannelModerationsFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
+import { createGroupChannelModerationFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
 
 import { useAppNavigation } from '../../hooks/useAppNavigation';
 import { Routes } from '../../libs/navigation';
 
-const GroupChannelModerationsFragment = createGroupChannelModerationsFragment();
-const GroupChannelModerationsScreen = () => {
-  const { navigation, params } = useAppNavigation<Routes.GroupChannelModerations>();
+const GroupChannelModerationFragment = createGroupChannelModerationFragment();
+const GroupChannelModerationScreen = () => {
+  const { navigation, params } = useAppNavigation<Routes.GroupChannelModeration>();
 
   const { sdk } = useSendbirdChat();
   const { channel } = useGroupChannel(sdk, params.channelUrl);
   if (!channel) return null;
 
   return (
-    <GroupChannelModerationsFragment
+    <GroupChannelModerationFragment
       channel={channel}
       onPressMenuOperators={() => {
         // Navigate to group channel operators
@@ -37,4 +37,4 @@ const GroupChannelModerationsScreen = () => {
   );
 };
 
-export default GroupChannelModerationsScreen;
+export default GroupChannelModerationScreen;

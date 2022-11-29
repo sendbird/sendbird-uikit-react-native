@@ -5,16 +5,16 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { NOOP } from '@sendbird/uikit-utils';
 
-import { createGroupChannelModerationsModule } from '../domain/groupChannelModerations';
+import { createGroupChannelModerationModule } from '../domain/groupChannelModeration';
 import type {
-  GroupChannelModerationsFragment,
-  GroupChannelModerationsModule,
-} from '../domain/groupChannelModerations/types';
+  GroupChannelModerationFragment,
+  GroupChannelModerationModule,
+} from '../domain/groupChannelModeration/types';
 
-const createGroupChannelModerationsFragment = (
-  initModule?: Partial<GroupChannelModerationsModule>,
-): GroupChannelModerationsFragment => {
-  const GroupChannelModerationsModule = createGroupChannelModerationsModule(initModule);
+const createGroupChannelModerationFragment = (
+  initModule?: Partial<GroupChannelModerationModule>,
+): GroupChannelModerationFragment => {
+  const GroupChannelModerationModule = createGroupChannelModerationModule(initModule);
 
   return ({
     channel,
@@ -27,8 +27,8 @@ const createGroupChannelModerationsFragment = (
     const { left, right } = useSafeAreaInsets();
     const { colors } = useUIKitTheme();
     return (
-      <GroupChannelModerationsModule.Provider channel={channel}>
-        <GroupChannelModerationsModule.Header onPressHeaderLeft={onPressHeaderLeft} />
+      <GroupChannelModerationModule.Provider channel={channel}>
+        <GroupChannelModerationModule.Header onPressHeaderLeft={onPressHeaderLeft} />
         <ScrollView
           style={{ backgroundColor: colors.background }}
           contentContainerStyle={{
@@ -36,14 +36,14 @@ const createGroupChannelModerationsFragment = (
             paddingRight: right + styles.viewContainer.paddingHorizontal,
           }}
         >
-          <GroupChannelModerationsModule.Menu
+          <GroupChannelModerationModule.Menu
             onPressMenuBannedUsers={onPressMenuBannedUsers}
             onPressMenuMutedMembers={onPressMenuMutedMembers}
             onPressMenuOperators={onPressMenuOperators}
             menuItemsCreator={menuItemsCreator}
           />
         </ScrollView>
-      </GroupChannelModerationsModule.Provider>
+      </GroupChannelModerationModule.Provider>
     );
   };
 };
@@ -54,4 +54,4 @@ const styles = createStyleSheet({
   },
 });
 
-export default createGroupChannelModerationsFragment;
+export default createGroupChannelModerationFragment;

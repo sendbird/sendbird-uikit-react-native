@@ -21,9 +21,9 @@ const GroupChannelSettingsScreen = () => {
         // Navigate back
         navigation.goBack();
       }}
-      onPressMenuModerations={() => {
-        // Navigate to group channel moderations
-        navigation.push(Routes.GroupChannelModerations, params);
+      onPressMenuModeration={() => {
+        // Navigate to group channel moderation
+        navigation.push(Routes.GroupChannelModeration, params);
       }}
       onPressMenuMembers={() => {
         // Navigate to group channel members

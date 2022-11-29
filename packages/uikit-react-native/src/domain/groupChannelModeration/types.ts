@@ -5,13 +5,13 @@ import type { SendbirdGroupChannel } from '@sendbird/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 
-export type GroupChannelModerationsProps = {
+export type GroupChannelModerationProps = {
   Fragment: {
     channel: SendbirdGroupChannel;
-    onPressHeaderLeft: GroupChannelModerationsProps['Header']['onPressHeaderLeft'];
-    onPressMenuOperators: GroupChannelModerationsProps['Menu']['onPressMenuOperators'];
-    onPressMenuMutedMembers: GroupChannelModerationsProps['Menu']['onPressMenuMutedMembers'];
-    onPressMenuBannedUsers: GroupChannelModerationsProps['Menu']['onPressMenuBannedUsers'];
+    onPressHeaderLeft: GroupChannelModerationProps['Header']['onPressHeaderLeft'];
+    onPressMenuOperators: GroupChannelModerationProps['Menu']['onPressMenuOperators'];
+    onPressMenuMutedMembers: GroupChannelModerationProps['Menu']['onPressMenuMutedMembers'];
+    onPressMenuBannedUsers: GroupChannelModerationProps['Menu']['onPressMenuBannedUsers'];
     menuItemsCreator?: (defaultMenuItems: MenuBarProps[]) => MenuBarProps[];
   };
   Header: {
@@ -29,20 +29,20 @@ export type GroupChannelModerationsProps = {
 };
 
 /**
- * Internal context for GroupChannelModerations
+ * Internal context for GroupChannelModeration
  * For example, the developer can create a custom header
  * with getting data from the domain context
  * */
-export type GroupChannelModerationsContextsType = {
+export type GroupChannelModerationContextsType = {
   Fragment: React.Context<{
     headerTitle: string;
     channel: SendbirdGroupChannel;
   }>;
 };
-export interface GroupChannelModerationsModule {
-  Provider: CommonComponent<GroupChannelModerationsProps['Provider']>;
-  Header: CommonComponent<GroupChannelModerationsProps['Header']>;
-  Menu: CommonComponent<GroupChannelModerationsProps['Menu']>;
+export interface GroupChannelModerationModule {
+  Provider: CommonComponent<GroupChannelModerationProps['Provider']>;
+  Header: CommonComponent<GroupChannelModerationProps['Header']>;
+  Menu: CommonComponent<GroupChannelModerationProps['Menu']>;
 }
 
-export type GroupChannelModerationsFragment = CommonComponent<GroupChannelModerationsProps['Fragment']>;
+export type GroupChannelModerationFragment = CommonComponent<GroupChannelModerationProps['Fragment']>;

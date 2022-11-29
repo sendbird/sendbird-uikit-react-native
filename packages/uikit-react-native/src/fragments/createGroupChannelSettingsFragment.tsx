@@ -16,7 +16,7 @@ const createGroupChannelSettingsFragment = (
   return ({
     onPressHeaderLeft = NOOP,
     channel,
-    onPressMenuModerations,
+    onPressMenuModeration,
     onPressMenuMembers,
     onPressMenuLeaveChannel,
     menuItemsCreator,
@@ -37,7 +37,7 @@ const createGroupChannelSettingsFragment = (
           <GroupChannelSettingsModule.Info />
           <GroupChannelSettingsModule.Menu
             menuItemsCreator={menuItemsCreator}
-            onPressMenuModerations={onPressMenuModerations}
+            onPressMenuModeration={onPressMenuModeration}
             onPressMenuMembers={onPressMenuMembers}
             onPressMenuLeaveChannel={onPressMenuLeaveChannel}
           />

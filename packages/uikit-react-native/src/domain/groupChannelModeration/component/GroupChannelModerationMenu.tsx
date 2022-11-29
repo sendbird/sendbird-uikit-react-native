@@ -5,16 +5,16 @@ import type { MenuBarProps } from '@sendbird/uikit-react-native-foundation';
 import { Icon, MenuBar, Switch, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 import { useLocalization } from '../../../hooks/useContext';
-import { GroupChannelModerationsContexts } from '../module/moduleContext';
-import type { GroupChannelModerationsProps } from '../types';
+import { GroupChannelModerationContexts } from '../module/moduleContext';
+import type { GroupChannelModerationProps } from '../types';
 
-const GroupChannelModerationsMenu = ({
+const GroupChannelModerationMenu = ({
   onPressMenuBannedUsers,
   onPressMenuMutedMembers,
   onPressMenuOperators,
   menuItemsCreator = (menu) => menu,
-}: GroupChannelModerationsProps['Menu']) => {
-  const { channel } = useContext(GroupChannelModerationsContexts.Fragment);
+}: GroupChannelModerationProps['Menu']) => {
+  const { channel } = useContext(GroupChannelModerationContexts.Fragment);
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
 
@@ -33,27 +33,27 @@ const GroupChannelModerationsMenu = ({
   const menuItems: MenuBarProps[] = menuItemsCreator([
     {
       icon: 'operator',
-      name: STRINGS.GROUP_CHANNEL_MODERATIONS.MENU_OPERATORS,
+      name: STRINGS.GROUP_CHANNEL_MODERATION.MENU_OPERATORS,
       onPress: () => onPressMenuOperators(),
       actionItem: <Icon icon={'chevron-right'} color={colors.onBackground01} />,
     },
     {
       icon: 'mute',
       visible: !channel.isBroadcast,
-      name: STRINGS.GROUP_CHANNEL_MODERATIONS.MENU_MUTED_MEMBERS,
+      name: STRINGS.GROUP_CHANNEL_MODERATION.MENU_MUTED_MEMBERS,
       onPress: () => onPressMenuMutedMembers(),
       actionItem: <Icon icon={'chevron-right'} color={colors.onBackground01} />,
     },
     {
       icon: 'ban',
-      name: STRINGS.GROUP_CHANNEL_MODERATIONS.MENU_BANNED_USERS,
+      name: STRINGS.GROUP_CHANNEL_MODERATION.MENU_BANNED_USERS,
       onPress: () => onPressMenuBannedUsers(),
       actionItem: <Icon icon={'chevron-right'} color={colors.onBackground01} />,
     },
     {
       icon: 'freeze',
       visible: !channel.isBroadcast,
-      name: STRINGS.GROUP_CHANNEL_MODERATIONS.MENU_FREEZE_CHANNEL,
+      name: STRINGS.GROUP_CHANNEL_MODERATION.MENU_FREEZE_CHANNEL,
       actionItem: <Switch value={isFrozen} onChangeValue={toggleFreeze} />,
       onPress: toggleFreeze,
     },
@@ -81,4 +81,4 @@ const GroupChannelModerationsMenu = ({
   );
 };
 
-export default GroupChannelModerationsMenu;
+export default GroupChannelModerationMenu;

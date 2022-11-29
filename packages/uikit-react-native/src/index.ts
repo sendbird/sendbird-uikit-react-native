@@ -22,7 +22,7 @@ export { default as createGroupChannelSettingsFragment } from './fragments/creat
 export { default as createGroupChannelInviteFragment } from './fragments/createGroupChannelInviteFragment';
 export { default as createGroupChannelListFragment } from './fragments/createGroupChannelListFragment';
 export { default as createGroupChannelMembersFragment } from './fragments/createGroupChannelMembersFragment';
-export { default as createGroupChannelModerationsFragment } from './fragments/createGroupChannelModerationsFragment';
+export { default as createGroupChannelModerationFragment } from './fragments/createGroupChannelModerationFragment';
 export { default as createGroupChannelOperatorsFragment } from './fragments/createGroupChannelOperatorsFragment';
 export { default as createGroupChannelRegisterOperatorFragment } from './fragments/createGroupChannelRegisterOperatorFragment';
 export { default as createGroupChannelMutedMembersFragment } from './fragments/createGroupChannelMutedMembersFragment';

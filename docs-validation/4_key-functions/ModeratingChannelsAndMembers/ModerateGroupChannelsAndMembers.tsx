@@ -7,10 +7,10 @@ const MyHeader = () => null;
 import React from 'react';
 
 import { useGroupChannel } from '@sendbird/uikit-chat-hooks';
-import { createGroupChannelModerationsFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
+import { createGroupChannelModerationFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
 
-const GroupChannelModerationsFragment = createGroupChannelModerationsFragment();
-const GroupChannelModerationsScreen = ({ params }: { params: { channelUrl: string } }) => {
+const GroupChannelModerationFragment = createGroupChannelModerationFragment();
+const GroupChannelModerationScreen = ({ params }: { params: { channelUrl: string } }) => {
   const { sdk } = useSendbirdChat();
   const { channel } = useGroupChannel(sdk, params.channelUrl);
   if (!channel) return null;
@@ -21,7 +21,7 @@ const GroupChannelModerationsScreen = ({ params }: { params: { channelUrl: strin
   const navigateToBack = () => {};
 
   return (
-    <GroupChannelModerationsFragment
+    <GroupChannelModerationFragment
       channel={channel}
       onPressMenuOperators={navigateToGroupChannelOperatorsScreen}
       onPressMenuMutedMembers={navigateToGroupChannelMutedMembersScreen}
@@ -35,10 +35,10 @@ const GroupChannelModerationsScreen = ({ params }: { params: { channelUrl: strin
  *
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/moderating-channels-and-members/moderate-group-channels-and-members}
  * */
-const GroupChannelModerationsFragment2 = createGroupChannelModerationsFragment({
+const GroupChannelModerationFragment2 = createGroupChannelModerationFragment({
   Header: () => <MyHeader />, // Use custom header
 });
-const GroupChannelModerationsScreen2 = ({ params }: { params: { channelUrl: string } }) => {
+const GroupChannelModerationScreen2 = ({ params }: { params: { channelUrl: string } }) => {
   const { sdk } = useSendbirdChat();
   const { channel } = useGroupChannel(sdk, params.channelUrl);
   if (!channel) return null;
@@ -49,7 +49,7 @@ const GroupChannelModerationsScreen2 = ({ params }: { params: { channelUrl: stri
   const navigateToBack = () => {};
 
   return (
-      <GroupChannelModerationsFragment
+      <GroupChannelModerationFragment
           channel={channel}
           onPressHeaderLeft={navigateToBack}
           onPressMenuOperators={navigateToGroupChannelOperatorsScreen}
