@@ -247,8 +247,8 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       MESSAGE_BUBBLE_UNKNOWN_DESC: () => 'Cannot read this message.',
 
       INPUT_PLACEHOLDER_ACTIVE: 'Enter message',
-      INPUT_PLACEHOLDER_DISABLED: 'Chat is unavailable in this channel',
-      INPUT_PLACEHOLDER_MUTED: "You're muted",
+      INPUT_PLACEHOLDER_DISABLED: 'Chat not available in this channel.',
+      INPUT_PLACEHOLDER_MUTED: "You're muted by the operator.",
       INPUT_EDIT_OK: 'Save',
       INPUT_EDIT_CANCEL: 'Cancel',
 
