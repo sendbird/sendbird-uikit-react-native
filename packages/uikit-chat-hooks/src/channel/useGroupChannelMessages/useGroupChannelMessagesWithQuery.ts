@@ -3,7 +3,6 @@ import { useCallback, useRef } from 'react';
 import type { SendbirdBaseChannel, SendbirdGroupChannel } from '@sendbird/uikit-utils';
 import {
   Logger,
-  confirmAndMarkAsDelivered,
   confirmAndMarkAsRead,
   isDifferentChannel,
   useAsyncEffect,
@@ -11,7 +10,6 @@ import {
 } from '@sendbird/uikit-utils';
 import type { SendbirdPreviousMessageListQuery } from '@sendbird/uikit-utils';
 
-import { useAppFeatures } from '../../common/useAppFeatures';
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';
 import { useActiveGroupChannel } from '../useActiveGroupChannel';
@@ -30,8 +28,6 @@ const createMessageQuery = (
 
 const HOOK_NAME = 'useGroupChannelMessagesWithQuery';
 export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, channel, userId, options) => {
-  const { deliveryReceiptEnabled } = useAppFeatures(sdk);
-
   const queryRef = useRef<SendbirdPreviousMessageListQuery>();
 
   // NOTE: We cannot determine the channel object of Sendbird SDK is stale or not, so force update after setActiveChannel
@@ -54,12 +50,7 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
 
   const channelMarkAs = async () => {
     try {
-      if (deliveryReceiptEnabled) await confirmAndMarkAsDelivered(sdk, activeChannel);
-    } catch (e) {
-      Logger.warn(`[${HOOK_NAME}/channelMarkAs/Delivered]`, e);
-    }
-    try {
-      await confirmAndMarkAsRead(sdk, [activeChannel]);
+      await confirmAndMarkAsRead([channel]);
     } catch (e) {
       Logger.warn(`[${HOOK_NAME}/channelMarkAs/Read]`, e);
     }

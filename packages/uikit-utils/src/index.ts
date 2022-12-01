@@ -16,6 +16,7 @@ export {
   emailRegex,
   phoneRegex,
 } from './shared/regex';
+export { BufferedRequest } from './shared/bufferedRequest';
 
 export * from './hooks';
 export * from './ui-format/groupChannel';

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 
-import { GroupChannelFilter, GroupChannelListOrder } from '@sendbird/chat/groupChannel';
-import type { SendbirdChatSDK, SendbirdGroupChannelCollection } from '@sendbird/uikit-utils';
+import { GroupChannelEventSource, GroupChannelFilter, GroupChannelListOrder } from '@sendbird/chat/groupChannel';
+import type { SendbirdBaseChannel, SendbirdChatSDK, SendbirdGroupChannelCollection } from '@sendbird/uikit-utils';
 import { confirmAndMarkAsDelivered, useAsyncEffect, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
 
 import { useAppFeatures } from '../../common/useAppFeatures';
@@ -37,11 +37,23 @@ export const useGroupChannelListWithCollection: UseGroupChannelList = (sdk, user
   const { loading, groupChannels, refreshing, setChannels, deleteChannels, updateRefreshing, updateLoading } =
     useGroupChannelListReducer();
 
-  const updateChannelsAndMarkAsDelivered = (markAsDelivered: boolean) => {
+  const updateChannelsAndMarkAsDelivered = (
+    markAsDelivered: boolean,
+    source?: GroupChannelEventSource,
+    updatedChannels?: SendbirdBaseChannel[],
+  ) => {
     const channels = collectionRef.current?.channels ?? [];
     setChannels(channels, true);
     if (markAsDelivered && deliveryReceiptEnabled) {
-      channels.forEach((channel) => confirmAndMarkAsDelivered(sdk, channel));
+      switch (source) {
+        case GroupChannelEventSource.EVENT_MESSAGE_RECEIVED:
+        case GroupChannelEventSource.EVENT_MESSAGE_SENT:
+        case GroupChannelEventSource.SYNC_CHANNEL_BACKGROUND:
+        case GroupChannelEventSource.SYNC_CHANNEL_CHANGELOGS:
+        case undefined:
+          confirmAndMarkAsDelivered(updatedChannels ?? channels);
+          break;
+      }
     }
   };
 
@@ -52,11 +64,11 @@ export const useGroupChannelListWithCollection: UseGroupChannelList = (sdk, user
       collectionRef.current = createGroupChannelListCollection(sdk, options?.collectionCreator);
 
       collectionRef.current?.setGroupChannelCollectionHandler({
-        onChannelsAdded: () => {
-          updateChannelsAndMarkAsDelivered(true);
+        onChannelsAdded: (context, channels) => {
+          updateChannelsAndMarkAsDelivered(true, context.source, channels);
         },
-        onChannelsUpdated: () => {
-          updateChannelsAndMarkAsDelivered(true);
+        onChannelsUpdated: (context, channels) => {
+          updateChannelsAndMarkAsDelivered(true, context.source, channels);
         },
         onChannelsDeleted: () => {
           updateChannelsAndMarkAsDelivered(false);

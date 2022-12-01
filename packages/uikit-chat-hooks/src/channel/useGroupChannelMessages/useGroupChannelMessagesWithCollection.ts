@@ -1,21 +1,14 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-import { MessageCollectionInitPolicy, MessageFilter } from '@sendbird/chat/groupChannel';
+import { MessageCollectionInitPolicy, MessageEventSource, MessageFilter } from '@sendbird/chat/groupChannel';
 import type {
   SendbirdChannel,
   SendbirdFileMessage,
   SendbirdGroupChannel,
   SendbirdMessageCollection,
 } from '@sendbird/uikit-utils';
-import {
-  Logger,
-  confirmAndMarkAsDelivered,
-  confirmAndMarkAsRead,
-  isDifferentChannel,
-  useForceUpdate,
-} from '@sendbird/uikit-utils';
+import { Logger, confirmAndMarkAsRead, isDifferentChannel, useForceUpdate } from '@sendbird/uikit-utils';
 
-import { useAppFeatures } from '../../common/useAppFeatures';
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';
 import { useActiveGroupChannel } from '../useActiveGroupChannel';
@@ -33,8 +26,6 @@ const createMessageCollection = (
 const HOOK_NAME = 'useGroupChannelMessagesWithCollection';
 
 export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (sdk, channel, userId, options) => {
-  const { deliveryReceiptEnabled } = useAppFeatures(sdk);
-
   const collectionRef = useRef<SendbirdMessageCollection>();
 
   // NOTE: We cannot determine the channel object of Sendbird SDK is stale or not, so force update af
@@ -57,12 +48,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
 
   const channelMarkAs = async () => {
     try {
-      if (deliveryReceiptEnabled) await confirmAndMarkAsDelivered(sdk, activeChannel);
-    } catch (e) {
-      Logger.warn(`[${HOOK_NAME}/channelMarkAs/Delivered]`, e);
-    }
-    try {
-      await confirmAndMarkAsRead(sdk, [activeChannel]);
+      await confirmAndMarkAsRead([activeChannel]);
     } catch (e) {
       Logger.warn(`[${HOOK_NAME}/channelMarkAs/Read]`, e);
     }
@@ -84,8 +70,14 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
         channelMarkAs();
 
         collectionRef.current?.setMessageCollectionHandler({
-          onMessagesAdded: (_, channel, messages) => {
-            channelMarkAs();
+          onMessagesAdded: (_, __, messages) => {
+            switch (_.source) {
+              case MessageEventSource.EVENT_MESSAGE_RECEIVED:
+              case MessageEventSource.EVENT_MESSAGE_SENT_SUCCESS:
+              case MessageEventSource.SYNC_MESSAGE_FILL:
+                channelMarkAs();
+                break;
+            }
             updateNextMessages(messages, false, sdk.currentUser.userId);
             updateChannel(channel);
           },
