@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.1...v2.0.2) (2022-12-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* **uikit:** update camera roll module
+
+### Features
+
+* added group channel type selector ([9fb7a19](https://github.com/sendbird/sendbird-uikit-react-native/commit/9fb7a193b5e245ba89030ef9c9d8abae95cf4bba))
+* **foundation:** added profile card ui ([472f02f](https://github.com/sendbird/sendbird-uikit-react-native/commit/472f02f064cbad416661cf49e90c4c9509eb1a4c))
+* support broadcast and supergroup channel ([895fa3b](https://github.com/sendbird/sendbird-uikit-react-native/commit/895fa3b27ffb06977fb326610e8234cfb812ec1f))
+* **uikit:** added mini profile card ([0877463](https://github.com/sendbird/sendbird-uikit-react-native/commit/08774638ba0e283f6da2c63545be746746b64058))
+* **utils:** added buffered request function ([d3e375c](https://github.com/sendbird/sendbird-uikit-react-native/commit/d3e375cc05721c251846d27eb2f8f8e86ad4379f))
+
+
+### Improvements
+
+* optizmie markAs APIs ([7b8a040](https://github.com/sendbird/sendbird-uikit-react-native/commit/7b8a040b4ffbf2f39a3fe381d53b4790ba897003))
+* **uikit:** update camera roll module ([5ddb5d3](https://github.com/sendbird/sendbird-uikit-react-native/commit/5ddb5d33f81d8fdd7b4dd2fa541cd687d5a9bd30))
+
+
+
 ## [2.0.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.0...v2.0.1) (2022-10-26)
 
 

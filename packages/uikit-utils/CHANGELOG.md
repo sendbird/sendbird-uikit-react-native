@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.1...v2.0.2) (2022-12-01)
+
+
+### Features
+
+* **uikit:** added mini profile card ([0877463](https://github.com/sendbird/sendbird-uikit-react-native/commit/08774638ba0e283f6da2c63545be746746b64058))
+* **utils:** added buffered request function ([d3e375c](https://github.com/sendbird/sendbird-uikit-react-native/commit/d3e375cc05721c251846d27eb2f8f8e86ad4379f))
+
+
+### Improvements
+
+* optizmie markAs APIs ([7b8a040](https://github.com/sendbird/sendbird-uikit-react-native/commit/7b8a040b4ffbf2f39a3fe381d53b4790ba897003))
+
+
+
 ## [2.0.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.0...v2.0.1) (2022-10-26)
 
 **Note:** Version bump only for package @sendbird/uikit-utils

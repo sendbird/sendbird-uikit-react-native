@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.1...v2.0.2) (2022-12-01)
+
+
+### Features
+
+* support broadcast and supergroup channel ([895fa3b](https://github.com/sendbird/sendbird-uikit-react-native/commit/895fa3b27ffb06977fb326610e8234cfb812ec1f))
+
+
+### Improvements
+
+* optizmie markAs APIs ([7b8a040](https://github.com/sendbird/sendbird-uikit-react-native/commit/7b8a040b4ffbf2f39a3fe381d53b4790ba897003))
+
+
+
 ## [2.0.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.0...v2.0.1) (2022-10-26)
 
 **Note:** Version bump only for package @sendbird/uikit-chat-hooks
