@@ -43,7 +43,7 @@ export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, o
 
   const updateChannelsAndMarkAsDelivered = (channels: SendbirdChannel[]) => {
     updateChannels(channels);
-    if (deliveryReceiptEnabled) channels.forEach((channel) => confirmAndMarkAsDelivered(sdk, channel));
+    if (deliveryReceiptEnabled) confirmAndMarkAsDelivered(channels);
   };
 
   const init = useFreshCallback(async (uid?: string) => {
@@ -55,7 +55,7 @@ export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, o
         const channels = await queryRef.current.next();
 
         setChannels(channels, true);
-        if (deliveryReceiptEnabled) channels.forEach((channel) => confirmAndMarkAsDelivered(sdk, channel));
+        if (deliveryReceiptEnabled) confirmAndMarkAsDelivered(channels);
       }
     }
   });
@@ -67,21 +67,24 @@ export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, o
   }, [init, userId]);
 
   useChannelHandler(sdk, HOOK_NAME, {
-    onChannelChanged: (channel) => updateChannelsAndMarkAsDelivered([channel]),
+    onChannelChanged: (channel) => updateChannels([channel]),
     onChannelFrozen: (channel) => updateChannels([channel]),
     onChannelUnfrozen: (channel) => updateChannels([channel]),
     onChannelMemberCountChanged: (channels) => updateChannels(channels),
     onChannelDeleted: (url) => deleteChannels([url]),
-    onUserJoined: (channel) => updateChannelsAndMarkAsDelivered([channel]),
+    onUserJoined: (channel) => updateChannels([channel]),
     onUserLeft: (channel, user) => {
       const isMe = user.userId === userId;
       if (isMe) deleteChannels([channel.url]);
-      else updateChannelsAndMarkAsDelivered([channel]);
+      else updateChannels([channel]);
     },
     onUserBanned(channel, user) {
       const isMe = user.userId === userId;
       if (isMe) deleteChannels([channel.url]);
-      else updateChannelsAndMarkAsDelivered([channel]);
+      else updateChannels([channel]);
+    },
+    onMessageReceived(channel) {
+      updateChannelsAndMarkAsDelivered([channel]);
     },
   });
 
@@ -95,7 +98,7 @@ export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, o
     if (queryRef.current?.hasNext) {
       const channels = await queryRef.current.next();
       setChannels(channels, false);
-      if (deliveryReceiptEnabled) channels.forEach((channel) => confirmAndMarkAsDelivered(sdk, channel));
+      if (deliveryReceiptEnabled) confirmAndMarkAsDelivered(channels);
     }
   });
 
