@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.1...v2.0.3) (2022-12-01)
+
+
+### Improvements
+
+* optimize markAs APIs ([b0fb3aa](https://github.com/sendbird/sendbird-uikit-react-native/commit/b0fb3aa86636b03f0dcc6337eaa17c7336b5bea9))
+
+
+
 ## [2.0.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.0...v2.0.1) (2022-10-26)
 
 **Note:** Version bump only for package @sendbird/uikit-chat-hooks
