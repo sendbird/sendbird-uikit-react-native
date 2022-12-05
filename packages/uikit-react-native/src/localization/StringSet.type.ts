@@ -400,7 +400,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     },
     DIALOG: {
       ALERT_DEFAULT_OK: 'OK',
-      ALERT_PERMISSIONS_TITLE: 'Allow permission',
+      ALERT_PERMISSIONS_TITLE: 'Allow access?',
       ALERT_PERMISSIONS_MESSAGE: (permission, appName = 'Application') => {
         return `${appName} need permission to access your ${permission}. Go to Settings to allow access`;
       },
