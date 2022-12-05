@@ -1,14 +1,5 @@
-import { createBufferedRequest } from '../shared/bufferedRequest';
-import type {
-  SendbirdBaseChannel,
-  SendbirdChannel,
-  SendbirdChatSDK,
-  SendbirdGroupChannel,
-  SendbirdOpenChannel,
-} from '../types';
-
-const markAsReadBuffReq = createBufferedRequest(10);
-const markAsDeliveredBuffReq = createBufferedRequest(10);
+import { BufferedRequest } from '../shared/bufferedRequest';
+import type { SendbirdBaseChannel, SendbirdChannel, SendbirdGroupChannel, SendbirdOpenChannel } from '../types';
 
 /**
  * Diff utils for channel
@@ -25,17 +16,16 @@ export const isGroupChannelChatUnavailable = (channel: SendbirdGroupChannel) => 
   return channel.myMutedState === 'muted' || (channel.isFrozen && channel.myRole !== 'operator');
 };
 
-export const confirmAndMarkAsRead = async (sdk: SendbirdChatSDK, channels: SendbirdBaseChannel[]) => {
-  const channelUrls = channels.filter((it) => it.isGroupChannel() && it.unreadMessageCount > 0).map((it) => it.url);
-  if (channelUrls.length > 0) {
-    markAsReadBuffReq.push(() => sdk.groupChannel.markAsReadWithChannelUrls(channelUrls));
-  }
+export const confirmAndMarkAsRead = async (channels: SendbirdBaseChannel[]) => {
+  channels
+    .filter((it): it is SendbirdGroupChannel => it.isGroupChannel() && it.unreadMessageCount > 0)
+    .forEach((it) => BufferedRequest.markAsRead.push(() => it.markAsRead()));
 };
 
-export const confirmAndMarkAsDelivered = async (sdk: SendbirdChatSDK, channel: SendbirdBaseChannel) => {
-  if (channel.isGroupChannel() && channel.unreadMessageCount > 0) {
-    markAsDeliveredBuffReq.push(() => sdk.groupChannel.markAsDelivered(channel.url));
-  }
+export const confirmAndMarkAsDelivered = async (channels: SendbirdBaseChannel[]) => {
+  channels
+    .filter((it): it is SendbirdGroupChannel => it.isGroupChannel() && it.unreadMessageCount > 0)
+    .forEach((it) => BufferedRequest.markAsDelivered.push(() => it.markAsDelivered()));
 };
 
 export function isDefaultCoverImage(coverUrl: string) {

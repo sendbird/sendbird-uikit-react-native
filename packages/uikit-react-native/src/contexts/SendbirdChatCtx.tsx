@@ -87,7 +87,7 @@ export const SendbirdChatProvider = ({
 
   const markAsDeliveredWithChannel: Context['markAsDeliveredWithChannel'] = useCallback(
     (channel: SendbirdGroupChannel) => {
-      if (appFeatures.deliveryReceiptEnabled) confirmAndMarkAsDelivered(sdkInstance, channel);
+      if (appFeatures.deliveryReceiptEnabled) confirmAndMarkAsDelivered([channel]);
     },
     [sdkInstance, appFeatures.deliveryReceiptEnabled],
   );

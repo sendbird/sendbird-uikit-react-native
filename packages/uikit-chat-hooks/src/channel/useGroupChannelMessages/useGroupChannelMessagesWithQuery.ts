@@ -7,14 +7,12 @@ import type {
 } from '@sendbird/uikit-utils';
 import {
   Logger,
-  confirmAndMarkAsDelivered,
   confirmAndMarkAsRead,
   isDifferentChannel,
   useAsyncEffect,
   useForceUpdate,
 } from '@sendbird/uikit-utils';
 
-import { useAppFeatures } from '../../common/useAppFeatures';
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';
 import { useGroupChannelMessagesReducer } from './reducer';
@@ -32,8 +30,6 @@ const createMessageQuery = (
 
 const HOOK_NAME = 'useGroupChannelMessagesWithQuery';
 export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, channel, userId, options) => {
-  const { deliveryReceiptEnabled } = useAppFeatures(sdk);
-
   const queryRef = useRef<SendbirdPreviousMessageListQuery>();
 
   const forceUpdate = useForceUpdate();
@@ -54,12 +50,7 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
 
   const channelMarkAs = async () => {
     try {
-      if (deliveryReceiptEnabled) await confirmAndMarkAsDelivered(sdk, channel);
-    } catch (e) {
-      Logger.warn(`[${HOOK_NAME}/channelMarkAs/Delivered]`, e);
-    }
-    try {
-      await confirmAndMarkAsRead(sdk, [channel]);
+      await confirmAndMarkAsRead([channel]);
     } catch (e) {
       Logger.warn(`[${HOOK_NAME}/channelMarkAs/Read]`, e);
     }
