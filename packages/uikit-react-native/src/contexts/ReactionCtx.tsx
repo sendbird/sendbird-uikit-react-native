@@ -5,8 +5,8 @@ import { NOOP } from '@sendbird/uikit-utils';
 
 import { ReactionBottomSheets } from '../components/ReactionBottomSheets';
 import { LocalizationContext } from '../contexts/LocalizationCtx';
-import { ProfileCardContext } from '../contexts/ProfileCardCtx';
 import { SendbirdChatContext } from '../contexts/SendbirdChatCtx';
+import { UserProfileContext } from '../contexts/UserProfileCtx';
 
 type State = {
   message?: SendbirdBaseMessage;
@@ -25,10 +25,10 @@ export const ReactionContext = React.createContext<ReactionContextType | null>(n
 export const ReactionProvider = ({ children }: Props) => {
   const chatCtx = useContext(SendbirdChatContext);
   const localizationCtx = useContext(LocalizationContext);
-  const userProfileCtx = useContext(ProfileCardContext);
+  const userProfileCtx = useContext(UserProfileContext);
   if (!chatCtx) throw new Error('SendbirdChatContext is not provided');
   if (!localizationCtx) throw new Error('LocalizationContext is not provided');
-  if (!userProfileCtx) throw new Error('ProfileCardContext is not provided');
+  if (!userProfileCtx) throw new Error('UserProfileContext is not provided');
 
   const [state, setState] = useReducer((prev: State, next: State) => ({ ...prev, ...next }), {});
   const [reactionListVisible, setReactionListVisible] = useState(false);

@@ -1,9 +1,9 @@
 import type React from 'react';
 
 import type { LocalizationContext } from '../../contexts/LocalizationCtx';
-import type { ProfileCardContext } from '../../contexts/ProfileCardCtx';
 import type { ReactionContext } from '../../contexts/ReactionCtx';
 import type { SendbirdChatContext } from '../../contexts/SendbirdChatCtx';
+import type { UserProfileContext } from '../../contexts/UserProfileCtx';
 import ReactionList from './ReactionListBottomSheet';
 import UserList from './ReactionUserListBottomSheet';
 
@@ -15,7 +15,7 @@ export type ReactionBottomSheetProps = {
   chatCtx: GetFromContext<typeof SendbirdChatContext>;
   reactionCtx: GetFromContext<typeof ReactionContext>;
   localizationCtx: GetFromContext<typeof LocalizationContext>;
-  userProfileCtx: GetFromContext<typeof ProfileCardContext>;
+  userProfileCtx: GetFromContext<typeof UserProfileContext>;
 };
 
 export const ReactionBottomSheets = {
