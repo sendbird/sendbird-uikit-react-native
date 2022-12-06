@@ -22,13 +22,13 @@ export const getGroupChannelChatAvailableState = (channel: SendbirdGroupChannel)
 export const confirmAndMarkAsRead = async (channels: SendbirdBaseChannel[]) => {
   channels
     .filter((it): it is SendbirdGroupChannel => it.isGroupChannel() && it.unreadMessageCount > 0)
-    .forEach((it) => BufferedRequest.markAsRead.push(() => it.markAsRead()));
+    .forEach((it) => BufferedRequest.markAsRead.push(() => it.markAsRead(), it.url));
 };
 
 export const confirmAndMarkAsDelivered = async (channels: SendbirdBaseChannel[]) => {
   channels
     .filter((it): it is SendbirdGroupChannel => it.isGroupChannel() && it.unreadMessageCount > 0)
-    .forEach((it) => BufferedRequest.markAsDelivered.push(() => it.markAsDelivered()));
+    .forEach((it) => BufferedRequest.markAsDelivered.push(() => it.markAsDelivered(), it.url));
 };
 
 export function isDefaultCoverImage(coverUrl: string) {
