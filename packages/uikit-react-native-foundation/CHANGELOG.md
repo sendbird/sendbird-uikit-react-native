@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.3...v2.1.0) (2022-12-06)
+
+
+### Features
+
+* **foundation:** added profile card ui ([472f02f](https://github.com/sendbird/sendbird-uikit-react-native/commit/472f02f064cbad416661cf49e90c4c9509eb1a4c))
+* support broadcast and supergroup channel ([895fa3b](https://github.com/sendbird/sendbird-uikit-react-native/commit/895fa3b27ffb06977fb326610e8234cfb812ec1f))
+* **uikit:** added mini profile card ([0877463](https://github.com/sendbird/sendbird-uikit-react-native/commit/08774638ba0e283f6da2c63545be746746b64058))
+* **uikit:** added moderation in group channel members ([9b25059](https://github.com/sendbird/sendbird-uikit-react-native/commit/9b250594fa3ecf4c02ceeb3ea035ac7060fcf0f5))
+
+
+
 ## [2.0.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.1...v2.0.3) (2022-12-01)
 
 **Note:** Version bump only for package @sendbird/uikit-react-native-foundation

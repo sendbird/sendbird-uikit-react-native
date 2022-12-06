@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.3...v2.1.0) (2022-12-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* **uikit:** update camera roll module
+
+### Improvements
+
+* **uikit:** update camera roll module ([5ddb5d3](https://github.com/sendbird/sendbird-uikit-react-native/commit/5ddb5d33f81d8fdd7b4dd2fa541cd687d5a9bd30))
+
+
+### Documentation
+
+* added list banned users in group channel ([4f60dfb](https://github.com/sendbird/sendbird-uikit-react-native/commit/4f60dfb19e5ae6ee8ab439b23b27cf1ebb0ae213))
+* added list muted members ([877d7d8](https://github.com/sendbird/sendbird-uikit-react-native/commit/877d7d8928b8cfebbb64320756e940e959991e9a))
+* added list operators in group channel ([a4afbf7](https://github.com/sendbird/sendbird-uikit-react-native/commit/a4afbf75e80432fe5cd7ada79b1edb1f33db93d0))
+* added moderating channels and members page ([aad20af](https://github.com/sendbird/sendbird-uikit-react-native/commit/aad20af84a51ad7eb288bc016efe395b791c8754))
+* added register member as operators ([7dde222](https://github.com/sendbird/sendbird-uikit-react-native/commit/7dde22261dca51e19c2d9475141be18ec74aa22b))
+* update docs validation snippet ([4aaeb89](https://github.com/sendbird/sendbird-uikit-react-native/commit/4aaeb894c172c58e95feed03d14fd75b94ec9b19))
+
+
+
 ## [2.0.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.0-rc.0...v2.0.0) (2022-10-11)
 
 

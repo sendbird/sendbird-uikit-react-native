@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.3...v2.1.0) (2022-12-06)
+
+
+### Features
+
+* **chat-hooks:** added useGroupChannel hook ([9392dea](https://github.com/sendbird/sendbird-uikit-react-native/commit/9392dea1f5b7c5a102c0aa96107a472f8433bae8))
+* support broadcast and supergroup channel ([895fa3b](https://github.com/sendbird/sendbird-uikit-react-native/commit/895fa3b27ffb06977fb326610e8234cfb812ec1f))
+* **uikit:** added group channel operators add fragment ([4ac84ee](https://github.com/sendbird/sendbird-uikit-react-native/commit/4ac84ee727b4336555ed84deb70775c308b6d2e5))
+
+
+### Bug Fixes
+
+* **chat-hooks:** prevent MESSAGE_RECEIVED handler called twice when receiving new message. ([ab988c6](https://github.com/sendbird/sendbird-uikit-react-native/commit/ab988c611d801e8eecd0b49743743c63ee48e1e2))
+
+
+### Improvements
+
+* **chat-hooks:** removed activeChannel from useGroupChannelMessages for normalizing ([70fb1c7](https://github.com/sendbird/sendbird-uikit-react-native/commit/70fb1c7ec2acad4f74d95c37c6d0bdf66d3eab88))
+
+
+
 ## [2.0.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.1...v2.0.3) (2022-12-01)
 
 

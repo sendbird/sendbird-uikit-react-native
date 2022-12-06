@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.3...v2.1.0) (2022-12-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* **uikit:** update camera roll module
+
+### Features
+
+* added group channel type selector ([9fb7a19](https://github.com/sendbird/sendbird-uikit-react-native/commit/9fb7a193b5e245ba89030ef9c9d8abae95cf4bba))
+* **chat-hooks:** added useGroupChannel hook ([9392dea](https://github.com/sendbird/sendbird-uikit-react-native/commit/9392dea1f5b7c5a102c0aa96107a472f8433bae8))
+* support broadcast and supergroup channel ([895fa3b](https://github.com/sendbird/sendbird-uikit-react-native/commit/895fa3b27ffb06977fb326610e8234cfb812ec1f))
+* **uikit:** added enableUseUserIdForNickname option ([5d3cfd8](https://github.com/sendbird/sendbird-uikit-react-native/commit/5d3cfd839ba7b0a58f7aba19d46b07b5d8dbea2d))
+* **uikit:** added group channel banned users fragment ([80e1a5e](https://github.com/sendbird/sendbird-uikit-react-native/commit/80e1a5ebaf6b80e6bb015ff64a9b4cc6ef2e19d7))
+* **uikit:** added group channel moderations fragment ([4213e6d](https://github.com/sendbird/sendbird-uikit-react-native/commit/4213e6dc279739d69dc2617de54ba1446c0e16e3))
+* **uikit:** added group channel muted members fragment ([3784b73](https://github.com/sendbird/sendbird-uikit-react-native/commit/3784b7364835fde061f91b157632dc864f555ab1))
+* **uikit:** added group channel operators add fragment ([4ac84ee](https://github.com/sendbird/sendbird-uikit-react-native/commit/4ac84ee727b4336555ed84deb70775c308b6d2e5))
+* **uikit:** added group channel operators fragment ([c7f6626](https://github.com/sendbird/sendbird-uikit-react-native/commit/c7f6626afd4236542f41aee48cfcdf9b217835b1))
+* **uikit:** added mini profile card ([0877463](https://github.com/sendbird/sendbird-uikit-react-native/commit/08774638ba0e283f6da2c63545be746746b64058))
+* **uikit:** added moderation in group channel members ([9b25059](https://github.com/sendbird/sendbird-uikit-react-native/commit/9b250594fa3ecf4c02ceeb3ea035ac7060fcf0f5))
+
+
+### Improvements
+
+* **chat-hooks:** removed activeChannel from useGroupChannelMessages for normalizing ([70fb1c7](https://github.com/sendbird/sendbird-uikit-react-native/commit/70fb1c7ec2acad4f74d95c37c6d0bdf66d3eab88))
+* **uikit:** update camera roll module ([5ddb5d3](https://github.com/sendbird/sendbird-uikit-react-native/commit/5ddb5d33f81d8fdd7b4dd2fa541cd687d5a9bd30))
+
+
+
 ## [2.0.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.1...v2.0.3) (2022-12-01)
 
 
