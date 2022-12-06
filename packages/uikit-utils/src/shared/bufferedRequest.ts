@@ -82,12 +82,15 @@ export class BufferedRequest {
           }
         }, timeoutMills + SAFE_TIMEOUT_BUFFER);
 
-        nextQueue.forEach(async (func, lane) => {
-          try {
-            await func();
-          } catch (e) {
-            waitQueue.set(lane, func);
-          }
+        let index = 0;
+        const nextRequestBaseTimeout = timeoutMills / nextQueue.size;
+        nextQueue.forEach((func) => {
+          setTimeout(() => {
+            func();
+            // TODO: Add retry
+            //.catch(() => waitQueue.set(lane, func));
+          }, nextRequestBaseTimeout * index);
+          index++;
         });
         nextQueue.clear();
       },
