@@ -11,6 +11,7 @@ import type {
 import { confirmAndMarkAsDelivered, useForceUpdate } from '@sendbird/uikit-utils';
 
 import type EmojiManager from '../libs/EmojiManager';
+import type MentionConfig from '../libs/MentionConfig';
 import type { FileType } from '../platform/types';
 
 export interface UIKitFeaturesInSendbirdChatContext {
@@ -18,16 +19,19 @@ export interface UIKitFeaturesInSendbirdChatContext {
   enableChannelListTypingIndicator: boolean;
   enableChannelListMessageReceiptStatus: boolean;
   enableUseUserIdForNickname: boolean;
+  enableMention: boolean;
 }
 
 interface Props extends UIKitFeaturesInSendbirdChatContext, React.PropsWithChildren {
   sdkInstance: SendbirdChatSDK;
   emojiManager: EmojiManager;
+  mentionConfig: MentionConfig;
 }
 
 type Context = {
   sdk: SendbirdChatSDK;
   emojiManager: EmojiManager;
+  mentionConfig?: MentionConfig;
   currentUser?: SendbirdUser;
   setCurrentUser: React.Dispatch<React.SetStateAction<SendbirdUser | undefined>>;
 
@@ -41,6 +45,7 @@ type Context = {
     channelListTypingIndicatorEnabled: boolean;
     channelListMessageReceiptStatusEnabled: boolean;
     useUserIdForNicknameEnabled: boolean;
+    mentionEnabled: boolean;
 
     // Sendbird application features
     deliveryReceiptEnabled: boolean;
@@ -55,10 +60,12 @@ export const SendbirdChatProvider = ({
   children,
   sdkInstance,
   emojiManager,
+  mentionConfig,
   enableAutoPushTokenRegistration,
   enableChannelListMessageReceiptStatus,
   enableChannelListTypingIndicator,
   enableUseUserIdForNickname,
+  enableMention,
 }: Props) => {
   const [currentUser, _setCurrentUser] = useState<SendbirdUser>();
   const forceUpdate = useForceUpdate();
@@ -115,6 +122,7 @@ export const SendbirdChatProvider = ({
   const value: Context = {
     sdk: sdkInstance,
     emojiManager,
+    mentionConfig,
     currentUser,
     setCurrentUser,
 
@@ -127,6 +135,7 @@ export const SendbirdChatProvider = ({
       channelListTypingIndicatorEnabled: enableChannelListTypingIndicator,
       channelListMessageReceiptStatusEnabled: enableChannelListMessageReceiptStatus,
       useUserIdForNicknameEnabled: enableUseUserIdForNickname,
+      mentionEnabled: enableMention,
     },
   };
 

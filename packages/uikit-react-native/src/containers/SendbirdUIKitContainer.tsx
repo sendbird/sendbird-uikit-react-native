@@ -31,6 +31,7 @@ import { SendbirdChatProvider } from '../contexts/SendbirdChatCtx';
 import { UserProfileProvider } from '../contexts/UserProfileCtx';
 import EmojiManager from '../libs/EmojiManager';
 import InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
+import MentionConfig, { MentionConfigInterface } from '../libs/MentionConfig';
 import StringSetEn from '../localization/StringSet.en';
 import type { StringSet } from '../localization/StringSet.type';
 import SBUDynamicModule from '../platform/dynamicModule';
@@ -62,6 +63,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   chatOptions?: {
     localCacheStorage?: LocalCacheStorage;
     onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
+    mention?: Partial<MentionConfigInterface>;
   } & Partial<UIKitFeaturesInSendbirdChatContext>;
   localization?: {
     stringSet?: StringSet;
@@ -115,6 +117,19 @@ const SendbirdUIKitContainer = ({
     return sendbird.chatSDK;
   });
   const emojiManager = useMemo(() => new EmojiManager(internalStorage), [internalStorage]);
+  const mentionConfig = useMemo(() => {
+    return new MentionConfig({
+      mentionLimit: chatOptions?.mention?.mentionLimit || MentionConfig.DEFAULT.MENTION_LIMIT,
+      suggestionLimit: chatOptions?.mention?.suggestionLimit || MentionConfig.DEFAULT.SUGGESTION_LIMIT,
+      debounceMills: chatOptions?.mention?.debounceMills ?? MentionConfig.DEFAULT.DEBOUNCE_MILLS,
+      delimiter: chatOptions?.mention?.delimiter ?? MentionConfig.DEFAULT.DELIMITER,
+    });
+  }, [
+    chatOptions?.mention?.mentionLimit,
+    chatOptions?.mention?.suggestionLimit,
+    chatOptions?.mention?.debounceMills,
+    chatOptions?.mention?.delimiter,
+  ]);
 
   useLayoutEffect(() => {
     if (!isFirstMount) {
@@ -139,10 +154,12 @@ const SendbirdUIKitContainer = ({
       <SendbirdChatProvider
         sdkInstance={sdkInstance}
         emojiManager={emojiManager}
+        mentionConfig={mentionConfig}
         enableAutoPushTokenRegistration={chatOptions?.enableAutoPushTokenRegistration ?? true}
         enableChannelListTypingIndicator={chatOptions?.enableChannelListTypingIndicator ?? false}
         enableChannelListMessageReceiptStatus={chatOptions?.enableChannelListMessageReceiptStatus ?? false}
         enableUseUserIdForNickname={chatOptions?.enableUseUserIdForNickname ?? false}
+        enableMention={chatOptions?.enableMention ?? false}
       >
         <LocalizationProvider stringSet={defaultStringSet}>
           <PlatformServiceProvider
