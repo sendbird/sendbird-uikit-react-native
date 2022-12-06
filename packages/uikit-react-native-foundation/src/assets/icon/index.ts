@@ -33,7 +33,7 @@ const IconAssets = {
   'leave': require('./icon-leave.png'),
   'members': require('./icon-members.png'),
   'message': require('./icon-message.png'),
-  'moderations': require('./icon-moderations.png'),
+  'moderation': require('./icon-moderation.png'),
   'more': require('./icon-more.png'),
   'mute': require('./icon-mute.png'),
   'notifications-filled': require('./icon-notifications-filled.png'),

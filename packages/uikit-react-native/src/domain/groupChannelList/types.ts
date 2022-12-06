@@ -2,7 +2,7 @@ import type React from 'react';
 import type { FlatListProps } from 'react-native';
 
 import type { UseGroupChannelListOptions } from '@sendbird/uikit-chat-hooks';
-import type { ActionMenuItem, BaseHeaderProps } from '@sendbird/uikit-react-native-foundation';
+import type { ActionMenuItem } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdGroupChannel } from '@sendbird/uikit-utils';
 
 import type { CommonComponent } from '../../types';
@@ -14,10 +14,6 @@ export interface GroupChannelListProps {
     onPressChannel: (channel: SendbirdGroupChannel) => void;
     /** Navigate to GroupChannelCreateFragment **/
     onPressCreateChannel: (channelType: GroupChannelType) => void;
-    /** Custom Header for TypeSelector, Only replace header component not a module **/
-    TypeSelectorHeader?: null | CommonComponent<
-      BaseHeaderProps<{ title: string; right: React.ReactElement; onPressRight: () => void }>
-    >;
     /** Method to render GroupChannel preview **/
     renderGroupChannelPreview?: (
       channel: SendbirdGroupChannel,
@@ -55,8 +51,6 @@ export interface GroupChannelListProps {
   };
   /** Props for `GroupChannelListModule.TypeSelector` **/
   TypeSelector: {
-    /** Prop from Fragment `Fragment.TypeSelectorHeader` **/
-    Header: GroupChannelListProps['Fragment']['TypeSelectorHeader'];
     /** Prop from Fragment `Fragment.skipTypeSelection` **/
     skipTypeSelection: boolean;
     /** Method called when type is selected, call `Fragment.onPressCreateChannel` **/

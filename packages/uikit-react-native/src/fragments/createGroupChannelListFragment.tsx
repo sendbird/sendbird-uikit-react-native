@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { AppState } from 'react-native';
 
 import { useGroupChannelList } from '@sendbird/uikit-chat-hooks';
-import { Logger, PASS, useFreshCallback } from '@sendbird/uikit-utils';
+import { PASS, useFreshCallback } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import GroupChannelPreviewContainer from '../containers/GroupChannelPreviewContainer';
@@ -17,7 +17,6 @@ import { useSendbirdChat } from '../hooks/useContext';
 const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListModule>): GroupChannelListFragment => {
   const GroupChannelListModule = createGroupChannelListModule(initModule);
   return ({
-    TypeSelectorHeader,
     onPressChannel,
     onPressCreateChannel,
     queryCreator,
@@ -56,10 +55,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
       },
     );
 
-    if (!currentUser) {
-      Logger.warn('Cannot render GroupChannelListFragment, please connect using `useConnection()` hook first');
-      return null;
-    }
+    const isChannelTypeAvailable = features.broadcastChannelEnabled || features.superGroupChannelEnabled;
 
     return (
       <GroupChannelListModule.Provider>
@@ -78,8 +74,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
           />
         </StatusComposition>
         <GroupChannelListModule.TypeSelector
-          skipTypeSelection={skipTypeSelection}
-          Header={TypeSelectorHeader}
+          skipTypeSelection={isChannelTypeAvailable ? skipTypeSelection : true}
           onSelectType={onPressCreateChannel}
         />
       </GroupChannelListModule.Provider>

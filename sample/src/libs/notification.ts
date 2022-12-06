@@ -16,13 +16,13 @@ export const onNotificationAndroid: (event: Event) => Promise<void> = async ({ t
 
   if (type === EventType.PRESS && detail.notification && isSendbirdNotification(detail.notification.data)) {
     const sendbird = parseSendbirdNotification(detail.notification.data);
-    runAfterAppReady(async (sdk, actions) => {
+    runAfterAppReady(async (_, actions) => {
+      const channelUrl = sendbird.channel.channel_url;
       if (Routes.Home === navigationRef.getCurrentRoute()?.name) {
-        actions.push(Routes.GroupChannelTabs, undefined);
+        actions.push(Routes.GroupChannelTabs, { channelUrl });
+      } else {
+        actions.navigate(Routes.GroupChannel, { channelUrl });
       }
-
-      const channel = await sdk.groupChannel.getChannel(sendbird.channel.channel_url);
-      actions.navigate(Routes.GroupChannel, { channelUrl: channel.url });
     });
   }
 };
@@ -35,13 +35,13 @@ export const onForegroundIOS = () => {
     const data = notification.getData();
     if (data.userInteraction === 1 && isSendbirdNotification(data)) {
       const sendbird = parseSendbirdNotification(data);
-      runAfterAppReady(async (sdk, actions) => {
+      runAfterAppReady(async (_, actions) => {
+        const channelUrl = sendbird.channel.channel_url;
         if (Routes.Home === navigationRef.getCurrentRoute()?.name) {
-          actions.push(Routes.GroupChannelTabs, undefined);
+          actions.push(Routes.GroupChannelTabs, { channelUrl });
+        } else {
+          actions.navigate(Routes.GroupChannel, { channelUrl });
         }
-
-        const channel = await sdk.groupChannel.getChannel(sendbird.channel.channel_url);
-        actions.navigate(Routes.GroupChannel, { channelUrl: channel.url });
       });
     }
   };

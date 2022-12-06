@@ -11,7 +11,7 @@ import useHeaderStyle from '../../styles/useHeaderStyle';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 
 type HeaderElement = string | React.ReactElement | null;
-type HeaderProps = BaseHeaderProps<
+export type HeaderProps = BaseHeaderProps<
   {
     title?: HeaderElement;
     left?: HeaderElement;
@@ -19,7 +19,10 @@ type HeaderProps = BaseHeaderProps<
     onPressLeft?: () => void;
     onPressRight?: () => void;
   },
-  { clearTitleMargin?: boolean }
+  {
+    clearTitleMargin?: boolean;
+    statusBarTopInsetAs?: 'padding' | 'margin';
+  }
 >;
 
 const AlignMapper = { left: 'flex-start', center: 'center', right: 'flex-end' } as const;
@@ -36,8 +39,10 @@ const Header: ((props: HeaderProps) => JSX.Element) & {
   onPressLeft,
   onPressRight,
   clearTitleMargin = false,
+  statusBarTopInsetAs = 'padding',
 }) => {
   const { topInset, defaultTitleAlign, defaultHeight } = useHeaderStyle();
+
   const { colors } = useUIKitTheme();
   const { left: paddingLeft, right: paddingRight } = useSafeAreaInsets();
 
@@ -54,9 +59,9 @@ const Header: ((props: HeaderProps) => JSX.Element) & {
       style={[
         styles.container,
         {
+          [statusBarTopInsetAs === 'padding' ? 'paddingTop' : 'marginTop']: topInset,
           paddingLeft: paddingLeft + styles.container.paddingHorizontal,
           paddingRight: paddingRight + styles.container.paddingHorizontal,
-          paddingTop: topInset,
           backgroundColor: colors.ui.header.nav.none.background,
           borderBottomColor: colors.ui.header.nav.none.borderBottom,
         },

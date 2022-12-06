@@ -22,6 +22,9 @@ export type GroupChannelBannedUsersProps = {
   StatusError: {
     onPressRetry: () => void;
   };
+  Provider: {
+    channel: SendbirdGroupChannel;
+  };
 };
 
 /**
@@ -32,10 +35,11 @@ export type GroupChannelBannedUsersProps = {
 export type GroupChannelBannedUsersContextsType = {
   Fragment: React.Context<{
     headerTitle: string;
+    channel: SendbirdGroupChannel;
   }>;
 };
 export interface GroupChannelBannedUsersModule {
-  Provider: CommonComponent;
+  Provider: CommonComponent<GroupChannelBannedUsersProps['Provider']>;
   Header: CommonComponent<GroupChannelBannedUsersProps['Header']>;
   List: CommonComponent<GroupChannelBannedUsersProps['List']>;
   StatusEmpty: CommonComponent;

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.3...v2.1.0) (2022-12-06)
+
+
+### Features
+
+* **uikit:** added group channel banned users fragment ([80e1a5e](https://github.com/sendbird/sendbird-uikit-react-native/commit/80e1a5ebaf6b80e6bb015ff64a9b4cc6ef2e19d7))
+* **uikit:** added mini profile card ([0877463](https://github.com/sendbird/sendbird-uikit-react-native/commit/08774638ba0e283f6da2c63545be746746b64058))
+* **uikit:** added moderation in group channel members ([9b25059](https://github.com/sendbird/sendbird-uikit-react-native/commit/9b250594fa3ecf4c02ceeb3ea035ac7060fcf0f5))
+* **utils:** added buffered request function ([d3e375c](https://github.com/sendbird/sendbird-uikit-react-native/commit/d3e375cc05721c251846d27eb2f8f8e86ad4379f))
+
+
+
 ## [2.0.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.1...v2.0.3) (2022-12-01)
 
 

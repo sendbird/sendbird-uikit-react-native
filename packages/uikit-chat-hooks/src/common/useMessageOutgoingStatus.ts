@@ -33,13 +33,14 @@ export const useMessageOutgoingStatus = (
     },
   });
 
-  if (channel.isBroadcast || channel.isSuper) return 'NONE';
   if (!message) return 'NONE';
 
   if ('sendingStatus' in message) {
     if (message.sendingStatus === 'pending') return 'PENDING';
     if (message.sendingStatus === 'failed') return 'FAILED';
   }
+
+  if (channel.isBroadcast || channel.isSuper) return 'NONE';
 
   if (channel.getUnreadMemberCount(message) === 0) return 'READ';
 

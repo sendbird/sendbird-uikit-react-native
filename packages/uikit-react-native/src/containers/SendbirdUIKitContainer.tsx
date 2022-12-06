@@ -15,8 +15,8 @@ import {
   UIKitThemeProvider,
 } from '@sendbird/uikit-react-native-foundation';
 import type {
+  SendbirdBaseChannel,
   SendbirdChatSDK,
-  SendbirdGroupChannel,
   SendbirdGroupChannelCreateParams,
   SendbirdMember,
   SendbirdUser,
@@ -24,8 +24,9 @@ import type {
 
 import { LocalizationProvider } from '../contexts/LocalizationCtx';
 import { PlatformServiceProvider } from '../contexts/PlatformServiceCtx';
-import { ProfileCardProvider } from '../contexts/ProfileCardCtx';
+import type { UIKitFeaturesInSendbirdChatContext } from '../contexts/SendbirdChatCtx';
 import { SendbirdChatProvider } from '../contexts/SendbirdChatCtx';
+import { UserProfileProvider } from '../contexts/UserProfileCtx';
 import { useLocalization } from '../hooks/useContext';
 import InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
 import StringSetEn from '../localization/StringSet.en';
@@ -59,10 +60,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   chatOptions?: {
     localCacheStorage?: LocalCacheStorage;
     onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
-    enableAutoPushTokenRegistration?: boolean;
-    enableChannelListTypingIndicator?: boolean;
-    enableChannelListMessageReceiptStatus?: boolean;
-  };
+  } & Partial<UIKitFeaturesInSendbirdChatContext>;
   localization?: {
     stringSet?: StringSet;
   };
@@ -76,8 +74,8 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   toast?: {
     dismissTimeout?: number;
   };
-  profileCard?: {
-    onCreateChannel: (channel: SendbirdGroupChannel) => void;
+  userProfile?: {
+    onCreateChannel: (channel: SendbirdBaseChannel) => void;
     onBeforeCreateChannel?: (
       channelParams: SendbirdGroupChannelCreateParams,
       users: SendbirdUser[] | SendbirdMember[],
@@ -97,7 +95,7 @@ const SendbirdUIKitContainer = ({
   localization,
   styles,
   toast,
-  profileCard,
+  userProfile,
   errorBoundary,
 }: SendbirdUIKitContainerProps) => {
   const unsubscribes = useRef<(() => void)[]>([]).current;
@@ -162,6 +160,7 @@ const SendbirdUIKitContainer = ({
         enableAutoPushTokenRegistration={chatOptions?.enableAutoPushTokenRegistration ?? true}
         enableChannelListTypingIndicator={chatOptions?.enableChannelListTypingIndicator ?? false}
         enableChannelListMessageReceiptStatus={chatOptions?.enableChannelListMessageReceiptStatus ?? false}
+        enableUseUserIdForNickname={chatOptions?.enableUseUserIdForNickname ?? false}
       >
         <LocalizationProvider stringSet={localization?.stringSet ?? StringSetEn}>
           <PlatformServiceProvider
@@ -178,12 +177,12 @@ const SendbirdUIKitContainer = ({
               >
                 <LocalizedDialogProvider>
                   <ToastProvider dismissTimeout={toast?.dismissTimeout}>
-                    <ProfileCardProvider
-                      onCreateChannel={profileCard?.onCreateChannel}
-                      onBeforeCreateChannel={profileCard?.onBeforeCreateChannel}
+                    <UserProfileProvider
+                      onCreateChannel={userProfile?.onCreateChannel}
+                      onBeforeCreateChannel={userProfile?.onBeforeCreateChannel}
                     >
                       <InternalErrorBoundaryContainer {...errorBoundary}>{children}</InternalErrorBoundaryContainer>
-                    </ProfileCardProvider>
+                    </UserProfileProvider>
                   </ToastProvider>
                 </LocalizedDialogProvider>
               </HeaderStyleProvider>

@@ -40,6 +40,7 @@ export interface StringSet {
     /** GroupChannel > Input */
     INPUT_PLACEHOLDER_ACTIVE: string;
     INPUT_PLACEHOLDER_DISABLED: string;
+    INPUT_PLACEHOLDER_MUTED: string;
     INPUT_EDIT_OK: string;
     INPUT_EDIT_CANCEL: string;
 
@@ -67,7 +68,7 @@ export interface StringSet {
     HEADER_RIGHT: string;
 
     /** GroupChannelSettings > Menu */
-    MENU_MODERATIONS: string;
+    MENU_MODERATION: string;
     MENU_NOTIFICATION: string;
     MENU_MEMBERS: string;
     MENU_LEAVE_CHANNEL: string;
@@ -83,11 +84,11 @@ export interface StringSet {
     DIALOG_CHANGE_IMAGE_MENU_CAMERA: string;
     DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY: string;
   };
-  GROUP_CHANNEL_MODERATIONS: {
-    /** GroupChannelModerations > Header */
+  GROUP_CHANNEL_MODERATION: {
+    /** GroupChannelModeration > Header */
     HEADER_TITLE: string;
 
-    /** GroupChannelModerations > Menu */
+    /** GroupChannelModeration > Menu */
     MENU_OPERATORS: string;
     MENU_MUTED_MEMBERS: string;
     MENU_BANNED_USERS: string;
@@ -97,8 +98,8 @@ export interface StringSet {
     /** GroupChannelOperators > Header */
     HEADER_TITLE: string;
   };
-  GROUP_CHANNEL_OPERATORS_ADD: {
-    /** GroupChannelOperatorsAdd > Header */
+  GROUP_CHANNEL_REGISTER_OPERATOR: {
+    /** GroupChannelRegisterOperator > Header */
     HEADER_TITLE: string;
     HEADER_RIGHT: (params: { selectedUsers: Array<SendbirdMember> }) => string;
   };
@@ -246,7 +247,8 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       MESSAGE_BUBBLE_UNKNOWN_DESC: () => 'Cannot read this message.',
 
       INPUT_PLACEHOLDER_ACTIVE: 'Enter message',
-      INPUT_PLACEHOLDER_DISABLED: 'Chat is unavailable in this channel',
+      INPUT_PLACEHOLDER_DISABLED: 'Chat not available in this channel.',
+      INPUT_PLACEHOLDER_MUTED: "You're muted by the operator.",
       INPUT_EDIT_OK: 'Save',
       INPUT_EDIT_CANCEL: 'Cancel',
 
@@ -268,7 +270,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     GROUP_CHANNEL_SETTINGS: {
       HEADER_TITLE: 'Channel information',
       HEADER_RIGHT: 'Edit',
-      MENU_MODERATIONS: 'Moderations',
+      MENU_MODERATION: 'Moderation',
       MENU_NOTIFICATION: 'Notifications',
       MENU_MEMBERS: 'Members',
       MENU_LEAVE_CHANNEL: 'Leave channel',
@@ -283,19 +285,19 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY: 'Choose photo',
       ...overrides?.GROUP_CHANNEL_SETTINGS,
     },
-    GROUP_CHANNEL_MODERATIONS: {
-      HEADER_TITLE: 'Moderations',
+    GROUP_CHANNEL_MODERATION: {
+      HEADER_TITLE: 'Moderation',
       MENU_OPERATORS: 'Operators',
       MENU_MUTED_MEMBERS: 'Muted members',
       MENU_BANNED_USERS: 'Banned users',
       MENU_FREEZE_CHANNEL: 'Freeze channel',
-      ...overrides?.GROUP_CHANNEL_MODERATIONS,
+      ...overrides?.GROUP_CHANNEL_MODERATION,
     },
     GROUP_CHANNEL_OPERATORS: {
       HEADER_TITLE: 'Operators',
       ...overrides?.GROUP_CHANNEL_OPERATORS,
     },
-    GROUP_CHANNEL_OPERATORS_ADD: {
+    GROUP_CHANNEL_REGISTER_OPERATOR: {
       HEADER_TITLE: 'Set as operators',
       HEADER_RIGHT: ({ selectedUsers }) => {
         const len = selectedUsers.length;
@@ -398,11 +400,11 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     },
     DIALOG: {
       ALERT_DEFAULT_OK: 'OK',
-      ALERT_PERMISSIONS_TITLE: 'Allow permission',
+      ALERT_PERMISSIONS_TITLE: 'Allow access?',
       ALERT_PERMISSIONS_MESSAGE: (permission, appName = 'Application') => {
         return `${appName} need permission to access your ${permission}. Go to Settings to allow access`;
       },
-      ALERT_PERMISSIONS_OK: 'SETTINGS',
+      ALERT_PERMISSIONS_OK: 'Go to settings',
       PROMPT_DEFAULT_OK: 'Submit',
       PROMPT_DEFAULT_CANCEL: 'Cancel',
       PROMPT_DEFAULT_PLACEHOLDER: 'Enter',

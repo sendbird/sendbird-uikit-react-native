@@ -99,6 +99,13 @@ yarn workspace @sendbird/uikit-react-native run create-domain
 > **Note**
 > We are using [yarn workspaces](https://classic.yarnpkg.com/en/docs/workspaces) and [lerna](https://github.com/lerna/lerna) to maintain this monorepo
 
+#### Patch package
+
+If you need to patch some packages for the sample to work using `patch-package`
+
+1. `npx patch-package package-name` > mark as comment `yarn-path` in `.yarnrc` file
+2. OR `./node_modules/.bin/patch-package package-name` > just run
+
 #### Package dependencies
 
 See [yarn workspace](https://classic.yarnpkg.com/en/docs/cli/workspace)

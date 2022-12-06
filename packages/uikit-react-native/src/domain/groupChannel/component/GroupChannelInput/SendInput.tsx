@@ -20,9 +20,19 @@ import type { GroupChannelProps } from '../../types';
 type SendInputProps = GroupChannelProps['Input'] & {
   text: string;
   setText: (val: string) => void;
+  frozen: boolean;
+  muted: boolean;
   disabled: boolean;
 };
-const SendInput = ({ onSendUserMessage, onSendFileMessage, text, setText, disabled }: SendInputProps) => {
+const SendInput = ({
+  onSendUserMessage,
+  onSendFileMessage,
+  text,
+  setText,
+  disabled,
+  frozen,
+  muted,
+}: SendInputProps) => {
   const { STRINGS } = useLocalization();
   const { fileService } = usePlatformService();
   const { colors } = useUIKitTheme();
@@ -120,8 +130,12 @@ const SendInput = ({ onSendUserMessage, onSendFileMessage, text, setText, disabl
         onChangeText={setText}
         style={styles.input}
         placeholder={conditionChaining(
-          [disabled],
-          [STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_DISABLED, STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE],
+          [frozen, muted],
+          [
+            STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_DISABLED,
+            STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_MUTED,
+            STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE,
+          ],
         )}
       />
       {Boolean(text.trim()) && (

@@ -1,68 +1,75 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
-import { useActiveGroupChannel, useChannelHandler } from '@sendbird/uikit-chat-hooks';
-import { Icon, useActionMenu } from '@sendbird/uikit-react-native-foundation';
+import { useChannelHandler, useUserList } from '@sendbird/uikit-chat-hooks';
 import type { ActionMenuItem } from '@sendbird/uikit-react-native-foundation';
+import { Icon, useActionMenu } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMember } from '@sendbird/uikit-utils';
-import { ifMuted, ifOperator, useForceUpdate, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
+import { ifMuted, ifOperator, isDifferentChannel, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
 
+import StatusComposition from '../components/StatusComposition';
 import UserActionBar from '../components/UserActionBar';
 import type { GroupChannelMembersFragment } from '../domain/groupChannelUserList/types';
 import createUserListModule from '../domain/userList/module/createUserListModule';
 import type { UserListModule } from '../domain/userList/types';
-import { useLocalization, useProfileCard, useSendbirdChat } from '../hooks/useContext';
+import { useLocalization, useSendbirdChat, useUserProfile } from '../hooks/useContext';
 
 const noop = () => '';
-const name = 'createGroupChannelMembersFragment';
+const HOOK_NAME = 'createGroupChannelMembersFragment';
 const createGroupChannelMembersFragment = (
   initModule?: Partial<UserListModule<SendbirdMember>>,
 ): GroupChannelMembersFragment<SendbirdMember> => {
   const UserListModule = createUserListModule<SendbirdMember>(initModule);
 
   return ({ channel, onPressHeaderLeft, onPressHeaderRight, renderUser }) => {
-    const uniqId = useUniqId(name);
-    const forceUpdate = useForceUpdate();
+    const uniqId = useUniqId(HOOK_NAME);
 
+    const refreshSchedule = useRef<NodeJS.Timeout>();
     const { STRINGS } = useLocalization();
     const { sdk, currentUser } = useSendbirdChat();
     const { openMenu } = useActionMenu();
-    const { show } = useProfileCard();
+    const { show } = useUserProfile();
 
-    const { activeChannel } = useActiveGroupChannel(sdk, channel);
+    const { users, refresh, loading, next, error, upsertUser, deleteUser } = useUserList(sdk, {
+      queryCreator: () => channel.createMemberListQuery({ limit: 20 }),
+    });
 
-    useChannelHandler(sdk, `${name}_${uniqId}`, {
-      onChannelMemberCountChanged(channels) {
-        if (channels.some((c) => c.url === channel.url)) forceUpdate();
+    useChannelHandler(sdk, `${HOOK_NAME}_${uniqId}`, {
+      onUserLeft(eventChannel, user) {
+        if (isDifferentChannel(eventChannel, channel)) return;
+        deleteUser(user.userId);
       },
-      onChannelChanged(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
+      onUserBanned(eventChannel, user) {
+        if (isDifferentChannel(eventChannel, channel)) return;
+        deleteUser(user.userId);
       },
-      onUserJoined(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
+      onOperatorUpdated(eventChannel) {
+        if (isDifferentChannel(eventChannel, channel)) return;
+        if (refreshSchedule.current) clearTimeout(refreshSchedule.current);
+        refreshSchedule.current = setTimeout(() => refresh(), 500);
       },
-      onUserLeft(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
+      onUserMuted(eventChannel, user) {
+        if (isDifferentChannel(eventChannel, channel) || !eventChannel.isGroupChannel()) return;
+
+        const memberFromChannel = eventChannel.members.find((it) => it.userId === user.userId);
+        if (memberFromChannel) return upsertUser(memberFromChannel);
+
+        const memberFromList = users.find((it) => it.userId === user.userId);
+        if (memberFromList) {
+          memberFromList.isMuted = true;
+          upsertUser(memberFromList);
+        }
       },
-      onUserBanned(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
-      },
-      onUserUnbanned(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
-      },
-      onUserMuted(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
-      },
-      onUserUnmuted(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
-      },
-      onChannelFrozen(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
-      },
-      onChannelUnfrozen(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
-      },
-      onOperatorUpdated(channel) {
-        if (channel.url === activeChannel.url) forceUpdate();
+      onUserUnmuted(eventChannel, user) {
+        if (isDifferentChannel(eventChannel, channel) || !eventChannel.isGroupChannel()) return;
+
+        const memberFromChannel = eventChannel.members.find((it) => it.userId === user.userId);
+        if (memberFromChannel) return upsertUser(memberFromChannel);
+
+        const memberFromList = users.find((it) => it.userId === user.userId);
+        if (memberFromList) {
+          memberFromList.isMuted = false;
+          upsertUser(memberFromList);
+        }
       },
     });
 
@@ -123,13 +130,19 @@ const createGroupChannelMembersFragment = (
           right={<Icon icon={'plus'} />}
           onPressHeaderRight={async () => onPressHeaderRight()}
         />
-
-        <UserListModule.List
-          users={activeChannel.members}
-          renderUser={_renderUser}
-          onLoadNext={async () => void 0}
-          ListEmptyComponent={<UserListModule.StatusEmpty />}
-        />
+        <StatusComposition
+          loading={loading}
+          LoadingComponent={<UserListModule.StatusLoading />}
+          error={Boolean(error)}
+          ErrorComponent={<UserListModule.StatusError onPressRetry={refresh} />}
+        >
+          <UserListModule.List
+            users={users}
+            renderUser={_renderUser}
+            onLoadNext={next}
+            ListEmptyComponent={<UserListModule.StatusEmpty />}
+          />
+        </StatusComposition>
       </UserListModule.Provider>
     );
   };

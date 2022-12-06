@@ -5,6 +5,7 @@ import { useAsyncLayoutEffect } from '@sendbird/uikit-utils';
 
 interface SimpleCredential {
   userId: string;
+  nickname?: string;
 }
 
 interface CredentialStorageInterface {
@@ -66,6 +67,7 @@ export const useAppAuth = (onAutonomousSignIn?: (cred: SimpleCredential) => Prom
   }, []);
 
   return {
+    authManager,
     loading,
     signIn: (cred: SimpleCredential) => authManager.authenticate(cred),
     signOut: () => authManager.deAuthenticate(),

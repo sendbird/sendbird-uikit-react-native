@@ -21,9 +21,9 @@ export enum Routes {
 
   GroupChannelSettings = 'GroupChannelSettings',
   GroupChannelMembers = 'GroupChannelMembers',
-  GroupChannelModerations = 'GroupChannelModerations',
+  GroupChannelModeration = 'GroupChannelModeration',
   GroupChannelOperators = 'GroupChannelOperators',
-  GroupChannelOperatorsAdd = 'GroupChannelOperatorsAdd',
+  GroupChannelRegisterOperator = 'GroupChannelRegisterOperator',
   GroupChannelMutedMembers = 'GroupChannelMutedMembers',
   GroupChannelBannedUsers = 'GroupChannelBannedUsers',
 
@@ -55,7 +55,15 @@ export type RouteParamsUnion =
       params: undefined;
     }
   | {
+      route: Routes.GroupChannelTabs;
+      params: { channelUrl?: string } | undefined;
+    }
+  | {
       route: Routes.GroupChannelList;
+      params: { channelUrl?: string } | undefined;
+    }
+  | {
+      route: Routes.Settings;
       params: undefined;
     }
   | {
@@ -75,7 +83,7 @@ export type RouteParamsUnion =
       params: { channelUrl: string };
     }
   | {
-      route: Routes.GroupChannelModerations;
+      route: Routes.GroupChannelModeration;
       params: { channelUrl: string };
     }
   | {
@@ -83,7 +91,7 @@ export type RouteParamsUnion =
       params: { channelUrl: string };
     }
   | {
-      route: Routes.GroupChannelOperatorsAdd;
+      route: Routes.GroupChannelRegisterOperator;
       params: { channelUrl: string };
     }
   | {
@@ -97,14 +105,6 @@ export type RouteParamsUnion =
   | {
       route: Routes.GroupChannelInvite;
       params: { channelUrl: string };
-    }
-  | {
-      route: Routes.Settings;
-      params: undefined;
-    }
-  | {
-      route: Routes.GroupChannelTabs;
-      params: undefined;
     }
   | {
       route: Routes.FileViewer;

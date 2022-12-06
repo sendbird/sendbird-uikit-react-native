@@ -66,6 +66,7 @@ const Modal = ({
 
   return (
     <RNModal
+      statusBarTranslucent={statusBarTranslucent}
       transparent
       hardwareAccelerated
       visible={modalVisible}

@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
+import { useChannelHandler, useUserList } from '@sendbird/uikit-chat-hooks';
 import { useActionMenu } from '@sendbird/uikit-react-native-foundation';
-import { NOOP, ifMuted, useForceUpdate, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
+import { NOOP, isDifferentChannel, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
 
+import StatusComposition from '../components/StatusComposition';
 import UserActionBar from '../components/UserActionBar';
 import { createGroupChannelMutedMembersModule } from '../domain/groupChannelMutedMembers';
 import type {
@@ -12,29 +13,31 @@ import type {
 } from '../domain/groupChannelMutedMembers/types';
 import { useLocalization, useSendbirdChat } from '../hooks/useContext';
 
-const name = 'createGroupChannelMutedMembersFragment';
+const HOOK_NAME = 'createGroupChannelMutedMembersFragment';
 const createGroupChannelMutedMembersFragment = (
   initModule?: Partial<GroupChannelMutedMembersModule>,
 ): GroupChannelMutedMembersFragment => {
   const GroupChannelMutedMembersModule = createGroupChannelMutedMembersModule(initModule);
 
   return ({ onPressHeaderLeft = NOOP, channel, renderUser }) => {
-    const uniqId = useUniqId(name);
-    const forceUpdate = useForceUpdate();
+    const uniqId = useUniqId(HOOK_NAME);
 
     const { STRINGS } = useLocalization();
     const { sdk, currentUser } = useSendbirdChat();
     const { openMenu } = useActionMenu();
 
-    useChannelHandler(sdk, `${name}_${uniqId}`, {
-      onUserLeft(channel) {
-        if (channel.url === channel.url) forceUpdate();
+    const { users, deleteUser, loading, refresh, error, next } = useUserList(sdk, {
+      queryCreator: () => channel.createMutedUserListQuery({ limit: 20 }),
+    });
+
+    useChannelHandler(sdk, `${HOOK_NAME}_${uniqId}`, {
+      onUserLeft(eventChannel, user) {
+        if (isDifferentChannel(eventChannel, channel)) return;
+        deleteUser(user.userId);
       },
-      onUserBanned(channel) {
-        if (channel.url === channel.url) forceUpdate();
-      },
-      onUserUnmuted(channel) {
-        if (channel.url === channel.url) forceUpdate();
+      onUserBanned(eventChannel, user) {
+        if (isDifferentChannel(eventChannel, channel)) return;
+        deleteUser(user.userId);
       },
     });
 
@@ -44,9 +47,8 @@ const createGroupChannelMutedMembersFragment = (
       const { user } = props;
       return (
         <UserActionBar
-          muted={user.isMuted}
+          muted
           uri={user.profileUrl}
-          label={user.role === 'operator' ? STRINGS.LABELS.USER_BAR_OPERATOR : ''}
           name={
             (user.nickname || STRINGS.LABELS.USER_NO_NAME) +
             (user.userId === currentUser?.userId ? STRINGS.LABELS.USER_BAR_ME_POSTFIX : '')
@@ -57,12 +59,8 @@ const createGroupChannelMutedMembersFragment = (
               title: user.nickname || STRINGS.LABELS.USER_NO_NAME,
               menuItems: [
                 {
-                  title: ifMuted(user.isMuted, STRINGS.LABELS.UNMUTE, STRINGS.LABELS.MUTE),
-                  onPress: ifMuted(
-                    user.isMuted,
-                    () => channel.unmuteUser(user),
-                    () => channel.muteUser(user),
-                  ),
+                  title: STRINGS.LABELS.UNMUTE,
+                  onPress: () => channel.unmuteUser(user).then(() => deleteUser(user.userId)),
                 },
               ],
             });
@@ -72,13 +70,21 @@ const createGroupChannelMutedMembersFragment = (
     });
 
     return (
-      <GroupChannelMutedMembersModule.Provider>
+      <GroupChannelMutedMembersModule.Provider channel={channel}>
         <GroupChannelMutedMembersModule.Header onPressHeaderLeft={onPressHeaderLeft} />
-        <GroupChannelMutedMembersModule.List
-          mutedMembers={channel.members.filter((it) => it.isMuted)}
-          renderUser={_renderUser}
-          ListEmptyComponent={<GroupChannelMutedMembersModule.StatusEmpty />}
-        />
+        <StatusComposition
+          loading={loading}
+          LoadingComponent={<GroupChannelMutedMembersModule.StatusLoading />}
+          error={Boolean(error)}
+          ErrorComponent={<GroupChannelMutedMembersModule.StatusError onPressRetry={refresh} />}
+        >
+          <GroupChannelMutedMembersModule.List
+            mutedMembers={users}
+            onLoadNext={next}
+            renderUser={_renderUser}
+            ListEmptyComponent={<GroupChannelMutedMembersModule.StatusEmpty />}
+          />
+        </StatusComposition>
       </GroupChannelMutedMembersModule.Provider>
     );
   };

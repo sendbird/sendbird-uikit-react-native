@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, ListRenderItem } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import type { SendbirdMember } from '@sendbird/uikit-utils';
+import type { SendbirdUser } from '@sendbird/uikit-utils';
 import { useFreshCallback } from '@sendbird/uikit-utils';
 
 import type { GroupChannelOperatorsProps } from '../types';
@@ -12,7 +12,7 @@ const GroupChannelOperatorsList = ({
   renderUser,
   ListEmptyComponent,
 }: GroupChannelOperatorsProps['List']) => {
-  const renderItem: ListRenderItem<SendbirdMember> = useFreshCallback(({ item }) => renderUser?.({ user: item }));
+  const renderItem: ListRenderItem<SendbirdUser> = useFreshCallback(({ item }) => renderUser?.({ user: item }));
   const { left, right } = useSafeAreaInsets();
 
   return (

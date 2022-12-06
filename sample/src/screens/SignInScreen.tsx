@@ -32,7 +32,7 @@ const SignInScreen = () => {
     }
   };
 
-  const { loading, signIn } = useAppAuth((user) => connectWith(user.userId));
+  const { loading, signIn } = useAppAuth((user) => connectWith(user.userId, user.nickname));
   const { colors } = useUIKitTheme();
 
   if (loading) return null;
@@ -58,7 +58,7 @@ const SignInScreen = () => {
         variant={'contained'}
         onPress={async () => {
           if (userId) {
-            await signIn({ userId });
+            await signIn({ userId, nickname });
             await connectWith(userId, nickname);
           }
         }}

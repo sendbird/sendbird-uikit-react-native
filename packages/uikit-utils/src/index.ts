@@ -36,8 +36,10 @@ export const SBErrorCode = {
 };
 export const SBErrorMessage = {
   ACL:
-    "An error occurred because you don't have access to the user list in your application.\n" +
-    'In order to gain access, you can turn on this attribute in the Access Control List settings on Sendbird Dashboard.',
+    'Sendbird provides various access control options when using the Chat SDK.\n' +
+    'By default, the Allow retrieving user list attribute is turned on to facilitate creating sample apps.\n' +
+    'However, this may grant access to unwanted data or operations, leading to potential security concerns.\n' +
+    'To manage your access control settings, you can turn on or off each setting on Sendbird Dashboard.',
 };
 
 export type {

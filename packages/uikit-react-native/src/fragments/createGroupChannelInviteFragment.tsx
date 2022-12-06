@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import { useActiveGroupChannel, useUserList } from '@sendbird/uikit-chat-hooks';
-import { Logger, SendbirdUser } from '@sendbird/uikit-utils';
+import { UserStruct, useUserList } from '@sendbird/uikit-chat-hooks';
+import type { SendbirdGroupChannel, SendbirdUser } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import UserSelectableBar from '../components/UserSelectableBar';
@@ -11,37 +11,12 @@ import createUserListModule from '../domain/userList/module/createUserListModule
 import type { UserListModule } from '../domain/userList/types';
 import { useLocalization, useSendbirdChat } from '../hooks/useContext';
 
-const defaultUserIdsGenerator = <T,>(users: T[]) => {
-  const userIds = users
-    .map((user) => {
-      // @ts-ignore
-      return user.userId as string | undefined;
-    })
-    .filter((u): u is string => Boolean(u));
-
-  if (userIds.length === 0) {
-    Logger.warn(
-      'GroupChannelInviteFragment: Couldn\'t find user id to invite! if you provided "queryCreator", please provide "userIdsGenerator" as well',
-    );
-  }
-
-  return userIds;
-};
-
-const createGroupChannelInviteFragment = <UserType,>(
+const createGroupChannelInviteFragment = <UserType extends UserStruct>(
   initModule?: Partial<UserListModule<UserType>>,
 ): GroupChannelInviteFragment<UserType> => {
   const UserListModule = createUserListModule<UserType>(initModule);
 
-  return ({
-    channel,
-    onPressHeaderLeft,
-    onInviteMembers,
-    userIdsGenerator = defaultUserIdsGenerator,
-    sortComparator,
-    queryCreator,
-    renderUser,
-  }) => {
+  return ({ channel, onPressHeaderLeft, onInviteMembers, sortComparator, queryCreator, renderUser }) => {
     const { sdk } = useSendbirdChat();
     const { STRINGS } = useLocalization();
     const { users, refreshing, refresh, next, error, loading } = useUserList(sdk, {
@@ -49,48 +24,47 @@ const createGroupChannelInviteFragment = <UserType,>(
       sortComparator,
     });
 
-    const { activeChannel } = useActiveGroupChannel(sdk, channel);
+    const memberIds = shouldFilterMember(channel) ? channel.members.map((it) => it.userId) : [];
 
     const _renderUser: NonNullable<typeof renderUser> = useCallback(
       (user, selectedUsers, setSelectedUsers) => {
         if (queryCreator && !renderUser) {
-          throw new Error('You should provide "renderUser" when providing "queryCreator"');
+          const hasRequiredKey = Object.hasOwn(user, 'profileUrl') && Object.hasOwn(user, 'nickname');
+          if (!hasRequiredKey) throw new Error('You should provide "renderUser" when providing "queryCreator"');
         }
+
         if (renderUser) return renderUser(user, selectedUsers, setSelectedUsers);
 
-        const sbUser = user as unknown as SendbirdUser;
-        const sbSelectedUsers = selectedUsers as unknown as SendbirdUser[];
-        const sbSetSelectedUsers = setSelectedUsers as unknown as React.Dispatch<React.SetStateAction<SendbirdUser[]>>;
+        const userIdxInMembers = memberIds.indexOf(user.userId);
+        const userIdxInSelectedUsers = selectedUsers.findIndex((it) => it.userId === user.userId);
 
-        const joinedUserIds = activeChannel.members.map((u) => u.userId);
-        const userIdx = sbSelectedUsers.findIndex((u) => u.userId === sbUser.userId);
-        const isSelected = userIdx > -1;
-
-        const isAlreadyJoined = joinedUserIds.includes(sbUser.userId);
+        const isMember = userIdxInMembers > -1;
+        const isSelected = userIdxInSelectedUsers > -1;
 
         return (
           <TouchableOpacity
             activeOpacity={0.7}
-            disabled={isAlreadyJoined}
+            disabled={isMember}
             onPress={() => {
-              sbSetSelectedUsers(([...draft]) => {
-                if (isSelected) draft.splice(userIdx, 1);
-                else draft.push(sbUser);
+              setSelectedUsers(([...draft]) => {
+                if (isSelected) draft.splice(userIdxInSelectedUsers, 1);
+                else draft.push(user);
                 return draft;
               });
             }}
           >
             <UserSelectableBar
-              uri={sbUser.profileUrl}
-              name={sbUser.nickname || STRINGS.LABELS.USER_NO_NAME}
-              selected={isAlreadyJoined || isSelected}
-              disabled={isAlreadyJoined}
+              uri={(user as unknown as SendbirdUser).profileUrl}
+              name={(user as unknown as SendbirdUser).nickname || STRINGS.LABELS.USER_NO_NAME}
+              selected={isMember || isSelected}
+              disabled={isMember}
             />
           </TouchableOpacity>
         );
       },
-      [activeChannel, renderUser, queryCreator],
+      [channel, renderUser, queryCreator],
     );
+
     return (
       <UserListModule.Provider
         headerRight={(selectedUsers) => STRINGS.GROUP_CHANNEL_INVITE.HEADER_RIGHT({ selectedUsers })}
@@ -99,8 +73,8 @@ const createGroupChannelInviteFragment = <UserType,>(
         <UserListModule.Header
           onPressHeaderLeft={onPressHeaderLeft}
           onPressHeaderRight={async (users) => {
-            const userIds = userIdsGenerator(users);
-            const updatedChannel = await activeChannel.inviteWithUserIds(userIds);
+            const userIds = users.map((it) => it.userId);
+            const updatedChannel = await channel.inviteWithUserIds(userIds);
             onInviteMembers(updatedChannel);
           }}
         />
@@ -123,5 +97,9 @@ const createGroupChannelInviteFragment = <UserType,>(
     );
   };
 };
+
+function shouldFilterMember(channel: SendbirdGroupChannel) {
+  return !channel.isSuper && !channel.isBroadcast;
+}
 
 export default createGroupChannelInviteFragment;

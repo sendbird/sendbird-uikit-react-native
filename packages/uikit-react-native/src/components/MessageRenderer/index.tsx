@@ -158,7 +158,7 @@ const styles = createStyleSheet({
   },
   outgoingContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'center',
   },
 });

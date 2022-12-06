@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.3...v2.1.0) (2022-12-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* **uikit:** update camera roll module
+
+### Features
+
+* **foundation:** added profile card ui ([472f02f](https://github.com/sendbird/sendbird-uikit-react-native/commit/472f02f064cbad416661cf49e90c4c9509eb1a4c))
+* **uikit:** added enableUseUserIdForNickname option ([5d3cfd8](https://github.com/sendbird/sendbird-uikit-react-native/commit/5d3cfd839ba7b0a58f7aba19d46b07b5d8dbea2d))
+* **uikit:** added group channel banned users fragment ([80e1a5e](https://github.com/sendbird/sendbird-uikit-react-native/commit/80e1a5ebaf6b80e6bb015ff64a9b4cc6ef2e19d7))
+* **uikit:** added group channel moderations fragment ([4213e6d](https://github.com/sendbird/sendbird-uikit-react-native/commit/4213e6dc279739d69dc2617de54ba1446c0e16e3))
+* **uikit:** added group channel muted members fragment ([3784b73](https://github.com/sendbird/sendbird-uikit-react-native/commit/3784b7364835fde061f91b157632dc864f555ab1))
+* **uikit:** added group channel operators add fragment ([4ac84ee](https://github.com/sendbird/sendbird-uikit-react-native/commit/4ac84ee727b4336555ed84deb70775c308b6d2e5))
+* **uikit:** added group channel operators fragment ([c7f6626](https://github.com/sendbird/sendbird-uikit-react-native/commit/c7f6626afd4236542f41aee48cfcdf9b217835b1))
+* **uikit:** added mini profile card ([0877463](https://github.com/sendbird/sendbird-uikit-react-native/commit/08774638ba0e283f6da2c63545be746746b64058))
+
+
+### Improvements
+
+* **chat-hooks:** removed activeChannel from useGroupChannelMessages for normalizing ([70fb1c7](https://github.com/sendbird/sendbird-uikit-react-native/commit/70fb1c7ec2acad4f74d95c37c6d0bdf66d3eab88))
+* **uikit:** update camera roll module ([5ddb5d3](https://github.com/sendbird/sendbird-uikit-react-native/commit/5ddb5d33f81d8fdd7b4dd2fa541cd687d5a9bd30))
+
+
+
 ## [2.0.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.0...v2.0.1) (2022-10-26)
 
 

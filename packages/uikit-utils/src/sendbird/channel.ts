@@ -12,20 +12,23 @@ export function isDifferentChannel<T extends SendbirdBaseChannel>(a?: T, b?: T):
   return a.url !== b.url;
 }
 
-export const isGroupChannelChatUnavailable = (channel: SendbirdGroupChannel) => {
-  return channel.myMutedState === 'muted' || (channel.isFrozen && channel.myRole !== 'operator');
+export const getGroupChannelChatAvailableState = (channel: SendbirdGroupChannel) => {
+  const frozen = channel.isFrozen && channel.myRole !== 'operator';
+  const muted = channel.myMutedState === 'muted';
+  const disabled = frozen || muted;
+  return { disabled, frozen, muted };
 };
 
 export const confirmAndMarkAsRead = async (channels: SendbirdBaseChannel[]) => {
   channels
     .filter((it): it is SendbirdGroupChannel => it.isGroupChannel() && it.unreadMessageCount > 0)
-    .forEach((it) => BufferedRequest.markAsRead.push(() => it.markAsRead()));
+    .forEach((it) => BufferedRequest.markAsRead.push(() => it.markAsRead(), it.url));
 };
 
 export const confirmAndMarkAsDelivered = async (channels: SendbirdBaseChannel[]) => {
   channels
     .filter((it): it is SendbirdGroupChannel => it.isGroupChannel() && it.unreadMessageCount > 0)
-    .forEach((it) => BufferedRequest.markAsDelivered.push(() => it.markAsDelivered()));
+    .forEach((it) => BufferedRequest.markAsDelivered.push(() => it.markAsDelivered(), it.url));
 };
 
 export function isDefaultCoverImage(coverUrl: string) {

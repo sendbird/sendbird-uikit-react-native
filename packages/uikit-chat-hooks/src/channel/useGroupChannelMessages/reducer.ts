@@ -37,12 +37,12 @@ const defaultReducer = ({ ...draft }: State, action: Action) => {
     }
     case 'update_messages':
     case 'update_next_messages': {
-      const key = action.type === 'update_messages' ? 'messageMap' : ('nextMessageMap' as const);
-      const messageMap = arrayToMapWithGetter(action.value.messages, getMessageUniqId);
+      const key = action.type === 'update_messages' ? 'messageMap' : 'nextMessageMap';
+      const receivedMessagesAsMap = arrayToMapWithGetter(action.value.messages, getMessageUniqId);
       if (action.value.clearPrev) {
-        draft[key] = messageMap;
+        draft[key] = receivedMessagesAsMap;
       } else {
-        draft[key] = { ...draft[key], ...messageMap };
+        draft[key] = { ...draft[key], ...receivedMessagesAsMap };
 
         // NOTE: Replace pending message to succeeded message
         action.value.messages

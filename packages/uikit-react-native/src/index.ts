@@ -22,22 +22,22 @@ export { default as createGroupChannelSettingsFragment } from './fragments/creat
 export { default as createGroupChannelInviteFragment } from './fragments/createGroupChannelInviteFragment';
 export { default as createGroupChannelListFragment } from './fragments/createGroupChannelListFragment';
 export { default as createGroupChannelMembersFragment } from './fragments/createGroupChannelMembersFragment';
-export { default as createGroupChannelModerationsFragment } from './fragments/createGroupChannelModerationsFragment';
+export { default as createGroupChannelModerationFragment } from './fragments/createGroupChannelModerationFragment';
 export { default as createGroupChannelOperatorsFragment } from './fragments/createGroupChannelOperatorsFragment';
-export { default as createGroupChannelOperatorsAddFragment } from './fragments/createGroupChannelOperatorsAddFragment';
+export { default as createGroupChannelRegisterOperatorFragment } from './fragments/createGroupChannelRegisterOperatorFragment';
 export { default as createGroupChannelMutedMembersFragment } from './fragments/createGroupChannelMutedMembersFragment';
 export { default as createGroupChannelBannedUsersFragment } from './fragments/createGroupChannelBannedUsersFragment';
 
 /** Context **/
 export { SendbirdChatContext, SendbirdChatProvider } from './contexts/SendbirdChatCtx';
 export { PlatformServiceContext, PlatformServiceProvider } from './contexts/PlatformServiceCtx';
-export { ProfileCardContext, ProfileCardProvider } from './contexts/ProfileCardCtx';
+export { UserProfileContext, UserProfileProvider } from './contexts/UserProfileCtx';
 export { LocalizationContext, LocalizationProvider } from './contexts/LocalizationCtx';
 
 /** Hooks **/
 export { default as useConnection } from './hooks/useConnection';
 export { default as usePushTokenRegistration } from './hooks/usePushTokenRegistration';
-export { useLocalization, usePlatformService, useSendbirdChat, useProfileCard } from './hooks/useContext';
+export { useLocalization, usePlatformService, useSendbirdChat, useUserProfile } from './hooks/useContext';
 
 /** Localization **/
 export { default as StringSetEn } from './localization/StringSet.en';

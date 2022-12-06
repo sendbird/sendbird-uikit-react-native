@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { View } from 'react-native';
 
 import { Divider, Text, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
-import { Logger, getGroupChannelTitle } from '@sendbird/uikit-utils';
+import { getGroupChannelTitle } from '@sendbird/uikit-utils';
 
 import ChannelCover from '../../../components/ChannelCover';
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
@@ -14,18 +14,13 @@ const GroupChannelSettingsInfo = (_: GroupChannelSettingsProps['Info']) => {
   const { currentUser } = useSendbirdChat();
   const { STRINGS } = useLocalization();
 
-  if (!currentUser) {
-    Logger.warn('Cannot render GroupChannelSettingsInfo, please connect using `useConnection()` hook first');
-    return null;
-  }
-
   return (
     <View>
       <View style={styles.userInfoContainer}>
         <ChannelCover channel={channel} size={80} containerStyle={styles.avatarContainer} />
         <Text h1 numberOfLines={1}>
           {getGroupChannelTitle(
-            currentUser.userId,
+            currentUser?.userId || '',
             channel,
             STRINGS.LABELS.USER_NO_NAME,
             STRINGS.LABELS.CHANNEL_NO_MEMBERS,

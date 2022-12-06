@@ -118,14 +118,13 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             onPressMediaMessage={onPressMediaMessage}
             flatListProps={memoizedFlatListProps}
           />
-          {shouldRenderInput(channel) && (
-            <GroupChannelModule.Input
-              onSendFileMessage={onSendFileMessage}
-              onSendUserMessage={onSendUserMessage}
-              onUpdateFileMessage={onUpdateFileMessage}
-              onUpdateUserMessage={onUpdateUserMessage}
-            />
-          )}
+          <GroupChannelModule.Input
+            shouldRenderInput={shouldRenderInput(channel)}
+            onSendFileMessage={onSendFileMessage}
+            onSendUserMessage={onSendUserMessage}
+            onUpdateFileMessage={onUpdateFileMessage}
+            onUpdateUserMessage={onUpdateUserMessage}
+          />
         </StatusComposition>
       </GroupChannelModule.Provider>
     );

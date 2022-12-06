@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Modal, OutlinedButton, ProfileCard, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
@@ -19,7 +19,7 @@ type OnBeforeCreateChannel = (
   users: SendbirdUser[] | SendbirdMember[],
 ) => SendbirdGroupChannelCreateParams | Promise<SendbirdGroupChannelCreateParams>;
 
-export type ProfileCardContextType = {
+export type UserProfileContextType = {
   show(user: SendbirdUser | SendbirdMember): void;
   hide(): void;
 };
@@ -29,28 +29,29 @@ type Props = React.PropsWithChildren<{
   onBeforeCreateChannel?: OnBeforeCreateChannel;
 }>;
 
-export const ProfileCardContext = React.createContext<ProfileCardContextType | null>(null);
-export const ProfileCardProvider = ({ children, onCreateChannel, onBeforeCreateChannel = PASS }: Props) => {
+export const UserProfileContext = React.createContext<UserProfileContextType | null>(null);
+export const UserProfileProvider = ({ children, onCreateChannel, onBeforeCreateChannel = PASS }: Props) => {
   const chatContext = useContext(SendbirdChatContext);
   const localizationContext = useContext(LocalizationContext);
+
+  if (!chatContext) throw new Error('SendbirdChatContext is not provided');
+  if (!localizationContext) throw new Error('LocalizationContext is not provided');
+
   const { bottom, left, right } = useSafeAreaInsets();
 
   const [user, setUser] = useState<SendbirdUser | SendbirdMember>();
   const [visible, setVisible] = useState(false);
 
-  const show: ProfileCardContextType['show'] = (user) => {
+  const show: UserProfileContextType['show'] = useCallback((user) => {
     setUser(user);
     setVisible(true);
-  };
+  }, []);
 
-  const hide: ProfileCardContextType['hide'] = () => {
+  const hide: UserProfileContextType['hide'] = useCallback(() => {
     setVisible(false);
-  };
+  }, []);
 
-  if (!chatContext) throw new Error('SendbirdChatContext is not provided');
-  if (!localizationContext) throw new Error('LocalizationContext is not provided');
-
-  const profileCardButton = useIIFE(() => {
+  const userProfileButton = useIIFE(() => {
     const isMe = chatContext.currentUser && user?.userId === chatContext.currentUser.userId;
     if (isMe) return undefined;
 
@@ -73,7 +74,7 @@ export const ProfileCardProvider = ({ children, onCreateChannel, onBeforeCreateC
           onCreateChannel(channel);
         } else {
           Logger.warn(
-            'Please set `onCreateChannel` before message to user from profile card, see `profileCard` prop in the `SendbirdUIKitContainer` props',
+            'Please set `onCreateChannel` before message to user from profile card, see `userProfile` prop in the `SendbirdUIKitContainer` props',
           );
         }
       }
@@ -87,7 +88,7 @@ export const ProfileCardProvider = ({ children, onCreateChannel, onBeforeCreateC
   });
 
   return (
-    <ProfileCardContext.Provider value={{ show, hide }}>
+    <UserProfileContext.Provider value={{ show, hide }}>
       {children}
       <Modal
         type={'slide'}
@@ -106,11 +107,11 @@ export const ProfileCardProvider = ({ children, onCreateChannel, onBeforeCreateC
             username={user.nickname || localizationContext.STRINGS.LABELS.USER_NO_NAME}
             bodyLabel={localizationContext.STRINGS.PROFILE_CARD.BODY_LABEL}
             body={localizationContext.STRINGS.PROFILE_CARD.BODY(user)}
-            button={profileCardButton}
+            button={userProfileButton}
           />
         )}
       </Modal>
-    </ProfileCardContext.Provider>
+    </UserProfileContext.Provider>
   );
 };
 

@@ -3,9 +3,12 @@ import { useMemo, useRef, useState } from 'react';
 import type { Optional, SendbirdChatSDK, SendbirdUser } from '@sendbird/uikit-utils';
 import { Logger, SBErrorCode, SBErrorMessage, useAsyncEffect, useFreshCallback } from '@sendbird/uikit-utils';
 
-import type { CustomQueryInterface, UseUserListOptions, UseUserListReturn } from '../types';
+import type { CustomQueryInterface, UseUserListOptions, UseUserListReturn, UserStruct } from '../types';
 
-const createUserQuery = <User>(sdk: SendbirdChatSDK, queryCreator?: UseUserListOptions<User>['queryCreator']) => {
+const createUserQuery = <User extends UserStruct>(
+  sdk: SendbirdChatSDK,
+  queryCreator?: UseUserListOptions<User>['queryCreator'],
+) => {
   if (queryCreator) return queryCreator();
   // In order to use the API, the option must be turned on in the dashboard.
   return sdk.createApplicationUserListQuery() as unknown as CustomQueryInterface<User>;
@@ -34,7 +37,11 @@ const createUserQuery = <User>(sdk: SendbirdChatSDK, queryCreator?: UseUserListO
  * */
 export const useUserList = <
   Options extends UseUserListOptions<QueriedUser>,
-  QueriedUser = Options['queryCreator'] extends Optional<() => CustomQueryInterface<infer User>> ? User : SendbirdUser,
+  QueriedUser extends UserStruct = Options['queryCreator'] extends Optional<
+    () => CustomQueryInterface<infer User extends UserStruct>
+  >
+    ? User
+    : SendbirdUser,
 >(
   sdk: SendbirdChatSDK,
   options?: Options,
@@ -50,6 +57,23 @@ export const useUserList = <
     if (options?.sortComparator) return users.sort(options.sortComparator);
     return users;
   }, [users, options?.sortComparator]);
+
+  const upsertUser = useFreshCallback((user: QueriedUser) => {
+    setUsers(([...draft]) => {
+      const userIdx = draft.findIndex((it) => it.userId === user.userId);
+      if (userIdx > -1) draft[userIdx] = user;
+      else draft.push(user);
+      return draft;
+    });
+  });
+
+  const deleteUser = useFreshCallback((userId: QueriedUser['userId']) => {
+    setUsers(([...draft]) => {
+      const userIdx = draft.findIndex((it) => it.userId === userId);
+      if (userIdx > -1) draft.splice(userIdx, 1);
+      return draft;
+    });
+  });
 
   const updateUsers = (users: QueriedUser[], clearPrev: boolean) => {
     if (clearPrev) setUsers(users);
@@ -107,6 +131,8 @@ export const useUserList = <
     loading,
     error,
     users: sortedUsers,
+    upsertUser,
+    deleteUser,
     next,
     refreshing,
     refresh,

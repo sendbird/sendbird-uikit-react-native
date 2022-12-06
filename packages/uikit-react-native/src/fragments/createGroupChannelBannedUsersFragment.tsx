@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React from 'react';
 
+import { useUserList } from '@sendbird/uikit-chat-hooks';
 import { useActionMenu } from '@sendbird/uikit-react-native-foundation';
-import { NOOP, SendbirdGroupChannel, SendbirdRestrictedUser, useFreshCallback } from '@sendbird/uikit-utils';
+import { NOOP, useFreshCallback } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import UserActionBar from '../components/UserActionBar';
@@ -12,10 +13,6 @@ import type {
 } from '../domain/groupChannelBannedUsers/types';
 import { useLocalization, useSendbirdChat } from '../hooks/useContext';
 
-const createBannedUserListQuery = (channel: SendbirdGroupChannel) => {
-  return channel.createBannedUserListQuery({ limit: 20 });
-};
-
 const createGroupChannelBannedUsersFragment = (
   initModule?: Partial<GroupChannelBannedUsersModule>,
 ): GroupChannelBannedUsersFragment => {
@@ -23,51 +20,12 @@ const createGroupChannelBannedUsersFragment = (
 
   return ({ onPressHeaderLeft = NOOP, channel, renderUser }) => {
     const { STRINGS } = useLocalization();
-    const { currentUser } = useSendbirdChat();
+    const { currentUser, sdk } = useSendbirdChat();
     const { openMenu } = useActionMenu();
 
-    const query = useRef(createBannedUserListQuery(channel));
-    const [bannedUsers, setBannedUsers] = useState<SendbirdRestrictedUser[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<unknown>();
-
-    const init = useCallback(async () => {
-      try {
-        const users = await query.current.next();
-        setBannedUsers(users);
-      } catch (e) {
-        setError(e);
-      } finally {
-        setLoading(false);
-      }
-    }, []);
-
-    const refresh = useCallback(async () => {
-      setLoading(true);
-      setError(undefined);
-      query.current = createBannedUserListQuery(channel);
-      await init();
-    }, []);
-
-    const next = useCallback(async () => {
-      if (query.current.hasNext) {
-        const users = await query.current.next();
-        setBannedUsers((prev) => [...prev, ...users]);
-      }
-    }, []);
-
-    const unban = async (user: SendbirdRestrictedUser) => {
-      await channel.unbanUser(user);
-      setBannedUsers(([...draft]) => {
-        const unbannedUserIdx = draft.findIndex((it) => it.userId === user.userId);
-        if (unbannedUserIdx > -1) draft.splice(unbannedUserIdx, 1);
-        return draft;
-      });
-    };
-
-    useEffect(() => {
-      init();
-    }, []);
+    const { users, deleteUser, loading, next, refresh, error } = useUserList(sdk, {
+      queryCreator: () => channel.createBannedUserListQuery({ limit: 20 }),
+    });
 
     const _renderUser: NonNullable<typeof renderUser> = useFreshCallback((props) => {
       if (renderUser) return renderUser(props);
@@ -86,7 +44,12 @@ const createGroupChannelBannedUsersFragment = (
           onPressActionMenu={() => {
             openMenu({
               title: user.nickname || STRINGS.LABELS.USER_NO_NAME,
-              menuItems: [{ title: STRINGS.LABELS.UNBAN, onPress: () => unban(user) }],
+              menuItems: [
+                {
+                  title: STRINGS.LABELS.UNBAN,
+                  onPress: () => channel.unbanUser(user).then(() => deleteUser(user.userId)),
+                },
+              ],
             });
           }}
         />
@@ -94,7 +57,7 @@ const createGroupChannelBannedUsersFragment = (
     });
 
     return (
-      <GroupChannelBannedUsersModule.Provider>
+      <GroupChannelBannedUsersModule.Provider channel={channel}>
         <GroupChannelBannedUsersModule.Header onPressHeaderLeft={onPressHeaderLeft} />
         <StatusComposition
           loading={loading}
@@ -103,7 +66,7 @@ const createGroupChannelBannedUsersFragment = (
           ErrorComponent={<GroupChannelBannedUsersModule.StatusError onPressRetry={refresh} />}
         >
           <GroupChannelBannedUsersModule.List
-            bannedUsers={bannedUsers}
+            bannedUsers={users}
             renderUser={_renderUser}
             ListEmptyComponent={<GroupChannelBannedUsersModule.StatusEmpty />}
             onLoadNext={next}

@@ -1,8 +1,7 @@
 import React, { useContext, useEffect } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { Platform, TouchableOpacity, View } from 'react-native';
 
 import {
-  Header as DefaultHeader,
   Icon,
   Modal,
   Text,
@@ -11,7 +10,7 @@ import {
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
 
-import { useLocalization } from '../../../hooks/useContext';
+import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelListContexts } from '../module/moduleContext';
 import type { GroupChannelListProps, GroupChannelType } from '../types';
 
@@ -21,16 +20,15 @@ const TYPE_ICONS: Record<GroupChannelType, keyof typeof Icon.Assets> = {
   'SUPER_GROUP': 'supergroup',
   'BROADCAST': 'broadcast',
 };
+const STATUS_BAR_TOP_INSET_AS: 'margin' | 'padding' = Platform.select({ android: 'margin', default: 'padding' });
 
-const GroupChannelListTypeSelector = ({
-  Header = DefaultHeader,
-  skipTypeSelection,
-  onSelectType,
-}: GroupChannelListProps['TypeSelector']) => {
-  const { statusBarTranslucent } = useHeaderStyle();
+const GroupChannelListTypeSelector = ({ skipTypeSelection, onSelectType }: GroupChannelListProps['TypeSelector']) => {
+  const { statusBarTranslucent, HeaderComponent } = useHeaderStyle();
   const { colors } = useUIKitTheme();
+  const { features } = useSendbirdChat();
   const typeSelector = useContext(GroupChannelListContexts.TypeSelector);
   const { visible, hide } = typeSelector;
+
   const createOnPressType = (type: GroupChannelType) => () => {
     hide();
     onSelectType(type);
@@ -42,42 +40,38 @@ const GroupChannelListTypeSelector = ({
 
   if (skipTypeSelection) return null;
 
-  const renderButtons = () => (
-    <View style={styles.buttonArea}>
-      {TYPES.map((type) => {
-        return (
-          <TouchableOpacity key={type} activeOpacity={0.6} onPress={createOnPressType(type)} style={styles.typeButton}>
-            <DefaultTypeIcon type={type} />
-            <DefaultTypeText type={type} />
-          </TouchableOpacity>
-        );
-      })}
-    </View>
-  );
-
-  const renderHeader = () => {
-    if (Header) {
-      return (
-        <Header
-          title={typeSelector.headerTitle}
-          right={<Icon icon={'close'} color={colors.onBackground01} />}
-          onPressRight={typeSelector.hide}
-        >
-          {renderButtons()}
-        </Header>
-      );
-    }
-
-    return (
-      <DefaultHeader title={null} right={null} left={null}>
-        {renderButtons()}
-      </DefaultHeader>
-    );
-  };
-
   return (
     <Modal visible={visible} onClose={hide} statusBarTranslucent={statusBarTranslucent}>
-      {renderHeader()}
+      <HeaderComponent
+        title={typeSelector.headerTitle}
+        right={<Icon icon={'close'} color={colors.onBackground01} />}
+        onPressRight={typeSelector.hide}
+        statusBarTopInsetAs={STATUS_BAR_TOP_INSET_AS}
+      >
+        <View style={styles.buttonArea}>
+          {TYPES.map((type) => {
+            if (type === 'SUPER_GROUP' && !features.superGroupChannelEnabled) {
+              return null;
+            }
+
+            if (type === 'BROADCAST' && !features.broadcastChannelEnabled) {
+              return null;
+            }
+
+            return (
+              <TouchableOpacity
+                key={type}
+                activeOpacity={0.6}
+                onPress={createOnPressType(type)}
+                style={styles.typeButton}
+              >
+                <DefaultTypeIcon type={type} />
+                <DefaultTypeText type={type} />
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </HeaderComponent>
     </Modal>
   );
 };

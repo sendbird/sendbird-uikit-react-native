@@ -14,6 +14,7 @@ export type MenuBarProps = {
 
   onPress: () => void;
   disabled?: boolean;
+  visible?: boolean;
 
   icon: keyof typeof Icon.Assets;
   iconColor?: string;
@@ -26,6 +27,7 @@ export type MenuBarProps = {
 const MenuBar = ({
   variant = 'default',
   disabled,
+  visible = true,
   onPress,
   name,
   icon,
@@ -35,6 +37,8 @@ const MenuBar = ({
   actionItem = null,
 }: MenuBarProps) => {
   const { palette, colors } = useUIKitTheme();
+
+  if (!visible) return null;
 
   return (
     <View>

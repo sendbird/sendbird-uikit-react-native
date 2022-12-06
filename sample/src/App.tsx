@@ -27,10 +27,10 @@ import {
   GroupChannelCreateScreen,
   GroupChannelInviteScreen,
   GroupChannelMembersScreen,
-  GroupChannelModerationsScreen,
+  GroupChannelModerationScreen,
   GroupChannelMutedMembersScreen,
-  GroupChannelOperatorsAddScreen,
   GroupChannelOperatorsScreen,
+  GroupChannelRegisterOperatorScreen,
   GroupChannelScreen,
   GroupChannelSettingsScreen,
   GroupChannelTabs,
@@ -68,11 +68,11 @@ const App = () => {
         statusBarTranslucent: GetTranslucent(),
       }}
       errorBoundary={{ ErrorInfoComponent: ErrorInfoScreen }}
-      profileCard={{
+      userProfile={{
         onCreateChannel: (channel) => {
-          navigationActions.push(Routes.GroupChannel, {
-            channelUrl: channel.url,
-          });
+          if (channel.isGroupChannel()) {
+            navigationActions.push(Routes.GroupChannel, { channelUrl: channel.url });
+          }
         },
       }}
     >
@@ -116,12 +116,15 @@ const Navigations = () => {
             <RootStack.Group>
               <RootStack.Screen name={Routes.GroupChannelSettings} component={GroupChannelSettingsScreen} />
               <RootStack.Screen name={Routes.GroupChannelMembers} component={GroupChannelMembersScreen} />
-              <RootStack.Screen name={Routes.GroupChannelModerations} component={GroupChannelModerationsScreen} />
+              <RootStack.Screen name={Routes.GroupChannelModeration} component={GroupChannelModerationScreen} />
               <RootStack.Screen name={Routes.GroupChannelMutedMembers} component={GroupChannelMutedMembersScreen} />
               <RootStack.Screen name={Routes.GroupChannelBannedUsers} component={GroupChannelBannedUsersScreen} />
               <RootStack.Group>
                 <RootStack.Screen name={Routes.GroupChannelOperators} component={GroupChannelOperatorsScreen} />
-                <RootStack.Screen name={Routes.GroupChannelOperatorsAdd} component={GroupChannelOperatorsAddScreen} />
+                <RootStack.Screen
+                  name={Routes.GroupChannelRegisterOperator}
+                  component={GroupChannelRegisterOperatorScreen}
+                />
               </RootStack.Group>
             </RootStack.Group>
             <RootStack.Screen name={Routes.GroupChannelCreate} component={GroupChannelCreateScreen} />

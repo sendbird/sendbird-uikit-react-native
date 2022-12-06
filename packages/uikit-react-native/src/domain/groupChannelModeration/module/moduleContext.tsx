@@ -4,16 +4,16 @@ import type { SendbirdGroupChannel } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization } from '../../../hooks/useContext';
-import type { GroupChannelModerationsContextsType, GroupChannelModerationsModule } from '../types';
+import type { GroupChannelModerationContextsType, GroupChannelModerationModule } from '../types';
 
-export const GroupChannelModerationsContexts: GroupChannelModerationsContextsType = {
+export const GroupChannelModerationContexts: GroupChannelModerationContextsType = {
   Fragment: createContext({
     headerTitle: '',
     channel: {} as SendbirdGroupChannel,
   }),
 };
 
-export const GroupChannelModerationsContextsProvider: GroupChannelModerationsModule['Provider'] = ({
+export const GroupChannelModerationContextsProvider: GroupChannelModerationModule['Provider'] = ({
   children,
   channel,
 }) => {
@@ -23,11 +23,11 @@ export const GroupChannelModerationsContextsProvider: GroupChannelModerationsMod
 
   return (
     <ProviderLayout>
-      <GroupChannelModerationsContexts.Fragment.Provider
-        value={{ headerTitle: STRINGS.GROUP_CHANNEL_MODERATIONS.HEADER_TITLE, channel }}
+      <GroupChannelModerationContexts.Fragment.Provider
+        value={{ headerTitle: STRINGS.GROUP_CHANNEL_MODERATION.HEADER_TITLE, channel }}
       >
         {children}
-      </GroupChannelModerationsContexts.Fragment.Provider>
+      </GroupChannelModerationContexts.Fragment.Provider>
     </ProviderLayout>
   );
 };

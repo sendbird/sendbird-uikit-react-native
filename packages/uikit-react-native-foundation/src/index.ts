@@ -12,11 +12,11 @@ export { default as TextInput } from './components/TextInput';
 export { default as URLParsedText } from './components/URLParsedText';
 
 /** UI **/
-export { default as ActionMenu, ActionMenuItem } from './ui/ActionMenu';
+export { default as ActionMenu } from './ui/ActionMenu';
 export { default as Alert } from './ui/Alert';
 export { default as Avatar } from './ui/Avatar';
 export { default as Badge } from './ui/Badge';
-export { default as BottomSheet, BottomSheetItem } from './ui/BottomSheet';
+export { default as BottomSheet } from './ui/BottomSheet';
 export { default as Button } from './ui/Button';
 export { default as ChannelFrozenBanner } from './ui/ChannelFrozenBanner';
 export { DialogProvider, useActionMenu, useAlert, usePrompt, useBottomSheet } from './ui/Dialog';
@@ -34,9 +34,9 @@ export { default as Toast, useToast, ToastProvider } from './ui/Toast';
 export { default as createSelectByColorScheme } from './styles/createSelectByColorScheme';
 export { default as createScaleFactor } from './styles/createScaleFactor';
 export { default as createStyleSheet } from './styles/createStyleSheet';
-export { default as createTypography, UIKitTypographyOverrides } from './styles/createTypography';
+export { default as createTypography } from './styles/createTypography';
 export { default as getDefaultHeaderHeight } from './styles/getDefaultHeaderHeight';
-export { HeaderStyleContext, HeaderStyleProvider, HeaderStyleContextType } from './styles/HeaderStyleContext';
+export { HeaderStyleContext, HeaderStyleProvider } from './styles/HeaderStyleContext';
 export { default as useHeaderStyle } from './styles/useHeaderStyle';
 
 /** Theme **/
@@ -65,3 +65,7 @@ export type {
   Component,
   GetColorTree,
 } from './types';
+export type { ActionMenuItem } from './ui/ActionMenu';
+export type { BottomSheetItem } from './ui/BottomSheet';
+export type { UIKitTypographyOverrides } from './styles/createTypography';
+export type { HeaderStyleContextType } from './styles/HeaderStyleContext';
