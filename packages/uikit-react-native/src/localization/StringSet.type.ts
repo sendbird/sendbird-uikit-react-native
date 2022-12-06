@@ -404,7 +404,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       ALERT_PERMISSIONS_MESSAGE: (permission, appName = 'Application') => {
         return `${appName} need permission to access your ${permission}. Go to Settings to allow access`;
       },
-      ALERT_PERMISSIONS_OK: 'SETTINGS',
+      ALERT_PERMISSIONS_OK: 'Go to settings',
       PROMPT_DEFAULT_OK: 'Submit',
       PROMPT_DEFAULT_CANCEL: 'Cancel',
       PROMPT_DEFAULT_PLACEHOLDER: 'Enter',
