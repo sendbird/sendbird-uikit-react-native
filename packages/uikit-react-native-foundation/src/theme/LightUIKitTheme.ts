@@ -179,6 +179,28 @@ const LightUIKitTheme = createTheme({
           },
         },
       },
+      reaction: {
+        default: {
+          enabled: {
+            background: palette.transparent,
+            highlight: palette.onBackgroundLight03,
+          },
+          selected: {
+            background: palette.primary100,
+            highlight: palette.primary300,
+          },
+        },
+        rounded: {
+          enabled: {
+            background: palette.background100,
+            highlight: palette.transparent,
+          },
+          selected: {
+            background: palette.primary100,
+            highlight: palette.transparent,
+          },
+        },
+      },
     },
   }),
 });

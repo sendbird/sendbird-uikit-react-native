@@ -19,8 +19,9 @@ import createStyleSheet from '../../styles/createStyleSheet';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 
+type ModalAnimationType = 'slide' | 'slide-no-gesture' | 'fade';
 type Props = {
-  type?: 'slide' | 'fade';
+  type?: ModalAnimationType;
   onClose: () => void;
   backgroundStyle?: StyleProp<ViewStyle>;
   disableBackgroundClose?: boolean;
@@ -117,12 +118,12 @@ const isHideGesture = (distanceY: number, velocityY: number) => {
   return distanceY > 125 || (distanceY > 0 && velocityY > 0.1);
 };
 const useModalPanResponder = (
-  type: 'slide' | 'fade',
+  type: ModalAnimationType,
   translateY: Animated.Value,
   show: () => void,
   hide: () => void,
 ) => {
-  if (type === 'fade') return { panHandlers: {} };
+  if (type === 'fade' || type === 'slide-no-gesture') return { panHandlers: {} };
   return React.useRef(
     PanResponder.create({
       onMoveShouldSetPanResponderCapture: (_, { dy }) => dy > 8,
@@ -137,15 +138,15 @@ const useModalPanResponder = (
   ).current;
 };
 
-const useModalAnimation = (type: 'slide' | 'fade') => {
-  const initialY = type === 'slide' ? Dimensions.get('window').height : 0;
+const useModalAnimation = (type: ModalAnimationType) => {
+  const initialY = type === 'fade' ? 0 : Dimensions.get('window').height;
   const baseAnimBackground = useRef(new Animated.Value(0)).current;
   const baseAnimContent = useRef(new Animated.Value(initialY)).current;
 
   const content = {
     opacity: baseAnimBackground.interpolate({
       inputRange: [0, 1],
-      outputRange: [type === 'slide' ? 1 : 0, 1],
+      outputRange: [type === 'fade' ? 0 : 1, 1],
     }),
     translateY: baseAnimContent,
   };

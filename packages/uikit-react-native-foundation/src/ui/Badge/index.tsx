@@ -1,7 +1,7 @@
 import React from 'react';
 import { Platform, StyleProp, View, ViewStyle } from 'react-native';
 
-import { truncatedBadgeCount } from '@sendbird/uikit-utils';
+import { truncatedCount } from '@sendbird/uikit-utils';
 
 import Text from '../../components/Text';
 import createStyleSheet from '../../styles/createStyleSheet';
@@ -29,7 +29,7 @@ const Badge = ({ count, maxCount, badgeColor, textColor, style, size = 'default'
       ]}
     >
       <Text caption1 color={textColor ?? colors.ui.badge.default.none.text}>
-        {truncatedBadgeCount(count, maxCount)}
+        {truncatedCount(count, maxCount)}
       </Text>
     </View>
   );

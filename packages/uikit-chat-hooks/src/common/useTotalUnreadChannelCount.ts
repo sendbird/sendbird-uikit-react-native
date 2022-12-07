@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
-import { truncatedBadgeCount, useAsyncEffect } from '@sendbird/uikit-utils';
+import { truncatedCount, useAsyncEffect } from '@sendbird/uikit-utils';
 import { useUniqId } from '@sendbird/uikit-utils';
 
 import { useUserEventHandler } from '../handler/useUserEventHandler';
@@ -24,5 +24,5 @@ export const useTotalUnreadChannelCount = (sdk: SendbirdChatSDK, params?: Params
     },
   });
 
-  return truncatedBadgeCount(unreadChannelCount, params?.maxCount);
+  return truncatedCount(unreadChannelCount, params?.maxCount);
 };

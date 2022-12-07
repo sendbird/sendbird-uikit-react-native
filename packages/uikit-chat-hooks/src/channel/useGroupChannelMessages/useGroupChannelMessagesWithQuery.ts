@@ -219,8 +219,6 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
     async (failedMessage) => {
       const message = await (() => {
         if (failedMessage.isUserMessage()) return channel.resendUserMessage(failedMessage);
-        // FIXME: v4 bugs
-        // @ts-ignore
         if (failedMessage.isFileMessage()) return channel.resendFileMessage(failedMessage);
         return null;
       })();

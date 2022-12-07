@@ -5,6 +5,7 @@ import { SessionHandler } from '@sendbird/chat';
 import { useConnection, useSendbirdChat } from '@sendbird/uikit-react-native';
 import { Button, Text, TextInput, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
+import Versions from '../components/Versions';
 import { SendbirdAPI } from '../factory';
 import { useAppAuth } from '../libs/authentication';
 
@@ -65,6 +66,8 @@ const SignInScreen = () => {
       >
         {'Sign in'}
       </Button>
+
+      <Versions style={{ marginTop: 12 }} />
     </View>
   );
 };

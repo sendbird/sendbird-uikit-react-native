@@ -10,6 +10,7 @@ import type {
 } from '@sendbird/uikit-utils';
 import { confirmAndMarkAsDelivered, useForceUpdate } from '@sendbird/uikit-utils';
 
+import type EmojiManager from '../libs/EmojiManager';
 import type { FileType } from '../platform/types';
 
 export interface UIKitFeaturesInSendbirdChatContext {
@@ -21,10 +22,12 @@ export interface UIKitFeaturesInSendbirdChatContext {
 
 interface Props extends UIKitFeaturesInSendbirdChatContext, React.PropsWithChildren {
   sdkInstance: SendbirdChatSDK;
+  emojiManager: EmojiManager;
 }
 
 type Context = {
   sdk: SendbirdChatSDK;
+  emojiManager: EmojiManager;
   currentUser?: SendbirdUser;
   setCurrentUser: React.Dispatch<React.SetStateAction<SendbirdUser | undefined>>;
 
@@ -51,6 +54,7 @@ export const SendbirdChatContext = React.createContext<Context | null>(null);
 export const SendbirdChatProvider = ({
   children,
   sdkInstance,
+  emojiManager,
   enableAutoPushTokenRegistration,
   enableChannelListMessageReceiptStatus,
   enableChannelListTypingIndicator,
@@ -110,6 +114,7 @@ export const SendbirdChatProvider = ({
 
   const value: Context = {
     sdk: sdkInstance,
+    emojiManager,
     currentUser,
     setCurrentUser,
 

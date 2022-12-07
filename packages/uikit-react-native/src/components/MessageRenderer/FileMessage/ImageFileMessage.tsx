@@ -34,7 +34,7 @@ const useRetry = (hasError: boolean, retryCount = 5) => {
   return retryCountRef.current;
 };
 
-const ImageFileMessage = ({ message }: FileMessageProps) => {
+const ImageFileMessage = ({ message, children, variant }: FileMessageProps) => {
   const { colors } = useUIKitTheme();
   const [imageNotFound, setImageNotFound] = useState(false);
 
@@ -44,29 +44,36 @@ const ImageFileMessage = ({ message }: FileMessageProps) => {
   const key = useRetry(imageNotFound);
 
   return (
-    <View style={style}>
-      <Image
-        key={key}
-        source={{ uri: fileUrl }}
-        style={[StyleSheet.absoluteFill, imageNotFound && styles.hide]}
-        resizeMode={'cover'}
-        resizeMethod={'resize'}
-        onError={() => setImageNotFound(true)}
-        onLoad={() => setImageNotFound(false)}
-      />
-      {imageNotFound && (
-        <Icon
-          containerStyle={StyleSheet.absoluteFill}
-          icon={'thumbnail-none'}
-          size={48}
-          color={colors.onBackground02}
+    <View style={[styles.bubbleContainer, { backgroundColor: colors.ui.message[variant].enabled.background }]}>
+      <View style={style}>
+        <Image
+          key={key}
+          source={{ uri: fileUrl }}
+          style={[StyleSheet.absoluteFill, imageNotFound && styles.hide]}
+          resizeMode={'cover'}
+          resizeMethod={'resize'}
+          onError={() => setImageNotFound(true)}
+          onLoad={() => setImageNotFound(false)}
         />
-      )}
+        {imageNotFound && (
+          <Icon
+            containerStyle={StyleSheet.absoluteFill}
+            icon={'thumbnail-none'}
+            size={48}
+            color={colors.onBackground02}
+          />
+        )}
+      </View>
+      {children}
     </View>
   );
 };
 
 const styles = createStyleSheet({
+  bubbleContainer: {
+    borderRadius: 16,
+    overflow: 'hidden',
+  },
   image: {
     width: 240,
     maxWidth: 240,

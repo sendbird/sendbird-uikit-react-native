@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { SuperChannelFilter, TotalUnreadMessageCountParams } from '@sendbird/chat/groupChannel';
 import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
-import { truncatedBadgeCount, useAsyncEffect, useUniqId } from '@sendbird/uikit-utils';
+import { truncatedCount, useAsyncEffect, useUniqId } from '@sendbird/uikit-utils';
 
 import { useUserEventHandler } from '../handler/useUserEventHandler';
 
@@ -28,5 +28,5 @@ export const useTotalUnreadMessageCount = (sdk: SendbirdChatSDK, options?: Optio
     onTotalUnreadMessageCountUpdated: (totalCount: number) => setUnreadMessageCount(totalCount),
   });
 
-  return truncatedBadgeCount(unreadMessageCount, options?.maxCount);
+  return truncatedCount(unreadMessageCount, options?.maxCount);
 };

@@ -6,6 +6,7 @@ import { useConnection } from '@sendbird/uikit-react-native';
 import { Button, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 import HomeListItem from '../components/HomeListItem';
+import Versions from '../components/Versions';
 import { useAppNavigation } from '../hooks/useAppNavigation';
 import { useAppAuth } from '../libs/authentication';
 import { Routes } from '../libs/navigation';
@@ -100,6 +101,7 @@ const HomeScreen = () => {
           >
             {'Sign out'}
           </Button>
+          <Versions style={{ marginTop: 12 }} />
         </View>
       }
     />

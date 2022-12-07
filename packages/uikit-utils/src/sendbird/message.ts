@@ -1,8 +1,10 @@
 import type {
+  SendbirdBaseChannel,
   SendbirdBaseMessage,
   SendbirdDataPayload,
   SendbirdFileMessage,
   SendbirdMessage,
+  SendbirdReaction,
   SendbirdSendableMessage,
 } from '../types';
 import { messageTime } from '../ui-format/common';
@@ -109,4 +111,12 @@ export function isSendbirdNotification(dataPayload?: {
 
 export function parseSendbirdNotification(dataPayload: RawSendbirdDataPayload): SendbirdDataPayload {
   return typeof dataPayload.sendbird === 'string' ? JSON.parse(dataPayload.sendbird) : dataPayload.sendbird;
+}
+
+export function shouldRenderReaction(channel: SendbirdBaseChannel, reactionEnabled: boolean) {
+  return channel.isGroupChannel() && !channel.isBroadcast && !channel.isSuper && reactionEnabled;
+}
+
+export function getReactionCount(reaction: SendbirdReaction) {
+  return reaction.userIds.length;
 }

@@ -154,6 +154,7 @@ export const DialogProvider = ({ defaultLabels, children }: Props) => {
                 onDismiss={consumeQueue}
                 visible={visibleState.current}
                 sheetItems={workingDialogJob.current.props.sheetItems}
+                HeaderComponent={workingDialogJob.current.props.HeaderComponent}
               />
             )}
           </BottomSheetContext.Provider>

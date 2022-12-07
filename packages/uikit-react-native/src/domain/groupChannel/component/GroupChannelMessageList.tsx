@@ -19,14 +19,16 @@ import {
   getFileType,
   isMyMessage,
   messageKeyExtractor,
+  shouldRenderReaction,
   toMegabyte,
   useFreshCallback,
 } from '@sendbird/uikit-utils';
 
 import type { ChatFlatListRef } from '../../../components/ChatFlatList';
 import ChatFlatList from '../../../components/ChatFlatList';
+import { ReactionAddons } from '../../../components/ReactionAddons';
 import { DEPRECATION_WARNING } from '../../../constants';
-import { useLocalization, usePlatformService } from '../../../hooks/useContext';
+import { useLocalization, usePlatformService, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
 
@@ -57,11 +59,12 @@ const GroupChannelMessageList = ({
   const scrollRef = useRef<ChatFlatListRef>(null);
   const [newMessagesInternalBuffer, setNewMessagesInternalBuffer] = useState(() => newMessagesFromMembers);
   const getMessagePressActions = useGetMessagePressActions({
+    channel,
+    currentUserId,
     onDeleteMessage,
+    onResendFailedMessage,
     onPressImageMessage,
     onPressMediaMessage,
-    currentUserId,
-    onResendFailedMessage,
   });
 
   const safeAreaLayout = { paddingLeft: left, paddingRight: right };
@@ -140,14 +143,20 @@ const GroupChannelMessageList = ({
 
 type HandleableMessage = SendbirdUserMessage | SendbirdFileMessage;
 const useGetMessagePressActions = ({
+  channel,
+  currentUserId,
+  onResendFailedMessage,
+  onDeleteMessage,
   onPressImageMessage,
   onPressMediaMessage,
-  onDeleteMessage,
-  onResendFailedMessage,
-  currentUserId,
 }: Pick<
   GroupChannelProps['MessageList'],
-  'onDeleteMessage' | 'onResendFailedMessage' | 'currentUserId' | 'onPressImageMessage' | 'onPressMediaMessage'
+  | 'channel'
+  | 'currentUserId'
+  | 'onResendFailedMessage'
+  | 'onDeleteMessage'
+  | 'onPressImageMessage'
+  | 'onPressMediaMessage'
 >) => {
   const { colors } = useUIKitTheme();
   const { STRINGS } = useLocalization();
@@ -155,6 +164,7 @@ const useGetMessagePressActions = ({
   const { openSheet } = useBottomSheet();
   const { alert } = useAlert();
   const { clipboardService, fileService } = usePlatformService();
+  const { features } = useSendbirdChat();
   const { setEditMessage } = useContext(GroupChannelContexts.Fragment);
 
   const handleFailedMessage = (message: HandleableMessage) => {
@@ -278,7 +288,14 @@ const useGetMessagePressActions = ({
     }
 
     if (sheetItems.length > 0) {
-      response.onLongPress = () => openSheet({ sheetItems });
+      response.onLongPress = () => {
+        openSheet({
+          sheetItems,
+          HeaderComponent: shouldRenderReaction(channel, features.reactionEnabled)
+            ? ({ onClose }) => <ReactionAddons.BottomSheet message={msg} channel={channel} onClose={onClose} />
+            : undefined,
+        });
+      };
     }
 
     if (msg.sendingStatus === 'failed') {

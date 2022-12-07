@@ -2,6 +2,7 @@ import { useContext } from 'react';
 
 import { LocalizationContext } from '../contexts/LocalizationCtx';
 import { PlatformServiceContext } from '../contexts/PlatformServiceCtx';
+import { ReactionContext } from '../contexts/ReactionCtx';
 import { SendbirdChatContext } from '../contexts/SendbirdChatCtx';
 import { UserProfileContext } from '../contexts/UserProfileCtx';
 
@@ -26,5 +27,11 @@ export const useSendbirdChat = () => {
 export const useUserProfile = () => {
   const value = useContext(UserProfileContext);
   if (!value) throw new Error('UserProfileContext is not provided');
+  return value;
+};
+
+export const useReaction = () => {
+  const value = useContext(ReactionContext);
+  if (!value) throw new Error('ReactionContext is not provided');
   return value;
 };

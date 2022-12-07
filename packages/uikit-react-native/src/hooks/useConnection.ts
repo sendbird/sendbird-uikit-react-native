@@ -9,7 +9,7 @@ type ConnectOptions = { nickname?: string; accessToken?: string };
 const cacheRestrictCodes = [400300, 400301, 400302, 400310];
 
 const useConnection = () => {
-  const { sdk, setCurrentUser, features } = useSendbirdChat();
+  const { sdk, emojiManager, setCurrentUser, features } = useSendbirdChat();
   const { registerPushTokenForCurrentUser, unregisterPushTokenForCurrentUser } = usePushTokenRegistration();
 
   const connect = useCallback(
@@ -37,6 +37,7 @@ const useConnection = () => {
 
         Logger.debug('[useConnection]', 'connected! (online)');
         setCurrentUser(user);
+        sdk.getAllEmoji().then(emojiManager.init);
 
         return user;
       } catch (e) {
@@ -50,6 +51,7 @@ const useConnection = () => {
           } else if (sdk.currentUser) {
             Logger.debug('[useConnection]', 'connected! (offline)');
             setCurrentUser(sdk.currentUser);
+            sdk.getAllEmoji().finally(emojiManager.init);
             return sdk.currentUser;
           }
         }
