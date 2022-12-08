@@ -1,5 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import { Platform, TextInput as RNTextInput, View } from 'react-native';
+import {
+  NativeSyntheticEvent,
+  Platform,
+  TextInput as RNTextInput,
+  TextInputSelectionChangeEventData,
+  View,
+} from 'react-native';
 
 import { Button, TextInput, createStyleSheet, useToast } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdFileMessage, SendbirdUserMessage } from '@sendbird/uikit-utils';
@@ -13,10 +19,19 @@ type EditInputProps = GroupChannelProps['Input'] & {
   editMessage: SendbirdUserMessage | SendbirdFileMessage;
   setEditMessage: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
   disabled: boolean;
+  onSelectionChange: (e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => void;
 };
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
-const EditInput = ({ text, setText, editMessage, setEditMessage, onUpdateUserMessage, disabled }: EditInputProps) => {
+const EditInput = ({
+  text,
+  setText,
+  editMessage,
+  setEditMessage,
+  onUpdateUserMessage,
+  onSelectionChange,
+  disabled,
+}: EditInputProps) => {
   const { STRINGS } = useLocalization();
   const inputRef = useRef<RNTextInput>(null);
   const toast = useToast();
@@ -46,14 +61,16 @@ const EditInput = ({ text, setText, editMessage, setEditMessage, onUpdateUserMes
     <View style={styles.editInputContainer}>
       <View style={styles.inputWrapper}>
         <TextInput
+          multiline
+          disableFullscreenUI
           editable={!disabled}
           autoFocus={AUTO_FOCUS}
           ref={inputRef}
-          multiline
           value={text}
           onChangeText={setText}
           style={styles.input}
           placeholder={STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE}
+          onSelectionChange={onSelectionChange}
         />
       </View>
       <View style={{ marginTop: 8, flexDirection: 'row' }}>

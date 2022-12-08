@@ -7,6 +7,7 @@ import BaseUserMessage from './BaseUserMessage';
 import OpenGraphUserMessage from './OpenGraphUserMessage';
 
 export type UserMessageProps = MessageRendererInterface<SendbirdUserMessage>;
+
 const UserMessage = (props: UserMessageProps) => {
   if (props.message.ogMetaData) {
     return <OpenGraphUserMessage {...props} ogMetaData={props.message.ogMetaData} />;

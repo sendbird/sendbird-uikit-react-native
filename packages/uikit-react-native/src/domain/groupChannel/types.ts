@@ -6,6 +6,7 @@ import type {
   SendbirdFileMessage,
   SendbirdFileMessageCreateParams,
   SendbirdGroupChannel,
+  SendbirdMember,
   SendbirdMessage,
   SendbirdUser,
   SendbirdUserMessage,
@@ -94,6 +95,16 @@ export interface GroupChannelProps {
     onSendUserMessage: (text: string) => Promise<void>;
     onUpdateFileMessage: (editedFile: FileType, message: SendbirdFileMessage) => Promise<void>;
     onUpdateUserMessage: (editedText: string, message: SendbirdUserMessage) => Promise<void>;
+    MentionSuggestionList: (props: GroupChannelProps['MentionSuggestionList']) => JSX.Element | null;
+  };
+
+  MentionSuggestionList: {
+    text: string;
+    selection: { start: number; end: number };
+    topInset: number;
+    bottomInset: number;
+    inputHeight: number;
+    onPressToMention: (user: SendbirdMember, rangeInText: { start: number; end: number }) => void;
   };
   Provider: {
     channel: SendbirdGroupChannel;
@@ -124,6 +135,7 @@ export interface GroupChannelModule {
   Header: CommonComponent<GroupChannelProps['Header']>;
   MessageList: CommonComponent<GroupChannelProps['MessageList']>;
   Input: CommonComponent<GroupChannelProps['Input']>;
+  MentionSuggestionList: CommonComponent<GroupChannelProps['MentionSuggestionList']>;
   StatusEmpty: CommonComponent;
   StatusLoading: CommonComponent;
 }

@@ -2,24 +2,20 @@ import React, { useState } from 'react';
 import { Linking, TouchableOpacity, View } from 'react-native';
 
 import type { OGMetaData } from '@sendbird/chat/message';
-import {
-  Icon,
-  Image,
-  Text,
-  URLParsedText,
-  createStyleSheet,
-  useUIKitTheme,
-} from '@sendbird/uikit-react-native-foundation';
-import { conditionChaining } from '@sendbird/uikit-utils';
+import { Icon, Image, RegexText, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { conditionChaining, urlRegexRough } from '@sendbird/uikit-utils';
 
-import { useLocalization } from '../../../hooks/useContext';
+import { useSendbirdChat, useUserProfile } from '../../../hooks/useContext';
+import { openUrl } from '../../../utils/common';
 import type { UserMessageProps } from './index';
 
 type Props = UserMessageProps & {
   ogMetaData: OGMetaData;
 };
+
 const OpenGraphUserMessage = ({ message, variant, pressed, ogMetaData, children }: Props) => {
-  const { STRINGS } = useLocalization();
+  const { mentionManager, features } = useSendbirdChat();
+  const { show } = useUserProfile();
   const { colors, select, palette } = useUIKitTheme();
   const color = colors.ui.message[variant][pressed ? 'pressed' : 'enabled'];
   const [imageNotFound, setImageNotFound] = useState(false);
@@ -30,14 +26,50 @@ const OpenGraphUserMessage = ({ message, variant, pressed, ogMetaData, children 
     <View style={[styles.bubbleContainer, { backgroundColor: containerBackground }]}>
       <View style={[styles.container, styles.bubbleContainer, { backgroundColor: color.background }]}>
         <View style={styles.messageContainer}>
-          <URLParsedText body3 color={color.textMsg}>
-            {message.message}
-            {Boolean(message.updatedAt) && (
-              <Text body3 color={color.textEdited}>
-                {STRINGS.GROUP_CHANNEL.MESSAGE_BUBBLE_EDITED_POSTFIX}
-              </Text>
-            )}
-          </URLParsedText>
+          <RegexText
+            body3
+            color={color.textMsg}
+            patterns={[
+              {
+                regex: mentionManager.templateRegex,
+                replacer({ match, groups, parentProps, keyPrefix, index }) {
+                  const user = message.mentionedUsers?.find((it) => it.userId === groups[2]);
+                  if (user) {
+                    return (
+                      <Text
+                        {...parentProps}
+                        key={`${keyPrefix}-${index}`}
+                        onPress={() => show(user)}
+                        style={[parentProps?.style, { fontWeight: 'bold' }]}
+                      >
+                        {`${mentionManager.config.trigger}${user.nickname}`}
+                      </Text>
+                    );
+                  }
+                  return match;
+                },
+              },
+              {
+                regex: urlRegexRough,
+                replacer({ match, parentProps, keyPrefix, index }) {
+                  return (
+                    <Text
+                      {...parentProps}
+                      key={`${keyPrefix}-${index}`}
+                      onPress={() => openUrl(match)}
+                      style={[parentProps?.style, { textDecorationLine: 'underline' }]}
+                    >
+                      {match}
+                    </Text>
+                  );
+                },
+              },
+            ]}
+          >
+            {features.mentionEnabled && message.mentionedMessageTemplate
+              ? message.mentionedMessageTemplate
+              : message.message}
+          </RegexText>
         </View>
         <TouchableOpacity
           style={{ backgroundColor: select({ dark: palette.background500, light: palette.background200 }) }}

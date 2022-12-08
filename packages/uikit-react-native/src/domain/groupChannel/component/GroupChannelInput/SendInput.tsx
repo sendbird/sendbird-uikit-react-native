@@ -1,5 +1,12 @@
-import React from 'react';
-import { Platform, TouchableOpacity, View } from 'react-native';
+import React, { forwardRef } from 'react';
+import {
+  NativeSyntheticEvent,
+  Platform,
+  TextInput as RNTextInput,
+  TextInputSelectionChangeEventData,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import {
   Icon,
@@ -23,16 +30,13 @@ type SendInputProps = GroupChannelProps['Input'] & {
   frozen: boolean;
   muted: boolean;
   disabled: boolean;
+  setSelection: (param: { start: number; end: number }) => void;
+  onSelectionChange: (e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => void;
 };
-const SendInput = ({
-  onSendUserMessage,
-  onSendFileMessage,
-  text,
-  setText,
-  disabled,
-  frozen,
-  muted,
-}: SendInputProps) => {
+const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
+  { onSendUserMessage, onSendFileMessage, text, setText, disabled, frozen, muted, onSelectionChange },
+  ref,
+) {
   const { STRINGS } = useLocalization();
   const { fileService } = usePlatformService();
   const { colors } = useUIKitTheme();
@@ -124,9 +128,11 @@ const SendInput = ({
         />
       </TouchableOpacity>
       <TextInput
+        ref={ref}
         multiline
+        disableFullscreenUI
+        onSelectionChange={onSelectionChange}
         editable={!disabled}
-        value={text}
         onChangeText={setText}
         style={styles.input}
         placeholder={conditionChaining(
@@ -137,7 +143,10 @@ const SendInput = ({
             STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE,
           ],
         )}
-      />
+      >
+        {text}
+      </TextInput>
+
       {Boolean(text.trim()) && (
         <TouchableOpacity onPress={onPressSend} disabled={disabled}>
           <Icon
@@ -150,7 +159,7 @@ const SendInput = ({
       )}
     </View>
   );
-};
+});
 
 const styles = createStyleSheet({
   sendInputContainer: {

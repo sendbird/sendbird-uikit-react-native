@@ -9,6 +9,8 @@ export const phoneRegex = /[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,7}/
 export const emailRegex = /\S+@\S+\.\S+/;
 export const newLineRegex = /\r\n|\r|\n/g;
 
+export const createMentionTemplateRegex = (trigger: string) => new RegExp(`(${trigger}[{])(.*?)([}])`, 'g');
+
 // const cases = [
 //   {
 //     type: 'urlStrict',
@@ -27,6 +29,33 @@ export const newLineRegex = /\r\n|\r|\n/g;
 //     regex: urlRegexStrict,
 //   },
 // ];
+
+export const replaceWithRegex = <T>(
+  text: string,
+  regex: RegExp,
+  replacer: (params: { match: string; groups: string[]; index: number; keyPrefix: string }) => T,
+  keyPrefix: string,
+) => {
+  const matches = [...text.matchAll(regex)];
+  const founds = matches.map((value) => {
+    const text = value[0];
+    const start = value.index ?? 0;
+    const end = start + text.length;
+    return { text, start, end, groups: value };
+  });
+
+  const items: Array<T | string> = [text];
+  let cursor = 0;
+  founds.forEach(({ text, start, end, groups }, index) => {
+    const restText = items.pop() as string;
+    const head = restText.slice(0, start - cursor);
+    const mid = replacer({ match: text, groups, index, keyPrefix });
+    const tail = restText.slice(end - cursor);
+    items.push(head, mid, tail);
+    cursor = end;
+  });
+  return items;
+};
 
 export const replaceUrlAsComponents = <T>(originText: string, replacer: (url: string) => T, strict?: boolean) => {
   const matches = [...originText.matchAll(strict ? urlRegexStrict : urlRegexRough)];

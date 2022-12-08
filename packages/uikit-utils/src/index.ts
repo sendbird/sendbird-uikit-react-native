@@ -15,8 +15,11 @@ export {
   normalizeFileName,
   emailRegex,
   phoneRegex,
+  replaceWithRegex,
+  createMentionTemplateRegex,
 } from './shared/regex';
 export { BufferedRequest } from './shared/bufferedRequest';
+export { default as replace } from './shared/replace';
 
 export * from './hooks';
 export * from './ui-format/groupChannel';

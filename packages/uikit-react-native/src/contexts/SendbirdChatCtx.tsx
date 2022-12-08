@@ -11,7 +11,7 @@ import type {
 import { confirmAndMarkAsDelivered, useForceUpdate } from '@sendbird/uikit-utils';
 
 import type EmojiManager from '../libs/EmojiManager';
-import type MentionConfig from '../libs/MentionConfig';
+import type MentionManager from '../libs/MentionManager';
 import type { FileType } from '../platform/types';
 
 export interface UIKitFeaturesInSendbirdChatContext {
@@ -25,13 +25,13 @@ export interface UIKitFeaturesInSendbirdChatContext {
 interface Props extends UIKitFeaturesInSendbirdChatContext, React.PropsWithChildren {
   sdkInstance: SendbirdChatSDK;
   emojiManager: EmojiManager;
-  mentionConfig: MentionConfig;
+  mentionManager: MentionManager;
 }
 
 type Context = {
   sdk: SendbirdChatSDK;
   emojiManager: EmojiManager;
-  mentionConfig?: MentionConfig;
+  mentionManager: MentionManager;
   currentUser?: SendbirdUser;
   setCurrentUser: React.Dispatch<React.SetStateAction<SendbirdUser | undefined>>;
 
@@ -60,7 +60,7 @@ export const SendbirdChatProvider = ({
   children,
   sdkInstance,
   emojiManager,
-  mentionConfig,
+  mentionManager,
   enableAutoPushTokenRegistration,
   enableChannelListMessageReceiptStatus,
   enableChannelListTypingIndicator,
@@ -83,9 +83,17 @@ export const SendbirdChatProvider = ({
 
       if (!user) throw new Error('Current user is not defined, please connect using `useConnection()` hook first');
 
-      const params: SendbirdUserUpdateParams = { nickname };
+      const params: SendbirdUserUpdateParams = {};
 
-      if (typeof profile === 'string') {
+      if (!nickname) {
+        params.nickname = user.nickname;
+      } else {
+        params.nickname = nickname;
+      }
+
+      if (!profile) {
+        params.profileUrl = user.profileUrl;
+      } else if (typeof profile === 'string') {
         params.profileUrl = profile;
       } else if (typeof profile === 'object') {
         params.profileImage = profile;
@@ -122,7 +130,7 @@ export const SendbirdChatProvider = ({
   const value: Context = {
     sdk: sdkInstance,
     emojiManager,
-    mentionConfig,
+    mentionManager,
     currentUser,
     setCurrentUser,
 

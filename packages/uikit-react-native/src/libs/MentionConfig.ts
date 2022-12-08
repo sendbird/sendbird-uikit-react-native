@@ -1,8 +1,9 @@
 export interface MentionConfigInterface {
   mentionLimit: number;
   suggestionLimit: number;
-  delimiter: string;
   debounceMills: number;
+  delimiter: string;
+  trigger: string;
 }
 
 class MentionConfig {
@@ -11,6 +12,7 @@ class MentionConfig {
     SUGGESTION_LIMIT: 15,
     DEBOUNCE_MILLS: 300,
     DELIMITER: ' ',
+    TRIGGER: '@',
   };
   constructor(private _config: MentionConfigInterface) {}
 
@@ -28,6 +30,10 @@ class MentionConfig {
 
   get debounceMills() {
     return this._config.debounceMills;
+  }
+
+  get trigger() {
+    return this._config.trigger;
   }
 }
 

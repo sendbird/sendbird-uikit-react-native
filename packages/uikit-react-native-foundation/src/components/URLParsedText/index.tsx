@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Linking } from 'react-native';
 
 import { Logger, replaceUrlAsComponents } from '@sendbird/uikit-utils';
@@ -19,30 +19,28 @@ type Props = TextProps & {
   strict?: boolean;
 };
 const URLParsedText = ({ children, onPressUrl = openUrl, strict, ...props }: Props) => {
-  const parsedChildren = useMemo((): React.ReactNode => {
-    return React.Children.map(React.Children.toArray(children), (child) => {
-      if (typeof child === 'string') {
-        return replaceUrlAsComponents(
-          child,
-          (url) => {
-            return (
-              <Text
-                {...props}
-                suppressHighlighting
-                onPress={() => onPressUrl?.(url, url.startsWith('http'))}
-                style={[props.style, styles.url]}
-              >
-                {url}
-              </Text>
-            );
-          },
-          strict,
-        );
-      }
+  const parsedChildren = React.Children.map(React.Children.toArray(children), (child) => {
+    if (typeof child === 'string') {
+      return replaceUrlAsComponents(
+        child,
+        (url) => {
+          return (
+            <Text
+              {...props}
+              suppressHighlighting
+              onPress={() => onPressUrl?.(url, url.startsWith('http'))}
+              style={[props.style, styles.url]}
+            >
+              {url}
+            </Text>
+          );
+        },
+        strict,
+      );
+    }
 
-      return child;
-    });
-  }, [children]);
+    return child;
+  });
 
   return <Text {...props}>{parsedChildren}</Text>;
 };

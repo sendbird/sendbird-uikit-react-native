@@ -119,6 +119,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             flatListProps={memoizedFlatListProps}
           />
           <GroupChannelModule.Input
+            MentionSuggestionList={GroupChannelModule.MentionSuggestionList}
             shouldRenderInput={shouldRenderInput(channel)}
             onSendFileMessage={onSendFileMessage}
             onSendUserMessage={onSendUserMessage}
