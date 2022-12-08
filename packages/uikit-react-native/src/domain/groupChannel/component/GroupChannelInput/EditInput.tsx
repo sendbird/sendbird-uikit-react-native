@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { forwardRef } from 'react';
 import {
   NativeSyntheticEvent,
   Platform,
@@ -18,31 +18,17 @@ type EditInputProps = GroupChannelProps['Input'] & {
   setText: (val: string) => void;
   editMessage: SendbirdUserMessage | SendbirdFileMessage;
   setEditMessage: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
-  disabled: boolean;
   onSelectionChange: (e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => void;
+  disabled: boolean;
+  autoFocus: boolean;
 };
 
-const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
-const EditInput = ({
-  text,
-  setText,
-  editMessage,
-  setEditMessage,
-  onUpdateUserMessage,
-  onSelectionChange,
-  disabled,
-}: EditInputProps) => {
+const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
+  { text, setText, editMessage, setEditMessage, onUpdateUserMessage, onSelectionChange, disabled, autoFocus },
+  ref,
+) {
   const { STRINGS } = useLocalization();
-  const inputRef = useRef<RNTextInput>(null);
   const toast = useToast();
-
-  useEffect(() => {
-    if (editMessage.isUserMessage()) {
-      setText(editMessage.message ?? '');
-
-      if (!AUTO_FOCUS) setTimeout(() => inputRef.current?.focus(), 500);
-    }
-  }, [editMessage]);
 
   const onPressCancel = () => {
     setEditMessage();
@@ -61,11 +47,11 @@ const EditInput = ({
     <View style={styles.editInputContainer}>
       <View style={styles.inputWrapper}>
         <TextInput
+          ref={ref}
           multiline
           disableFullscreenUI
           editable={!disabled}
-          autoFocus={AUTO_FOCUS}
-          ref={inputRef}
+          autoFocus={autoFocus}
           value={text}
           onChangeText={setText}
           style={styles.input}
@@ -84,7 +70,7 @@ const EditInput = ({
       </View>
     </View>
   );
-};
+});
 
 const styles = createStyleSheet({
   editInputContainer: {

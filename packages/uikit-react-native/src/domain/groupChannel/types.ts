@@ -104,7 +104,8 @@ export interface GroupChannelProps {
     topInset: number;
     bottomInset: number;
     inputHeight: number;
-    onPressToMention: (user: SendbirdMember, rangeInText: { start: number; end: number }) => void;
+    onPressToMention: (user: SendbirdMember, searchStringRange: { start: number; end: number }) => void;
+    mentionedUsers: { user: SendbirdUser; range: { start: number; end: number } }[];
   };
   Provider: {
     channel: SendbirdGroupChannel;

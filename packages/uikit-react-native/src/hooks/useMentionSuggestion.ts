@@ -1,35 +1,54 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import type { SendbirdGroupChannel, SendbirdMember } from '@sendbird/uikit-utils';
+import type { SendbirdGroupChannel, SendbirdMember, SendbirdUser } from '@sendbird/uikit-utils';
 
 import { useSendbirdChat } from '../hooks/useContext';
 
+type Range = {
+  start: number;
+  end: number;
+};
 const useMentionSuggestion = (params: {
   text: string;
-  selection: { start: number; end: number };
+  selection: Range;
   channel: SendbirdGroupChannel;
+  mentionedUsers: { user: SendbirdUser; range: Range }[];
 }) => {
-  const { text, selection, channel } = params;
+  const { text, selection, channel, mentionedUsers } = params;
 
   const { mentionManager, currentUser } = useSendbirdChat();
   const [members, setMembers] = useState<SendbirdMember[]>([]);
   const timeoutRef = useRef<NodeJS.Timeout>();
 
-  const searchRangeRef = useRef<{ start: number; end: number }>({ start: 0, end: 0 });
+  const searchStringRangeRef = useRef<{ start: number; end: number }>({ start: 0, end: 0 });
+  const searchLimitedRef = useRef(false);
 
-  const updateSearchRange = (start: number, end: number) => {
-    searchRangeRef.current = { start, end };
+  const updateSearchStringRange = (selectionIndex: number, searchString: string) => {
+    searchStringRangeRef.current = mentionManager.getSearchStringRangeInText(selectionIndex, searchString);
+    return searchStringRangeRef.current;
+  };
+  const updateSearchLimited = (mentionCount: number, mentionLimit: number) => {
+    searchLimitedRef.current = mentionCount >= mentionLimit;
+    return searchLimitedRef.current;
+  };
+  const resetRefs = () => {
+    searchLimitedRef.current = false;
+    searchStringRangeRef.current = { start: 0, end: 0 };
   };
 
   const fetchMembers = async (): Promise<SendbirdMember[]> => {
+    resetRefs();
+
     const selectionRanged = selection.start !== selection.end;
     if (selectionRanged) return [];
 
     const { isTriggered, isValidSearchString, searchString } = mentionManager.findSearchString(text, selection.start);
     if (!isTriggered() || !isValidSearchString()) return [];
 
-    const { start: ssStart, end: ssEnd } = mentionManager.getSearchStringRangeInText(selection.start, searchString);
-    updateSearchRange(ssStart, ssEnd);
+    const limited = updateSearchLimited(mentionedUsers.length, mentionManager.config.mentionLimit);
+    if (limited) return [];
+
+    updateSearchStringRange(selection.start, searchString);
 
     if (channel.isSuper) {
       return channel
@@ -63,7 +82,12 @@ const useMentionSuggestion = (params: {
     };
   }, [text, selection]);
 
-  return { members, reset: useCallback(() => setMembers([]), []), searchRange: searchRangeRef.current };
+  return {
+    members,
+    reset: useCallback(() => setMembers([]), []),
+    searchStringRange: searchStringRangeRef.current,
+    searchLimited: searchLimitedRef.current,
+  };
 };
 
 export default useMentionSuggestion;

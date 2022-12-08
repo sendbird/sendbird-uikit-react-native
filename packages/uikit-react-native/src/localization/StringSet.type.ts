@@ -44,6 +44,9 @@ export interface StringSet {
     INPUT_EDIT_OK: string;
     INPUT_EDIT_CANCEL: string;
 
+    /** GroupChannel > MentionSuggestionList */
+    MENTION_LIMITED: (mentionLimit: number) => string;
+
     /** GroupChannel > Dialog > Message */
     DIALOG_MESSAGE_COPY: string;
     DIALOG_MESSAGE_EDIT: string;
@@ -261,6 +264,8 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       INPUT_PLACEHOLDER_MUTED: "You're muted by the operator.",
       INPUT_EDIT_OK: 'Save',
       INPUT_EDIT_CANCEL: 'Cancel',
+
+      MENTION_LIMITED: (mentionLimit) => `You can have up to ${mentionLimit} mentions per message.`,
 
       DIALOG_MESSAGE_COPY: 'Copy',
       DIALOG_MESSAGE_EDIT: 'Edit',
