@@ -84,6 +84,16 @@ export interface StringSet {
     DIALOG_CHANGE_IMAGE_MENU_CAMERA: string;
     DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY: string;
   };
+  GROUP_CHANNEL_NOTIFICATIONS: {
+    /** GroupChannelNotifications > Header */
+    HEADER_TITLE: string;
+
+    /** GroupChannelNotifications > Menu */
+    MENU_NOTIFICATIONS: string;
+    MENU_NOTIFICATIONS_DESC: string;
+    MENU_NOTIFICATIONS_OPTION_ALL: string;
+    MENU_NOTIFICATIONS_OPTION_MENTIONS_ONLY: string;
+  };
   GROUP_CHANNEL_MODERATION: {
     /** GroupChannelModeration > Header */
     HEADER_TITLE: string;
@@ -284,6 +294,15 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       DIALOG_CHANGE_IMAGE_MENU_CAMERA: 'Take photo',
       DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY: 'Choose photo',
       ...overrides?.GROUP_CHANNEL_SETTINGS,
+    },
+    GROUP_CHANNEL_NOTIFICATIONS: {
+      HEADER_TITLE: 'Notifications',
+      MENU_NOTIFICATIONS: 'Notifications',
+      MENU_NOTIFICATIONS_DESC:
+        'Turn on push notifications if you wish to be notified when messages are delivered to this channel.',
+      MENU_NOTIFICATIONS_OPTION_ALL: 'All new messages',
+      MENU_NOTIFICATIONS_OPTION_MENTIONS_ONLY: 'Mentions only',
+      ...overrides?.GROUP_CHANNEL_NOTIFICATIONS,
     },
     GROUP_CHANNEL_MODERATION: {
       HEADER_TITLE: 'Moderation',

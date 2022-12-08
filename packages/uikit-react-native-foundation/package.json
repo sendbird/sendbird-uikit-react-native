@@ -16,7 +16,8 @@
   "scripts": {
     "test": "jest",
     "build": "bob build",
-    "clean": "del lib"
+    "clean": "del lib",
+    "generate-icons": "node src/assets/bundle-icons.js"
   },
   "keywords": [
     "react-native",
