@@ -129,7 +129,7 @@ const SendbirdUIKitContainer = ({
       delimiter: MentionConfig.DEFAULT.DELIMITER,
       trigger: MentionConfig.DEFAULT.TRIGGER,
     });
-    return new MentionManager(config);
+    return new MentionManager(config, chatOptions?.enableMention ?? false);
   }, [chatOptions?.mention?.mentionLimit, chatOptions?.mention?.suggestionLimit, chatOptions?.mention?.debounceMills]);
 
   useLayoutEffect(() => {

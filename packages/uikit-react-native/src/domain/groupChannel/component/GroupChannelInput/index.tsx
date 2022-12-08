@@ -175,6 +175,7 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
                 setText={setText}
                 setSelection={setSelection}
                 onSelectionChange={onSelectionChange}
+                mentionedUsers={mentionedUsers}
               />
             )}
             {inputMode === 'edit' && editMessage && (
@@ -188,6 +189,7 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
                 setEditMessage={setEditMessage}
                 disabled={chatAvailableState.disabled}
                 onSelectionChange={onSelectionChange}
+                mentionedUsers={mentionedUsers}
               />
             )}
           </View>

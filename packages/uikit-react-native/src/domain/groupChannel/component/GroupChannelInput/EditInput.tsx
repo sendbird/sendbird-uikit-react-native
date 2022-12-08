@@ -10,7 +10,8 @@ import {
 import { Button, TextInput, createStyleSheet, useToast } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdFileMessage, SendbirdUserMessage } from '@sendbird/uikit-utils';
 
-import { useLocalization } from '../../../../hooks/useContext';
+import { useLocalization, useSendbirdChat } from '../../../../hooks/useContext';
+import type { MentionedUser } from '../../../../types';
 import type { GroupChannelProps } from '../../types';
 
 type EditInputProps = GroupChannelProps['Input'] & {
@@ -21,12 +22,24 @@ type EditInputProps = GroupChannelProps['Input'] & {
   onSelectionChange: (e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => void;
   disabled: boolean;
   autoFocus: boolean;
+  mentionedUsers: MentionedUser[];
 };
 
 const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
-  { text, setText, editMessage, setEditMessage, onUpdateUserMessage, onSelectionChange, disabled, autoFocus },
+  {
+    text,
+    setText,
+    editMessage,
+    setEditMessage,
+    onUpdateUserMessage,
+    onSelectionChange,
+    disabled,
+    autoFocus,
+    mentionedUsers,
+  },
   ref,
 ) {
+  const { mentionManager } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const toast = useToast();
 
@@ -57,7 +70,9 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
           style={styles.input}
           placeholder={STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE}
           onSelectionChange={onSelectionChange}
-        />
+        >
+          {mentionManager.textToMentionedComponents(text, mentionedUsers)}
+        </TextInput>
       </View>
       <View style={{ marginTop: 8, flexDirection: 'row' }}>
         <Button variant={'text'} onPress={onPressCancel}>

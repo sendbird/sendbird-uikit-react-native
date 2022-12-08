@@ -19,10 +19,10 @@ import {
 } from '@sendbird/uikit-react-native-foundation';
 import { conditionChaining } from '@sendbird/uikit-utils';
 
-import { useLocalization, usePlatformService } from '../../../../hooks/useContext';
+import { useLocalization, usePlatformService, useSendbirdChat } from '../../../../hooks/useContext';
 import SBUError from '../../../../libs/SBUError';
 import SBUUtils from '../../../../libs/SBUUtils';
-import type { Range } from '../../../../types';
+import type { MentionedUser, Range } from '../../../../types';
 import type { GroupChannelProps } from '../../types';
 
 type SendInputProps = GroupChannelProps['Input'] & {
@@ -33,11 +33,13 @@ type SendInputProps = GroupChannelProps['Input'] & {
   disabled: boolean;
   setSelection: (param: Range) => void;
   onSelectionChange: (e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => void;
+  mentionedUsers: MentionedUser[];
 };
 const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
-  { onSendUserMessage, onSendFileMessage, text, setText, disabled, frozen, muted, onSelectionChange },
+  { onSendUserMessage, onSendFileMessage, text, setText, disabled, frozen, muted, onSelectionChange, mentionedUsers },
   ref,
 ) {
+  const { mentionManager } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { fileService } = usePlatformService();
   const { colors } = useUIKitTheme();
@@ -145,7 +147,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
           ],
         )}
       >
-        {text}
+        {mentionManager.textToMentionedComponents(text, mentionedUsers)}
       </TextInput>
 
       {Boolean(text.trim()) && (
