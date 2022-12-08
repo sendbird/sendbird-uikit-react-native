@@ -75,6 +75,8 @@ const GroupChannelMentionSuggestionList = ({
   return (
     <ScrollView
       bounces={false}
+      keyboardDismissMode={'none'}
+      keyboardShouldPersistTaps={'always'}
       style={[
         styles.container,
         {
