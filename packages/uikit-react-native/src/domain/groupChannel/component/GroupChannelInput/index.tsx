@@ -14,7 +14,6 @@ import {
   SendbirdFileMessage,
   SendbirdGroupChannel,
   SendbirdMember,
-  SendbirdUser,
   SendbirdUserMessage,
   getGroupChannelChatAvailableState,
   replace,
@@ -23,6 +22,7 @@ import {
 } from '@sendbird/uikit-utils';
 
 import { useSendbirdChat } from '../../../../hooks/useContext';
+import type { MentionedUser, Range } from '../../../../types';
 import { GroupChannelContexts } from '../../module/moduleContext';
 import type { GroupChannelProps } from '../../types';
 import EditInput from './EditInput';
@@ -35,14 +35,14 @@ function inRange(start: number, num: number, end: number) {
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
 const KEYBOARD_AVOID_VIEW_BEHAVIOR = Platform.select({ ios: 'padding' as const, default: undefined });
 
-const useTextInputSelection = (mentionedUsers: { user: SendbirdUser; range: { start: number; end: number } }[]) => {
+const useTextInputSelection = (mentionedUsers: MentionedUser[]) => {
   const [selection, setSelection] = useState({ start: 0, end: 0 });
   const textInputRef = useRef<TextInput>();
 
   return {
     textInputRef,
     selection,
-    setSelection: useCallback((selection: { start: number; end: number }) => {
+    setSelection: useCallback((selection: Range) => {
       textInputRef.current?.setNativeProps({ selection });
       setSelection(selection);
     }, []),
@@ -115,15 +115,15 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
 
   const [text, setText] = useState('');
   const [inputHeight, setInputHeight] = useState(styles.inputDefault.height);
+  const [mentionedUsers, setMentionedUsers] = useState<MentionedUser[]>([]);
 
-  const { mentionedUsers, setMentionedUsers } = mentionManager.useMentionTextInput();
   const { selection, setSelection, onSelectionChange, textInputRef } = useTextInputSelection(mentionedUsers);
 
   useTypingTrigger(text, channel);
   usePersistText(text, setText, chatAvailableState.disabled);
   useEditModeAutoFocus(textInputRef, setText, editMessage);
 
-  const updateMentionTemplate = (user: SendbirdMember, range: { start: number; end: number }) => {
+  const updateMentionTemplate = (user: SendbirdMember, range: Range) => {
     setMentionedUsers((prev) => [...prev, { user, range }]);
   };
 

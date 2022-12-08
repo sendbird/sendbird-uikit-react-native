@@ -22,6 +22,7 @@ import { conditionChaining } from '@sendbird/uikit-utils';
 import { useLocalization, usePlatformService } from '../../../../hooks/useContext';
 import SBUError from '../../../../libs/SBUError';
 import SBUUtils from '../../../../libs/SBUUtils';
+import type { Range } from '../../../../types';
 import type { GroupChannelProps } from '../../types';
 
 type SendInputProps = GroupChannelProps['Input'] & {
@@ -30,7 +31,7 @@ type SendInputProps = GroupChannelProps['Input'] & {
   frozen: boolean;
   muted: boolean;
   disabled: boolean;
-  setSelection: (param: { start: number; end: number }) => void;
+  setSelection: (param: Range) => void;
   onSelectionChange: (e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => void;
 };
 const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(

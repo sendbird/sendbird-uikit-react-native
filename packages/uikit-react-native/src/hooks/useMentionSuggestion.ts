@@ -3,11 +3,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { SendbirdGroupChannel, SendbirdMember, SendbirdUser } from '@sendbird/uikit-utils';
 
 import { useSendbirdChat } from '../hooks/useContext';
+import type { Range } from '../types';
 
-type Range = {
-  start: number;
-  end: number;
-};
 const useMentionSuggestion = (params: {
   text: string;
   selection: Range;
@@ -20,7 +17,7 @@ const useMentionSuggestion = (params: {
   const [members, setMembers] = useState<SendbirdMember[]>([]);
   const timeoutRef = useRef<NodeJS.Timeout>();
 
-  const searchStringRangeRef = useRef<{ start: number; end: number }>({ start: 0, end: 0 });
+  const searchStringRangeRef = useRef<Range>({ start: 0, end: 0 });
   const searchLimitedRef = useRef(false);
 
   const updateSearchStringRange = (selectionIndex: number, searchString: string) => {

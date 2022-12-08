@@ -1,11 +1,9 @@
-import { useState } from 'react';
-
 import type { SendbirdUser } from '@sendbird/uikit-utils';
 import { createMentionTemplateRegex } from '@sendbird/uikit-utils';
 
+import type { Range } from '../types';
 import type { MentionConfigInterface } from './MentionConfig';
 
-type Range = { start: number; end: number };
 class MentionManager {
   private _invalidStartsKeywords: string[];
   private _templateRegex: RegExp;
@@ -51,15 +49,6 @@ class MentionManager {
    * */
   public asMentionedMessageText = (user: SendbirdUser) => {
     return `${this.config.trigger}${user.nickname}${this.config.delimiter}`;
-  };
-
-  public useMentionTextInput = () => {
-    const [mentionedUsers, setMentionedUsers] = useState<{ range: Range; user: SendbirdUser }[]>([]);
-
-    return {
-      mentionedUsers,
-      setMentionedUsers,
-    };
   };
 }
 

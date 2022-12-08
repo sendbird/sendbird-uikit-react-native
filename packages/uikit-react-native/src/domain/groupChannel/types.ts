@@ -14,7 +14,7 @@ import type {
 } from '@sendbird/uikit-utils';
 
 import type { FileType } from '../../platform/types';
-import type { CommonComponent } from '../../types';
+import type { CommonComponent, MentionedUser, Range } from '../../types';
 
 export interface GroupChannelProps {
   Fragment: {
@@ -100,12 +100,12 @@ export interface GroupChannelProps {
 
   MentionSuggestionList: {
     text: string;
-    selection: { start: number; end: number };
+    selection: Range;
     topInset: number;
     bottomInset: number;
     inputHeight: number;
-    onPressToMention: (user: SendbirdMember, searchStringRange: { start: number; end: number }) => void;
-    mentionedUsers: { user: SendbirdUser; range: { start: number; end: number } }[];
+    onPressToMention: (user: SendbirdMember, searchStringRange: Range) => void;
+    mentionedUsers: MentionedUser[];
   };
   Provider: {
     channel: SendbirdGroupChannel;
