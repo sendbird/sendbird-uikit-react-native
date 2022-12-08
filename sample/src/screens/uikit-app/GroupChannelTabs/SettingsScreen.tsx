@@ -52,7 +52,7 @@ const SettingsScreen = () => {
       placeholder: 'Enter name',
       defaultValue: currentUser?.nickname ?? '',
       onSubmit: async (nickname) => {
-        const user = await updateCurrentUserInfo(nickname, sdk.currentUser.plainProfileUrl);
+        const user = await updateCurrentUserInfo(nickname);
         await authManager.authenticate({ userId: user.userId, nickname: user.nickname });
       },
     });
