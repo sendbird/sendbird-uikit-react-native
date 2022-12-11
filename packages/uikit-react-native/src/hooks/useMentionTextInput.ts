@@ -9,11 +9,11 @@ import { useSendbirdChat } from './useContext';
 const useMentionTextInput = () => {
   const { mentionManager } = useSendbirdChat();
 
+  const mentionedUsersRef = useRef<MentionedUser[]>([]);
   const textInputRef = useRef<TextInput>();
+
   const [text, setText] = useState('');
   const [selection, setSelection] = useState({ start: 0, end: 0 });
-
-  const mentionedUsersRef = useRef<MentionedUser[]>([]);
 
   const onChangeText = useFreshCallback((_nextText: string, addedMentionedUser?: MentionedUser) => {
     const prevText = text;

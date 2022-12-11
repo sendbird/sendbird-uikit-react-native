@@ -42,7 +42,7 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
     useMentionTextInput();
 
   useTypingTrigger(text, channel);
-  useTextPersistanceOnDisabled(text, onChangeText, chatAvailableState.disabled);
+  useTextPersistenceOnDisabled(text, onChangeText, chatAvailableState.disabled);
   useAutoFocusOnEditMode(textInputRef, onChangeText, editMessage);
 
   const onPressToMention: GroupChannelProps['MentionSuggestionList']['onPressToMention'] = (
@@ -132,7 +132,7 @@ const useTypingTrigger = (text: string, channel: SendbirdGroupChannel) => {
   }, [text]);
 };
 
-const useTextPersistanceOnDisabled = (text: string, setText: (val: string) => void, chatDisabled: boolean) => {
+const useTextPersistenceOnDisabled = (text: string, setText: (val: string) => void, chatDisabled: boolean) => {
   const textTmpRef = useRef('');
 
   useEffect(() => {
