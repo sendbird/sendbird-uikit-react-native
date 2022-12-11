@@ -50,7 +50,11 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
 
   const onPressSave = () => {
     if (editMessage.isUserMessage()) {
-      onUpdateUserMessage(text, editMessage).catch(() => toast.show(STRINGS.TOAST.UPDATE_MSG_ERROR, 'error'));
+      const mention = {
+        userIds: mentionedUsers.map((it) => it.user.userId),
+        messageTemplate: mentionManager.textToMentionedMessageTemplate(text, mentionedUsers),
+      };
+      onUpdateUserMessage(text, editMessage, mention).catch(() => toast.show(STRINGS.TOAST.UPDATE_MSG_ERROR, 'error'));
     }
     setEditMessage();
     onChangeText('');

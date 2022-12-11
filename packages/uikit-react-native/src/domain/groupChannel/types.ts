@@ -16,6 +16,11 @@ import type {
 import type { FileType } from '../../platform/types';
 import type { CommonComponent, MentionedUser, Range } from '../../types';
 
+type UserMessageMentionParams = {
+  messageTemplate: SendbirdUserMessageCreateParams['mentionedMessageTemplate'];
+  userIds: SendbirdUserMessageCreateParams['mentionedUserIds'];
+};
+
 export interface GroupChannelProps {
   Fragment: {
     channel: SendbirdGroupChannel;
@@ -92,9 +97,13 @@ export interface GroupChannelProps {
   Input: {
     shouldRenderInput: boolean;
     onSendFileMessage: (file: FileType) => Promise<void>;
-    onSendUserMessage: (text: string) => Promise<void>;
+    onSendUserMessage: (text: string, mention?: UserMessageMentionParams) => Promise<void>;
     onUpdateFileMessage: (editedFile: FileType, message: SendbirdFileMessage) => Promise<void>;
-    onUpdateUserMessage: (editedText: string, message: SendbirdUserMessage) => Promise<void>;
+    onUpdateUserMessage: (
+      editedText: string,
+      message: SendbirdUserMessage,
+      mention?: UserMessageMentionParams,
+    ) => Promise<void>;
     MentionSuggestionList: (props: GroupChannelProps['MentionSuggestionList']) => JSX.Element | null;
   };
 

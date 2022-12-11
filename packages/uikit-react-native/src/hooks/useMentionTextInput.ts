@@ -1,12 +1,12 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { NativeSyntheticEvent, TextInput, TextInputSelectionChangeEventData } from 'react-native';
 
-import { replace, useFreshCallback } from '@sendbird/uikit-utils';
+import { SendbirdFileMessage, SendbirdUserMessage, replace, useFreshCallback } from '@sendbird/uikit-utils';
 
 import type { MentionedUser, Range } from '../types';
 import { useSendbirdChat } from './useContext';
 
-const useMentionTextInput = () => {
+const useMentionTextInput = (params: { editMessage?: SendbirdUserMessage | SendbirdFileMessage }) => {
   const { mentionManager } = useSendbirdChat();
 
   const mentionedUsersRef = useRef<MentionedUser[]>([]);
@@ -14,6 +14,28 @@ const useMentionTextInput = () => {
 
   const [text, setText] = useState('');
   const [selection, setSelection] = useState({ start: 0, end: 0 });
+
+  // TODO: Refactor text edit logic more clearly
+  useEffect(() => {
+    if (
+      params.editMessage?.mentionedMessageTemplate &&
+      params.editMessage?.mentionedUsers &&
+      mentionManager.mentionEnabled
+    ) {
+      const result = mentionManager.templateToTextAndMentionedUsers(
+        params.editMessage.mentionedMessageTemplate,
+        params.editMessage.mentionedUsers,
+      );
+
+      mentionedUsersRef.current = result.mentionedUsers;
+      setText(result.mentionedText);
+    } else {
+      mentionedUsersRef.current = [];
+      if (params.editMessage?.isUserMessage()) {
+        setText(params.editMessage.message);
+      }
+    }
+  }, [params.editMessage]);
 
   const onChangeText = useFreshCallback((_nextText: string, addedMentionedUser?: MentionedUser) => {
     const prevText = text;

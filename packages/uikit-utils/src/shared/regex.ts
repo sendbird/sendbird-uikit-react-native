@@ -33,7 +33,13 @@ export const createMentionTemplateRegex = (trigger: string) => new RegExp(`(${tr
 export const replaceWithRegex = <T>(
   text: string,
   regex: RegExp,
-  replacer: (params: { match: string; groups: string[]; index: number; keyPrefix: string }) => T,
+  replacer: (params: {
+    match: string;
+    groups: string[];
+    matchIndex: number | undefined;
+    index: number;
+    keyPrefix: string;
+  }) => T,
   keyPrefix: string,
 ) => {
   const matches = [...text.matchAll(regex)];
@@ -41,15 +47,15 @@ export const replaceWithRegex = <T>(
     const text = value[0];
     const start = value.index ?? 0;
     const end = start + text.length;
-    return { text, start, end, groups: value };
+    return { text, start, end, groups: value, matchIndex: value.index };
   });
 
   const items: Array<T | string> = [text];
   let cursor = 0;
-  founds.forEach(({ text, start, end, groups }, index) => {
+  founds.forEach(({ text, start, end, groups, matchIndex }, index) => {
     const restText = items.pop() as string;
     const head = restText.slice(0, start - cursor);
-    const mid = replacer({ match: text, groups, index, keyPrefix });
+    const mid = replacer({ match: text, groups, matchIndex, index, keyPrefix });
     const tail = restText.slice(end - cursor);
     items.push(head, mid, tail);
     cursor = end;

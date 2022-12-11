@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Text, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdUser } from '@sendbird/uikit-utils';
-import { createMentionTemplateRegex } from '@sendbird/uikit-utils';
+import { createMentionTemplateRegex, replaceWithRegex } from '@sendbird/uikit-utils';
 
 import type { MentionedUser, Range } from '../types';
 import type { MentionConfigInterface } from './MentionConfig';
@@ -171,9 +171,43 @@ class MentionManager {
    * @description Convert @{user.id} template to @user.nickname text and MentionedUser[] array.
    * */
   public templateToTextAndMentionedUsers = (template: string, mentionedUsers: SendbirdUser[]) => {
+    const actualMentionedUsers: MentionedUser[] = [];
+
+    let offsetToMove = 0;
+    const mentionedText = replaceWithRegex(
+      template,
+      this.templateRegex,
+      ({ match, matchIndex, groups }) => {
+        const user = mentionedUsers.find((it) => it.userId === groups[2]);
+        if (user && typeof matchIndex === 'number') {
+          const userIdSpan = match;
+          const userNicknameSpan = this.asMentionedMessageText(user);
+
+          const offsetAfterConverted = userNicknameSpan.length - userIdSpan.length;
+
+          const originalRange: Range = {
+            start: matchIndex,
+            end: matchIndex + userIdSpan.length,
+          };
+
+          const convertedRange: Range = {
+            start: Math.max(0, originalRange.start + offsetToMove),
+            end: originalRange.end + offsetToMove + offsetAfterConverted,
+          };
+
+          offsetToMove += offsetAfterConverted;
+
+          actualMentionedUsers.push({ range: convertedRange, user });
+          return userNicknameSpan;
+        }
+        return match;
+      },
+      '',
+    ).join('');
+
     return {
-      mentionedText: '',
-      mentionedUsers: [] as MentionedUser[],
+      mentionedText,
+      mentionedUsers: actualMentionedUsers,
     };
   };
 }

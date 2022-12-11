@@ -22,6 +22,7 @@ import SendInput from './SendInput';
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
 const KEYBOARD_AVOID_VIEW_BEHAVIOR = Platform.select({ ios: 'padding' as const, default: undefined });
 
+// TODO: Refactor 'Edit' mode to clearly
 const GroupChannelInput = (props: GroupChannelProps['Input']) => {
   const { top, left, right, bottom } = useSafeAreaInsets();
   const { colors } = useUIKitTheme();
@@ -39,11 +40,11 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
   const [inputHeight, setInputHeight] = useState(styles.inputDefault.height);
 
   const { selection, setSelection, onSelectionChange, textInputRef, text, onChangeText, mentionedUsers } =
-    useMentionTextInput();
+    useMentionTextInput({ editMessage });
 
   useTypingTrigger(text, channel);
   useTextPersistenceOnDisabled(text, onChangeText, chatAvailableState.disabled);
-  useAutoFocusOnEditMode(textInputRef, onChangeText, editMessage);
+  useAutoFocusOnEditMode(textInputRef, editMessage);
 
   const onPressToMention: GroupChannelProps['MentionSuggestionList']['onPressToMention'] = (
     user,
@@ -147,12 +148,10 @@ const useTextPersistenceOnDisabled = (text: string, setText: (val: string) => vo
 
 const useAutoFocusOnEditMode = (
   textInputRef: MutableRefObject<TextInput | undefined>,
-  setText: (val: string) => void,
   editMessage?: SendbirdUserMessage | SendbirdFileMessage,
 ) => {
   useEffect(() => {
     if (editMessage?.isUserMessage()) {
-      setText(editMessage.message ?? '');
       if (!AUTO_FOCUS) setTimeout(() => textInputRef.current?.focus(), 500);
     }
   }, [editMessage]);
