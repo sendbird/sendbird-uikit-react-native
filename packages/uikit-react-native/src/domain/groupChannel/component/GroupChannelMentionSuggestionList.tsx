@@ -66,7 +66,7 @@ const GroupChannelMentionSuggestionList = ({
             <Text body3 color={colors.onBackground03} numberOfLines={1} style={styles.userId}>
               {member.userId}
             </Text>
-            <Divider style={{ position: 'absolute' }} />
+            <Divider style={{ position: 'absolute', bottom: 0 }} />
           </View>
         </Pressable>
       );
