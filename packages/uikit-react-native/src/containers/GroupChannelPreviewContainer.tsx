@@ -32,7 +32,7 @@ type Props = {
   onLongPress: () => void;
 };
 const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) => {
-  const { currentUser, sdk, features } = useSendbirdChat();
+  const { currentUser, sdk, features, mentionManager } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
 
@@ -100,6 +100,8 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
         body={bodyText}
         bodyIcon={bodyIcon}
         badgeCount={channel.unreadMessageCount}
+        mentioned={channel.unreadMentionCount > 0}
+        mentionTrigger={mentionManager.config.trigger}
         memberCount={channel.memberCount > 2 ? channel.memberCount : undefined}
         frozen={channel.isFrozen}
         broadcast={channel.isBroadcast}
