@@ -2,10 +2,10 @@ import React, { useContext } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 
 import { PushTriggerOption } from '@sendbird/chat';
-import { useLocalization } from '@sendbird/uikit-react-native';
 import { Divider, Icon, Switch, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { useForceUpdate } from '@sendbird/uikit-utils';
 
+import { useLocalization } from '../../../hooks/useContext';
 import { GroupChannelNotificationsContexts } from '../module/moduleContext';
 
 const GroupChannelNotificationsView = () => {

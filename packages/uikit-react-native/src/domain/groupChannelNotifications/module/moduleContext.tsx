@@ -1,9 +1,9 @@
 import React, { createContext } from 'react';
 
-import { useLocalization } from '@sendbird/uikit-react-native';
 import type { SendbirdGroupChannel } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
+import { useLocalization } from '../../../hooks/useContext';
 import type { GroupChannelNotificationsContextsType, GroupChannelNotificationsModule } from '../types';
 
 export const GroupChannelNotificationsContexts: GroupChannelNotificationsContextsType = {
