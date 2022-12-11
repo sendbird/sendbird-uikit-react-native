@@ -1,5 +1,6 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { Icon, Image, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
@@ -19,6 +20,7 @@ const BottomSheetReactionAddon = ({ onClose, message, channel }: Props) => {
   const { updateReactionFocusedItem, openReactionList } = useReaction();
   const { colors } = useUIKitTheme();
   const id = useUniqId(COMPONENT_NAME);
+  const { left, right } = useSafeAreaInsets();
 
   useChannelHandler(sdk, COMPONENT_NAME + id, {
     async onReactionUpdated(eventChannel, event) {
@@ -39,7 +41,7 @@ const BottomSheetReactionAddon = ({ onClose, message, channel }: Props) => {
   const color = colors.ui.reaction.default;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { marginRight: right, marginLeft: left }]}>
       {emojiAll.map(({ key, url }) => {
         const reactionUserIds = message?.reactions?.find((it) => it.key === key)?.userIds ?? [];
         const currentUserIdx = reactionUserIds.indexOf(currentUser?.userId ?? UNKNOWN_USER_ID);

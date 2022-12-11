@@ -44,6 +44,8 @@ const IconAssets = {
   'play': require('./icon-play.png'),
   'plus': require('./icon-plus.png'),
   'question': require('./icon-question.png'),
+  'radio-off': require('./icon-radio-off.png'),
+  'radio-on': require('./icon-radio-on.png'),
   'refresh': require('./icon-refresh.png'),
   'remove': require('./icon-remove.png'),
   'reply-filled': require('./icon-reply-filled.png'),

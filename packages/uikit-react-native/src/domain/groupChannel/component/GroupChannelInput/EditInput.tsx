@@ -1,60 +1,81 @@
-import React, { useEffect, useRef } from 'react';
-import { Platform, TextInput as RNTextInput, View } from 'react-native';
+import React, { forwardRef } from 'react';
+import {
+  NativeSyntheticEvent,
+  Platform,
+  TextInput as RNTextInput,
+  TextInputSelectionChangeEventData,
+  View,
+} from 'react-native';
 
 import { Button, TextInput, createStyleSheet, useToast } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdFileMessage, SendbirdUserMessage } from '@sendbird/uikit-utils';
 
-import { useLocalization } from '../../../../hooks/useContext';
+import { useLocalization, useSendbirdChat } from '../../../../hooks/useContext';
+import type { MentionedUser } from '../../../../types';
 import type { GroupChannelProps } from '../../types';
 
 type EditInputProps = GroupChannelProps['Input'] & {
   text: string;
-  setText: (val: string) => void;
+  onChangeText: (val: string) => void;
   editMessage: SendbirdUserMessage | SendbirdFileMessage;
   setEditMessage: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
+  onSelectionChange: (e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => void;
   disabled: boolean;
+  autoFocus: boolean;
+  mentionedUsers: MentionedUser[];
 };
 
-const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
-const EditInput = ({ text, setText, editMessage, setEditMessage, onUpdateUserMessage, disabled }: EditInputProps) => {
+const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
+  {
+    text,
+    onChangeText,
+    editMessage,
+    setEditMessage,
+    onUpdateUserMessage,
+    onSelectionChange,
+    disabled,
+    autoFocus,
+    mentionedUsers,
+  },
+  ref,
+) {
+  const { mentionManager } = useSendbirdChat();
   const { STRINGS } = useLocalization();
-  const inputRef = useRef<RNTextInput>(null);
   const toast = useToast();
-
-  useEffect(() => {
-    if (editMessage.isUserMessage()) {
-      setText(editMessage.message ?? '');
-
-      if (!AUTO_FOCUS) setTimeout(() => inputRef.current?.focus(), 500);
-    }
-  }, [editMessage]);
 
   const onPressCancel = () => {
     setEditMessage();
-    setText('');
+    onChangeText('');
   };
 
   const onPressSave = () => {
     if (editMessage.isUserMessage()) {
-      onUpdateUserMessage(text, editMessage).catch(() => toast.show(STRINGS.TOAST.UPDATE_MSG_ERROR, 'error'));
+      const mention = {
+        userIds: mentionedUsers.map((it) => it.user.userId),
+        messageTemplate: mentionManager.textToMentionedMessageTemplate(text, mentionedUsers),
+      };
+      onUpdateUserMessage(text, editMessage, mention).catch(() => toast.show(STRINGS.TOAST.UPDATE_MSG_ERROR, 'error'));
     }
     setEditMessage();
-    setText('');
+    onChangeText('');
   };
 
   return (
     <View style={styles.editInputContainer}>
       <View style={styles.inputWrapper}>
         <TextInput
-          editable={!disabled}
-          autoFocus={AUTO_FOCUS}
-          ref={inputRef}
+          ref={ref}
           multiline
-          value={text}
-          onChangeText={setText}
+          disableFullscreenUI
+          editable={!disabled}
+          autoFocus={autoFocus}
+          onChangeText={onChangeText}
           style={styles.input}
           placeholder={STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE}
-        />
+          onSelectionChange={onSelectionChange}
+        >
+          {mentionManager.textToMentionedComponents(text, mentionedUsers)}
+        </TextInput>
       </View>
       <View style={{ marginTop: 8, flexDirection: 'row' }}>
         <Button variant={'text'} onPress={onPressCancel}>
@@ -67,7 +88,7 @@ const EditInput = ({ text, setText, editMessage, setEditMessage, onUpdateUserMes
       </View>
     </View>
   );
-};
+});
 
 const styles = createStyleSheet({
   editInputContainer: {

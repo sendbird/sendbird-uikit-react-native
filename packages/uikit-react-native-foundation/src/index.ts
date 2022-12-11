@@ -6,6 +6,7 @@ export { default as Divider } from './components/Divider';
 export { default as Icon } from './components/Icon';
 export { default as Image } from './components/Image';
 export { default as Modal } from './components/Modal';
+export { default as RegexText } from './components/RegexText';
 export { default as Switch } from './components/Switch';
 export { default as Text } from './components/Text';
 export { default as TextInput } from './components/TextInput';

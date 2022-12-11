@@ -44,6 +44,9 @@ export interface StringSet {
     INPUT_EDIT_OK: string;
     INPUT_EDIT_CANCEL: string;
 
+    /** GroupChannel > MentionSuggestionList */
+    MENTION_LIMITED: (mentionLimit: number) => string;
+
     /** GroupChannel > Dialog > Message */
     DIALOG_MESSAGE_COPY: string;
     DIALOG_MESSAGE_EDIT: string;
@@ -83,6 +86,16 @@ export interface StringSet {
     DIALOG_CHANGE_IMAGE_MENU_TITLE: string;
     DIALOG_CHANGE_IMAGE_MENU_CAMERA: string;
     DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY: string;
+  };
+  GROUP_CHANNEL_NOTIFICATIONS: {
+    /** GroupChannelNotifications > Header */
+    HEADER_TITLE: string;
+
+    /** GroupChannelNotifications > Menu */
+    MENU_NOTIFICATIONS: string;
+    MENU_NOTIFICATIONS_DESC: string;
+    MENU_NOTIFICATIONS_OPTION_ALL: string;
+    MENU_NOTIFICATIONS_OPTION_MENTIONS_ONLY: string;
   };
   GROUP_CHANNEL_MODERATION: {
     /** GroupChannelModeration > Header */
@@ -252,6 +265,8 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       INPUT_EDIT_OK: 'Save',
       INPUT_EDIT_CANCEL: 'Cancel',
 
+      MENTION_LIMITED: (mentionLimit) => `You can have up to ${mentionLimit} mentions per message.`,
+
       DIALOG_MESSAGE_COPY: 'Copy',
       DIALOG_MESSAGE_EDIT: 'Edit',
       DIALOG_MESSAGE_SAVE: 'Save',
@@ -284,6 +299,15 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       DIALOG_CHANGE_IMAGE_MENU_CAMERA: 'Take photo',
       DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY: 'Choose photo',
       ...overrides?.GROUP_CHANNEL_SETTINGS,
+    },
+    GROUP_CHANNEL_NOTIFICATIONS: {
+      HEADER_TITLE: 'Notifications',
+      MENU_NOTIFICATIONS: 'Notifications',
+      MENU_NOTIFICATIONS_DESC:
+        'Turn on push notifications if you wish to be notified when messages are delivered to this channel.',
+      MENU_NOTIFICATIONS_OPTION_ALL: 'All new messages',
+      MENU_NOTIFICATIONS_OPTION_MENTIONS_ONLY: 'Mentions only',
+      ...overrides?.GROUP_CHANNEL_NOTIFICATIONS,
     },
     GROUP_CHANNEL_MODERATION: {
       HEADER_TITLE: 'Moderation',

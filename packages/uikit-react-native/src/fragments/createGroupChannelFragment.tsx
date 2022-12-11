@@ -75,10 +75,16 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       const processedParams = await onBeforeSendFileMessage({ file });
       await sendFileMessage(processedParams);
     });
-    const onSendUserMessage: GroupChannelProps['Input']['onSendUserMessage'] = useFreshCallback(async (text) => {
-      const processedParams = await onBeforeSendUserMessage({ message: text });
-      await sendUserMessage(processedParams);
-    });
+    const onSendUserMessage: GroupChannelProps['Input']['onSendUserMessage'] = useFreshCallback(
+      async (text, mention) => {
+        const processedParams = await onBeforeSendUserMessage({
+          message: text,
+          mentionedUserIds: mention?.userIds,
+          mentionedMessageTemplate: mention?.messageTemplate,
+        });
+        await sendUserMessage(processedParams);
+      },
+    );
     const onUpdateFileMessage: GroupChannelProps['Input']['onUpdateFileMessage'] = useFreshCallback(
       async (editedFile, message) => {
         const processedParams = await onBeforeSendFileMessage({ file: editedFile });
@@ -86,8 +92,12 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       },
     );
     const onUpdateUserMessage: GroupChannelProps['Input']['onUpdateUserMessage'] = useFreshCallback(
-      async (editedText, message) => {
-        const processedParams = await onBeforeSendUserMessage({ message: editedText });
+      async (editedText, message, mention) => {
+        const processedParams = await onBeforeSendUserMessage({
+          message: editedText,
+          mentionedUserIds: mention?.userIds,
+          mentionedMessageTemplate: mention?.messageTemplate,
+        });
         await updateUserMessage(message.messageId, processedParams);
       },
     );
@@ -119,6 +129,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             flatListProps={memoizedFlatListProps}
           />
           <GroupChannelModule.Input
+            MentionSuggestionList={GroupChannelModule.MentionSuggestionList}
             shouldRenderInput={shouldRenderInput(channel)}
             onSendFileMessage={onSendFileMessage}
             onSendUserMessage={onSendUserMessage}

@@ -1,5 +1,12 @@
-import React from 'react';
-import { Platform, TouchableOpacity, View } from 'react-native';
+import React, { forwardRef } from 'react';
+import {
+  NativeSyntheticEvent,
+  Platform,
+  TextInput as RNTextInput,
+  TextInputSelectionChangeEventData,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import {
   Icon,
@@ -12,27 +19,37 @@ import {
 } from '@sendbird/uikit-react-native-foundation';
 import { conditionChaining } from '@sendbird/uikit-utils';
 
-import { useLocalization, usePlatformService } from '../../../../hooks/useContext';
+import { useLocalization, usePlatformService, useSendbirdChat } from '../../../../hooks/useContext';
 import SBUError from '../../../../libs/SBUError';
 import SBUUtils from '../../../../libs/SBUUtils';
+import type { MentionedUser, Range } from '../../../../types';
 import type { GroupChannelProps } from '../../types';
 
 type SendInputProps = GroupChannelProps['Input'] & {
   text: string;
-  setText: (val: string) => void;
+  onChangeText: (val: string) => void;
   frozen: boolean;
   muted: boolean;
   disabled: boolean;
+  setSelection: (param: Range) => void;
+  onSelectionChange: (e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => void;
+  mentionedUsers: MentionedUser[];
 };
-const SendInput = ({
-  onSendUserMessage,
-  onSendFileMessage,
-  text,
-  setText,
-  disabled,
-  frozen,
-  muted,
-}: SendInputProps) => {
+const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
+  {
+    onSendUserMessage,
+    onSendFileMessage,
+    text,
+    onChangeText,
+    disabled,
+    frozen,
+    muted,
+    onSelectionChange,
+    mentionedUsers,
+  },
+  ref,
+) {
+  const { mentionManager } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { fileService } = usePlatformService();
   const { colors } = useUIKitTheme();
@@ -41,9 +58,14 @@ const SendInput = ({
   const toast = useToast();
 
   const onPressSend = () => {
-    onSendUserMessage(text).catch(() => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error'));
-    setText('');
+    const mention = {
+      userIds: mentionedUsers.map((it) => it.user.userId),
+      messageTemplate: mentionManager.textToMentionedMessageTemplate(text, mentionedUsers),
+    };
+    onSendUserMessage(text, mention).catch(() => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error'));
+    onChangeText('');
   };
+
   const onPressAttachment = () => {
     openSheet({
       sheetItems: [
@@ -124,10 +146,12 @@ const SendInput = ({
         />
       </TouchableOpacity>
       <TextInput
+        ref={ref}
         multiline
+        disableFullscreenUI
+        onSelectionChange={onSelectionChange}
         editable={!disabled}
-        value={text}
-        onChangeText={setText}
+        onChangeText={onChangeText}
         style={styles.input}
         placeholder={conditionChaining(
           [frozen, muted],
@@ -137,7 +161,10 @@ const SendInput = ({
             STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE,
           ],
         )}
-      />
+      >
+        {mentionManager.textToMentionedComponents(text, mentionedUsers)}
+      </TextInput>
+
       {Boolean(text.trim()) && (
         <TouchableOpacity onPress={onPressSend} disabled={disabled}>
           <Icon
@@ -150,7 +177,7 @@ const SendInput = ({
       )}
     </View>
   );
-};
+});
 
 const styles = createStyleSheet({
   sendInputContainer: {

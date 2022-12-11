@@ -9,3 +9,4 @@ export { default as GroupChannelOperatorsScreen } from './GroupChannelOperatorsS
 export { default as GroupChannelRegisterOperatorScreen } from './GroupChannelRegisterOperatorScreen';
 export { default as GroupChannelMutedMembersScreen } from './GroupChannelMutedMembersScreen';
 export { default as GroupChannelBannedUsersScreen } from './GroupChannelBannedUsersScreen';
+export { default as GroupChannelNotificationsScreen } from './GroupChannelNotificationsScreen';

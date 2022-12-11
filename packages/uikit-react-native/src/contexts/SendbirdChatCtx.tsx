@@ -11,6 +11,7 @@ import type {
 import { confirmAndMarkAsDelivered, useForceUpdate } from '@sendbird/uikit-utils';
 
 import type EmojiManager from '../libs/EmojiManager';
+import type MentionManager from '../libs/MentionManager';
 import type { FileType } from '../platform/types';
 
 export interface UIKitFeaturesInSendbirdChatContext {
@@ -18,16 +19,19 @@ export interface UIKitFeaturesInSendbirdChatContext {
   enableChannelListTypingIndicator: boolean;
   enableChannelListMessageReceiptStatus: boolean;
   enableUseUserIdForNickname: boolean;
+  enableMention: boolean;
 }
 
 interface Props extends UIKitFeaturesInSendbirdChatContext, React.PropsWithChildren {
   sdkInstance: SendbirdChatSDK;
   emojiManager: EmojiManager;
+  mentionManager: MentionManager;
 }
 
 type Context = {
   sdk: SendbirdChatSDK;
   emojiManager: EmojiManager;
+  mentionManager: MentionManager;
   currentUser?: SendbirdUser;
   setCurrentUser: React.Dispatch<React.SetStateAction<SendbirdUser | undefined>>;
 
@@ -41,6 +45,7 @@ type Context = {
     channelListTypingIndicatorEnabled: boolean;
     channelListMessageReceiptStatusEnabled: boolean;
     useUserIdForNicknameEnabled: boolean;
+    mentionEnabled: boolean;
 
     // Sendbird application features
     deliveryReceiptEnabled: boolean;
@@ -55,10 +60,12 @@ export const SendbirdChatProvider = ({
   children,
   sdkInstance,
   emojiManager,
+  mentionManager,
   enableAutoPushTokenRegistration,
   enableChannelListMessageReceiptStatus,
   enableChannelListTypingIndicator,
   enableUseUserIdForNickname,
+  enableMention,
 }: Props) => {
   const [currentUser, _setCurrentUser] = useState<SendbirdUser>();
   const forceUpdate = useForceUpdate();
@@ -76,9 +83,17 @@ export const SendbirdChatProvider = ({
 
       if (!user) throw new Error('Current user is not defined, please connect using `useConnection()` hook first');
 
-      const params: SendbirdUserUpdateParams = { nickname };
+      const params: SendbirdUserUpdateParams = {};
 
-      if (typeof profile === 'string') {
+      if (!nickname) {
+        params.nickname = user.nickname;
+      } else {
+        params.nickname = nickname;
+      }
+
+      if (!profile) {
+        params.profileUrl = user.profileUrl;
+      } else if (typeof profile === 'string') {
         params.profileUrl = profile;
       } else if (typeof profile === 'object') {
         params.profileImage = profile;
@@ -115,6 +130,7 @@ export const SendbirdChatProvider = ({
   const value: Context = {
     sdk: sdkInstance,
     emojiManager,
+    mentionManager,
     currentUser,
     setCurrentUser,
 
@@ -127,6 +143,7 @@ export const SendbirdChatProvider = ({
       channelListTypingIndicatorEnabled: enableChannelListTypingIndicator,
       channelListMessageReceiptStatusEnabled: enableChannelListMessageReceiptStatus,
       useUserIdForNicknameEnabled: enableUseUserIdForNickname,
+      mentionEnabled: enableMention,
     },
   };
 

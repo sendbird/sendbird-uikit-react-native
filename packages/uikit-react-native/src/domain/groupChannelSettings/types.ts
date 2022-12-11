@@ -12,6 +12,7 @@ export interface GroupChannelSettingsProps {
     onPressMenuModeration: GroupChannelSettingsProps['Menu']['onPressMenuModeration'];
     onPressMenuMembers: GroupChannelSettingsProps['Menu']['onPressMenuMembers'];
     onPressMenuLeaveChannel: GroupChannelSettingsProps['Menu']['onPressMenuLeaveChannel'];
+    onPressMenuNotificationWhenMentionEnabled?: GroupChannelSettingsProps['Menu']['onPressMenuNotificationWhenMentionEnabled'];
     menuItemsCreator?: GroupChannelSettingsProps['Menu']['menuItemsCreator'];
   };
   Header: {
@@ -22,6 +23,7 @@ export interface GroupChannelSettingsProps {
     onPressMenuModeration: () => void;
     onPressMenuMembers: () => void;
     onPressMenuLeaveChannel: () => void;
+    onPressMenuNotificationWhenMentionEnabled?: () => void;
     menuItemsCreator?: (defaultMenuItems: MenuBarProps[]) => MenuBarProps[];
   };
   Provider: {

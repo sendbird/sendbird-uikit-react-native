@@ -31,6 +31,8 @@ import { SendbirdChatProvider } from '../contexts/SendbirdChatCtx';
 import { UserProfileProvider } from '../contexts/UserProfileCtx';
 import EmojiManager from '../libs/EmojiManager';
 import InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
+import MentionConfig, { MentionConfigInterface } from '../libs/MentionConfig';
+import MentionManager from '../libs/MentionManager';
 import StringSetEn from '../localization/StringSet.en';
 import type { StringSet } from '../localization/StringSet.type';
 import SBUDynamicModule from '../platform/dynamicModule';
@@ -62,6 +64,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   chatOptions?: {
     localCacheStorage?: LocalCacheStorage;
     onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
+    mention?: Pick<Partial<MentionConfigInterface>, 'mentionLimit' | 'suggestionLimit' | 'debounceMills'>;
   } & Partial<UIKitFeaturesInSendbirdChatContext>;
   localization?: {
     stringSet?: StringSet;
@@ -115,6 +118,19 @@ const SendbirdUIKitContainer = ({
     return sendbird.chatSDK;
   });
   const emojiManager = useMemo(() => new EmojiManager(internalStorage), [internalStorage]);
+  const mentionManager = useMemo(() => {
+    const config = new MentionConfig({
+      mentionLimit: Math.min(
+        chatOptions?.mention?.mentionLimit || MentionConfig.DEFAULT.MENTION_LIMIT,
+        MentionConfig.DEFAULT.MENTION_LIMIT,
+      ),
+      suggestionLimit: chatOptions?.mention?.suggestionLimit || MentionConfig.DEFAULT.SUGGESTION_LIMIT,
+      debounceMills: chatOptions?.mention?.debounceMills ?? MentionConfig.DEFAULT.DEBOUNCE_MILLS,
+      delimiter: MentionConfig.DEFAULT.DELIMITER,
+      trigger: MentionConfig.DEFAULT.TRIGGER,
+    });
+    return new MentionManager(config, chatOptions?.enableMention ?? false);
+  }, [chatOptions?.mention?.mentionLimit, chatOptions?.mention?.suggestionLimit, chatOptions?.mention?.debounceMills]);
 
   useLayoutEffect(() => {
     if (!isFirstMount) {
@@ -139,10 +155,12 @@ const SendbirdUIKitContainer = ({
       <SendbirdChatProvider
         sdkInstance={sdkInstance}
         emojiManager={emojiManager}
+        mentionManager={mentionManager}
         enableAutoPushTokenRegistration={chatOptions?.enableAutoPushTokenRegistration ?? true}
         enableChannelListTypingIndicator={chatOptions?.enableChannelListTypingIndicator ?? false}
         enableChannelListMessageReceiptStatus={chatOptions?.enableChannelListMessageReceiptStatus ?? false}
         enableUseUserIdForNickname={chatOptions?.enableUseUserIdForNickname ?? false}
+        enableMention={chatOptions?.enableMention ?? false}
       >
         <LocalizationProvider stringSet={defaultStringSet}>
           <PlatformServiceProvider

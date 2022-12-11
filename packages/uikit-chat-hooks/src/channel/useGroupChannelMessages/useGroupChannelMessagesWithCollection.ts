@@ -77,6 +77,15 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
             updateNextMessages(messages, false, sdk.currentUser.userId);
           },
           onMessagesUpdated: (_, __, messages) => {
+            // NOTE: admin message is not added via onMessagesAdded handler, not checked yet is this a bug.
+            if (_.source === MessageEventSource.EVENT_MESSAGE_RECEIVED) {
+              const nextMessageIds = nextMessages.map((it) => it.messageId);
+              const nonAddedMessagesFromReceivedEvent = messages.filter(
+                (it) => nextMessageIds.indexOf(it.messageId) === -1,
+              );
+              updateNextMessages(nonAddedMessagesFromReceivedEvent, false, sdk.currentUser.userId);
+            }
+
             // NOTE: v4 MESSAGE_RECEIVED is called twice from onMessagesAdded and onMessagesUpdated when receiving new message.
             //  This is not intended behavior but not bugs.
             if (_.source !== MessageEventSource.EVENT_MESSAGE_RECEIVED) {
