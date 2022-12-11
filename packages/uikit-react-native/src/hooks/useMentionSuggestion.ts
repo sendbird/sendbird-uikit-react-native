@@ -44,7 +44,7 @@ const useMentionSuggestion = (params: {
     );
     if (selectionInMentionedRange) return [];
 
-    const { isTriggered, isValidSearchString, searchString } = mentionManager.findSearchString(text, selection.start);
+    const { isTriggered, isValidSearchString, searchString } = mentionManager.getSearchString(text, selection.start);
     if (!isTriggered() || !isValidSearchString()) return [];
 
     const limited = updateSearchLimited(mentionedUsers.length, mentionManager.config.mentionLimit);

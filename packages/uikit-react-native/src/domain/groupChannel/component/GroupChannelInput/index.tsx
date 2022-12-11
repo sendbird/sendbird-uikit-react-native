@@ -49,7 +49,7 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
     user,
     searchStringRange,
   ) => {
-    const mentionedMessageText = mentionManager.asMentionedMessageText(user);
+    const mentionedMessageText = mentionManager.asMentionedMessageText(user, true);
     const range = { start: searchStringRange.start, end: searchStringRange.start + mentionedMessageText.length - 1 };
 
     onChangeText(replace(text, searchStringRange.start, searchStringRange.end, mentionedMessageText), { user, range });

@@ -45,7 +45,7 @@ class MentionManager {
     return this._templateRegex;
   }
 
-  public findSearchString = (text: string, selectionIndex: number) => {
+  public getSearchString = (text: string, selectionIndex: number) => {
     const lastSpan = text.slice(0, selectionIndex).split(this.config.delimiter).pop() ?? '';
     const triggerIdx = lastSpan.indexOf(this.config.trigger);
     const mentionSpan = triggerIdx === -1 ? lastSpan : lastSpan.slice(triggerIdx);
@@ -68,15 +68,15 @@ class MentionManager {
   /**
    * @description User to @{user.id} template format
    * */
-  public asMentionedMessageTemplate = (user: SendbirdUser) => {
-    return `${this.config.trigger}{${user.nickname}}${this.config.delimiter}`;
+  public asMentionedMessageTemplate = (user: SendbirdUser, delimiter = false) => {
+    return `${this.config.trigger}{${user.userId}}` + (delimiter ? this.config.delimiter : '');
   };
 
   /**
    * @description User to @user.nickname text format
    * */
-  public asMentionedMessageText = (user: SendbirdUser) => {
-    return `${this.config.trigger}${user.nickname}${this.config.delimiter}`;
+  public asMentionedMessageText = (user: SendbirdUser, delimiter = false) => {
+    return `${this.config.trigger}${user.nickname}` + (delimiter ? this.config.delimiter : '');
   };
 
   /**
@@ -110,6 +110,28 @@ class MentionManager {
     return [leftText, ...components];
   };
 
+  public textToMentionedMessageTemplate = (text: string, mentionedUsers: MentionedUser[]) => {
+    if (!this.mentionEnabled) return text;
+
+    const { leftText, strings } = mentionedUsers
+      .sort((a, b) => b.range.start - a.range.start)
+      .reduce(
+        ({ leftText, strings }, curr) => {
+          const leftSpan = leftText.slice(0, curr.range.start);
+          const templateSpan = this.asMentionedMessageTemplate(curr.user);
+          const rightSpan = leftText.slice(curr.range.end);
+
+          return {
+            leftText: leftSpan,
+            strings: [templateSpan, rightSpan, ...strings],
+          };
+        },
+        { leftText: text, strings: [] as string[] },
+      );
+
+    return [leftText, ...strings].join('');
+  };
+
   /**
    * @description Move the range by offset in the mentioned users
    * */
@@ -119,10 +141,7 @@ class MentionManager {
       if (selectionIndex <= it.range.start) {
         return {
           ...it,
-          range: {
-            start: it.range.start + offset,
-            end: it.range.end + offset,
-          },
+          range: { start: it.range.start + offset, end: it.range.end + offset },
         };
       }
 
@@ -151,18 +170,12 @@ class MentionManager {
   /**
    * @description Convert @{user.id} template to @user.nickname text and MentionedUser[] array.
    * */
-  // public templateToMentionedText = (template: string, mentionedUsers: SendbirdUser[]) => {
-  // const matches = [...template.matchAll(this.templateRegex)];
-  // matches.map((value) => {
-  // const matchedText = value[0];
-  // const userId = value[2];
-  // const start = value.index ?? 0;
-  // const end = start + matchedText.length;
-  // return { text, start, end, groups: value };
-  //
-  //   mentionedUsers.find((it) => it.userId === userId);
-  // });
-  // };
+  public templateToTextAndMentionedUsers = (template: string, mentionedUsers: SendbirdUser[]) => {
+    return {
+      mentionedText: '',
+      mentionedUsers: [] as MentionedUser[],
+    };
+  };
 }
 
 const styles = createStyleSheet({
