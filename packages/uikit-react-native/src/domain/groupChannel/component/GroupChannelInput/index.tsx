@@ -39,8 +39,9 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
 
   const [inputHeight, setInputHeight] = useState(styles.inputDefault.height);
 
-  const { selection, setSelection, onSelectionChange, textInputRef, text, onChangeText, mentionedUsers } =
-    useMentionTextInput({ editMessage });
+  const { selection, onSelectionChange, textInputRef, text, onChangeText, mentionedUsers } = useMentionTextInput({
+    editMessage,
+  });
 
   useTypingTrigger(text, channel);
   useTextPersistenceOnDisabled(text, onChangeText, chatAvailableState.disabled);
@@ -88,7 +89,6 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
                 ref={textInputRef as never}
                 text={text}
                 onChangeText={onChangeText}
-                setSelection={setSelection}
                 onSelectionChange={onSelectionChange}
                 mentionedUsers={mentionedUsers}
               />

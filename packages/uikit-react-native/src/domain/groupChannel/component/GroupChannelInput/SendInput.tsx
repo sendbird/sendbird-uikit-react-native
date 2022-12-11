@@ -22,7 +22,7 @@ import { conditionChaining } from '@sendbird/uikit-utils';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../../../hooks/useContext';
 import SBUError from '../../../../libs/SBUError';
 import SBUUtils from '../../../../libs/SBUUtils';
-import type { MentionedUser, Range } from '../../../../types';
+import type { MentionedUser } from '../../../../types';
 import type { GroupChannelProps } from '../../types';
 
 type SendInputProps = GroupChannelProps['Input'] & {
@@ -31,7 +31,6 @@ type SendInputProps = GroupChannelProps['Input'] & {
   frozen: boolean;
   muted: boolean;
   disabled: boolean;
-  setSelection: (param: Range) => void;
   onSelectionChange: (e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => void;
   mentionedUsers: MentionedUser[];
 };

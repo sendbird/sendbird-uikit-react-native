@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { NativeSyntheticEvent, TextInput, TextInputSelectionChangeEventData } from 'react-native';
+import { Platform } from 'react-native';
 
 import { SendbirdFileMessage, SendbirdUserMessage, replace, useFreshCallback } from '@sendbird/uikit-utils';
 
-import type { MentionedUser, Range } from '../types';
+import type { MentionedUser } from '../types';
 import { useSendbirdChat } from './useContext';
 
 const useMentionTextInput = (params: { editMessage?: SendbirdUserMessage | SendbirdFileMessage }) => {
@@ -107,10 +108,6 @@ const useMentionTextInput = (params: { editMessage?: SendbirdUserMessage | Sendb
   return {
     textInputRef,
     selection,
-    setSelection: useCallback((selection: Range) => {
-      textInputRef.current?.setNativeProps({ selection });
-      setSelection(selection);
-    }, []),
     onSelectionChange: useFreshCallback((e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => {
       const nativeSelection = { ...e.nativeEvent.selection };
 
@@ -124,6 +121,13 @@ const useMentionTextInput = (params: { editMessage?: SendbirdUserMessage | Sendb
         if (mentionedUser) {
           const selectionBlock = { start: mentionedUser.range.start, end: mentionedUser.range.end };
           textInputRef.current?.setNativeProps({ selection: selectionBlock });
+          // BUG: setNativeProps called again when invoked onChangeText
+          //  https://github.com/facebook/react-native/issues/33520
+          if (Platform.OS === 'android') {
+            setTimeout(() => {
+              textInputRef.current?.setNativeProps({ selection: { start: 0 } });
+            }, 250);
+          }
           setSelection(selectionBlock);
         } else {
           setSelection(nativeSelection);
