@@ -33,12 +33,16 @@ const useMentionSuggestion = (params: {
     searchStringRangeRef.current = { start: 0, end: 0 };
   };
 
-  // TODO: prevent search in mentioned range
   const fetchMembers = async (): Promise<SendbirdMember[]> => {
     resetRefs();
 
     const selectionRanged = selection.start !== selection.end;
     if (selectionRanged) return [];
+
+    const selectionInMentionedRange = mentionedUsers.some((it) =>
+      mentionManager.rangeHelpers.intersection(it.range, selection, 'underMore'),
+    );
+    if (selectionInMentionedRange) return [];
 
     const { isTriggered, isValidSearchString, searchString } = mentionManager.findSearchString(text, selection.start);
     if (!isTriggered() || !isValidSearchString()) return [];
