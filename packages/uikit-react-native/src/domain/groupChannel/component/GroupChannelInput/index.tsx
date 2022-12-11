@@ -42,8 +42,8 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
     useMentionTextInput();
 
   useTypingTrigger(text, channel);
-  usePersistText(text, onChangeText, chatAvailableState.disabled);
-  useEditModeAutoFocus(textInputRef, onChangeText, editMessage);
+  useTextPersistanceOnDisabled(text, onChangeText, chatAvailableState.disabled);
+  useAutoFocusOnEditMode(textInputRef, onChangeText, editMessage);
 
   const onPressToMention: GroupChannelProps['MentionSuggestionList']['onPressToMention'] = (
     user,
@@ -132,7 +132,7 @@ const useTypingTrigger = (text: string, channel: SendbirdGroupChannel) => {
   }, [text]);
 };
 
-const usePersistText = (text: string, setText: (val: string) => void, chatDisabled: boolean) => {
+const useTextPersistanceOnDisabled = (text: string, setText: (val: string) => void, chatDisabled: boolean) => {
   const textTmpRef = useRef('');
 
   useEffect(() => {
@@ -145,7 +145,7 @@ const usePersistText = (text: string, setText: (val: string) => void, chatDisabl
   }, [chatDisabled]);
 };
 
-const useEditModeAutoFocus = (
+const useAutoFocusOnEditMode = (
   textInputRef: MutableRefObject<TextInput | undefined>,
   setText: (val: string) => void,
   editMessage?: SendbirdUserMessage | SendbirdFileMessage,
