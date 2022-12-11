@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { PushTriggerOption } from '@sendbird/chat';
 import type { MenuBarProps } from '@sendbird/uikit-react-native-foundation';
 import { Icon, MenuBar, Switch, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { Logger } from '@sendbird/uikit-utils';
+import { Logger, conditionChaining } from '@sendbird/uikit-utils';
 
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelSettingsContexts } from '../module/moduleContext';
@@ -71,10 +71,12 @@ const GroupChannelSettingsMenu = ({
       name: STRINGS.GROUP_CHANNEL_SETTINGS.MENU_NOTIFICATION,
       onPress: onPressNotificationMenu,
       actionLabel: getNotificationsLabel(channel.myPushTriggerOption),
-      actionItem: features.mentionEnabled ? (
-        <Icon icon={'chevron-right'} color={colors.onBackground01} />
-      ) : (
-        <Switch value={channel.myPushTriggerOption !== 'off'} onChangeValue={toggleNotification} />
+      actionItem: conditionChaining(
+        [features.mentionEnabled],
+        [
+          <Icon icon={'chevron-right'} color={colors.onBackground01} />,
+          <Switch value={channel.myPushTriggerOption !== 'off'} onChangeValue={toggleNotification} />,
+        ],
       ),
     },
     {
