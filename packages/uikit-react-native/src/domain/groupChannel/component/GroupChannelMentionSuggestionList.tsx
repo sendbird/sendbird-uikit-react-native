@@ -27,7 +27,7 @@ const GroupChannelMentionSuggestionList = ({
   onPressToMention,
   mentionedUsers,
 }: GroupChannelProps['MentionSuggestionList']) => {
-  const { width, height } = useWindowDimensions();
+  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
   const { channel } = useContext(GroupChannelContexts.Fragment);
   const { mentionManager } = useSendbirdChat();
   const { STRINGS } = useLocalization();
@@ -43,8 +43,9 @@ const GroupChannelMentionSuggestionList = ({
     mentionedUsers,
   });
 
-  const isLandscape = width > height;
-  const maxHeight = isLandscape && keyboard.visible ? height - inputHeight - keyboard.height - topInset : 196;
+  const isLandscape = screenWidth > screenHeight;
+  const isShortened = isLandscape && keyboard.visible;
+  const maxHeight = isShortened ? screenHeight - (topInset + inputHeight + keyboard.height) : styles.suggestion.height;
 
   const renderMembers = () => {
     return members.map((member) => {
@@ -106,6 +107,9 @@ const GroupChannelMentionSuggestionList = ({
 };
 
 const styles = createStyleSheet({
+  suggestion: {
+    height: 196,
+  },
   container: {
     borderTopWidth: 1,
     position: 'absolute',
