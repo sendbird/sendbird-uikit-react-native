@@ -65,7 +65,6 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
           disableFullscreenUI
           editable={!disabled}
           autoFocus={autoFocus}
-          value={text}
           onChangeText={onChangeText}
           style={styles.input}
           placeholder={STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE}

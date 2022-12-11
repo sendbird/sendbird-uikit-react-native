@@ -20,8 +20,12 @@ const useMentionTextInput = () => {
     let nextText = _nextText;
     let offset = nextText.length - prevText.length;
 
+    // Text clear
+    if (nextText === '') {
+      mentionedUsersRef.current = [];
+    }
     // Text add
-    if (offset > 0) {
+    else if (offset > 0) {
       /** Add mentioned user **/
       if (addedMentionedUser) mentionedUsersRef.current.push(addedMentionedUser);
 
