@@ -33,6 +33,7 @@ const useMentionSuggestion = (params: {
     searchStringRangeRef.current = { start: 0, end: 0 };
   };
 
+  // TODO: prevent search in mentioned range
   const fetchMembers = async (): Promise<SendbirdMember[]> => {
     resetRefs();
 

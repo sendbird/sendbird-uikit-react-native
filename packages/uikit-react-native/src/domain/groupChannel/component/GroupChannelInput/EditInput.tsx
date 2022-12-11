@@ -16,7 +16,7 @@ import type { GroupChannelProps } from '../../types';
 
 type EditInputProps = GroupChannelProps['Input'] & {
   text: string;
-  setText: (val: string) => void;
+  onChangeText: (val: string) => void;
   editMessage: SendbirdUserMessage | SendbirdFileMessage;
   setEditMessage: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
   onSelectionChange: (e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => void;
@@ -28,7 +28,7 @@ type EditInputProps = GroupChannelProps['Input'] & {
 const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
   {
     text,
-    setText,
+    onChangeText,
     editMessage,
     setEditMessage,
     onUpdateUserMessage,
@@ -45,7 +45,7 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
 
   const onPressCancel = () => {
     setEditMessage();
-    setText('');
+    onChangeText('');
   };
 
   const onPressSave = () => {
@@ -53,7 +53,7 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
       onUpdateUserMessage(text, editMessage).catch(() => toast.show(STRINGS.TOAST.UPDATE_MSG_ERROR, 'error'));
     }
     setEditMessage();
-    setText('');
+    onChangeText('');
   };
 
   return (
@@ -66,7 +66,7 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
           editable={!disabled}
           autoFocus={autoFocus}
           value={text}
-          onChangeText={setText}
+          onChangeText={onChangeText}
           style={styles.input}
           placeholder={STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE}
           onSelectionChange={onSelectionChange}

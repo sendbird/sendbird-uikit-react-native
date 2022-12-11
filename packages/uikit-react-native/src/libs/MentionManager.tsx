@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Text, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdUser } from '@sendbird/uikit-utils';
-import { createMentionTemplateRegex, replaceWithRegex } from '@sendbird/uikit-utils';
+import { createMentionTemplateRegex } from '@sendbird/uikit-utils';
 
 import type { MentionedUser, Range } from '../types';
 import type { MentionConfigInterface } from './MentionConfig';
@@ -15,6 +15,31 @@ class MentionManager {
     this._invalidStartsKeywords = [this.config.trigger, this.config.delimiter];
     this._templateRegex = createMentionTemplateRegex(this.config.trigger);
   }
+
+  public rangeHelpers = {
+    inRangeUnderOver(start: number, num: number, end: number) {
+      return start < num && num < end;
+    },
+    inRangeUnderMore(start: number, num: number, end: number) {
+      return start < num && num <= end;
+    },
+    inRangeLessOver(start: number, num: number, end: number) {
+      return start <= num && num < end;
+    },
+    inRangeLessMore(start: number, num: number, end: number) {
+      return start <= num && num <= end;
+    },
+    intersection(a: Range, b: Range, compare: 'underOver' | 'underMore' | 'lessOver' | 'lessMore' = 'underOver') {
+      const range = {
+        underOver: this.inRangeUnderOver,
+        underMore: this.inRangeUnderMore,
+        lessOver: this.inRangeLessOver,
+        lessMore: this.inRangeLessMore,
+      }[compare];
+
+      return range(a.start, b.start, a.end) || range(a.start, b.end, a.end);
+    },
+  };
 
   public get templateRegex() {
     return this._templateRegex;
@@ -55,22 +80,6 @@ class MentionManager {
   };
 
   /**
-   * @description Convert @{user.id} template to @user.nickname text and MentionedUser[] array.
-   * */
-  // public templateToMentionedText = (template: string, mentionedUsers: SendbirdUser[]) => {
-  // const matches = [...template.matchAll(this.templateRegex)];
-  // matches.map((value) => {
-  // const matchedText = value[0];
-  // const userId = value[2];
-  // const start = value.index ?? 0;
-  // const end = start + matchedText.length;
-  // return { text, start, end, groups: value };
-  //
-  //   mentionedUsers.find((it) => it.userId === userId);
-  // });
-  // };
-
-  /**
    * @description Bold @user.nickname
    * */
   public textToMentionedComponents = (text: string, mentionedUsers: MentionedUser[]) => {
@@ -100,6 +109,60 @@ class MentionManager {
 
     return [leftText, ...components];
   };
+
+  /**
+   * @description Move the range by offset in the mentioned users
+   * */
+  public reconcileRangeInMentionedUsers = (offset: number, selectionIndex: number, mentionedUsers: MentionedUser[]) => {
+    return mentionedUsers.map((it) => {
+      // Changes only on the right text of selection.
+      if (selectionIndex <= it.range.start) {
+        return {
+          ...it,
+          range: {
+            start: it.range.start + offset,
+            end: it.range.end + offset,
+          },
+        };
+      }
+
+      return it;
+    });
+  };
+
+  /**
+   * @description Remove users who in a range
+   * */
+  public removeMentionedUsersInSelection = (selection: Range, mentionedUsers: MentionedUser[]) => {
+    let lastSelection = 0;
+    let removedOffset = 0;
+    const filtered = mentionedUsers.filter((it) => {
+      const shouldRemove = this.rangeHelpers.intersection(selection, it.range, 'lessMore');
+      if (shouldRemove) {
+        lastSelection = Math.max(lastSelection, it.range.end);
+        removedOffset -= it.range.end - it.range.start;
+      }
+      return !shouldRemove;
+    });
+
+    return { filtered, lastSelection, removedOffset };
+  };
+
+  /**
+   * @description Convert @{user.id} template to @user.nickname text and MentionedUser[] array.
+   * */
+  // public templateToMentionedText = (template: string, mentionedUsers: SendbirdUser[]) => {
+  // const matches = [...template.matchAll(this.templateRegex)];
+  // matches.map((value) => {
+  // const matchedText = value[0];
+  // const userId = value[2];
+  // const start = value.index ?? 0;
+  // const end = start + matchedText.length;
+  // return { text, start, end, groups: value };
+  //
+  //   mentionedUsers.find((it) => it.userId === userId);
+  // });
+  // };
 }
 
 const styles = createStyleSheet({

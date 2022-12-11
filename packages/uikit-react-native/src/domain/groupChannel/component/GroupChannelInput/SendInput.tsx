@@ -27,7 +27,7 @@ import type { GroupChannelProps } from '../../types';
 
 type SendInputProps = GroupChannelProps['Input'] & {
   text: string;
-  setText: (val: string) => void;
+  onChangeText: (val: string) => void;
   frozen: boolean;
   muted: boolean;
   disabled: boolean;
@@ -36,7 +36,17 @@ type SendInputProps = GroupChannelProps['Input'] & {
   mentionedUsers: MentionedUser[];
 };
 const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
-  { onSendUserMessage, onSendFileMessage, text, setText, disabled, frozen, muted, onSelectionChange, mentionedUsers },
+  {
+    onSendUserMessage,
+    onSendFileMessage,
+    text,
+    onChangeText,
+    disabled,
+    frozen,
+    muted,
+    onSelectionChange,
+    mentionedUsers,
+  },
   ref,
 ) {
   const { mentionManager } = useSendbirdChat();
@@ -49,8 +59,9 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
 
   const onPressSend = () => {
     onSendUserMessage(text).catch(() => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error'));
-    setText('');
+    onChangeText('');
   };
+
   const onPressAttachment = () => {
     openSheet({
       sheetItems: [
@@ -136,7 +147,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
         disableFullscreenUI
         onSelectionChange={onSelectionChange}
         editable={!disabled}
-        onChangeText={setText}
+        onChangeText={onChangeText}
         style={styles.input}
         placeholder={conditionChaining(
           [frozen, muted],
