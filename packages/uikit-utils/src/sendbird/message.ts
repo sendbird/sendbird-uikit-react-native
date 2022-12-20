@@ -7,7 +7,7 @@ import type {
   SendbirdReaction,
   SendbirdSendableMessage,
 } from '../types';
-import { messageTime } from '../ui-format/common';
+import { getMessageTimeFormat } from '../ui-format/common';
 
 export function isNewMessage(msg: SendbirdMessage, currentUserId?: string) {
   const myMessage = isMyMessage(msg, currentUserId);
@@ -69,7 +69,7 @@ export function calcMessageGrouping(
     if (!prev) return false;
     if (curr.isAdminMessage()) return false;
     if (!hasSameSender(curr, prev)) return false;
-    if (messageTime(new Date(curr.createdAt)) !== messageTime(new Date(prev.createdAt))) return false;
+    if (getMessageTimeFormat(new Date(curr.createdAt)) !== getMessageTimeFormat(new Date(prev.createdAt))) return false;
     return true;
   };
 
@@ -78,7 +78,7 @@ export function calcMessageGrouping(
     if (!next) return false;
     if (curr.isAdminMessage()) return false;
     if (!hasSameSender(curr, next)) return false;
-    if (messageTime(new Date(curr.createdAt)) !== messageTime(new Date(next.createdAt))) return false;
+    if (getMessageTimeFormat(new Date(curr.createdAt)) !== getMessageTimeFormat(new Date(next.createdAt))) return false;
     return true;
   };
 

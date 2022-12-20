@@ -1,7 +1,5 @@
 import type { Locale } from 'date-fns';
-import format from 'date-fns/format';
-import isToday from 'date-fns/isToday';
-import isYesterday from 'date-fns/isYesterday';
+import { format, isThisYear, isToday, isYesterday } from 'date-fns';
 
 import type { SendbirdGroupChannel } from '../types';
 import { truncate } from './common';
@@ -23,9 +21,12 @@ export const getGroupChannelTitle = (
 
 export const getGroupChannelPreviewTime = (channel: SendbirdGroupChannel, locale?: Locale) => {
   const timestamp = channel.lastMessage?.createdAt || channel.joinedAt * 1000 || channel.createdAt;
+
   if (isToday(timestamp)) return format(timestamp, 'p', { locale });
   if (isYesterday(timestamp)) return 'Yesterday';
-  return format(timestamp, 'MMM dd', { locale });
+  if (isThisYear(timestamp)) return format(timestamp, 'MMM dd', { locale });
+
+  return format(timestamp, 'yyyy/MM/dd', { locale });
 };
 
 export const getGroupChannelLastMessage = (channel: SendbirdGroupChannel, EMPTY_MESSAGE = '', MAX_LEN = 15) => {
