@@ -9,11 +9,11 @@ import type {
   SendbirdUser,
 } from '@sendbird/uikit-utils';
 import {
-  dateSeparator,
+  getDateSeparatorFormat,
   getGroupChannelLastMessage,
   getGroupChannelPreviewTime,
   getGroupChannelTitle,
-  messageTime,
+  getMessageTimeFormat,
 } from '@sendbird/uikit-utils';
 
 /**
@@ -250,10 +250,10 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       HEADER_TITLE: (currentUserId, channel) =>
         getGroupChannelTitle(currentUserId, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       LIST_BANNER_FROZEN: 'Channel is frozen',
-      LIST_DATE_SEPARATOR: (date, locale) => dateSeparator(date, locale ?? dateLocale),
+      LIST_DATE_SEPARATOR: (date, locale) => getDateSeparatorFormat(date, locale ?? dateLocale),
       LIST_BUTTON_NEW_MSG: (newMessages) => `${newMessages.length} new messages`,
 
-      MESSAGE_BUBBLE_TIME: (message, locale) => messageTime(new Date(message.createdAt), locale ?? dateLocale),
+      MESSAGE_BUBBLE_TIME: (message, locale) => getMessageTimeFormat(new Date(message.createdAt), locale ?? dateLocale),
       MESSAGE_BUBBLE_FILE_TITLE: (message) => message.name,
       MESSAGE_BUBBLE_EDITED_POSTFIX: ' (edited)',
       MESSAGE_BUBBLE_UNKNOWN_TITLE: () => '(Unknown message type)',
@@ -406,7 +406,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     },
     FILE_VIEWER: {
       TITLE: (message) => message.sender?.nickname || USER_NO_NAME,
-      SUBTITLE: (message) => messageTime(new Date(message.createdAt), dateLocale),
+      SUBTITLE: (message) => getMessageTimeFormat(new Date(message.createdAt), dateLocale),
     },
     PLACEHOLDER: {
       NO_BANNED_USERS: 'No banned users',
