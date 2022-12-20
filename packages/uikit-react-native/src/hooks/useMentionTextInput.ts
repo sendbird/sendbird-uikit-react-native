@@ -53,7 +53,7 @@ const useMentionTextInput = (params: { editMessage?: SendbirdUserMessage | Sendb
       if (addedMentionedUser) mentionedUsersRef.current.push(addedMentionedUser);
 
       /** Reconcile mentioned users range on the right side of the selection **/
-      mentionedUsersRef.current = mentionManager.reconcileRangeInMentionedUsers(
+      mentionedUsersRef.current = mentionManager.reconcileRangeOfMentionedUsers(
         offset,
         selection.end,
         mentionedUsersRef.current,
@@ -70,7 +70,7 @@ const useMentionTextInput = (params: { editMessage?: SendbirdUserMessage | Sendb
         );
 
         /** Reconcile mentioned users range on the right side of the selection **/
-        mentionedUsersRef.current = mentionManager.reconcileRangeInMentionedUsers(
+        mentionedUsersRef.current = mentionManager.reconcileRangeOfMentionedUsers(
           offset,
           Math.max(selection.end, lastSelection),
           filtered,
@@ -80,7 +80,7 @@ const useMentionTextInput = (params: { editMessage?: SendbirdUserMessage | Sendb
       else {
         /** Find mentioned user who ranges in removed selection **/
         const foundIndex = mentionedUsersRef.current.findIndex((it) =>
-          mentionManager.rangeHelpers.intersection(it.range, selection, 'underMore'),
+          mentionManager.rangeHelpers.contains(it.range, selection, 'underMore'),
         );
         /** If found, remove from the mentioned user list and remove remainder text **/
         if (foundIndex > -1) {
@@ -94,7 +94,7 @@ const useMentionTextInput = (params: { editMessage?: SendbirdUserMessage | Sendb
         }
 
         /** Reconcile mentioned users range on the right side of the selection **/
-        mentionedUsersRef.current = mentionManager.reconcileRangeInMentionedUsers(
+        mentionedUsersRef.current = mentionManager.reconcileRangeOfMentionedUsers(
           offset,
           selection.end,
           mentionedUsersRef.current,
@@ -114,7 +114,7 @@ const useMentionTextInput = (params: { editMessage?: SendbirdUserMessage | Sendb
       // NOTE: To synchronize call onSelectionChange after onChangeText called on each platform.
       setTimeout(() => {
         const mentionedUser = mentionedUsersRef.current.find((it) =>
-          mentionManager.rangeHelpers.intersection(it.range, nativeSelection),
+          mentionManager.rangeHelpers.contains(it.range, nativeSelection),
         );
 
         // Selection should be blocked if changed into mentioned area

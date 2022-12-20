@@ -29,15 +29,15 @@ class MentionManager {
     inRangeLessMore(start: number, num: number, end: number) {
       return start <= num && num <= end;
     },
-    intersection(a: Range, b: Range, compare: 'underOver' | 'underMore' | 'lessOver' | 'lessMore' = 'underOver') {
-      const range = {
+    contains(a: Range, b: Range, compare: 'underOver' | 'underMore' | 'lessOver' | 'lessMore' = 'underOver') {
+      const inRange = {
         underOver: this.inRangeUnderOver,
         underMore: this.inRangeUnderMore,
         lessOver: this.inRangeLessOver,
         lessMore: this.inRangeLessMore,
       }[compare];
 
-      return range(a.start, b.start, a.end) || range(a.start, b.end, a.end);
+      return inRange(a.start, b.start, a.end) || inRange(a.start, b.end, a.end);
     },
   };
 
@@ -133,15 +133,18 @@ class MentionManager {
   };
 
   /**
-   * @description Move the range by offset in the mentioned users
+   * @description Reconcile the range by offset in the mentioned users
    * */
-  public reconcileRangeInMentionedUsers = (offset: number, selectionIndex: number, mentionedUsers: MentionedUser[]) => {
+  public reconcileRangeOfMentionedUsers = (offset: number, selectionIndex: number, mentionedUsers: MentionedUser[]) => {
     return mentionedUsers.map((it) => {
       // Changes only on the right text of selection.
       if (selectionIndex <= it.range.start) {
         return {
           ...it,
-          range: { start: it.range.start + offset, end: it.range.end + offset },
+          range: {
+            start: it.range.start + offset,
+            end: it.range.end + offset,
+          },
         };
       }
 
@@ -156,7 +159,7 @@ class MentionManager {
     let lastSelection = 0;
     let removedOffset = 0;
     const filtered = mentionedUsers.filter((it) => {
-      const shouldRemove = this.rangeHelpers.intersection(selection, it.range, 'lessMore');
+      const shouldRemove = this.rangeHelpers.contains(selection, it.range, 'lessMore');
       if (shouldRemove) {
         lastSelection = Math.max(lastSelection, it.range.end);
         removedOffset -= it.range.end - it.range.start;

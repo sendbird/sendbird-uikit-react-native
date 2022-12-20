@@ -39,10 +39,10 @@ const useMentionSuggestion = (params: {
     const selectionRanged = selection.start !== selection.end;
     if (selectionRanged) return [];
 
-    const selectionInMentionedRange = mentionedUsers.some((it) =>
-      mentionManager.rangeHelpers.intersection(it.range, selection, 'underMore'),
+    const selectionContainsMentionedUser = mentionedUsers.some((it) =>
+      mentionManager.rangeHelpers.contains(it.range, selection, 'underMore'),
     );
-    if (selectionInMentionedRange) return [];
+    if (selectionContainsMentionedUser) return [];
 
     const { isTriggered, isValidSearchString, searchString } = mentionManager.getSearchString(text, selection.start);
     if (!isTriggered() || !isValidSearchString()) return [];
