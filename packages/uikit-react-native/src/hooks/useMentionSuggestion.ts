@@ -40,7 +40,7 @@ const useMentionSuggestion = (params: {
     if (selectionRanged) return [];
 
     const selectionContainsMentionedUser = mentionedUsers.some((it) =>
-      mentionManager.rangeHelpers.contains(it.range, selection, 'underMore'),
+      mentionManager.rangeHelpers.overlaps(it.range, selection, 'underMore'),
     );
     if (selectionContainsMentionedUser) return [];
 

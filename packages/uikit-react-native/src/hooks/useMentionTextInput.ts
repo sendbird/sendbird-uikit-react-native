@@ -80,7 +80,7 @@ const useMentionTextInput = (params: { editMessage?: SendbirdUserMessage | Sendb
       else {
         /** Find mentioned user who ranges in removed selection **/
         const foundIndex = mentionedUsersRef.current.findIndex((it) =>
-          mentionManager.rangeHelpers.contains(it.range, selection, 'underMore'),
+          mentionManager.rangeHelpers.overlaps(it.range, selection, 'underMore'),
         );
         /** If found, remove from the mentioned user list and remove remainder text **/
         if (foundIndex > -1) {
@@ -114,7 +114,7 @@ const useMentionTextInput = (params: { editMessage?: SendbirdUserMessage | Sendb
       // NOTE: To synchronize call onSelectionChange after onChangeText called on each platform.
       setTimeout(() => {
         const mentionedUser = mentionedUsersRef.current.find((it) =>
-          mentionManager.rangeHelpers.contains(it.range, nativeSelection),
+          mentionManager.rangeHelpers.overlaps(it.range, nativeSelection),
         );
 
         // Selection should be blocked if changed into mentioned area

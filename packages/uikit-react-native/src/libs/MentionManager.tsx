@@ -29,7 +29,7 @@ class MentionManager {
     inRangeLessMore(start: number, num: number, end: number) {
       return start <= num && num <= end;
     },
-    contains(a: Range, b: Range, compare: 'underOver' | 'underMore' | 'lessOver' | 'lessMore' = 'underOver') {
+    overlaps(a: Range, b: Range, compare: 'underOver' | 'underMore' | 'lessOver' | 'lessMore' = 'underOver') {
       const inRange = {
         underOver: this.inRangeUnderOver,
         underMore: this.inRangeUnderMore,
@@ -159,7 +159,7 @@ class MentionManager {
     let lastSelection = 0;
     let removedOffset = 0;
     const filtered = mentionedUsers.filter((it) => {
-      const shouldRemove = this.rangeHelpers.contains(selection, it.range, 'lessMore');
+      const shouldRemove = this.rangeHelpers.overlaps(selection, it.range, 'lessMore');
       if (shouldRemove) {
         lastSelection = Math.max(lastSelection, it.range.end);
         removedOffset -= it.range.end - it.range.start;
