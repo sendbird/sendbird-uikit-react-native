@@ -58,17 +58,11 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   const toast = useToast();
 
   const onPressSend = () => {
-    const mention = conditionChaining(
-      [mentionedUsers.length > 0],
-      [
-        {
-          userIds: mentionedUsers.map((it) => it.user.userId),
-          messageTemplate: mentionManager.textToMentionedMessageTemplate(text, mentionedUsers),
-          type: MentionType.USERS,
-        },
-        undefined,
-      ],
-    );
+    const mention = {
+      userIds: mentionedUsers.map((it) => it.user.userId),
+      messageTemplate: mentionManager.textToMentionedMessageTemplate(text, mentionedUsers),
+      type: MentionType.USERS,
+    };
 
     onSendUserMessage(text, mention).catch(() => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error'));
     onChangeText('');
