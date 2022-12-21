@@ -68,7 +68,7 @@ const OpenGraphUserMessage = ({ message, variant, pressed, ogMetaData, children 
                 },
               ]}
             >
-              {features.mentionEnabled && message.mentionedMessageTemplate
+              {features.userMentionEnabled && message.mentionedMessageTemplate
                 ? message.mentionedMessageTemplate
                 : message.message}
             </RegexText>

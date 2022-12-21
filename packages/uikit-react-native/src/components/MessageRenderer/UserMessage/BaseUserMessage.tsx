@@ -58,7 +58,7 @@ const BaseUserMessage = ({ message, variant, pressed, children }: UserMessagePro
               },
             ]}
           >
-            {features.mentionEnabled && message.mentionedMessageTemplate
+            {features.userMentionEnabled && message.mentionedMessageTemplate
               ? message.mentionedMessageTemplate
               : message.message}
           </RegexText>

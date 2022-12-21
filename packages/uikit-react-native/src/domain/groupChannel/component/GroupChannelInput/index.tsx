@@ -30,7 +30,7 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
   const { channel, editMessage, setEditMessage, keyboardAvoidOffset = 0 } = useContext(GroupChannelContexts.Fragment);
 
   const chatAvailableState = getGroupChannelChatAvailableState(channel);
-  const mentionAvailable = features.mentionEnabled && channel.isGroupChannel() && !channel.isBroadcast;
+  const mentionAvailable = features.userMentionEnabled && channel.isGroupChannel() && !channel.isBroadcast;
   const inputMode = useIIFE(() => {
     if (!editMessage) return 'send';
     if (editMessage.isFileMessage()) return 'send';

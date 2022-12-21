@@ -43,7 +43,7 @@ const GroupChannelSettingsMenu = ({
   }
 
   const onPressNotificationMenu = () => {
-    if (features.mentionEnabled) {
+    if (features.userMentionEnabled) {
       onPressMenuNotificationWhenMentionEnabled?.();
     } else {
       toggleNotification();
@@ -72,7 +72,7 @@ const GroupChannelSettingsMenu = ({
       onPress: onPressNotificationMenu,
       actionLabel: getNotificationsLabel(channel.myPushTriggerOption),
       actionItem: conditionChaining(
-        [features.mentionEnabled],
+        [features.userMentionEnabled],
         [
           <Icon icon={'chevron-right'} color={colors.onBackground01} />,
           <Switch value={channel.myPushTriggerOption !== 'off'} onChangeValue={toggleNotification} />,

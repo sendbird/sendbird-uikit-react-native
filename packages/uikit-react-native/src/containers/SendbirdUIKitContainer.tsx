@@ -129,7 +129,7 @@ const SendbirdUIKitContainer = ({
       delimiter: MentionConfig.DEFAULT.DELIMITER,
       trigger: MentionConfig.DEFAULT.TRIGGER,
     });
-    return new MentionManager(config, chatOptions?.enableMention ?? false);
+    return new MentionManager(config, chatOptions?.enableUserMention ?? false);
   }, [chatOptions?.mention?.mentionLimit, chatOptions?.mention?.suggestionLimit, chatOptions?.mention?.debounceMills]);
 
   useLayoutEffect(() => {
@@ -160,7 +160,7 @@ const SendbirdUIKitContainer = ({
         enableChannelListTypingIndicator={chatOptions?.enableChannelListTypingIndicator ?? false}
         enableChannelListMessageReceiptStatus={chatOptions?.enableChannelListMessageReceiptStatus ?? false}
         enableUseUserIdForNickname={chatOptions?.enableUseUserIdForNickname ?? false}
-        enableMention={chatOptions?.enableMention ?? false}
+        enableUserMention={chatOptions?.enableUserMention ?? false}
       >
         <LocalizationProvider stringSet={defaultStringSet}>
           <PlatformServiceProvider
