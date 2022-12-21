@@ -121,10 +121,7 @@ const SendbirdUIKitContainer = ({
   const emojiManager = useMemo(() => new EmojiManager(internalStorage), [internalStorage]);
   const mentionManager = useMemo(() => {
     const config = new MentionConfig({
-      mentionLimit: Math.min(
-        userMention?.mentionLimit || MentionConfig.DEFAULT.MENTION_LIMIT,
-        MentionConfig.DEFAULT.MENTION_LIMIT,
-      ),
+      mentionLimit: userMention?.mentionLimit || MentionConfig.DEFAULT.MENTION_LIMIT,
       suggestionLimit: userMention?.suggestionLimit || MentionConfig.DEFAULT.SUGGESTION_LIMIT,
       debounceMills: userMention?.debounceMills ?? MentionConfig.DEFAULT.DEBOUNCE_MILLS,
       delimiter: MentionConfig.DEFAULT.DELIMITER,
