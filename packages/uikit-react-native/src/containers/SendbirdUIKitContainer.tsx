@@ -64,7 +64,6 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   chatOptions?: {
     localCacheStorage?: LocalCacheStorage;
     onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
-    mention?: Pick<Partial<MentionConfigInterface>, 'mentionLimit' | 'suggestionLimit' | 'debounceMills'>;
   } & Partial<UIKitFeaturesInSendbirdChatContext>;
   localization?: {
     stringSet?: StringSet;
@@ -86,6 +85,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
       users: SendbirdUser[] | SendbirdMember[],
     ) => SendbirdGroupChannelCreateParams | Promise<SendbirdGroupChannelCreateParams>;
   };
+  userMention?: Pick<Partial<MentionConfigInterface>, 'mentionLimit' | 'suggestionLimit' | 'debounceMills'>;
   errorBoundary?: {
     onError?: (props: ErrorBoundaryProps) => void;
     ErrorInfoComponent?: (props: ErrorBoundaryProps) => JSX.Element;
@@ -101,6 +101,7 @@ const SendbirdUIKitContainer = ({
   styles,
   toast,
   userProfile,
+  userMention,
   errorBoundary,
 }: SendbirdUIKitContainerProps) => {
   const defaultStringSet = localization?.stringSet ?? StringSetEn;
@@ -121,16 +122,16 @@ const SendbirdUIKitContainer = ({
   const mentionManager = useMemo(() => {
     const config = new MentionConfig({
       mentionLimit: Math.min(
-        chatOptions?.mention?.mentionLimit || MentionConfig.DEFAULT.MENTION_LIMIT,
+        userMention?.mentionLimit || MentionConfig.DEFAULT.MENTION_LIMIT,
         MentionConfig.DEFAULT.MENTION_LIMIT,
       ),
-      suggestionLimit: chatOptions?.mention?.suggestionLimit || MentionConfig.DEFAULT.SUGGESTION_LIMIT,
-      debounceMills: chatOptions?.mention?.debounceMills ?? MentionConfig.DEFAULT.DEBOUNCE_MILLS,
+      suggestionLimit: userMention?.suggestionLimit || MentionConfig.DEFAULT.SUGGESTION_LIMIT,
+      debounceMills: userMention?.debounceMills ?? MentionConfig.DEFAULT.DEBOUNCE_MILLS,
       delimiter: MentionConfig.DEFAULT.DELIMITER,
       trigger: MentionConfig.DEFAULT.TRIGGER,
     });
     return new MentionManager(config, chatOptions?.enableUserMention ?? false);
-  }, [chatOptions?.mention?.mentionLimit, chatOptions?.mention?.suggestionLimit, chatOptions?.mention?.debounceMills]);
+  }, [userMention?.mentionLimit, userMention?.suggestionLimit, userMention?.debounceMills]);
 
   useLayoutEffect(() => {
     if (!isFirstMount) {
