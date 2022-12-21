@@ -29,7 +29,7 @@ const GroupChannelSettingsMenu = ({
   onPressMenuModeration,
   onPressMenuMembers,
   onPressMenuLeaveChannel,
-  onPressMenuNotificationWhenMentionEnabled,
+  onPressMenuNotification,
   menuItemsCreator = (menu) => menu,
 }: GroupChannelSettingsProps['Menu']) => {
   const { sdk, features } = useSendbirdChat();
@@ -37,14 +37,14 @@ const GroupChannelSettingsMenu = ({
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
 
-  if (__DEV__ && !WARN_onPressMenuNotificationWhenMentionEnabled && !onPressMenuNotificationWhenMentionEnabled) {
+  if (__DEV__ && !WARN_onPressMenuNotificationWhenMentionEnabled && !onPressMenuNotification) {
     Logger.warn('You should pass `onPressMenuNotificationWhenMentionEnabled` prop if using mention');
     WARN_onPressMenuNotificationWhenMentionEnabled = true;
   }
 
   const onPressNotificationMenu = () => {
     if (features.userMentionEnabled) {
-      onPressMenuNotificationWhenMentionEnabled?.();
+      onPressMenuNotification?.();
     } else {
       toggleNotification();
     }
