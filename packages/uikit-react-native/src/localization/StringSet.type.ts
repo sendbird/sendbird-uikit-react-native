@@ -44,7 +44,7 @@ export interface StringSet {
     INPUT_EDIT_OK: string;
     INPUT_EDIT_CANCEL: string;
 
-    /** GroupChannel > MentionSuggestionList */
+    /** GroupChannel > Suggested mention list */
     MENTION_LIMITED: (mentionLimit: number) => string;
 
     /** GroupChannel > Dialog > Message */

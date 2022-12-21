@@ -105,10 +105,10 @@ export interface GroupChannelProps {
       message: SendbirdUserMessage,
       mention?: UserMessageMentionParams,
     ) => Promise<void>;
-    MentionSuggestionList: (props: GroupChannelProps['MentionSuggestionList']) => JSX.Element | null;
+    SuggestedMentionList: (props: GroupChannelProps['SuggestedMentionList']) => JSX.Element | null;
   };
 
-  MentionSuggestionList: {
+  SuggestedMentionList: {
     text: string;
     selection: Range;
     topInset: number;
@@ -146,7 +146,7 @@ export interface GroupChannelModule {
   Header: CommonComponent<GroupChannelProps['Header']>;
   MessageList: CommonComponent<GroupChannelProps['MessageList']>;
   Input: CommonComponent<GroupChannelProps['Input']>;
-  MentionSuggestionList: CommonComponent<GroupChannelProps['MentionSuggestionList']>;
+  SuggestedMentionList: CommonComponent<GroupChannelProps['SuggestedMentionList']>;
   StatusEmpty: CommonComponent;
   StatusLoading: CommonComponent;
 }

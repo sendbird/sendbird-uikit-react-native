@@ -52,10 +52,7 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
   useTextPersistenceOnDisabled(text, onChangeText, chatAvailableState.disabled);
   useAutoFocusOnEditMode(textInputRef, messageToEdit);
 
-  const onPressToMention: GroupChannelProps['MentionSuggestionList']['onPressToMention'] = (
-    user,
-    searchStringRange,
-  ) => {
+  const onPressToMention: GroupChannelProps['SuggestedMentionList']['onPressToMention'] = (user, searchStringRange) => {
     const mentionedMessageText = mentionManager.asMentionedMessageText(user, true);
     const range = { start: searchStringRange.start, end: searchStringRange.start + mentionedMessageText.length - 1 };
 
@@ -76,7 +73,7 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
           {mentionAvailable && Platform.OS !== 'android' && (
             // NOTE: Android cannot recognize the scroll responder properly
             //  when has absolute ScrollView inside KeyboardAvoidingView
-            <props.MentionSuggestionList
+            <props.SuggestedMentionList
               text={text}
               selection={selection}
               inputHeight={inputHeight}
@@ -117,7 +114,7 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
         </View>
       </KeyboardAvoidingView>
       {mentionAvailable && Platform.OS === 'android' && (
-        <props.MentionSuggestionList
+        <props.SuggestedMentionList
           text={text}
           selection={selection}
           inputHeight={inputHeight}

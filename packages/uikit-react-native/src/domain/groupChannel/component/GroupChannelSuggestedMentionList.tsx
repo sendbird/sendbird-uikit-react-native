@@ -19,14 +19,14 @@ import useMentionSuggestion from '../../../hooks/useMentionSuggestion';
 import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
 
-const GroupChannelMentionSuggestionList = ({
+const GroupChannelSuggestedMentionList = ({
   text,
   selection,
   inputHeight,
   bottomInset,
   onPressToMention,
   mentionedUsers,
-}: GroupChannelProps['MentionSuggestionList']) => {
+}: GroupChannelProps['SuggestedMentionList']) => {
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
   const { channel } = useContext(GroupChannelContexts.Fragment);
   const { mentionManager } = useSendbirdChat();
@@ -143,4 +143,4 @@ const styles = createStyleSheet({
     marginRight: 16,
   },
 });
-export default GroupChannelMentionSuggestionList;
+export default GroupChannelSuggestedMentionList;
