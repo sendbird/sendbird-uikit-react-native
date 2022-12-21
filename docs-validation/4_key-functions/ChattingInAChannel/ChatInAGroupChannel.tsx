@@ -40,8 +40,8 @@ function _context(_: GroupChannelContextsType) {
   const fragment = useContext(_.Fragment);
   fragment.headerTitle;
   fragment.channel;
-  fragment.editMessage;
-  fragment.setEditMessage;
+  fragment.messageToEdit;
+  fragment.setMessageToEdit;
   fragment.keyboardAvoidOffset;
 
   const typing = useContext(_.TypingIndicator);
@@ -57,8 +57,8 @@ const Component = () => {
   const {
     headerTitle,
     channel,
-    editMessage,
-    setEditMessage,
+    messageToEdit,
+    setMessageToEdit,
     keyboardAvoidOffset,
   } = useContext(GroupChannelContexts.Fragment);
 };

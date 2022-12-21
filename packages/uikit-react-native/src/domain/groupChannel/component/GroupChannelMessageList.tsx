@@ -165,7 +165,7 @@ const useGetMessagePressActions = ({
   const { alert } = useAlert();
   const { clipboardService, fileService } = usePlatformService();
   const { features } = useSendbirdChat();
-  const { setEditMessage } = useContext(GroupChannelContexts.Fragment);
+  const { setMessageToEdit } = useContext(GroupChannelContexts.Fragment);
 
   const handleFailedMessage = (message: HandleableMessage) => {
     openSheet({
@@ -225,7 +225,7 @@ const useGetMessagePressActions = ({
           {
             icon: 'edit',
             title: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_EDIT,
-            onPress: () => setEditMessage(msg),
+            onPress: () => setMessageToEdit(msg),
           },
           {
             icon: 'delete',

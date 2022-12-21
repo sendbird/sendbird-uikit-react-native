@@ -7,7 +7,7 @@ import { SendbirdFileMessage, SendbirdUserMessage, replace, useFreshCallback } f
 import type { MentionedUser } from '../types';
 import { useSendbirdChat } from './useContext';
 
-const useMentionTextInput = (params: { editMessage?: SendbirdUserMessage | SendbirdFileMessage }) => {
+const useMentionTextInput = (params: { messageToEdit?: SendbirdUserMessage | SendbirdFileMessage }) => {
   const { mentionManager } = useSendbirdChat();
 
   const mentionedUsersRef = useRef<MentionedUser[]>([]);
@@ -19,24 +19,24 @@ const useMentionTextInput = (params: { editMessage?: SendbirdUserMessage | Sendb
   // TODO: Refactor text edit logic more clearly
   useEffect(() => {
     if (
-      params.editMessage?.mentionedMessageTemplate &&
-      params.editMessage?.mentionedUsers &&
+      params.messageToEdit?.mentionedMessageTemplate &&
+      params.messageToEdit?.mentionedUsers &&
       mentionManager.mentionEnabled
     ) {
       const result = mentionManager.templateToTextAndMentionedUsers(
-        params.editMessage.mentionedMessageTemplate,
-        params.editMessage.mentionedUsers,
+        params.messageToEdit.mentionedMessageTemplate,
+        params.messageToEdit.mentionedUsers,
       );
 
       mentionedUsersRef.current = result.mentionedUsers;
       setText(result.mentionedText);
     } else {
       mentionedUsersRef.current = [];
-      if (params.editMessage?.isUserMessage()) {
-        setText(params.editMessage.message);
+      if (params.messageToEdit?.isUserMessage()) {
+        setText(params.messageToEdit.message);
       }
     }
-  }, [params.editMessage]);
+  }, [params.messageToEdit]);
 
   const onChangeText = useFreshCallback((_nextText: string, addedMentionedUser?: MentionedUser) => {
     const prevText = text;

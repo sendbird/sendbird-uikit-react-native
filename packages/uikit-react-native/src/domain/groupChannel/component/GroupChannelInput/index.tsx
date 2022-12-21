@@ -27,25 +27,30 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
   const { top, left, right, bottom } = useSafeAreaInsets();
   const { colors } = useUIKitTheme();
   const { features, mentionManager } = useSendbirdChat();
-  const { channel, editMessage, setEditMessage, keyboardAvoidOffset = 0 } = useContext(GroupChannelContexts.Fragment);
+  const {
+    channel,
+    messageToEdit,
+    setMessageToEdit,
+    keyboardAvoidOffset = 0,
+  } = useContext(GroupChannelContexts.Fragment);
 
   const chatAvailableState = getGroupChannelChatAvailableState(channel);
   const mentionAvailable = features.userMentionEnabled && channel.isGroupChannel() && !channel.isBroadcast;
   const inputMode = useIIFE(() => {
-    if (!editMessage) return 'send';
-    if (editMessage.isFileMessage()) return 'send';
+    if (!messageToEdit) return 'send';
+    if (messageToEdit.isFileMessage()) return 'send';
     return 'edit';
   });
 
   const [inputHeight, setInputHeight] = useState(styles.inputDefault.height);
 
   const { selection, onSelectionChange, textInputRef, text, onChangeText, mentionedUsers } = useMentionTextInput({
-    editMessage,
+    messageToEdit: messageToEdit,
   });
 
   useTypingTrigger(text, channel);
   useTextPersistenceOnDisabled(text, onChangeText, chatAvailableState.disabled);
-  useAutoFocusOnEditMode(textInputRef, editMessage);
+  useAutoFocusOnEditMode(textInputRef, messageToEdit);
 
   const onPressToMention: GroupChannelProps['MentionSuggestionList']['onPressToMention'] = (
     user,
@@ -93,15 +98,15 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
                 mentionedUsers={mentionedUsers}
               />
             )}
-            {inputMode === 'edit' && editMessage && (
+            {inputMode === 'edit' && messageToEdit && (
               <EditInput
                 {...props}
                 ref={textInputRef as never}
                 autoFocus={AUTO_FOCUS}
                 text={text}
                 onChangeText={onChangeText}
-                editMessage={editMessage}
-                setEditMessage={setEditMessage}
+                messageToEdit={messageToEdit}
+                setMessageToEdit={setMessageToEdit}
                 disabled={chatAvailableState.disabled}
                 onSelectionChange={onSelectionChange}
                 mentionedUsers={mentionedUsers}
@@ -148,13 +153,13 @@ const useTextPersistenceOnDisabled = (text: string, setText: (val: string) => vo
 
 const useAutoFocusOnEditMode = (
   textInputRef: MutableRefObject<TextInput | undefined>,
-  editMessage?: SendbirdUserMessage | SendbirdFileMessage,
+  messageToEdit?: SendbirdUserMessage | SendbirdFileMessage,
 ) => {
   useEffect(() => {
-    if (editMessage?.isUserMessage()) {
+    if (messageToEdit?.isUserMessage()) {
       if (!AUTO_FOCUS) setTimeout(() => textInputRef.current?.focus(), 500);
     }
-  }, [editMessage]);
+  }, [messageToEdit]);
 };
 
 const SafeAreaBottom = ({ height }: { height: number }) => {

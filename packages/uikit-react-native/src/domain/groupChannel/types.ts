@@ -133,8 +133,8 @@ export interface GroupChannelContextsType {
   Fragment: React.Context<{
     headerTitle: string;
     channel: SendbirdGroupChannel;
-    editMessage?: SendbirdUserMessage | SendbirdFileMessage;
-    setEditMessage: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
+    messageToEdit?: SendbirdUserMessage | SendbirdFileMessage;
+    setMessageToEdit: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
     keyboardAvoidOffset?: number;
   }>;
   TypingIndicator: React.Context<{

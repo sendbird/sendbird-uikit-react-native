@@ -19,7 +19,7 @@ export const GroupChannelContexts: GroupChannelContextsType = {
   Fragment: createContext({
     headerTitle: '',
     channel: {} as SendbirdGroupChannel,
-    setEditMessage: NOOP,
+    setMessageToEdit: NOOP,
   }),
   TypingIndicator: createContext({
     typingUsers: [] as SendbirdUser[],
@@ -39,7 +39,7 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
   const { currentUser, sdk } = useSendbirdChat();
 
   const [typingUsers, setTypingUsers] = useState<SendbirdUser[]>([]);
-  const [editMessage, setEditMessage] = useState<SendbirdUserMessage | SendbirdFileMessage>();
+  const [messageToEdit, setMessageToEdit] = useState<SendbirdUserMessage | SendbirdFileMessage>();
 
   useChannelHandler(sdk, `GroupChannelContextsProvider_${id}`, {
     onTypingStatusUpdated(eventChannel) {
@@ -55,8 +55,8 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
         value={{
           headerTitle: STRINGS.GROUP_CHANNEL.HEADER_TITLE(currentUser?.userId ?? '', channel),
           channel,
-          editMessage,
-          setEditMessage,
+          messageToEdit,
+          setMessageToEdit,
           keyboardAvoidOffset,
         }}
       >
