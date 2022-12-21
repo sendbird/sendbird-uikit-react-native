@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 
+import { MentionType } from '@sendbird/chat/message';
 import {
   Icon,
   TextInput,
@@ -57,10 +58,18 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   const toast = useToast();
 
   const onPressSend = () => {
-    const mention = {
-      userIds: mentionedUsers.map((it) => it.user.userId),
-      messageTemplate: mentionManager.textToMentionedMessageTemplate(text, mentionedUsers),
-    };
+    const mention = conditionChaining(
+      [mentionedUsers.length > 0],
+      [
+        {
+          userIds: mentionedUsers.map((it) => it.user.userId),
+          messageTemplate: mentionManager.textToMentionedMessageTemplate(text, mentionedUsers),
+          type: MentionType.USERS,
+        },
+        undefined,
+      ],
+    );
+
     onSendUserMessage(text, mention).catch(() => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error'));
     onChangeText('');
   };

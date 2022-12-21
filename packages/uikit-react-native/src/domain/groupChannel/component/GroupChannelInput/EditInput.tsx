@@ -7,8 +7,10 @@ import {
   View,
 } from 'react-native';
 
+import { MentionType } from '@sendbird/chat/message';
 import { Button, TextInput, createStyleSheet, useToast } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdFileMessage, SendbirdUserMessage } from '@sendbird/uikit-utils';
+import { conditionChaining } from '@sendbird/uikit-utils';
 
 import { useLocalization, useSendbirdChat } from '../../../../hooks/useContext';
 import type { MentionedUser } from '../../../../types';
@@ -50,10 +52,18 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
 
   const onPressSave = () => {
     if (editMessage.isUserMessage()) {
-      const mention = {
-        userIds: mentionedUsers.map((it) => it.user.userId),
-        messageTemplate: mentionManager.textToMentionedMessageTemplate(text, mentionedUsers),
-      };
+      const mention = conditionChaining(
+        [mentionedUsers.length > 0],
+        [
+          {
+            userIds: mentionedUsers.map((it) => it.user.userId),
+            messageTemplate: mentionManager.textToMentionedMessageTemplate(text, mentionedUsers),
+            type: MentionType.USERS,
+          },
+          undefined,
+        ],
+      );
+
       onUpdateUserMessage(text, editMessage, mention).catch(() => toast.show(STRINGS.TOAST.UPDATE_MSG_ERROR, 'error'));
     }
     setEditMessage();

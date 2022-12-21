@@ -16,10 +16,11 @@ import type {
 import type { FileType } from '../../platform/types';
 import type { CommonComponent, MentionedUser, Range } from '../../types';
 
-type UserMessageMentionParams = {
+type UserMessageMentionParams = Required<{
   messageTemplate: SendbirdUserMessageCreateParams['mentionedMessageTemplate'];
   userIds: SendbirdUserMessageCreateParams['mentionedUserIds'];
-};
+  type: SendbirdUserMessageCreateParams['mentionType'];
+}>;
 
 export interface GroupChannelProps {
   Fragment: {

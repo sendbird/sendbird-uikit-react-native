@@ -81,6 +81,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
           message: text,
           mentionedUserIds: mention?.userIds,
           mentionedMessageTemplate: mention?.messageTemplate,
+          mentionType: mention?.type,
         });
         await sendUserMessage(processedParams);
       },
@@ -97,6 +98,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
           message: editedText,
           mentionedUserIds: mention?.userIds,
           mentionedMessageTemplate: mention?.messageTemplate,
+          mentionType: mention?.type,
         });
         await updateUserMessage(message.messageId, processedParams);
       },
