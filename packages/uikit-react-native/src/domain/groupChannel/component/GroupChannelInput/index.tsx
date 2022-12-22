@@ -70,19 +70,6 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
         behavior={KEYBOARD_AVOID_VIEW_BEHAVIOR}
       >
         <View style={{ paddingLeft: left, paddingRight: right, backgroundColor: colors.background }}>
-          {mentionAvailable && Platform.OS !== 'android' && (
-            // NOTE: Android cannot recognize the scroll responder properly
-            //  when has absolute ScrollView inside KeyboardAvoidingView
-            <props.SuggestedMentionList
-              text={text}
-              selection={selection}
-              inputHeight={inputHeight}
-              topInset={top}
-              bottomInset={bottom}
-              onPressToMention={onPressToMention}
-              mentionedUsers={mentionedUsers}
-            />
-          )}
           <View onLayout={(e) => setInputHeight(e.nativeEvent.layout.height)} style={styles.inputContainer}>
             {inputMode === 'send' && (
               <SendInput
@@ -113,7 +100,7 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
           <SafeAreaBottom height={bottom} />
         </View>
       </KeyboardAvoidingView>
-      {mentionAvailable && Platform.OS === 'android' && (
+      {mentionAvailable && (
         <props.SuggestedMentionList
           text={text}
           selection={selection}
