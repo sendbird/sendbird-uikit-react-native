@@ -10,19 +10,6 @@ import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelSettingsContexts } from '../module/moduleContext';
 import type { GroupChannelSettingsProps } from '../types';
 
-// TODO: Replace with String set
-const getNotificationsLabel = (option: PushTriggerOption) => {
-  switch (option) {
-    case PushTriggerOption.ALL:
-    case PushTriggerOption.DEFAULT:
-      return 'On';
-    case PushTriggerOption.OFF:
-      return 'Off';
-    case PushTriggerOption.MENTION_ONLY:
-      return 'Mentions only';
-  }
-};
-
 let WARN_onPressMenuNotification = false;
 
 const GroupChannelSettingsMenu = ({
@@ -50,20 +37,34 @@ const GroupChannelSettingsMenu = ({
     }
   };
 
-  const { onPressNotificationMenu, actionLabelNotificationMenu, actionItemNotificationMenu } = useIIFE(() => ({
-    actionLabelNotificationMenu: getNotificationsLabel(channel.myPushTriggerOption),
-    actionItemNotificationMenu: conditionChaining(
-      [features.userMentionEnabled],
-      [
-        <Icon icon={'chevron-right'} color={colors.onBackground01} />,
-        <Switch value={channel.myPushTriggerOption !== 'off'} onChangeValue={toggleNotification} />,
-      ],
-    ),
-    onPressNotificationMenu: () => {
-      if (features.userMentionEnabled) onPressMenuNotification?.();
-      else toggleNotification();
-    },
-  }));
+  const { onPressNotificationMenu, actionLabelNotificationMenu, actionItemNotificationMenu } = useIIFE(() => {
+    const getNotificationsLabel = () => {
+      switch (channel.myPushTriggerOption) {
+        case PushTriggerOption.ALL:
+        case PushTriggerOption.DEFAULT:
+          return STRINGS.GROUP_CHANNEL_SETTINGS.MENU_NOTIFICATION_LABEL_ON;
+        case PushTriggerOption.OFF:
+          return STRINGS.GROUP_CHANNEL_SETTINGS.MENU_NOTIFICATION_LABEL_OFF;
+        case PushTriggerOption.MENTION_ONLY:
+          return STRINGS.GROUP_CHANNEL_SETTINGS.MENU_NOTIFICATION_LABEL_MENTION_ONLY;
+      }
+    };
+
+    return {
+      actionLabelNotificationMenu: getNotificationsLabel(),
+      actionItemNotificationMenu: conditionChaining(
+        [features.userMentionEnabled],
+        [
+          <Icon icon={'chevron-right'} color={colors.onBackground01} />,
+          <Switch value={channel.myPushTriggerOption !== 'off'} onChangeValue={toggleNotification} />,
+        ],
+      ),
+      onPressNotificationMenu: () => {
+        if (features.userMentionEnabled) onPressMenuNotification?.();
+        else toggleNotification();
+      },
+    };
+  });
 
   const menuItems: MenuBarProps[] = menuItemsCreator([
     {

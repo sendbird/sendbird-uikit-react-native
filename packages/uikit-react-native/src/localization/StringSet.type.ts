@@ -72,9 +72,12 @@ export interface StringSet {
 
     /** GroupChannelSettings > Menu */
     MENU_MODERATION: string;
-    MENU_NOTIFICATION: string;
     MENU_MEMBERS: string;
     MENU_LEAVE_CHANNEL: string;
+    MENU_NOTIFICATION: string;
+    MENU_NOTIFICATION_LABEL_ON: string;
+    MENU_NOTIFICATION_LABEL_OFF: string;
+    MENU_NOTIFICATION_LABEL_MENTION_ONLY: string;
 
     /** GroupChannelSettings > Dialog */
     DIALOG_CHANGE_NAME: string;
@@ -95,7 +98,7 @@ export interface StringSet {
     MENU_NOTIFICATIONS: string;
     MENU_NOTIFICATIONS_DESC: string;
     MENU_NOTIFICATIONS_OPTION_ALL: string;
-    MENU_NOTIFICATIONS_OPTION_MENTIONS_ONLY: string;
+    MENU_NOTIFICATIONS_OPTION_MENTION_ONLY: string;
   };
   GROUP_CHANNEL_MODERATION: {
     /** GroupChannelModeration > Header */
@@ -286,9 +289,12 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       HEADER_TITLE: 'Channel information',
       HEADER_RIGHT: 'Edit',
       MENU_MODERATION: 'Moderation',
-      MENU_NOTIFICATION: 'Notifications',
       MENU_MEMBERS: 'Members',
       MENU_LEAVE_CHANNEL: 'Leave channel',
+      MENU_NOTIFICATION: 'Notifications',
+      MENU_NOTIFICATION_LABEL_ON: 'On',
+      MENU_NOTIFICATION_LABEL_OFF: 'Off',
+      MENU_NOTIFICATION_LABEL_MENTION_ONLY: 'Mentions only',
       DIALOG_CHANGE_NAME: 'Change channel name',
       DIALOG_CHANGE_NAME_PROMPT_TITLE: 'Change channel name',
       DIALOG_CHANGE_NAME_PROMPT_PLACEHOLDER: 'Enter name',
@@ -306,7 +312,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       MENU_NOTIFICATIONS_DESC:
         'Turn on push notifications if you wish to be notified when messages are delivered to this channel.',
       MENU_NOTIFICATIONS_OPTION_ALL: 'All new messages',
-      MENU_NOTIFICATIONS_OPTION_MENTIONS_ONLY: 'Mentions only',
+      MENU_NOTIFICATIONS_OPTION_MENTION_ONLY: 'Mentions only',
       ...overrides?.GROUP_CHANNEL_NOTIFICATIONS,
     },
     GROUP_CHANNEL_MODERATION: {

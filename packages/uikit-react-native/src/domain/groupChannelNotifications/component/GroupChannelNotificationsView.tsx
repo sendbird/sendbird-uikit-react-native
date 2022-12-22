@@ -61,7 +61,7 @@ const GroupChannelNotificationsView = () => {
           <Bar
             body3
             onPress={() => onPressNotificationsOption(PushTriggerOption.MENTION_ONLY)}
-            title={STRINGS.GROUP_CHANNEL_NOTIFICATIONS.MENU_NOTIFICATIONS_OPTION_MENTIONS_ONLY}
+            title={STRINGS.GROUP_CHANNEL_NOTIFICATIONS.MENU_NOTIFICATIONS_OPTION_MENTION_ONLY}
             component={
               <Icon
                 color={turnedOnNotificationsOptionMentionsOnly ? colors.primary : colors.onBackground03}
