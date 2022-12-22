@@ -59,9 +59,10 @@ export const useIsMountedRef = () => {
 export const useIsFirstMount = () => {
   const isFirstMount = useRef(true);
 
-  useLayoutEffect(() => {
+  if (isFirstMount.current) {
     isFirstMount.current = false;
-  }, []);
+    return true;
+  }
 
   return isFirstMount.current;
 };
