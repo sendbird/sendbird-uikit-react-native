@@ -2,13 +2,16 @@ import { useEffect, useState } from 'react';
 import { Keyboard, KeyboardEvent, KeyboardEventName, LayoutAnimation, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { NOOP } from '@sendbird/uikit-utils';
+
 type KeyboardEvents = {
   showEvent: KeyboardEventName;
   hideEvent: KeyboardEventName;
 };
 
-const getNextConfigFrom = (event: KeyboardEvent) => {
-  return LayoutAnimation.create(event.duration, event.easing);
+const configureNextLayoutAnimation = (event: KeyboardEvent) => {
+  const config = LayoutAnimation.create(event.duration, event.easing);
+  LayoutAnimation.configureNext(config);
 };
 
 const { showEvent, hideEvent } = Platform.select<KeyboardEvents>({
@@ -25,16 +28,18 @@ const useKeyboardStatus = () => {
       Keyboard.addListener(showEvent, (event) => {
         const height = event.endCoordinates.height;
         const bottomSpace = Platform.select({ ios: height - bottomInset, default: 0 });
+        const nextLayoutAnimation = Platform.select({ ios: configureNextLayoutAnimation, default: NOOP });
 
-        Platform.OS === 'ios' && LayoutAnimation.configureNext(getNextConfigFrom(event));
+        nextLayoutAnimation(event);
         setKeyboardStatus({ visible: true, height, bottomSpace });
       }),
 
       Keyboard.addListener(hideEvent, (event) => {
         const height = 0;
         const bottomSpace = Platform.select({ default: height });
+        const nextLayoutAnimation = Platform.select({ ios: configureNextLayoutAnimation, default: NOOP });
 
-        Platform.OS === 'ios' && LayoutAnimation.configureNext(getNextConfigFrom(event));
+        nextLayoutAnimation(event);
         setKeyboardStatus({ visible: false, height, bottomSpace });
       }),
     ];
