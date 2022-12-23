@@ -4,6 +4,8 @@ import { Platform } from 'react-native';
 import { Logger } from '@sendbird/uikit-utils';
 
 export { default as MessageRenderer } from './components/MessageRenderer';
+export { ReactionAddons } from './components/ReactionAddons';
+export { ReactionBottomSheets } from './components/ReactionBottomSheets';
 export { default as ChannelCover } from './components/ChannelCover';
 export { default as ChatFlatList } from './components/ChatFlatList';
 export { default as FileViewer } from './components/FileViewer';
@@ -27,6 +29,7 @@ export { default as createGroupChannelOperatorsFragment } from './fragments/crea
 export { default as createGroupChannelRegisterOperatorFragment } from './fragments/createGroupChannelRegisterOperatorFragment';
 export { default as createGroupChannelMutedMembersFragment } from './fragments/createGroupChannelMutedMembersFragment';
 export { default as createGroupChannelBannedUsersFragment } from './fragments/createGroupChannelBannedUsersFragment';
+export { default as createGroupChannelNotificationsFragment } from './fragments/createGroupChannelNotificationsFragment';
 
 /** Context **/
 export { SendbirdChatContext, SendbirdChatProvider } from './contexts/SendbirdChatCtx';
@@ -97,9 +100,17 @@ export type {
   GroupChannelListContextsType,
 } from './domain/groupChannelList/types';
 
+export * from './domain/groupChannelNotifications';
+export {
+  GroupChannelNotificationsProps,
+  GroupChannelNotificationsContextsType,
+  GroupChannelNotificationsFragment,
+  GroupChannelNotificationsModule,
+} from './domain/groupChannelNotifications/types';
+
+export * from './domain/groupChannelUserList/types';
 export * from './domain/userList';
 export type { UserListProps, UserListModule, UserListContextsType } from './domain/userList/types';
-export * from './domain/groupChannelUserList/types';
 
 /** UIKit **/
 export { default as SendbirdUIKitContainer, SendbirdUIKit } from './containers/SendbirdUIKitContainer';
