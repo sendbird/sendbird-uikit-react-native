@@ -63,7 +63,11 @@ const useMentionSuggestion = (params: {
     } else {
       return channel.members
         .sort((a, b) => a.nickname?.localeCompare(b.nickname))
-        .filter((member) => member.nickname?.startsWith(searchString) && member.userId !== currentUser?.userId)
+        .filter(
+          (member) =>
+            member.nickname?.toLowerCase().startsWith(searchString.toLowerCase()) &&
+            member.userId !== currentUser?.userId,
+        )
         .slice(0, mentionManager.config.suggestionLimit);
     }
   };
