@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import type { SendbirdGroupChannel, SendbirdMember, SendbirdUser } from '@sendbird/uikit-utils';
+import { useAsyncEffect } from '@sendbird/uikit-utils';
 
 import { useSendbirdChat } from '../hooks/useContext';
 import type { Range } from '../types';
@@ -12,6 +13,12 @@ const useMentionSuggestion = (params: {
   mentionedUsers: { user: SendbirdUser; range: Range }[];
 }) => {
   const { text, selection, channel, mentionedUsers } = params;
+
+  const [freshChannel, setFreshChannel] = useState(channel);
+
+  useAsyncEffect(async () => {
+    setFreshChannel(await channel.refresh());
+  }, [channel.url]);
 
   const { mentionManager, currentUser } = useSendbirdChat();
   const [members, setMembers] = useState<SendbirdMember[]>([]);
@@ -52,8 +59,8 @@ const useMentionSuggestion = (params: {
 
     updateSearchStringRange(selection.start, searchString);
 
-    if (channel.isSuper) {
-      return channel
+    if (freshChannel.isSuper) {
+      return freshChannel
         .createMemberListQuery({
           nicknameStartsWithFilter: searchString,
           limit: mentionManager.config.suggestionLimit + 1,
@@ -61,7 +68,7 @@ const useMentionSuggestion = (params: {
         .next()
         .then((members) => members.filter((member) => member.userId !== currentUser?.userId));
     } else {
-      return channel.members
+      return freshChannel.members
         .sort((a, b) => a.nickname?.localeCompare(b.nickname))
         .filter(
           (member) =>
