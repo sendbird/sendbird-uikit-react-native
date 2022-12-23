@@ -14,12 +14,13 @@ type Props = UserMessageProps & {
 };
 
 const OpenGraphUserMessage = ({ message, variant, pressed, ogMetaData, children }: Props) => {
-  const { mentionManager, features } = useSendbirdChat();
+  const { mentionManager, features, currentUser } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { show } = useUserProfile();
   const { colors, select, palette } = useUIKitTheme();
-  const color = colors.ui.message[variant][pressed ? 'pressed' : 'enabled'];
+
   const [imageNotFound, setImageNotFound] = useState(false);
+  const color = colors.ui.message[variant][pressed ? 'pressed' : 'enabled'];
 
   const containerBackground = select({ dark: palette.background400, light: palette.background100 });
 
@@ -42,7 +43,11 @@ const OpenGraphUserMessage = ({ message, variant, pressed, ogMetaData, children 
                           {...parentProps}
                           key={`${keyPrefix}-${index}`}
                           onPress={() => show(user)}
-                          style={[parentProps?.style, { fontWeight: 'bold' }]}
+                          style={[
+                            parentProps?.style,
+                            { fontWeight: 'bold' },
+                            user.userId === currentUser?.userId && { backgroundColor: palette.highlight },
+                          ]}
                         >
                           {`${mentionManager.asMentionedMessageText(user)}`}
                         </Text>
