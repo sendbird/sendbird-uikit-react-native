@@ -11,6 +11,7 @@ import type {
   SendbirdPreviousMessageListQuery,
   SendbirdUserMessage,
   SendbirdUserMessageCreateParams,
+  UserStruct,
 } from '@sendbird/uikit-utils';
 
 export interface CustomQueryInterface<Data> {
@@ -188,10 +189,6 @@ export type UseGroupChannelMessagesOptions = {
   enableCollectionWithoutLocalCache?: boolean;
   onChannelDeleted?: () => void;
 };
-
-export interface UserStruct {
-  userId: string;
-}
 
 /**
  * @interface UseUserListReturn

@@ -46,6 +46,7 @@ export const SBErrorMessage = {
 };
 
 export type {
+  UserStruct,
   FilterByValueType,
   UnionToIntersection,
   OmittedValues,

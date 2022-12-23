@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, ListRenderItem } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { SendbirdRestrictedUser, useFreshCallback } from '@sendbird/uikit-utils';
+import { SendbirdRestrictedUser, getUserUniqId, useFreshCallback } from '@sendbird/uikit-utils';
 
 import type { GroupChannelBannedUsersProps } from '../types';
 
@@ -23,8 +23,9 @@ const GroupChannelBannedUsersList = ({
       renderItem={renderItem}
       contentContainerStyle={{ paddingLeft: left, paddingRight: right, flexGrow: 1 }}
       ListEmptyComponent={ListEmptyComponent}
-      onEndReached={() => onLoadNext()}
+      onEndReached={onLoadNext}
       bounces={false}
+      keyExtractor={getUserUniqId}
     />
   );
 };

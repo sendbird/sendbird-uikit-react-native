@@ -1,5 +1,10 @@
-import type { UseUserListOptions, UserStruct } from '@sendbird/uikit-chat-hooks';
-import type { SendbirdGroupChannel, SendbirdGroupChannelCreateParams, SendbirdMember } from '@sendbird/uikit-utils';
+import type { UseUserListOptions } from '@sendbird/uikit-chat-hooks';
+import type {
+  SendbirdGroupChannel,
+  SendbirdGroupChannelCreateParams,
+  SendbirdMember,
+  UserStruct,
+} from '@sendbird/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 import type { GroupChannelType } from '../groupChannelList/types';

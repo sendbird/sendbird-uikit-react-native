@@ -3,7 +3,7 @@ import { FlatList, ListRenderItem } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { SendbirdUser } from '@sendbird/uikit-utils';
-import { useFreshCallback } from '@sendbird/uikit-utils';
+import { getUserUniqId, useFreshCallback } from '@sendbird/uikit-utils';
 
 import type { GroupChannelOperatorsProps } from '../types';
 
@@ -22,6 +22,7 @@ const GroupChannelOperatorsList = ({
       contentContainerStyle={{ paddingLeft: left, paddingRight: right, flexGrow: 1 }}
       ListEmptyComponent={ListEmptyComponent}
       bounces={false}
+      keyExtractor={getUserUniqId}
     />
   );
 };

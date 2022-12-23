@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, ListRenderItem } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { SendbirdRestrictedUser, useFreshCallback } from '@sendbird/uikit-utils';
+import { SendbirdRestrictedUser, getUserUniqId, useFreshCallback } from '@sendbird/uikit-utils';
 
 import type { GroupChannelMutedMembersProps } from '../types';
 
@@ -23,6 +23,7 @@ const GroupChannelMutedMembersList = ({
       contentContainerStyle={{ paddingLeft: left, paddingRight: right, flexGrow: 1 }}
       ListEmptyComponent={ListEmptyComponent}
       bounces={false}
+      keyExtractor={getUserUniqId}
     />
   );
 };

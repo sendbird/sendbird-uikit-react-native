@@ -21,7 +21,6 @@ export type {
   UseGroupChannelListOptions,
   UseGroupChannelMessages,
   UseGroupChannelMessagesOptions,
-  UserStruct,
   UseUserListOptions,
   UseUserListReturn,
   CustomQueryInterface,

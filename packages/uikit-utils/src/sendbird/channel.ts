@@ -46,3 +46,7 @@ export function getGroupChannels(channels: SendbirdChannel[]): SendbirdGroupChan
 export function getOpenChannels(channels: SendbirdChannel[]): SendbirdOpenChannel[] {
   return channels.filter((c): c is SendbirdOpenChannel => c.isOpenChannel());
 }
+
+export function getChannelUniqId(channel: SendbirdChannel) {
+  return channel.url;
+}
