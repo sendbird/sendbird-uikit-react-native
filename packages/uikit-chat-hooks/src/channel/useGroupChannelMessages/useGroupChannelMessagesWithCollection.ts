@@ -48,11 +48,18 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     updateRefreshing,
   } = useGroupChannelMessagesReducer(userId, options?.sortComparator);
 
-  const channelMarkAs = async () => {
+  const channelMarkAsRead = async (source?: MessageEventSource) => {
     try {
-      await confirmAndMarkAsRead([channel]);
+      switch (source) {
+        case MessageEventSource.EVENT_MESSAGE_RECEIVED:
+        case MessageEventSource.EVENT_MESSAGE_SENT_SUCCESS:
+        case MessageEventSource.SYNC_MESSAGE_FILL:
+        case undefined:
+          await confirmAndMarkAsRead([channel]);
+          break;
+      }
     } catch (e) {
-      Logger.warn(`[${HOOK_NAME}/channelMarkAs/Read]`, e);
+      Logger.warn(`[${HOOK_NAME}/channelMarkAsRead]`, e);
     }
   };
 
@@ -63,20 +70,16 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
       if (uid) {
         collectionRef.current = createMessageCollection(channel, options?.collectionCreator);
         updateNextMessages([], true, sdk.currentUser.userId);
-        channelMarkAs();
+        channelMarkAsRead();
 
         collectionRef.current?.setMessageCollectionHandler({
           onMessagesAdded: (_, __, messages) => {
-            switch (_.source) {
-              case MessageEventSource.EVENT_MESSAGE_RECEIVED:
-              case MessageEventSource.EVENT_MESSAGE_SENT_SUCCESS:
-              case MessageEventSource.SYNC_MESSAGE_FILL:
-                channelMarkAs();
-                break;
-            }
+            channelMarkAsRead(_.source);
             updateNextMessages(messages, false, sdk.currentUser.userId);
           },
           onMessagesUpdated: (_, __, messages) => {
+            channelMarkAsRead(_.source);
+
             // NOTE: admin message is not added via onMessagesAdded handler, not checked yet is this a bug.
             if (_.source === MessageEventSource.EVENT_MESSAGE_RECEIVED) {
               const nextMessageIds = nextMessages.map((it) => it.messageId);
