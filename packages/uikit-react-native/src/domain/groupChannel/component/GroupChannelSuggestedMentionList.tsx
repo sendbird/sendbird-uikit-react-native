@@ -48,9 +48,19 @@ const GroupChannelSuggestedMentionList = ({
   const isShortened = isLandscape && keyboard.visible;
   const maxHeight = isShortened ? screenHeight - (topInset + inputHeight + keyboard.height) : styles.suggestion.height;
 
+  const renderLimitGuide = () => {
+    return (
+      <View style={[styles.searchLimited, { borderTopColor: colors.onBackground04 }]}>
+        <Icon icon={'info'} size={20} containerStyle={{ marginRight: 4 }} color={colors.onBackground02} />
+        <Text body3 color={colors.onBackground02}>
+          {STRINGS.GROUP_CHANNEL.MENTION_LIMITED(mentionManager.config.mentionLimit)}
+        </Text>
+      </View>
+    );
+  };
   const renderMembers = () => {
     return (
-      <View style={{ borderTopWidth: 1, borderTopColor: colors.onBackground04 }}>
+      <View>
         {members.map((member) => {
           return (
             <Pressable
@@ -64,7 +74,7 @@ const GroupChannelSuggestedMentionList = ({
               <Avatar size={28} uri={member.profileUrl} containerStyle={styles.userAvatar} />
               <View style={styles.userInfo}>
                 <Text body2 color={colors.onBackground01} numberOfLines={1} style={styles.userNickname}>
-                  {member.nickname}
+                  {member.nickname || STRINGS.LABELS.USER_NO_NAME}
                 </Text>
                 <Text body3 color={colors.onBackground03} numberOfLines={1} style={styles.userId}>
                   {member.userId}
@@ -88,29 +98,21 @@ const GroupChannelSuggestedMentionList = ({
         bounces={false}
         keyboardDismissMode={'none'}
         keyboardShouldPersistTaps={'always'}
-        style={{
-          maxHeight,
-          backgroundColor: colors.background,
-          position: 'absolute',
-          bottom: keyboard.bottomSpace,
-          left: 0,
-          right: 0,
-        }}
+        style={[
+          styles.scrollView,
+          {
+            maxHeight,
+            backgroundColor: colors.background,
+            bottom: keyboard.bottomSpace,
+          },
+          members.length !== 0 && {
+            borderTopWidth: 1,
+            borderTopColor: colors.onBackground04,
+          },
+        ]}
         contentContainerStyle={{ paddingLeft: left, paddingRight: right }}
       >
-        {conditionChaining(
-          [searchLimited, members.length !== 0],
-          [
-            <View style={[styles.searchLimited, { borderTopColor: colors.onBackground04 }]}>
-              <Icon icon={'info'} size={20} containerStyle={{ marginRight: 4 }} color={colors.onBackground02} />
-              <Text body3 color={colors.onBackground02}>
-                {STRINGS.GROUP_CHANNEL.MENTION_LIMITED(mentionManager.config.mentionLimit)}
-              </Text>
-            </View>,
-            renderMembers(),
-            null,
-          ],
-        )}
+        {conditionChaining([searchLimited, members.length !== 0], [renderLimitGuide(), renderMembers(), null])}
       </Animated.ScrollView>
     </Pressable>
   );
@@ -125,6 +127,11 @@ const styles = createStyleSheet({
     top: 0,
     right: 0,
     left: 0,
+  },
+  scrollView: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
   },
   userContainer: {
     paddingLeft: 16,
@@ -141,6 +148,7 @@ const styles = createStyleSheet({
     flex: 1,
   },
   userNickname: {
+    flexShrink: 1,
     lineHeight: 44,
     textAlignVertical: 'center',
     marginRight: 6,
