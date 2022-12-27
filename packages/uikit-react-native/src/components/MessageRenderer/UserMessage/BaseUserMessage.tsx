@@ -8,7 +8,14 @@ import { useLocalization, useSendbirdChat, useUserProfile } from '../../../hooks
 import { openUrl } from '../../../utils/common';
 import type { UserMessageProps } from './index';
 
-const BaseUserMessage = ({ message, variant, pressed, children }: UserMessageProps) => {
+const BaseUserMessage = ({
+  message,
+  variant,
+  pressed,
+  children,
+  onLongPressMentionedUser,
+  onLongPressURL,
+}: UserMessageProps) => {
   const { mentionManager, features, currentUser } = useSendbirdChat();
   const { show } = useUserProfile();
   const { STRINGS } = useLocalization();
@@ -34,6 +41,7 @@ const BaseUserMessage = ({ message, variant, pressed, children }: UserMessagePro
                         {...parentProps}
                         key={`${keyPrefix}-${index}`}
                         onPress={() => show(user)}
+                        onLongPress={onLongPressMentionedUser}
                         style={[
                           parentProps?.style,
                           { fontWeight: 'bold' },
@@ -55,6 +63,7 @@ const BaseUserMessage = ({ message, variant, pressed, children }: UserMessagePro
                       {...parentProps}
                       key={`${keyPrefix}-${index}`}
                       onPress={() => openUrl(match)}
+                      onLongPress={onLongPressURL}
                       style={[parentProps?.style, { textDecorationLine: 'underline' }]}
                     >
                       {match}

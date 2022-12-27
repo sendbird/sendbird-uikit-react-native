@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, View } from 'react-native';
+import { Pressable, PressableProps, View } from 'react-native';
 
 import { createStyleSheet } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
@@ -27,7 +27,7 @@ import UnknownMessage from './UnknownMessage';
 import UserMessage from './UserMessage';
 
 type MessageStyleVariant = 'outgoing' | 'incoming';
-export interface MessageRendererInterface<T = SendbirdMessage> {
+export type MessageRendererInterface<T = SendbirdMessage, AdditionalProps = unknown> = {
   message: T;
   prevMessage?: SendbirdMessage;
   nextMessage?: SendbirdMessage;
@@ -36,7 +36,7 @@ export interface MessageRendererInterface<T = SendbirdMessage> {
   groupWithNext: boolean;
   pressed: boolean;
   children?: React.ReactElement | null;
-}
+} & AdditionalProps;
 
 const MessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
   currentUserId,
@@ -68,7 +68,7 @@ const MessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
   });
 
   const messageComponent = useIIFE(() => {
-    const pressableProps = {
+    const pressableProps: PressableProps = {
       style: styles.msgContainer,
       disabled: !onPress && !onLongPress,
       onPress,
@@ -81,7 +81,13 @@ const MessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
       return (
         <Pressable {...pressableProps}>
           {({ pressed }) => (
-            <UserMessage message={message} pressed={pressed} {...messageProps}>
+            <UserMessage
+              message={message}
+              pressed={pressed}
+              onLongPressURL={onLongPress}
+              onLongPressMentionedUser={onLongPress}
+              {...messageProps}
+            >
               {reactionChildren}
             </UserMessage>
           )}

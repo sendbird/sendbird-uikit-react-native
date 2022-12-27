@@ -13,7 +13,15 @@ type Props = UserMessageProps & {
   ogMetaData: OGMetaData;
 };
 
-const OpenGraphUserMessage = ({ message, variant, pressed, ogMetaData, children }: Props) => {
+const OpenGraphUserMessage = ({
+  message,
+  variant,
+  pressed,
+  ogMetaData,
+  children,
+  onLongPressMentionedUser,
+  onLongPressURL,
+}: Props) => {
   const { mentionManager, features, currentUser } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { show } = useUserProfile();
@@ -38,15 +46,17 @@ const OpenGraphUserMessage = ({ message, variant, pressed, ogMetaData, children 
                   replacer({ match, groups, parentProps, keyPrefix, index }) {
                     const user = message.mentionedUsers?.find((it) => it.userId === groups[2]);
                     if (user) {
+                      const isCurrentUser = user.userId === currentUser?.userId;
                       return (
                         <Text
                           {...parentProps}
                           key={`${keyPrefix}-${index}`}
                           onPress={() => show(user)}
+                          onLongPress={onLongPressMentionedUser}
                           style={[
                             parentProps?.style,
-                            { fontWeight: 'bold' },
-                            user.userId === currentUser?.userId && { backgroundColor: palette.highlight },
+                            styles.mentionedText,
+                            isCurrentUser && { backgroundColor: palette.highlight },
                           ]}
                         >
                           {`${mentionManager.asMentionedMessageText(user)}`}
@@ -64,7 +74,8 @@ const OpenGraphUserMessage = ({ message, variant, pressed, ogMetaData, children 
                         {...parentProps}
                         key={`${keyPrefix}-${index}`}
                         onPress={() => openUrl(match)}
-                        style={[parentProps?.style, { textDecorationLine: 'underline' }]}
+                        onLongPress={onLongPressURL}
+                        style={[parentProps?.style, styles.urlText]}
                       >
                         {match}
                       </Text>
@@ -165,6 +176,12 @@ const styles = createStyleSheet({
   ogDesc: {
     lineHeight: 14,
     marginBottom: 8,
+  },
+  mentionedText: {
+    fontWeight: 'bold',
+  },
+  urlText: {
+    textDecorationLine: 'underline',
   },
 });
 
