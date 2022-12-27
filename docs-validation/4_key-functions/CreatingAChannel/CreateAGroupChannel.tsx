@@ -71,7 +71,8 @@ const Component2 = () => {
  * Customization
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/creating-a-channel/create-a-group-channel#2-customization}
  * */
-import { CustomQuery, UserStruct } from '@sendbird/uikit-chat-hooks';
+import type { UserStruct } from '@sendbird/uikit-utils';
+import { CustomQuery } from '@sendbird/uikit-chat-hooks';
 import { createGroupChannelCreateFragment } from '@sendbird/uikit-react-native';
 
 interface MyAppUser extends UserStruct {
