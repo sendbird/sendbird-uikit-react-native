@@ -22,6 +22,10 @@ import SendInput from './SendInput';
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
 const KEYBOARD_AVOID_VIEW_BEHAVIOR = Platform.select({ ios: 'padding' as const, default: undefined });
 
+// FIXME(iOS): Dynamic style does not work properly when typing the CJK. (https://github.com/facebook/react-native/issues/26107)
+//  To workaround temporarily, change the key for re-mount the component.
+const GET_INPUT_KEY = (shouldReset: boolean) => (shouldReset ? 'uikit-input-clear' : 'uikit-input');
+
 // TODO: Refactor 'Edit' mode to clearly
 const GroupChannelInput = (props: GroupChannelProps['Input']) => {
   const { top, left, right, bottom } = useSafeAreaInsets();
@@ -75,6 +79,7 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
               <SendInput
                 {...props}
                 {...chatAvailableState}
+                key={GET_INPUT_KEY(mentionedUsers.length === 0)}
                 ref={textInputRef as never}
                 text={text}
                 onChangeText={onChangeText}
@@ -85,6 +90,7 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
             {inputMode === 'edit' && messageToEdit && (
               <EditInput
                 {...props}
+                key={GET_INPUT_KEY(mentionedUsers.length === 0)}
                 ref={textInputRef as never}
                 autoFocus={AUTO_FOCUS}
                 text={text}

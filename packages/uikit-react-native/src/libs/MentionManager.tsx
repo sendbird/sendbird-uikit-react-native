@@ -83,7 +83,7 @@ class MentionManager {
    * @description Bold @user.nickname
    * */
   public textToMentionedComponents = (text: string, mentionedUsers: MentionedUser[]) => {
-    if (!this.mentionEnabled) return text;
+    if (!this.mentionEnabled || mentionedUsers.length === 0) return text;
 
     const { leftText, components } = mentionedUsers
       .sort((a, b) => b.range.start - a.range.start)
