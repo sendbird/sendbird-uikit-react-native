@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Text, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdUser } from '@sendbird/uikit-utils';
+import type { SendbirdFileMessage, SendbirdUser, SendbirdUserMessage } from '@sendbird/uikit-utils';
 import { createMentionTemplateRegex, replaceWithRegex } from '@sendbird/uikit-utils';
 
 import type { MentionedUser, Range } from '../types';
@@ -56,6 +56,44 @@ class MentionManager {
       isTriggered: () => mentionSpan.startsWith(this.config.trigger),
       isValidSearchString: () => this._invalidStartsKeywords.every((it) => !searchString.startsWith(it)),
     };
+  };
+
+  /**
+   * @description Reconcile the range by offset in the mentioned users
+   * */
+  public reconcileRangeOfMentionedUsers = (offset: number, selectionIndex: number, mentionedUsers: MentionedUser[]) => {
+    return mentionedUsers.map((it) => {
+      // Changes only on the right text of selection.
+      if (selectionIndex <= it.range.start) {
+        return {
+          ...it,
+          range: {
+            start: it.range.start + offset,
+            end: it.range.end + offset,
+          },
+        };
+      }
+
+      return it;
+    });
+  };
+
+  /**
+   * @description Remove users who in a range
+   * */
+  public removeMentionedUsersInSelection = (selection: Range, mentionedUsers: MentionedUser[]) => {
+    let lastSelection = 0;
+    let removedOffset = 0;
+    const filtered = mentionedUsers.filter((it) => {
+      const shouldRemove = this.rangeHelpers.overlaps(selection, it.range, 'lessMore');
+      if (shouldRemove) {
+        lastSelection = Math.max(lastSelection, it.range.end);
+        removedOffset -= it.range.end - it.range.start;
+      }
+      return !shouldRemove;
+    });
+
+    return { filtered, lastSelection, removedOffset };
   };
 
   public getSearchStringRangeInText = (selectionIndex: number, searchString: string): Range => {
@@ -133,44 +171,6 @@ class MentionManager {
   };
 
   /**
-   * @description Reconcile the range by offset in the mentioned users
-   * */
-  public reconcileRangeOfMentionedUsers = (offset: number, selectionIndex: number, mentionedUsers: MentionedUser[]) => {
-    return mentionedUsers.map((it) => {
-      // Changes only on the right text of selection.
-      if (selectionIndex <= it.range.start) {
-        return {
-          ...it,
-          range: {
-            start: it.range.start + offset,
-            end: it.range.end + offset,
-          },
-        };
-      }
-
-      return it;
-    });
-  };
-
-  /**
-   * @description Remove users who in a range
-   * */
-  public removeMentionedUsersInSelection = (selection: Range, mentionedUsers: MentionedUser[]) => {
-    let lastSelection = 0;
-    let removedOffset = 0;
-    const filtered = mentionedUsers.filter((it) => {
-      const shouldRemove = this.rangeHelpers.overlaps(selection, it.range, 'lessMore');
-      if (shouldRemove) {
-        lastSelection = Math.max(lastSelection, it.range.end);
-        removedOffset -= it.range.end - it.range.start;
-      }
-      return !shouldRemove;
-    });
-
-    return { filtered, lastSelection, removedOffset };
-  };
-
-  /**
    * @description Convert @{user.id} template to @user.nickname text and MentionedUser[] array.
    * */
   public templateToTextAndMentionedUsers = (template: string, mentionedUsers: SendbirdUser[]) => {
@@ -213,7 +213,25 @@ class MentionManager {
       mentionedUsers: actualMentionedUsers,
     };
   };
+
+  public shouldUseMentionedMessageTemplate = (
+    message?: SendbirdUserMessage | SendbirdFileMessage,
+  ): message is RequiredSpecific<
+    SendbirdUserMessage | SendbirdFileMessage,
+    'mentionedMessageTemplate' | 'mentionedUsers' | 'mentionedUserIds' | 'mentionType'
+  > => {
+    return Boolean(
+      this.mentionEnabled &&
+        message?.mentionedMessageTemplate &&
+        message?.mentionedUsers &&
+        message?.mentionedUsers.length > 0,
+    );
+  };
 }
+
+type RequiredSpecific<T, K extends keyof T> = T & {
+  [P in K]-?: T[P];
+};
 
 const styles = createStyleSheet({
   mentionedText: { fontWeight: 'bold' },

@@ -18,11 +18,7 @@ const useMentionTextInput = (params: { messageToEdit?: SendbirdUserMessage | Sen
 
   // TODO: Refactor text edit logic more clearly
   useEffect(() => {
-    if (
-      params.messageToEdit?.mentionedMessageTemplate &&
-      params.messageToEdit?.mentionedUsers &&
-      mentionManager.mentionEnabled
-    ) {
+    if (mentionManager.shouldUseMentionedMessageTemplate(params.messageToEdit)) {
       const result = mentionManager.templateToTextAndMentionedUsers(
         params.messageToEdit.mentionedMessageTemplate,
         params.messageToEdit.mentionedUsers,

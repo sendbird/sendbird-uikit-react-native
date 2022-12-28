@@ -22,7 +22,7 @@ const OpenGraphUserMessage = ({
   onLongPressMentionedUser,
   onLongPressURL,
 }: Props) => {
-  const { mentionManager, features, currentUser } = useSendbirdChat();
+  const { mentionManager, currentUser } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { show } = useUserProfile();
   const { colors, select, palette } = useUIKitTheme();
@@ -84,7 +84,7 @@ const OpenGraphUserMessage = ({
                 },
               ]}
             >
-              {features.userMentionEnabled && message.mentionedMessageTemplate
+              {mentionManager.shouldUseMentionedMessageTemplate(message)
                 ? message.mentionedMessageTemplate
                 : message.message}
             </RegexText>

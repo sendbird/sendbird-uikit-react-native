@@ -16,7 +16,7 @@ const BaseUserMessage = ({
   onLongPressMentionedUser,
   onLongPressURL,
 }: UserMessageProps) => {
-  const { mentionManager, features, currentUser } = useSendbirdChat();
+  const { mentionManager, currentUser } = useSendbirdChat();
   const { show } = useUserProfile();
   const { STRINGS } = useLocalization();
   const { colors, palette } = useUIKitTheme();
@@ -73,7 +73,7 @@ const BaseUserMessage = ({
               },
             ]}
           >
-            {features.userMentionEnabled && message.mentionedMessageTemplate
+            {mentionManager.shouldUseMentionedMessageTemplate(message)
               ? message.mentionedMessageTemplate
               : message.message}
           </RegexText>
