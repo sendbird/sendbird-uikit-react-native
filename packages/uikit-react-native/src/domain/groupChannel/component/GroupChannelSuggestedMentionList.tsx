@@ -46,6 +46,7 @@ const GroupChannelSuggestedMentionList = ({
 
   const isLandscape = screenWidth > screenHeight;
   const isShortened = isLandscape && keyboard.visible;
+  const canRenderMembers = members.length > 0;
   const maxHeight = isShortened ? screenHeight - (topInset + inputHeight + keyboard.height) : styles.suggestion.height;
 
   const renderLimitGuide = () => {
@@ -58,6 +59,7 @@ const GroupChannelSuggestedMentionList = ({
       </View>
     );
   };
+
   const renderMembers = () => {
     return (
       <View>
@@ -91,7 +93,7 @@ const GroupChannelSuggestedMentionList = ({
   return (
     <Pressable
       onPress={reset}
-      pointerEvents={members.length > 0 ? 'auto' : 'none'}
+      pointerEvents={canRenderMembers ? 'auto' : 'none'}
       style={[styles.container, { bottom: inputHeight + bottomInset }]}
     >
       <ScrollView
@@ -105,14 +107,14 @@ const GroupChannelSuggestedMentionList = ({
             backgroundColor: colors.background,
             bottom: keyboard.bottomSpace,
           },
-          members.length !== 0 && {
+          canRenderMembers && {
             borderTopWidth: 1,
             borderTopColor: colors.onBackground04,
           },
         ]}
         contentContainerStyle={{ paddingLeft: left, paddingRight: right }}
       >
-        {conditionChaining([searchLimited, members.length !== 0], [renderLimitGuide(), renderMembers(), null])}
+        {conditionChaining([searchLimited, canRenderMembers], [renderLimitGuide(), renderMembers(), null])}
       </ScrollView>
     </Pressable>
   );

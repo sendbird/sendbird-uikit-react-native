@@ -21,7 +21,7 @@ const createGroupChannelModule = ({
     Header,
     MessageList,
     Input,
-    SuggestedMentionList: SuggestedMentionList,
+    SuggestedMentionList,
     StatusEmpty,
     StatusLoading,
     Provider,
