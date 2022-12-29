@@ -83,10 +83,10 @@ export const useUserList = <
   const init = useFreshCallback(async () => {
     query.current = createUserQuery<QueriedUser>(sdk, options?.queryCreator);
     if (query.current?.hasNext) {
-      const users = await query.current?.next().catch((err) => {
-        Logger.error(error);
-        if (err.code === SBErrorCode.NON_AUTHORIZED) Logger.warn(SBErrorMessage.ACL);
-        throw error;
+      const users = await query.current?.next().catch((e) => {
+        Logger.error(e);
+        if (e.code === SBErrorCode.NON_AUTHORIZED) Logger.warn(SBErrorMessage.ACL);
+        throw e;
       });
       updateUsers(users, true);
     }
@@ -118,10 +118,10 @@ export const useUserList = <
 
   const next = useFreshCallback(async () => {
     if (query.current && query.current?.hasNext) {
-      const nextUsers = await query.current.next().catch((err) => {
-        Logger.error(error);
-        if (err.code === SBErrorCode.NON_AUTHORIZED) Logger.warn(SBErrorMessage.ACL);
-        throw error;
+      const nextUsers = await query.current.next().catch((e) => {
+        Logger.error(e);
+        if (e.code === SBErrorCode.NON_AUTHORIZED) Logger.warn(SBErrorMessage.ACL);
+        throw e;
       });
       updateUsers(nextUsers, false);
     }
