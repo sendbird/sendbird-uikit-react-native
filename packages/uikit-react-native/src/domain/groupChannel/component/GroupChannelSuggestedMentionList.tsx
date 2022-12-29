@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Animated, Pressable, View, useWindowDimensions } from 'react-native';
+import { Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -94,7 +94,7 @@ const GroupChannelSuggestedMentionList = ({
       pointerEvents={members.length > 0 ? 'auto' : 'none'}
       style={[styles.container, { bottom: inputHeight + bottomInset }]}
     >
-      <Animated.ScrollView
+      <ScrollView
         bounces={false}
         keyboardDismissMode={'none'}
         keyboardShouldPersistTaps={'always'}
@@ -113,7 +113,7 @@ const GroupChannelSuggestedMentionList = ({
         contentContainerStyle={{ paddingLeft: left, paddingRight: right }}
       >
         {conditionChaining([searchLimited, members.length !== 0], [renderLimitGuide(), renderMembers(), null])}
-      </Animated.ScrollView>
+      </ScrollView>
     </Pressable>
   );
 };
