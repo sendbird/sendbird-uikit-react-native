@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.1.0...v2.2.0) (2023-01-03)
+
+
+### Features
+
+* added group channel notifications fragment ([dfb891d](https://github.com/sendbird/sendbird-uikit-react-native/commit/dfb891d76e79ad33f1b184c248e0d0688add2c13))
+
+
+
 ## [2.1.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.3...v2.1.0) (2022-12-06)
 
 

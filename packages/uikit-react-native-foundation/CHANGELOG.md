@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.1.0...v2.2.0) (2023-01-03)
+
+
+### Features
+
+* added group channel notifications fragment ([dfb891d](https://github.com/sendbird/sendbird-uikit-react-native/commit/dfb891d76e79ad33f1b184c248e0d0688add2c13))
+* **foundation:** added dynamic header to bottom sheet ([850cb68](https://github.com/sendbird/sendbird-uikit-react-native/commit/850cb68cca6927c4f76c682b182bbe91b688a154))
+* **foundation:** added mention related props to group channel preview ([507a1af](https://github.com/sendbird/sendbird-uikit-react-native/commit/507a1af747ca5190e436028c4755f5ebab685cad))
+* **foundation:** added reaction ui color ([5b272e5](https://github.com/sendbird/sendbird-uikit-react-native/commit/5b272e57bbec5ece4bbcdaecb88fddd5ec3759f4))
+* **uikit:** added reaction addons ([1a0db30](https://github.com/sendbird/sendbird-uikit-react-native/commit/1a0db308f517d2da280db68f2d81a743174dccfb))
+* **uikit:** added reaction bottom sheets ([07ae1ad](https://github.com/sendbird/sendbird-uikit-react-native/commit/07ae1ad0608ed9c28760c135fe631ced17159bb1))
+* **uikit:** added reaction user list bottom sheet ([e9ef7e9](https://github.com/sendbird/sendbird-uikit-react-native/commit/e9ef7e9b4715e49a41802453aae95f283917e03b))
+
+
+
 ## [2.1.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.3...v2.1.0) (2022-12-06)
 
 

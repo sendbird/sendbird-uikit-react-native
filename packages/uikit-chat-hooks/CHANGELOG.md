@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.1.0...v2.2.0) (2023-01-03)
+
+
+### Features
+
+* **uikit:** added reaction addons ([1a0db30](https://github.com/sendbird/sendbird-uikit-react-native/commit/1a0db308f517d2da280db68f2d81a743174dccfb))
+
+
+### Bug Fixes
+
+* added missing keyExtractor to list components of modules ([4ee1108](https://github.com/sendbird/sendbird-uikit-react-native/commit/4ee110878522e1486882285869b68ad7ec98438f))
+* **chat-hooks:** admin message is not added via onMessagesAdded handler ([0bbb499](https://github.com/sendbird/sendbird-uikit-react-native/commit/0bbb499187ce7a4861c8738d802b0d572d79289a))
+* **chat-hooks:** fixed wrong error variable name in the useUserList query catch ([82c6f6f](https://github.com/sendbird/sendbird-uikit-react-native/commit/82c6f6fc612de6f8732ec5d6f602783409bc9d52))
+
+
+
 ## [2.1.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.3...v2.1.0) (2022-12-06)
 
 
