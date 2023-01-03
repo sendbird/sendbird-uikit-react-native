@@ -16,10 +16,11 @@ import type {
 import type { FileType } from '../../platform/types';
 import type { CommonComponent, MentionedUser, Range } from '../../types';
 
-type UserMessageMentionParams = {
+type UserMessageMentionParams = Required<{
   messageTemplate: SendbirdUserMessageCreateParams['mentionedMessageTemplate'];
   userIds: SendbirdUserMessageCreateParams['mentionedUserIds'];
-};
+  type: SendbirdUserMessageCreateParams['mentionType'];
+}>;
 
 export interface GroupChannelProps {
   Fragment: {
@@ -104,10 +105,10 @@ export interface GroupChannelProps {
       message: SendbirdUserMessage,
       mention?: UserMessageMentionParams,
     ) => Promise<void>;
-    MentionSuggestionList: (props: GroupChannelProps['MentionSuggestionList']) => JSX.Element | null;
+    SuggestedMentionList: (props: GroupChannelProps['SuggestedMentionList']) => JSX.Element | null;
   };
 
-  MentionSuggestionList: {
+  SuggestedMentionList: {
     text: string;
     selection: Range;
     topInset: number;
@@ -132,8 +133,8 @@ export interface GroupChannelContextsType {
   Fragment: React.Context<{
     headerTitle: string;
     channel: SendbirdGroupChannel;
-    editMessage?: SendbirdUserMessage | SendbirdFileMessage;
-    setEditMessage: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
+    messageToEdit?: SendbirdUserMessage | SendbirdFileMessage;
+    setMessageToEdit: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
     keyboardAvoidOffset?: number;
   }>;
   TypingIndicator: React.Context<{
@@ -145,7 +146,7 @@ export interface GroupChannelModule {
   Header: CommonComponent<GroupChannelProps['Header']>;
   MessageList: CommonComponent<GroupChannelProps['MessageList']>;
   Input: CommonComponent<GroupChannelProps['Input']>;
-  MentionSuggestionList: CommonComponent<GroupChannelProps['MentionSuggestionList']>;
+  SuggestedMentionList: CommonComponent<GroupChannelProps['SuggestedMentionList']>;
   StatusEmpty: CommonComponent;
   StatusLoading: CommonComponent;
 }

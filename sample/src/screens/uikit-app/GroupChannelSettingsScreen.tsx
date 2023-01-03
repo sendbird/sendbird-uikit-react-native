@@ -33,7 +33,7 @@ const GroupChannelSettingsScreen = () => {
         // Navigate to group channel list
         navigation.navigate(Routes.GroupChannelList);
       }}
-      onPressMenuNotificationWhenMentionEnabled={() => {
+      onPressMenuNotification={() => {
         // Navigate to group channel notifications
         navigation.navigate(Routes.GroupChannelNotifications, params);
       }}

@@ -9,11 +9,11 @@ import type {
   SendbirdUser,
 } from '@sendbird/uikit-utils';
 import {
-  dateSeparator,
+  getDateSeparatorFormat,
   getGroupChannelLastMessage,
   getGroupChannelPreviewTime,
   getGroupChannelTitle,
-  messageTime,
+  getMessageTimeFormat,
 } from '@sendbird/uikit-utils';
 
 /**
@@ -44,7 +44,7 @@ export interface StringSet {
     INPUT_EDIT_OK: string;
     INPUT_EDIT_CANCEL: string;
 
-    /** GroupChannel > MentionSuggestionList */
+    /** GroupChannel > Suggested mention list */
     MENTION_LIMITED: (mentionLimit: number) => string;
 
     /** GroupChannel > Dialog > Message */
@@ -72,9 +72,12 @@ export interface StringSet {
 
     /** GroupChannelSettings > Menu */
     MENU_MODERATION: string;
-    MENU_NOTIFICATION: string;
     MENU_MEMBERS: string;
     MENU_LEAVE_CHANNEL: string;
+    MENU_NOTIFICATION: string;
+    MENU_NOTIFICATION_LABEL_ON: string;
+    MENU_NOTIFICATION_LABEL_OFF: string;
+    MENU_NOTIFICATION_LABEL_MENTION_ONLY: string;
 
     /** GroupChannelSettings > Dialog */
     DIALOG_CHANGE_NAME: string;
@@ -95,7 +98,7 @@ export interface StringSet {
     MENU_NOTIFICATIONS: string;
     MENU_NOTIFICATIONS_DESC: string;
     MENU_NOTIFICATIONS_OPTION_ALL: string;
-    MENU_NOTIFICATIONS_OPTION_MENTIONS_ONLY: string;
+    MENU_NOTIFICATIONS_OPTION_MENTION_ONLY: string;
   };
   GROUP_CHANNEL_MODERATION: {
     /** GroupChannelModeration > Header */
@@ -250,10 +253,10 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       HEADER_TITLE: (currentUserId, channel) =>
         getGroupChannelTitle(currentUserId, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       LIST_BANNER_FROZEN: 'Channel is frozen',
-      LIST_DATE_SEPARATOR: (date, locale) => dateSeparator(date, locale ?? dateLocale),
+      LIST_DATE_SEPARATOR: (date, locale) => getDateSeparatorFormat(date, locale ?? dateLocale),
       LIST_BUTTON_NEW_MSG: (newMessages) => `${newMessages.length} new messages`,
 
-      MESSAGE_BUBBLE_TIME: (message, locale) => messageTime(new Date(message.createdAt), locale ?? dateLocale),
+      MESSAGE_BUBBLE_TIME: (message, locale) => getMessageTimeFormat(new Date(message.createdAt), locale ?? dateLocale),
       MESSAGE_BUBBLE_FILE_TITLE: (message) => message.name,
       MESSAGE_BUBBLE_EDITED_POSTFIX: ' (edited)',
       MESSAGE_BUBBLE_UNKNOWN_TITLE: () => '(Unknown message type)',
@@ -286,9 +289,12 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       HEADER_TITLE: 'Channel information',
       HEADER_RIGHT: 'Edit',
       MENU_MODERATION: 'Moderation',
-      MENU_NOTIFICATION: 'Notifications',
       MENU_MEMBERS: 'Members',
       MENU_LEAVE_CHANNEL: 'Leave channel',
+      MENU_NOTIFICATION: 'Notifications',
+      MENU_NOTIFICATION_LABEL_ON: 'On',
+      MENU_NOTIFICATION_LABEL_OFF: 'Off',
+      MENU_NOTIFICATION_LABEL_MENTION_ONLY: 'Mentions only',
       DIALOG_CHANGE_NAME: 'Change channel name',
       DIALOG_CHANGE_NAME_PROMPT_TITLE: 'Change channel name',
       DIALOG_CHANGE_NAME_PROMPT_PLACEHOLDER: 'Enter name',
@@ -306,7 +312,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       MENU_NOTIFICATIONS_DESC:
         'Turn on push notifications if you wish to be notified when messages are delivered to this channel.',
       MENU_NOTIFICATIONS_OPTION_ALL: 'All new messages',
-      MENU_NOTIFICATIONS_OPTION_MENTIONS_ONLY: 'Mentions only',
+      MENU_NOTIFICATIONS_OPTION_MENTION_ONLY: 'Mentions only',
       ...overrides?.GROUP_CHANNEL_NOTIFICATIONS,
     },
     GROUP_CHANNEL_MODERATION: {
@@ -406,7 +412,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     },
     FILE_VIEWER: {
       TITLE: (message) => message.sender?.nickname || USER_NO_NAME,
-      SUBTITLE: (message) => messageTime(new Date(message.createdAt), dateLocale),
+      SUBTITLE: (message) => getMessageTimeFormat(new Date(message.createdAt), dateLocale),
     },
     PLACEHOLDER: {
       NO_BANNED_USERS: 'No banned users',
@@ -426,7 +432,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       ALERT_DEFAULT_OK: 'OK',
       ALERT_PERMISSIONS_TITLE: 'Allow access?',
       ALERT_PERMISSIONS_MESSAGE: (permission, appName = 'Application') => {
-        return `${appName} need permission to access your ${permission}. Go to Settings to allow access`;
+        return `${appName} need permission to access your ${permission}.`;
       },
       ALERT_PERMISSIONS_OK: 'Go to settings',
       PROMPT_DEFAULT_OK: 'Submit',

@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 
+import { MentionType } from '@sendbird/chat/message';
 import { Button, TextInput, createStyleSheet, useToast } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdFileMessage, SendbirdUserMessage } from '@sendbird/uikit-utils';
 
@@ -17,8 +18,8 @@ import type { GroupChannelProps } from '../../types';
 type EditInputProps = GroupChannelProps['Input'] & {
   text: string;
   onChangeText: (val: string) => void;
-  editMessage: SendbirdUserMessage | SendbirdFileMessage;
-  setEditMessage: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
+  messageToEdit: SendbirdUserMessage | SendbirdFileMessage;
+  setMessageToEdit: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
   onSelectionChange: (e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => void;
   disabled: boolean;
   autoFocus: boolean;
@@ -29,8 +30,8 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
   {
     text,
     onChangeText,
-    editMessage,
-    setEditMessage,
+    messageToEdit,
+    setMessageToEdit,
     onUpdateUserMessage,
     onSelectionChange,
     disabled,
@@ -44,19 +45,23 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
   const toast = useToast();
 
   const onPressCancel = () => {
-    setEditMessage();
+    setMessageToEdit();
     onChangeText('');
   };
 
   const onPressSave = () => {
-    if (editMessage.isUserMessage()) {
+    if (messageToEdit.isUserMessage()) {
       const mention = {
         userIds: mentionedUsers.map((it) => it.user.userId),
         messageTemplate: mentionManager.textToMentionedMessageTemplate(text, mentionedUsers),
+        type: MentionType.USERS,
       };
-      onUpdateUserMessage(text, editMessage, mention).catch(() => toast.show(STRINGS.TOAST.UPDATE_MSG_ERROR, 'error'));
+
+      onUpdateUserMessage(text, messageToEdit, mention).catch(() =>
+        toast.show(STRINGS.TOAST.UPDATE_MSG_ERROR, 'error'),
+      );
     }
-    setEditMessage();
+    setMessageToEdit();
     onChangeText('');
   };
 

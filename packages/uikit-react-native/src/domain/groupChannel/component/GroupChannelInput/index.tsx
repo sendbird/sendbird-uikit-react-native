@@ -22,34 +22,41 @@ import SendInput from './SendInput';
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
 const KEYBOARD_AVOID_VIEW_BEHAVIOR = Platform.select({ ios: 'padding' as const, default: undefined });
 
+// FIXME(iOS): Dynamic style does not work properly when typing the CJK. (https://github.com/facebook/react-native/issues/26107)
+//  To workaround temporarily, change the key for re-mount the component.
+const GET_INPUT_KEY = (shouldReset: boolean) => (shouldReset ? 'uikit-input-clear' : 'uikit-input');
+
 // TODO: Refactor 'Edit' mode to clearly
 const GroupChannelInput = (props: GroupChannelProps['Input']) => {
   const { top, left, right, bottom } = useSafeAreaInsets();
   const { colors } = useUIKitTheme();
   const { features, mentionManager } = useSendbirdChat();
-  const { channel, editMessage, setEditMessage, keyboardAvoidOffset = 0 } = useContext(GroupChannelContexts.Fragment);
+  const {
+    channel,
+    messageToEdit,
+    setMessageToEdit,
+    keyboardAvoidOffset = 0,
+  } = useContext(GroupChannelContexts.Fragment);
 
   const chatAvailableState = getGroupChannelChatAvailableState(channel);
-  const mentionAvailable = features.mentionEnabled && channel.isGroupChannel() && !channel.isBroadcast;
+  const mentionAvailable = features.userMentionEnabled && channel.isGroupChannel() && !channel.isBroadcast;
   const inputMode = useIIFE(() => {
-    if (!editMessage) return 'send';
-    if (editMessage.isFileMessage()) return 'send';
+    if (!messageToEdit) return 'send';
+    if (messageToEdit.isFileMessage()) return 'send';
     return 'edit';
   });
 
   const [inputHeight, setInputHeight] = useState(styles.inputDefault.height);
 
-  const { selection, setSelection, onSelectionChange, textInputRef, text, onChangeText, mentionedUsers } =
-    useMentionTextInput({ editMessage });
+  const { selection, onSelectionChange, textInputRef, text, onChangeText, mentionedUsers } = useMentionTextInput({
+    messageToEdit: messageToEdit,
+  });
 
   useTypingTrigger(text, channel);
   useTextPersistenceOnDisabled(text, onChangeText, chatAvailableState.disabled);
-  useAutoFocusOnEditMode(textInputRef, editMessage);
+  useAutoFocusOnEditMode(textInputRef, messageToEdit);
 
-  const onPressToMention: GroupChannelProps['MentionSuggestionList']['onPressToMention'] = (
-    user,
-    searchStringRange,
-  ) => {
+  const onPressToMention: GroupChannelProps['SuggestedMentionList']['onPressToMention'] = (user, searchStringRange) => {
     const mentionedMessageText = mentionManager.asMentionedMessageText(user, true);
     const range = { start: searchStringRange.start, end: searchStringRange.start + mentionedMessageText.length - 1 };
 
@@ -67,41 +74,29 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
         behavior={KEYBOARD_AVOID_VIEW_BEHAVIOR}
       >
         <View style={{ paddingLeft: left, paddingRight: right, backgroundColor: colors.background }}>
-          {mentionAvailable && Platform.OS !== 'android' && (
-            // NOTE: Android cannot recognize the scroll responder properly
-            //  when has absolute ScrollView inside KeyboardAvoidingView
-            <props.MentionSuggestionList
-              text={text}
-              selection={selection}
-              inputHeight={inputHeight}
-              topInset={top}
-              bottomInset={bottom}
-              onPressToMention={onPressToMention}
-              mentionedUsers={mentionedUsers}
-            />
-          )}
           <View onLayout={(e) => setInputHeight(e.nativeEvent.layout.height)} style={styles.inputContainer}>
             {inputMode === 'send' && (
               <SendInput
                 {...props}
                 {...chatAvailableState}
+                key={GET_INPUT_KEY(mentionedUsers.length === 0)}
                 ref={textInputRef as never}
                 text={text}
                 onChangeText={onChangeText}
-                setSelection={setSelection}
                 onSelectionChange={onSelectionChange}
                 mentionedUsers={mentionedUsers}
               />
             )}
-            {inputMode === 'edit' && editMessage && (
+            {inputMode === 'edit' && messageToEdit && (
               <EditInput
                 {...props}
+                key={GET_INPUT_KEY(mentionedUsers.length === 0)}
                 ref={textInputRef as never}
                 autoFocus={AUTO_FOCUS}
                 text={text}
                 onChangeText={onChangeText}
-                editMessage={editMessage}
-                setEditMessage={setEditMessage}
+                messageToEdit={messageToEdit}
+                setMessageToEdit={setMessageToEdit}
                 disabled={chatAvailableState.disabled}
                 onSelectionChange={onSelectionChange}
                 mentionedUsers={mentionedUsers}
@@ -111,8 +106,8 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
           <SafeAreaBottom height={bottom} />
         </View>
       </KeyboardAvoidingView>
-      {mentionAvailable && Platform.OS === 'android' && (
-        <props.MentionSuggestionList
+      {mentionAvailable && (
+        <props.SuggestedMentionList
           text={text}
           selection={selection}
           inputHeight={inputHeight}
@@ -148,13 +143,13 @@ const useTextPersistenceOnDisabled = (text: string, setText: (val: string) => vo
 
 const useAutoFocusOnEditMode = (
   textInputRef: MutableRefObject<TextInput | undefined>,
-  editMessage?: SendbirdUserMessage | SendbirdFileMessage,
+  messageToEdit?: SendbirdUserMessage | SendbirdFileMessage,
 ) => {
   useEffect(() => {
-    if (editMessage?.isUserMessage()) {
+    if (messageToEdit?.isUserMessage()) {
       if (!AUTO_FOCUS) setTimeout(() => textInputRef.current?.focus(), 500);
     }
-  }, [editMessage]);
+  }, [messageToEdit]);
 };
 
 const SafeAreaBottom = ({ height }: { height: number }) => {

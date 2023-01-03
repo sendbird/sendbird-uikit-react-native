@@ -524,7 +524,7 @@ DEPENDENCIES:
   - "react-native-cameraroll (from `../../node_modules/@react-native-camera-roll/camera-roll`)"
   - react-native-create-thumbnail (from `../../node_modules/react-native-create-thumbnail`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
-  - react-native-file-access (from `../../node_modules/react-native-file-access`)
+  - react-native-file-access (from `../node_modules/react-native-file-access`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - "react-native-netinfo (from `../../node_modules/@react-native-community/netinfo`)"
   - react-native-safe-area-context (from `../../node_modules/react-native-safe-area-context`)
@@ -637,7 +637,7 @@ EXTERNAL SOURCES:
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
   react-native-file-access:
-    :path: "../../node_modules/react-native-file-access"
+    :path: "../node_modules/react-native-file-access"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-netinfo:

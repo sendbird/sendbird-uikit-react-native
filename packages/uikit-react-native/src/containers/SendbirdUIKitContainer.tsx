@@ -51,6 +51,13 @@ const NetInfo = SBUDynamicModule.get('@react-native-community/netinfo', 'warn');
 export const SendbirdUIKit = Object.freeze({
   VERSION,
   PLATFORM: Platform.OS.toLowerCase(),
+  DEFAULT: {
+    AUTO_PUSH_TOKEN_REGISTRATION: true,
+    CHANNEL_LIST_TYPING_INDICATOR: false,
+    CHANNEL_LIST_MESSAGE_RECEIPT_STATUS: false,
+    USE_USER_ID_FOR_NICKNAME: false,
+    USER_MENTION: false,
+  },
 });
 
 export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
@@ -64,7 +71,6 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   chatOptions?: {
     localCacheStorage?: LocalCacheStorage;
     onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
-    mention?: Pick<Partial<MentionConfigInterface>, 'mentionLimit' | 'suggestionLimit' | 'debounceMills'>;
   } & Partial<UIKitFeaturesInSendbirdChatContext>;
   localization?: {
     stringSet?: StringSet;
@@ -86,6 +92,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
       users: SendbirdUser[] | SendbirdMember[],
     ) => SendbirdGroupChannelCreateParams | Promise<SendbirdGroupChannelCreateParams>;
   };
+  userMention?: Pick<Partial<MentionConfigInterface>, 'mentionLimit' | 'suggestionLimit' | 'debounceMills'>;
   errorBoundary?: {
     onError?: (props: ErrorBoundaryProps) => void;
     ErrorInfoComponent?: (props: ErrorBoundaryProps) => JSX.Element;
@@ -101,6 +108,7 @@ const SendbirdUIKitContainer = ({
   styles,
   toast,
   userProfile,
+  userMention,
   errorBoundary,
 }: SendbirdUIKitContainerProps) => {
   const defaultStringSet = localization?.stringSet ?? StringSetEn;
@@ -120,17 +128,14 @@ const SendbirdUIKitContainer = ({
   const emojiManager = useMemo(() => new EmojiManager(internalStorage), [internalStorage]);
   const mentionManager = useMemo(() => {
     const config = new MentionConfig({
-      mentionLimit: Math.min(
-        chatOptions?.mention?.mentionLimit || MentionConfig.DEFAULT.MENTION_LIMIT,
-        MentionConfig.DEFAULT.MENTION_LIMIT,
-      ),
-      suggestionLimit: chatOptions?.mention?.suggestionLimit || MentionConfig.DEFAULT.SUGGESTION_LIMIT,
-      debounceMills: chatOptions?.mention?.debounceMills ?? MentionConfig.DEFAULT.DEBOUNCE_MILLS,
+      mentionLimit: userMention?.mentionLimit || MentionConfig.DEFAULT.MENTION_LIMIT,
+      suggestionLimit: userMention?.suggestionLimit || MentionConfig.DEFAULT.SUGGESTION_LIMIT,
+      debounceMills: userMention?.debounceMills ?? MentionConfig.DEFAULT.DEBOUNCE_MILLS,
       delimiter: MentionConfig.DEFAULT.DELIMITER,
       trigger: MentionConfig.DEFAULT.TRIGGER,
     });
-    return new MentionManager(config, chatOptions?.enableMention ?? false);
-  }, [chatOptions?.mention?.mentionLimit, chatOptions?.mention?.suggestionLimit, chatOptions?.mention?.debounceMills]);
+    return new MentionManager(config, chatOptions?.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION);
+  }, [userMention?.mentionLimit, userMention?.suggestionLimit, userMention?.debounceMills]);
 
   useLayoutEffect(() => {
     if (!isFirstMount) {
@@ -156,11 +161,20 @@ const SendbirdUIKitContainer = ({
         sdkInstance={sdkInstance}
         emojiManager={emojiManager}
         mentionManager={mentionManager}
-        enableAutoPushTokenRegistration={chatOptions?.enableAutoPushTokenRegistration ?? true}
-        enableChannelListTypingIndicator={chatOptions?.enableChannelListTypingIndicator ?? false}
-        enableChannelListMessageReceiptStatus={chatOptions?.enableChannelListMessageReceiptStatus ?? false}
-        enableUseUserIdForNickname={chatOptions?.enableUseUserIdForNickname ?? false}
-        enableMention={chatOptions?.enableMention ?? false}
+        enableAutoPushTokenRegistration={
+          chatOptions?.enableAutoPushTokenRegistration ?? SendbirdUIKit.DEFAULT.AUTO_PUSH_TOKEN_REGISTRATION
+        }
+        enableChannelListTypingIndicator={
+          chatOptions?.enableChannelListTypingIndicator ?? SendbirdUIKit.DEFAULT.CHANNEL_LIST_TYPING_INDICATOR
+        }
+        enableChannelListMessageReceiptStatus={
+          chatOptions?.enableChannelListMessageReceiptStatus ??
+          SendbirdUIKit.DEFAULT.CHANNEL_LIST_MESSAGE_RECEIPT_STATUS
+        }
+        enableUseUserIdForNickname={
+          chatOptions?.enableUseUserIdForNickname ?? SendbirdUIKit.DEFAULT.USE_USER_ID_FOR_NICKNAME
+        }
+        enableUserMention={chatOptions?.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION}
       >
         <LocalizationProvider stringSet={defaultStringSet}>
           <PlatformServiceProvider

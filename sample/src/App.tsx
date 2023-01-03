@@ -56,7 +56,7 @@ const App = () => {
         enableAutoPushTokenRegistration: true,
         enableChannelListTypingIndicator: true,
         enableChannelListMessageReceiptStatus: true,
-        enableMention: true,
+        enableUserMention: true,
       }}
       platformServices={{
         file: FileService,

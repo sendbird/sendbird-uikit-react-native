@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.1.0...v2.2.0) (2023-01-03)
+
+
+### Features
+
+* added group channel notifications fragment ([dfb891d](https://github.com/sendbird/sendbird-uikit-react-native/commit/dfb891d76e79ad33f1b184c248e0d0688add2c13))
+* **foundation:** added mention related props to group channel preview ([507a1af](https://github.com/sendbird/sendbird-uikit-react-native/commit/507a1af747ca5190e436028c4755f5ebab685cad))
+* **uikit:** added emoji manager ([1cad175](https://github.com/sendbird/sendbird-uikit-react-native/commit/1cad175228c89ea995743279ddcbf6ddc0b099e8))
+* **uikit:** added reaction addons ([1a0db30](https://github.com/sendbird/sendbird-uikit-react-native/commit/1a0db308f517d2da280db68f2d81a743174dccfb))
+* **uikit:** added reaction bottom sheets ([07ae1ad](https://github.com/sendbird/sendbird-uikit-react-native/commit/07ae1ad0608ed9c28760c135fe631ced17159bb1))
+* **uikit:** added reaction user list bottom sheet ([e9ef7e9](https://github.com/sendbird/sendbird-uikit-react-native/commit/e9ef7e9b4715e49a41802453aae95f283917e03b))
+
+
+### Bug Fixes
+
+* added missing keyExtractor to list components of modules ([4ee1108](https://github.com/sendbird/sendbird-uikit-react-native/commit/4ee110878522e1486882285869b68ad7ec98438f))
+* android selection bug ([d2b4c8c](https://github.com/sendbird/sendbird-uikit-react-native/commit/d2b4c8c8b6a7216a4dedf6445daf0f951f34b4c9))
+
+
+### Improvements
+
+* update time format ([708be93](https://github.com/sendbird/sendbird-uikit-react-native/commit/708be932005f0911e63a5d77ace1cb779357beb9))
+
+
+
 ## [2.1.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.0.3...v2.1.0) (2022-12-06)
 
 

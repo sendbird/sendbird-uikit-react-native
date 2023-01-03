@@ -1,5 +1,5 @@
 import type { Locale } from 'date-fns';
-import format from 'date-fns/format';
+import { format, isThisYear } from 'date-fns';
 
 type TruncateMode = 'head' | 'mid' | 'tail';
 type TruncateOption = { mode: TruncateMode; maxLen: number; separator: string };
@@ -58,8 +58,9 @@ export const truncatedCount = (count: number, MAX = 99, MAX_SUFFIX = '+') => {
  * @param {Locale} [locale]
  * @returns {string}
  * */
-export const dateSeparator = (date: Date, locale?: Locale): string => {
-  return format(date, 'E, LLL dd', { locale });
+export const getDateSeparatorFormat = (date: Date, locale?: Locale): string => {
+  if (isThisYear(date)) return format(date, 'MMM dd, yyyy', { locale });
+  return format(date, 'E, MMM dd', { locale });
 };
 
 /**
@@ -69,6 +70,6 @@ export const dateSeparator = (date: Date, locale?: Locale): string => {
  * @param {Locale} [locale]
  * @returns {string}
  * */
-export const messageTime = (date: Date, locale?: Locale): string => {
+export const getMessageTimeFormat = (date: Date, locale?: Locale): string => {
   return format(date, 'p', { locale });
 };

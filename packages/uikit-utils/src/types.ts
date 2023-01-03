@@ -65,6 +65,10 @@ export type Optional<T> = T | undefined;
 
 export type ContextValue<T extends React.Context<any>> = T extends React.Context<infer V> ? V : never;
 
+export interface UserStruct {
+  userId: string;
+}
+
 export type SendbirdChatSDK = SendbirdChat & ModuleNamespaces<[GroupChannelModule, OpenChannelModule]>;
 export type SendbirdMessage = BaseMessage | FileMessage | UserMessage | AdminMessage | SendableMessage;
 export type SendbirdChannel = BaseChannel | GroupChannel | OpenChannel;

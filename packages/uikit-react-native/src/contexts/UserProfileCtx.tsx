@@ -29,6 +29,8 @@ type Props = React.PropsWithChildren<{
   onBeforeCreateChannel?: OnBeforeCreateChannel;
 }>;
 
+let WARN_onCreateChannel = false;
+
 export const UserProfileContext = React.createContext<UserProfileContextType | null>(null);
 export const UserProfileProvider = ({ children, onCreateChannel, onBeforeCreateChannel = PASS }: Props) => {
   const chatContext = useContext(SendbirdChatContext);
@@ -36,6 +38,13 @@ export const UserProfileProvider = ({ children, onCreateChannel, onBeforeCreateC
 
   if (!chatContext) throw new Error('SendbirdChatContext is not provided');
   if (!localizationContext) throw new Error('LocalizationContext is not provided');
+
+  if (__DEV__ && !WARN_onCreateChannel && !onCreateChannel) {
+    Logger.warn(
+      'You should pass `userProfile.onCreateChannel` prop to SendbirdUIKitContainer if want to use message in a user profile',
+    );
+    WARN_onCreateChannel = true;
+  }
 
   const { bottom, left, right } = useSafeAreaInsets();
 

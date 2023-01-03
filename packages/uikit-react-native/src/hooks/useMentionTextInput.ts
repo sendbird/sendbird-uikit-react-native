@@ -1,12 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { NativeSyntheticEvent, TextInput, TextInputSelectionChangeEventData } from 'react-native';
+import { Platform } from 'react-native';
 
 import { SendbirdFileMessage, SendbirdUserMessage, replace, useFreshCallback } from '@sendbird/uikit-utils';
 
-import type { MentionedUser, Range } from '../types';
+import type { MentionedUser } from '../types';
 import { useSendbirdChat } from './useContext';
 
-const useMentionTextInput = (params: { editMessage?: SendbirdUserMessage | SendbirdFileMessage }) => {
+const useMentionTextInput = (params: { messageToEdit?: SendbirdUserMessage | SendbirdFileMessage }) => {
   const { mentionManager } = useSendbirdChat();
 
   const mentionedUsersRef = useRef<MentionedUser[]>([]);
@@ -17,25 +18,21 @@ const useMentionTextInput = (params: { editMessage?: SendbirdUserMessage | Sendb
 
   // TODO: Refactor text edit logic more clearly
   useEffect(() => {
-    if (
-      params.editMessage?.mentionedMessageTemplate &&
-      params.editMessage?.mentionedUsers &&
-      mentionManager.mentionEnabled
-    ) {
+    if (mentionManager.shouldUseMentionedMessageTemplate(params.messageToEdit)) {
       const result = mentionManager.templateToTextAndMentionedUsers(
-        params.editMessage.mentionedMessageTemplate,
-        params.editMessage.mentionedUsers,
+        params.messageToEdit.mentionedMessageTemplate,
+        params.messageToEdit.mentionedUsers,
       );
 
       mentionedUsersRef.current = result.mentionedUsers;
       setText(result.mentionedText);
     } else {
       mentionedUsersRef.current = [];
-      if (params.editMessage?.isUserMessage()) {
-        setText(params.editMessage.message);
+      if (params.messageToEdit?.isUserMessage()) {
+        setText(params.messageToEdit.message);
       }
     }
-  }, [params.editMessage]);
+  }, [params.messageToEdit]);
 
   const onChangeText = useFreshCallback((_nextText: string, addedMentionedUser?: MentionedUser) => {
     const prevText = text;
@@ -52,7 +49,7 @@ const useMentionTextInput = (params: { editMessage?: SendbirdUserMessage | Sendb
       if (addedMentionedUser) mentionedUsersRef.current.push(addedMentionedUser);
 
       /** Reconcile mentioned users range on the right side of the selection **/
-      mentionedUsersRef.current = mentionManager.reconcileRangeInMentionedUsers(
+      mentionedUsersRef.current = mentionManager.reconcileRangeOfMentionedUsers(
         offset,
         selection.end,
         mentionedUsersRef.current,
@@ -69,7 +66,7 @@ const useMentionTextInput = (params: { editMessage?: SendbirdUserMessage | Sendb
         );
 
         /** Reconcile mentioned users range on the right side of the selection **/
-        mentionedUsersRef.current = mentionManager.reconcileRangeInMentionedUsers(
+        mentionedUsersRef.current = mentionManager.reconcileRangeOfMentionedUsers(
           offset,
           Math.max(selection.end, lastSelection),
           filtered,
@@ -79,7 +76,7 @@ const useMentionTextInput = (params: { editMessage?: SendbirdUserMessage | Sendb
       else {
         /** Find mentioned user who ranges in removed selection **/
         const foundIndex = mentionedUsersRef.current.findIndex((it) =>
-          mentionManager.rangeHelpers.intersection(it.range, selection, 'underMore'),
+          mentionManager.rangeHelpers.overlaps(it.range, selection, 'underMore'),
         );
         /** If found, remove from the mentioned user list and remove remainder text **/
         if (foundIndex > -1) {
@@ -93,7 +90,7 @@ const useMentionTextInput = (params: { editMessage?: SendbirdUserMessage | Sendb
         }
 
         /** Reconcile mentioned users range on the right side of the selection **/
-        mentionedUsersRef.current = mentionManager.reconcileRangeInMentionedUsers(
+        mentionedUsersRef.current = mentionManager.reconcileRangeOfMentionedUsers(
           offset,
           selection.end,
           mentionedUsersRef.current,
@@ -107,23 +104,26 @@ const useMentionTextInput = (params: { editMessage?: SendbirdUserMessage | Sendb
   return {
     textInputRef,
     selection,
-    setSelection: useCallback((selection: Range) => {
-      textInputRef.current?.setNativeProps({ selection });
-      setSelection(selection);
-    }, []),
     onSelectionChange: useFreshCallback((e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => {
       const nativeSelection = { ...e.nativeEvent.selection };
 
       // NOTE: To synchronize call onSelectionChange after onChangeText called on each platform.
       setTimeout(() => {
         const mentionedUser = mentionedUsersRef.current.find((it) =>
-          mentionManager.rangeHelpers.intersection(it.range, nativeSelection),
+          mentionManager.rangeHelpers.overlaps(it.range, nativeSelection),
         );
 
         // Selection should be blocked if changed into mentioned area
         if (mentionedUser) {
           const selectionBlock = { start: mentionedUser.range.start, end: mentionedUser.range.end };
           textInputRef.current?.setNativeProps({ selection: selectionBlock });
+          // BUG: setNativeProps called again when invoked onChangeText
+          //  https://github.com/facebook/react-native/issues/33520
+          if (Platform.OS === 'android') {
+            setTimeout(() => {
+              textInputRef.current?.setNativeProps({ selection: { start: 0 } });
+            }, 250);
+          }
           setSelection(selectionBlock);
         } else {
           setSelection(nativeSelection);

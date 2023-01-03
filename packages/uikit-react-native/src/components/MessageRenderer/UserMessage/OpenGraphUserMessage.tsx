@@ -13,13 +13,22 @@ type Props = UserMessageProps & {
   ogMetaData: OGMetaData;
 };
 
-const OpenGraphUserMessage = ({ message, variant, pressed, ogMetaData, children }: Props) => {
-  const { mentionManager, features } = useSendbirdChat();
+const OpenGraphUserMessage = ({
+  message,
+  variant,
+  pressed,
+  ogMetaData,
+  children,
+  onLongPressMentionedUser,
+  onLongPressURL,
+}: Props) => {
+  const { mentionManager, currentUser } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { show } = useUserProfile();
   const { colors, select, palette } = useUIKitTheme();
-  const color = colors.ui.message[variant][pressed ? 'pressed' : 'enabled'];
+
   const [imageNotFound, setImageNotFound] = useState(false);
+  const color = colors.ui.message[variant][pressed ? 'pressed' : 'enabled'];
 
   const containerBackground = select({ dark: palette.background400, light: palette.background100 });
 
@@ -37,12 +46,18 @@ const OpenGraphUserMessage = ({ message, variant, pressed, ogMetaData, children 
                   replacer({ match, groups, parentProps, keyPrefix, index }) {
                     const user = message.mentionedUsers?.find((it) => it.userId === groups[2]);
                     if (user) {
+                      const isCurrentUser = user.userId === currentUser?.userId;
                       return (
                         <Text
                           {...parentProps}
                           key={`${keyPrefix}-${index}`}
                           onPress={() => show(user)}
-                          style={[parentProps?.style, { fontWeight: 'bold' }]}
+                          onLongPress={onLongPressMentionedUser}
+                          style={[
+                            parentProps?.style,
+                            styles.mentionedText,
+                            isCurrentUser && { backgroundColor: palette.highlight },
+                          ]}
                         >
                           {`${mentionManager.asMentionedMessageText(user)}`}
                         </Text>
@@ -59,7 +74,8 @@ const OpenGraphUserMessage = ({ message, variant, pressed, ogMetaData, children 
                         {...parentProps}
                         key={`${keyPrefix}-${index}`}
                         onPress={() => openUrl(match)}
-                        style={[parentProps?.style, { textDecorationLine: 'underline' }]}
+                        onLongPress={onLongPressURL}
+                        style={[parentProps?.style, styles.urlText]}
                       >
                         {match}
                       </Text>
@@ -68,7 +84,7 @@ const OpenGraphUserMessage = ({ message, variant, pressed, ogMetaData, children 
                 },
               ]}
             >
-              {features.mentionEnabled && message.mentionedMessageTemplate
+              {mentionManager.shouldUseMentionedMessageTemplate(message)
                 ? message.mentionedMessageTemplate
                 : message.message}
             </RegexText>
@@ -160,6 +176,12 @@ const styles = createStyleSheet({
   ogDesc: {
     lineHeight: 14,
     marginBottom: 8,
+  },
+  mentionedText: {
+    fontWeight: 'bold',
+  },
+  urlText: {
+    textDecorationLine: 'underline',
   },
 });
 

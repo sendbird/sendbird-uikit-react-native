@@ -19,6 +19,9 @@ const GroupChannelSettingsScreen = ({ params }: { params: { channelUrl: string }
   const navigateToGroupChannelMembersScreen = () => {};
   const navigateToGroupChannelModerationScreen = () => {};
 
+  // Only required when you enabled mention.
+  const navigateToGroupChannelNotificationScreen = () => {};
+
   return (
     <GroupChannelSettingsFragment
       channel={channel}
@@ -26,6 +29,7 @@ const GroupChannelSettingsScreen = ({ params }: { params: { channelUrl: string }
       onPressMenuLeaveChannel={navigateToGroupChannelListScreen}
       onPressMenuMembers={navigateToGroupChannelMembersScreen}
       onPressMenuModeration={navigateToGroupChannelModerationScreen}
+      onPressMenuNotification={navigateToGroupChannelNotificationScreen}
     />
   );
 };
@@ -76,6 +80,9 @@ const GroupChannelSettingsScreen2 = ({ params }: { params: { channelUrl: string 
   const navigateToGroupChannelMembersScreen = () => {};
   const navigateToGroupChannelModerationScreen = () => {};
 
+  // Only required when you enabled mention.
+  const navigateToGroupChannelNotificationScreen = () => {};
+
   return (
     <GroupChannelSettingsFragment2
       channel={channel}
@@ -83,6 +90,7 @@ const GroupChannelSettingsScreen2 = ({ params }: { params: { channelUrl: string 
       onPressMenuLeaveChannel={navigateToGroupChannelListScreen}
       onPressMenuMembers={navigateToGroupChannelMembersScreen}
       onPressMenuModeration={navigateToGroupChannelModerationScreen}
+      onPressMenuNotification={navigateToGroupChannelNotificationScreen}
       menuItemsCreator={(items) => {
         items.unshift({
           icon: 'channels',

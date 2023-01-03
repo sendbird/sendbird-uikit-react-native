@@ -2,7 +2,7 @@ import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef 
 import { FlatList, FlatListProps, Platform } from 'react-native';
 
 import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { SendbirdMessage, isMyMessage } from '@sendbird/uikit-utils';
+import { SendbirdMessage, getMessageUniqId, isMyMessage } from '@sendbird/uikit-utils';
 
 let ANDROID_BUG_ALERT_SHOWED = Platform.OS !== 'android';
 const BOTTOM_DETECT_THRESHOLD = 25;
@@ -90,6 +90,7 @@ const ChatFlatList = forwardRef<ChatFlatListRef, Props>(function CustomFlatList(
       onEndReached={onTopReached}
       scrollEventThrottle={16}
       onScroll={_onScroll}
+      keyExtractor={getMessageUniqId}
     />
   );
 });

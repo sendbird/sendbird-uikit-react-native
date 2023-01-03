@@ -8,12 +8,21 @@ import { useLocalization, useSendbirdChat, useUserProfile } from '../../../hooks
 import { openUrl } from '../../../utils/common';
 import type { UserMessageProps } from './index';
 
-const BaseUserMessage = ({ message, variant, pressed, children }: UserMessageProps) => {
-  const { STRINGS } = useLocalization();
-  const { colors } = useUIKitTheme();
-  const color = colors.ui.message[variant][pressed ? 'pressed' : 'enabled'];
-  const { mentionManager, features } = useSendbirdChat();
+const BaseUserMessage = ({
+  message,
+  variant,
+  pressed,
+  children,
+  onLongPressMentionedUser,
+  onLongPressURL,
+}: UserMessageProps) => {
+  const { mentionManager, currentUser } = useSendbirdChat();
   const { show } = useUserProfile();
+  const { STRINGS } = useLocalization();
+  const { colors, palette } = useUIKitTheme();
+
+  const color = colors.ui.message[variant][pressed ? 'pressed' : 'enabled'];
+
   return (
     <View style={[styles.container, { backgroundColor: color.background }]}>
       <View style={styles.wrapper}>
@@ -32,7 +41,12 @@ const BaseUserMessage = ({ message, variant, pressed, children }: UserMessagePro
                         {...parentProps}
                         key={`${keyPrefix}-${index}`}
                         onPress={() => show(user)}
-                        style={[parentProps?.style, { fontWeight: 'bold' }]}
+                        onLongPress={onLongPressMentionedUser}
+                        style={[
+                          parentProps?.style,
+                          { fontWeight: 'bold' },
+                          user.userId === currentUser?.userId && { backgroundColor: palette.highlight },
+                        ]}
                       >
                         {`${mentionManager.asMentionedMessageText(user)}`}
                       </Text>
@@ -49,6 +63,7 @@ const BaseUserMessage = ({ message, variant, pressed, children }: UserMessagePro
                       {...parentProps}
                       key={`${keyPrefix}-${index}`}
                       onPress={() => openUrl(match)}
+                      onLongPress={onLongPressURL}
                       style={[parentProps?.style, { textDecorationLine: 'underline' }]}
                     >
                       {match}
@@ -58,7 +73,7 @@ const BaseUserMessage = ({ message, variant, pressed, children }: UserMessagePro
               },
             ]}
           >
-            {features.mentionEnabled && message.mentionedMessageTemplate
+            {mentionManager.shouldUseMentionedMessageTemplate(message)
               ? message.mentionedMessageTemplate
               : message.message}
           </RegexText>

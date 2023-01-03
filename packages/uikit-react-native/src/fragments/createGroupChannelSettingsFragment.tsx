@@ -19,7 +19,7 @@ const createGroupChannelSettingsFragment = (
     onPressMenuModeration,
     onPressMenuMembers,
     onPressMenuLeaveChannel,
-    onPressMenuNotificationWhenMentionEnabled,
+    onPressMenuNotification,
     menuItemsCreator,
   }) => {
     const { colors } = useUIKitTheme();
@@ -41,7 +41,7 @@ const createGroupChannelSettingsFragment = (
             onPressMenuModeration={onPressMenuModeration}
             onPressMenuMembers={onPressMenuMembers}
             onPressMenuLeaveChannel={onPressMenuLeaveChannel}
-            onPressMenuNotificationWhenMentionEnabled={onPressMenuNotificationWhenMentionEnabled}
+            onPressMenuNotification={onPressMenuNotification}
           />
         </ScrollView>
       </GroupChannelSettingsModule.Provider>

@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { PushTriggerOption } from '@sendbird/chat';
 import { useActionMenu, useToast } from '@sendbird/uikit-react-native-foundation';
-import { PASS, SendbirdGroupChannel, useFreshCallback } from '@sendbird/uikit-utils';
+import { PASS, SendbirdGroupChannel, getChannelUniqId, useFreshCallback } from '@sendbird/uikit-utils';
 
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import type { GroupChannelListProps } from '../types';
@@ -69,6 +69,7 @@ const GroupChannelListList = ({
       onEndReached={onLoadNext}
       {...flatListProps}
       contentContainerStyle={[flatListProps?.contentContainerStyle, { paddingLeft: left, paddingRight: right }]}
+      keyExtractor={getChannelUniqId}
     />
   );
 };

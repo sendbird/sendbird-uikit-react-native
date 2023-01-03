@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import type { SendbirdGroupChannel, SendbirdMember, SendbirdUser } from '@sendbird/uikit-utils';
+import { useAsyncEffect } from '@sendbird/uikit-utils';
 
 import { useSendbirdChat } from '../hooks/useContext';
 import type { Range } from '../types';
@@ -12,6 +13,12 @@ const useMentionSuggestion = (params: {
   mentionedUsers: { user: SendbirdUser; range: Range }[];
 }) => {
   const { text, selection, channel, mentionedUsers } = params;
+
+  const [freshChannel, setFreshChannel] = useState(channel);
+
+  useAsyncEffect(async () => {
+    setFreshChannel(await channel.refresh());
+  }, [channel.url]);
 
   const { mentionManager, currentUser } = useSendbirdChat();
   const [members, setMembers] = useState<SendbirdMember[]>([]);
@@ -39,10 +46,10 @@ const useMentionSuggestion = (params: {
     const selectionRanged = selection.start !== selection.end;
     if (selectionRanged) return [];
 
-    const selectionInMentionedRange = mentionedUsers.some((it) =>
-      mentionManager.rangeHelpers.intersection(it.range, selection, 'underMore'),
+    const selectionContainsMentionedUser = mentionedUsers.some((it) =>
+      mentionManager.rangeHelpers.overlaps(it.range, selection, 'underMore'),
     );
-    if (selectionInMentionedRange) return [];
+    if (selectionContainsMentionedUser) return [];
 
     const { isTriggered, isValidSearchString, searchString } = mentionManager.getSearchString(text, selection.start);
     if (!isTriggered() || !isValidSearchString()) return [];
@@ -52,8 +59,8 @@ const useMentionSuggestion = (params: {
 
     updateSearchStringRange(selection.start, searchString);
 
-    if (channel.isSuper) {
-      return channel
+    if (freshChannel.isSuper) {
+      return freshChannel
         .createMemberListQuery({
           nicknameStartsWithFilter: searchString,
           limit: mentionManager.config.suggestionLimit + 1,
@@ -61,9 +68,13 @@ const useMentionSuggestion = (params: {
         .next()
         .then((members) => members.filter((member) => member.userId !== currentUser?.userId));
     } else {
-      return channel.members
+      return freshChannel.members
         .sort((a, b) => a.nickname?.localeCompare(b.nickname))
-        .filter((member) => member.nickname?.startsWith(searchString) && member.userId !== currentUser?.userId)
+        .filter(
+          (member) =>
+            member.nickname?.toLowerCase().startsWith(searchString.toLowerCase()) &&
+            member.userId !== currentUser?.userId,
+        )
         .slice(0, mentionManager.config.suggestionLimit);
     }
   };

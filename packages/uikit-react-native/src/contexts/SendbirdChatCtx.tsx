@@ -19,7 +19,7 @@ export interface UIKitFeaturesInSendbirdChatContext {
   enableChannelListTypingIndicator: boolean;
   enableChannelListMessageReceiptStatus: boolean;
   enableUseUserIdForNickname: boolean;
-  enableMention: boolean;
+  enableUserMention: boolean;
 }
 
 interface Props extends UIKitFeaturesInSendbirdChatContext, React.PropsWithChildren {
@@ -45,7 +45,7 @@ type Context = {
     channelListTypingIndicatorEnabled: boolean;
     channelListMessageReceiptStatusEnabled: boolean;
     useUserIdForNicknameEnabled: boolean;
-    mentionEnabled: boolean;
+    userMentionEnabled: boolean;
 
     // Sendbird application features
     deliveryReceiptEnabled: boolean;
@@ -65,7 +65,7 @@ export const SendbirdChatProvider = ({
   enableChannelListMessageReceiptStatus,
   enableChannelListTypingIndicator,
   enableUseUserIdForNickname,
-  enableMention,
+  enableUserMention,
 }: Props) => {
   const [currentUser, _setCurrentUser] = useState<SendbirdUser>();
   const forceUpdate = useForceUpdate();
@@ -143,7 +143,7 @@ export const SendbirdChatProvider = ({
       channelListTypingIndicatorEnabled: enableChannelListTypingIndicator,
       channelListMessageReceiptStatusEnabled: enableChannelListMessageReceiptStatus,
       useUserIdForNicknameEnabled: enableUseUserIdForNickname,
-      mentionEnabled: enableMention,
+      userMentionEnabled: enableUserMention,
     },
   };
 
