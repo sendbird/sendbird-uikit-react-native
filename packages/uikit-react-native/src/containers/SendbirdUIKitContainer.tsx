@@ -152,7 +152,7 @@ const SendbirdUIKitContainer = ({
         width: imageCompression?.width,
         height: imageCompression?.height,
       }),
-    [imageCompression],
+    [imageCompression?.compressionRate, imageCompression?.width, imageCompression?.height],
   );
 
   useLayoutEffect(() => {
