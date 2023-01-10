@@ -11,6 +11,7 @@ import type {
 import { confirmAndMarkAsDelivered, useForceUpdate } from '@sendbird/uikit-utils';
 
 import type EmojiManager from '../libs/EmojiManager';
+import type ImageCompressionConfig from '../libs/ImageCompressionConfig';
 import type MentionManager from '../libs/MentionManager';
 import type { FileType } from '../platform/types';
 
@@ -20,18 +21,21 @@ export interface UIKitFeaturesInSendbirdChatContext {
   enableChannelListMessageReceiptStatus: boolean;
   enableUseUserIdForNickname: boolean;
   enableUserMention: boolean;
+  enableImageCompression: boolean;
 }
 
 interface Props extends UIKitFeaturesInSendbirdChatContext, React.PropsWithChildren {
   sdkInstance: SendbirdChatSDK;
   emojiManager: EmojiManager;
   mentionManager: MentionManager;
+  imageCompressionConfig: ImageCompressionConfig;
 }
 
 type Context = {
   sdk: SendbirdChatSDK;
   emojiManager: EmojiManager;
   mentionManager: MentionManager;
+  imageCompressionConfig: ImageCompressionConfig;
   currentUser?: SendbirdUser;
   setCurrentUser: React.Dispatch<React.SetStateAction<SendbirdUser | undefined>>;
 
@@ -46,6 +50,7 @@ type Context = {
     channelListMessageReceiptStatusEnabled: boolean;
     useUserIdForNicknameEnabled: boolean;
     userMentionEnabled: boolean;
+    imageCompressionEnabled: boolean;
 
     // Sendbird application features
     deliveryReceiptEnabled: boolean;
@@ -61,11 +66,13 @@ export const SendbirdChatProvider = ({
   sdkInstance,
   emojiManager,
   mentionManager,
+  imageCompressionConfig,
   enableAutoPushTokenRegistration,
   enableChannelListMessageReceiptStatus,
   enableChannelListTypingIndicator,
   enableUseUserIdForNickname,
   enableUserMention,
+  enableImageCompression,
 }: Props) => {
   const [currentUser, _setCurrentUser] = useState<SendbirdUser>();
   const forceUpdate = useForceUpdate();
@@ -131,6 +138,7 @@ export const SendbirdChatProvider = ({
     sdk: sdkInstance,
     emojiManager,
     mentionManager,
+    imageCompressionConfig,
     currentUser,
     setCurrentUser,
 
@@ -144,6 +152,7 @@ export const SendbirdChatProvider = ({
       channelListMessageReceiptStatusEnabled: enableChannelListMessageReceiptStatus,
       useUserIdForNicknameEnabled: enableUseUserIdForNickname,
       userMentionEnabled: enableUserMention,
+      imageCompressionEnabled: enableImageCompression,
     },
   };
 

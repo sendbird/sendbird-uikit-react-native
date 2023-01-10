@@ -30,11 +30,14 @@ import type { UIKitFeaturesInSendbirdChatContext } from '../contexts/SendbirdCha
 import { SendbirdChatProvider } from '../contexts/SendbirdChatCtx';
 import { UserProfileProvider } from '../contexts/UserProfileCtx';
 import EmojiManager from '../libs/EmojiManager';
+import type { ImageCompressionConfigInterface } from '../libs/ImageCompressionConfig';
+import ImageCompressionConfig from '../libs/ImageCompressionConfig';
 import InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
 import MentionConfig, { MentionConfigInterface } from '../libs/MentionConfig';
 import MentionManager from '../libs/MentionManager';
 import StringSetEn from '../localization/StringSet.en';
 import type { StringSet } from '../localization/StringSet.type';
+import createNativeMediaService from '../platform/createMediaService.native';
 import SBUDynamicModule from '../platform/dynamicModule';
 import type {
   ClipboardServiceInterface,
@@ -57,6 +60,7 @@ export const SendbirdUIKit = Object.freeze({
     CHANNEL_LIST_MESSAGE_RECEIPT_STATUS: false,
     USE_USER_ID_FOR_NICKNAME: false,
     USER_MENTION: false,
+    IMAGE_COMPRESSION: true,
   },
 });
 
@@ -82,6 +86,10 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
     defaultHeaderHeight?: number;
     HeaderComponent?: HeaderStyleContextType['HeaderComponent'];
   };
+  errorBoundary?: {
+    onError?: (props: ErrorBoundaryProps) => void;
+    ErrorInfoComponent?: (props: ErrorBoundaryProps) => JSX.Element;
+  };
   toast?: {
     dismissTimeout?: number;
   };
@@ -93,10 +101,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
     ) => SendbirdGroupChannelCreateParams | Promise<SendbirdGroupChannelCreateParams>;
   };
   userMention?: Pick<Partial<MentionConfigInterface>, 'mentionLimit' | 'suggestionLimit' | 'debounceMills'>;
-  errorBoundary?: {
-    onError?: (props: ErrorBoundaryProps) => void;
-    ErrorInfoComponent?: (props: ErrorBoundaryProps) => JSX.Element;
-  };
+  imageCompression?: ImageCompressionConfigInterface;
 }>;
 
 const SendbirdUIKitContainer = ({
@@ -106,10 +111,11 @@ const SendbirdUIKitContainer = ({
   platformServices,
   localization,
   styles,
+  errorBoundary,
   toast,
   userProfile,
   userMention,
-  errorBoundary,
+  imageCompression,
 }: SendbirdUIKitContainerProps) => {
   const defaultStringSet = localization?.stringSet ?? StringSetEn;
 
@@ -125,7 +131,9 @@ const SendbirdUIKitContainer = ({
     unsubscribes.current = sendbird.unsubscribes;
     return sendbird.chatSDK;
   });
+
   const emojiManager = useMemo(() => new EmojiManager(internalStorage), [internalStorage]);
+
   const mentionManager = useMemo(() => {
     const config = new MentionConfig({
       mentionLimit: userMention?.mentionLimit || MentionConfig.DEFAULT.MENTION_LIMIT,
@@ -136,6 +144,16 @@ const SendbirdUIKitContainer = ({
     });
     return new MentionManager(config, chatOptions?.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION);
   }, [userMention?.mentionLimit, userMention?.suggestionLimit, userMention?.debounceMills]);
+
+  const imageCompressionConfig = useMemo(
+    () =>
+      new ImageCompressionConfig({
+        compressionRate: imageCompression?.compressionRate || ImageCompressionConfig.DEFAULT.COMPRESSION_RATE,
+        width: imageCompression?.width,
+        height: imageCompression?.height,
+      }),
+    [imageCompression],
+  );
 
   useLayoutEffect(() => {
     if (!isFirstMount) {
@@ -161,6 +179,7 @@ const SendbirdUIKitContainer = ({
         sdkInstance={sdkInstance}
         emojiManager={emojiManager}
         mentionManager={mentionManager}
+        imageCompressionConfig={imageCompressionConfig}
         enableAutoPushTokenRegistration={
           chatOptions?.enableAutoPushTokenRegistration ?? SendbirdUIKit.DEFAULT.AUTO_PUSH_TOKEN_REGISTRATION
         }
@@ -175,13 +194,14 @@ const SendbirdUIKitContainer = ({
           chatOptions?.enableUseUserIdForNickname ?? SendbirdUIKit.DEFAULT.USE_USER_ID_FOR_NICKNAME
         }
         enableUserMention={chatOptions?.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION}
+        enableImageCompression={chatOptions?.enableImageCompression ?? SendbirdUIKit.DEFAULT.IMAGE_COMPRESSION}
       >
         <LocalizationProvider stringSet={defaultStringSet}>
           <PlatformServiceProvider
             fileService={platformServices.file}
             notificationService={platformServices.notification}
             clipboardService={platformServices.clipboard}
-            mediaService={platformServices.media}
+            mediaService={platformServices.media ?? createNativeMediaService()}
           >
             <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
               <HeaderStyleProvider

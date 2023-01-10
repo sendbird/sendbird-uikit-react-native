@@ -15,7 +15,7 @@ const useRetry = (videoFileUrl: string, retryCount = 5) => {
   const { mediaService } = usePlatformService();
 
   const fetchThumbnail = () => {
-    return mediaService?.getVideoThumbnail({ url: videoFileUrl, timeMills: 1000 }).then((result) => {
+    return mediaService.getVideoThumbnail({ url: videoFileUrl, timeMills: 1000 }).then((result) => {
       setState({ loading: false, thumbnail: result?.path ?? null });
     });
   };
