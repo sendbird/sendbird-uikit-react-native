@@ -1,7 +1,6 @@
 export { Logger } from './shared/logger';
 export { default as arrayToMap, arrayToMapWithGetter } from './shared/arrayToMap';
 export { createPubSub } from './shared/pubsub';
-export { default as conditionChaining } from './shared/conditionChaining';
 export {
   urlRegexStrict,
   urlRegexRough,
@@ -19,7 +18,8 @@ export {
   createMentionTemplateRegex,
 } from './shared/regex';
 export { BufferedRequest } from './shared/bufferedRequest';
-export { default as replace } from './shared/replace';
+
+export * from './shared';
 
 export * from './hooks';
 export * from './ui-format/groupChannel';
