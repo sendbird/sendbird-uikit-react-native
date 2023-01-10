@@ -71,7 +71,7 @@ const SettingsScreen = () => {
                 if (error.code === SBUError.CODE.ERR_PERMISSIONS_DENIED) {
                   alert({
                     title: STRINGS.DIALOG.ALERT_PERMISSIONS_TITLE,
-                    message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE('camera', 'UIKitSample'),
+                    message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE(STRINGS.LABELS.PERMISSION_CAMERA, 'UIKitSample'),
                     buttons: [{ text: STRINGS.DIALOG.ALERT_PERMISSIONS_OK, onPress: () => SBUUtils.openSettings() }],
                   });
                 } else {
@@ -95,7 +95,10 @@ const SettingsScreen = () => {
                 if (error.code === SBUError.CODE.ERR_PERMISSIONS_DENIED) {
                   alert({
                     title: STRINGS.DIALOG.ALERT_PERMISSIONS_TITLE,
-                    message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE('device storage', 'UIKitSample'),
+                    message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE(
+                      STRINGS.LABELS.PERMISSION_DEVICE_STORAGE,
+                      'UIKitSample',
+                    ),
                     buttons: [{ text: STRINGS.DIALOG.ALERT_PERMISSIONS_OK, onPress: () => SBUUtils.openSettings() }],
                   });
                 } else {

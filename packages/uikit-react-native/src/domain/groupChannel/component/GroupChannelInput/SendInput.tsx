@@ -81,7 +81,10 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
                 if (error.code === SBUError.CODE.ERR_PERMISSIONS_DENIED) {
                   alert({
                     title: STRINGS.DIALOG.ALERT_PERMISSIONS_TITLE,
-                    message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE('camera', 'UIKitSample'),
+                    message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE(
+                      STRINGS.LABELS.PERMISSION_CAMERA,
+                      STRINGS.LABELS.PERMISSION_APP_NAME,
+                    ),
                     buttons: [{ text: STRINGS.DIALOG.ALERT_PERMISSIONS_OK, onPress: () => SBUUtils.openSettings() }],
                   });
                 } else {
@@ -106,7 +109,10 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
                 if (error.code === SBUError.CODE.ERR_PERMISSIONS_DENIED) {
                   alert({
                     title: STRINGS.DIALOG.ALERT_PERMISSIONS_TITLE,
-                    message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE('device storage', 'UIKitSample'),
+                    message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE(
+                      STRINGS.LABELS.PERMISSION_DEVICE_STORAGE,
+                      STRINGS.LABELS.PERMISSION_APP_NAME,
+                    ),
                     buttons: [{ text: STRINGS.DIALOG.ALERT_PERMISSIONS_OK, onPress: () => SBUUtils.openSettings() }],
                   });
                 } else {

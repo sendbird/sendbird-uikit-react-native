@@ -169,6 +169,10 @@ export interface StringSet {
   };
   // UI
   LABELS: {
+    PERMISSION_APP_NAME: string;
+    PERMISSION_CAMERA: string;
+    PERMISSION_DEVICE_STORAGE: string;
+
     USER_NO_NAME: string;
     CHANNEL_NO_MEMBERS: string;
     TYPING_INDICATOR_TYPINGS: (users: SendbirdUser[]) => string | undefined;
@@ -391,6 +395,9 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       ...overrides?.GROUP_CHANNEL_INVITE,
     },
     LABELS: {
+      PERMISSION_APP_NAME: 'Application',
+      PERMISSION_CAMERA: 'camera',
+      PERMISSION_DEVICE_STORAGE: 'device storage',
       USER_NO_NAME,
       CHANNEL_NO_MEMBERS,
       TYPING_INDICATOR_TYPINGS: (users, NO_NAME = USER_NO_NAME) => {
