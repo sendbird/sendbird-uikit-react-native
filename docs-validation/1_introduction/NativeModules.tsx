@@ -48,6 +48,7 @@ import * as ExpoMediaLibrary from 'expo-media-library';
 import * as ExpoNotifications from 'expo-notifications';
 import * as ExpoAV from 'expo-av';
 import * as ExpoVideoThumbnail from 'expo-video-thumbnails';
+import * as ExpoImageManipulator from 'expo-image-manipulator';
 
 const ExpoNotificationService = createExpoNotificationService(ExpoNotifications);
 const ExpoClipboardService = createExpoClipboardService(ExpoClipboard);
@@ -59,6 +60,8 @@ const ExpoFileService = createExpoFileService({
 });
 const ExpoMediaService = createExpoMediaService({
   avModule: ExpoAV,
-  thumbnailModule: ExpoVideoThumbnail
+  thumbnailModule: ExpoVideoThumbnail,
+  imageManipulator: ExpoImageManipulator,
+  fsModule: ExpoFS,
 })
 /** ------------------ **/
