@@ -81,6 +81,7 @@
     "typescript": "4.9.4"
   },
   "peerDependencies": {
+    "@bam.tech/react-native-image-resizer": ">=3.0.0",
     "@react-native-camera-roll/camera-roll": ">=5.0.0",
     "@react-native-clipboard/clipboard": ">=1.8.5",
     "@react-native-community/netinfo": ">=9.3.0",
