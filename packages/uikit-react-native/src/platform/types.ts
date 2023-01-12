@@ -69,9 +69,9 @@ interface GetVideoThumbnailOptions {
 
 interface CompressImageOptions {
   /**
-   * A path of image file to compress
+   * A uri of image file to compress
    * */
-  path: string;
+  uri: string;
 
   /**
    * A resize width, apply only to downscale
@@ -91,7 +91,7 @@ interface CompressImageOptions {
 }
 
 type GetVideoThumbnailResult = Promise<{ path: string } | null>;
-type CompressImageResult = Promise<{ path: string; size: number } | null>;
+type CompressImageResult = Promise<{ uri: string; size: number } | null>;
 
 export interface MediaServiceInterface {
   VideoComponent<Props = {}>(props: VideoProps & Props): JSX.Element;

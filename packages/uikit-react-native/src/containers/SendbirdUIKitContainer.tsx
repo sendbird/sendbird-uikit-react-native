@@ -100,7 +100,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
     ) => SendbirdGroupChannelCreateParams | Promise<SendbirdGroupChannelCreateParams>;
   };
   userMention?: Pick<Partial<MentionConfigInterface>, 'mentionLimit' | 'suggestionLimit' | 'debounceMills'>;
-  imageCompression?: ImageCompressionConfigInterface;
+  imageCompression?: Partial<ImageCompressionConfigInterface>;
 }>;
 
 const SendbirdUIKitContainer = ({

@@ -36,22 +36,22 @@ const createNativeMediaService = ({
         return null;
       }
     },
-    async compressImage({ path, maxWidth, maxHeight, compressionRate = 1 }) {
-      const originSize = await SBUUtils.getImageSize(path);
+    async compressImage({ uri, maxWidth, maxHeight, compressionRate = 1 }) {
+      const originSize = await SBUUtils.getImageSize(uri);
       const { width, height } = getDownscaleSize(originSize, { width: maxWidth, height: maxHeight });
       const extension = (() => {
-        return { 'png': 'PNG', 'jpeg': 'JPEG', 'jpg': 'JPEG' }[getFileExtension(path)] ?? 'JPEG';
+        return { 'png': 'PNG', 'jpeg': 'JPEG', 'jpg': 'JPEG' }[getFileExtension(uri)] ?? 'JPEG';
       })() as 'PNG' | 'JPEG';
 
-      const { path: resizedPath, size: resizedSize } = await imageResizerModule.default.createResizedImage(
-        path,
+      const { size: resizedSize, uri: compressedURI } = await imageResizerModule.default.createResizedImage(
+        uri,
         width,
         height,
         extension,
         Math.min(Math.max(0, compressionRate), 1) * 100,
       );
 
-      return { path: resizedPath, size: resizedSize };
+      return { uri: compressedURI, size: resizedSize };
     },
   };
 };

@@ -44,7 +44,12 @@ const ImageFileMessage = ({ message, children, variant }: FileMessageProps) => {
   const key = useRetry(imageNotFound);
 
   return (
-    <View style={[styles.bubbleContainer, { backgroundColor: colors.ui.message[variant].enabled.background }]}>
+    <View
+      style={[
+        styles.bubbleContainer,
+        { backgroundColor: imageNotFound ? colors.onBackground04 : colors.ui.message[variant].enabled.background },
+      ]}
+    >
       <View style={style}>
         <Image
           key={key}

@@ -101,14 +101,14 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
               ) {
                 await SBUUtils.safeRun(async () => {
                   const compressed = await mediaService.compressImage({
-                    path: mediaFile.uri,
+                    uri: mediaFile.uri,
                     maxWidth: imageCompressionConfig.width,
                     maxHeight: imageCompressionConfig.height,
                     compressionRate: imageCompressionConfig.compressionRate,
                   });
 
                   if (compressed) {
-                    mediaFile.uri = compressed.path;
+                    mediaFile.uri = compressed.uri;
                     mediaFile.size = compressed.size;
                   }
                 });
@@ -151,14 +151,14 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
               ) {
                 await SBUUtils.safeRun(async () => {
                   const compressed = await mediaService.compressImage({
-                    path: mediaFile.uri,
+                    uri: mediaFile.uri,
                     maxWidth: imageCompressionConfig.width,
                     maxHeight: imageCompressionConfig.height,
                     compressionRate: imageCompressionConfig.compressionRate,
                   });
 
                   if (compressed) {
-                    mediaFile.uri = compressed.path;
+                    mediaFile.uri = compressed.uri;
                     mediaFile.size = compressed.size;
                   }
                 });
@@ -184,14 +184,14 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
               ) {
                 await SBUUtils.safeRun(async () => {
                   const compressed = await mediaService.compressImage({
-                    path: documentFile.uri,
+                    uri: documentFile.uri,
                     maxWidth: imageCompressionConfig.width,
                     maxHeight: imageCompressionConfig.height,
                     compressionRate: imageCompressionConfig.compressionRate,
                   });
 
                   if (compressed) {
-                    documentFile.uri = compressed.path;
+                    documentFile.uri = compressed.uri;
                     documentFile.size = compressed.size;
                   }
                 });

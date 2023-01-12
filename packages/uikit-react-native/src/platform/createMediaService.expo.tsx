@@ -36,16 +36,16 @@ const createExpoMediaService = ({
         return null;
       }
     },
-    async compressImage({ maxWidth, maxHeight, compressionRate = 1, path }) {
-      const originSize = await SBUUtils.getImageSize(path);
+    async compressImage({ maxWidth, maxHeight, compressionRate = 1, uri }) {
+      const originSize = await SBUUtils.getImageSize(uri);
       const resizingSize = getDownscaleSize(originSize, { width: maxWidth, height: maxHeight });
 
-      const { uri } = await imageManipulator.manipulateAsync(path, [{ resize: resizingSize }], {
+      const { uri: compressedURI } = await imageManipulator.manipulateAsync(uri, [{ resize: resizingSize }], {
         compress: Math.min(Math.max(0, compressionRate), 1),
       });
       const { size = 0 } = await fsModule.getInfoAsync(uri);
 
-      return { path: uri, size };
+      return { uri: compressedURI, size };
     },
   };
 };
