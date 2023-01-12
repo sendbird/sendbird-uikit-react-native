@@ -10,7 +10,7 @@ type KeyboardEvents = {
 };
 
 const configureNextLayoutAnimation = (event: KeyboardEvent) => {
-  const config = LayoutAnimation.create(event.duration, event.easing);
+  const config = LayoutAnimation.create(event.duration, event.easing, LayoutAnimation.Properties.scaleY);
   LayoutAnimation.configureNext(config);
 };
 
