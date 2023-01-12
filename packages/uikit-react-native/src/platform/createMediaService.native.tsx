@@ -1,28 +1,31 @@
+import type * as RNImageResizer from '@bam.tech/react-native-image-resizer';
 import React from 'react';
+import type * as RNCreateThumbnail from 'react-native-create-thumbnail';
+import type RNVideo from 'react-native-video';
 
 import { getDownscaleSize, getFileExtension, hash } from '@sendbird/uikit-utils';
 
 import SBUUtils from '../libs/SBUUtils';
-import SBUDynamicModule from './dynamicModule';
 import type { MediaServiceInterface } from './types';
 
 type Modules = {
-  VideoComponent?: unknown;
-  thumbnailModule?: unknown;
+  VideoComponent: typeof RNVideo;
+  thumbnailModule: typeof RNCreateThumbnail;
+  imageResizerModule: typeof RNImageResizer;
 };
 
-const createNativeMediaService = (_?: Modules): MediaServiceInterface => {
-  const Thumbnail = SBUDynamicModule.get('react-native-create-thumbnail');
-  const Video = SBUDynamicModule.get('react-native-video');
-  const ImageResizer = SBUDynamicModule.get('@bam.tech/react-native-image-resizer');
-
+const createNativeMediaService = ({
+  VideoComponent,
+  thumbnailModule,
+  imageResizerModule,
+}: Modules): MediaServiceInterface => {
   return {
     VideoComponent({ source, resizeMode, onLoad, ...props }) {
-      return <Video.default {...props} source={source} resizeMode={resizeMode} onLoad={onLoad} controls />;
+      return <VideoComponent {...props} source={source} resizeMode={resizeMode} onLoad={onLoad} controls />;
     },
     async getVideoThumbnail({ url, timeMills }) {
       try {
-        const { path } = await Thumbnail.createThumbnail({
+        const { path } = await thumbnailModule.createThumbnail({
           url,
           format: 'jpeg',
           timeStamp: timeMills,
@@ -40,7 +43,7 @@ const createNativeMediaService = (_?: Modules): MediaServiceInterface => {
         return { 'png': 'PNG', 'jpeg': 'JPEG', 'jpg': 'JPEG' }[getFileExtension(path)] ?? 'JPEG';
       })() as 'PNG' | 'JPEG';
 
-      const { path: resizedPath, size: resizedSize } = await ImageResizer.default.createResizedImage(
+      const { path: resizedPath, size: resizedSize } = await imageResizerModule.default.createResizedImage(
         path,
         width,
         height,

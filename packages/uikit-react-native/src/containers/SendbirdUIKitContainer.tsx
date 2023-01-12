@@ -37,7 +37,6 @@ import MentionConfig, { MentionConfigInterface } from '../libs/MentionConfig';
 import MentionManager from '../libs/MentionManager';
 import StringSetEn from '../localization/StringSet.en';
 import type { StringSet } from '../localization/StringSet.type';
-import createNativeMediaService from '../platform/createMediaService.native';
 import SBUDynamicModule from '../platform/dynamicModule';
 import type {
   ClipboardServiceInterface,
@@ -70,7 +69,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
     file: FileServiceInterface;
     notification: NotificationServiceInterface;
     clipboard: ClipboardServiceInterface;
-    media?: MediaServiceInterface;
+    media: MediaServiceInterface;
   };
   chatOptions?: {
     localCacheStorage?: LocalCacheStorage;
@@ -201,7 +200,7 @@ const SendbirdUIKitContainer = ({
             fileService={platformServices.file}
             notificationService={platformServices.notification}
             clipboardService={platformServices.clipboard}
-            mediaService={platformServices.media ?? createNativeMediaService()}
+            mediaService={platformServices.media}
           >
             <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
               <HeaderStyleProvider

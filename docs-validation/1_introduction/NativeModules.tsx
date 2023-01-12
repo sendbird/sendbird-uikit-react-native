@@ -16,10 +16,13 @@ import {
 import Clipboard from '@react-native-clipboard/clipboard';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import RNFBMessaging from '@react-native-firebase/messaging';
+import Video from 'react-native-video';
 import * as DocumentPicker from 'react-native-document-picker';
 import * as FileAccess from 'react-native-file-access';
 import * as ImagePicker from 'react-native-image-picker';
 import * as Permissions from 'react-native-permissions';
+import * as CreateThumbnail from 'react-native-create-thumbnail';
+import * as ImageResizer from '@bam.tech/react-native-image-resizer';
 
 const NativeClipboardService = createNativeClipboardService(Clipboard);
 const NativeNotificationService = createNativeNotificationService({
@@ -33,7 +36,11 @@ const NativeFileService = createNativeFileService({
   mediaLibraryModule: CameraRoll,
   documentPickerModule: DocumentPicker,
 });
-const NativeMediaService = createNativeMediaService();
+const NativeMediaService = createNativeMediaService({
+  VideoComponent: Video,
+  thumbnailModule: CreateThumbnail,
+  imageResizerModule: ImageResizer,
+});
 /** ------------------ **/
 
 /**
