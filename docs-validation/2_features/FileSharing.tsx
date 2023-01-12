@@ -84,22 +84,21 @@ function _stringResource(str: StringSet) {
  * Image compression
  * {@link https://sendbird.com/docs/uikit/v3/react-native/features/file-sharing#2-image-compression}
  * */
-// @ts-ignore
-import ImageResizer from 'react-native-image-resizer';
+import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
 
-const GroupChannelScreen2 = () => {
+const App = () => {
   return (
-    // @ts-ignore
-    <GroupChannelFragment
-      onBeforeSendFileMessage={async (params) => {
-        if (params.file && 'uri' in params.file) {
-          if (isImageFile(params.file.name)) {
-            const { uri, size } = await ImageResizer.createResizedImage(params.file.uri);
-            params.file = { ...params.file, uri, size };
-          }
-        }
-
-        return params;
+    <SendbirdUIKitContainer
+      appId={'APP_ID'}
+      // @ts-ignore
+      platformServices={{}}
+      chatOptions={{
+        enableImageCompression: true
+      }}
+      imageCompression={{
+        compressionRate: 0.5,
+        width: 600,
+        height: 600
       }}
     />
   );
