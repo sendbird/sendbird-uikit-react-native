@@ -9,9 +9,14 @@ type KeyboardEvents = {
   hideEvent: KeyboardEventName;
 };
 
+let isLayoutAnimationConfigured = false;
+
 const configureNextLayoutAnimation = (event: KeyboardEvent) => {
+  if (isLayoutAnimationConfigured) return;
   const config = LayoutAnimation.create(event.duration, event.easing, LayoutAnimation.Properties.scaleY);
-  LayoutAnimation.configureNext(config);
+  isLayoutAnimationConfigured = true;
+  const onEnd = () => (isLayoutAnimationConfigured = false);
+  LayoutAnimation.configureNext(config, onEnd, onEnd);
 };
 
 const { showEvent, hideEvent } = Platform.select<KeyboardEvents>({
