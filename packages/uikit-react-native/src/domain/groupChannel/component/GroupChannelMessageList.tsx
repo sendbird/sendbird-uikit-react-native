@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { Linking, ListRenderItem, Platform, View } from 'react-native';
+import { ListRenderItem, Platform, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation';
@@ -29,6 +29,7 @@ import ChatFlatList from '../../../components/ChatFlatList';
 import { ReactionAddons } from '../../../components/ReactionAddons';
 import { DEPRECATION_WARNING } from '../../../constants';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../../hooks/useContext';
+import SBUUtils from '../../../libs/SBUUtils';
 import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
 
@@ -281,7 +282,7 @@ const useGetMessagePressActions = ({
           break;
         }
         default: {
-          response.onPress = () => Linking.openURL(msg.url).catch();
+          response.onPress = () => SBUUtils.openURL(msg.url);
           break;
         }
       }

@@ -45,11 +45,12 @@ UIKit for React-Native can be installed through either `yarn` or `npm`
 **Install dependencies**
 
 ```sh
-npm i @sendbird/uikit-react-native \
-      @sendbird/chat \
-      date-fns \
-      react-native-safe-area-context \
-      @react-native-community/netinfo
+npm install @sendbird/uikit-react-native \
+            @sendbird/chat \
+            date-fns \
+            react-native-safe-area-context \
+            @react-native-community/netinfo \
+            @react-native-async-storage/async-storage
 ```
 
 **Linking native modules**
@@ -121,6 +122,7 @@ const App = () => {
         file: FileService,
         notification: NotificationService,
         clipboard: ClipboardService,
+        media: MediaService,
       }}
     >
       {/* ... */}
@@ -136,17 +138,20 @@ In order to implement the interfaces to your React Native app more easily, we pr
 
 **Using React Native CLI**
 
-You can use `createNativeClipboardService`, `createNativeNotificationService` and `createNativeFileService` helper functions with below native modules.
+You can use `createNativeClipboardService`, `createNativeNotificationService`, `createNativeFileService` and `createNativeMediaService` helper functions with below native modules.
 
 ```sh
-npm install react-native-permissions \
+npm install react-native-video \
+            react-native-permissions \
+            react-native-file-access \
             react-native-image-picker \
             react-native-document-picker \
-            @react-native-camera-roll/camera-roll \
-            react-native-file-access \
+            react-native-create-thumbnail \
             @react-native-clipboard/clipboard \
+            @react-native-camera-roll/camera-roll \
             @react-native-firebase/app \
             @react-native-firebase/messaging \
+            @bam.tech/react-native-image-resizer
 
 npx pod-install
 ```
@@ -155,28 +160,36 @@ npx pod-install
 import Clipboard from '@react-native-clipboard/clipboard';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import RNFBMessaging from '@react-native-firebase/messaging';
+import Video from 'react-native-video';
 import * as DocumentPicker from 'react-native-document-picker';
 import * as FileAccess from 'react-native-file-access';
 import * as ImagePicker from 'react-native-image-picker';
 import * as Permissions from 'react-native-permissions';
+import * as CreateThumbnail from 'react-native-create-thumbnail';
+import * as ImageResizer from '@bam.tech/react-native-image-resizer';
 
-const ClipboardService = createNativeClipboardService(Clipboard);
-const NotificationService = createNativeNotificationService({
+const NativeClipboardService = createNativeClipboardService(Clipboard);
+const NativeNotificationService = createNativeNotificationService({
   messagingModule: RNFBMessaging,
   permissionModule: Permissions,
 });
-const FileService = createNativeFileService({
+const NativeFileService = createNativeFileService({
   fsModule: FileAccess,
   permissionModule: Permissions,
   imagePickerModule: ImagePicker,
   mediaLibraryModule: CameraRoll,
   documentPickerModule: DocumentPicker,
 });
+const NativeMediaService = createNativeMediaService({
+  VideoComponent: Video,
+  thumbnailModule: CreateThumbnail,
+  imageResizerModule: ImageResizer,
+});
 ```
 
 **Using Expo CLI**
 
-You can use `createExpoClipboardService`, `createExpoNotificationService` and `createExpoFileService` helper functions with below expo modules.
+You can use `createExpoClipboardService`, `createExpoNotificationService`, `createExpoFileService` and `createExpoMediaService` helper functions with below expo modules.
 
 ```sh
 expo install expo-image-picker \
@@ -184,7 +197,10 @@ expo install expo-image-picker \
              expo-media-library \
              expo-file-system \
              expo-clipboard \
-             expo-notifications
+             expo-notifications \
+             expo-av \
+             expo-video-thumbnails \
+             expo-image-manipulator
 ```
 
 ```ts
@@ -194,15 +210,24 @@ import * as ExpoFS from 'expo-file-system';
 import * as ExpoImagePicker from 'expo-image-picker';
 import * as ExpoMediaLibrary from 'expo-media-library';
 import * as ExpoNotifications from 'expo-notifications';
+import * as ExpoAV from 'expo-av';
+import * as ExpoVideoThumbnail from 'expo-video-thumbnails';
+import * as ExpoImageManipulator from 'expo-image-manipulator';
 
-const NotificationService = createExpoNotificationService(ExpoNotifications);
-const ClipboardService = createExpoClipboardService(ExpoClipboard);
-const FileService = createExpoFileService({
+const ExpoNotificationService = createExpoNotificationService(ExpoNotifications);
+const ExpoClipboardService = createExpoClipboardService(ExpoClipboard);
+const ExpoFileService = createExpoFileService({
   fsModule: ExpoFS,
   imagePickerModule: ExpoImagePicker,
   mediaLibraryModule: ExpoMediaLibrary,
   documentPickerModule: ExpoDocumentPicker,
 });
+const ExpoMediaService = createExpoMediaService({
+  avModule: ExpoAV,
+  thumbnailModule: ExpoVideoThumbnail,
+  imageManipulator: ExpoImageManipulator,
+  fsModule: ExpoFS,
+})
 ```
 
 ### Local caching (optional)

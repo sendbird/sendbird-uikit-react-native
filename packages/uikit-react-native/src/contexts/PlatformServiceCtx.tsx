@@ -11,7 +11,7 @@ type Props = React.PropsWithChildren<{
   fileService: FileServiceInterface;
   clipboardService: ClipboardServiceInterface;
   notificationService: NotificationServiceInterface;
-  mediaService?: MediaServiceInterface;
+  mediaService: MediaServiceInterface;
 }>;
 
 export const PlatformServiceContext = React.createContext<Props | null>(null);

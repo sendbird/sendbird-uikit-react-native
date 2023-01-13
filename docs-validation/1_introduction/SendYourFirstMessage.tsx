@@ -20,6 +20,7 @@ import * as FileAccess from 'react-native-file-access';
 import * as ImagePicker from 'react-native-image-picker';
 import * as Permissions from 'react-native-permissions';
 import * as CreateThumbnail from 'react-native-create-thumbnail';
+import * as ImageResizer from '@bam.tech/react-native-image-resizer';
 
 const ClipboardService = createNativeClipboardService(Clipboard);
 const NotificationService = createNativeNotificationService({
@@ -36,6 +37,7 @@ const FileService = createNativeFileService({
 const MediaService = createNativeMediaService({
   VideoComponent: Video,
   thumbnailModule: CreateThumbnail,
+  imageResizerModule: ImageResizer,
 });
 /** ------------------ **/
 
@@ -179,6 +181,7 @@ const App2 = () => {
         file: FileService,
         notification: NotificationService,
         clipboard: ClipboardService,
+        media: MediaService,
       }}
     >
       <Navigation />

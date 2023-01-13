@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Linking, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
 import type { OGMetaData } from '@sendbird/chat/message';
 import { Icon, Image, RegexText, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { conditionChaining, urlRegexRough } from '@sendbird/uikit-utils';
 
 import { useLocalization, useSendbirdChat, useUserProfile } from '../../../hooks/useContext';
-import { openUrl } from '../../../utils/common';
+import SBUUtils from '../../../libs/SBUUtils';
 import type { UserMessageProps } from './index';
 
 type Props = UserMessageProps & {
@@ -73,7 +73,7 @@ const OpenGraphUserMessage = ({
                       <Text
                         {...parentProps}
                         key={`${keyPrefix}-${index}`}
-                        onPress={() => openUrl(match)}
+                        onPress={() => SBUUtils.openURL(match)}
                         onLongPress={onLongPressURL}
                         style={[parentProps?.style, styles.urlText]}
                       >
@@ -98,7 +98,7 @@ const OpenGraphUserMessage = ({
         <TouchableOpacity
           style={{ backgroundColor: select({ dark: palette.background500, light: palette.background200 }) }}
           activeOpacity={0.85}
-          onPress={() => Linking.openURL(ogMetaData.url).catch()}
+          onPress={() => SBUUtils.openURL(ogMetaData.url)}
         >
           <View
             style={[

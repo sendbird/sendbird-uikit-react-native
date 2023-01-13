@@ -18,7 +18,7 @@ import {
   useToast,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import { conditionChaining } from '@sendbird/uikit-utils';
+import { conditionChaining, isImage, shouldCompressImage } from '@sendbird/uikit-utils';
 
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../../../hooks/useContext';
 import SBUError from '../../../../libs/SBUError';
@@ -49,9 +49,9 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   },
   ref,
 ) {
-  const { mentionManager } = useSendbirdChat();
+  const { mentionManager, imageCompressionConfig, features } = useSendbirdChat();
   const { STRINGS } = useLocalization();
-  const { fileService } = usePlatformService();
+  const { fileService, mediaService } = usePlatformService();
   const { colors } = useUIKitTheme();
   const { openSheet } = useBottomSheet();
   const { alert } = useAlert();
@@ -75,13 +75,16 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
           title: STRINGS.GROUP_CHANNEL.DIALOG_ATTACHMENT_CAMERA,
           icon: 'camera',
           onPress: async () => {
-            const photo = await fileService.openCamera({
+            const mediaFile = await fileService.openCamera({
               mediaType: 'all',
               onOpenFailure: (error) => {
                 if (error.code === SBUError.CODE.ERR_PERMISSIONS_DENIED) {
                   alert({
                     title: STRINGS.DIALOG.ALERT_PERMISSIONS_TITLE,
-                    message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE('camera', 'UIKitSample'),
+                    message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE(
+                      STRINGS.LABELS.PERMISSION_CAMERA,
+                      STRINGS.LABELS.PERMISSION_APP_NAME,
+                    ),
                     buttons: [{ text: STRINGS.DIALOG.ALERT_PERMISSIONS_OK, onPress: () => SBUUtils.openSettings() }],
                   });
                 } else {
@@ -90,8 +93,28 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
               },
             });
 
-            if (photo) {
-              onSendFileMessage(photo).catch(() => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error'));
+            if (mediaFile) {
+              // Image compression
+              if (
+                isImage(mediaFile.uri, mediaFile.type) &&
+                shouldCompressImage(mediaFile.uri, features.imageCompressionEnabled)
+              ) {
+                await SBUUtils.safeRun(async () => {
+                  const compressed = await mediaService.compressImage({
+                    uri: mediaFile.uri,
+                    maxWidth: imageCompressionConfig.width,
+                    maxHeight: imageCompressionConfig.height,
+                    compressionRate: imageCompressionConfig.compressionRate,
+                  });
+
+                  if (compressed) {
+                    mediaFile.uri = compressed.uri;
+                    mediaFile.size = compressed.size;
+                  }
+                });
+              }
+
+              onSendFileMessage(mediaFile).catch(() => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error'));
             }
           },
         },
@@ -99,14 +122,17 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
           title: STRINGS.GROUP_CHANNEL.DIALOG_ATTACHMENT_PHOTO_LIBRARY,
           icon: 'photo',
           onPress: async () => {
-            const photo = await fileService.openMediaLibrary({
+            const mediaFiles = await fileService.openMediaLibrary({
               selectionLimit: 1,
               mediaType: 'all',
               onOpenFailure: (error) => {
                 if (error.code === SBUError.CODE.ERR_PERMISSIONS_DENIED) {
                   alert({
                     title: STRINGS.DIALOG.ALERT_PERMISSIONS_TITLE,
-                    message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE('device storage', 'UIKitSample'),
+                    message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE(
+                      STRINGS.LABELS.PERMISSION_DEVICE_STORAGE,
+                      STRINGS.LABELS.PERMISSION_APP_NAME,
+                    ),
                     buttons: [{ text: STRINGS.DIALOG.ALERT_PERMISSIONS_OK, onPress: () => SBUUtils.openSettings() }],
                   });
                 } else {
@@ -115,8 +141,30 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
               },
             });
 
-            if (photo && photo[0]) {
-              onSendFileMessage(photo[0]).catch(() => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error'));
+            if (mediaFiles && mediaFiles[0]) {
+              const mediaFile = mediaFiles[0];
+
+              // Image compression
+              if (
+                isImage(mediaFile.uri, mediaFile.type) &&
+                shouldCompressImage(mediaFile.uri, features.imageCompressionEnabled)
+              ) {
+                await SBUUtils.safeRun(async () => {
+                  const compressed = await mediaService.compressImage({
+                    uri: mediaFile.uri,
+                    maxWidth: imageCompressionConfig.width,
+                    maxHeight: imageCompressionConfig.height,
+                    compressionRate: imageCompressionConfig.compressionRate,
+                  });
+
+                  if (compressed) {
+                    mediaFile.uri = compressed.uri;
+                    mediaFile.size = compressed.size;
+                  }
+                });
+              }
+
+              onSendFileMessage(mediaFiles[0]).catch(() => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error'));
             }
           },
         },
@@ -124,12 +172,32 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
           title: STRINGS.GROUP_CHANNEL.DIALOG_ATTACHMENT_FILES,
           icon: 'document',
           onPress: async () => {
-            const file = await fileService.openDocument({
+            const documentFile = await fileService.openDocument({
               onOpenFailure: () => toast.show(STRINGS.TOAST.OPEN_FILES_ERROR, 'error'),
             });
 
-            if (file) {
-              onSendFileMessage(file).catch(() => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error'));
+            if (documentFile) {
+              // Image compression
+              if (
+                isImage(documentFile.uri, documentFile.type) &&
+                shouldCompressImage(documentFile.uri, features.imageCompressionEnabled)
+              ) {
+                await SBUUtils.safeRun(async () => {
+                  const compressed = await mediaService.compressImage({
+                    uri: documentFile.uri,
+                    maxWidth: imageCompressionConfig.width,
+                    maxHeight: imageCompressionConfig.height,
+                    compressionRate: imageCompressionConfig.compressionRate,
+                  });
+
+                  if (compressed) {
+                    documentFile.uri = compressed.uri;
+                    documentFile.size = compressed.size;
+                  }
+                });
+              }
+
+              onSendFileMessage(documentFile).catch(() => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error'));
             }
           },
         },

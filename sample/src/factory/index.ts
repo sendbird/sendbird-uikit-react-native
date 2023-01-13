@@ -1,3 +1,4 @@
+import * as ImageResizer from '@bam.tech/react-native-image-resizer';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import Clipboard from '@react-native-clipboard/clipboard';
 import RNFBMessaging from '@react-native-firebase/messaging';
@@ -38,7 +39,11 @@ export const FileService = createNativeFileService({
   fsModule: FileAccess,
   mediaLibraryModule: CameraRoll,
 });
-export const MediaService = createNativeMediaService({ VideoComponent: Video, thumbnailModule: CreateThumbnail });
+export const MediaService = createNativeMediaService({
+  VideoComponent: Video,
+  thumbnailModule: CreateThumbnail,
+  imageResizerModule: ImageResizer,
+});
 
 export const GetTranslucent = (state = true) => {
   Platform.OS === 'android' && StatusBar.setTranslucent(state);

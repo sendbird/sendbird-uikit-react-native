@@ -22,6 +22,7 @@ import * as FileAccess from 'react-native-file-access';
 import * as ImagePicker from 'react-native-image-picker';
 import * as Permissions from 'react-native-permissions';
 import * as CreateThumbnail from 'react-native-create-thumbnail';
+import * as ImageResizer from '@bam.tech/react-native-image-resizer';
 
 const NativeClipboardService = createNativeClipboardService(Clipboard);
 const NativeNotificationService = createNativeNotificationService({
@@ -38,6 +39,7 @@ const NativeFileService = createNativeFileService({
 const NativeMediaService = createNativeMediaService({
   VideoComponent: Video,
   thumbnailModule: CreateThumbnail,
+  imageResizerModule: ImageResizer,
 });
 /** ------------------ **/
 
@@ -53,6 +55,7 @@ import * as ExpoMediaLibrary from 'expo-media-library';
 import * as ExpoNotifications from 'expo-notifications';
 import * as ExpoAV from 'expo-av';
 import * as ExpoVideoThumbnail from 'expo-video-thumbnails';
+import * as ExpoImageManipulator from 'expo-image-manipulator';
 
 const ExpoNotificationService = createExpoNotificationService(ExpoNotifications);
 const ExpoClipboardService = createExpoClipboardService(ExpoClipboard);
@@ -64,6 +67,8 @@ const ExpoFileService = createExpoFileService({
 });
 const ExpoMediaService = createExpoMediaService({
   avModule: ExpoAV,
-  thumbnailModule: ExpoVideoThumbnail
+  thumbnailModule: ExpoVideoThumbnail,
+  imageManipulator: ExpoImageManipulator,
+  fsModule: ExpoFS,
 })
 /** ------------------ **/

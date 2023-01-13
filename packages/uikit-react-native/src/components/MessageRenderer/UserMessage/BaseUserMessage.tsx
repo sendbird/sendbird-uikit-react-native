@@ -5,7 +5,7 @@ import { RegexText, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uiki
 import { urlRegexStrict } from '@sendbird/uikit-utils';
 
 import { useLocalization, useSendbirdChat, useUserProfile } from '../../../hooks/useContext';
-import { openUrl } from '../../../utils/common';
+import SBUUtils from '../../../libs/SBUUtils';
 import type { UserMessageProps } from './index';
 
 const BaseUserMessage = ({
@@ -62,7 +62,7 @@ const BaseUserMessage = ({
                     <Text
                       {...parentProps}
                       key={`${keyPrefix}-${index}`}
-                      onPress={() => openUrl(match)}
+                      onPress={() => SBUUtils.openURL(match)}
                       onLongPress={onLongPressURL}
                       style={[parentProps?.style, { textDecorationLine: 'underline' }]}
                     >
