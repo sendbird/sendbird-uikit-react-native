@@ -148,7 +148,7 @@ npm install react-native-video \
             react-native-document-picker \
             react-native-create-thumbnail \
             @react-native-clipboard/clipboard \
-            @react-native-camera-roll/cameraroll \
+            @react-native-camera-roll/camera-roll \
             @react-native-firebase/app \
             @react-native-firebase/messaging \
             @bam.tech/react-native-image-resizer
