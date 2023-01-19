@@ -39,12 +39,12 @@ const useKeyboardStatus = () => {
         setKeyboardStatus({ visible: true, height, bottomSpace });
       }),
 
-      Keyboard.addListener(hideEvent, (event) => {
+      Keyboard.addListener(hideEvent, () => {
         const height = 0;
         const bottomSpace = Platform.select({ default: height });
-        const nextLayoutAnimation = Platform.select({ ios: configureNextLayoutAnimation, default: NOOP });
+        // const nextLayoutAnimation = Platform.select({ ios: configureNextLayoutAnimation, default: NOOP });
 
-        nextLayoutAnimation(event);
+        // nextLayoutAnimation(event);
         setKeyboardStatus({ visible: false, height, bottomSpace });
       }),
     ];
