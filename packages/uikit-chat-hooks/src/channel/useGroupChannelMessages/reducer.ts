@@ -57,10 +57,6 @@ const defaultReducer = ({ ...draft }: State, action: Action) => {
           .forEach((m) => delete draft[key][m.reqId]);
       }
 
-      if (action.type === 'update_messages') {
-        draft['nextMessageMap'] = {};
-      }
-
       return draft;
     }
     case 'delete_messages':
