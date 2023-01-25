@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { AppState, AppStateStatus } from 'react-native';
+import React, { useCallback, useState } from 'react';
 
 import { useAppFeatures } from '@sendbird/uikit-chat-hooks';
 import type {
@@ -8,7 +7,7 @@ import type {
   SendbirdUser,
   SendbirdUserUpdateParams,
 } from '@sendbird/uikit-utils';
-import { confirmAndMarkAsDelivered, useForceUpdate } from '@sendbird/uikit-utils';
+import { confirmAndMarkAsDelivered, useAppState, useForceUpdate } from '@sendbird/uikit-utils';
 
 import type EmojiManager from '../libs/EmojiManager';
 import type ImageCompressionConfig from '../libs/ImageCompressionConfig';
@@ -123,16 +122,11 @@ export const SendbirdChatProvider = ({
     [sdkInstance, appFeatures.deliveryReceiptEnabled],
   );
 
-  useEffect(() => {
-    const listener = (status: AppStateStatus) => {
-      // 'active' | 'background' | 'inactive' | 'unknown' | 'extension';
-      if (status === 'active') sdkInstance.connectionState === 'CLOSED' && sdkInstance.setForegroundState();
-      else if (status === 'background') sdkInstance.connectionState === 'OPEN' && sdkInstance.setBackgroundState();
-    };
-
-    const subscriber = AppState.addEventListener('change', listener);
-    return () => subscriber.remove();
-  }, [sdkInstance]);
+  useAppState('change', (status) => {
+    // 'active' | 'background' | 'inactive' | 'unknown' | 'extension';
+    if (status === 'active') sdkInstance.connectionState === 'CLOSED' && sdkInstance.setForegroundState();
+    else if (status === 'background') sdkInstance.connectionState === 'OPEN' && sdkInstance.setBackgroundState();
+  });
 
   const value: Context = {
     sdk: sdkInstance,
