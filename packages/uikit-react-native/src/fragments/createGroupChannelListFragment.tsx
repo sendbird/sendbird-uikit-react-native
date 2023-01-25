@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
-import { AppState } from 'react-native';
+import React from 'react';
 
 import { useGroupChannelList } from '@sendbird/uikit-chat-hooks';
-import { Logger, PASS, useFreshCallback } from '@sendbird/uikit-utils';
+import { Logger, PASS, useAppState, useFreshCallback } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import GroupChannelPreviewContainer from '../containers/GroupChannelPreviewContainer';
@@ -35,12 +34,9 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     });
 
     if (features.deliveryReceiptEnabled) {
-      useEffect(() => {
-        const listener = AppState.addEventListener('change', (status) => {
-          if (status === 'active') groupChannels.forEach(markAsDeliveredWithChannel);
-        });
-        return () => listener.remove();
-      }, []);
+      useAppState('change', (status) => {
+        if (status === 'active') groupChannels.forEach(markAsDeliveredWithChannel);
+      });
     }
 
     const _renderGroupChannelPreview: GroupChannelListProps['List']['renderGroupChannelPreview'] = useFreshCallback(
