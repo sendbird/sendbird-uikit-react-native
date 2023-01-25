@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { DependencyList } from 'react';
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { EdgeInsets, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 type Destructor = () => void;
 type AsyncEffectCallback = () => void | Destructor | Promise<void> | Promise<Destructor>;
@@ -72,32 +71,4 @@ export const useFreshCallback = <T extends (...args: any[]) => any>(callback: T)
   const ref = useRef<T>(callback);
   ref.current = callback;
   return useCallback(((...args) => ref.current(...args)) as T, []);
-};
-
-type EdgePaddingMap = {
-  left: 'paddingLeft';
-  right: 'paddingRight';
-  top: 'paddingTop';
-  bottom: 'paddingBottom';
-};
-const edgePaddingMap: EdgePaddingMap = {
-  left: 'paddingLeft',
-  right: 'paddingRight',
-  top: 'paddingTop',
-  bottom: 'paddingBottom',
-};
-export const useSafeAreaPadding = <
-  T extends keyof EdgeInsets,
-  Result extends { [key in EdgePaddingMap[T]]: EdgeInsets[T] },
->(
-  edges: T[],
-): Result => {
-  const safeAreaInsets = useSafeAreaInsets();
-  return useMemo(() => {
-    return edges.reduce((map, edge) => {
-      const paddingKey = edgePaddingMap[edge];
-      map[paddingKey] = safeAreaInsets[edge];
-      return map;
-    }, {} as { [key in EdgePaddingMap[T]]: EdgeInsets[T] });
-  }, edges) as Result;
 };
