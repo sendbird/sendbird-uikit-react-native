@@ -30,7 +30,7 @@ interface Props extends UIKitFeaturesInSendbirdChatContext, React.PropsWithChild
   imageCompressionConfig: ImageCompressionConfig;
 }
 
-type Context = {
+export type SendbirdChatContextType = {
   sdk: SendbirdChatSDK;
   emojiManager: EmojiManager;
   mentionManager: MentionManager;
@@ -59,7 +59,7 @@ type Context = {
   };
 };
 
-export const SendbirdChatContext = React.createContext<Context | null>(null);
+export const SendbirdChatContext = React.createContext<SendbirdChatContextType | null>(null);
 export const SendbirdChatProvider = ({
   children,
   sdkInstance,
@@ -77,13 +77,13 @@ export const SendbirdChatProvider = ({
   const forceUpdate = useForceUpdate();
   const appFeatures = useAppFeatures(sdkInstance);
 
-  const setCurrentUser: Context['setCurrentUser'] = useCallback((user) => {
+  const setCurrentUser: SendbirdChatContextType['setCurrentUser'] = useCallback((user) => {
     // NOTE: Sendbird SDK handle User object is always same object, so force update after setCurrentUser
     _setCurrentUser(user);
     forceUpdate();
   }, []);
 
-  const updateCurrentUserInfo: Context['updateCurrentUserInfo'] = useCallback(
+  const updateCurrentUserInfo: SendbirdChatContextType['updateCurrentUserInfo'] = useCallback(
     async (nickname, profile) => {
       let user = currentUser;
 
@@ -115,7 +115,7 @@ export const SendbirdChatProvider = ({
     [sdkInstance, currentUser, setCurrentUser],
   );
 
-  const markAsDeliveredWithChannel: Context['markAsDeliveredWithChannel'] = useCallback(
+  const markAsDeliveredWithChannel: SendbirdChatContextType['markAsDeliveredWithChannel'] = useCallback(
     (channel: SendbirdGroupChannel) => {
       if (appFeatures.deliveryReceiptEnabled) confirmAndMarkAsDelivered([channel]);
     },
@@ -128,7 +128,7 @@ export const SendbirdChatProvider = ({
     else if (status === 'background') sdkInstance.connectionState === 'OPEN' && sdkInstance.setBackgroundState();
   });
 
-  const value: Context = {
+  const value: SendbirdChatContextType = {
     sdk: sdkInstance,
     emojiManager,
     mentionManager,
