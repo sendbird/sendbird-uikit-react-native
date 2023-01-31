@@ -15,6 +15,10 @@ export enum Routes {
   Palette = 'Palette',
   ThemeColors = 'ThemeColors',
 
+  OpenChannelTabs = 'OpenChannelTabs',
+  OpenChannelList = 'OpenChannelList',
+  OpenChannel = 'OpenChannel',
+
   GroupChannelTabs = 'GroupChannelTabs',
   GroupChannelList = 'GroupChannelList',
   GroupChannel = 'GroupChannel',
@@ -35,6 +39,7 @@ export enum Routes {
 }
 
 export type RouteParamsUnion =
+  /** Shared screens **/
   | {
       route: Routes.SignIn;
       params: undefined;
@@ -56,16 +61,24 @@ export type RouteParamsUnion =
       params: undefined;
     }
   | {
+      route: Routes.Settings;
+      params: undefined;
+    }
+  | {
+      route: Routes.FileViewer;
+      params: {
+        serializedFileMessage: object;
+        deleteMessage: () => Promise<void>;
+      };
+    }
+  /** OpenChannel screens **/
+  | {
       route: Routes.GroupChannelTabs;
       params: { channelUrl?: string } | undefined;
     }
   | {
       route: Routes.GroupChannelList;
       params: { channelUrl?: string } | undefined;
-    }
-  | {
-      route: Routes.Settings;
-      params: undefined;
     }
   | {
       route: Routes.GroupChannelCreate;
@@ -111,12 +124,18 @@ export type RouteParamsUnion =
       route: Routes.GroupChannelInvite;
       params: { channelUrl: string };
     }
+  /** OpenChannel screens **/
   | {
-      route: Routes.FileViewer;
-      params: {
-        serializedFileMessage: object;
-        deleteMessage: () => Promise<void>;
-      };
+      route: Routes.OpenChannelTabs;
+      params: { channelUrl?: string } | undefined;
+    }
+  | {
+      route: Routes.OpenChannelList;
+      params: { channelUrl?: string } | undefined;
+    }
+  | {
+      route: Routes.OpenChannel;
+      params: { channelUrl: string };
     };
 
 type ExtractParams<R extends Routes, U extends RouteParamsUnion> = U extends { route: R; params: infer P } ? P : never;

@@ -19,6 +19,13 @@ export const getGroupChannelChatAvailableState = (channel: SendbirdGroupChannel)
   return { disabled, frozen, muted };
 };
 
+export const getOpenChannelChatAvailableState = async (channel: SendbirdOpenChannel, userId: string) => {
+  const frozen = channel.isFrozen && channel.isOperator(userId);
+  const muted = (await channel.getMyMutedInfo()).isMuted;
+  const disabled = frozen || muted;
+  return { disabled, frozen, muted };
+};
+
 export const confirmAndMarkAsRead = async (channels: SendbirdBaseChannel[]) => {
   channels
     .filter((it): it is SendbirdGroupChannel => it.isGroupChannel() && it.unreadMessageCount > 0)
