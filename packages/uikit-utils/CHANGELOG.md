@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.1.3...v1.1.4) (2023-01-31)
+
+
+### Bug Fixes
+
+* **uikit:** support compatibility for removing AppState listener under 0.65 ([4aaba86](https://github.com/sendbird/sendbird-uikit-react-native/commit/4aaba863ae328186bfddffe1560b3569e167f75a))
+
+
+
 ## [1.1.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.1.2...v1.1.3) (2022-10-26)
 
 **Note:** Version bump only for package @sendbird/uikit-utils
