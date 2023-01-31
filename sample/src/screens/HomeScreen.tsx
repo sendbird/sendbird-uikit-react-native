@@ -22,7 +22,7 @@ const HomeItems: { title: string; desc?: string; image?: any; route?: Routes }[]
     image: require('../assets/imgOpenchannel.png'),
     title: 'Open channel',
     desc: 'Live streams, Open community chat',
-    route: undefined,
+    route: Routes.OpenChannelTabs,
   },
   {
     title: 'Storybook',
