@@ -11,20 +11,19 @@ import { MentionType } from '@sendbird/chat/message';
 import { Button, TextInput, createStyleSheet, useToast } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdFileMessage, SendbirdUserMessage } from '@sendbird/uikit-utils';
 
-import { useLocalization, useSendbirdChat } from '../../../../hooks/useContext';
-import type { MentionedUser } from '../../../../types';
-import type { GroupChannelProps } from '../../types';
+import { useLocalization, useSendbirdChat } from '../../hooks/useContext';
+import type { MentionedUser } from '../../types';
+import type { ChannelInputProps } from './index';
 
-type EditInputProps = GroupChannelProps['Input'] & {
+interface EditInputProps extends ChannelInputProps {
   text: string;
   onChangeText: (val: string) => void;
   messageToEdit: SendbirdUserMessage | SendbirdFileMessage;
   setMessageToEdit: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
   onSelectionChange: (e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => void;
-  disabled: boolean;
   autoFocus: boolean;
   mentionedUsers: MentionedUser[];
-};
+}
 
 const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
   {
@@ -34,9 +33,9 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
     setMessageToEdit,
     onUpdateUserMessage,
     onSelectionChange,
-    disabled,
     autoFocus,
     mentionedUsers,
+    inputDisabled,
   },
   ref,
 ) {
@@ -72,7 +71,7 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
           ref={ref}
           multiline
           disableFullscreenUI
-          editable={!disabled}
+          editable={!inputDisabled}
           autoFocus={autoFocus}
           onChangeText={onChangeText}
           style={styles.input}
