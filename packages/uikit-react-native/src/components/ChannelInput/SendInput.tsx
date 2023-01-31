@@ -20,32 +20,30 @@ import {
 } from '@sendbird/uikit-react-native-foundation';
 import { conditionChaining, isImage, shouldCompressImage } from '@sendbird/uikit-utils';
 
-import { useLocalization, usePlatformService, useSendbirdChat } from '../../../../hooks/useContext';
-import SBUError from '../../../../libs/SBUError';
-import SBUUtils from '../../../../libs/SBUUtils';
-import type { MentionedUser } from '../../../../types';
-import type { GroupChannelProps } from '../../types';
+import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
+import SBUError from '../../libs/SBUError';
+import SBUUtils from '../../libs/SBUUtils';
+import type { MentionedUser } from '../../types';
+import type { ChannelInputProps } from './index';
 
-type SendInputProps = GroupChannelProps['Input'] & {
+interface SendInputProps extends ChannelInputProps {
   text: string;
   onChangeText: (val: string) => void;
-  frozen: boolean;
-  muted: boolean;
-  disabled: boolean;
   onSelectionChange: (e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => void;
   mentionedUsers: MentionedUser[];
-};
+}
+
 const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   {
     onSendUserMessage,
     onSendFileMessage,
     text,
     onChangeText,
-    disabled,
-    frozen,
-    muted,
     onSelectionChange,
     mentionedUsers,
+    inputDisabled,
+    inputFrozen,
+    inputMuted,
   },
   ref,
 ) {
@@ -207,9 +205,9 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
 
   return (
     <View style={styles.sendInputContainer}>
-      <TouchableOpacity onPress={onPressAttachment} disabled={disabled}>
+      <TouchableOpacity onPress={onPressAttachment} disabled={inputDisabled}>
         <Icon
-          color={disabled ? colors.ui.input.default.disabled.highlight : colors.ui.input.default.active.highlight}
+          color={inputDisabled ? colors.ui.input.default.disabled.highlight : colors.ui.input.default.active.highlight}
           icon={'add'}
           size={24}
           containerStyle={styles.iconAttach}
@@ -220,11 +218,11 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
         multiline
         disableFullscreenUI
         onSelectionChange={onSelectionChange}
-        editable={!disabled}
+        editable={!inputDisabled}
         onChangeText={onChangeText}
         style={styles.input}
         placeholder={conditionChaining(
-          [frozen, muted],
+          [inputFrozen, inputMuted],
           [
             STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_DISABLED,
             STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_MUTED,
@@ -236,9 +234,11 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
       </TextInput>
 
       {Boolean(text.trim()) && (
-        <TouchableOpacity onPress={onPressSend} disabled={disabled}>
+        <TouchableOpacity onPress={onPressSend} disabled={inputDisabled}>
           <Icon
-            color={disabled ? colors.ui.input.default.disabled.highlight : colors.ui.input.default.active.highlight}
+            color={
+              inputDisabled ? colors.ui.input.default.disabled.highlight : colors.ui.input.default.active.highlight
+            }
             icon={'send'}
             size={24}
             containerStyle={styles.iconSend}
