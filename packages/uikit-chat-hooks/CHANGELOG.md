@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.1.3...v1.1.4) (2023-01-31)
+
+**Note:** Version bump only for package @sendbird/uikit-chat-hooks
+
+
+
+
+
 ## [1.1.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.1.2...v1.1.3) (2022-10-26)
 
 **Note:** Version bump only for package @sendbird/uikit-chat-hooks
