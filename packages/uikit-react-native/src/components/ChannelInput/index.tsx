@@ -1,23 +1,70 @@
-import React, { MutableRefObject, useContext, useEffect, useRef, useState } from 'react';
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { KeyboardAvoidingView, Platform, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import {
+  SendbirdBaseChannel,
+  SendbirdBaseMessage,
   SendbirdFileMessage,
-  SendbirdGroupChannel,
+  SendbirdMember,
   SendbirdUserMessage,
-  getGroupChannelChatAvailableState,
+  SendbirdUserMessageCreateParams,
   replace,
   useIIFE,
 } from '@sendbird/uikit-utils';
 
-import { useSendbirdChat } from '../../../../hooks/useContext';
-import useMentionTextInput from '../../../../hooks/useMentionTextInput';
-import { GroupChannelContexts } from '../../module/moduleContext';
-import type { GroupChannelProps } from '../../types';
+import { useSendbirdChat } from '../../hooks/useContext';
+import useMentionTextInput from '../../hooks/useMentionTextInput';
+import type { FileType } from '../../platform/types';
+import type { MentionedUser, Range } from '../../types';
 import EditInput from './EditInput';
 import SendInput from './SendInput';
+
+type UserMessageMentionParams = Required<{
+  messageTemplate: SendbirdUserMessageCreateParams['mentionedMessageTemplate'];
+  userIds: SendbirdUserMessageCreateParams['mentionedUserIds'];
+  type: SendbirdUserMessageCreateParams['mentionType'];
+}>;
+
+export type SuggestedMentionListProps = {
+  text: string;
+  selection: Range;
+  topInset: number;
+  bottomInset: number;
+  inputHeight: number;
+  onPressToMention: (user: SendbirdMember, searchStringRange: Range) => void;
+  mentionedUsers: MentionedUser[];
+};
+
+export type ChannelInputProps = {
+  // default
+  channel: SendbirdBaseChannel;
+  shouldRenderInput: boolean;
+  keyboardAvoidOffset: number;
+
+  // default actions
+  onSendFileMessage: (file: FileType) => Promise<void>;
+  onSendUserMessage: (text: string, mention?: UserMessageMentionParams) => Promise<void>;
+  onUpdateFileMessage: (editedFile: FileType, message: SendbirdFileMessage) => Promise<void>;
+  onUpdateUserMessage: (
+    editedText: string,
+    message: SendbirdUserMessage,
+    mention?: UserMessageMentionParams,
+  ) => Promise<void>;
+
+  // input status
+  inputFrozen: boolean;
+  inputMuted: boolean;
+  inputDisabled: boolean;
+
+  // edit
+  messageToEdit: undefined | SendbirdUserMessage | SendbirdFileMessage;
+  setMessageToEdit: (message?: undefined | SendbirdUserMessage | SendbirdFileMessage) => void;
+
+  // mention
+  SuggestedMentionList?: (props: SuggestedMentionListProps) => JSX.Element | null;
+};
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
 const KEYBOARD_AVOID_VIEW_BEHAVIOR = Platform.select({ ios: 'padding' as const, default: undefined });
@@ -28,36 +75,32 @@ const KEYBOARD_AVOID_VIEW_BEHAVIOR = Platform.select({ ios: 'padding' as const, 
 const GET_INPUT_KEY = (shouldReset: boolean) => (shouldReset ? 'uikit-input-clear' : 'uikit-input');
 
 // TODO: Refactor 'Edit' mode to clearly
-const GroupChannelInput = (props: GroupChannelProps['Input']) => {
+const ChannelInput = (props: ChannelInputProps) => {
+  const { channel, keyboardAvoidOffset, messageToEdit, setMessageToEdit } = props;
+
   const { top, left, right, bottom } = useSafeAreaInsets();
   const { colors } = useUIKitTheme();
   const { features, mentionManager } = useSendbirdChat();
-  const {
-    channel,
-    messageToEdit,
-    setMessageToEdit,
-    keyboardAvoidOffset = 0,
-  } = useContext(GroupChannelContexts.Fragment);
 
-  const chatAvailableState = getGroupChannelChatAvailableState(channel);
-  const mentionAvailable = features.userMentionEnabled && channel.isGroupChannel() && !channel.isBroadcast;
+  const { selection, onSelectionChange, textInputRef, text, onChangeText, mentionedUsers } = useMentionTextInput({
+    messageToEdit,
+  });
   const inputMode = useIIFE(() => {
     if (!messageToEdit) return 'send';
     if (messageToEdit.isFileMessage()) return 'send';
     return 'edit';
   });
 
+  const mentionAvailable = features.userMentionEnabled && channel.isGroupChannel() && !channel.isBroadcast;
+  const inputKeyToRemount = GET_INPUT_KEY(mentionAvailable ? mentionedUsers.length === 0 : false);
+
   const [inputHeight, setInputHeight] = useState(styles.inputDefault.height);
 
-  const { selection, onSelectionChange, textInputRef, text, onChangeText, mentionedUsers } = useMentionTextInput({
-    messageToEdit: messageToEdit,
-  });
-
   useTypingTrigger(text, channel);
-  useTextPersistenceOnDisabled(text, onChangeText, chatAvailableState.disabled);
+  useTextPersistenceOnDisabled(text, onChangeText, props.inputDisabled);
   useAutoFocusOnEditMode(textInputRef, messageToEdit);
 
-  const onPressToMention: GroupChannelProps['SuggestedMentionList']['onPressToMention'] = (user, searchStringRange) => {
+  const onPressToMention = (user: SendbirdMember, searchStringRange: Range) => {
     const mentionedMessageText = mentionManager.asMentionedMessageText(user, true);
     const range = { start: searchStringRange.start, end: searchStringRange.start + mentionedMessageText.length - 1 };
 
@@ -79,8 +122,7 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
             {inputMode === 'send' && (
               <SendInput
                 {...props}
-                {...chatAvailableState}
-                key={GET_INPUT_KEY(mentionedUsers.length === 0)}
+                key={inputKeyToRemount}
                 ref={textInputRef as never}
                 text={text}
                 onChangeText={onChangeText}
@@ -91,23 +133,22 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
             {inputMode === 'edit' && messageToEdit && (
               <EditInput
                 {...props}
-                key={GET_INPUT_KEY(mentionedUsers.length === 0)}
+                key={inputKeyToRemount}
                 ref={textInputRef as never}
-                autoFocus={AUTO_FOCUS}
                 text={text}
                 onChangeText={onChangeText}
-                messageToEdit={messageToEdit}
-                setMessageToEdit={setMessageToEdit}
-                disabled={chatAvailableState.disabled}
+                autoFocus={AUTO_FOCUS}
                 onSelectionChange={onSelectionChange}
+                messageToEdit={messageToEdit}
                 mentionedUsers={mentionedUsers}
+                setMessageToEdit={setMessageToEdit}
               />
             )}
           </View>
           <SafeAreaBottom height={bottom} />
         </View>
       </KeyboardAvoidingView>
-      {mentionAvailable && (
+      {mentionAvailable && props.SuggestedMentionList && (
         <props.SuggestedMentionList
           text={text}
           selection={selection}
@@ -122,11 +163,13 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
   );
 };
 
-const useTypingTrigger = (text: string, channel: SendbirdGroupChannel) => {
-  useEffect(() => {
-    if (text.length === 0) channel.endTyping();
-    else channel.startTyping();
-  }, [text]);
+const useTypingTrigger = (text: string, channel: SendbirdBaseChannel) => {
+  if (channel.isGroupChannel()) {
+    useEffect(() => {
+      if (text.length === 0) channel.endTyping();
+      else channel.startTyping();
+    }, [text]);
+  }
 };
 
 const useTextPersistenceOnDisabled = (text: string, setText: (val: string) => void, chatDisabled: boolean) => {
@@ -144,7 +187,7 @@ const useTextPersistenceOnDisabled = (text: string, setText: (val: string) => vo
 
 const useAutoFocusOnEditMode = (
   textInputRef: MutableRefObject<TextInput | undefined>,
-  messageToEdit?: SendbirdUserMessage | SendbirdFileMessage,
+  messageToEdit?: SendbirdBaseMessage,
 ) => {
   useEffect(() => {
     if (messageToEdit?.isUserMessage()) {
@@ -167,4 +210,4 @@ const styles = createStyleSheet({
   },
 });
 
-export default React.memo(GroupChannelInput);
+export default React.memo(ChannelInput);

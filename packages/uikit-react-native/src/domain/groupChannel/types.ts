@@ -6,21 +6,14 @@ import type {
   SendbirdFileMessage,
   SendbirdFileMessageCreateParams,
   SendbirdGroupChannel,
-  SendbirdMember,
   SendbirdMessage,
   SendbirdUser,
   SendbirdUserMessage,
   SendbirdUserMessageCreateParams,
 } from '@sendbird/uikit-utils';
 
-import type { FileType } from '../../platform/types';
-import type { CommonComponent, MentionedUser, Range } from '../../types';
-
-type UserMessageMentionParams = Required<{
-  messageTemplate: SendbirdUserMessageCreateParams['mentionedMessageTemplate'];
-  userIds: SendbirdUserMessageCreateParams['mentionedUserIds'];
-  type: SendbirdUserMessageCreateParams['mentionType'];
-}>;
+import type { ChannelInputProps, SuggestedMentionListProps } from '../../components/ChannelInput';
+import type { CommonComponent } from '../../types';
 
 export interface GroupChannelProps {
   Fragment: {
@@ -95,28 +88,17 @@ export interface GroupChannelProps {
     /** @deprecated `onPressImageMessage` is deprecated, please use `onPressMediaMessage` instead **/
     onPressImageMessage?: (message: SendbirdFileMessage, uri: string) => void;
   };
-  Input: {
-    shouldRenderInput: boolean;
-    onSendFileMessage: (file: FileType) => Promise<void>;
-    onSendUserMessage: (text: string, mention?: UserMessageMentionParams) => Promise<void>;
-    onUpdateFileMessage: (editedFile: FileType, message: SendbirdFileMessage) => Promise<void>;
-    onUpdateUserMessage: (
-      editedText: string,
-      message: SendbirdUserMessage,
-      mention?: UserMessageMentionParams,
-    ) => Promise<void>;
-    SuggestedMentionList: (props: GroupChannelProps['SuggestedMentionList']) => JSX.Element | null;
-  };
+  Input: Pick<
+    ChannelInputProps,
+    | 'shouldRenderInput'
+    | 'onSendFileMessage'
+    | 'onSendUserMessage'
+    | 'onUpdateFileMessage'
+    | 'onUpdateUserMessage'
+    | 'SuggestedMentionList'
+  >;
 
-  SuggestedMentionList: {
-    text: string;
-    selection: Range;
-    topInset: number;
-    bottomInset: number;
-    inputHeight: number;
-    onPressToMention: (user: SendbirdMember, searchStringRange: Range) => void;
-    mentionedUsers: MentionedUser[];
-  };
+  SuggestedMentionList: SuggestedMentionListProps;
   Provider: {
     channel: SendbirdGroupChannel;
     enableTypingIndicator: boolean;
