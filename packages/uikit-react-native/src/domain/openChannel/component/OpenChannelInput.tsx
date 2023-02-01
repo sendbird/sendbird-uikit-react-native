@@ -36,23 +36,28 @@ const OpenChannelInput = (props: OpenChannelProps['Input']) => {
   }, [channel, updateChatAvailableState]);
 
   const id = useUniqId('OpenChannelInput');
-  useChannelHandler(sdk, `OpenChannelInput_${id}`, {
-    onChannelFrozen(channel) {
-      updateChatAvailableState(channel);
+  useChannelHandler(
+    sdk,
+    `OpenChannelInput_${id}`,
+    {
+      onChannelFrozen(channel) {
+        updateChatAvailableState(channel);
+      },
+      onChannelUnfrozen(channel) {
+        updateChatAvailableState(channel);
+      },
+      onUserMuted(channel) {
+        updateChatAvailableState(channel);
+      },
+      onUserUnmuted(channel) {
+        updateChatAvailableState(channel);
+      },
+      onOperatorUpdated(channel) {
+        updateChatAvailableState(channel);
+      },
     },
-    onChannelUnfrozen(channel) {
-      updateChatAvailableState(channel);
-    },
-    onUserMuted(channel) {
-      updateChatAvailableState(channel);
-    },
-    onUserUnmuted(channel) {
-      updateChatAvailableState(channel);
-    },
-    onOperatorUpdated(channel) {
-      updateChatAvailableState(channel);
-    },
-  });
+    'open',
+  );
 
   return (
     <ChannelInput
@@ -68,7 +73,6 @@ const OpenChannelInput = (props: OpenChannelProps['Input']) => {
       onSendUserMessage={props.onSendUserMessage}
       onUpdateFileMessage={props.onUpdateFileMessage}
       onUpdateUserMessage={props.onUpdateUserMessage}
-      SuggestedMentionList={props.SuggestedMentionList}
     />
   );
 };

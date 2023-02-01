@@ -70,7 +70,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     openSheet({
       sheetItems: [
         {
-          title: STRINGS.GROUP_CHANNEL.DIALOG_ATTACHMENT_CAMERA,
+          title: STRINGS.LABELS.CHANNEL_INPUT_ATTACHMENT_CAMERA,
           icon: 'camera',
           onPress: async () => {
             const mediaFile = await fileService.openCamera({
@@ -117,7 +117,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
           },
         },
         {
-          title: STRINGS.GROUP_CHANNEL.DIALOG_ATTACHMENT_PHOTO_LIBRARY,
+          title: STRINGS.LABELS.CHANNEL_INPUT_ATTACHMENT_PHOTO_LIBRARY,
           icon: 'photo',
           onPress: async () => {
             const mediaFiles = await fileService.openMediaLibrary({
@@ -167,7 +167,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
           },
         },
         {
-          title: STRINGS.GROUP_CHANNEL.DIALOG_ATTACHMENT_FILES,
+          title: STRINGS.LABELS.CHANNEL_INPUT_ATTACHMENT_FILES,
           icon: 'document',
           onPress: async () => {
             const documentFile = await fileService.openDocument({
@@ -224,9 +224,9 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
         placeholder={conditionChaining(
           [inputFrozen, inputMuted],
           [
-            STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_DISABLED,
-            STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_MUTED,
-            STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE,
+            STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED,
+            STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_MUTED,
+            STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_ACTIVE,
           ],
         )}
       >

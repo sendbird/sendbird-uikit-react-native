@@ -114,7 +114,16 @@ export function parseSendbirdNotification(dataPayload: RawSendbirdDataPayload): 
 }
 
 export function shouldRenderReaction(channel: SendbirdBaseChannel, reactionEnabled: boolean) {
-  return channel.isGroupChannel() && !channel.isBroadcast && !channel.isSuper && reactionEnabled;
+  if (channel.isOpenChannel()) {
+    return false;
+  }
+
+  if (channel.isGroupChannel()) {
+    if (channel.isBroadcast) return false;
+    if (channel.isSuper) return false;
+  }
+
+  return reactionEnabled;
 }
 
 export function getReactionCount(reaction: SendbirdReaction) {

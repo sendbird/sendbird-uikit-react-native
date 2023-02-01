@@ -6,6 +6,7 @@ import type {
   SendbirdGroupChannel,
   SendbirdMember,
   SendbirdMessage,
+  SendbirdOpenChannel,
   SendbirdUser,
 } from '@sendbird/uikit-utils';
 import {
@@ -15,12 +16,28 @@ import {
   getGroupChannelTitle,
   getMessageTimeFormat,
 } from '@sendbird/uikit-utils';
+import { getOpenChannelTitle } from '@sendbird/uikit-utils/src/ui-format/openChannel';
 
 /**
  * StringSet interface
  * Do not configure over 3 depths (for overrides easy)
  * */
 export interface StringSet {
+  OPEN_CHANNEL: {
+    /** OpenChannel > Header */
+    HEADER_TITLE: (channel: SendbirdOpenChannel) => string;
+
+    /** OpenChannel > List */
+    LIST_BANNER_FROZEN: string;
+    LIST_DATE_SEPARATOR: (date: Date, locale?: Locale) => string;
+
+    /** OpenChannel > Message bubble */
+    MESSAGE_BUBBLE_TIME: (message: SendbirdMessage, locale?: Locale) => string;
+    MESSAGE_BUBBLE_FILE_TITLE: (message: SendbirdFileMessage) => string;
+    MESSAGE_BUBBLE_EDITED_POSTFIX: string;
+    MESSAGE_BUBBLE_UNKNOWN_TITLE: (message: SendbirdMessage) => string;
+    MESSAGE_BUBBLE_UNKNOWN_DESC: (message: SendbirdMessage) => string;
+  };
   GROUP_CHANNEL: {
     /** GroupChannel > Header */
     HEADER_TITLE: (currentUserId: string, channel: SendbirdGroupChannel) => string;
@@ -37,33 +54,43 @@ export interface StringSet {
     MESSAGE_BUBBLE_UNKNOWN_TITLE: (message: SendbirdMessage) => string;
     MESSAGE_BUBBLE_UNKNOWN_DESC: (message: SendbirdMessage) => string;
 
-    /** GroupChannel > Input */
-    INPUT_PLACEHOLDER_ACTIVE: string;
-    INPUT_PLACEHOLDER_DISABLED: string;
-    INPUT_PLACEHOLDER_MUTED: string;
-    INPUT_EDIT_OK: string;
-    INPUT_EDIT_CANCEL: string;
-
     /** GroupChannel > Suggested mention list */
     MENTION_LIMITED: (mentionLimit: number) => string;
 
-    /** GroupChannel > Dialog > Message */
+    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_COPY **/
     DIALOG_MESSAGE_COPY: string;
+    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_EDIT **/
     DIALOG_MESSAGE_EDIT: string;
+    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_SAVE **/
     DIALOG_MESSAGE_SAVE: string;
+    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_DELETE **/
     DIALOG_MESSAGE_DELETE: string;
-    /** GroupChannel > Dialog > Message > Delete confirm */
+    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE **/
     DIALOG_MESSAGE_DELETE_CONFIRM_TITLE: string;
+    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_OK **/
     DIALOG_MESSAGE_DELETE_CONFIRM_OK: string;
+    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_CANCEL **/
     DIALOG_MESSAGE_DELETE_CONFIRM_CANCEL: string;
-    /** GroupChannel > Dialog > Message > Failed */
+    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_FAILED_RETRY **/
     DIALOG_MESSAGE_FAILED_RETRY: string;
+    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_FAILED_REMOVE **/
     DIALOG_MESSAGE_FAILED_REMOVE: string;
-
-    /** GroupChannel > Dialog > Attachments */
+    /** @deprecated Please use LABELS.CHANNEL_INPUT_ATTACHMENT_CAMERA **/
     DIALOG_ATTACHMENT_CAMERA: string;
+    /** @deprecated Please use LABELS.CHANNEL_INPUT_ATTACHMENT_PHOTO_LIBRARY **/
     DIALOG_ATTACHMENT_PHOTO_LIBRARY: string;
+    /** @deprecated Please use LABELS.CHANNEL_INPUT_ATTACHMENT_FILES **/
     DIALOG_ATTACHMENT_FILES: string;
+    /** @deprecated Please use LABELS.CHANNEL_INPUT_PLACEHOLDER_ACTIVE **/
+    INPUT_PLACEHOLDER_ACTIVE: string;
+    /** @deprecated Please use LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED **/
+    INPUT_PLACEHOLDER_DISABLED: string;
+    /** @deprecated Please use LABELS.CHANNEL_INPUT_PLACEHOLDER_MUTED **/
+    INPUT_PLACEHOLDER_MUTED: string;
+    /** @deprecated Please use LABELS.CHANNEL_INPUT_EDIT_OK **/
+    INPUT_EDIT_OK: string;
+    /** @deprecated Please use LABELS.CHANNEL_INPUT_EDIT_CANCEL **/
+    INPUT_EDIT_CANCEL: string;
   };
   GROUP_CHANNEL_SETTINGS: {
     /** GroupChannelSettings > Header */
@@ -152,9 +179,9 @@ export interface StringSet {
     /** GroupChannelMembers > Header */
     HEADER_TITLE: string;
 
-    /** @deprecated Please use in LABELS **/
+    /** @deprecated Please use LABELS.USER_BAR_ME_POSTFIX **/
     USER_BAR_ME_POSTFIX: string;
-    /** @deprecated Please use in LABELS **/
+    /** @deprecated Please use LABELS.USER_BAR_OPERATOR **/
     USER_BAR_OPERATOR: string;
   };
   GROUP_CHANNEL_INVITE: {
@@ -186,6 +213,30 @@ export interface StringSet {
     UNMUTE: string;
     BAN: string;
     UNBAN: string;
+
+    /** ChannelInput **/
+    CHANNEL_INPUT_PLACEHOLDER_ACTIVE: string;
+    CHANNEL_INPUT_PLACEHOLDER_DISABLED: string;
+    CHANNEL_INPUT_PLACEHOLDER_MUTED: string;
+    CHANNEL_INPUT_EDIT_OK: string;
+    CHANNEL_INPUT_EDIT_CANCEL: string;
+    /** ChannelInput > Attachments **/
+    CHANNEL_INPUT_ATTACHMENT_CAMERA: string;
+    CHANNEL_INPUT_ATTACHMENT_PHOTO_LIBRARY: string;
+    CHANNEL_INPUT_ATTACHMENT_FILES: string;
+
+    /** Channel > Message **/
+    CHANNEL_MESSAGE_COPY: string;
+    CHANNEL_MESSAGE_EDIT: string;
+    CHANNEL_MESSAGE_SAVE: string;
+    CHANNEL_MESSAGE_DELETE: string;
+    /** Channel > Message > Delete confirm **/
+    CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE: string;
+    CHANNEL_MESSAGE_DELETE_CONFIRM_OK: string;
+    CHANNEL_MESSAGE_DELETE_CONFIRM_CANCEL: string;
+    /** Channel > Message > Failed **/
+    CHANNEL_MESSAGE_FAILED_RETRY: string;
+    CHANNEL_MESSAGE_FAILED_REMOVE: string;
   };
   FILE_VIEWER: {
     TITLE: (message: SendbirdFileMessage) => string;
@@ -253,9 +304,20 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
   const USER_NO_NAME = overrides?.LABELS?.USER_NO_NAME ?? '(No name)';
   const CHANNEL_NO_MEMBERS = overrides?.LABELS?.CHANNEL_NO_MEMBERS ?? '(No members)';
   return {
+    OPEN_CHANNEL: {
+      HEADER_TITLE: (channel) => getOpenChannelTitle(channel),
+
+      LIST_BANNER_FROZEN: 'Channel is frozen',
+      LIST_DATE_SEPARATOR: (date, locale) => getDateSeparatorFormat(date, locale ?? dateLocale),
+
+      MESSAGE_BUBBLE_TIME: (message, locale) => getMessageTimeFormat(new Date(message.createdAt), locale ?? dateLocale),
+      MESSAGE_BUBBLE_FILE_TITLE: (message) => message.name,
+      MESSAGE_BUBBLE_EDITED_POSTFIX: ' (edited)',
+      MESSAGE_BUBBLE_UNKNOWN_TITLE: () => '(Unknown message type)',
+      MESSAGE_BUBBLE_UNKNOWN_DESC: () => 'Cannot read this message.',
+    },
     GROUP_CHANNEL: {
-      HEADER_TITLE: (currentUserId, channel) =>
-        getGroupChannelTitle(currentUserId, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
+      HEADER_TITLE: (uid, channel) => getGroupChannelTitle(uid, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       LIST_BANNER_FROZEN: 'Channel is frozen',
       LIST_DATE_SEPARATOR: (date, locale) => getDateSeparatorFormat(date, locale ?? dateLocale),
       LIST_BUTTON_NEW_MSG: (newMessages) => `${newMessages.length} new messages`,
@@ -266,27 +328,42 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       MESSAGE_BUBBLE_UNKNOWN_TITLE: () => '(Unknown message type)',
       MESSAGE_BUBBLE_UNKNOWN_DESC: () => 'Cannot read this message.',
 
-      INPUT_PLACEHOLDER_ACTIVE: 'Enter message',
-      INPUT_PLACEHOLDER_DISABLED: 'Chat not available in this channel.',
-      INPUT_PLACEHOLDER_MUTED: "You're muted by the operator.",
-      INPUT_EDIT_OK: 'Save',
-      INPUT_EDIT_CANCEL: 'Cancel',
-
       MENTION_LIMITED: (mentionLimit) => `You can have up to ${mentionLimit} mentions per message.`,
 
+      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_COPY **/
       DIALOG_MESSAGE_COPY: 'Copy',
+      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_EDIT **/
       DIALOG_MESSAGE_EDIT: 'Edit',
+      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_SAVE **/
       DIALOG_MESSAGE_SAVE: 'Save',
+      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_DELETE **/
       DIALOG_MESSAGE_DELETE: 'Delete',
+      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE **/
       DIALOG_MESSAGE_DELETE_CONFIRM_TITLE: 'Delete message?',
+      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_OK **/
       DIALOG_MESSAGE_DELETE_CONFIRM_OK: 'Delete',
+      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_CANCEL **/
       DIALOG_MESSAGE_DELETE_CONFIRM_CANCEL: 'Cancel',
+      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_FAILED_RETRY **/
       DIALOG_MESSAGE_FAILED_RETRY: 'Retry',
+      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_FAILED_REMOVE **/
       DIALOG_MESSAGE_FAILED_REMOVE: 'Remove',
-
+      /** @deprecated Please use LABELS.CHANNEL_INPUT_ATTACHMENT_CAMERA **/
       DIALOG_ATTACHMENT_CAMERA: 'Camera',
+      /** @deprecated Please use LABELS.CHANNEL_INPUT_ATTACHMENT_PHOTO_LIBRARY **/
       DIALOG_ATTACHMENT_PHOTO_LIBRARY: 'Photo library',
+      /** @deprecated Please use LABELS.CHANNEL_INPUT_ATTACHMENT_FILES **/
       DIALOG_ATTACHMENT_FILES: 'Files',
+      /** @deprecated Please use LABELS.CHANNEL_INPUT_PLACEHOLDER_ACTIVE **/
+      INPUT_PLACEHOLDER_ACTIVE: 'Enter message',
+      /** @deprecated Please use LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED **/
+      INPUT_PLACEHOLDER_DISABLED: 'Chat not available in this channel.',
+      /** @deprecated Please use LABELS.CHANNEL_INPUT_PLACEHOLDER_MUTED **/
+      INPUT_PLACEHOLDER_MUTED: "You're muted by the operator.",
+      /** @deprecated Please use LABELS.CHANNEL_INPUT_EDIT_OK **/
+      INPUT_EDIT_OK: 'Save',
+      /** @deprecated Please use LABELS.CHANNEL_INPUT_EDIT_CANCEL **/
+      INPUT_EDIT_CANCEL: 'Cancel',
       ...overrides?.GROUP_CHANNEL,
     },
     GROUP_CHANNEL_SETTINGS: {
@@ -370,9 +447,9 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     },
     GROUP_CHANNEL_MEMBERS: {
       HEADER_TITLE: 'Members',
-      /** @deprecated Please use in LABELS **/
+      /** @deprecated Please use LABELS.USER_BAR_ME_POSTFIX **/
       USER_BAR_ME_POSTFIX: ' (You)',
-      /** @deprecated Please use in LABELS **/
+      /** @deprecated Please use LABELS.USER_BAR_OPERATOR **/
       USER_BAR_OPERATOR: 'Operator',
       ...overrides?.GROUP_CHANNEL_MEMBERS,
     },
@@ -415,6 +492,29 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       UNMUTE: 'Unmute',
       BAN: 'Ban',
       UNBAN: 'Unban',
+
+      // Deprecation backward
+      CHANNEL_MESSAGE_COPY: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_COPY ?? 'Copy',
+      CHANNEL_MESSAGE_EDIT: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_EDIT ?? 'Edit',
+      CHANNEL_MESSAGE_SAVE: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_SAVE ?? 'Save',
+      CHANNEL_MESSAGE_DELETE: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_DELETE ?? 'Delete',
+      CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE:
+        overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_DELETE_CONFIRM_TITLE ?? 'Delete message?',
+      CHANNEL_MESSAGE_DELETE_CONFIRM_OK: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_DELETE_CONFIRM_OK ?? 'Delete',
+      CHANNEL_MESSAGE_DELETE_CONFIRM_CANCEL: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_DELETE_CONFIRM_CANCEL ?? 'Cancel',
+      CHANNEL_MESSAGE_FAILED_RETRY: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_FAILED_RETRY ?? 'Retry',
+      CHANNEL_MESSAGE_FAILED_REMOVE: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_FAILED_REMOVE ?? 'Remove',
+      CHANNEL_INPUT_ATTACHMENT_CAMERA: overrides?.GROUP_CHANNEL?.DIALOG_ATTACHMENT_CAMERA ?? 'Camera',
+      CHANNEL_INPUT_ATTACHMENT_PHOTO_LIBRARY:
+        overrides?.GROUP_CHANNEL?.DIALOG_ATTACHMENT_PHOTO_LIBRARY ?? 'Photo library',
+      CHANNEL_INPUT_ATTACHMENT_FILES: overrides?.GROUP_CHANNEL?.DIALOG_ATTACHMENT_FILES ?? 'Files',
+      CHANNEL_INPUT_PLACEHOLDER_ACTIVE: overrides?.GROUP_CHANNEL?.INPUT_PLACEHOLDER_ACTIVE ?? 'Enter message',
+      CHANNEL_INPUT_PLACEHOLDER_DISABLED:
+        overrides?.GROUP_CHANNEL?.INPUT_PLACEHOLDER_DISABLED ?? 'Chat not available in this channel.',
+      CHANNEL_INPUT_PLACEHOLDER_MUTED:
+        overrides?.GROUP_CHANNEL?.INPUT_PLACEHOLDER_MUTED ?? "You're muted by the operator.",
+      CHANNEL_INPUT_EDIT_OK: overrides?.GROUP_CHANNEL?.INPUT_EDIT_OK ?? 'Save',
+      CHANNEL_INPUT_EDIT_CANCEL: overrides?.GROUP_CHANNEL?.INPUT_EDIT_CANCEL ?? 'Cancel',
       ...overrides?.LABELS,
     },
     FILE_VIEWER: {

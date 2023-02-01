@@ -55,27 +55,26 @@ export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, opt
     updateLoading(false);
   }, [init, userId]);
 
-  useChannelHandler(sdk, HOOK_NAME, {
-    onChannelChanged: (channel) => updateChannels([channel]),
-    onChannelFrozen: (channel) => updateChannels([channel]),
-    onChannelUnfrozen: (channel) => updateChannels([channel]),
-    onChannelMemberCountChanged: (channels) => updateChannels(channels),
-    onChannelDeleted: (url) => deleteChannels([url]),
-    onUserJoined: (channel) => updateChannels([channel]),
-    onUserLeft: (channel, user) => {
-      const isMe = user.userId === userId;
-      if (isMe) deleteChannels([channel.url]);
-      else updateChannels([channel]);
+  useChannelHandler(
+    sdk,
+    HOOK_NAME,
+    {
+      onChannelChanged: (channel) => updateChannels([channel]),
+      onChannelFrozen: (channel) => updateChannels([channel]),
+      onChannelUnfrozen: (channel) => updateChannels([channel]),
+      onChannelParticipantCountChanged: (channel) => updateChannels([channel]),
+      onChannelDeleted: (url) => deleteChannels([url]),
+      onUserBanned(channel, user) {
+        const isMe = user.userId === userId;
+        if (isMe) deleteChannels([channel.url]);
+        else updateChannels([channel]);
+      },
+      onMessageReceived(channel) {
+        updateChannelsAndMarkAsDelivered([channel]);
+      },
     },
-    onUserBanned(channel, user) {
-      const isMe = user.userId === userId;
-      if (isMe) deleteChannels([channel.url]);
-      else updateChannels([channel]);
-    },
-    onMessageReceived(channel) {
-      updateChannelsAndMarkAsDelivered([channel]);
-    },
-  });
+    'open',
+  );
 
   const refresh = useFreshCallback(async () => {
     updateRefreshing(true);
