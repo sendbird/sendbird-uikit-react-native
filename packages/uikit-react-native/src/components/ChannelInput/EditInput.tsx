@@ -75,7 +75,7 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
           autoFocus={autoFocus}
           onChangeText={onChangeText}
           style={styles.input}
-          placeholder={STRINGS.GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE}
+          placeholder={STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_ACTIVE}
           onSelectionChange={onSelectionChange}
         >
           {mentionManager.textToMentionedComponents(text, mentionedUsers)}
@@ -83,11 +83,11 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
       </View>
       <View style={{ marginTop: 8, flexDirection: 'row' }}>
         <Button variant={'text'} onPress={onPressCancel}>
-          {STRINGS.GROUP_CHANNEL.INPUT_EDIT_CANCEL}
+          {STRINGS.LABELS.CHANNEL_INPUT_EDIT_CANCEL}
         </Button>
         <View style={styles.space} />
         <Button variant={'contained'} onPress={onPressSave}>
-          {STRINGS.GROUP_CHANNEL.INPUT_EDIT_OK}
+          {STRINGS.LABELS.CHANNEL_INPUT_EDIT_OK}
         </Button>
       </View>
     </View>

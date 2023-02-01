@@ -1,6 +1,5 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { ListRenderItem, Platform, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation';
 import {
@@ -19,23 +18,21 @@ import {
   getFileType,
   isMyMessage,
   messageKeyExtractor,
-  shouldRenderReaction,
   toMegabyte,
   useFreshCallback,
+  useSafeAreaPadding,
 } from '@sendbird/uikit-utils';
 
 import type { ChatFlatListRef } from '../../../components/ChatFlatList';
 import ChatFlatList from '../../../components/ChatFlatList';
-import { ReactionAddons } from '../../../components/ReactionAddons';
-import { DEPRECATION_WARNING } from '../../../constants';
-import { useLocalization, usePlatformService, useSendbirdChat } from '../../../hooks/useContext';
+import { useLocalization, usePlatformService } from '../../../hooks/useContext';
 import SBUUtils from '../../../libs/SBUUtils';
-import { GroupChannelContexts } from '../module/moduleContext';
-import type { GroupChannelProps } from '../types';
+import { OpenChannelContexts } from '../module/moduleContext';
+import type { OpenChannelProps } from '../types';
 
 const HANDLE_NEXT_MSG_SEPARATELY = Platform.select({ default: true });
 
-const GroupChannelMessageList = ({
+const OpenChannelMessageList = ({
   currentUserId,
   channel,
   messages,
@@ -48,27 +45,26 @@ const GroupChannelMessageList = ({
   renderScrollToBottomButton,
   onResendFailedMessage,
   onDeleteMessage,
-  onPressImageMessage,
   onPressMediaMessage,
   flatListProps,
   enableMessageGrouping,
-}: GroupChannelProps['MessageList']) => {
+}: OpenChannelProps['MessageList']) => {
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
-  const { left, right } = useSafeAreaInsets();
+
   const [scrollLeaveBottom, setScrollLeaveBottom] = useState(false);
-  const scrollRef = useRef<ChatFlatListRef>(null);
   const [newMessagesInternalBuffer, setNewMessagesInternalBuffer] = useState(() => newMessagesFromMembers);
+
+  const scrollRef = useRef<ChatFlatListRef>(null);
+
+  const safeAreaLayout = useSafeAreaPadding(['left', 'right']);
   const getMessagePressActions = useGetMessagePressActions({
     channel,
     currentUserId,
     onDeleteMessage,
     onResendFailedMessage,
-    onPressImageMessage,
     onPressMediaMessage,
   });
-
-  const safeAreaLayout = { paddingLeft: left, paddingRight: right };
 
   const renderItem: ListRenderItem<SendbirdMessage> = useFreshCallback(({ item, index }) => {
     const { onPress, onLongPress } = getMessagePressActions(item);
@@ -110,7 +106,7 @@ const GroupChannelMessageList = ({
         onLeaveScrollBottom={onLeaveScrollBottom}
         currentUserId={currentUserId}
         {...flatListProps}
-        listKey={`group-channel-messages-${channel.url}`}
+        listKey={`open-channel-messages-${channel.url}`}
         ref={scrollRef}
         data={messages}
         renderItem={renderItem}
@@ -144,20 +140,13 @@ const GroupChannelMessageList = ({
 
 type HandleableMessage = SendbirdUserMessage | SendbirdFileMessage;
 const useGetMessagePressActions = ({
-  channel,
   currentUserId,
   onResendFailedMessage,
   onDeleteMessage,
-  onPressImageMessage,
   onPressMediaMessage,
 }: Pick<
-  GroupChannelProps['MessageList'],
-  | 'channel'
-  | 'currentUserId'
-  | 'onResendFailedMessage'
-  | 'onDeleteMessage'
-  | 'onPressImageMessage'
-  | 'onPressMediaMessage'
+  OpenChannelProps['MessageList'],
+  'channel' | 'currentUserId' | 'onResendFailedMessage' | 'onDeleteMessage' | 'onPressMediaMessage'
 >) => {
   const { colors } = useUIKitTheme();
   const { STRINGS } = useLocalization();
@@ -165,8 +154,7 @@ const useGetMessagePressActions = ({
   const { openSheet } = useBottomSheet();
   const { alert } = useAlert();
   const { clipboardService, fileService } = usePlatformService();
-  const { features } = useSendbirdChat();
-  const { setMessageToEdit } = useContext(GroupChannelContexts.Fragment);
+  const { setMessageToEdit } = useContext(OpenChannelContexts.Fragment);
 
   const handleFailedMessage = (message: HandleableMessage) => {
     openSheet({
@@ -273,10 +261,6 @@ const useGetMessagePressActions = ({
         case 'video':
         case 'audio': {
           response.onPress = () => {
-            if (onPressImageMessage && fileType === 'image') {
-              Logger.warn(DEPRECATION_WARNING.GROUP_CHANNEL.ON_PRESS_IMAGE_MESSAGE);
-              onPressImageMessage(msg, getAvailableUriFromFileMessage(msg));
-            }
             onPressMediaMessage?.(msg, () => onDeleteMessage(msg), getAvailableUriFromFileMessage(msg));
           };
           break;
@@ -290,12 +274,7 @@ const useGetMessagePressActions = ({
 
     if (sheetItems.length > 0) {
       response.onLongPress = () => {
-        openSheet({
-          sheetItems,
-          HeaderComponent: shouldRenderReaction(channel, features.reactionEnabled)
-            ? ({ onClose }) => <ReactionAddons.BottomSheet message={msg} channel={channel} onClose={onClose} />
-            : undefined,
-        });
+        openSheet({ sheetItems });
       };
     }
 
@@ -340,4 +319,4 @@ const styles = createStyleSheet({
   },
 });
 
-export default React.memo(GroupChannelMessageList);
+export default React.memo(OpenChannelMessageList);

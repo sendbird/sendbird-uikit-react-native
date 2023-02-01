@@ -68,55 +68,57 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
     }
   };
 
-  useChannelHandler(sdk, HOOK_NAME, {
-    // Messages
-    onMessageReceived(eventChannel, message) {
-      if (isDifferentChannel(channel, eventChannel)) return;
-      channelMarkAsRead();
-      updateNextMessages([message], false, sdk.currentUser.userId);
-    },
-    onMessageUpdated(eventChannel, message) {
-      if (isDifferentChannel(channel, eventChannel)) return;
-      updateMessages([message], false, sdk.currentUser.userId);
-    },
-    onMessageDeleted(eventChannel, messageId) {
-      if (isDifferentChannel(channel, eventChannel)) return;
-      deleteMessages([messageId], []);
-      deleteNextMessages([messageId], []);
-    },
-    // Channels
-    onChannelChanged: channelUpdater,
-    onChannelFrozen: channelUpdater,
-    onChannelUnfrozen: channelUpdater,
-    onChannelHidden: channelUpdater,
-    onChannelMemberCountChanged(channels) {
-      const foundChannel = channels.find((c) => !isDifferentChannel(c, channel));
-      if (foundChannel) channelUpdater(foundChannel);
-    },
-    onChannelDeleted(channelUrl, type) {
-      if (channel.url === channelUrl && type === 'open') {
-        options?.onChannelDeleted?.();
-      }
-    },
-    // Users
-    onOperatorUpdated: channelUpdater,
-    onUserLeft: channelUpdater,
-    // onUserEntered: channelUpdater,
-    // onUserExited: channelUpdater,
-    onUserJoined: channelUpdater,
-    onUserUnbanned: channelUpdater,
-    onUserMuted: channelUpdater,
-    onUserUnmuted: channelUpdater,
-    onUserBanned(eventChannel, bannedUser) {
-      if (isDifferentChannel(channel, eventChannel)) return;
-
-      if (bannedUser.userId === sdk.currentUser.userId) {
-        options?.onChannelDeleted?.();
-      } else {
+  useChannelHandler(
+    sdk,
+    HOOK_NAME,
+    {
+      // Messages
+      onMessageReceived(eventChannel, message) {
+        if (isDifferentChannel(channel, eventChannel)) return;
+        channelMarkAsRead();
+        updateNextMessages([message], false, sdk.currentUser.userId);
+      },
+      onMessageUpdated(eventChannel, message) {
+        if (isDifferentChannel(channel, eventChannel)) return;
+        updateMessages([message], false, sdk.currentUser.userId);
+      },
+      onMessageDeleted(eventChannel, messageId) {
+        if (isDifferentChannel(channel, eventChannel)) return;
+        deleteMessages([messageId], []);
+        deleteNextMessages([messageId], []);
+      },
+      // Channels
+      onChannelChanged: channelUpdater,
+      onChannelFrozen: channelUpdater,
+      onChannelUnfrozen: channelUpdater,
+      onChannelParticipantCountChanged(eventChannel) {
+        if (isDifferentChannel(channel, eventChannel)) return;
         channelUpdater(eventChannel);
-      }
+      },
+      onChannelDeleted(channelUrl, type) {
+        if (channel.url === channelUrl && type === 'open') {
+          options?.onChannelDeleted?.();
+        }
+      },
+      // Users
+      onOperatorUpdated: channelUpdater,
+      onUserEntered: channelUpdater,
+      onUserExited: channelUpdater,
+      onUserUnbanned: channelUpdater,
+      onUserMuted: channelUpdater,
+      onUserUnmuted: channelUpdater,
+      onUserBanned(eventChannel, bannedUser) {
+        if (isDifferentChannel(channel, eventChannel)) return;
+
+        if (bannedUser.userId === sdk.currentUser.userId) {
+          options?.onChannelDeleted?.();
+        } else {
+          channelUpdater(eventChannel);
+        }
+      },
     },
-  });
+    'open',
+  );
 
   useAsyncEffect(async () => {
     updateLoading(true);
