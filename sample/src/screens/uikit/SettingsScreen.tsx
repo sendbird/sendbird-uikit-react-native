@@ -3,7 +3,7 @@ import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { usePushTrigger } from '@sendbird/uikit-chat-hooks';
-import { useLocalization, usePlatformService, useSendbirdChat } from '@sendbird/uikit-react-native';
+import { SBUError, SBUUtils, useLocalization, usePlatformService, useSendbirdChat } from '@sendbird/uikit-react-native';
 import {
   Avatar,
   Divider,
@@ -14,18 +14,16 @@ import {
   Text,
   useActionMenu,
   useAlert,
+  useBottomSheet,
   usePrompt,
   useToast,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
-import SBUError from '@sendbird/uikit-react-native/src/libs/SBUError';
-import SBUUtils from '@sendbird/uikit-react-native/src/libs/SBUUtils';
 
-import { useAppNavigation } from '../../../hooks/useAppNavigation';
-import useAppearance from '../../../hooks/useAppearance';
-import { useAppAuth } from '../../../libs/authentication';
-import { Routes } from '../../../libs/navigation';
+import { useAppNavigation } from '../../hooks/useAppNavigation';
+import useAppearance from '../../hooks/useAppearance';
+import { useAppAuth } from '../../libs/authentication';
+import { Routes } from '../../libs/navigation';
 
 const SettingsScreen = () => {
   const { navigation } = useAppNavigation<Routes.Settings>();
