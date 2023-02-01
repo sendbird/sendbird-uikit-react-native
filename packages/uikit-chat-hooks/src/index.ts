@@ -2,6 +2,8 @@ export { useGroupChannelList } from './channel/useGroupChannelList';
 export { useGroupChannelMessages } from './channel/useGroupChannelMessages';
 export { useGroupChannel } from './channel/useGroupChannel';
 
+export { useOpenChannel } from './channel/useOpenChannel';
+
 export { useAppFeatures } from './common/useAppFeatures';
 export { useMessageOutgoingStatus } from './common/useMessageOutgoingStatus';
 export { usePushTrigger } from './common/usePushTrigger';
