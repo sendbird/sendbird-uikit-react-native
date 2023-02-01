@@ -3,8 +3,8 @@ import React from 'react';
 import { createGroupChannelCreateFragment } from '@sendbird/uikit-react-native';
 import type { SendbirdUser } from '@sendbird/uikit-utils';
 
-import { useAppNavigation } from '../../hooks/useAppNavigation';
-import { Routes } from '../../libs/navigation';
+import { useAppNavigation } from '../../../hooks/useAppNavigation';
+import { Routes } from '../../../libs/navigation';
 
 const GroupChannelCreateFragment = createGroupChannelCreateFragment<SendbirdUser>();
 

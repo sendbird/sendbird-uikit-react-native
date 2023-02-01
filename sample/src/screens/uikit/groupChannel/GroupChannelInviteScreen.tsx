@@ -4,8 +4,8 @@ import { useGroupChannel } from '@sendbird/uikit-chat-hooks';
 import { createGroupChannelInviteFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
 import type { SendbirdUser } from '@sendbird/uikit-utils';
 
-import { useAppNavigation } from '../../hooks/useAppNavigation';
-import { Routes } from '../../libs/navigation';
+import { useAppNavigation } from '../../../hooks/useAppNavigation';
+import { Routes } from '../../../libs/navigation';
 
 const GroupChannelInviteFragment = createGroupChannelInviteFragment<SendbirdUser>();
 
