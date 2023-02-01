@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 
 import { createGroupChannelListFragment } from '@sendbird/uikit-react-native';
 
-import { useAppNavigation } from '../../../hooks/useAppNavigation';
-import { Routes } from '../../../libs/navigation';
+import { useAppNavigation } from '../../../../hooks/useAppNavigation';
+import { Routes } from '../../../../libs/navigation';
 
 /**
  * Example for customize navigation header with DomainContext

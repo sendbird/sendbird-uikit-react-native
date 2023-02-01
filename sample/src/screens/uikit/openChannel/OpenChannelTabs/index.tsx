@@ -1,14 +1,13 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 
-import { useTotalUnreadMessageCount } from '@sendbird/uikit-chat-hooks';
-import { useSendbirdChat } from '@sendbird/uikit-react-native';
 import { Icon, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
-import { useAppNavigation } from '../../../hooks/useAppNavigation';
-import { Routes } from '../../../libs/navigation';
-import GroupChannelListScreen from './GroupChannelListScreen';
-import SettingsScreen from './SettingsScreen';
+import { useAppNavigation } from '../../../../hooks/useAppNavigation';
+import { Routes } from '../../../../libs/navigation';
+import SettingsScreen from '../../SettingsScreen';
+import OpenChannelListCommunityScreen from './OpenChannelListCommunityScreen';
+import OpenChannelListLiveStreamsScreen from './OpenChannelListLiveStreamsScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,12 +15,10 @@ const GroupChannelTabs = () => {
   const { params } = useAppNavigation<Routes.GroupChannelTabs>();
 
   const { colors, typography } = useUIKitTheme();
-  const { sdk } = useSendbirdChat();
-  const totalUnreadMessages = useTotalUnreadMessageCount(sdk);
 
   return (
     <Tab.Navigator
-      initialRouteName={Routes.GroupChannelList}
+      initialRouteName={Routes.OpenChannelListLiveStreams}
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: colors.primary,
@@ -29,13 +26,21 @@ const GroupChannelTabs = () => {
       }}
     >
       <Tab.Screen
-        name={Routes.GroupChannelList}
-        component={GroupChannelListScreen}
+        name={Routes.OpenChannelListLiveStreams}
+        component={OpenChannelListLiveStreamsScreen}
         initialParams={params}
         options={{
-          tabBarLabel: 'Channels',
-          tabBarBadge: totalUnreadMessages === '0' ? undefined : totalUnreadMessages,
-          tabBarIcon: ({ color }) => <Icon icon={'chat-filled'} color={color} />,
+          tabBarLabel: 'Live streams',
+          tabBarIcon: ({ color }) => <Icon icon={'streaming'} color={color} />,
+        }}
+      />
+      <Tab.Screen
+        name={Routes.OpenChannelListCommunity}
+        component={OpenChannelListCommunityScreen}
+        initialParams={params}
+        options={{
+          tabBarLabel: 'Community',
+          tabBarIcon: ({ color }) => <Icon icon={'channels'} color={color} />,
         }}
       />
       <Tab.Screen

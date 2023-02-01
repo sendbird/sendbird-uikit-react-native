@@ -3,8 +3,8 @@ import React from 'react';
 import { useGroupChannel } from '@sendbird/uikit-chat-hooks';
 import { createGroupChannelFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
 
-import { useAppNavigation } from '../../hooks/useAppNavigation';
-import { Routes } from '../../libs/navigation';
+import { useAppNavigation } from '../../../hooks/useAppNavigation';
+import { Routes } from '../../../libs/navigation';
 
 /**
  * Example for customize navigation header with DomainContext
