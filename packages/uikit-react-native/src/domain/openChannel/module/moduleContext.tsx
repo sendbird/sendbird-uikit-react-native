@@ -4,7 +4,7 @@ import type { SendbirdOpenChannel } from '@sendbird/uikit-utils';
 import { NOOP, SendbirdFileMessage, SendbirdUserMessage } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
-import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
+import { useLocalization } from '../../../hooks/useContext';
 import type { OpenChannelContextsType, OpenChannelModule } from '../types';
 
 export const OpenChannelContexts: OpenChannelContextsType = {
@@ -20,7 +20,6 @@ export const OpenChannelContextsProvider: OpenChannelModule['Provider'] = ({
   channel,
   keyboardAvoidOffset,
 }) => {
-  const { currentUser } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const [messageToEdit, setMessageToEdit] = useState<SendbirdUserMessage | SendbirdFileMessage>();
 
@@ -28,7 +27,7 @@ export const OpenChannelContextsProvider: OpenChannelModule['Provider'] = ({
     <ProviderLayout>
       <OpenChannelContexts.Fragment.Provider
         value={{
-          headerTitle: STRINGS.GROUP_CHANNEL.HEADER_TITLE(currentUser?.userId ?? '', {} as any),
+          headerTitle: STRINGS.OPEN_CHANNEL.HEADER_TITLE(channel),
           channel,
           keyboardAvoidOffset,
           messageToEdit,

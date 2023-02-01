@@ -37,7 +37,7 @@ import type {
   UserMessageCreateParams,
   UserMessageUpdateParams,
 } from '@sendbird/chat/message';
-import type { OpenChannel, OpenChannelModule } from '@sendbird/chat/openChannel';
+import type { OpenChannel, OpenChannelListQuery, OpenChannelModule } from '@sendbird/chat/openChannel';
 
 export type FilterByValueType<T extends object, Type> = {
   [K in keyof T as T[K] extends Type ? K : never]: T[K];
@@ -98,6 +98,7 @@ export type SendbirdEmojiContainer = EmojiContainer;
 
 export type SendbirdGroupChannelCollection = GroupChannelCollection;
 export type SendbirdGroupChannelListQuery = GroupChannelListQuery;
+export type SendbirdOpenChannelListQuery = OpenChannelListQuery;
 export type SendbirdMessageCollection = MessageCollection;
 export type SendbirdPreviousMessageListQuery = PreviousMessageListQuery;
 

@@ -1,16 +1,23 @@
 import React, { useContext } from 'react';
 
-import { useHeaderStyle } from '@sendbird/uikit-react-native-foundation';
+import { Icon, useHeaderStyle } from '@sendbird/uikit-react-native-foundation';
 
 import { OpenChannelContexts } from '../module/moduleContext';
 import type { OpenChannelProps } from '../types';
-import { useLocalization } from "@sendbird/uikit-react-native";
 
-const OpenChannelHeader = (_: OpenChannelProps['Header']) => {
+const OpenChannelHeader = ({ onPressHeaderLeft, onPressHeaderRight, rightIconName }: OpenChannelProps['Header']) => {
   const { headerTitle } = useContext(OpenChannelContexts.Fragment);
   const { HeaderComponent } = useHeaderStyle();
-  const {STRINGS} = useLocalization();
-  return <HeaderComponent title={headerTitle} />;
+
+  return (
+    <HeaderComponent
+      title={headerTitle}
+      left={<Icon icon={'arrow-left'} />}
+      onPressLeft={onPressHeaderLeft}
+      right={<Icon icon={rightIconName} />}
+      onPressRight={onPressHeaderRight}
+    />
+  );
 };
 
-export default OpenChannelHeader;
+export default React.memo(OpenChannelHeader);

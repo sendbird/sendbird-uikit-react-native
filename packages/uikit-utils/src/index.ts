@@ -79,6 +79,7 @@ export type {
   SendbirdDataPayload,
   SendbirdPreviousMessageListQuery,
   SendbirdSendableMessage,
+  SendbirdOpenChannelListQuery,
   SendbirdGroupChannelListQuery,
   SendbirdGroupChannelUpdateParams,
   SendbirdUserMessageUpdateParams,
