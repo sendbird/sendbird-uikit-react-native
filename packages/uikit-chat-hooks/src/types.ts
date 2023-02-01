@@ -8,6 +8,8 @@ import type {
   SendbirdGroupChannelListQuery,
   SendbirdMessage,
   SendbirdMessageCollection,
+  SendbirdOpenChannel,
+  SendbirdOpenChannelListQuery,
   SendbirdPreviousMessageListQuery,
   SendbirdUserMessage,
   SendbirdUserMessageCreateParams,
@@ -187,6 +189,165 @@ export type UseGroupChannelMessagesOptions = {
   queryCreator?: () => SendbirdPreviousMessageListQuery;
   collectionCreator?: () => SendbirdMessageCollection;
   enableCollectionWithoutLocalCache?: boolean;
+  onChannelDeleted?: () => void;
+};
+
+/**
+ * @interface UseOpenChannelList
+ * @description interface for open channel list hook
+ * */
+export interface UseOpenChannelList {
+  (sdk: SendbirdChatSDK, userId?: string, options?: UseOpenChannelListOptions): {
+    /**
+     * Loading state, only available on first render
+     * */
+    loading: boolean;
+
+    /**
+     * Refreshing state, status is changes when the refresh is called.
+     * */
+    refreshing: boolean;
+
+    /**
+     * Refresh, clear and reload messages from latest
+     * @return {Promise<void>}
+     * */
+    refresh: () => Promise<void>;
+
+    /**
+     * Get open channels state
+     * */
+    openChannels: SendbirdOpenChannel[];
+
+    /**
+     * Fetch next channels to state
+     * @return {Promise<void>}
+     * */
+    next: () => Promise<void>;
+  };
+}
+export type UseOpenChannelListOptions = {
+  queryCreator?: () => SendbirdOpenChannelListQuery;
+};
+
+/**
+ * @interface UseOpenChannelMessages
+ * @description interface for open channel messages hook
+ * - Receive new messages from other users -> append to state(nextMessages)
+ * - onTopReached -> prev() -> fetch prev messages and append to state(messages)
+ * - onBottomReached -> next() -> nextMessages append to state(messages)
+ * */
+export interface UseOpenChannelMessages {
+  (sdk: SendbirdChatSDK, channel: SendbirdOpenChannel, userId?: string, options?: UseOpenChannelMessagesOptions): {
+    /**
+     * Loading state, only available on first render
+     * */
+    loading: boolean;
+
+    /**
+     * Refreshing state, status is changes when the refresh is called.
+     * */
+    refreshing: boolean;
+
+    /**
+     * Refresh, clear and reload messages from latest
+     * @return {Promise<void>}
+     * */
+    refresh: () => Promise<void>;
+
+    /**
+     * Get messages, this state is for render
+     * For example, if a user receives a new messages while searching for an old message
+     * for this case, new messages will be included here.
+     * @return {SendbirdMessage[]}
+     * */
+    messages: SendbirdMessage[];
+
+    /**
+     * Fetch prev messages to state
+     * @return {Promise<void>}
+     * */
+    prev: () => Promise<void>;
+
+    /**
+     * Get messages, this state is for temporary data before render
+     * For example, if a user receives a new messages while searching for an old message
+     * for this case, new messages will be included here.
+     * */
+    nextMessages: SendbirdMessage[];
+
+    /**
+     * Get new messages from nextMessages
+     * A new message means a message that meets the below conditions
+     * - Not admin message
+     * - Not updated message
+     * - Not current user's message
+     * */
+    newMessagesFromMembers: SendbirdMessage[];
+
+    /**
+     * Fetch next messages to state
+     * @return {Promise<void>}
+     * */
+    next: () => Promise<void>;
+
+    /**
+     * Send file message
+     * @param params file message params
+     * @param callback sent message callback
+     * @return pending message
+     * */
+    sendFileMessage: (
+      params: SendbirdFileMessageCreateParams,
+      onPending?: (message: SendbirdFileMessage, error?: SendbirdError) => void,
+    ) => Promise<SendbirdFileMessage>;
+
+    /**
+     * Send user message
+     * @param params user message params
+     * @param callback sent message callback
+     * @return pending message
+     * */
+    sendUserMessage: (
+      params: SendbirdUserMessageCreateParams,
+      onPending?: (message: SendbirdUserMessage, error?: SendbirdError) => void,
+    ) => Promise<SendbirdUserMessage>;
+
+    /**
+     * Update file message
+     * @param messageId
+     * @param params file message params
+     * @return updated message
+     * */
+    updateFileMessage: (messageId: number, params: SendbirdFileMessageCreateParams) => Promise<SendbirdFileMessage>;
+
+    /**
+     * Update user message
+     * @param messageId
+     * @param params user message params
+     * @return updated message
+     * */
+    updateUserMessage: (messageId: number, params: SendbirdUserMessageCreateParams) => Promise<SendbirdUserMessage>;
+
+    /**
+     * Resend failed message
+     * @param failedMessage failed message to resend
+     * @return {Promise<void>}
+     * */
+    resendMessage: (failedMessage: SendbirdFileMessage | SendbirdUserMessage) => Promise<void>;
+
+    /**
+     * Delete message
+     * @param message sent or failed message
+     * @return {Promise<void>}
+     * */
+    deleteMessage: (message: SendbirdFileMessage | SendbirdUserMessage) => Promise<void>;
+  };
+}
+
+export type UseOpenChannelMessagesOptions = {
+  sortComparator?: (a: SendbirdMessage, b: SendbirdMessage) => number;
+  queryCreator?: () => SendbirdPreviousMessageListQuery;
   onChannelDeleted?: () => void;
 };
 
