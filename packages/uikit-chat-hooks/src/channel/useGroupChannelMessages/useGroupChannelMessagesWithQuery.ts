@@ -7,6 +7,7 @@ import type {
 } from '@sendbird/uikit-utils';
 import {
   Logger,
+  NOOP,
   confirmAndMarkAsRead,
   isDifferentChannel,
   useAsyncEffect,
@@ -60,7 +61,7 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
     async (uid?: string) => {
       if (uid) {
         queryRef.current = createMessageQuery(channel, options?.queryCreator);
-        channelMarkAsRead().catch();
+        channelMarkAsRead().catch(NOOP);
         if (queryRef.current?.hasNext) {
           const list = await queryRef.current?.load();
           updateMessages(list, true, sdk.currentUser.userId);

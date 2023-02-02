@@ -15,8 +15,8 @@ import {
   getGroupChannelPreviewTime,
   getGroupChannelTitle,
   getMessageTimeFormat,
+  getOpenChannelTitle,
 } from '@sendbird/uikit-utils';
-import { getOpenChannelTitle } from '@sendbird/uikit-utils/src/ui-format/openChannel';
 
 /**
  * StringSet interface
@@ -41,6 +41,31 @@ export interface StringSet {
   OPEN_CHANNEL_PARTICIPANTS: {
     /** OpenChannelParticipants > Header */
     HEADER_TITLE: string;
+  };
+  OPEN_CHANNEL_SETTINGS: {
+    /** OpenChannelSettings > Header */
+    HEADER_TITLE: string;
+    HEADER_RIGHT: string;
+
+    /** OpenChannelSettings > Menu */
+    MENU_URL: string;
+    MENU_MODERATION: string;
+    MENU_PARTICIPANTS: string;
+    MENU_DELETE_CHANNEL: string;
+
+    /** OpenChannelSettings > Dialog */
+    DIALOG_CHANNEL_DELETE_CONFIRM_TITLE: string;
+    DIALOG_CHANNEL_DELETE_CONFIRM_OK: string;
+    DIALOG_CHANNEL_DELETE_CONFIRM_CANCEL: string;
+    DIALOG_CHANGE_NAME: string;
+    DIALOG_CHANGE_IMAGE: string;
+    DIALOG_CHANGE_NAME_PROMPT_TITLE: string;
+    DIALOG_CHANGE_NAME_PROMPT_PLACEHOLDER: string;
+    DIALOG_CHANGE_NAME_PROMPT_CANCEL: string;
+    DIALOG_CHANGE_NAME_PROMPT_OK: string;
+    DIALOG_CHANGE_IMAGE_MENU_TITLE: string;
+    DIALOG_CHANGE_IMAGE_MENU_CAMERA: string;
+    DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY: string;
   };
   GROUP_CHANNEL: {
     /** GroupChannel > Header */
@@ -310,18 +335,39 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
   return {
     OPEN_CHANNEL: {
       HEADER_TITLE: (channel) => getOpenChannelTitle(channel),
-
       LIST_BANNER_FROZEN: 'Channel is frozen',
       LIST_DATE_SEPARATOR: (date, locale) => getDateSeparatorFormat(date, locale ?? dateLocale),
-
       MESSAGE_BUBBLE_TIME: (message, locale) => getMessageTimeFormat(new Date(message.createdAt), locale ?? dateLocale),
       MESSAGE_BUBBLE_FILE_TITLE: (message) => message.name,
       MESSAGE_BUBBLE_EDITED_POSTFIX: ' (edited)',
       MESSAGE_BUBBLE_UNKNOWN_TITLE: () => '(Unknown message type)',
       MESSAGE_BUBBLE_UNKNOWN_DESC: () => 'Cannot read this message.',
+      ...overrides?.OPEN_CHANNEL,
     },
     OPEN_CHANNEL_PARTICIPANTS: {
       HEADER_TITLE: 'Participants',
+      ...overrides?.OPEN_CHANNEL_PARTICIPANTS,
+    },
+    OPEN_CHANNEL_SETTINGS: {
+      HEADER_TITLE: 'Channel information',
+      HEADER_RIGHT: 'Edit',
+      MENU_URL: 'URL',
+      MENU_MODERATION: 'Moderation',
+      MENU_PARTICIPANTS: 'Participants',
+      MENU_DELETE_CHANNEL: 'Delete channel',
+      DIALOG_CHANNEL_DELETE_CONFIRM_TITLE: 'Delete channel?',
+      DIALOG_CHANNEL_DELETE_CONFIRM_OK: 'Delete',
+      DIALOG_CHANNEL_DELETE_CONFIRM_CANCEL: 'Cancel',
+      DIALOG_CHANGE_NAME: 'Change channel name',
+      DIALOG_CHANGE_NAME_PROMPT_TITLE: 'Change channel name',
+      DIALOG_CHANGE_NAME_PROMPT_PLACEHOLDER: 'Enter name',
+      DIALOG_CHANGE_NAME_PROMPT_OK: 'Save',
+      DIALOG_CHANGE_NAME_PROMPT_CANCEL: 'Cancel',
+      DIALOG_CHANGE_IMAGE: 'Change channel image',
+      DIALOG_CHANGE_IMAGE_MENU_TITLE: 'Change channel image',
+      DIALOG_CHANGE_IMAGE_MENU_CAMERA: 'Take photo',
+      DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY: 'Choose photo',
+      ...overrides?.OPEN_CHANNEL_SETTINGS,
     },
     GROUP_CHANNEL: {
       HEADER_TITLE: (uid, channel) => getGroupChannelTitle(uid, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
