@@ -24,6 +24,7 @@ export * from './shared';
 export * from './hooks';
 export * from './hooks/react-native';
 export * from './ui-format/groupChannel';
+export * from './ui-format/openChannel';
 export * from './ui-format/common';
 export * from './sendbird/channel';
 export * from './sendbird/message';

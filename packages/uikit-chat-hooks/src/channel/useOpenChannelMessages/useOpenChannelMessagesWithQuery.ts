@@ -3,6 +3,7 @@ import { useRef } from 'react';
 import type { SendbirdBaseChannel, SendbirdOpenChannel, SendbirdPreviousMessageListQuery } from '@sendbird/uikit-utils';
 import {
   Logger,
+  NOOP,
   confirmAndMarkAsRead,
   isDifferentChannel,
   useAsyncEffect,
@@ -53,7 +54,7 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
   const init = useFreshCallback(async (uid?: string) => {
     if (uid) {
       queryRef.current = createMessageQuery(channel, options?.queryCreator);
-      channelMarkAsRead().catch();
+      channelMarkAsRead().catch(NOOP);
       if (queryRef.current?.hasNext) {
         const list = await queryRef.current?.load();
         updateMessages(list, true, sdk.currentUser.userId);
@@ -128,7 +129,7 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
     updateLoading(false);
 
     return () => {
-      channel.exit();
+      channel.exit().catch(NOOP);
     };
   }, [init, userId]);
 
