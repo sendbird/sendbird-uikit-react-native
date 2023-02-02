@@ -2,29 +2,21 @@ import React, { useContext } from 'react';
 import { View } from 'react-native';
 
 import { Divider, Text, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
-import { getGroupChannelTitle } from '@sendbird/uikit-utils';
+import { getOpenChannelTitle } from '@sendbird/uikit-utils';
 
 import ChannelCover from '../../../components/ChannelCover';
-import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
-import { GroupChannelSettingsContexts } from '../module/moduleContext';
-import type { GroupChannelSettingsProps } from '../types';
+import { OpenChannelSettingsContexts } from '../module/moduleContext';
+import type { OpenChannelSettingsProps } from '../types';
 
-const GroupChannelSettingsInfo = (_: GroupChannelSettingsProps['Info']) => {
-  const { channel } = useContext(GroupChannelSettingsContexts.Fragment);
-  const { currentUser } = useSendbirdChat();
-  const { STRINGS } = useLocalization();
+const OpenChannelSettingsInfo = (_: OpenChannelSettingsProps['Info']) => {
+  const { channel } = useContext(OpenChannelSettingsContexts.Fragment);
 
   return (
     <View>
       <View style={styles.userInfoContainer}>
         <ChannelCover channel={channel} size={80} containerStyle={styles.avatarContainer} />
         <Text h1 numberOfLines={1}>
-          {getGroupChannelTitle(
-            currentUser?.userId || '',
-            channel,
-            STRINGS.LABELS.USER_NO_NAME,
-            STRINGS.LABELS.CHANNEL_NO_MEMBERS,
-          ) || ' '}
+          {getOpenChannelTitle(channel) || ' '}
         </Text>
       </View>
       <Divider />
@@ -39,4 +31,4 @@ const styles = createStyleSheet({
   userIdContainer: { paddingVertical: 16 },
   userIdLabel: { marginBottom: 4 },
 });
-export default GroupChannelSettingsInfo;
+export default OpenChannelSettingsInfo;
