@@ -35,6 +35,14 @@ export const ASYNC_NOOP = async () => void 0;
 export const PASS = <T>(val: T) => val;
 export const toMegabyte = (byte: number) => byte / 1024 / 1024;
 export const isFunction = <T>(param?: T): param is NonNullable<T> => typeof param === 'function';
+
+export function ifThenOr<T>(cond: boolean, then: T): T | undefined;
+export function ifThenOr<T, V>(cond: boolean, then: T, or: V): T | V;
+export function ifThenOr(cond: boolean, then: unknown, or?: unknown) {
+  if (cond) return then;
+  return or;
+}
+
 export const SBErrorCode = {
   NON_AUTHORIZED: 400108,
 };
@@ -90,4 +98,7 @@ export type {
   SendbirdEmojiContainer,
   SendbirdEmoji,
   SendbirdEmojiCategory,
+  SendbirdOpenChannelUpdateParams,
+  SendbirdOpenChannelCreateParams,
+  SendbirdParticipant,
 } from './types';

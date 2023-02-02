@@ -36,6 +36,7 @@ import {
   GroupChannelSettingsScreen,
   GroupChannelTabs,
   HomeScreen,
+  OpenChannelParticipantsScreen,
   OpenChannelScreen,
   OpenChannelTabs,
   PaletteScreen,
@@ -148,6 +149,9 @@ const Navigations = () => {
             <RootStack.Group>
               <RootStack.Screen name={Routes.OpenChannelTabs} component={OpenChannelTabs} />
               <RootStack.Screen name={Routes.OpenChannel} component={OpenChannelScreen} />
+              <RootStack.Group>
+                <RootStack.Screen name={Routes.OpenChannelParticipants} component={OpenChannelParticipantsScreen} />
+              </RootStack.Group>
             </RootStack.Group>
 
             <RootStack.Group screenOptions={{ animation: 'slide_from_bottom', headerShown: false }}>

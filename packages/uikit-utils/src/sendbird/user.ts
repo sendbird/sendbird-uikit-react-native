@@ -9,13 +9,6 @@ export function ifOperator(role: Role, then: unknown, or?: unknown) {
   return or;
 }
 
-export function ifMuted<T>(muted: boolean, then: T): T | undefined;
-export function ifMuted<T, V>(muted: boolean, then: T, or: V): T | V;
-export function ifMuted(muted: boolean, then: unknown, or?: unknown) {
-  if (muted) return then;
-  return or;
-}
-
 export function getUserUniqId<T extends UserStruct>(user: T) {
   return user.userId;
 }
