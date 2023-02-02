@@ -33,6 +33,7 @@ export { default as createGroupChannelNotificationsFragment } from './fragments/
 
 /** Fragments - open channels **/
 export { default as createOpenChannelFragment } from './fragments/createOpenChannelFragment';
+export { default as createOpenChannelParticipantsFragment } from './fragments/createOpenChannelParticipantsFragment';
 
 /** Context **/
 export { SendbirdChatContext, SendbirdChatProvider } from './contexts/SendbirdChatCtx';

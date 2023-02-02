@@ -38,6 +38,10 @@ export interface StringSet {
     MESSAGE_BUBBLE_UNKNOWN_TITLE: (message: SendbirdMessage) => string;
     MESSAGE_BUBBLE_UNKNOWN_DESC: (message: SendbirdMessage) => string;
   };
+  OPEN_CHANNEL_PARTICIPANTS: {
+    /** OpenChannelParticipants > Header */
+    HEADER_TITLE: string;
+  };
   GROUP_CHANNEL: {
     /** GroupChannel > Header */
     HEADER_TITLE: (currentUserId: string, channel: SendbirdGroupChannel) => string;
@@ -315,6 +319,9 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       MESSAGE_BUBBLE_EDITED_POSTFIX: ' (edited)',
       MESSAGE_BUBBLE_UNKNOWN_TITLE: () => '(Unknown message type)',
       MESSAGE_BUBBLE_UNKNOWN_DESC: () => 'Cannot read this message.',
+    },
+    OPEN_CHANNEL_PARTICIPANTS: {
+      HEADER_TITLE: 'Participants',
     },
     GROUP_CHANNEL: {
       HEADER_TITLE: (uid, channel) => getGroupChannelTitle(uid, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),

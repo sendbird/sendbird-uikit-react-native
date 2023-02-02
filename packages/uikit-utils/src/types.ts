@@ -9,6 +9,7 @@ import type {
   Emoji,
   EmojiCategory,
   EmojiContainer,
+  Participant,
   RestrictedUser,
   SendbirdError as SBError,
   User,
@@ -24,7 +25,12 @@ import type {
   Member,
   MessageCollection,
 } from '@sendbird/chat/groupChannel';
-import type { ModuleNamespaces, SendableMessage } from '@sendbird/chat/lib/__definition';
+import type {
+  ModuleNamespaces,
+  OpenChannelCreateParams,
+  OpenChannelUpdateParams,
+  SendableMessage,
+} from '@sendbird/chat/lib/__definition';
 import type {
   AdminMessage,
   BaseMessage,
@@ -81,12 +87,18 @@ export type SendbirdFileMessageCreateParams = FileMessageCreateParams;
 export type SendbirdFileMessageUpdateParams = FileMessageUpdateParams;
 export type SendbirdUserMessageCreateParams = UserMessageCreateParams;
 export type SendbirdUserMessageUpdateParams = UserMessageUpdateParams;
+
 export type SendbirdGroupChannelCreateParams = GroupChannelCreateParams;
 export type SendbirdGroupChannelUpdateParams = GroupChannelUpdateParams;
+export type SendbirdOpenChannelCreateParams = OpenChannelCreateParams;
+export type SendbirdOpenChannelUpdateParams = OpenChannelUpdateParams;
+
 export type SendbirdUserUpdateParams = UserUpdateParams;
 export type SendbirdUser = User;
 export type SendbirdRestrictedUser = RestrictedUser;
 export type SendbirdMember = Member;
+export type SendbirdParticipant = Participant;
+
 export type SendbirdGroupChannel = GroupChannel;
 export type SendbirdBaseChannel = BaseChannel;
 export type SendbirdOpenChannel = OpenChannel;

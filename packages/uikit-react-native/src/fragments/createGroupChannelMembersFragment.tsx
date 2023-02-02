@@ -4,7 +4,7 @@ import { useChannelHandler, useUserList } from '@sendbird/uikit-chat-hooks';
 import type { ActionMenuItem } from '@sendbird/uikit-react-native-foundation';
 import { Icon, useActionMenu } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMember } from '@sendbird/uikit-utils';
-import { ifMuted, ifOperator, isDifferentChannel, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
+import { ifOperator, ifThenOr, isDifferentChannel, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import UserActionBar from '../components/UserActionBar';
@@ -13,7 +13,7 @@ import createUserListModule from '../domain/userList/module/createUserListModule
 import type { UserListModule } from '../domain/userList/types';
 import { useLocalization, useSendbirdChat, useUserProfile } from '../hooks/useContext';
 
-const noop = () => '';
+const RETURN_EMPTY_STRING = () => '';
 const HOOK_NAME = 'createGroupChannelMembersFragment';
 const createGroupChannelMembersFragment = (
   initModule?: Partial<UserListModule<SendbirdMember>>,
@@ -100,8 +100,8 @@ const createGroupChannelMembersFragment = (
 
             if (!channel.isBroadcast) {
               menuItems.push({
-                title: ifMuted(user.isMuted, STRINGS.LABELS.UNMUTE, STRINGS.LABELS.MUTE),
-                onPress: ifMuted(
+                title: ifThenOr(user.isMuted, STRINGS.LABELS.UNMUTE, STRINGS.LABELS.MUTE),
+                onPress: ifThenOr(
                   user.isMuted,
                   () => channel.unmuteUser(user),
                   () => channel.muteUser(user),
@@ -123,7 +123,10 @@ const createGroupChannelMembersFragment = (
     });
 
     return (
-      <UserListModule.Provider headerRight={noop} headerTitle={STRINGS.GROUP_CHANNEL_MEMBERS.HEADER_TITLE}>
+      <UserListModule.Provider
+        headerRight={RETURN_EMPTY_STRING}
+        headerTitle={STRINGS.GROUP_CHANNEL_MEMBERS.HEADER_TITLE}
+      >
         <UserListModule.Header
           shouldActivateHeaderRight={() => true}
           onPressHeaderLeft={onPressHeaderLeft}
