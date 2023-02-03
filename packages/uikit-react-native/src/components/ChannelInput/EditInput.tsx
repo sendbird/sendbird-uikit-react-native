@@ -31,6 +31,7 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
     onChangeText,
     messageToEdit,
     setMessageToEdit,
+    onPressUpdateUserMessage,
     onUpdateUserMessage,
     onSelectionChange,
     autoFocus,
@@ -50,19 +51,30 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
 
   const onPressSave = () => {
     if (messageToEdit.isUserMessage()) {
-      const mention = {
-        userIds: mentionedUsers.map((it) => it.user.userId),
-        messageTemplate: mentionManager.textToMentionedMessageTemplate(text, mentionedUsers),
-        type: MentionType.USERS,
-      };
+      const mentionType = MentionType.USERS;
+      const mentionedUserIds = mentionedUsers.map((it) => it.user.userId);
+      const mentionedMessageTemplate = mentionManager.textToMentionedMessageTemplate(text, mentionedUsers);
 
-      onUpdateUserMessage(text, messageToEdit, mention).catch(() =>
-        toast.show(STRINGS.TOAST.UPDATE_MSG_ERROR, 'error'),
-      );
+      if (onPressUpdateUserMessage) {
+        onPressUpdateUserMessage(messageToEdit, {
+          message: text,
+          mentionType,
+          mentionedUserIds,
+          mentionedMessageTemplate,
+        }).catch(onFailureToUpdate);
+      } else if (onUpdateUserMessage) {
+        onUpdateUserMessage(text, messageToEdit, {
+          type: MentionType.USERS,
+          userIds: mentionedUserIds,
+          messageTemplate: mentionedMessageTemplate,
+        }).catch(onFailureToUpdate);
+      }
     }
     setMessageToEdit();
     onChangeText('');
   };
+
+  const onFailureToUpdate = () => toast.show(STRINGS.TOAST.UPDATE_MSG_ERROR, 'error');
 
   return (
     <View style={styles.editInputContainer}>

@@ -7,9 +7,12 @@ import {
   SendbirdBaseChannel,
   SendbirdBaseMessage,
   SendbirdFileMessage,
+  SendbirdFileMessageCreateParams,
+  SendbirdFileMessageUpdateParams,
   SendbirdMember,
   SendbirdUserMessage,
   SendbirdUserMessageCreateParams,
+  SendbirdUserMessageUpdateParams,
   replace,
   useIIFE,
 } from '@sendbird/uikit-utils';
@@ -44,14 +47,10 @@ export type ChannelInputProps = {
   keyboardAvoidOffset: number;
 
   // default actions
-  onSendFileMessage: (file: FileType) => Promise<void>;
-  onSendUserMessage: (text: string, mention?: UserMessageMentionParams) => Promise<void>;
-  onUpdateFileMessage: (editedFile: FileType, message: SendbirdFileMessage) => Promise<void>;
-  onUpdateUserMessage: (
-    editedText: string,
-    message: SendbirdUserMessage,
-    mention?: UserMessageMentionParams,
-  ) => Promise<void>;
+  onPressSendUserMessage: (params: SendbirdUserMessageCreateParams) => Promise<void>;
+  onPressSendFileMessage: (params: SendbirdFileMessageCreateParams) => Promise<void>;
+  onPressUpdateUserMessage: (message: SendbirdUserMessage, params: SendbirdUserMessageUpdateParams) => Promise<void>;
+  onPressUpdateFileMessage: (message: SendbirdFileMessage, params: SendbirdFileMessageUpdateParams) => Promise<void>;
 
   // input status
   inputFrozen: boolean;
@@ -64,6 +63,19 @@ export type ChannelInputProps = {
 
   // mention
   SuggestedMentionList?: (props: SuggestedMentionListProps) => JSX.Element | null;
+
+  /** @deprecated Please use `onPressSendUserMessage` **/
+  onSendFileMessage?: (file: FileType) => Promise<void>;
+  /** @deprecated Please use `onPressSendFileMessage` **/
+  onSendUserMessage?: (text: string, mention?: UserMessageMentionParams) => Promise<void>;
+  /** @deprecated Please use `onPressUpdateUserMessage` **/
+  onUpdateFileMessage?: (editedFile: FileType, message: SendbirdFileMessage) => Promise<void>;
+  /** @deprecated Please use `onPressUpdateFileMessage` **/
+  onUpdateUserMessage?: (
+    editedText: string,
+    message: SendbirdUserMessage,
+    mention?: UserMessageMentionParams,
+  ) => Promise<void>;
 };
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });

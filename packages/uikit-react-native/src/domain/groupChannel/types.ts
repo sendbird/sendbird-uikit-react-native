@@ -3,13 +3,16 @@ import type { FlatListProps } from 'react-native';
 
 import type { UseGroupChannelMessagesOptions } from '@sendbird/uikit-chat-hooks';
 import type {
+  OnBeforeHandler,
   SendbirdFileMessage,
   SendbirdFileMessageCreateParams,
+  SendbirdFileMessageUpdateParams,
   SendbirdGroupChannel,
   SendbirdMessage,
   SendbirdUser,
   SendbirdUserMessage,
   SendbirdUserMessageCreateParams,
+  SendbirdUserMessageUpdateParams,
 } from '@sendbird/uikit-utils';
 
 import type { ChannelInputProps, SuggestedMentionListProps } from '../../components/ChannelInput';
@@ -21,14 +24,12 @@ export interface GroupChannelProps {
     onChannelDeleted: () => void;
     onPressHeaderLeft: GroupChannelProps['Header']['onPressHeaderLeft'];
     onPressHeaderRight: GroupChannelProps['Header']['onPressHeaderRight'];
-
-    onBeforeSendFileMessage?: (
-      params: SendbirdFileMessageCreateParams,
-    ) => SendbirdFileMessageCreateParams | Promise<SendbirdFileMessageCreateParams>;
-    onBeforeSendUserMessage?: (
-      params: SendbirdUserMessageCreateParams,
-    ) => SendbirdUserMessageCreateParams | Promise<SendbirdUserMessageCreateParams>;
     onPressMediaMessage?: GroupChannelProps['MessageList']['onPressMediaMessage'];
+
+    onBeforeSendUserMessage?: OnBeforeHandler<SendbirdUserMessageCreateParams>;
+    onBeforeSendFileMessage?: OnBeforeHandler<SendbirdFileMessageCreateParams>;
+    onBeforeUpdateUserMessage?: OnBeforeHandler<SendbirdUserMessageUpdateParams>;
+    onBeforeUpdateFileMessage?: OnBeforeHandler<SendbirdFileMessageUpdateParams>;
 
     renderMessage?: GroupChannelProps['MessageList']['renderMessage'];
     renderNewMessagesButton?: GroupChannelProps['MessageList']['renderNewMessagesButton'];
@@ -91,11 +92,15 @@ export interface GroupChannelProps {
   Input: Pick<
     ChannelInputProps,
     | 'shouldRenderInput'
+    | 'onPressSendUserMessage'
+    | 'onPressSendFileMessage'
+    | 'onPressUpdateUserMessage'
+    | 'onPressUpdateFileMessage'
+    | 'SuggestedMentionList'
     | 'onSendFileMessage'
     | 'onSendUserMessage'
     | 'onUpdateFileMessage'
     | 'onUpdateUserMessage'
-    | 'SuggestedMentionList'
   >;
 
   SuggestedMentionList: SuggestedMentionListProps;

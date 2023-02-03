@@ -71,6 +71,8 @@ export type Optional<T> = T | undefined;
 
 export type ContextValue<T extends React.Context<any>> = T extends React.Context<infer V> ? V : never;
 
+export type OnBeforeHandler<T> = (params: T) => T | Promise<T>;
+
 export interface UserStruct {
   userId: string;
 }
