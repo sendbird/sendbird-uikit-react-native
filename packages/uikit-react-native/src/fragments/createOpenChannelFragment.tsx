@@ -24,8 +24,10 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
     onPressHeaderRightWithParticipants = NOOP,
     onPressMediaMessage = NOOP,
     onChannelDeleted = NOOP,
-    onBeforeSendFileMessage = PASS,
     onBeforeSendUserMessage = PASS,
+    onBeforeSendFileMessage = PASS,
+    onBeforeUpdateUserMessage = PASS,
+    onBeforeUpdateFileMessage = PASS,
     channel,
     keyboardAvoidOffset,
     queryCreator,
@@ -68,24 +70,28 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
       [loading, flatListProps],
     );
 
-    const onSendFileMessage: OpenChannelProps['Input']['onSendFileMessage'] = useFreshCallback(async (file) => {
-      const processedParams = await onBeforeSendFileMessage({ file });
-      await sendFileMessage(processedParams);
-    });
-    const onSendUserMessage: OpenChannelProps['Input']['onSendUserMessage'] = useFreshCallback(async (text) => {
-      const processedParams = await onBeforeSendUserMessage({ message: text });
-      await sendUserMessage(processedParams);
-    });
-    const onUpdateFileMessage: OpenChannelProps['Input']['onUpdateFileMessage'] = useFreshCallback(
-      async (editedFile, message) => {
-        const processedParams = await onBeforeSendFileMessage({ file: editedFile });
-        await updateFileMessage(message.messageId, processedParams);
+    const onPressSendUserMessage: OpenChannelProps['Input']['onPressSendUserMessage'] = useFreshCallback(
+      async (params) => {
+        const processedParams = await onBeforeSendUserMessage(params);
+        await sendUserMessage(processedParams);
       },
     );
-    const onUpdateUserMessage: OpenChannelProps['Input']['onUpdateUserMessage'] = useFreshCallback(
-      async (editedText, message) => {
-        const processedParams = await onBeforeSendUserMessage({ message: editedText });
+    const onPressSendFileMessage: OpenChannelProps['Input']['onPressSendFileMessage'] = useFreshCallback(
+      async (params) => {
+        const processedParams = await onBeforeSendFileMessage(params);
+        await sendFileMessage(processedParams);
+      },
+    );
+    const onPressUpdateUserMessage: OpenChannelProps['Input']['onPressUpdateUserMessage'] = useFreshCallback(
+      async (message, params) => {
+        const processedParams = await onBeforeUpdateUserMessage(params);
         await updateUserMessage(message.messageId, processedParams);
+      },
+    );
+    const onPressUpdateFileMessage: OpenChannelProps['Input']['onPressUpdateFileMessage'] = useFreshCallback(
+      async (message, params) => {
+        const processedParams = await onBeforeUpdateFileMessage(params);
+        await updateFileMessage(message.messageId, processedParams);
       },
     );
 
@@ -116,10 +122,10 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
           />
           <OpenChannelModule.Input
             shouldRenderInput
-            onSendFileMessage={onSendFileMessage}
-            onSendUserMessage={onSendUserMessage}
-            onUpdateFileMessage={onUpdateFileMessage}
-            onUpdateUserMessage={onUpdateUserMessage}
+            onPressSendUserMessage={onPressSendUserMessage}
+            onPressSendFileMessage={onPressSendFileMessage}
+            onPressUpdateUserMessage={onPressUpdateUserMessage}
+            onPressUpdateFileMessage={onPressUpdateFileMessage}
           />
         </StatusComposition>
       </OpenChannelModule.Provider>

@@ -35,7 +35,7 @@ export const NOOP: () => void = () => void 0;
 export const ASYNC_NOOP = async () => void 0;
 export const PASS = <T>(val: T) => val;
 export const toMegabyte = (byte: number) => byte / 1024 / 1024;
-export const isFunction = <T>(param?: T): param is NonNullable<T> => typeof param === 'function';
+export const isFunction = (param?: unknown): param is Function => typeof param === 'function';
 
 export function ifThenOr<T>(cond: boolean, then: T): T | undefined;
 export function ifThenOr<T, V>(cond: boolean, then: T, or: V): T | V;
@@ -63,6 +63,7 @@ export type {
   PartialDeep,
   Optional,
   ContextValue,
+  OnBeforeHandler,
   SendbirdMessage,
   SendbirdChatSDK,
   SendbirdChannel,

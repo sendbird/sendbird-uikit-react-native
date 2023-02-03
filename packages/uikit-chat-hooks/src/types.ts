@@ -3,6 +3,7 @@ import type {
   SendbirdError,
   SendbirdFileMessage,
   SendbirdFileMessageCreateParams,
+  SendbirdFileMessageUpdateParams,
   SendbirdGroupChannel,
   SendbirdGroupChannelCollection,
   SendbirdGroupChannelListQuery,
@@ -13,6 +14,7 @@ import type {
   SendbirdPreviousMessageListQuery,
   SendbirdUserMessage,
   SendbirdUserMessageCreateParams,
+  SendbirdUserMessageUpdateParams,
   UserStruct,
 } from '@sendbird/uikit-utils';
 
@@ -158,7 +160,7 @@ export interface UseGroupChannelMessages {
      * @param params file message params
      * @return updated message
      * */
-    updateFileMessage: (messageId: number, params: SendbirdFileMessageCreateParams) => Promise<SendbirdFileMessage>;
+    updateFileMessage: (messageId: number, params: SendbirdFileMessageUpdateParams) => Promise<SendbirdFileMessage>;
 
     /**
      * Update user message
@@ -166,7 +168,7 @@ export interface UseGroupChannelMessages {
      * @param params user message params
      * @return updated message
      * */
-    updateUserMessage: (messageId: number, params: SendbirdUserMessageCreateParams) => Promise<SendbirdUserMessage>;
+    updateUserMessage: (messageId: number, params: SendbirdUserMessageUpdateParams) => Promise<SendbirdUserMessage>;
 
     /**
      * Resend failed message
@@ -319,7 +321,7 @@ export interface UseOpenChannelMessages {
      * @param params file message params
      * @return updated message
      * */
-    updateFileMessage: (messageId: number, params: SendbirdFileMessageCreateParams) => Promise<SendbirdFileMessage>;
+    updateFileMessage: (messageId: number, params: SendbirdFileMessageUpdateParams) => Promise<SendbirdFileMessage>;
 
     /**
      * Update user message
@@ -327,7 +329,7 @@ export interface UseOpenChannelMessages {
      * @param params user message params
      * @return updated message
      * */
-    updateUserMessage: (messageId: number, params: SendbirdUserMessageCreateParams) => Promise<SendbirdUserMessage>;
+    updateUserMessage: (messageId: number, params: SendbirdUserMessageUpdateParams) => Promise<SendbirdUserMessage>;
 
     /**
      * Resend failed message

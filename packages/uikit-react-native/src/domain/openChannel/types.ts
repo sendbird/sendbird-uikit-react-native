@@ -4,18 +4,19 @@ import type { FlatListProps } from 'react-native';
 import type { UseOpenChannelMessagesOptions } from '@sendbird/uikit-chat-hooks';
 import type { Icon } from '@sendbird/uikit-react-native-foundation';
 import type {
+  OnBeforeHandler,
   SendbirdFileMessage,
   SendbirdFileMessageCreateParams,
+  SendbirdFileMessageUpdateParams,
   SendbirdMessage,
   SendbirdOpenChannel,
   SendbirdUserMessage,
   SendbirdUserMessageCreateParams,
+  SendbirdUserMessageUpdateParams,
 } from '@sendbird/uikit-utils';
 
 import type { ChannelInputProps } from '../../components/ChannelInput';
 import type { CommonComponent } from '../../types';
-
-type OnBeforeSendMessage<T> = (params: T) => T | Promise<T>;
 
 export type OpenChannelProps = {
   Fragment: {
@@ -24,10 +25,12 @@ export type OpenChannelProps = {
     onPressHeaderLeft: OpenChannelProps['Header']['onPressHeaderLeft'];
     onPressHeaderRightWithSettings: OpenChannelProps['Header']['onPressHeaderRight'];
     onPressHeaderRightWithParticipants: OpenChannelProps['Header']['onPressHeaderRight'];
-
-    onBeforeSendFileMessage?: OnBeforeSendMessage<SendbirdFileMessageCreateParams>;
-    onBeforeSendUserMessage?: OnBeforeSendMessage<SendbirdUserMessageCreateParams>;
     onPressMediaMessage?: OpenChannelProps['MessageList']['onPressMediaMessage'];
+
+    onBeforeSendUserMessage?: OnBeforeHandler<SendbirdUserMessageCreateParams>;
+    onBeforeSendFileMessage?: OnBeforeHandler<SendbirdFileMessageCreateParams>;
+    onBeforeUpdateUserMessage?: OnBeforeHandler<SendbirdUserMessageUpdateParams>;
+    onBeforeUpdateFileMessage?: OnBeforeHandler<SendbirdFileMessageUpdateParams>;
 
     renderMessage?: OpenChannelProps['MessageList']['renderMessage'];
     renderNewMessagesButton?: OpenChannelProps['MessageList']['renderNewMessagesButton'];
@@ -83,7 +86,11 @@ export type OpenChannelProps = {
   };
   Input: Pick<
     ChannelInputProps,
-    'shouldRenderInput' | 'onSendFileMessage' | 'onSendUserMessage' | 'onUpdateFileMessage' | 'onUpdateUserMessage'
+    | 'shouldRenderInput'
+    | 'onPressSendUserMessage'
+    | 'onPressSendFileMessage'
+    | 'onPressUpdateUserMessage'
+    | 'onPressUpdateFileMessage'
   >;
 
   Provider: {

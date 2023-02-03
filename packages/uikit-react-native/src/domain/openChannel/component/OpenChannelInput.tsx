@@ -69,10 +69,10 @@ const OpenChannelInput = (props: OpenChannelProps['Input']) => {
       inputDisabled={chatAvailableState.disabled}
       keyboardAvoidOffset={keyboardAvoidOffset}
       shouldRenderInput={props.shouldRenderInput}
-      onSendFileMessage={props.onSendFileMessage}
-      onSendUserMessage={props.onSendUserMessage}
-      onUpdateFileMessage={props.onUpdateFileMessage}
-      onUpdateUserMessage={props.onUpdateUserMessage}
+      onPressSendUserMessage={props.onPressSendUserMessage}
+      onPressSendFileMessage={props.onPressSendFileMessage}
+      onPressUpdateUserMessage={props.onPressUpdateUserMessage}
+      onPressUpdateFileMessage={props.onPressUpdateFileMessage}
     />
   );
 };
