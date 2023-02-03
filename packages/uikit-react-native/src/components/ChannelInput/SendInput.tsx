@@ -23,6 +23,7 @@ import { conditionChaining, isImage, shouldCompressImage } from '@sendbird/uikit
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 import SBUError from '../../libs/SBUError';
 import SBUUtils from '../../libs/SBUUtils';
+import type { FileType } from '../../platform/types';
 import type { MentionedUser } from '../../types';
 import type { ChannelInputProps } from './index';
 
@@ -35,6 +36,8 @@ interface SendInputProps extends ChannelInputProps {
 
 const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   {
+    onPressSendUserMessage,
+    onPressSendFileMessage,
     onSendUserMessage,
     onSendFileMessage,
     text,
@@ -55,16 +58,38 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   const { alert } = useAlert();
   const toast = useToast();
 
-  const onPressSend = () => {
-    const mention = {
-      userIds: mentionedUsers.map((it) => it.user.userId),
-      messageTemplate: mentionManager.textToMentionedMessageTemplate(text, mentionedUsers),
-      type: MentionType.USERS,
-    };
+  const sendUserMessage = () => {
+    const mentionType = MentionType.USERS;
+    const mentionedUserIds = mentionedUsers.map((it) => it.user.userId);
+    const mentionedMessageTemplate = mentionManager.textToMentionedMessageTemplate(text, mentionedUsers);
 
-    onSendUserMessage(text, mention).catch(() => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error'));
+    if (onPressSendUserMessage) {
+      onPressSendUserMessage({
+        message: text,
+        mentionType,
+        mentionedUserIds,
+        mentionedMessageTemplate,
+      }).catch(onFailureToSend);
+    } else if (onSendUserMessage) {
+      onSendUserMessage(text, {
+        type: mentionType,
+        userIds: mentionedUserIds,
+        messageTemplate: mentionedMessageTemplate,
+      }).catch(onFailureToSend);
+    }
+
     onChangeText('');
   };
+
+  const sendFileMessage = (file: FileType) => {
+    if (onPressSendFileMessage) {
+      onPressSendFileMessage({ file }).catch(onFailureToSend);
+    } else if (onSendFileMessage) {
+      onSendFileMessage(file).catch(onFailureToSend);
+    }
+  };
+
+  const onFailureToSend = () => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error');
 
   const onPressAttachment = () => {
     openSheet({
@@ -112,7 +137,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
                 });
               }
 
-              onSendFileMessage(mediaFile).catch(() => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error'));
+              sendFileMessage(mediaFile);
             }
           },
         },
@@ -162,7 +187,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
                 });
               }
 
-              onSendFileMessage(mediaFiles[0]).catch(() => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error'));
+              sendFileMessage(mediaFile);
             }
           },
         },
@@ -195,7 +220,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
                 });
               }
 
-              onSendFileMessage(documentFile).catch(() => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error'));
+              sendFileMessage(documentFile);
             }
           },
         },
@@ -234,7 +259,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
       </TextInput>
 
       {Boolean(text.trim()) && (
-        <TouchableOpacity onPress={onPressSend} disabled={inputDisabled}>
+        <TouchableOpacity onPress={sendUserMessage} disabled={inputDisabled}>
           <Icon
             color={
               inputDisabled ? colors.ui.input.default.disabled.highlight : colors.ui.input.default.active.highlight

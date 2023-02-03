@@ -22,17 +22,19 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     enableTypingIndicator = true,
     onPressHeaderLeft = NOOP,
     onPressHeaderRight = NOOP,
-    onPressImageMessage,
     onPressMediaMessage = NOOP,
     onChannelDeleted = NOOP,
-    onBeforeSendFileMessage = PASS,
     onBeforeSendUserMessage = PASS,
+    onBeforeSendFileMessage = PASS,
+    onBeforeUpdateUserMessage = PASS,
+    onBeforeUpdateFileMessage = PASS,
     channel,
     keyboardAvoidOffset,
     queryCreator,
     collectionCreator,
     sortComparator = messageComparator,
     flatListProps,
+    onPressImageMessage,
   }) => {
     const { sdk, currentUser } = useSendbirdChat();
 
@@ -71,10 +73,37 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       [loading, flatListProps],
     );
 
+    const onPressSendUserMessage: GroupChannelProps['Input']['onPressSendUserMessage'] = useFreshCallback(
+      async (params) => {
+        const processedParams = await onBeforeSendUserMessage(params);
+        await sendUserMessage(processedParams);
+      },
+    );
+    const onPressSendFileMessage: GroupChannelProps['Input']['onPressSendFileMessage'] = useFreshCallback(
+      async (params) => {
+        const processedParams = await onBeforeSendFileMessage(params);
+        await sendFileMessage(processedParams);
+      },
+    );
+    const onPressUpdateUserMessage: GroupChannelProps['Input']['onPressUpdateUserMessage'] = useFreshCallback(
+      async (message, params) => {
+        const processedParams = await onBeforeUpdateUserMessage(params);
+        await updateUserMessage(message.messageId, processedParams);
+      },
+    );
+    const onPressUpdateFileMessage: GroupChannelProps['Input']['onPressUpdateFileMessage'] = useFreshCallback(
+      async (message, params) => {
+        const processedParams = await onBeforeUpdateFileMessage(params);
+        await updateFileMessage(message.messageId, processedParams);
+      },
+    );
+
+    /** @deprecated **/
     const onSendFileMessage: GroupChannelProps['Input']['onSendFileMessage'] = useFreshCallback(async (file) => {
       const processedParams = await onBeforeSendFileMessage({ file });
       await sendFileMessage(processedParams);
     });
+    /** @deprecated **/
     const onSendUserMessage: GroupChannelProps['Input']['onSendUserMessage'] = useFreshCallback(
       async (text, mention) => {
         const processedParams = await onBeforeSendUserMessage({
@@ -86,12 +115,14 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
         await sendUserMessage(processedParams);
       },
     );
+    /** @deprecated **/
     const onUpdateFileMessage: GroupChannelProps['Input']['onUpdateFileMessage'] = useFreshCallback(
       async (editedFile, message) => {
         const processedParams = await onBeforeSendFileMessage({ file: editedFile });
         await updateFileMessage(message.messageId, processedParams);
       },
     );
+    /** @deprecated **/
     const onUpdateUserMessage: GroupChannelProps['Input']['onUpdateUserMessage'] = useFreshCallback(
       async (editedText, message, mention) => {
         const processedParams = await onBeforeSendUserMessage({
@@ -133,6 +164,10 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
           <GroupChannelModule.Input
             SuggestedMentionList={GroupChannelModule.SuggestedMentionList}
             shouldRenderInput={shouldRenderInput(channel)}
+            onPressSendUserMessage={onPressSendUserMessage}
+            onPressSendFileMessage={onPressSendFileMessage}
+            onPressUpdateUserMessage={onPressUpdateUserMessage}
+            onPressUpdateFileMessage={onPressUpdateFileMessage}
             onSendFileMessage={onSendFileMessage}
             onSendUserMessage={onSendUserMessage}
             onUpdateFileMessage={onUpdateFileMessage}
