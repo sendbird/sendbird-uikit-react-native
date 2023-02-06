@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { AppState, AppStateEvent, AppStateStatus } from 'react-native';
 import { EdgeInsets, useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -22,13 +22,11 @@ export const useSafeAreaPadding = <
   edges: T[],
 ): Result => {
   const safeAreaInsets = useSafeAreaInsets();
-  return useMemo(() => {
-    return edges.reduce((map, edge) => {
-      const paddingKey = edgePaddingMap[edge];
-      map[paddingKey] = safeAreaInsets[edge];
-      return map;
-    }, {} as { [key in EdgePaddingMap[T]]: EdgeInsets[T] });
-  }, edges) as Result;
+  return edges.reduce((map, edge) => {
+    const paddingKey = edgePaddingMap[edge];
+    map[paddingKey] = safeAreaInsets[edge];
+    return map;
+  }, {} as { [key in EdgePaddingMap[T]]: EdgeInsets[T] }) as Result;
 };
 
 type AppStateListener = (status: AppStateStatus) => void;

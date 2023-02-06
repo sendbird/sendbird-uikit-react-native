@@ -47,7 +47,11 @@ const ImageFileMessage = ({ message, children, variant }: FileMessageProps) => {
     <View
       style={[
         styles.bubbleContainer,
-        { backgroundColor: imageNotFound ? colors.onBackground04 : colors.ui.message[variant].enabled.background },
+        {
+          backgroundColor: imageNotFound
+            ? colors.onBackground04
+            : colors.ui.groupChannelMessage[variant].enabled.background,
+        },
       ]}
     >
       <View style={style}>
