@@ -1,3 +1,4 @@
+import { getFileExtension, getFileType } from '../shared/regex';
 import type {
   SendbirdBaseChannel,
   SendbirdBaseMessage,
@@ -128,4 +129,47 @@ export function shouldRenderReaction(channel: SendbirdBaseChannel, reactionEnabl
 
 export function getReactionCount(reaction: SendbirdReaction) {
   return reaction.userIds.length;
+}
+
+type MessageType =
+  | 'user'
+  | 'admin'
+  | 'file'
+  | 'unknown'
+  | `user.${'opengraph'}`
+  | `file.${'image' | 'video' | 'audio'}`;
+
+export function getFileTypeFromMessage(message: SendbirdFileMessage) {
+  return getFileType(message.type || getFileExtension(message.name));
+}
+
+export function getMessageType(message: SendbirdMessage): MessageType {
+  if (message.isAdminMessage()) {
+    return 'admin';
+  }
+
+  if (message.isUserMessage()) {
+    if (message.ogMetaData) {
+      return 'user.opengraph';
+    }
+    return 'user';
+  }
+
+  if (message.isFileMessage()) {
+    const fileType = getFileTypeFromMessage(message);
+    switch (fileType) {
+      case 'image':
+      case 'video': {
+        return `file.${fileType}`;
+      }
+      case 'audio': {
+        return `file.${fileType}`;
+      }
+      default: {
+        return 'file';
+      }
+    }
+  }
+
+  return 'unknown';
 }

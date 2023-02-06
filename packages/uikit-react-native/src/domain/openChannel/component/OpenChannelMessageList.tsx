@@ -97,7 +97,7 @@ const OpenChannelMessageList = ({
   return (
     <View style={[{ flex: 1, backgroundColor: colors.background }, safeAreaLayout]}>
       {channel.isFrozen && (
-        <ChannelFrozenBanner style={styles.frozenBanner} text={STRINGS.GROUP_CHANNEL.LIST_BANNER_FROZEN} />
+        <ChannelFrozenBanner style={styles.frozenBanner} text={STRINGS.OPEN_CHANNEL.LIST_BANNER_FROZEN} />
       )}
       <ChatFlatList
         nextMessages={nextMessages}

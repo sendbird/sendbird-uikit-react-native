@@ -9,7 +9,7 @@ import StatusComposition from '../components/StatusComposition';
 import { UNKNOWN_USER_ID } from '../constants';
 import { createOpenChannelModule } from '../domain/openChannel';
 import type { OpenChannelFragment, OpenChannelModule, OpenChannelProps } from '../domain/openChannel/types';
-import { useSendbirdChat } from '../hooks/useContext';
+import { useSendbirdChat, useUserProfile } from '../hooks/useContext';
 
 const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): OpenChannelFragment => {
   const OpenChannelModule = createOpenChannelModule(initModule);
@@ -53,12 +53,13 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
       sortComparator,
       onChannelDeleted,
     });
+    const { show } = useUserProfile();
 
     const isOperator = channel.isOperator(currentUser?.userId ?? UNKNOWN_USER_ID);
 
     const _renderMessage: OpenChannelProps['MessageList']['renderMessage'] = useFreshCallback((props) => {
       if (renderMessage) return renderMessage(props);
-      return <OpenChannelMessageRenderer {...props} />;
+      return <OpenChannelMessageRenderer {...props} onPressAvatar={show} />;
     });
 
     const memoizedFlatListProps = useMemo(
