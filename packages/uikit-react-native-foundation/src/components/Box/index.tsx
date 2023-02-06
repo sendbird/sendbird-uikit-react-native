@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleProp, StyleSheet, View, ViewProps, ViewStyle } from 'react-native';
 
-import type { UIKitColors, UIKitPalette } from '@sendbird/uikit-react-native-foundation';
 import { isFunction } from '@sendbird/uikit-utils';
 
 import useUIKitTheme from '../../theme/useUIKitTheme';
+import type { UIKitColors, UIKitPalette } from '../../types';
 
 type BaseBoxProps = Pick<
   ViewStyle,
