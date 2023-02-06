@@ -31,14 +31,16 @@ const VideoFileMessage = (props: OpenChannelMessageProps<SendbirdFileMessage, Pr
             <ImageWithPlaceholder source={{ uri: thumbnail ?? 'invalid-image' }} width={'100%'} height={'100%'} />
           )}
 
-          <Box style={styles.iconContainer} alignItems={'center'} justifyContent={'center'}>
-            <Icon
-              icon={'play'}
-              size={28}
-              color={palette.onBackgroundLight02}
-              containerStyle={[styles.playIcon, { backgroundColor: palette.onBackgroundDark01 }]}
-            />
-          </Box>
+          {(loading || thumbnail !== null) && (
+            <Box style={styles.iconContainer} alignItems={'center'} justifyContent={'center'}>
+              <Icon
+                icon={'play'}
+                size={28}
+                color={palette.onBackgroundLight02}
+                containerStyle={[styles.playIcon, { backgroundColor: palette.onBackgroundDark01 }]}
+              />
+            </Box>
+          )}
         </Box>
       </PressBox>
     </MessageContainer>
