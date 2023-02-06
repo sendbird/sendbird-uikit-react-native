@@ -1,121 +1,91 @@
 import React from 'react';
-import { Pressable, PressableProps, View } from 'react-native';
 
-import { Text, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
-import { calcMessageGrouping, conditionChaining, useIIFE } from '@sendbird/uikit-utils';
+import type { OpenChannelMessageProps } from '@sendbird/uikit-react-native-foundation';
+import { Box, OpenChannelMessage } from '@sendbird/uikit-react-native-foundation';
+import {
+  SendbirdAdminMessage,
+  SendbirdFileMessage,
+  SendbirdMessage,
+  SendbirdUserMessage,
+  calcMessageGrouping,
+  getMessageType,
+} from '@sendbird/uikit-utils';
 
-import { DEFAULT_LONG_PRESS_DELAY } from '../../constants';
 import type { OpenChannelProps } from '../../domain/openChannel/types';
-import MessageContainer from '../MessageRenderer/MessageContainer';
-import MessageDateSeparator from '../MessageRenderer/MessageDateSeparator';
-import MessageIncomingAvatar from '../MessageRenderer/MessageIncomingAvatar';
-import MessageIncomingSenderName from '../MessageRenderer/MessageIncomingSenderName';
-import MessageTime from '../MessageRenderer/MessageTime';
+import { useLocalization, usePlatformService } from '../../hooks/useContext';
+import SBUUtils from '../../libs/SBUUtils';
+import OpenChannelMessageDateSeparator from './OpenChannelMessageDateSeparator';
 
 const OpenChannelMessageRenderer: OpenChannelProps['Fragment']['renderMessage'] = ({
+  channel,
   message,
   onPress,
   onLongPress,
-  ...rest
+  onPressAvatar,
+  enableMessageGrouping,
+  prevMessage,
+  nextMessage,
 }) => {
-  const { groupWithPrev, groupWithNext } = calcMessageGrouping(
-    Boolean(rest.enableMessageGrouping),
-    message,
-    rest.prevMessage,
-    rest.nextMessage,
-  );
+  const { STRINGS } = useLocalization();
+  const { mediaService } = usePlatformService();
+  const { groupWithPrev } = calcMessageGrouping(Boolean(enableMessageGrouping), message, prevMessage, nextMessage);
 
-  const messageComponent = useIIFE(() => {
-    const pressableProps: PressableProps = {
-      style: styles.msgContainer,
-      disabled: !onPress && !onLongPress,
-      onPress,
-      onLongPress,
-      delayLongPress: DEFAULT_LONG_PRESS_DELAY,
-    };
-
-    // const messageProps = { ...rest, groupWithNext, groupWithPrev };
-
-    if (message.isUserMessage()) {
-      return <Pressable {...pressableProps}>{() => <Text>{'User message_' + message.message}</Text>}</Pressable>;
+  const messageProps: Omit<OpenChannelMessageProps<SendbirdMessage>, 'message'> = {
+    channel,
+    onPress,
+    onLongPress,
+    onPressURL: () => message.ogMetaData?.url && SBUUtils.openURL(message.ogMetaData?.url),
+    onPressAvatar: () => 'sender' in message && onPressAvatar?.(message.sender),
+    grouped: groupWithPrev,
+    strings: {
+      edited: STRINGS.OPEN_CHANNEL.MESSAGE_BUBBLE_EDITED_POSTFIX,
+      senderName: ('sender' in message && message.sender.nickname) || STRINGS.LABELS.USER_NO_NAME,
+      sentDate: STRINGS.OPEN_CHANNEL.MESSAGE_BUBBLE_TIME(message),
+      fileName: message.isFileMessage() ? STRINGS.OPEN_CHANNEL.MESSAGE_BUBBLE_FILE_TITLE(message) : '',
+      unknownTitle: STRINGS.OPEN_CHANNEL.MESSAGE_BUBBLE_UNKNOWN_TITLE(message),
+      unknownDescription: STRINGS.OPEN_CHANNEL.MESSAGE_BUBBLE_UNKNOWN_DESC(message),
+    },
+  };
+  const renderMessage = () => {
+    switch (getMessageType(message)) {
+      case 'admin': {
+        return <OpenChannelMessage.Admin message={message as SendbirdAdminMessage} {...messageProps} />;
+      }
+      case 'user': {
+        return <OpenChannelMessage.User message={message as SendbirdUserMessage} {...messageProps} />;
+      }
+      case 'user.opengraph': {
+        return <OpenChannelMessage.OpenGraphUser message={message as SendbirdUserMessage} {...messageProps} />;
+      }
+      case 'file':
+      case 'file.audio': {
+        return <OpenChannelMessage.File message={message as SendbirdFileMessage} {...messageProps} />;
+      }
+      case 'file.image': {
+        return <OpenChannelMessage.ImageFile message={message as SendbirdFileMessage} {...messageProps} />;
+      }
+      case 'file.video': {
+        return (
+          <OpenChannelMessage.VideoFile
+            message={message as SendbirdFileMessage}
+            fetchThumbnailFromVideoSource={(uri) => mediaService.getVideoThumbnail({ url: uri, timeMills: 1000 })}
+            {...messageProps}
+          />
+        );
+      }
+      case 'unknown':
+      default: {
+        return <OpenChannelMessage.Unknown message={message} {...messageProps} />;
+      }
     }
-
-    if (message.isFileMessage()) {
-      return <Pressable {...pressableProps}>{() => <Text>{'File message'}</Text>}</Pressable>;
-    }
-
-    if (message.isAdminMessage()) {
-      return <Text>{'Admin message'}</Text>;
-    }
-
-    return <Pressable {...pressableProps}>{() => <Text>{'Unknown message'}</Text>}</Pressable>;
-  });
+  };
 
   return (
-    <MessageContainer>
-      <MessageDateSeparator message={message} prevMessage={rest.prevMessage} />
-      <View
-        style={[
-          conditionChaining(
-            [groupWithNext, Boolean(rest.nextMessage)],
-            [styles.chatGroup, styles.chatNonGroup, styles.chatLastMessage],
-          ),
-        ]}
-      >
-        <MessageIncomingAvatar message={message} grouping={groupWithPrev} />
-        <View style={styles.bubbleContainer}>
-          <MessageIncomingSenderName message={message} grouping={groupWithPrev} />
-          <View style={styles.bubbleWrapper}>
-            {messageComponent}
-            <MessageTime message={message} grouping={groupWithPrev} style={styles.timeIncoming} />
-          </View>
-        </View>
-      </View>
-    </MessageContainer>
+    <Box>
+      <OpenChannelMessageDateSeparator message={message} prevMessage={prevMessage} />
+      {renderMessage()}
+    </Box>
   );
 };
-
-const styles = createStyleSheet({
-  chatIncoming: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-end',
-  },
-  chatOutgoing: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-  },
-  timeIncoming: {
-    marginLeft: 4,
-  },
-  timeOutgoing: {
-    marginRight: 4,
-  },
-  chatGroup: {
-    marginBottom: 2,
-  },
-  chatNonGroup: {
-    marginBottom: 16,
-  },
-  chatLastMessage: {
-    marginBottom: 16,
-  },
-  msgContainer: {
-    maxWidth: 240,
-  },
-  bubbleContainer: {
-    flexShrink: 1,
-  },
-  bubbleWrapper: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-  },
-  outgoingContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-  },
-});
 
 export default React.memo(OpenChannelMessageRenderer);

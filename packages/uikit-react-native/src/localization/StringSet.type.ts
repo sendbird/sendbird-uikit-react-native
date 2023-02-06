@@ -15,6 +15,7 @@ import {
   getGroupChannelPreviewTime,
   getGroupChannelTitle,
   getMessageTimeFormat,
+  getOpenChannelParticipants,
   getOpenChannelTitle,
 } from '@sendbird/uikit-utils';
 
@@ -26,6 +27,7 @@ export interface StringSet {
   OPEN_CHANNEL: {
     /** OpenChannel > Header */
     HEADER_TITLE: (channel: SendbirdOpenChannel) => string;
+    HEADER_SUBTITLE: (channel: SendbirdOpenChannel) => string;
 
     /** OpenChannel > List */
     LIST_BANNER_FROZEN: string;
@@ -335,6 +337,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
   return {
     OPEN_CHANNEL: {
       HEADER_TITLE: (channel) => getOpenChannelTitle(channel),
+      HEADER_SUBTITLE: (channel) => getOpenChannelParticipants(channel),
       LIST_BANNER_FROZEN: 'Channel is frozen',
       LIST_DATE_SEPARATOR: (date, locale) => getDateSeparatorFormat(date, locale ?? dateLocale),
       MESSAGE_BUBBLE_TIME: (message, locale) => getMessageTimeFormat(new Date(message.createdAt), locale ?? dateLocale),

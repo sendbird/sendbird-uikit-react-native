@@ -14,7 +14,7 @@ type Props = FileMessageProps & {
 const BaseFileMessage = ({ message, variant, pressed, type, children }: Props) => {
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
-  const color = colors.ui.message[variant][pressed ? 'pressed' : 'enabled'];
+  const color = colors.ui.groupChannelMessage[variant][pressed ? 'pressed' : 'enabled'];
   return (
     <View style={[styles.bubbleContainer, { backgroundColor: color.background }]}>
       <View style={styles.container}>

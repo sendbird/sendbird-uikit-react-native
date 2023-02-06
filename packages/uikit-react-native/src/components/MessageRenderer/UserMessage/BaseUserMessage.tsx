@@ -21,7 +21,7 @@ const BaseUserMessage = ({
   const { STRINGS } = useLocalization();
   const { colors, palette } = useUIKitTheme();
 
-  const color = colors.ui.message[variant][pressed ? 'pressed' : 'enabled'];
+  const color = colors.ui.groupChannelMessage[variant][pressed ? 'pressed' : 'enabled'];
 
   return (
     <View style={[styles.container, { backgroundColor: color.background }]}>

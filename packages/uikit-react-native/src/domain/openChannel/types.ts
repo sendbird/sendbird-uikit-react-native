@@ -8,8 +8,10 @@ import type {
   SendbirdFileMessage,
   SendbirdFileMessageCreateParams,
   SendbirdFileMessageUpdateParams,
+  SendbirdMember,
   SendbirdMessage,
   SendbirdOpenChannel,
+  SendbirdUser,
   SendbirdUserMessage,
   SendbirdUserMessageCreateParams,
   SendbirdUserMessageUpdateParams,
@@ -69,6 +71,7 @@ export type OpenChannelProps = {
       nextMessage?: SendbirdMessage;
       onPress?: () => void;
       onLongPress?: () => void;
+      onPressAvatar?: (user: SendbirdUser | SendbirdMember) => void;
       channel: OpenChannelProps['MessageList']['channel'];
       currentUserId?: OpenChannelProps['MessageList']['currentUserId'];
       enableMessageGrouping: OpenChannelProps['MessageList']['enableMessageGrouping'];
