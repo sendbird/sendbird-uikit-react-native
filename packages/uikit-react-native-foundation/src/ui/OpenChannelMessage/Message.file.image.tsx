@@ -16,7 +16,7 @@ const ImageFileMessage = (props: OpenChannelMessageProps<SendbirdFileMessage>) =
   return (
     <MessageContainer {...rest}>
       <Box borderRadius={8} overflow={'hidden'} style={styles.container}>
-        <PressBox activeOpacity={0.8} onPress={onPress} onLongPress={onLongPress}>
+        <PressBox style={styles.container} activeOpacity={0.8} onPress={onPress} onLongPress={onLongPress}>
           <ImageWithPlaceholder source={{ uri }} width={'100%'} height={'100%'} />
         </PressBox>
       </Box>
@@ -26,7 +26,6 @@ const ImageFileMessage = (props: OpenChannelMessageProps<SendbirdFileMessage>) =
 
 const styles = createStyleSheet({
   container: {
-    width: 296,
     maxWidth: 296,
     height: 196,
   },
