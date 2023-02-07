@@ -54,7 +54,7 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
   const init = useFreshCallback(async (uid?: string) => {
     if (uid) {
       queryRef.current = createMessageQuery(channel, options?.queryCreator);
-      channelMarkAsRead().catch(NOOP);
+      channelMarkAsRead();
       if (queryRef.current?.hasNext) {
         const list = await queryRef.current?.load();
         updateMessages(list, true, sdk.currentUser.userId);
