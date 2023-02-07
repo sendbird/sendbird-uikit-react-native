@@ -35,7 +35,7 @@ const OpenChannelMessageRenderer: OpenChannelProps['Fragment']['renderMessage'] 
     onPress,
     onLongPress,
     onPressURL: () => message.ogMetaData?.url && SBUUtils.openURL(message.ogMetaData?.url),
-    onPressAvatar: () => 'sender' in message && onPressAvatar?.(message.sender),
+    onPressAvatar: () => 'sender' in message && onPressAvatar?.(message.sender, { hideMessageButton: true }),
     grouped: groupWithPrev,
     strings: {
       edited: STRINGS.OPEN_CHANNEL.MESSAGE_BUBBLE_EDITED_POSTFIX,

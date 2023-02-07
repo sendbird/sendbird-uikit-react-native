@@ -8,16 +8,15 @@ import type {
   SendbirdFileMessage,
   SendbirdFileMessageCreateParams,
   SendbirdFileMessageUpdateParams,
-  SendbirdMember,
   SendbirdMessage,
   SendbirdOpenChannel,
-  SendbirdUser,
   SendbirdUserMessage,
   SendbirdUserMessageCreateParams,
   SendbirdUserMessageUpdateParams,
 } from '@sendbird/uikit-utils';
 
 import type { ChannelInputProps } from '../../components/ChannelInput';
+import type { UserProfileContextType } from '../../contexts/UserProfileCtx';
 import type { CommonComponent } from '../../types';
 
 export type OpenChannelProps = {
@@ -71,7 +70,7 @@ export type OpenChannelProps = {
       nextMessage?: SendbirdMessage;
       onPress?: () => void;
       onLongPress?: () => void;
-      onPressAvatar?: (user: SendbirdUser | SendbirdMember) => void;
+      onPressAvatar?: UserProfileContextType['show'];
       channel: OpenChannelProps['MessageList']['channel'];
       currentUserId?: OpenChannelProps['MessageList']['currentUserId'];
       enableMessageGrouping: OpenChannelProps['MessageList']['enableMessageGrouping'];
