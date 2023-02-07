@@ -44,7 +44,7 @@ const MessageContainer = ({
           <Box style={styles.avatar} />
         )}
       </Box>
-      <Box flexShrink={1} flexDirection={'column'} alignItems={'flex-start'}>
+      <Box flexShrink={1} flex={1} flexDirection={'column'} alignItems={'flex-start'}>
         {!grouped && 'sender' in props.message && (
           <Box flexDirection={'row'} alignItems={'center'} marginBottom={2}>
             <Box marginRight={4}>
@@ -66,7 +66,7 @@ const MessageContainer = ({
             </Box>
           </Box>
         )}
-        {children}
+        <Box style={{ width: '100%' }}>{children}</Box>
         {'sender' in props.message && (
           <Box flexDirection={'row'}>
             {props.message.sendingStatus === 'failed' && (

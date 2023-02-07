@@ -30,7 +30,7 @@ const FileMessage = (props: OpenChannelMessageProps<SendbirdFileMessage, Props>)
               borderRadius={8}
               flexDirection={'row'}
               alignItems={'center'}
-              justifyContent={'flex-end'}
+              justifyContent={'flex-start'}
               style={{ backgroundColor: pressed ? color.pressed.bubbleBackground : color.enabled.bubbleBackground }}
             >
               <Box

@@ -61,7 +61,7 @@ const OpenGraphUserMessage = (props: OpenChannelMessageProps<SendbirdUserMessage
       </PressBox>
       {props.message.ogMetaData && (
         <MessageContainer {...rest} grouped>
-          <PressBox onPress={onPressURL} onLongPress={onLongPress}>
+          <PressBox style={styles.ogContainer} onPress={onPressURL} onLongPress={onLongPress}>
             {({ pressed }) =>
               props.message.ogMetaData && (
                 <Box
@@ -100,7 +100,6 @@ const OpenGraphUserMessage = (props: OpenChannelMessageProps<SendbirdUserMessage
 
 const styles = createStyleSheet({
   ogContainer: {
-    width: 296,
     maxWidth: 296,
   },
   ogUrl: {

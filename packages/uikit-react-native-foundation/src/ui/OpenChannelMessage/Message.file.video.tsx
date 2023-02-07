@@ -23,7 +23,7 @@ const VideoFileMessage = (props: OpenChannelMessageProps<SendbirdFileMessage, Pr
 
   return (
     <MessageContainer {...rest}>
-      <PressBox activeOpacity={0.8} onPress={onPress} onLongPress={onLongPress}>
+      <PressBox style={styles.container} activeOpacity={0.8} onPress={onPress} onLongPress={onLongPress}>
         <Box borderRadius={8} overflow={'hidden'} style={styles.container}>
           {loading ? (
             <Box backgroundColor={colors.onBackground04} style={{ width: '100%', height: '100%' }} />
@@ -77,7 +77,6 @@ const useRetry = (fetch: () => Promise<{ path: string } | null>, retryCount = 5)
 };
 const styles = createStyleSheet({
   container: {
-    width: 296,
     maxWidth: 296,
     height: 196,
   },
