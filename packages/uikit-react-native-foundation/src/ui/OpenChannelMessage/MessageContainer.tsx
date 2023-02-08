@@ -66,7 +66,7 @@ const MessageContainer = ({
             </Box>
           </Box>
         )}
-        <Box style={{ width: '100%' }}>{children}</Box>
+        <Box style={styles.message}>{children}</Box>
         {'sender' in props.message && (
           <Box flexDirection={'row'}>
             {props.message.sendingStatus === 'failed' && (
@@ -84,6 +84,9 @@ const MessageContainer = ({
 const styles = createStyleSheet({
   avatar: {
     width: 28,
+  },
+  message: {
+    width: '100%',
   },
 });
 
