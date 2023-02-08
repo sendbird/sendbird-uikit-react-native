@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: sendbird-uikit-react-native
+  description: UIKit for React-Native
+  annotations:
+    github.com/project-slug: sendbird-uikit-react-native
+spec:
+  type: library
+  lifecycle: production
+  owner: team-ui-kit
+  system: sendbird-uikit
