@@ -3,7 +3,8 @@ import { FlatList, Pressable } from 'react-native';
 
 import { useOpenChannelList } from '@sendbird/uikit-chat-hooks';
 import { useSendbirdChat } from '@sendbird/uikit-react-native';
-import { GroupChannelPreview } from '@sendbird/uikit-react-native-foundation';
+import { OpenChannelPreview } from '@sendbird/uikit-react-native-foundation';
+import { getChannelUniqId } from '@sendbird/uikit-utils';
 
 import { useAppNavigation } from '../../../../hooks/useAppNavigation';
 import { Routes } from '../../../../libs/navigation';
@@ -13,7 +14,7 @@ const OpenChannelListLiveStreamsScreen = () => {
   const { sdk, currentUser } = useSendbirdChat();
   const { navigation } = useAppNavigation<Routes.OpenChannelListLiveStreams>();
 
-  const { openChannels } = useOpenChannelList(sdk, currentUser?.userId, {
+  const { openChannels, next, refresh, refreshing } = useOpenChannelList(sdk, currentUser?.userId, {
     queryCreator: () =>
       sdk.openChannel.createOpenChannelListQuery({
         customTypes: [OpenChannelCustomType.LIVE],
@@ -23,15 +24,17 @@ const OpenChannelListLiveStreamsScreen = () => {
   return (
     <FlatList
       data={openChannels}
-      keyExtractor={(item) => item.url}
+      onRefresh={refresh}
+      refreshing={refreshing}
+      keyExtractor={getChannelUniqId}
+      onEndReached={next}
       renderItem={({ item }) => (
         <Pressable onPress={() => navigation.navigate(Routes.OpenChannel, { channelUrl: item.url })}>
-          <GroupChannelPreview
+          <OpenChannelPreview
             coverUrl={item.coverUrl}
             title={item.name}
-            titleCaption={item.createdAt + ''}
-            body={'latest message'}
-            badgeCount={0}
+            participantsCount={item.participantCount}
+            frozen={item.isFrozen}
           />
         </Pressable>
       )}

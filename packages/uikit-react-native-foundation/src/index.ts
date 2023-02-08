@@ -29,6 +29,7 @@ export { default as Header } from './ui/Header';
 export { default as LoadingSpinner } from './ui/LoadingSpinner';
 export { default as MenuBar, MenuBarProps } from './ui/MenuBar';
 export { default as OpenChannelMessage, OpenChannelMessageProps } from './ui/OpenChannelMessage';
+export { default as OpenChannelPreview } from './ui/OpenChannelPreview';
 export { default as OutlinedButton } from './ui/OutlinedButton';
 export { default as Placeholder } from './ui/Placeholder';
 export { default as ProfileCard } from './ui/ProfileCard';

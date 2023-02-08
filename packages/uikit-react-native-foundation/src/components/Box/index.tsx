@@ -30,6 +30,8 @@ type BaseBoxProps = Pick<
   | 'paddingTop'
   | 'paddingBottom'
   | 'overflow'
+  | 'width'
+  | 'height'
 > & {
   backgroundColor?: string | ((theme: { colors: UIKitColors; palette: UIKitPalette }) => string);
 };
