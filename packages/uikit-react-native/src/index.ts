@@ -35,6 +35,7 @@ export { default as createGroupChannelNotificationsFragment } from './fragments/
 export { default as createOpenChannelFragment } from './fragments/createOpenChannelFragment';
 export { default as createOpenChannelParticipantsFragment } from './fragments/createOpenChannelParticipantsFragment';
 export { default as createOpenChannelSettingsFragment } from './fragments/createOpenChannelSettingsFragment';
+export { default as createOpenChannelListFragment } from './fragments/createOpenChannelListFragment';
 
 /** Context **/
 export { SendbirdChatContext, SendbirdChatProvider } from './contexts/SendbirdChatCtx';
@@ -111,7 +112,7 @@ export type {
 } from './domain/groupChannelList/types';
 
 export * from './domain/groupChannelNotifications';
-export {
+export type {
   GroupChannelNotificationsProps,
   GroupChannelNotificationsModule,
   GroupChannelNotificationsFragment,
@@ -122,12 +123,18 @@ export * from './domain/groupChannelUserList/types';
 
 /** Feature - open channels **/
 export * from './domain/openChannel';
-export {
+export type {
   OpenChannelProps,
   OpenChannelModule,
   OpenChannelFragment,
   OpenChannelContextsType,
 } from './domain/openChannel/types';
+export type {
+  OpenChannelListProps,
+  OpenChannelListModule,
+  OpenChannelListFragment,
+  OpenChannelListContextsType,
+} from './domain/openChannelList/types';
 
 /** UIKit **/
 export { default as SendbirdUIKitContainer, SendbirdUIKit } from './containers/SendbirdUIKitContainer';

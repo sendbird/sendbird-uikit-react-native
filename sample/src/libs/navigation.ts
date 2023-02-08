@@ -21,6 +21,7 @@ export enum Routes {
   OpenChannel = 'OpenChannel',
   OpenChannelSettings = 'OpenChannelSettings',
   OpenChannelParticipants = 'OpenChannelParticipants',
+  OpenChannelCreate = 'OpenChannelCreate',
 
   GroupChannelTabs = 'GroupChannelTabs',
   GroupChannelList = 'GroupChannelList',
@@ -154,6 +155,10 @@ export type RouteParamsUnion =
   | {
       route: Routes.OpenChannelParticipants;
       params: ChannelUrlParams;
+    }
+  | {
+      route: Routes.OpenChannelCreate;
+      params: undefined;
     };
 
 type ExtractParams<R extends Routes, U extends RouteParamsUnion> = U extends { route: R; params: infer P } ? P : never;
