@@ -69,6 +69,13 @@ export interface StringSet {
     DIALOG_CHANGE_IMAGE_MENU_CAMERA: string;
     DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY: string;
   };
+  OPEN_CHANNEL_LIST: {
+    /** OpenChannelList > Header */
+    HEADER_TITLE: string;
+
+    /** OpenChannelList > Channel preview */
+    CHANNEL_PREVIEW_TITLE: (channel: SendbirdOpenChannel) => string;
+  };
   GROUP_CHANNEL: {
     /** GroupChannel > Header */
     HEADER_TITLE: (currentUserId: string, channel: SendbirdGroupChannel) => string;
@@ -371,6 +378,10 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       DIALOG_CHANGE_IMAGE_MENU_CAMERA: 'Take photo',
       DIALOG_CHANGE_IMAGE_MENU_PHOTO_LIBRARY: 'Choose photo',
       ...overrides?.OPEN_CHANNEL_SETTINGS,
+    },
+    OPEN_CHANNEL_LIST: {
+      HEADER_TITLE: 'Channels',
+      CHANNEL_PREVIEW_TITLE: (channel) => getOpenChannelTitle(channel),
     },
     GROUP_CHANNEL: {
       HEADER_TITLE: (uid, channel) => getGroupChannelTitle(uid, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
