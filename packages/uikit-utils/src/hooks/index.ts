@@ -72,3 +72,24 @@ export const useFreshCallback = <T extends (...args: any[]) => any>(callback: T)
   ref.current = callback;
   return useCallback(((...args) => ref.current(...args)) as T, []);
 };
+
+export const useDebounceEffect = (action: () => void, delay: number, deps: DependencyList = []) => {
+  const timeoutRef = useRef<NodeJS.Timeout>();
+
+  useEffect(() => {
+    timeoutRef.current = setTimeout(async () => {
+      try {
+        await action();
+      } finally {
+        timeoutRef.current = undefined;
+      }
+    }, delay);
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = undefined;
+      }
+    };
+  }, [delay, ...deps]);
+};
