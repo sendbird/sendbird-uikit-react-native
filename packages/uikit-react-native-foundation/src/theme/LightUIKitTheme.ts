@@ -229,6 +229,19 @@ const LightUIKitTheme = createTheme({
             },
           },
         },
+        openChannelPreview: {
+          default: {
+            none: {
+              textTitle: palette.onBackgroundLight01,
+              textParticipants: palette.onBackgroundLight02,
+              frozenIcon: palette.primary300,
+              participantsIcon: palette.onBackgroundLight02,
+              background: palette.background50,
+              coverBackground: palette.background300,
+              separator: palette.onBackgroundLight04,
+            },
+          },
+        },
       },
     };
   },
