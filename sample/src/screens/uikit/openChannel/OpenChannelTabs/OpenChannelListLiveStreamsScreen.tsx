@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 
 import type { OpenChannel } from '@sendbird/chat/openChannel';
 import { createOpenChannelListFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
+import { createOpenChannelListModule } from '@sendbird/uikit-react-native';
 import {
   Avatar,
   Box,
@@ -12,7 +13,6 @@ import {
   useHeaderStyle,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import { createOpenChannelListModule } from '@sendbird/uikit-react-native/src/domain/openChannelList';
 import type { SendbirdOpenChannel } from '@sendbird/uikit-utils';
 
 import { useAppNavigation } from '../../../../hooks/useAppNavigation';
