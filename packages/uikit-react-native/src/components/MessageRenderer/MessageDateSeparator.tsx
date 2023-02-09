@@ -15,6 +15,7 @@ type Props = {
 const MessageDateSeparator = ({ message, prevMessage }: Props) => {
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
+
   const sameDay = isSameDay(message.createdAt, prevMessage?.createdAt ?? 0);
   if (sameDay) return null;
   return (

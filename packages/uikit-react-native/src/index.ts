@@ -17,7 +17,7 @@ export { default as TypedPlaceholder } from './components/TypedPlaceholder';
 export { default as UserActionBar } from './components/UserActionBar';
 export { default as UserSelectableBar } from './components/UserSelectableBar';
 
-/** Fragments **/
+/** Fragments - group channels **/
 export { default as createGroupChannelCreateFragment } from './fragments/createGroupChannelCreateFragment';
 export { default as createGroupChannelFragment } from './fragments/createGroupChannelFragment';
 export { default as createGroupChannelSettingsFragment } from './fragments/createGroupChannelSettingsFragment';
@@ -30,6 +30,11 @@ export { default as createGroupChannelRegisterOperatorFragment } from './fragmen
 export { default as createGroupChannelMutedMembersFragment } from './fragments/createGroupChannelMutedMembersFragment';
 export { default as createGroupChannelBannedUsersFragment } from './fragments/createGroupChannelBannedUsersFragment';
 export { default as createGroupChannelNotificationsFragment } from './fragments/createGroupChannelNotificationsFragment';
+
+/** Fragments - open channels **/
+export { default as createOpenChannelFragment } from './fragments/createOpenChannelFragment';
+export { default as createOpenChannelParticipantsFragment } from './fragments/createOpenChannelParticipantsFragment';
+export { default as createOpenChannelSettingsFragment } from './fragments/createOpenChannelSettingsFragment';
 
 /** Context **/
 export { SendbirdChatContext, SendbirdChatProvider } from './contexts/SendbirdChatCtx';
@@ -75,7 +80,11 @@ export type {
   MediaServiceInterface,
 } from './platform/types';
 
-/** Domain **/
+/** Feature - shared **/
+export * from './domain/userList';
+export type { UserListProps, UserListModule, UserListContextsType } from './domain/userList/types';
+
+/** Feature - group channels **/
 export * from './domain/groupChannel';
 export type {
   GroupChannelProps,
@@ -104,19 +113,27 @@ export type {
 export * from './domain/groupChannelNotifications';
 export {
   GroupChannelNotificationsProps,
-  GroupChannelNotificationsContextsType,
-  GroupChannelNotificationsFragment,
   GroupChannelNotificationsModule,
+  GroupChannelNotificationsFragment,
+  GroupChannelNotificationsContextsType,
 } from './domain/groupChannelNotifications/types';
 
 export * from './domain/groupChannelUserList/types';
-export * from './domain/userList';
-export type { UserListProps, UserListModule, UserListContextsType } from './domain/userList/types';
+
+/** Feature - open channels **/
+export * from './domain/openChannel';
+export {
+  OpenChannelProps,
+  OpenChannelModule,
+  OpenChannelFragment,
+  OpenChannelContextsType,
+} from './domain/openChannel/types';
 
 /** UIKit **/
 export { default as SendbirdUIKitContainer, SendbirdUIKit } from './containers/SendbirdUIKitContainer';
 export type { SendbirdUIKitContainerProps } from './containers/SendbirdUIKitContainer';
 export { default as SBUError } from './libs/SBUError';
+export { default as SBUUtils } from './libs/SBUUtils';
 
 export * from './types';
 

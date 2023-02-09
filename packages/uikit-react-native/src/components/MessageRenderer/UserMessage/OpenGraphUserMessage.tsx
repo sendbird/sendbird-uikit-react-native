@@ -28,7 +28,7 @@ const OpenGraphUserMessage = ({
   const { colors, select, palette } = useUIKitTheme();
 
   const [imageNotFound, setImageNotFound] = useState(false);
-  const color = colors.ui.message[variant][pressed ? 'pressed' : 'enabled'];
+  const color = colors.ui.groupChannelMessage[variant][pressed ? 'pressed' : 'enabled'];
 
   const containerBackground = select({ dark: palette.background400, light: palette.background100 });
 

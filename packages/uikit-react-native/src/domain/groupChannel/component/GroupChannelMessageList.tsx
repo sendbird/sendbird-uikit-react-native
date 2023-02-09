@@ -172,12 +172,12 @@ const useGetMessagePressActions = ({
     openSheet({
       sheetItems: [
         {
-          title: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_FAILED_RETRY,
+          title: STRINGS.LABELS.CHANNEL_MESSAGE_FAILED_RETRY,
           onPress: () =>
             onResendFailedMessage(message).catch(() => toast.show(STRINGS.TOAST.RESEND_MSG_ERROR, 'error')),
         },
         {
-          title: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_FAILED_REMOVE,
+          title: STRINGS.LABELS.CHANNEL_MESSAGE_FAILED_REMOVE,
           titleColor: colors.ui.dialog.default.none.destructive,
           onPress: () => confirmDelete(message),
         },
@@ -186,13 +186,13 @@ const useGetMessagePressActions = ({
   };
   const confirmDelete = (message: HandleableMessage) => {
     alert({
-      title: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_DELETE_CONFIRM_TITLE,
+      title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE,
       buttons: [
         {
-          text: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_DELETE_CONFIRM_CANCEL,
+          text: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_CANCEL,
         },
         {
-          text: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_DELETE_CONFIRM_OK,
+          text: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_OK,
           style: 'destructive',
           onPress: () => onDeleteMessage(message).catch(() => toast.show(STRINGS.TOAST.DELETE_MSG_ERROR, 'error')),
         },
@@ -214,7 +214,7 @@ const useGetMessagePressActions = ({
     if (msg.isUserMessage()) {
       sheetItems.push({
         icon: 'copy',
-        title: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_COPY,
+        title: STRINGS.LABELS.CHANNEL_MESSAGE_COPY,
         onPress: () => {
           clipboardService.setString(msg.message || '');
           toast.show(STRINGS.TOAST.COPY_OK, 'success');
@@ -225,12 +225,12 @@ const useGetMessagePressActions = ({
         sheetItems.push(
           {
             icon: 'edit',
-            title: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_EDIT,
+            title: STRINGS.LABELS.CHANNEL_MESSAGE_EDIT,
             onPress: () => setMessageToEdit(msg),
           },
           {
             icon: 'delete',
-            title: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_DELETE,
+            title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
             onPress: () => confirmDelete(msg),
           },
         );
@@ -240,7 +240,7 @@ const useGetMessagePressActions = ({
     if (msg.isFileMessage()) {
       sheetItems.push({
         icon: 'download',
-        title: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_SAVE,
+        title: STRINGS.LABELS.CHANNEL_MESSAGE_SAVE,
         onPress: async () => {
           if (toMegabyte(msg.size) > 4) {
             toast.show(STRINGS.TOAST.DOWNLOAD_START, 'success');
@@ -262,7 +262,7 @@ const useGetMessagePressActions = ({
       if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
         sheetItems.push({
           icon: 'delete',
-          title: STRINGS.GROUP_CHANNEL.DIALOG_MESSAGE_DELETE,
+          title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
           onPress: () => confirmDelete(msg),
         });
       }

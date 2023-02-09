@@ -1,7 +1,10 @@
 export { useGroupChannelList } from './channel/useGroupChannelList';
 export { useGroupChannelMessages } from './channel/useGroupChannelMessages';
-export { useActiveGroupChannel } from './channel/useActiveGroupChannel';
 export { useGroupChannel } from './channel/useGroupChannel';
+
+export { useOpenChannelList } from './channel/useOpenChannelList';
+export { useOpenChannelMessages } from './channel/useOpenChannelMessages';
+export { useOpenChannel } from './channel/useOpenChannel';
 
 export { useAppFeatures } from './common/useAppFeatures';
 export { useMessageOutgoingStatus } from './common/useMessageOutgoingStatus';
@@ -25,4 +28,8 @@ export type {
   UseUserListReturn,
   CustomQueryInterface,
   CustomBidirectionalQueryInterface,
+  UseOpenChannelMessagesOptions,
+  UseOpenChannelListOptions,
+  UseOpenChannelList,
+  UseOpenChannelMessages,
 } from './types';

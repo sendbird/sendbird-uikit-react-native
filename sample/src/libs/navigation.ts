@@ -15,10 +15,16 @@ export enum Routes {
   Palette = 'Palette',
   ThemeColors = 'ThemeColors',
 
+  OpenChannelTabs = 'OpenChannelTabs',
+  OpenChannelListCommunity = 'OpenChannelListCommunity',
+  OpenChannelListLiveStreams = 'OpenChannelListLiveStreams',
+  OpenChannel = 'OpenChannel',
+  OpenChannelSettings = 'OpenChannelSettings',
+  OpenChannelParticipants = 'OpenChannelParticipants',
+
   GroupChannelTabs = 'GroupChannelTabs',
   GroupChannelList = 'GroupChannelList',
   GroupChannel = 'GroupChannel',
-
   GroupChannelSettings = 'GroupChannelSettings',
   GroupChannelNotifications = 'GroupChannelNotifications',
   GroupChannelMembers = 'GroupChannelMembers',
@@ -34,7 +40,12 @@ export enum Routes {
   FileViewer = 'FileViewer',
 }
 
+type ChannelUrlParams = {
+  channelUrl: string;
+};
+
 export type RouteParamsUnion =
+  /** Shared screens **/
   | {
       route: Routes.SignIn;
       params: undefined;
@@ -56,60 +67,8 @@ export type RouteParamsUnion =
       params: undefined;
     }
   | {
-      route: Routes.GroupChannelTabs;
-      params: { channelUrl?: string } | undefined;
-    }
-  | {
-      route: Routes.GroupChannelList;
-      params: { channelUrl?: string } | undefined;
-    }
-  | {
       route: Routes.Settings;
       params: undefined;
-    }
-  | {
-      route: Routes.GroupChannelCreate;
-      params: { channelType: GroupChannelType };
-    }
-  | {
-      route: Routes.GroupChannel;
-      params: { channelUrl: string };
-    }
-  | {
-      route: Routes.GroupChannelSettings;
-      params: { channelUrl: string };
-    }
-  | {
-      route: Routes.GroupChannelNotifications;
-      params: { channelUrl: string };
-    }
-  | {
-      route: Routes.GroupChannelMembers;
-      params: { channelUrl: string };
-    }
-  | {
-      route: Routes.GroupChannelModeration;
-      params: { channelUrl: string };
-    }
-  | {
-      route: Routes.GroupChannelOperators;
-      params: { channelUrl: string };
-    }
-  | {
-      route: Routes.GroupChannelRegisterOperator;
-      params: { channelUrl: string };
-    }
-  | {
-      route: Routes.GroupChannelMutedMembers;
-      params: { channelUrl: string };
-    }
-  | {
-      route: Routes.GroupChannelBannedUsers;
-      params: { channelUrl: string };
-    }
-  | {
-      route: Routes.GroupChannelInvite;
-      params: { channelUrl: string };
     }
   | {
       route: Routes.FileViewer;
@@ -117,6 +76,84 @@ export type RouteParamsUnion =
         serializedFileMessage: object;
         deleteMessage: () => Promise<void>;
       };
+    }
+  /** GroupChannel screens **/
+  | {
+      route: Routes.GroupChannelTabs;
+      params: Partial<ChannelUrlParams> | undefined;
+    }
+  | {
+      route: Routes.GroupChannelList;
+      params: Partial<ChannelUrlParams> | undefined;
+    }
+  | {
+      route: Routes.GroupChannelCreate;
+      params: { channelType: GroupChannelType };
+    }
+  | {
+      route: Routes.GroupChannel;
+      params: ChannelUrlParams;
+    }
+  | {
+      route: Routes.GroupChannelSettings;
+      params: ChannelUrlParams;
+    }
+  | {
+      route: Routes.GroupChannelNotifications;
+      params: ChannelUrlParams;
+    }
+  | {
+      route: Routes.GroupChannelMembers;
+      params: ChannelUrlParams;
+    }
+  | {
+      route: Routes.GroupChannelModeration;
+      params: ChannelUrlParams;
+    }
+  | {
+      route: Routes.GroupChannelOperators;
+      params: ChannelUrlParams;
+    }
+  | {
+      route: Routes.GroupChannelRegisterOperator;
+      params: ChannelUrlParams;
+    }
+  | {
+      route: Routes.GroupChannelMutedMembers;
+      params: ChannelUrlParams;
+    }
+  | {
+      route: Routes.GroupChannelBannedUsers;
+      params: ChannelUrlParams;
+    }
+  | {
+      route: Routes.GroupChannelInvite;
+      params: ChannelUrlParams;
+    }
+  /** OpenChannel screens **/
+  | {
+      route: Routes.OpenChannelTabs;
+      params: Partial<ChannelUrlParams> | undefined;
+    }
+  | {
+      route: Routes.OpenChannelListLiveStreams;
+      params: Partial<ChannelUrlParams> | undefined;
+    }
+  | {
+      route: Routes.OpenChannelListCommunity;
+      params: Partial<ChannelUrlParams> | undefined;
+    }
+  | {
+      route: Routes.OpenChannel;
+      params: ChannelUrlParams;
+    }
+  | {
+      route: Routes.OpenChannelSettings;
+      params: ChannelUrlParams;
+    }
+  | {
+      route: Routes.OpenChannelParticipants;
+      params: ChannelUrlParams;
     };
 
 type ExtractParams<R extends Routes, U extends RouteParamsUnion> = U extends { route: R; params: infer P } ? P : never;
