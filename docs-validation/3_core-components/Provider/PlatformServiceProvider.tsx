@@ -1,4 +1,4 @@
-import type { MediaServiceInterface } from '@sendbird/uikit-react-native/src/platform/types';
+import type { MediaServiceInterface } from '@sendbird/uikit-react-native';
 
 const isMediaFile = (_: string) => 0;
 const MyDocumentPickerModule = {

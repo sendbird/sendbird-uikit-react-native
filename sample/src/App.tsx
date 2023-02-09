@@ -36,6 +36,7 @@ import {
   GroupChannelSettingsScreen,
   GroupChannelTabs,
   HomeScreen,
+  OpenChannelCreateScreen,
   OpenChannelLiveStreamScreen,
   OpenChannelParticipantsScreen,
   OpenChannelScreen,
@@ -156,6 +157,7 @@ const Navigations = () => {
                 <RootStack.Screen name={Routes.OpenChannelSettings} component={OpenChannelSettingsScreen} />
                 <RootStack.Screen name={Routes.OpenChannelParticipants} component={OpenChannelParticipantsScreen} />
               </RootStack.Group>
+              <RootStack.Screen name={Routes.OpenChannelCreate} component={OpenChannelCreateScreen} />
             </RootStack.Group>
 
             <RootStack.Group screenOptions={{ animation: 'slide_from_bottom', headerShown: false }}>

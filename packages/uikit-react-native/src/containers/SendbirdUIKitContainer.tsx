@@ -15,8 +15,8 @@ import {
   UIKitThemeProvider,
 } from '@sendbird/uikit-react-native-foundation';
 import type {
-  SendbirdBaseChannel,
   SendbirdChatSDK,
+  SendbirdGroupChannel,
   SendbirdGroupChannelCreateParams,
   SendbirdMember,
   SendbirdUser,
@@ -93,7 +93,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
     dismissTimeout?: number;
   };
   userProfile?: {
-    onCreateChannel: (channel: SendbirdBaseChannel) => void;
+    onCreateChannel: (channel: SendbirdGroupChannel) => void;
     onBeforeCreateChannel?: (
       channelParams: SendbirdGroupChannelCreateParams,
       users: SendbirdUser[] | SendbirdMember[],

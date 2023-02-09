@@ -21,7 +21,7 @@ const OpenChannelListCommunityScreen = () => {
     <OpenChannelListFragment
       onPressCreateChannel={() => {
         // Navigating to open channel create
-        // navigation.navigate(Routes.OpenChannelCreate)
+        navigation.navigate(Routes.OpenChannelCreate);
       }}
       onPressChannel={(channel) => {
         // Navigating to open channel

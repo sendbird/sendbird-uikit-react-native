@@ -1,15 +1,7 @@
 import { useRef } from 'react';
 
 import type { SendbirdBaseChannel, SendbirdOpenChannel, SendbirdPreviousMessageListQuery } from '@sendbird/uikit-utils';
-import {
-  Logger,
-  NOOP,
-  confirmAndMarkAsRead,
-  isDifferentChannel,
-  useAsyncEffect,
-  useForceUpdate,
-  useFreshCallback,
-} from '@sendbird/uikit-utils';
+import { NOOP, isDifferentChannel, useAsyncEffect, useForceUpdate, useFreshCallback } from '@sendbird/uikit-utils';
 
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseOpenChannelMessages, UseOpenChannelMessagesOptions } from '../../types';
@@ -43,20 +35,12 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
     updateRefreshing,
   } = useOpenChannelMessagesReducer(userId, options?.sortComparator);
 
-  const channelMarkAsRead = async () => {
-    try {
-      await confirmAndMarkAsRead([channel]);
-    } catch (e) {
-      Logger.warn(`[${HOOK_NAME}/channelMarkAsRead]`, e);
-    }
-  };
-
   const init = useFreshCallback(async (uid?: string) => {
     if (uid) {
       queryRef.current = createMessageQuery(channel, options?.queryCreator);
-      channelMarkAsRead();
       if (queryRef.current?.hasNext) {
         const list = await queryRef.current?.load();
+
         updateMessages(list, true, sdk.currentUser.userId);
       }
       updateNextMessages([], true, sdk.currentUser.userId);
@@ -76,7 +60,6 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
       // Messages
       onMessageReceived(eventChannel, message) {
         if (isDifferentChannel(channel, eventChannel)) return;
-        channelMarkAsRead();
         updateNextMessages([message], false, sdk.currentUser.userId);
       },
       onMessageUpdated(eventChannel, message) {
@@ -103,8 +86,6 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
       },
       // Users
       onOperatorUpdated: channelUpdater,
-      onUserEntered: channelUpdater,
-      onUserExited: channelUpdater,
       onUserUnbanned: channelUpdater,
       onUserMuted: channelUpdater,
       onUserUnmuted: channelUpdater,
@@ -124,9 +105,15 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
   useAsyncEffect(async () => {
     updateLoading(true);
 
-    await channel.enter();
-    await init(userId);
-    updateLoading(false);
+    try {
+      await channel.enter();
+      await init(userId);
+    } catch (error) {
+      options?.onError?.(error);
+      options?.onChannelDeleted?.();
+    } finally {
+      updateLoading(false);
+    }
 
     return () => {
       channel.exit().catch(NOOP);

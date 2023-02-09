@@ -76,6 +76,19 @@ export interface StringSet {
     /** OpenChannelList > Channel preview */
     CHANNEL_PREVIEW_TITLE: (channel: SendbirdOpenChannel) => string;
   };
+  OPEN_CHANNEL_CREATE: {
+    /** OpenChannelCreate > Header */
+    HEADER_TITLE: string;
+    HEADER_RIGHT: string;
+
+    /** OpenChannelCreate > ProfileInput */
+    PLACEHOLDER: string;
+
+    /** OpenChannelCreate > Dialog */
+    DIALOG_IMAGE_MENU_REMOVE: string;
+    DIALOG_IMAGE_MENU_CAMERA: string;
+    DIALOG_IMAGE_MENU_PHOTO_LIBRARY: string;
+  };
   GROUP_CHANNEL: {
     /** GroupChannel > Header */
     HEADER_TITLE: (currentUserId: string, channel: SendbirdGroupChannel) => string;
@@ -318,6 +331,8 @@ export interface StringSet {
     TURN_ON_NOTIFICATIONS_ERROR: string;
     TURN_OFF_NOTIFICATIONS_ERROR: string;
     LEAVE_CHANNEL_ERROR: string;
+    UNKNOWN_ERROR: string;
+    GET_CHANNEL_ERROR: string;
   };
   PROFILE_CARD: {
     BUTTON_MESSAGE: string;
@@ -382,6 +397,14 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     OPEN_CHANNEL_LIST: {
       HEADER_TITLE: 'Channels',
       CHANNEL_PREVIEW_TITLE: (channel) => getOpenChannelTitle(channel),
+    },
+    OPEN_CHANNEL_CREATE: {
+      HEADER_TITLE: 'New channel',
+      HEADER_RIGHT: 'Create',
+      PLACEHOLDER: 'Enter channel name',
+      DIALOG_IMAGE_MENU_REMOVE: 'Remove photo',
+      DIALOG_IMAGE_MENU_CAMERA: 'Take photo',
+      DIALOG_IMAGE_MENU_PHOTO_LIBRARY: 'Choose photo',
     },
     GROUP_CHANNEL: {
       HEADER_TITLE: (uid, channel) => getGroupChannelTitle(uid, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
@@ -629,6 +652,8 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       TURN_ON_NOTIFICATIONS_ERROR: "Couldn't turn on notifications.",
       TURN_OFF_NOTIFICATIONS_ERROR: "Couldn't turn off notifications.",
       LEAVE_CHANNEL_ERROR: "Couldn't leave channel.",
+      UNKNOWN_ERROR: 'Something went wrong.',
+      GET_CHANNEL_ERROR: "Couldn't retrieve channel.",
       ...overrides?.TOAST,
     },
     PROFILE_CARD: {

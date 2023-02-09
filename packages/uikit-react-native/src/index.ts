@@ -36,6 +36,7 @@ export { default as createOpenChannelFragment } from './fragments/createOpenChan
 export { default as createOpenChannelParticipantsFragment } from './fragments/createOpenChannelParticipantsFragment';
 export { default as createOpenChannelSettingsFragment } from './fragments/createOpenChannelSettingsFragment';
 export { default as createOpenChannelListFragment } from './fragments/createOpenChannelListFragment';
+export { default as createOpenChannelCreateFragment } from './fragments/createOpenChannelCreateFragment';
 
 /** Context **/
 export { SendbirdChatContext, SendbirdChatProvider } from './contexts/SendbirdChatCtx';
@@ -129,12 +130,32 @@ export type {
   OpenChannelFragment,
   OpenChannelContextsType,
 } from './domain/openChannel/types';
+
+export * from './domain/openChannelSettings';
+export type {
+  OpenChannelSettingsProps,
+  OpenChannelSettingsModule,
+  OpenChannelSettingsFragment,
+  OpenChannelSettingsContextsType,
+} from './domain/openChannelSettings/types';
+
+export * from './domain/openChannelList';
 export type {
   OpenChannelListProps,
   OpenChannelListModule,
   OpenChannelListFragment,
   OpenChannelListContextsType,
 } from './domain/openChannelList/types';
+
+export * from './domain/openChannelCreate';
+export type {
+  OpenChannelCreateProps,
+  OpenChannelCreateModule,
+  OpenChannelCreateFragment,
+  OpenChannelCreateContextsType,
+} from './domain/openChannelCreate/types';
+
+export * from './domain/openChannelUserList/types';
 
 /** UIKit **/
 export { default as SendbirdUIKitContainer, SendbirdUIKit } from './containers/SendbirdUIKitContainer';

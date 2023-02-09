@@ -1,9 +1,8 @@
 import { useRef } from 'react';
 
-import type { SendbirdChatSDK, SendbirdOpenChannelListQuery } from '@sendbird/uikit-utils';
-import { confirmAndMarkAsDelivered, useAsyncEffect, useFreshCallback } from '@sendbird/uikit-utils';
+import type { SendbirdBaseChannel, SendbirdChatSDK, SendbirdOpenChannelListQuery } from '@sendbird/uikit-utils';
+import { useAsyncEffect, useFreshCallback } from '@sendbird/uikit-utils';
 
-import { useAppFeatures } from '../../common/useAppFeatures';
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseOpenChannelList, UseOpenChannelListOptions } from '../../types';
 import { useOpenChannelListReducer } from './reducer';
@@ -17,7 +16,6 @@ const createOpenChannelListQuery = (sdk: SendbirdChatSDK, queryCreator: UseOpenC
 };
 
 export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, options) => {
-  const { deliveryReceiptEnabled } = useAppFeatures(sdk);
   const queryRef = useRef<SendbirdOpenChannelListQuery>();
 
   const {
@@ -25,7 +23,7 @@ export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, opt
     openChannels,
     refreshing,
     updateChannels,
-    setChannels,
+    appendChannels,
     deleteChannels,
     updateRefreshing,
     updateLoading,
@@ -37,7 +35,7 @@ export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, opt
 
       if (queryRef.current?.hasNext) {
         const channels = await queryRef.current.next();
-        setChannels(channels, true);
+        appendChannels(channels, true);
       }
     }
   });
@@ -48,18 +46,28 @@ export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, opt
     updateLoading(false);
   }, [init, userId]);
 
+  const updateChannel = (channel: SendbirdBaseChannel) => {
+    if (channel.isOpenChannel()) updateChannels([channel]);
+  };
+
   useChannelHandler(
     sdk,
     HOOK_NAME,
     {
-      onChannelChanged: (channel) => updateChannels([channel]),
-      onChannelFrozen: (channel) => updateChannels([channel]),
-      onChannelUnfrozen: (channel) => updateChannels([channel]),
+      onChannelChanged: updateChannel,
+      onChannelFrozen: updateChannel,
+      onChannelUnfrozen: updateChannel,
       onChannelDeleted: (url) => deleteChannels([url]),
       onUserBanned(channel, user) {
         const isMe = user.userId === userId;
-        if (isMe) deleteChannels([channel.url]);
-        else updateChannels([channel]);
+        if (isMe && channel.isOpenChannel()) deleteChannels([channel.url]);
+      },
+      onUserEntered: (channel, user) => {
+        const isMe = user.userId === userId;
+        if (isMe && channel.isOpenChannel() && !openChannels.find((it) => it.url === channel.url)) {
+          appendChannels([], true);
+          refresh();
+        }
       },
     },
     'open',
@@ -74,8 +82,7 @@ export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, opt
   const next = useFreshCallback(async () => {
     if (queryRef.current?.hasNext) {
       const channels = await queryRef.current.next();
-      setChannels(channels, false);
-      if (deliveryReceiptEnabled) confirmAndMarkAsDelivered(channels);
+      appendChannels(channels, false);
     }
   });
 
