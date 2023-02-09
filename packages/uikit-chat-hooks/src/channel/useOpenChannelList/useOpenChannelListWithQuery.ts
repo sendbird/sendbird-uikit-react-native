@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-import type { SendbirdChannel, SendbirdChatSDK, SendbirdOpenChannelListQuery } from '@sendbird/uikit-utils';
+import type { SendbirdChatSDK, SendbirdOpenChannelListQuery } from '@sendbird/uikit-utils';
 import { confirmAndMarkAsDelivered, useAsyncEffect, useFreshCallback } from '@sendbird/uikit-utils';
 
 import { useAppFeatures } from '../../common/useAppFeatures';
@@ -31,20 +31,13 @@ export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, opt
     updateLoading,
   } = useOpenChannelListReducer();
 
-  const updateChannelsAndMarkAsDelivered = (channels: SendbirdChannel[]) => {
-    updateChannels(channels);
-    if (deliveryReceiptEnabled) confirmAndMarkAsDelivered(channels);
-  };
-
   const init = useFreshCallback(async (uid?: string) => {
     if (uid) {
       queryRef.current = createOpenChannelListQuery(sdk, options?.queryCreator);
 
       if (queryRef.current?.hasNext) {
         const channels = await queryRef.current.next();
-
         setChannels(channels, true);
-        if (deliveryReceiptEnabled) confirmAndMarkAsDelivered(channels);
       }
     }
   });
@@ -62,15 +55,11 @@ export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, opt
       onChannelChanged: (channel) => updateChannels([channel]),
       onChannelFrozen: (channel) => updateChannels([channel]),
       onChannelUnfrozen: (channel) => updateChannels([channel]),
-      onChannelParticipantCountChanged: (channel) => updateChannels([channel]),
       onChannelDeleted: (url) => deleteChannels([url]),
       onUserBanned(channel, user) {
         const isMe = user.userId === userId;
         if (isMe) deleteChannels([channel.url]);
         else updateChannels([channel]);
-      },
-      onMessageReceived(channel) {
-        updateChannelsAndMarkAsDelivered([channel]);
       },
     },
     'open',

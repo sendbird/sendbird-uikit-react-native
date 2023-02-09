@@ -19,6 +19,7 @@ export enum Routes {
   OpenChannelListCommunity = 'OpenChannelListCommunity',
   OpenChannelListLiveStreams = 'OpenChannelListLiveStreams',
   OpenChannel = 'OpenChannel',
+  OpenChannelLiveStream = 'OpenChannelLiveStream',
   OpenChannelSettings = 'OpenChannelSettings',
   OpenChannelParticipants = 'OpenChannelParticipants',
   OpenChannelCreate = 'OpenChannelCreate',
@@ -146,6 +147,10 @@ export type RouteParamsUnion =
     }
   | {
       route: Routes.OpenChannel;
+      params: ChannelUrlParams;
+    }
+  | {
+      route: Routes.OpenChannelLiveStream;
       params: ChannelUrlParams;
     }
   | {
