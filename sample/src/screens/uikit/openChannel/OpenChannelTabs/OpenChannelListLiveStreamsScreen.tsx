@@ -17,7 +17,7 @@ import type { SendbirdOpenChannel } from '@sendbird/uikit-utils';
 
 import { useAppNavigation } from '../../../../hooks/useAppNavigation';
 import { Routes } from '../../../../libs/navigation';
-import { OpenChannelCustomType } from '../../../../libs/openChannel';
+import { OpenChannelCustomType, parseStreamData } from '../../../../libs/openChannel';
 
 const BasicOpenChannelListModule = createOpenChannelListModule();
 const OpenChannelListFragment = createOpenChannelListFragment({
@@ -48,7 +48,7 @@ const OpenChannelListLiveStreamsScreen = () => {
 
   const navigateToOpenChannel = (channel: SendbirdOpenChannel) => {
     // Navigating to open channel
-    navigation.navigate(Routes.OpenChannel, { channelUrl: channel.url });
+    navigation.navigate(Routes.OpenChannelLiveStream, { channelUrl: channel.url });
   };
 
   return (
@@ -75,7 +75,7 @@ const OpenChannelListLiveStreamsScreen = () => {
 
 const LiveStreamPreview = ({ channel }: { channel: SendbirdOpenChannel }) => {
   const streamData = parseStreamData(channel.data);
-  const { colors } = useUIKitTheme();
+  const { colors, palette } = useUIKitTheme();
 
   if (!streamData) return null;
 
@@ -90,7 +90,7 @@ const LiveStreamPreview = ({ channel }: { channel: SendbirdOpenChannel }) => {
           borderRadius={5}
           style={{ position: 'absolute', left: 4, bottom: 4 }}
         />
-        <Text caption1 color={colors.onBackgroundReverse01} style={{ position: 'absolute', left: 18, bottom: 1 }}>
+        <Text caption1 color={palette.onBackgroundDark01} style={{ position: 'absolute', left: 18, bottom: 1 }}>
           {channel.participantCount}
         </Text>
       </Box>
@@ -126,19 +126,5 @@ const LiveStreamPreview = ({ channel }: { channel: SendbirdOpenChannel }) => {
     </Box>
   );
 };
-
-function parseStreamData(data: string) {
-  try {
-    return JSON.parse(data) as {
-      creator_info: { id: string; name: string; profile_url: string };
-      live_channel_url: string;
-      name: string;
-      tags: string[];
-      thumbnail_url: string;
-    };
-  } catch {
-    return null;
-  }
-}
 
 export default OpenChannelListLiveStreamsScreen;
