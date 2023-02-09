@@ -51,7 +51,9 @@ const VideoFileMessage = ({ message, variant, children }: FileMessageProps) => {
 
   if (loading) {
     return (
-      <View style={[styles.bubbleContainer, { backgroundColor: colors.ui.message[variant].enabled.background }]}>
+      <View
+        style={[styles.bubbleContainer, { backgroundColor: colors.ui.groupChannelMessage[variant].enabled.background }]}
+      >
         <View style={[styles.bubbleContainer, styles.bubbleInnerContainer]}>
           <View style={style} />
           <PlayIcon />
@@ -62,7 +64,9 @@ const VideoFileMessage = ({ message, variant, children }: FileMessageProps) => {
   }
 
   return (
-    <View style={[styles.bubbleContainer, { backgroundColor: colors.ui.message[variant].enabled.background }]}>
+    <View
+      style={[styles.bubbleContainer, { backgroundColor: colors.ui.groupChannelMessage[variant].enabled.background }]}
+    >
       <View style={[styles.bubbleContainer, styles.bubbleInnerContainer]}>
         <Image source={{ uri: thumbnail || fileUrl }} style={style} resizeMode={'cover'} resizeMethod={'resize'} />
         <PlayIcon />

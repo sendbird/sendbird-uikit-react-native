@@ -19,8 +19,12 @@ type OnBeforeCreateChannel = (
   users: SendbirdUser[] | SendbirdMember[],
 ) => SendbirdGroupChannelCreateParams | Promise<SendbirdGroupChannelCreateParams>;
 
+type ShowOptions = {
+  hideMessageButton?: boolean;
+};
+
 export type UserProfileContextType = {
-  show(user: SendbirdUser | SendbirdMember): void;
+  show(user: SendbirdUser | SendbirdMember, options?: ShowOptions): void;
   hide(): void;
 };
 
@@ -50,19 +54,27 @@ export const UserProfileProvider = ({ children, onCreateChannel, onBeforeCreateC
 
   const [user, setUser] = useState<SendbirdUser | SendbirdMember>();
   const [visible, setVisible] = useState(false);
+  const [hideMessageButton, setHideMessageButton] = useState(false);
 
-  const show: UserProfileContextType['show'] = useCallback((user) => {
+  const show: UserProfileContextType['show'] = useCallback((user, options) => {
     setUser(user);
     setVisible(true);
+    setHideMessageButton(Boolean(options?.hideMessageButton));
   }, []);
 
   const hide: UserProfileContextType['hide'] = useCallback(() => {
     setVisible(false);
   }, []);
 
+  const onDismiss = () => {
+    setUser(undefined);
+    setHideMessageButton(false);
+  };
+
   const userProfileButton = useIIFE(() => {
     const isMe = chatContext.currentUser && user?.userId === chatContext.currentUser.userId;
     if (isMe) return undefined;
+    if (hideMessageButton) return undefined;
 
     const onPressMessageButton = async () => {
       if (user) {
@@ -102,7 +114,7 @@ export const UserProfileProvider = ({ children, onCreateChannel, onBeforeCreateC
       <Modal
         type={'slide'}
         onClose={hide}
-        onDismiss={() => setUser(undefined)}
+        onDismiss={onDismiss}
         visible={visible && Boolean(user)}
         backgroundStyle={styles.modal}
       >

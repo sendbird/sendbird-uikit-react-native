@@ -24,6 +24,7 @@ export * from './shared';
 export * from './hooks';
 export * from './hooks/react-native';
 export * from './ui-format/groupChannel';
+export * from './ui-format/openChannel';
 export * from './ui-format/common';
 export * from './sendbird/channel';
 export * from './sendbird/message';
@@ -34,7 +35,15 @@ export const NOOP: () => void = () => void 0;
 export const ASYNC_NOOP = async () => void 0;
 export const PASS = <T>(val: T) => val;
 export const toMegabyte = (byte: number) => byte / 1024 / 1024;
-export const isFunction = <T>(param?: T): param is NonNullable<T> => typeof param === 'function';
+export const isFunction = (param?: unknown): param is Function => typeof param === 'function';
+
+export function ifThenOr<T>(cond: boolean, then: T): T | undefined;
+export function ifThenOr<T, V>(cond: boolean, then: T, or: V): T | V;
+export function ifThenOr(cond: boolean, then: unknown, or?: unknown) {
+  if (cond) return then;
+  return or;
+}
+
 export const SBErrorCode = {
   NON_AUTHORIZED: 400108,
 };
@@ -54,6 +63,7 @@ export type {
   PartialDeep,
   Optional,
   ContextValue,
+  OnBeforeHandler,
   SendbirdMessage,
   SendbirdChatSDK,
   SendbirdChannel,
@@ -79,6 +89,7 @@ export type {
   SendbirdDataPayload,
   SendbirdPreviousMessageListQuery,
   SendbirdSendableMessage,
+  SendbirdOpenChannelListQuery,
   SendbirdGroupChannelListQuery,
   SendbirdGroupChannelUpdateParams,
   SendbirdUserMessageUpdateParams,
@@ -89,4 +100,7 @@ export type {
   SendbirdEmojiContainer,
   SendbirdEmoji,
   SendbirdEmojiCategory,
+  SendbirdOpenChannelUpdateParams,
+  SendbirdOpenChannelCreateParams,
+  SendbirdParticipant,
 } from './types';

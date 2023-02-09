@@ -54,3 +54,13 @@ export function shouldCompressImage(filePath: string, compressionEnabled = true)
   const extension = getFileExtension(filePath);
   return Boolean(extension.match(/jpg|jpeg|png/i) && compressionEnabled);
 }
+
+/**
+ * Returns the picked data from object.
+ * */
+export function pick<T extends { [key: string]: unknown }, Keys extends keyof T>(obj: T, keys: Keys[]) {
+  return keys.reduce((pickedObj, key) => {
+    pickedObj[key] = obj[key];
+    return pickedObj;
+  }, {} as { [key in Keys]: T[key] });
+}

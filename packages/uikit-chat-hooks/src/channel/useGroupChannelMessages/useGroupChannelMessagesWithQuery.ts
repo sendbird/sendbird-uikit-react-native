@@ -60,7 +60,7 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
     async (uid?: string) => {
       if (uid) {
         queryRef.current = createMessageQuery(channel, options?.queryCreator);
-        channelMarkAsRead().catch();
+        channelMarkAsRead();
         if (queryRef.current?.hasNext) {
           const list = await queryRef.current?.load();
           updateMessages(list, true, sdk.currentUser.userId);
