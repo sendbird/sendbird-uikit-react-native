@@ -8,5 +8,5 @@ metadata:
 spec:
   type: library
   lifecycle: production
-  owner: team-ui-kit
+  owner: dep-client-platform
   system: sendbird-uikit
