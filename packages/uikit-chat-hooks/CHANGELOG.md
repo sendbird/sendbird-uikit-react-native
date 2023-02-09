@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.2.0...v2.3.0) (2023-02-09)
+
+
+### Bug Fixes
+
+* **chat-hooks:** do not clear next message when loading prev message ([6508144](https://github.com/sendbird/sendbird-uikit-react-native/commit/65081448760750f1ac61315171f29092124f147b))
+
+
+
 ## [2.2.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.1.0...v2.2.0) (2023-01-03)
 
 

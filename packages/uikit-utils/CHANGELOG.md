@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.2.0...v2.3.0) (2023-02-09)
+
+
+### Features
+
+* **utils:** added useSafeAreaPadding hook ([80cd9ab](https://github.com/sendbird/sendbird-uikit-react-native/commit/80cd9abea96a95cb3f51a7c8ecc87c0bbd7e104d))
+
+
+### Bug Fixes
+
+* **uikit:** support compatibility for removing AppState listener under 0.65 ([b122691](https://github.com/sendbird/sendbird-uikit-react-native/commit/b12269130dd5648c4afe5497957ef47832ca6672))
+
+
+
 ## [2.2.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.1.0...v2.2.0) (2023-01-03)
 
 

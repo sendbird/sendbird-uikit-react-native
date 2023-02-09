@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.2.0...v2.3.0) (2023-02-09)
+
+
+### Features
+
+* added image compression feature ([568b5bb](https://github.com/sendbird/sendbird-uikit-react-native/commit/568b5bb86efa2cd1310be62207b4f2345d159d21))
+* **utils:** added useSafeAreaPadding hook ([80cd9ab](https://github.com/sendbird/sendbird-uikit-react-native/commit/80cd9abea96a95cb3f51a7c8ecc87c0bbd7e104d))
+
+
+### Bug Fixes
+
+* added missing labels for permissions ([89186bd](https://github.com/sendbird/sendbird-uikit-react-native/commit/89186bd5a64573a0994495c927cd1442f0af5e80))
+* **chat-hooks:** do not clear next message when loading prev message ([6508144](https://github.com/sendbird/sendbird-uikit-react-native/commit/65081448760750f1ac61315171f29092124f147b))
+* **uikit:** fixed to useContext type compiles the correct package path ([d17ccb0](https://github.com/sendbird/sendbird-uikit-react-native/commit/d17ccb0a1a492b6ec6558e97e7d3b35021db2242))
+* **uikit:** support compatibility for removing AppState listener under 0.65 ([b122691](https://github.com/sendbird/sendbird-uikit-react-native/commit/b12269130dd5648c4afe5497957ef47832ca6672))
+
+
+
 ## [2.2.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.1.0...v2.2.0) (2023-01-03)
 
 
