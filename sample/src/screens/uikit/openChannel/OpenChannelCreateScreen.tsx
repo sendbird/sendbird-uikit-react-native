@@ -9,7 +9,7 @@ import { OpenChannelCustomType } from '../../../libs/openChannel';
 
 const OpenChannelCreateFragment = createOpenChannelCreateFragment();
 const OpenChannelCreateScreen = () => {
-  const { navigation } = useAppNavigation<Routes.OpenChannelSettings>();
+  const { navigation } = useAppNavigation<Routes.OpenChannelCreate>();
 
   const navigateToOpenChannel = (channel: SendbirdOpenChannel) => {
     navigation.replace(Routes.OpenChannel, { channelUrl: channel.url });
