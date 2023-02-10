@@ -4,7 +4,7 @@ metadata:
   name: sendbird-uikit-react-native
   description: UIKit for React-Native
   annotations:
-    github.com/project-slug: sendbird-uikit-react-native
+    github.com/project-slug: sendbird/sendbird-uikit-react-native
 spec:
   type: library
   lifecycle: production
