@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react';
 
+import { SendbirdError } from '@sendbird/chat';
 import { useOpenChannelMessages } from '@sendbird/uikit-chat-hooks';
-import { NOOP, PASS, messageComparator, useFreshCallback } from '@sendbird/uikit-utils';
+import { useToast } from '@sendbird/uikit-react-native-foundation';
+import { NOOP, PASS, SBErrorCode, messageComparator, useFreshCallback } from '@sendbird/uikit-utils';
 
 import OpenChannelMessageRenderer from '../components/OpenChannelMessageRenderer';
 import ScrollToBottomButton from '../components/ScrollToBottomButton';
@@ -9,7 +11,7 @@ import StatusComposition from '../components/StatusComposition';
 import { UNKNOWN_USER_ID } from '../constants';
 import { createOpenChannelModule } from '../domain/openChannel';
 import type { OpenChannelFragment, OpenChannelModule, OpenChannelProps } from '../domain/openChannel/types';
-import { useSendbirdChat, useUserProfile } from '../hooks/useContext';
+import { useLocalization, useSendbirdChat, useUserProfile } from '../hooks/useContext';
 
 const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): OpenChannelFragment => {
   const OpenChannelModule = createOpenChannelModule(initModule);
@@ -35,6 +37,10 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
     flatListProps,
   }) => {
     const { sdk, currentUser } = useSendbirdChat();
+    const { STRINGS } = useLocalization();
+    const { show: showToast } = useToast();
+    const { show: showUserProfile } = useUserProfile();
+
     const {
       messages,
       nextMessages,
@@ -52,14 +58,25 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
       queryCreator,
       sortComparator,
       onChannelDeleted,
+      onError(error) {
+        if (error instanceof SendbirdError) {
+          switch (error.code) {
+            case SBErrorCode.CHANNEL_NOT_FOUND_SDK:
+            case SBErrorCode.CHANNEL_NOT_FOUND_SERVER: {
+              return showToast(STRINGS.TOAST.GET_CHANNEL_ERROR, 'error');
+            }
+          }
+        }
+
+        showToast(STRINGS.TOAST.UNKNOWN_ERROR, 'error');
+      },
     });
-    const { show } = useUserProfile();
 
     const isOperator = channel.isOperator(currentUser?.userId ?? UNKNOWN_USER_ID);
 
     const _renderMessage: OpenChannelProps['MessageList']['renderMessage'] = useFreshCallback((props) => {
       if (renderMessage) return renderMessage(props);
-      return <OpenChannelMessageRenderer {...props} onPressAvatar={show} />;
+      return <OpenChannelMessageRenderer {...props} onPressAvatar={showUserProfile} />;
     });
 
     const memoizedFlatListProps = useMemo(

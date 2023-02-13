@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleProp, StyleSheet, View, ViewProps, ViewStyle } from 'react-native';
+import { StyleProp, View, ViewProps, ViewStyle } from 'react-native';
 
 import { isFunction } from '@sendbird/uikit-utils';
 
@@ -15,6 +15,10 @@ type BaseBoxProps = Pick<
   | 'alignItems'
   | 'justifyContent'
   | 'borderRadius'
+  | 'borderWidth'
+  | 'borderColor'
+  | 'borderBottomColor'
+  | 'borderBottomWidth'
   | 'margin'
   | 'marginHorizontal'
   | 'marginVertical'
@@ -30,6 +34,8 @@ type BaseBoxProps = Pick<
   | 'paddingTop'
   | 'paddingBottom'
   | 'overflow'
+  | 'width'
+  | 'height'
 > & {
   backgroundColor?: string | ((theme: { colors: UIKitColors; palette: UIKitPalette }) => string);
 };
@@ -39,7 +45,7 @@ const Box = ({ style, children, ...props }: BoxProps) => {
   const boxStyle = useBoxStyle(props);
 
   return (
-    <View style={StyleSheet.flatten([boxStyle, style])} {...props}>
+    <View style={[boxStyle, style]} {...props}>
       {children}
     </View>
   );

@@ -229,6 +229,19 @@ const DarkUIKitTheme = createTheme({
             },
           },
         },
+        openChannelPreview: {
+          default: {
+            none: {
+              textTitle: palette.onBackgroundDark01,
+              textParticipants: palette.onBackgroundDark02,
+              frozenIcon: palette.primary200,
+              participantsIcon: palette.onBackgroundDark02,
+              background: palette.background600,
+              coverBackground: palette.background300,
+              separator: palette.onBackgroundDark04,
+            },
+          },
+        },
       },
     };
   },
