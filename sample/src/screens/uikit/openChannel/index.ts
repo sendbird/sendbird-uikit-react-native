@@ -4,3 +4,4 @@ export { default as OpenChannelLiveStreamScreen } from './OpenChannelLiveStreamS
 export { default as OpenChannelParticipantsScreen } from './OpenChannelParticipantsScreen';
 export { default as OpenChannelSettingsScreen } from './OpenChannelSettingsScreen';
 export { default as OpenChannelCreateScreen } from './OpenChannelCreateScreen';
+export { default as OpenChannelModerationScreen } from './OpenChannelModerationScreen';
