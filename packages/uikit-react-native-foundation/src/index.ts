@@ -27,8 +27,10 @@ export { DialogProvider, useActionMenu, useAlert, usePrompt, useBottomSheet } fr
 export { default as GroupChannelPreview } from './ui/GroupChannelPreview';
 export { default as Header } from './ui/Header';
 export { default as LoadingSpinner } from './ui/LoadingSpinner';
-export { default as MenuBar, MenuBarProps } from './ui/MenuBar';
-export { default as OpenChannelMessage, OpenChannelMessageProps } from './ui/OpenChannelMessage';
+export { default as MenuBar } from './ui/MenuBar';
+export type { MenuBarProps } from './ui/MenuBar';
+export { default as OpenChannelMessage } from './ui/OpenChannelMessage';
+export type { OpenChannelMessageProps } from './ui/OpenChannelMessage';
 export { default as OpenChannelPreview } from './ui/OpenChannelPreview';
 export { default as OutlinedButton } from './ui/OutlinedButton';
 export { default as Placeholder } from './ui/Placeholder';

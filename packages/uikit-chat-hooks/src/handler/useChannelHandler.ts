@@ -5,6 +5,18 @@ import { OpenChannelHandler } from '@sendbird/chat/openChannel';
 import { Logger, SendbirdChatSDK } from '@sendbird/uikit-utils';
 
 type ChannelType = 'open' | 'group';
+
+function getChannelHandler(type: ChannelType) {
+  switch (type) {
+    case 'open': {
+      return new GroupChannelHandler();
+    }
+    case 'group':
+    default: {
+      return new OpenChannelHandler();
+    }
+  }
+}
 export const useChannelHandler = <T extends ChannelType = 'group'>(
   sdk: SendbirdChatSDK,
   handlerId: string,
@@ -19,7 +31,7 @@ export const useChannelHandler = <T extends ChannelType = 'group'>(
   useEffect(() => {
     Logger.debug('[useChannelHandler] hook called by', handlerId);
 
-    const handler = type === 'open' ? new OpenChannelHandler() : new GroupChannelHandler();
+    const handler = getChannelHandler(type);
     const handlerKeys = Object.keys(handler) as (keyof typeof handler)[];
     handlerKeys.forEach((key) => {
       handler[key] = (...args: unknown[]) => {
