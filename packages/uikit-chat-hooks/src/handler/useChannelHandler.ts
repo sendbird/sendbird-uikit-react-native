@@ -9,11 +9,11 @@ type ChannelType = 'open' | 'group';
 function getChannelHandler(type: ChannelType) {
   switch (type) {
     case 'open': {
-      return new GroupChannelHandler();
+      return new OpenChannelHandler();
     }
     case 'group':
     default: {
-      return new OpenChannelHandler();
+      return new GroupChannelHandler();
     }
   }
 }
