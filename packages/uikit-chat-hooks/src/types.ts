@@ -351,6 +351,7 @@ export type UseOpenChannelMessagesOptions = {
   sortComparator?: (a: SendbirdMessage, b: SendbirdMessage) => number;
   queryCreator?: () => SendbirdPreviousMessageListQuery;
   onChannelDeleted?: () => void;
+  onError?: (error?: unknown) => void;
 };
 
 /**

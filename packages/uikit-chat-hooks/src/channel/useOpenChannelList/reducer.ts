@@ -17,8 +17,8 @@ type Action =
       value: { channelUrls: string[] };
     }
   | {
-      type: 'set_channels';
-      value: { channels: SendbirdChannel[]; clearPrev: boolean };
+      type: 'append_channels';
+      value: { channels: SendbirdChannel[]; clearBeforeAction: boolean };
     };
 
 type State = {
@@ -49,11 +49,12 @@ const defaultReducer = ({ ...draft }: State, action: Action) => {
       });
       break;
     }
-    case 'set_channels': {
-      if (action.value.clearPrev) {
-        draft.openChannels = getOpenChannels(action.value.channels);
+    case 'append_channels': {
+      const openChannels = getOpenChannels(action.value.channels);
+      if (action.value.clearBeforeAction) {
+        draft.openChannels = openChannels;
       } else {
-        draft.openChannels = [...draft.openChannels, ...getOpenChannels(action.value.channels)];
+        draft.openChannels = [...draft.openChannels, ...openChannels];
       }
       break;
     }
@@ -74,8 +75,8 @@ export const useOpenChannelListReducer = () => {
   const deleteChannels = (channelUrls: string[]) => {
     dispatch({ type: 'delete_channels', value: { channelUrls } });
   };
-  const setChannels = (channels: SendbirdChannel[], clearPrev: boolean) => {
-    dispatch({ type: 'set_channels', value: { channels, clearPrev } });
+  const appendChannels = (channels: SendbirdChannel[], clearBeforeAction: boolean) => {
+    dispatch({ type: 'append_channels', value: { channels, clearBeforeAction } });
   };
   const updateLoading = (status: boolean) => {
     dispatch({ type: 'update_loading', value: { status } });
@@ -89,7 +90,7 @@ export const useOpenChannelListReducer = () => {
     updateRefreshing,
     updateChannels,
     deleteChannels,
-    setChannels,
+    appendChannels,
 
     loading,
     refreshing,

@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import type { SendbirdGroupChannel, SendbirdMember, SendbirdUser } from '@sendbird/uikit-utils';
-import { useAsyncEffect } from '@sendbird/uikit-utils';
+import { useAsyncEffect, useDebounceEffect } from '@sendbird/uikit-utils';
 
 import { useSendbirdChat } from '../hooks/useContext';
 import type { Range } from '../types';
@@ -22,7 +22,6 @@ const useMentionSuggestion = (params: {
 
   const { mentionManager, currentUser } = useSendbirdChat();
   const [members, setMembers] = useState<SendbirdMember[]>([]);
-  const timeoutRef = useRef<NodeJS.Timeout>();
 
   const searchStringRangeRef = useRef<Range>({ start: 0, end: 0 });
   const searchLimitedRef = useRef(false);
@@ -79,21 +78,15 @@ const useMentionSuggestion = (params: {
     }
   };
 
-  useEffect(() => {
-    timeoutRef.current = setTimeout(async () => {
-      fetchMembers()
+  useDebounceEffect(
+    () => {
+      return fetchMembers()
         .then(setMembers)
-        .catch(() => setMembers([]))
-        .finally(() => (timeoutRef.current = undefined));
-    }, mentionManager.config.debounceMills);
-
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = undefined;
-      }
-    };
-  }, [text, selection]);
+        .catch(() => setMembers([]));
+    },
+    mentionManager.config.debounceMills,
+    [text, selection],
+  );
 
   return {
     members,
