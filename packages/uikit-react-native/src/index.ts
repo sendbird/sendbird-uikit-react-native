@@ -50,9 +50,9 @@ export { default as usePushTokenRegistration } from './hooks/usePushTokenRegistr
 export * from './hooks/useContext';
 
 /** Localization **/
+export { createBaseStringSet } from './localization/createBaseStringSet';
 export { default as StringSetEn } from './localization/StringSet.en';
-export { createBaseStringSet } from './localization/StringSet.type';
-export type { StringSet } from './localization/StringSet.type';
+export * from './localization/StringSet.type';
 
 /** Platform API **/
 export { default as createNativeFileService } from './platform/createFileService.native';
@@ -63,97 +63,39 @@ export { default as createExpoFileService } from './platform/createFileService.e
 export { default as createExpoClipboardService } from './platform/createClipboardService.expo';
 export { default as createExpoNotificationService } from './platform/createNotificationService.expo';
 export { default as createExpoMediaService } from './platform/createMediaService.expo';
-
-export type {
-  FileServiceInterface,
-  ClipboardServiceInterface,
-  FilePickerServiceInterface,
-  FileSystemServiceInterface,
-  SaveOptions,
-  OpenDocumentOptions,
-  OpenCameraOptions,
-  OpenMediaLibraryOptions,
-  OpenResultListener,
-  DownloadedPath,
-  Unsubscribe,
-  FilePickerResponse,
-  FileType,
-  NotificationServiceInterface,
-  MediaServiceInterface,
-} from './platform/types';
+export * from './platform/types';
 
 /** Feature - shared **/
 export * from './domain/userList';
-export type { UserListProps, UserListModule, UserListContextsType } from './domain/userList/types';
+export * from './domain/userList/types';
 
 /** Feature - group channels **/
 export * from './domain/groupChannel';
-export type {
-  GroupChannelProps,
-  GroupChannelModule,
-  GroupChannelFragment,
-  GroupChannelContextsType,
-} from './domain/groupChannel/types';
+export * from './domain/groupChannel/types';
 
 export * from './domain/groupChannelSettings';
-export type {
-  GroupChannelSettingsProps,
-  GroupChannelSettingsModule,
-  GroupChannelSettingsFragment,
-  GroupChannelSettingsContextsType,
-} from './domain/groupChannelSettings/types';
+export * from './domain/groupChannelSettings/types';
 
 export * from './domain/groupChannelList';
-export type {
-  GroupChannelType,
-  GroupChannelListProps,
-  GroupChannelListModule,
-  GroupChannelListFragment,
-  GroupChannelListContextsType,
-} from './domain/groupChannelList/types';
+export * from './domain/groupChannelList/types';
 
 export * from './domain/groupChannelNotifications';
-export type {
-  GroupChannelNotificationsProps,
-  GroupChannelNotificationsModule,
-  GroupChannelNotificationsFragment,
-  GroupChannelNotificationsContextsType,
-} from './domain/groupChannelNotifications/types';
+export * from './domain/groupChannelNotifications/types';
 
 export * from './domain/groupChannelUserList/types';
 
 /** Feature - open channels **/
 export * from './domain/openChannel';
-export type {
-  OpenChannelProps,
-  OpenChannelModule,
-  OpenChannelFragment,
-  OpenChannelContextsType,
-} from './domain/openChannel/types';
+export * from './domain/openChannel/types';
 
 export * from './domain/openChannelSettings';
-export type {
-  OpenChannelSettingsProps,
-  OpenChannelSettingsModule,
-  OpenChannelSettingsFragment,
-  OpenChannelSettingsContextsType,
-} from './domain/openChannelSettings/types';
+export * from './domain/openChannelSettings/types';
 
 export * from './domain/openChannelList';
-export type {
-  OpenChannelListProps,
-  OpenChannelListModule,
-  OpenChannelListFragment,
-  OpenChannelListContextsType,
-} from './domain/openChannelList/types';
+export * from './domain/openChannelList/types';
 
 export * from './domain/openChannelCreate';
-export type {
-  OpenChannelCreateProps,
-  OpenChannelCreateModule,
-  OpenChannelCreateFragment,
-  OpenChannelCreateContextsType,
-} from './domain/openChannelCreate/types';
+export * from './domain/openChannelCreate/types';
 
 export * from './domain/openChannelUserList/types';
 
