@@ -37,6 +37,7 @@ export { default as createOpenChannelParticipantsFragment } from './fragments/cr
 export { default as createOpenChannelSettingsFragment } from './fragments/createOpenChannelSettingsFragment';
 export { default as createOpenChannelListFragment } from './fragments/createOpenChannelListFragment';
 export { default as createOpenChannelCreateFragment } from './fragments/createOpenChannelCreateFragment';
+export { default as createOpenChannelModerationFragment } from './fragments/createOpenChannelModerationFragment';
 
 /** Context **/
 export { SendbirdChatContext, SendbirdChatProvider } from './contexts/SendbirdChatCtx';
@@ -96,6 +97,9 @@ export * from './domain/openChannelList/types';
 
 export * from './domain/openChannelCreate';
 export * from './domain/openChannelCreate/types';
+
+export * from './domain/openChannelModeration';
+export * from './domain/openChannelModeration/types';
 
 export * from './domain/openChannelUserList/types';
 

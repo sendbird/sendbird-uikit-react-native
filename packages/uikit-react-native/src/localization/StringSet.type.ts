@@ -79,6 +79,15 @@ export interface StringSet {
     DIALOG_IMAGE_MENU_CAMERA: string;
     DIALOG_IMAGE_MENU_PHOTO_LIBRARY: string;
   };
+  OPEN_CHANNEL_MODERATION: {
+    /** OpenChannelModeration > Header */
+    HEADER_TITLE: string;
+
+    /** OpenChannelModeration > Menu */
+    MENU_OPERATORS: string;
+    MENU_MUTED_PARTICIPANTS: string;
+    MENU_BANNED_USERS: string;
+  };
   GROUP_CHANNEL: {
     /** GroupChannel > Header */
     HEADER_TITLE: (currentUserId: string, channel: SendbirdGroupChannel) => string;

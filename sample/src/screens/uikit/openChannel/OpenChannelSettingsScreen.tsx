@@ -24,7 +24,7 @@ const OpenChannelSettingsScreen = () => {
       }}
       onPressMenuModeration={() => {
         // Navigate to group channel moderation
-        // navigation.push(Routes.OpenChannelModeration, params);
+        navigation.push(Routes.OpenChannelModeration, params);
       }}
       onPressMenuParticipants={() => {
         // Navigate to open channel participants
