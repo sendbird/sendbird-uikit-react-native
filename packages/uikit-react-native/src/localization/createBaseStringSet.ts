@@ -69,6 +69,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     OPEN_CHANNEL_LIST: {
       HEADER_TITLE: 'Channels',
       CHANNEL_PREVIEW_TITLE: (channel) => getOpenChannelTitle(channel),
+      ...overrides?.OPEN_CHANNEL_LIST,
     },
     OPEN_CHANNEL_CREATE: {
       HEADER_TITLE: 'New channel',
@@ -77,6 +78,14 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       DIALOG_IMAGE_MENU_REMOVE: 'Remove photo',
       DIALOG_IMAGE_MENU_CAMERA: 'Take photo',
       DIALOG_IMAGE_MENU_PHOTO_LIBRARY: 'Choose photo',
+      ...overrides?.OPEN_CHANNEL_CREATE,
+    },
+    OPEN_CHANNEL_MODERATION: {
+      HEADER_TITLE: 'Moderation',
+      MENU_OPERATORS: 'Operators',
+      MENU_MUTED_PARTICIPANTS: 'Muted participants',
+      MENU_BANNED_USERS: 'Banned users',
+      ...overrides?.OPEN_CHANNEL_MODERATION,
     },
     GROUP_CHANNEL: {
       HEADER_TITLE: (uid, channel) => getGroupChannelTitle(uid, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),

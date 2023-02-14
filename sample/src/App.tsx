@@ -38,6 +38,7 @@ import {
   HomeScreen,
   OpenChannelCreateScreen,
   OpenChannelLiveStreamScreen,
+  OpenChannelModerationScreen,
   OpenChannelParticipantsScreen,
   OpenChannelScreen,
   OpenChannelSettingsScreen,
@@ -156,6 +157,7 @@ const Navigations = () => {
               <RootStack.Group>
                 <RootStack.Screen name={Routes.OpenChannelSettings} component={OpenChannelSettingsScreen} />
                 <RootStack.Screen name={Routes.OpenChannelParticipants} component={OpenChannelParticipantsScreen} />
+                <RootStack.Screen name={Routes.OpenChannelModeration} component={OpenChannelModerationScreen} />
               </RootStack.Group>
               <RootStack.Screen name={Routes.OpenChannelCreate} component={OpenChannelCreateScreen} />
             </RootStack.Group>
