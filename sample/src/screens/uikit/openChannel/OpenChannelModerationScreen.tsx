@@ -4,7 +4,7 @@ import { useOpenChannel } from '@sendbird/uikit-chat-hooks';
 import { createOpenChannelModerationFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
 
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
-import type { Routes } from '../../../libs/navigation';
+import { Routes } from '../../../libs/navigation';
 
 const OpenChannelModerationFragment = createOpenChannelModerationFragment();
 const OpenChannelModerationScreen = () => {
@@ -27,7 +27,7 @@ const OpenChannelModerationScreen = () => {
       }}
       onPressMenuBannedUsers={() => {
         // Navigate to group channel banned users
-        // navigation.push(Routes.OpenChannelBannedUsers, params);
+        navigation.push(Routes.OpenChannelBannedUsers, params);
       }}
       onPressHeaderLeft={() => {
         // Navigate back

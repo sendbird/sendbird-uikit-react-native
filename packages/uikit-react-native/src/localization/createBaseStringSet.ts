@@ -1,5 +1,6 @@
 import type { Locale } from 'date-fns';
 
+import type { PartialDeep } from '@sendbird/uikit-utils';
 import {
   getDateSeparatorFormat,
   getGroupChannelLastMessage,
@@ -9,7 +10,6 @@ import {
   getOpenChannelParticipants,
   getOpenChannelTitle,
 } from '@sendbird/uikit-utils';
-import type { PartialDeep } from '@sendbird/uikit-utils';
 
 import type { StringSet } from './StringSet.type';
 
@@ -86,6 +86,10 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       MENU_MUTED_PARTICIPANTS: 'Muted participants',
       MENU_BANNED_USERS: 'Banned users',
       ...overrides?.OPEN_CHANNEL_MODERATION,
+    },
+    OPEN_CHANNEL_BANNED_USERS: {
+      HEADER_TITLE: 'Banned users',
+      ...overrides?.OPEN_CHANNEL_BANNED_USERS,
     },
     GROUP_CHANNEL: {
       HEADER_TITLE: (uid, channel) => getGroupChannelTitle(uid, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
