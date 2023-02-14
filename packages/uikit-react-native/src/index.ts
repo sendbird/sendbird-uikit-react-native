@@ -38,6 +38,7 @@ export { default as createOpenChannelSettingsFragment } from './fragments/create
 export { default as createOpenChannelListFragment } from './fragments/createOpenChannelListFragment';
 export { default as createOpenChannelCreateFragment } from './fragments/createOpenChannelCreateFragment';
 export { default as createOpenChannelModerationFragment } from './fragments/createOpenChannelModerationFragment';
+export { default as createOpenChannelBannedUsersFragment } from './fragments/createOpenChannelBannedUsersFragment';
 
 /** Context **/
 export { SendbirdChatContext, SendbirdChatProvider } from './contexts/SendbirdChatCtx';
@@ -100,6 +101,9 @@ export * from './domain/openChannelCreate/types';
 
 export * from './domain/openChannelModeration';
 export * from './domain/openChannelModeration/types';
+
+export * from './domain/openChannelBannedUsers';
+export * from './domain/openChannelBannedUsers/types';
 
 export * from './domain/openChannelUserList/types';
 

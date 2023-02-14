@@ -5,3 +5,4 @@ export { default as OpenChannelParticipantsScreen } from './OpenChannelParticipa
 export { default as OpenChannelSettingsScreen } from './OpenChannelSettingsScreen';
 export { default as OpenChannelCreateScreen } from './OpenChannelCreateScreen';
 export { default as OpenChannelModerationScreen } from './OpenChannelModerationScreen';
+export { default as OpenChannelBannedUsersScreen } from './OpenChannelBannedUsersScreen';
