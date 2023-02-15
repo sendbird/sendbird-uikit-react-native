@@ -88,6 +88,10 @@ export interface StringSet {
     MENU_MUTED_PARTICIPANTS: string;
     MENU_BANNED_USERS: string;
   };
+  OPEN_CHANNEL_BANNED_USERS: {
+    /** OpenChannelBannedUsers > Header */
+    HEADER_TITLE: string;
+  };
   GROUP_CHANNEL: {
     /** GroupChannel > Header */
     HEADER_TITLE: (currentUserId: string, channel: SendbirdGroupChannel) => string;
