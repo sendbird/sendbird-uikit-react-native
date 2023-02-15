@@ -13,6 +13,11 @@ export const useUniqId = (key: string) => {
   })[0];
 };
 
+export const useUniqHandlerId = (name: string) => {
+  const id = useUniqId(name);
+  return `${name}_${id}`;
+};
+
 export const useForceUpdate = () => {
   const [, updater] = useState(0);
   return useCallback(() => updater((prev) => prev + 1), []);

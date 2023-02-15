@@ -1,7 +1,14 @@
 import { useRef } from 'react';
 
 import type { SendbirdBaseChannel, SendbirdOpenChannel, SendbirdPreviousMessageListQuery } from '@sendbird/uikit-utils';
-import { NOOP, isDifferentChannel, useAsyncEffect, useForceUpdate, useFreshCallback } from '@sendbird/uikit-utils';
+import {
+  NOOP,
+  isDifferentChannel,
+  useAsyncEffect,
+  useForceUpdate,
+  useFreshCallback,
+  useUniqHandlerId,
+} from '@sendbird/uikit-utils';
 
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseOpenChannelMessages, UseOpenChannelMessagesOptions } from '../../types';
@@ -15,11 +22,10 @@ const createMessageQuery = (channel: SendbirdOpenChannel, creator?: UseOpenChann
   });
 };
 
-const HOOK_NAME = 'useOpenChannelMessagesWithQuery';
 export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, channel, userId, options) => {
   const queryRef = useRef<SendbirdPreviousMessageListQuery>();
-
   const forceUpdate = useForceUpdate();
+  const handlerId = useUniqHandlerId('useOpenChannelMessagesWithQuery');
 
   const {
     loading,
@@ -55,7 +61,7 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
 
   useChannelHandler(
     sdk,
-    HOOK_NAME,
+    handlerId,
     {
       // Messages
       onMessageReceived(eventChannel, message) {

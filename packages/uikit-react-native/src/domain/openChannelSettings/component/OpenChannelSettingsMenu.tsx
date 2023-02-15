@@ -4,14 +4,13 @@ import { View } from 'react-native';
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import type { MenuBarProps } from '@sendbird/uikit-react-native-foundation';
 import { Icon, MenuBar, useAlert, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { SendbirdBaseChannel, isDifferentChannel, useForceUpdate, useUniqId } from '@sendbird/uikit-utils';
+import { SendbirdBaseChannel, isDifferentChannel, useForceUpdate, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import { UNKNOWN_USER_ID } from '../../../constants';
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { OpenChannelSettingsContexts } from '../module/moduleContext';
 import type { OpenChannelSettingsProps } from '../types';
 
-const ComponentName = 'OpenChannelSettingsMenu';
 const OpenChannelSettingsMenu = ({
   onPressMenuModeration,
   onPressMenuParticipants,
@@ -25,7 +24,7 @@ const OpenChannelSettingsMenu = ({
   const { alert } = useAlert();
 
   const forceUpdate = useForceUpdate();
-  const uniqId = useUniqId(ComponentName);
+  const handlerId = useUniqHandlerId('OpenChannelSettingsMenu');
 
   const onChannelUpdated = (eventChannel: SendbirdBaseChannel) => {
     if (isDifferentChannel(channel, eventChannel)) return;
@@ -34,7 +33,7 @@ const OpenChannelSettingsMenu = ({
 
   useChannelHandler(
     sdk,
-    `${ComponentName}_${uniqId}`,
+    handlerId,
     {
       onChannelChanged: onChannelUpdated,
       onChannelParticipantCountChanged: onChannelUpdated,

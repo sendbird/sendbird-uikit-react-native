@@ -1,13 +1,11 @@
 import { useRef } from 'react';
 
 import type { SendbirdBaseChannel, SendbirdChatSDK, SendbirdOpenChannelListQuery } from '@sendbird/uikit-utils';
-import { useAsyncEffect, useFreshCallback } from '@sendbird/uikit-utils';
+import { useAsyncEffect, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseOpenChannelList, UseOpenChannelListOptions } from '../../types';
 import { useOpenChannelListReducer } from './reducer';
-
-const HOOK_NAME = 'useOpenChannelListWithQuery';
 
 const createOpenChannelListQuery = (sdk: SendbirdChatSDK, queryCreator: UseOpenChannelListOptions['queryCreator']) => {
   const passedQuery = queryCreator?.();
@@ -17,6 +15,7 @@ const createOpenChannelListQuery = (sdk: SendbirdChatSDK, queryCreator: UseOpenC
 
 export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, options) => {
   const queryRef = useRef<SendbirdOpenChannelListQuery>();
+  const handlerId = useUniqHandlerId('useOpenChannelListWithQuery');
 
   const {
     loading,
@@ -52,7 +51,7 @@ export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, opt
 
   useChannelHandler(
     sdk,
-    HOOK_NAME,
+    handlerId,
     {
       onChannelChanged: updateChannel,
       onChannelFrozen: updateChannel,

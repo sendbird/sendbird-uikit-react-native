@@ -13,6 +13,7 @@ import {
   isDifferentChannel,
   useForceUpdate,
   useFreshCallback,
+  useUniqHandlerId,
 } from '@sendbird/uikit-utils';
 
 import { useChannelHandler } from '../../handler/useChannelHandler';
@@ -28,11 +29,10 @@ const createMessageCollection = (
   return channel.createMessageCollection({ filter, limit: 100 });
 };
 
-const HOOK_NAME = 'useGroupChannelMessagesWithCollection';
-
 export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (sdk, channel, userId, options) => {
   const forceUpdate = useForceUpdate();
   const collectionRef = useRef<SendbirdMessageCollection>();
+  const handlerId = useUniqHandlerId('useGroupChannelMessagesWithCollection');
 
   const {
     loading,
@@ -59,7 +59,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
           break;
       }
     } catch (e) {
-      Logger.warn(`[${HOOK_NAME}/channelMarkAsRead]`, e);
+      Logger.warn('[useGroupChannelMessagesWithCollection/channelMarkAsRead]', e);
     }
   };
 
@@ -115,9 +115,9 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
         collectionRef.current
           .initialize(MessageCollectionInitPolicy.CACHE_AND_REPLACE_BY_API)
           .onCacheResult((err, messages) => {
-            if (err) sdk.isCacheEnabled && Logger.error(`[${HOOK_NAME}/onCacheResult]`, err);
+            if (err) sdk.isCacheEnabled && Logger.error('[useGroupChannelMessagesWithCollection/onCacheResult]', err);
             else {
-              Logger.debug(`[${HOOK_NAME}/onCacheResult]`, 'message length:', messages.length);
+              Logger.debug('[useGroupChannelMessagesWithCollection/onCacheResult]', 'message length:', messages.length);
 
               updateMessages(messages, true, sdk.currentUser.userId);
               updateMessages(collectionRef.current?.pendingMessages ?? [], false, sdk.currentUser.userId);
@@ -126,9 +126,9 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
             callback?.();
           })
           .onApiResult((err, messages) => {
-            if (err) Logger.warn(`[${HOOK_NAME}/onApiResult]`, err);
+            if (err) Logger.warn('[useGroupChannelMessagesWithCollection/onApiResult]', err);
             else {
-              Logger.debug(`[${HOOK_NAME}/onApiResult]`, 'message length:', messages.length);
+              Logger.debug('[useGroupChannelMessagesWithCollection/onApiResult]', 'message length:', messages.length);
 
               updateMessages(messages, true, sdk.currentUser.userId);
               if (sdk.isCacheEnabled) {
@@ -143,7 +143,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     [sdk, channel.url, options?.collectionCreator],
   );
 
-  useChannelHandler(sdk, HOOK_NAME, {
+  useChannelHandler(sdk, handlerId, {
     onUserBanned(channel, bannedUser) {
       if (channel.isGroupChannel() && !isDifferentChannel(channel, channel)) {
         if (bannedUser.userId === sdk.currentUser.userId) {

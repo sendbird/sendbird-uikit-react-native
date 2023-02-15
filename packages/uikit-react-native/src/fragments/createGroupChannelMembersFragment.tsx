@@ -4,7 +4,7 @@ import { useChannelHandler, useUserList } from '@sendbird/uikit-chat-hooks';
 import type { ActionMenuItem } from '@sendbird/uikit-react-native-foundation';
 import { Icon, useActionMenu } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMember } from '@sendbird/uikit-utils';
-import { ifOperator, ifThenOr, isDifferentChannel, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
+import { ifOperator, ifThenOr, isDifferentChannel, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import UserActionBar from '../components/UserActionBar';
@@ -14,14 +14,14 @@ import type { UserListModule } from '../domain/userList/types';
 import { useLocalization, useSendbirdChat, useUserProfile } from '../hooks/useContext';
 
 const RETURN_EMPTY_STRING = () => '';
-const HOOK_NAME = 'createGroupChannelMembersFragment';
+
 const createGroupChannelMembersFragment = (
   initModule?: Partial<UserListModule<SendbirdMember>>,
 ): GroupChannelMembersFragment<SendbirdMember> => {
   const UserListModule = createUserListModule<SendbirdMember>(initModule);
 
   return ({ channel, onPressHeaderLeft, onPressHeaderRight, renderUser }) => {
-    const uniqId = useUniqId(HOOK_NAME);
+    const handlerId = useUniqHandlerId('GroupChannelMembersFragment');
 
     const refreshSchedule = useRef<NodeJS.Timeout>();
     const { STRINGS } = useLocalization();
@@ -33,7 +33,7 @@ const createGroupChannelMembersFragment = (
       queryCreator: () => channel.createMemberListQuery({ limit: 20 }),
     });
 
-    useChannelHandler(sdk, `${HOOK_NAME}_${uniqId}`, {
+    useChannelHandler(sdk, handlerId, {
       onUserLeft(eventChannel, user) {
         if (isDifferentChannel(eventChannel, channel)) return;
         deleteUser(user.userId);

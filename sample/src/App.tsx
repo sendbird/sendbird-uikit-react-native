@@ -40,7 +40,10 @@ import {
   OpenChannelCreateScreen,
   OpenChannelLiveStreamScreen,
   OpenChannelModerationScreen,
+  OpenChannelMutedParticipantsScreen,
+  OpenChannelOperatorsScreen,
   OpenChannelParticipantsScreen,
+  OpenChannelRegisterOperatorScreen,
   OpenChannelScreen,
   OpenChannelSettingsScreen,
   OpenChannelTabs,
@@ -138,13 +141,11 @@ const Navigations = () => {
                 <RootStack.Screen name={Routes.GroupChannelModeration} component={GroupChannelModerationScreen} />
                 <RootStack.Screen name={Routes.GroupChannelMutedMembers} component={GroupChannelMutedMembersScreen} />
                 <RootStack.Screen name={Routes.GroupChannelBannedUsers} component={GroupChannelBannedUsersScreen} />
-                <RootStack.Group>
-                  <RootStack.Screen name={Routes.GroupChannelOperators} component={GroupChannelOperatorsScreen} />
-                  <RootStack.Screen
-                    name={Routes.GroupChannelRegisterOperator}
-                    component={GroupChannelRegisterOperatorScreen}
-                  />
-                </RootStack.Group>
+                <RootStack.Screen name={Routes.GroupChannelOperators} component={GroupChannelOperatorsScreen} />
+                <RootStack.Screen
+                  name={Routes.GroupChannelRegisterOperator}
+                  component={GroupChannelRegisterOperatorScreen}
+                />
               </RootStack.Group>
               <RootStack.Screen name={Routes.GroupChannelCreate} component={GroupChannelCreateScreen} />
               <RootStack.Screen name={Routes.GroupChannelInvite} component={GroupChannelInviteScreen} />
@@ -159,7 +160,16 @@ const Navigations = () => {
                 <RootStack.Screen name={Routes.OpenChannelSettings} component={OpenChannelSettingsScreen} />
                 <RootStack.Screen name={Routes.OpenChannelParticipants} component={OpenChannelParticipantsScreen} />
                 <RootStack.Screen name={Routes.OpenChannelModeration} component={OpenChannelModerationScreen} />
+                <RootStack.Screen
+                  name={Routes.OpenChannelMutedParticipants}
+                  component={OpenChannelMutedParticipantsScreen}
+                />
                 <RootStack.Screen name={Routes.OpenChannelBannedUsers} component={OpenChannelBannedUsersScreen} />
+                <RootStack.Screen name={Routes.OpenChannelOperators} component={OpenChannelOperatorsScreen} />
+                <RootStack.Screen
+                  name={Routes.OpenChannelRegisterOperator}
+                  component={OpenChannelRegisterOperatorScreen}
+                />
               </RootStack.Group>
               <RootStack.Screen name={Routes.OpenChannelCreate} component={OpenChannelCreateScreen} />
             </RootStack.Group>

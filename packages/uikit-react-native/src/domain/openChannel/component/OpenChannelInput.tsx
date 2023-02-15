@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
-import { SendbirdBaseChannel, getOpenChannelChatAvailableState, useUniqId } from '@sendbird/uikit-utils';
+import { SendbirdBaseChannel, getOpenChannelChatAvailableState, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import ChannelInput from '../../../components/ChannelInput';
 import { UNKNOWN_USER_ID } from '../../../constants';
@@ -35,10 +35,10 @@ const OpenChannelInput = (props: OpenChannelProps['Input']) => {
     updateChatAvailableState(channel);
   }, [channel, updateChatAvailableState]);
 
-  const id = useUniqId('OpenChannelInput');
+  const handlerId = useUniqHandlerId('OpenChannelInput');
   useChannelHandler(
     sdk,
-    `OpenChannelInput_${id}`,
+    handlerId,
     {
       onChannelFrozen(channel) {
         updateChatAvailableState(channel);
