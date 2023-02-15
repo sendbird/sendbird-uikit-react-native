@@ -11,8 +11,8 @@ import OpenChannelListLiveStreamsScreen from './OpenChannelListLiveStreamsScreen
 
 const Tab = createBottomTabNavigator();
 
-const GroupChannelTabs = () => {
-  const { params } = useAppNavigation<Routes.GroupChannelTabs>();
+const OpenChannelTabs = () => {
+  const { params } = useAppNavigation<Routes.OpenChannelTabs>();
 
   const { colors, typography } = useUIKitTheme();
 
@@ -55,4 +55,4 @@ const GroupChannelTabs = () => {
   );
 };
 
-export default GroupChannelTabs;
+export default OpenChannelTabs;

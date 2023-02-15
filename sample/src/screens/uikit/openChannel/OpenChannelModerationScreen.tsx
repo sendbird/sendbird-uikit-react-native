@@ -18,15 +18,15 @@ const OpenChannelModerationScreen = () => {
     <OpenChannelModerationFragment
       channel={channel}
       onPressMenuOperators={() => {
-        // Navigate to group channel operators
-        // navigation.push(Routes.OpenChannelOperators, params);
+        // Navigate to open channel operators
+        navigation.push(Routes.OpenChannelOperators, params);
       }}
       onPressMenuMutedParticipants={() => {
-        // Navigate to group channel muted participants
+        // Navigate to open channel muted participants
         navigation.push(Routes.OpenChannelMutedParticipants, params);
       }}
       onPressMenuBannedUsers={() => {
-        // Navigate to group channel banned users
+        // Navigate to open channel banned users
         navigation.push(Routes.OpenChannelBannedUsers, params);
       }}
       onPressHeaderLeft={() => {
