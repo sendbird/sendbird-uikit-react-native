@@ -11,6 +11,7 @@ const GroupChannelOperatorsList = ({
   operators,
   renderUser,
   ListEmptyComponent,
+  onLoadNext,
 }: GroupChannelOperatorsProps['List']) => {
   const renderItem: ListRenderItem<SendbirdUser> = useFreshCallback(({ item }) => renderUser?.({ user: item }));
   const { left, right } = useSafeAreaInsets();
@@ -23,6 +24,7 @@ const GroupChannelOperatorsList = ({
       ListEmptyComponent={ListEmptyComponent}
       bounces={false}
       keyExtractor={getUserUniqId}
+      onEndReached={onLoadNext}
     />
   );
 };

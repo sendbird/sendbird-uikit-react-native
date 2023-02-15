@@ -10,6 +10,7 @@ const OpenChannelMutedParticipantsList = ({
   renderUser,
   mutedMembers,
   ListEmptyComponent,
+  onLoadNext,
 }: OpenChannelMutedParticipantsProps['List']) => {
   const renderItem: ListRenderItem<SendbirdRestrictedUser> = useFreshCallback(({ item }) =>
     renderUser?.({ user: item }),
@@ -24,6 +25,7 @@ const OpenChannelMutedParticipantsList = ({
       ListEmptyComponent={ListEmptyComponent}
       bounces={false}
       keyExtractor={getUserUniqId}
+      onEndReached={onLoadNext}
     />
   );
 };
