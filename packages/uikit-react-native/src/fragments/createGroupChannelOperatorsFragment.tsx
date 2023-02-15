@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useChannelHandler, useUserList } from '@sendbird/uikit-chat-hooks';
 import { useActionMenu } from '@sendbird/uikit-react-native-foundation';
-import { ifOperator, isDifferentChannel, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
+import { ifOperator, isDifferentChannel, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import UserActionBar from '../components/UserActionBar';
@@ -10,14 +10,13 @@ import { createGroupChannelOperatorsModule } from '../domain/groupChannelOperato
 import type { GroupChannelOperatorsFragment, GroupChannelOperatorsModule } from '../domain/groupChannelOperators/types';
 import { useLocalization, useSendbirdChat, useUserProfile } from '../hooks/useContext';
 
-const name = 'createGroupChannelOperatorsFragment';
 const createGroupChannelOperatorsFragment = (
   initModule?: Partial<GroupChannelOperatorsModule>,
 ): GroupChannelOperatorsFragment => {
   const GroupChannelOperatorsModule = createGroupChannelOperatorsModule(initModule);
 
   return ({ channel, onPressHeaderLeft, onPressHeaderRight, renderUser }) => {
-    const uniqId = useUniqId(name);
+    const handlerId = useUniqHandlerId('GroupChannelOperatorsFragment');
 
     const { STRINGS } = useLocalization();
     const { sdk, currentUser } = useSendbirdChat();
@@ -28,7 +27,7 @@ const createGroupChannelOperatorsFragment = (
       queryCreator: () => channel.createOperatorListQuery({ limit: 20 }),
     });
 
-    useChannelHandler(sdk, `${name}_${uniqId}`, {
+    useChannelHandler(sdk, handlerId, {
       onUserLeft(eventChannel, user) {
         if (isDifferentChannel(eventChannel, channel)) return;
         deleteUser(user.userId);

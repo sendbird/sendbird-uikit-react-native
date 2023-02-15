@@ -9,7 +9,7 @@ import {
   SendbirdGroupChannelUpdateParams,
   isDifferentChannel,
   useForceUpdate,
-  useUniqId,
+  useUniqHandlerId,
 } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
@@ -27,9 +27,8 @@ export const GroupChannelSettingsContexts: GroupChannelSettingsContextsType = {
   }),
 };
 
-const HOOK_NAME = 'GroupChannelSettingsContextsProvider';
 export const GroupChannelSettingsContextsProvider: GroupChannelSettingsModule['Provider'] = ({ children, channel }) => {
-  const uniqId = useUniqId(HOOK_NAME);
+  const handlerId = useUniqHandlerId('GroupChannelSettingsContextsProvider');
   const forceUpdate = useForceUpdate();
   const { STRINGS } = useLocalization();
   const { sdk } = useSendbirdChat();
@@ -41,7 +40,7 @@ export const GroupChannelSettingsContextsProvider: GroupChannelSettingsModule['P
     forceUpdate();
   };
 
-  useChannelHandler(sdk, `${HOOK_NAME}_${uniqId}`, {
+  useChannelHandler(sdk, handlerId, {
     onChannelChanged: onChannelChanged,
     onChannelFrozen: onChannelChanged,
     onChannelUnfrozen: onChannelChanged,
