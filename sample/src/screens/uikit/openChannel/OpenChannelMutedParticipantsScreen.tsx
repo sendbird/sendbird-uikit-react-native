@@ -8,7 +8,7 @@ import type { Routes } from '../../../libs/navigation';
 
 const OpenChannelMutedMembersFragment = createOpenChannelMutedParticipantsFragment();
 const OpenChannelMutedParticipantsScreen = () => {
-  const { navigation, params } = useAppNavigation<Routes.GroupChannelMutedMembers>();
+  const { navigation, params } = useAppNavigation<Routes.OpenChannelMutedParticipants>();
 
   const { sdk } = useSendbirdChat();
   const { channel } = useOpenChannel(sdk, params.channelUrl);
