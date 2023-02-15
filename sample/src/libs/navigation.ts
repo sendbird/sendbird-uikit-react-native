@@ -24,6 +24,7 @@ export enum Routes {
   OpenChannelParticipants = 'OpenChannelParticipants',
   OpenChannelCreate = 'OpenChannelCreate',
   OpenChannelModeration = 'OpenChannelModeration',
+  OpenChannelBannedUsers = 'OpenChannelBannedUsers',
 
   GroupChannelTabs = 'GroupChannelTabs',
   GroupChannelList = 'GroupChannelList',
@@ -168,6 +169,10 @@ export type RouteParamsUnion =
     }
   | {
       route: Routes.OpenChannelModeration;
+      params: ChannelUrlParams;
+    }
+  | {
+      route: Routes.OpenChannelBannedUsers;
       params: ChannelUrlParams;
     };
 
