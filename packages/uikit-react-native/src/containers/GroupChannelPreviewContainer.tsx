@@ -17,7 +17,7 @@ import {
   isDifferentChannel,
   isMyMessage,
   useIIFE,
-  useUniqId,
+  useUniqHandlerId,
 } from '@sendbird/uikit-utils';
 
 import ChannelCover from '../components/ChannelCover';
@@ -39,8 +39,8 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
   const [typingUsers, setTypingUsers] = useState<SendbirdUser[]>([]);
 
   if (features.channelListTypingIndicatorEnabled) {
-    const typingId = useUniqId('GroupChannelPreviewContainer');
-    useChannelHandler(sdk, `GroupChannelPreviewContainer_TypingIndicator_${typingId}`, {
+    const handlerId = useUniqHandlerId('GroupChannelPreviewContainer_TypingIndicator');
+    useChannelHandler(sdk, handlerId, {
       onTypingStatusUpdated(eventChannel) {
         if (isDifferentChannel(channel, eventChannel)) return;
         setTypingUsers(eventChannel.getTypingUsers());

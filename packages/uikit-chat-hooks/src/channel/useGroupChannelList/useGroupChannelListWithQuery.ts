@@ -2,14 +2,12 @@ import { useRef } from 'react';
 
 import { GroupChannelListOrder } from '@sendbird/chat/groupChannel';
 import type { SendbirdChannel, SendbirdChatSDK, SendbirdGroupChannelListQuery } from '@sendbird/uikit-utils';
-import { confirmAndMarkAsDelivered, useAsyncEffect, useFreshCallback } from '@sendbird/uikit-utils';
+import { confirmAndMarkAsDelivered, useAsyncEffect, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import { useAppFeatures } from '../../common/useAppFeatures';
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseGroupChannelList, UseGroupChannelListOptions } from '../../types';
 import { useGroupChannelListReducer } from './reducer';
-
-const HOOK_NAME = 'useGroupChannelListWithQuery';
 
 const createGroupChannelListQuery = (
   sdk: SendbirdChatSDK,
@@ -28,6 +26,7 @@ const createGroupChannelListQuery = (
 export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, options) => {
   const { deliveryReceiptEnabled } = useAppFeatures(sdk);
   const queryRef = useRef<SendbirdGroupChannelListQuery>();
+  const handlerId = useUniqHandlerId('useGroupChannelListWithQuery');
 
   const {
     loading,
@@ -66,7 +65,7 @@ export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, o
     updateLoading(false);
   }, [init, userId]);
 
-  useChannelHandler(sdk, HOOK_NAME, {
+  useChannelHandler(sdk, handlerId, {
     onChannelChanged: (channel) => updateChannels([channel]),
     onChannelFrozen: (channel) => updateChannels([channel]),
     onChannelUnfrozen: (channel) => updateChannels([channel]),

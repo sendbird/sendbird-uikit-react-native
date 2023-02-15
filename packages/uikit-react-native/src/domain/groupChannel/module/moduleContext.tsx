@@ -8,7 +8,7 @@ import {
   SendbirdUser,
   SendbirdUserMessage,
   isDifferentChannel,
-  useUniqId,
+  useUniqHandlerId,
 } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
@@ -34,14 +34,14 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
 }) => {
   if (!channel) throw new Error('GroupChannel is not provided to GroupChannelModule');
 
-  const id = useUniqId('GroupChannelContextsProvider');
+  const handlerId = useUniqHandlerId('GroupChannelContextsProvider');
   const { STRINGS } = useLocalization();
   const { currentUser, sdk } = useSendbirdChat();
 
   const [typingUsers, setTypingUsers] = useState<SendbirdUser[]>([]);
   const [messageToEdit, setMessageToEdit] = useState<SendbirdUserMessage | SendbirdFileMessage>();
 
-  useChannelHandler(sdk, `GroupChannelContextsProvider_${id}`, {
+  useChannelHandler(sdk, handlerId, {
     onTypingStatusUpdated(eventChannel) {
       if (isDifferentChannel(channel, eventChannel)) return;
       if (!enableTypingIndicator) return;

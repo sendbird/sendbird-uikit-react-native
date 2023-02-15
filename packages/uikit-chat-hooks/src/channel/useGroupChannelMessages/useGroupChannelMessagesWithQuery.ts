@@ -11,6 +11,7 @@ import {
   isDifferentChannel,
   useAsyncEffect,
   useForceUpdate,
+  useUniqHandlerId,
 } from '@sendbird/uikit-utils';
 
 import { useChannelHandler } from '../../handler/useChannelHandler';
@@ -28,9 +29,9 @@ const createMessageQuery = (
   });
 };
 
-const HOOK_NAME = 'useGroupChannelMessagesWithQuery';
 export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, channel, userId, options) => {
   const queryRef = useRef<SendbirdPreviousMessageListQuery>();
+  const handlerId = useUniqHandlerId('useGroupChannelMessagesWithQuery');
 
   const forceUpdate = useForceUpdate();
 
@@ -52,7 +53,7 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
     try {
       await confirmAndMarkAsRead([channel]);
     } catch (e) {
-      Logger.warn(`[${HOOK_NAME}/channelMarkAsRead]`, e);
+      Logger.warn('[useGroupChannelMessagesWithQuery/channelMarkAsRead]', e);
     }
   };
 
@@ -77,7 +78,7 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
     }
   };
 
-  useChannelHandler(sdk, HOOK_NAME, {
+  useChannelHandler(sdk, handlerId, {
     // Messages
     onMessageReceived(eventChannel, message) {
       if (isDifferentChannel(channel, eventChannel)) return;
