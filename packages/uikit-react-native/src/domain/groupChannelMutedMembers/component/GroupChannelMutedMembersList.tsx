@@ -10,6 +10,7 @@ const GroupChannelMutedMembersList = ({
   renderUser,
   mutedMembers,
   ListEmptyComponent,
+  onLoadNext,
 }: GroupChannelMutedMembersProps['List']) => {
   const renderItem: ListRenderItem<SendbirdRestrictedUser> = useFreshCallback(({ item }) =>
     renderUser?.({ user: item }),
@@ -24,6 +25,7 @@ const GroupChannelMutedMembersList = ({
       ListEmptyComponent={ListEmptyComponent}
       bounces={false}
       keyExtractor={getUserUniqId}
+      onEndReached={onLoadNext}
     />
   );
 };
