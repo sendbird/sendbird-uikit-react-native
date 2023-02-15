@@ -2,14 +2,12 @@ import { useEffect, useRef } from 'react';
 
 import { GroupChannelEventSource, GroupChannelFilter, GroupChannelListOrder } from '@sendbird/chat/groupChannel';
 import type { SendbirdBaseChannel, SendbirdChatSDK, SendbirdGroupChannelCollection } from '@sendbird/uikit-utils';
-import { confirmAndMarkAsDelivered, useAsyncEffect, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
+import { confirmAndMarkAsDelivered, useAsyncEffect, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import { useAppFeatures } from '../../common/useAppFeatures';
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseGroupChannelList, UseGroupChannelListOptions } from '../../types';
 import { useGroupChannelListReducer } from './reducer';
-
-const HOOK_NAME = 'useGroupChannelListWithCollection';
 
 const createGroupChannelListCollection = (
   sdk: SendbirdChatSDK,
@@ -29,7 +27,7 @@ const createGroupChannelListCollection = (
 };
 
 export const useGroupChannelListWithCollection: UseGroupChannelList = (sdk, userId, options) => {
-  const id = useUniqId(HOOK_NAME);
+  const handlerId = useUniqHandlerId('useGroupChannelListWithCollection');
   const { deliveryReceiptEnabled } = useAppFeatures(sdk);
 
   const collectionRef = useRef<SendbirdGroupChannelCollection>();
@@ -94,7 +92,7 @@ export const useGroupChannelListWithCollection: UseGroupChannelList = (sdk, user
     updateLoading(false);
   }, [init, userId]);
 
-  useChannelHandler(sdk, `${HOOK_NAME}_${id}`, {
+  useChannelHandler(sdk, handlerId, {
     onUserBanned: (channel, user) => {
       const isMe = user.userId === userId;
       if (isMe) deleteChannels([channel.url]);

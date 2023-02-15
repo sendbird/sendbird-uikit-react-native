@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { Icon, Image, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { SendbirdBaseChannel, SendbirdBaseMessage, useUniqId } from '@sendbird/uikit-utils';
+import { SendbirdBaseChannel, SendbirdBaseMessage, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import { UNKNOWN_USER_ID } from '../../constants';
 import { useReaction, useSendbirdChat } from '../../hooks/useContext';
@@ -14,15 +14,14 @@ type Props = {
   channel: SendbirdBaseChannel;
   message: SendbirdBaseMessage;
 };
-const COMPONENT_NAME = 'BottomSheetReactionAddon';
 const BottomSheetReactionAddon = ({ onClose, message, channel }: Props) => {
   const { emojiManager, currentUser, sdk } = useSendbirdChat();
   const { updateReactionFocusedItem, openReactionList } = useReaction();
   const { colors } = useUIKitTheme();
-  const id = useUniqId(COMPONENT_NAME);
+  const handlerId = useUniqHandlerId('BottomSheetReactionAddon');
   const { left, right } = useSafeAreaInsets();
 
-  useChannelHandler(sdk, COMPONENT_NAME + id, {
+  useChannelHandler(sdk, handlerId, {
     async onReactionUpdated(eventChannel, event) {
       if (channel?.url === eventChannel.url && event.messageId === message?.messageId) {
         updateReactionFocusedItem({

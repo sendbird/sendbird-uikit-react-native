@@ -9,7 +9,7 @@ import {
   SendbirdOpenChannelUpdateParams,
   isDifferentChannel,
   useForceUpdate,
-  useUniqId,
+  useUniqHandlerId,
 } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
@@ -27,9 +27,8 @@ export const OpenChannelSettingsContexts: OpenChannelSettingsContextsType = {
   }),
 };
 
-const HOOK_NAME = 'OpenChannelSettingsContextsProvider';
 export const OpenChannelSettingsContextsProvider: OpenChannelSettingsModule['Provider'] = ({ channel, children }) => {
-  const uniqId = useUniqId(HOOK_NAME);
+  const handlerId = useUniqHandlerId('OpenChannelSettingsContextsProvider');
   const forceUpdate = useForceUpdate();
   const { STRINGS } = useLocalization();
   const { sdk } = useSendbirdChat();
@@ -41,7 +40,7 @@ export const OpenChannelSettingsContextsProvider: OpenChannelSettingsModule['Pro
     forceUpdate();
   };
 
-  useChannelHandler(sdk, `${HOOK_NAME}_${uniqId}`, {
+  useChannelHandler(sdk, handlerId, {
     onChannelChanged: onChannelChanged,
     onChannelFrozen: onChannelChanged,
     onChannelUnfrozen: onChannelChanged,
