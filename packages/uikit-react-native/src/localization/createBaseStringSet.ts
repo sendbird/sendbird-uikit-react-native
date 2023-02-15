@@ -91,6 +91,10 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       HEADER_TITLE: 'Banned users',
       ...overrides?.OPEN_CHANNEL_BANNED_USERS,
     },
+    OPEN_CHANNEL_MUTED_PARTICIPANTS: {
+      HEADER_TITLE: 'Muted participants',
+      ...overrides?.OPEN_CHANNEL_MUTED_PARTICIPANTS,
+    },
     GROUP_CHANNEL: {
       HEADER_TITLE: (uid, channel) => getGroupChannelTitle(uid, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       LIST_BANNER_FROZEN: 'Channel is frozen',
@@ -302,6 +306,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       NO_CHANNELS: 'No channels',
       NO_MESSAGES: 'No messages',
       NO_MUTED_MEMBERS: 'No muted members',
+      NO_MUTED_PARTICIPANTS: 'No muted participants',
       NO_RESULTS_FOUND: 'No results found',
       ...overrides?.PLACEHOLDER,
       ERROR: {

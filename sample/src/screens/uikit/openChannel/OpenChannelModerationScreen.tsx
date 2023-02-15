@@ -23,7 +23,7 @@ const OpenChannelModerationScreen = () => {
       }}
       onPressMenuMutedParticipants={() => {
         // Navigate to group channel muted participants
-        // navigation.push(Routes.OpenChannelMutedParticipants, params);
+        navigation.push(Routes.OpenChannelMutedParticipants, params);
       }}
       onPressMenuBannedUsers={() => {
         // Navigate to group channel banned users
