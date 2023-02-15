@@ -92,6 +92,10 @@ export interface StringSet {
     /** OpenChannelBannedUsers > Header */
     HEADER_TITLE: string;
   };
+  OPEN_CHANNEL_MUTED_PARTICIPANTS: {
+    /** OpenChannelMutedMembers > Header */
+    HEADER_TITLE: string;
+  };
   GROUP_CHANNEL: {
     /** GroupChannel > Header */
     HEADER_TITLE: (currentUserId: string, channel: SendbirdGroupChannel) => string;
@@ -302,6 +306,7 @@ export interface StringSet {
     NO_CHANNELS: string;
     NO_MESSAGES: string;
     NO_MUTED_MEMBERS: string;
+    NO_MUTED_PARTICIPANTS: string;
     NO_RESULTS_FOUND: string;
     ERROR: {
       MESSAGE: string;
