@@ -37,11 +37,14 @@ export type Component =
   | 'Input'
   | 'Badge'
   | 'Placeholder'
-  | 'Message'
   | 'DateSeparator'
+  | 'GroupChannelMessage'
   | 'GroupChannelPreview'
   | 'ProfileCard'
-  | 'Reaction';
+  | 'Reaction'
+  | 'OpenChannelMessage'
+  | 'OpenChannelPreview'
+  | 'Message';
 
 export type GetColorTree<
   Tree extends {
@@ -65,11 +68,15 @@ export type ComponentColorTree = GetColorTree<{
     Input: 'default' | 'underline';
     Badge: 'default';
     Placeholder: 'default';
-    Message: 'incoming' | 'outgoing';
     DateSeparator: 'default';
+    GroupChannelMessage: 'incoming' | 'outgoing';
     GroupChannelPreview: 'default';
     ProfileCard: 'default';
     Reaction: 'default' | 'rounded';
+    OpenChannelMessage: 'default';
+    OpenChannelPreview: 'default';
+    /** @deprecated **/
+    Message: 'incoming' | 'outgoing';
   };
   State: {
     Header: 'none';
@@ -78,11 +85,15 @@ export type ComponentColorTree = GetColorTree<{
     Input: 'active' | 'disabled';
     Badge: 'none';
     Placeholder: 'none';
-    Message: 'enabled' | 'pressed';
     DateSeparator: 'none';
+    GroupChannelMessage: 'enabled' | 'pressed';
     GroupChannelPreview: 'none';
     ProfileCard: 'none';
     Reaction: 'enabled' | 'selected';
+    OpenChannelMessage: 'enabled' | 'pressed';
+    OpenChannelPreview: 'none';
+    /** @deprecated **/
+    Message: 'enabled' | 'pressed';
   };
   ColorPart: {
     Header: 'background' | 'borderBottom';
@@ -91,8 +102,8 @@ export type ComponentColorTree = GetColorTree<{
     Input: 'text' | 'placeholder' | 'background' | 'highlight';
     Badge: 'text' | 'background';
     Placeholder: 'content' | 'highlight';
-    Message: 'textMsg' | 'textEdited' | 'textSenderName' | 'textTime' | 'background';
     DateSeparator: 'text' | 'background';
+    GroupChannelMessage: 'textMsg' | 'textEdited' | 'textSenderName' | 'textTime' | 'background';
     GroupChannelPreview:
       | 'textTitle'
       | 'textTitleCaption'
@@ -105,6 +116,26 @@ export type ComponentColorTree = GetColorTree<{
       | 'separator';
     ProfileCard: 'textUsername' | 'textBodyLabel' | 'textBody' | 'background';
     Reaction: 'background' | 'highlight';
+    OpenChannelMessage:
+      | 'textMsg'
+      | 'textMsgPostfix'
+      | 'textSenderName'
+      | 'textTime'
+      | 'textOperator'
+      | 'background'
+      | 'bubbleBackground'
+      | 'adminBackground';
+    OpenChannelPreview:
+      | 'textTitle'
+      | 'textParticipants'
+      | 'frozenIcon'
+      | 'participantsIcon'
+      | 'background'
+      | 'coverBackground'
+      | 'separator';
+
+    /** @deprecated **/
+    Message: 'textMsg' | 'textEdited' | 'textSenderName' | 'textTime' | 'background';
   };
 }>;
 export type ComponentColors<T extends Component> = {
@@ -145,11 +176,15 @@ export interface UIKitColors {
     input: ComponentColors<'Input'>;
     badge: ComponentColors<'Badge'>;
     placeholder: ComponentColors<'Placeholder'>;
-    message: ComponentColors<'Message'>;
     dateSeparator: ComponentColors<'DateSeparator'>;
+    groupChannelMessage: ComponentColors<'GroupChannelMessage'>;
     groupChannelPreview: ComponentColors<'GroupChannelPreview'>;
     profileCard: ComponentColors<'ProfileCard'>;
     reaction: ComponentColors<'Reaction'>;
+    openChannelMessage: ComponentColors<'OpenChannelMessage'>;
+    openChannelPreview: ComponentColors<'OpenChannelPreview'>;
+    /** @deprecated Please use `colors.ui.groupChannelMessage` **/
+    message: ComponentColors<'Message'>;
   };
 }
 

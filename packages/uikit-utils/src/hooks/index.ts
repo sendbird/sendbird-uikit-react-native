@@ -13,6 +13,11 @@ export const useUniqId = (key: string) => {
   })[0];
 };
 
+export const useUniqHandlerId = (name: string) => {
+  const id = useUniqId(name);
+  return `${name}_${id}`;
+};
+
 export const useForceUpdate = () => {
   const [, updater] = useState(0);
   return useCallback(() => updater((prev) => prev + 1), []);
@@ -71,4 +76,25 @@ export const useFreshCallback = <T extends (...args: any[]) => any>(callback: T)
   const ref = useRef<T>(callback);
   ref.current = callback;
   return useCallback(((...args) => ref.current(...args)) as T, []);
+};
+
+export const useDebounceEffect = (action: () => void, delay: number, deps: DependencyList = []) => {
+  const timeoutRef = useRef<NodeJS.Timeout>();
+
+  useEffect(() => {
+    timeoutRef.current = setTimeout(async () => {
+      try {
+        await action();
+      } finally {
+        timeoutRef.current = undefined;
+      }
+    }, delay);
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = undefined;
+      }
+    };
+  }, [delay, ...deps]);
 };

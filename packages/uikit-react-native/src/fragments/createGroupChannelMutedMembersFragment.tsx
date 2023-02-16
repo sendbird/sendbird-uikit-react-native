@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useChannelHandler, useUserList } from '@sendbird/uikit-chat-hooks';
 import { useActionMenu } from '@sendbird/uikit-react-native-foundation';
-import { NOOP, isDifferentChannel, useFreshCallback, useUniqId } from '@sendbird/uikit-utils';
+import { NOOP, isDifferentChannel, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import UserActionBar from '../components/UserActionBar';
@@ -13,24 +13,31 @@ import type {
 } from '../domain/groupChannelMutedMembers/types';
 import { useLocalization, useSendbirdChat } from '../hooks/useContext';
 
-const HOOK_NAME = 'createGroupChannelMutedMembersFragment';
 const createGroupChannelMutedMembersFragment = (
   initModule?: Partial<GroupChannelMutedMembersModule>,
 ): GroupChannelMutedMembersFragment => {
   const GroupChannelMutedMembersModule = createGroupChannelMutedMembersModule(initModule);
 
   return ({ onPressHeaderLeft = NOOP, channel, renderUser }) => {
-    const uniqId = useUniqId(HOOK_NAME);
+    const handlerId = useUniqHandlerId('GroupChannelMutedMembersFragment');
 
     const { STRINGS } = useLocalization();
     const { sdk, currentUser } = useSendbirdChat();
     const { openMenu } = useActionMenu();
 
-    const { users, deleteUser, loading, refresh, error, next } = useUserList(sdk, {
+    const { users, deleteUser, upsertUser, loading, refresh, error, next } = useUserList(sdk, {
       queryCreator: () => channel.createMutedUserListQuery({ limit: 20 }),
     });
 
-    useChannelHandler(sdk, `${HOOK_NAME}_${uniqId}`, {
+    useChannelHandler(sdk, handlerId, {
+      onUserMuted(eventChannel, user) {
+        if (isDifferentChannel(eventChannel, channel)) return;
+        upsertUser(user);
+      },
+      onUserUnmuted(eventChannel, user) {
+        if (isDifferentChannel(eventChannel, channel)) return;
+        deleteUser(user.userId);
+      },
       onUserLeft(eventChannel, user) {
         if (isDifferentChannel(eventChannel, channel)) return;
         deleteUser(user.userId);

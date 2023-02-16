@@ -24,7 +24,7 @@ const GroupChannelSettingsInfo = (_: GroupChannelSettingsProps['Info']) => {
             channel,
             STRINGS.LABELS.USER_NO_NAME,
             STRINGS.LABELS.CHANNEL_NO_MEMBERS,
-          )}
+          ) || ' '}
         </Text>
       </View>
       <Divider />

@@ -3,24 +3,20 @@ import type { FlatListProps } from 'react-native';
 
 import type { UseGroupChannelMessagesOptions } from '@sendbird/uikit-chat-hooks';
 import type {
+  OnBeforeHandler,
   SendbirdFileMessage,
   SendbirdFileMessageCreateParams,
+  SendbirdFileMessageUpdateParams,
   SendbirdGroupChannel,
-  SendbirdMember,
   SendbirdMessage,
   SendbirdUser,
   SendbirdUserMessage,
   SendbirdUserMessageCreateParams,
+  SendbirdUserMessageUpdateParams,
 } from '@sendbird/uikit-utils';
 
-import type { FileType } from '../../platform/types';
-import type { CommonComponent, MentionedUser, Range } from '../../types';
-
-type UserMessageMentionParams = Required<{
-  messageTemplate: SendbirdUserMessageCreateParams['mentionedMessageTemplate'];
-  userIds: SendbirdUserMessageCreateParams['mentionedUserIds'];
-  type: SendbirdUserMessageCreateParams['mentionType'];
-}>;
+import type { ChannelInputProps, SuggestedMentionListProps } from '../../components/ChannelInput';
+import type { CommonComponent } from '../../types';
 
 export interface GroupChannelProps {
   Fragment: {
@@ -28,14 +24,12 @@ export interface GroupChannelProps {
     onChannelDeleted: () => void;
     onPressHeaderLeft: GroupChannelProps['Header']['onPressHeaderLeft'];
     onPressHeaderRight: GroupChannelProps['Header']['onPressHeaderRight'];
-
-    onBeforeSendFileMessage?: (
-      params: SendbirdFileMessageCreateParams,
-    ) => SendbirdFileMessageCreateParams | Promise<SendbirdFileMessageCreateParams>;
-    onBeforeSendUserMessage?: (
-      params: SendbirdUserMessageCreateParams,
-    ) => SendbirdUserMessageCreateParams | Promise<SendbirdUserMessageCreateParams>;
     onPressMediaMessage?: GroupChannelProps['MessageList']['onPressMediaMessage'];
+
+    onBeforeSendUserMessage?: OnBeforeHandler<SendbirdUserMessageCreateParams>;
+    onBeforeSendFileMessage?: OnBeforeHandler<SendbirdFileMessageCreateParams>;
+    onBeforeUpdateUserMessage?: OnBeforeHandler<SendbirdUserMessageUpdateParams>;
+    onBeforeUpdateFileMessage?: OnBeforeHandler<SendbirdFileMessageUpdateParams>;
 
     renderMessage?: GroupChannelProps['MessageList']['renderMessage'];
     renderNewMessagesButton?: GroupChannelProps['MessageList']['renderNewMessagesButton'];
@@ -95,28 +89,21 @@ export interface GroupChannelProps {
     /** @deprecated `onPressImageMessage` is deprecated, please use `onPressMediaMessage` instead **/
     onPressImageMessage?: (message: SendbirdFileMessage, uri: string) => void;
   };
-  Input: {
-    shouldRenderInput: boolean;
-    onSendFileMessage: (file: FileType) => Promise<void>;
-    onSendUserMessage: (text: string, mention?: UserMessageMentionParams) => Promise<void>;
-    onUpdateFileMessage: (editedFile: FileType, message: SendbirdFileMessage) => Promise<void>;
-    onUpdateUserMessage: (
-      editedText: string,
-      message: SendbirdUserMessage,
-      mention?: UserMessageMentionParams,
-    ) => Promise<void>;
-    SuggestedMentionList: (props: GroupChannelProps['SuggestedMentionList']) => JSX.Element | null;
-  };
+  Input: Pick<
+    ChannelInputProps,
+    | 'shouldRenderInput'
+    | 'onPressSendUserMessage'
+    | 'onPressSendFileMessage'
+    | 'onPressUpdateUserMessage'
+    | 'onPressUpdateFileMessage'
+    | 'SuggestedMentionList'
+    | 'onSendFileMessage'
+    | 'onSendUserMessage'
+    | 'onUpdateFileMessage'
+    | 'onUpdateUserMessage'
+  >;
 
-  SuggestedMentionList: {
-    text: string;
-    selection: Range;
-    topInset: number;
-    bottomInset: number;
-    inputHeight: number;
-    onPressToMention: (user: SendbirdMember, searchStringRange: Range) => void;
-    mentionedUsers: MentionedUser[];
-  };
+  SuggestedMentionList: SuggestedMentionListProps;
   Provider: {
     channel: SendbirdGroupChannel;
     enableTypingIndicator: boolean;

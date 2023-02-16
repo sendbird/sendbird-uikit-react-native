@@ -2,10 +2,13 @@
 export { default as IconAssets } from './assets/icon';
 
 /** Component **/
+export { default as Box } from './components/Box';
 export { default as Divider } from './components/Divider';
 export { default as Icon } from './components/Icon';
 export { default as Image } from './components/Image';
+export { default as ImageWithPlaceholder } from './components/ImageWithPlaceholder';
 export { default as Modal } from './components/Modal';
+export { default as PressBox } from './components/PressBox';
 export { default as RegexText } from './components/RegexText';
 export { default as Switch } from './components/Switch';
 export { default as Text } from './components/Text';
@@ -24,7 +27,11 @@ export { DialogProvider, useActionMenu, useAlert, usePrompt, useBottomSheet } fr
 export { default as GroupChannelPreview } from './ui/GroupChannelPreview';
 export { default as Header } from './ui/Header';
 export { default as LoadingSpinner } from './ui/LoadingSpinner';
-export { default as MenuBar, MenuBarProps } from './ui/MenuBar';
+export { default as MenuBar } from './ui/MenuBar';
+export type { MenuBarProps } from './ui/MenuBar';
+export { default as OpenChannelMessage } from './ui/OpenChannelMessage';
+export type { OpenChannelMessageProps } from './ui/OpenChannelMessage';
+export { default as OpenChannelPreview } from './ui/OpenChannelPreview';
 export { default as OutlinedButton } from './ui/OutlinedButton';
 export { default as Placeholder } from './ui/Placeholder';
 export { default as ProfileCard } from './ui/ProfileCard';

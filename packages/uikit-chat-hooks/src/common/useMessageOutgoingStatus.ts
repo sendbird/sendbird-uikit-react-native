@@ -1,10 +1,8 @@
 import type { SendbirdChatSDK, SendbirdGroupChannel, SendbirdMessage } from '@sendbird/uikit-utils';
-import { isDifferentChannel, isMyMessage, useForceUpdate, useUniqId } from '@sendbird/uikit-utils';
+import { isDifferentChannel, isMyMessage, useForceUpdate, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import { useChannelHandler } from '../handler/useChannelHandler';
 import { useAppFeatures } from './useAppFeatures';
-
-const HOOK_NAME = 'useMessageOutgoingStatus';
 
 export type SBUOutgoingStatus = 'NONE' | 'PENDING' | 'FAILED' | 'UNDELIVERED' | 'DELIVERED' | 'UNREAD' | 'READ';
 
@@ -16,9 +14,9 @@ export const useMessageOutgoingStatus = (
   const features = useAppFeatures(sdk);
   const forceUpdate = useForceUpdate();
   const currentUser = sdk.currentUser;
+  const handlerId = useUniqHandlerId('useMessageOutgoingStatus');
 
-  const uniqId = useUniqId(HOOK_NAME);
-  useChannelHandler(sdk, `${HOOK_NAME}_${uniqId}`, {
+  useChannelHandler(sdk, handlerId, {
     onUndeliveredMemberStatusUpdated(eventChannel) {
       if (isDifferentChannel(channel, eventChannel)) return;
       if (!isMyMessage(message, currentUser?.userId)) return;

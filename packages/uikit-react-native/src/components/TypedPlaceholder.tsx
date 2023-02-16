@@ -7,6 +7,7 @@ import { useLocalization } from '../hooks/useContext';
 type Props = {
   type:
     | 'no-muted-members'
+    | 'no-muted-participants'
     | 'no-banned-users'
     | 'no-channels'
     | 'no-messages'
@@ -27,6 +28,8 @@ const TypedPlaceholder = ({ type, onPressRetry }: Props) => {
       return <Placeholder icon={'message'} message={STRINGS.PLACEHOLDER.NO_MESSAGES} />;
     case 'no-muted-members':
       return <Placeholder icon={'mute'} message={STRINGS.PLACEHOLDER.NO_MUTED_MEMBERS} />;
+    case 'no-muted-participants':
+      return <Placeholder icon={'mute'} message={STRINGS.PLACEHOLDER.NO_MUTED_PARTICIPANTS} />;
     case 'no-results-found':
       return <Placeholder icon={'search'} message={STRINGS.PLACEHOLDER.NO_RESULTS_FOUND} />;
     case 'no-users':

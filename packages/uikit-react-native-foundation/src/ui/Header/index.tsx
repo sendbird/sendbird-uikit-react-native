@@ -21,6 +21,7 @@ export type HeaderProps = BaseHeaderProps<
   },
   {
     clearTitleMargin?: boolean;
+    clearStatusBarTopInset?: boolean;
     statusBarTopInsetAs?: 'padding' | 'margin';
   }
 >;
@@ -39,6 +40,7 @@ const Header: ((props: HeaderProps) => JSX.Element) & {
   onPressLeft,
   onPressRight,
   clearTitleMargin = false,
+  clearStatusBarTopInset = false,
   statusBarTopInsetAs = 'padding',
 }) => {
   const { topInset, defaultTitleAlign, defaultHeight } = useHeaderStyle();
@@ -47,10 +49,13 @@ const Header: ((props: HeaderProps) => JSX.Element) & {
   const { left: paddingLeft, right: paddingRight } = useSafeAreaInsets();
 
   const actualTitleAlign = titleAlign ?? defaultTitleAlign;
+  const actualTopInset = clearStatusBarTopInset ? 0 : topInset;
 
   if (!title && !left && !right) {
     return (
-      <View style={{ paddingTop: topInset, backgroundColor: colors.ui.header.nav.none.background }}>{children}</View>
+      <View style={{ paddingTop: actualTopInset, backgroundColor: colors.ui.header.nav.none.background }}>
+        {children}
+      </View>
     );
   }
 
@@ -59,7 +64,7 @@ const Header: ((props: HeaderProps) => JSX.Element) & {
       style={[
         styles.container,
         {
-          [statusBarTopInsetAs === 'padding' ? 'paddingTop' : 'marginTop']: topInset,
+          [statusBarTopInsetAs === 'padding' ? 'paddingTop' : 'marginTop']: actualTopInset,
           paddingLeft: paddingLeft + styles.container.paddingHorizontal,
           paddingRight: paddingRight + styles.container.paddingHorizontal,
           backgroundColor: colors.ui.header.nav.none.background,
