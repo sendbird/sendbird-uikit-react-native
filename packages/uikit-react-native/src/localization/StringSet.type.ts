@@ -6,6 +6,7 @@ import type {
   SendbirdMember,
   SendbirdMessage,
   SendbirdOpenChannel,
+  SendbirdParticipant,
   SendbirdUser,
 } from '@sendbird/uikit-utils';
 
@@ -99,6 +100,11 @@ export interface StringSet {
   OPEN_CHANNEL_OPERATORS: {
     /** OpenChannelOperators > Header */
     HEADER_TITLE: string;
+  };
+  OPEN_CHANNEL_REGISTER_OPERATOR: {
+    /** OpenChannelRegisterOperator > Header */
+    HEADER_TITLE: string;
+    HEADER_RIGHT: (params: { selectedUsers: Array<SendbirdParticipant> }) => string;
   };
   GROUP_CHANNEL: {
     /** GroupChannel > Header */
