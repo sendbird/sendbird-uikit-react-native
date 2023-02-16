@@ -18,7 +18,7 @@ import {
   useToast,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import { conditionChaining, isImage, shouldCompressImage } from '@sendbird/uikit-utils';
+import { isImage, shouldCompressImage } from '@sendbird/uikit-utils';
 
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 import SBUError from '../../libs/SBUError';
@@ -228,6 +228,14 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     });
   };
 
+  const getPlaceholder = () => {
+    if (!inputDisabled) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_ACTIVE;
+    if (inputFrozen) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED;
+    if (inputMuted) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_MUTED;
+
+    return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED;
+  };
+
   return (
     <View style={styles.sendInputContainer}>
       <TouchableOpacity onPress={onPressAttachment} disabled={inputDisabled}>
@@ -246,14 +254,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
         editable={!inputDisabled}
         onChangeText={onChangeText}
         style={styles.input}
-        placeholder={conditionChaining(
-          [inputFrozen, inputMuted],
-          [
-            STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED,
-            STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_MUTED,
-            STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_ACTIVE,
-          ],
-        )}
+        placeholder={getPlaceholder()}
       >
         {mentionManager.textToMentionedComponents(text, mentionedUsers)}
       </TextInput>
