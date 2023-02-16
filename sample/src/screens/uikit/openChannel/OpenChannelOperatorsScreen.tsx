@@ -2,15 +2,12 @@ import React from 'react';
 
 import { useOpenChannel } from '@sendbird/uikit-chat-hooks';
 import { useSendbirdChat } from '@sendbird/uikit-react-native';
+import { createOpenChannelOperatorsFragment } from '@sendbird/uikit-react-native';
 
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
 import { Routes } from '../../../libs/navigation';
 
-const OpenChannelOperatorsFragment = (_: {
-  channel: unknown;
-  onPressHeaderLeft: unknown;
-  onPressHeaderRight: unknown;
-}) => null;
+const OpenChannelOperatorsFragment = createOpenChannelOperatorsFragment();
 const OpenChannelOperatorsScreen = () => {
   const { navigation, params } = useAppNavigation<Routes.OpenChannelOperators>();
 
