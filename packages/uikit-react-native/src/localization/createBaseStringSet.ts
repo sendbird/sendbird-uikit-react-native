@@ -99,6 +99,15 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       HEADER_TITLE: 'Operators',
       ...overrides?.OPEN_CHANNEL_OPERATORS,
     },
+    OPEN_CHANNEL_REGISTER_OPERATOR: {
+      HEADER_TITLE: 'Set as operators',
+      HEADER_RIGHT: ({ selectedUsers }) => {
+        const len = selectedUsers.length;
+        if (len === 0) return 'Add';
+        return `Add (${len})`;
+      },
+      ...overrides?.OPEN_CHANNEL_REGISTER_OPERATOR,
+    },
     GROUP_CHANNEL: {
       HEADER_TITLE: (uid, channel) => getGroupChannelTitle(uid, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       LIST_BANNER_FROZEN: 'Channel is frozen',
