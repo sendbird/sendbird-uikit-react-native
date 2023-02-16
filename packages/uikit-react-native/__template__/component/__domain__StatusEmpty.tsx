@@ -1,19 +1,16 @@
 // @ts-nocheck - !!REMOVE
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+
+import { Box } from '@sendbird/uikit-react-native-foundation';
 
 import TypedPlaceholder from '../../../components/TypedPlaceholder';
 
 const __domain__StatusEmpty = () => {
   return (
-    <View style={styles.container}>
+    <Box flex={1} alignItems={'center'} justifyContent={'center'}>
       <TypedPlaceholder type={'no-messages'} />
-    </View>
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-});
 
 export default __domain__StatusEmpty;
