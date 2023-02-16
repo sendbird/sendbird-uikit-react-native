@@ -1,5 +1,5 @@
 import type { UseUserListOptions } from '@sendbird/uikit-chat-hooks';
-import type { SendbirdMember, SendbirdOpenChannel, UserStruct } from '@sendbird/uikit-utils';
+import type { SendbirdOpenChannel, SendbirdParticipant, UserStruct } from '@sendbird/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 import type { UserListProps } from '../userList/types';
@@ -16,7 +16,7 @@ export type OpenChannelParticipantsFragment<User extends UserStruct> = CommonCom
   OpenChannelParticipantsProps<User>['Fragment']
 >;
 
-export interface OpenChannelRegisterOperatorProps<User extends UserStruct = SendbirdMember> {
+export interface OpenChannelRegisterOperatorProps<User extends UserStruct = SendbirdParticipant> {
   Fragment: {
     channel: SendbirdOpenChannel;
     onPressHeaderLeft: () => void;
