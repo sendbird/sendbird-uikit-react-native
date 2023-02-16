@@ -96,6 +96,10 @@ export interface StringSet {
     /** OpenChannelMutedMembers > Header */
     HEADER_TITLE: string;
   };
+  OPEN_CHANNEL_OPERATORS: {
+    /** OpenChannelOperators > Header */
+    HEADER_TITLE: string;
+  };
   GROUP_CHANNEL: {
     /** GroupChannel > Header */
     HEADER_TITLE: (currentUserId: string, channel: SendbirdGroupChannel) => string;

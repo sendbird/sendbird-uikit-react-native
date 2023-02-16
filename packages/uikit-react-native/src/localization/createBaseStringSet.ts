@@ -95,6 +95,10 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       HEADER_TITLE: 'Muted participants',
       ...overrides?.OPEN_CHANNEL_MUTED_PARTICIPANTS,
     },
+    OPEN_CHANNEL_OPERATORS: {
+      HEADER_TITLE: 'Operators',
+      ...overrides?.OPEN_CHANNEL_OPERATORS,
+    },
     GROUP_CHANNEL: {
       HEADER_TITLE: (uid, channel) => getGroupChannelTitle(uid, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       LIST_BANNER_FROZEN: 'Channel is frozen',
