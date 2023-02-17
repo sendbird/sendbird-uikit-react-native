@@ -163,7 +163,10 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
               resolve(sentMessage);
             }
           })
-          .onFailed((err) => {
+          .onFailed((err, sentMessage) => {
+            if (sentMessage.isUserMessage()) {
+              updateNextMessages([sentMessage], false, sdk.currentUser.userId);
+            }
             reject(err);
           });
       });
@@ -187,7 +190,10 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
               resolve(sentMessage);
             }
           })
-          .onFailed((err) => {
+          .onFailed((err, sentMessage) => {
+            if (sentMessage.isFileMessage()) {
+              updateNextMessages([sentMessage], false, sdk.currentUser.userId);
+            }
             reject(err);
           });
       });
