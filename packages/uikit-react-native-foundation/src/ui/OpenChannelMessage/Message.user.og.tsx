@@ -86,7 +86,7 @@ const OpenGraphUserMessage = (props: OpenChannelMessageProps<SendbirdUserMessage
 
                   <ImageWithPlaceholder
                     style={styles.ogImage}
-                    source={{ uri: props.message.ogMetaData.defaultImage.url }}
+                    source={{ uri: props.message.ogMetaData.defaultImage?.url }}
                   />
                 </Box>
               )
