@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { SendingStatus } from '@sendbird/chat/message';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
 import { getMessageTimeFormat, useSafeAreaPadding } from '@sendbird/uikit-utils';
 
@@ -10,6 +11,7 @@ import Text from '../../components/Text';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import Avatar from '../Avatar';
+import LoadingSpinner from '../LoadingSpinner';
 import type { OpenChannelMessageProps } from './index';
 
 type Props = {
@@ -26,6 +28,30 @@ const MessageContainer = ({
   const { colors } = useUIKitTheme();
   const { paddingLeft, paddingRight } = useSafeAreaPadding(['left', 'right']);
   const color = colors.ui.openChannelMessage.default;
+
+  const renderSendingStatus = () => {
+    if (!('sendingStatus' in props.message)) return null;
+
+    switch (props.message.sendingStatus) {
+      case SendingStatus.PENDING: {
+        return (
+          <SendingStatusContainer>
+            <LoadingSpinner color={colors.primary} size={16} />
+          </SendingStatusContainer>
+        );
+      }
+      case SendingStatus.FAILED: {
+        return (
+          <SendingStatusContainer>
+            <Icon icon={'error'} color={colors.error} size={16} />
+          </SendingStatusContainer>
+        );
+      }
+      default: {
+        return null;
+      }
+    }
+  };
 
   return (
     <Box
@@ -67,16 +93,17 @@ const MessageContainer = ({
           </Box>
         )}
         <Box style={styles.message}>{children}</Box>
-        {'sender' in props.message && (
-          <Box flexDirection={'row'}>
-            {props.message.sendingStatus === 'failed' && (
-              <Box marginTop={2}>
-                <Icon icon={'error'} color={colors.error} size={16} />
-              </Box>
-            )}
-          </Box>
-        )}
+
+        {renderSendingStatus()}
       </Box>
+    </Box>
+  );
+};
+
+const SendingStatusContainer = ({ children }: { children: React.ReactElement }) => {
+  return (
+    <Box flexDirection={'row'}>
+      <Box marginTop={2}>{children}</Box>
     </Box>
   );
 };
