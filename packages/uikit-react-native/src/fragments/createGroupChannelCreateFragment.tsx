@@ -4,9 +4,9 @@ import { TouchableOpacity } from 'react-native';
 import { useUserList } from '@sendbird/uikit-chat-hooks';
 import {
   PASS,
-  SendbirdGroupChannelCreateParams,
   SendbirdUser,
   UserStruct,
+  getDefaultGroupChannelCreateParams,
   useFreshCallback,
 } from '@sendbird/uikit-utils';
 
@@ -81,16 +81,13 @@ const createGroupChannelCreateFragment = <UserType extends UserStruct>(
         <UserListModule.Header
           onPressHeaderLeft={onPressHeaderLeft}
           onPressHeaderRight={async (users) => {
-            const params: SendbirdGroupChannelCreateParams = {
+            const params = getDefaultGroupChannelCreateParams({
               invitedUserIds: users.map((it) => it.userId),
-              name: '',
-              coverUrl: '',
-              isDistinct: false,
-            };
+              currentUserId: currentUser?.userId,
+            });
 
             if (channelType === 'BROADCAST') params.isBroadcast = true;
             if (channelType === 'SUPER_GROUP') params.isSuper = true;
-            if (currentUser) params.operatorUserIds = [currentUser.userId];
 
             const processedParams = await onBeforeCreateChannel(params, users);
             const channel = await sdk.groupChannel.createChannel(processedParams);
