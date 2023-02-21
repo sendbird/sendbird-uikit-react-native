@@ -170,9 +170,7 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
             }
           })
           .onFailed((err, sentMessage) => {
-            if (sentMessage.isUserMessage()) {
-              updateNextMessages([sentMessage], false, sdk.currentUser.userId);
-            }
+            updateNextMessages([sentMessage], false, sdk.currentUser.userId);
             reject(err);
           });
       });
@@ -197,9 +195,7 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
             }
           })
           .onFailed((err, sentMessage) => {
-            if (sentMessage.isFileMessage()) {
-              updateNextMessages([sentMessage], false, sdk.currentUser.userId);
-            }
+            updateNextMessages([sentMessage], false, sdk.currentUser.userId);
             reject(err);
           });
       });
