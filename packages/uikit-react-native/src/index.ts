@@ -3,7 +3,9 @@ import { Platform } from 'react-native';
 
 import { Logger } from '@sendbird/uikit-utils';
 
+export { default as ChannelInput } from './components/ChannelInput';
 export { default as MessageRenderer } from './components/MessageRenderer';
+export { default as OpenChannelMessageRenderer } from './components/OpenChannelMessageRenderer';
 export { ReactionAddons } from './components/ReactionAddons';
 export { ReactionBottomSheets } from './components/ReactionBottomSheets';
 export { default as ChannelCover } from './components/ChannelCover';
