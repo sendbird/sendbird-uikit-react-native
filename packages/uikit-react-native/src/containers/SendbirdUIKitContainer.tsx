@@ -212,6 +212,7 @@ const SendbirdUIKitContainer = ({
                   <UserProfileProvider
                     onCreateChannel={userProfile?.onCreateChannel}
                     onBeforeCreateChannel={userProfile?.onBeforeCreateChannel}
+                    statusBarTranslucent={styles?.statusBarTranslucent ?? true}
                   >
                     <ReactionProvider>
                       <LocalizationContext.Consumer>
