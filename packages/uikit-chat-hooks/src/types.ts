@@ -217,6 +217,11 @@ export interface UseOpenChannelList {
     refresh: () => Promise<void>;
 
     /**
+     * Error state
+     * */
+    error: unknown | null;
+
+    /**
      * Get open channels state
      * */
     openChannels: SendbirdOpenChannel[];

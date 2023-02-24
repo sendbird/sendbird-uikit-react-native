@@ -5,6 +5,10 @@ import { getOpenChannels } from '@sendbird/uikit-utils';
 
 type Action =
   | {
+      type: 'update_error';
+      value: { error: unknown | null };
+    }
+  | {
       type: 'update_loading' | 'update_refreshing';
       value: { status: boolean };
     }
@@ -22,6 +26,7 @@ type Action =
     };
 
 type State = {
+  error: unknown | null;
   loading: boolean;
   refreshing: boolean;
   openChannels: SendbirdOpenChannel[];
@@ -29,6 +34,10 @@ type State = {
 
 const defaultReducer = ({ ...draft }: State, action: Action) => {
   switch (action.type) {
+    case 'update_error': {
+      draft.error = action.value.error;
+      break;
+    }
     case 'update_refreshing':
     case 'update_loading': {
       const key = action.type === 'update_loading' ? 'loading' : 'refreshing';
@@ -63,10 +72,11 @@ const defaultReducer = ({ ...draft }: State, action: Action) => {
 };
 
 export const useOpenChannelListReducer = () => {
-  const [{ loading, refreshing, openChannels }, dispatch] = useReducer(defaultReducer, {
+  const [{ error, loading, refreshing, openChannels }, dispatch] = useReducer(defaultReducer, {
     loading: true,
     refreshing: false,
     openChannels: [],
+    error: null,
   });
 
   const updateChannels = (channels: SendbirdChannel[]) => {
@@ -85,13 +95,19 @@ export const useOpenChannelListReducer = () => {
     dispatch({ type: 'update_refreshing', value: { status } });
   };
 
+  const updateError = (error: unknown | null) => {
+    dispatch({ type: 'update_error', value: { error } });
+  };
+
   return {
+    updateError,
     updateLoading,
     updateRefreshing,
     updateChannels,
     deleteChannels,
     appendChannels,
 
+    error,
     loading,
     refreshing,
     openChannels,

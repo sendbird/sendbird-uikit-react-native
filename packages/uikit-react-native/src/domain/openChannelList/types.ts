@@ -36,6 +36,9 @@ export type OpenChannelListProps = {
     /** Handler for refreshing the list of open channels **/
     onRefresh: () => void;
   };
+  StatusError: {
+    onPressRetry: () => void;
+  };
 };
 
 /**
@@ -54,6 +57,7 @@ export interface OpenChannelListModule {
   List: CommonComponent<OpenChannelListProps['List']>;
   StatusEmpty: CommonComponent;
   StatusLoading: CommonComponent;
+  StatusError: CommonComponent<OpenChannelListProps['StatusError']>;
 }
 
 export type OpenChannelListFragment = CommonComponent<OpenChannelListProps['Fragment']>;

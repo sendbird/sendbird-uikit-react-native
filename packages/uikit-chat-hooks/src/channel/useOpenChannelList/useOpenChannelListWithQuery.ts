@@ -18,6 +18,7 @@ export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, opt
   const handlerId = useUniqHandlerId('useOpenChannelListWithQuery');
 
   const {
+    error,
     loading,
     openChannels,
     refreshing,
@@ -26,6 +27,7 @@ export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, opt
     deleteChannels,
     updateRefreshing,
     updateLoading,
+    updateError,
   } = useOpenChannelListReducer();
 
   const init = useFreshCallback(async (uid?: string) => {
@@ -41,8 +43,14 @@ export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, opt
 
   useAsyncEffect(async () => {
     updateLoading(true);
-    await init(userId);
-    updateLoading(false);
+    updateError(null);
+    try {
+      await init(userId);
+    } catch (e) {
+      updateError(e);
+    } finally {
+      updateLoading(false);
+    }
   }, [init, userId]);
 
   const updateChannel = (channel: SendbirdBaseChannel) => {
@@ -74,8 +82,14 @@ export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, opt
 
   const refresh = useFreshCallback(async () => {
     updateRefreshing(true);
-    await init(userId);
-    updateRefreshing(false);
+    updateError(null);
+    try {
+      await init(userId);
+    } catch (e) {
+      updateError(e);
+    } finally {
+      updateRefreshing(false);
+    }
   });
 
   const next = useFreshCallback(async () => {
@@ -86,6 +100,7 @@ export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, opt
   });
 
   return {
+    error,
     loading,
     openChannels,
     refresh,
