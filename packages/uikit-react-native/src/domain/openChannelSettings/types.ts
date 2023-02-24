@@ -12,6 +12,7 @@ export type OpenChannelSettingsProps = {
     onPressMenuModeration: OpenChannelSettingsProps['Menu']['onPressMenuModeration'];
     onPressMenuParticipants: OpenChannelSettingsProps['Menu']['onPressMenuParticipants'];
     onPressMenuDeleteChannel: OpenChannelSettingsProps['Menu']['onPressMenuDeleteChannel'];
+    onNavigateToOpenChannel: OpenChannelSettingsProps['Provider']['onNavigateToOpenChannel'];
     menuItemsCreator?: OpenChannelSettingsProps['Menu']['menuItemsCreator'];
   };
   Header: {
@@ -26,6 +27,7 @@ export type OpenChannelSettingsProps = {
   };
   Provider: {
     channel: SendbirdOpenChannel;
+    onNavigateToOpenChannel: () => void;
   };
 };
 
