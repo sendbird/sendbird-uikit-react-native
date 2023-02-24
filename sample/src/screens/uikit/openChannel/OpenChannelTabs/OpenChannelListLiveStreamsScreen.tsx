@@ -68,7 +68,7 @@ const OpenChannelListLiveStreamsScreen = () => {
         ),
         [],
       )}
-      flatListProps={{ bounces: false }}
+      flatListProps={{ bounces: false, onRefresh: undefined }}
     />
   );
 };
