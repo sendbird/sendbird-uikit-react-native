@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StatusBar, StyleSheet, useWindowDimensions } from 'react-native';
+import { StyleSheet, useWindowDimensions } from 'react-native';
 
 import { useChannelHandler, useOpenChannel } from '@sendbird/uikit-chat-hooks';
 import { OpenChannelContexts, createOpenChannelFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
@@ -52,7 +52,6 @@ const StreamView = (props: { channel: SendbirdOpenChannel; height: number | stri
 
   return (
     <Box style={{ height: props.height, width: '100%' }} flex={isLandscape ? 1.2 : 0}>
-      <StatusBar hidden animated />
       <Image style={StyleSheet.absoluteFill} resizeMode={'cover'} source={{ uri: streamData.live_channel_url }} />
       <Box style={StyleSheet.absoluteFill} backgroundColor={palette.overlay02} />
       <PressBox activeOpacity={0.8} onPress={() => navigation.goBack()}>
@@ -122,6 +121,7 @@ const OpenChannelLiveStreamScreen = () => {
 
   return (
     <Box flex={1} flexDirection={isLandscape ? 'row' : 'column'}>
+      {/*<StatusBar hidden animated />*/}
       <StreamView height={streamViewHeight} channel={channel} />
       <OpenChannelFragment
         keyboardAvoidOffset={keyboardAvoidOffset}
