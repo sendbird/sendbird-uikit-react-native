@@ -2,7 +2,7 @@ import React from 'react';
 
 import { SendingStatus } from '@sendbird/chat/message';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
-import { getMessageTimeFormat, useSafeAreaPadding } from '@sendbird/uikit-utils';
+import { getMessageTimeFormat } from '@sendbird/uikit-utils';
 
 import Box from '../../components/Box';
 import Icon from '../../components/Icon';
@@ -26,7 +26,6 @@ const MessageContainer = ({
   ...props
 }: OpenChannelMessageProps<SendbirdMessage, Props>) => {
   const { colors } = useUIKitTheme();
-  const { paddingLeft, paddingRight } = useSafeAreaPadding(['left', 'right']);
   const color = colors.ui.openChannelMessage.default;
 
   const renderSendingStatus = () => {
@@ -57,8 +56,8 @@ const MessageContainer = ({
     <Box
       flexDirection={'row'}
       paddingVertical={grouped ? 5 : 6}
-      paddingLeft={12 + paddingLeft}
-      paddingRight={12 + paddingRight}
+      paddingLeft={12}
+      paddingRight={12}
       backgroundColor={pressed ? color.pressed.background : color.enabled.background}
     >
       <Box marginRight={12}>
