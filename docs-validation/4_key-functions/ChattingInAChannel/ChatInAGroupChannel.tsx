@@ -6,7 +6,6 @@ const AdvertiseMessage = (_:object) => <></>
  * Usage
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-usage}
  * */
-import { useState } from 'react';
 import { useSendbirdChat, createGroupChannelFragment } from "@sendbird/uikit-react-native";
 import { useGroupChannel } from "@sendbird/uikit-chat-hooks";
 
