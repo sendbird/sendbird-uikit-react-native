@@ -72,9 +72,11 @@ const MessageContainer = ({
       <Box flexShrink={1} flex={1} flexDirection={'column'} alignItems={'flex-start'}>
         {!grouped && 'sender' in props.message && (
           <Box flexDirection={'row'} alignItems={'center'} marginBottom={2}>
-            <Box marginRight={4}>
+            <Box marginRight={4} flexShrink={1}>
               <Text
                 caption1
+                ellipsizeMode={'middle'}
+                numberOfLines={1}
                 color={
                   channel.isOperator(props.message.sender.userId)
                     ? color.enabled.textOperator
