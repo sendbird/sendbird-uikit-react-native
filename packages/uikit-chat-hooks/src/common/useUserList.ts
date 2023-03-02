@@ -83,6 +83,7 @@ export const useUserList = <
   const init = useFreshCallback(async () => {
     query.current = createUserQuery<QueriedUser>(sdk, options?.queryCreator);
     if (query.current?.hasNext) {
+      updateUsers([], true);
       const users = await query.current?.next().catch((e) => {
         Logger.error(e);
         if (e.code === SBErrorCode.NON_AUTHORIZED) Logger.warn(SBErrorMessage.ACL);
