@@ -39,6 +39,7 @@ export interface OpenChannelCreateModule {
   Provider: CommonComponent;
   Header: CommonComponent<OpenChannelCreateProps['Header']>;
   ProfileInput: CommonComponent<OpenChannelCreateProps['ProfileInput']>;
+  StatusLoading: CommonComponent;
 }
 
 export type OpenChannelCreateFragment = CommonComponent<OpenChannelCreateProps['Fragment']>;
