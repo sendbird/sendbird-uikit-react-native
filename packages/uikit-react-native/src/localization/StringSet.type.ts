@@ -42,7 +42,7 @@ export interface StringSet {
 
     /** OpenChannelSettings > Info */
     INFO_URL: string;
-    
+
     /** OpenChannelSettings > Menu */
     MENU_MODERATION: string;
     MENU_PARTICIPANTS: string;
