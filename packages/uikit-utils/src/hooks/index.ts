@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { DependencyList } from 'react';
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react';
 
 type Destructor = () => void;
 type AsyncEffectCallback = () => void | Destructor | Promise<void> | Promise<Destructor>;
@@ -97,4 +97,8 @@ export const useDebounceEffect = (action: () => void, delay: number, deps: Depen
       }
     };
   }, [delay, ...deps]);
+};
+
+export const usePartialState = <S>(initialState: S) => {
+  return useReducer((prev: S, state: Partial<S>) => ({ ...prev, ...state }), initialState);
 };
