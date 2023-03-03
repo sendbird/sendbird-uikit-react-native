@@ -41,18 +41,6 @@ export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, opt
     }
   });
 
-  useAsyncEffect(async () => {
-    updateLoading(true);
-    updateError(null);
-    try {
-      await init(userId);
-    } catch (e) {
-      updateError(e);
-    } finally {
-      updateLoading(false);
-    }
-  }, [init, userId]);
-
   const updateChannel = (channel: SendbirdBaseChannel) => {
     if (channel.isOpenChannel()) updateChannels([channel]);
   };
@@ -80,6 +68,19 @@ export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, opt
     'open',
   );
 
+  useAsyncEffect(async () => {
+    updateLoading(true);
+    updateError(null);
+    try {
+      await init(userId);
+    } catch (e) {
+      updateError(e);
+      appendChannels([], true);
+    } finally {
+      updateLoading(false);
+    }
+  }, [init, userId]);
+
   const refresh = useFreshCallback(async () => {
     updateRefreshing(true);
     updateError(null);
@@ -87,6 +88,7 @@ export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, opt
       await init(userId);
     } catch (e) {
       updateError(e);
+      appendChannels([], true);
     } finally {
       updateRefreshing(false);
     }
