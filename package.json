@@ -83,7 +83,6 @@
       "/node_modules/"
     ],
     "moduleNameMapper": {
-      "@sendbird/chat-hooks": "<rootDir>/packages/chat-hooks/src",
       "@sendbird/uikit-([^/]+)": "<rootDir>/packages/uikit-$1/src"
     },
     "coverageReporters": [
