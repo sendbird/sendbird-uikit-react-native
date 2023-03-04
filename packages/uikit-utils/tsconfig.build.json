@@ -2,5 +2,6 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "paths": {}
-  }
+  },
+  "exclude": ["**/__tests__/**"]
 }
