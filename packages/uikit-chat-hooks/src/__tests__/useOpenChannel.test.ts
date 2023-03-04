@@ -3,8 +3,8 @@ import { renderHook, waitFor } from '@testing-library/react-native';
 import { useOpenChannel } from '../channel/useOpenChannel';
 import { createMockSendbird } from './__mocks__/createMockSendbirdSDK';
 
-describe('useGroupChannel', () => {
-  it('should fetch group channel and return it', async () => {
+describe('useOpenChannel', () => {
+  it('should fetch open channel and return it', async () => {
     const channelUrl = 'test_channel_url';
     const sdk = createMockSendbird('success');
     const { result } = renderHook(() => useOpenChannel(sdk, channelUrl));
@@ -21,7 +21,7 @@ describe('useGroupChannel', () => {
     });
   });
 
-  it('should set error state if fetching group channel fails', async () => {
+  it('should set error state if fetching open channel fails', async () => {
     const channelUrl = 'test_channel_url';
     const sdk = createMockSendbird('failure');
     const { result } = renderHook(() => useOpenChannel(sdk, channelUrl));
