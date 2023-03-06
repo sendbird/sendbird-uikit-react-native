@@ -10,7 +10,7 @@ import { useGroupChannel } from '@sendbird/uikit-chat-hooks';
 import { createGroupChannelRegisterOperatorFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
 
 const GroupChannelRegisterOperatorFragment = createGroupChannelRegisterOperatorFragment();
-const GroupChannelRegisterOperatorScreen = (params: { channelUrl: string }) => {
+const GroupChannelRegisterOperatorScreen = ({ route: { params } }: any) => {
   const { sdk } = useSendbirdChat();
   const { channel } = useGroupChannel(sdk, params.channelUrl);
   if (!channel) return null;
@@ -34,7 +34,7 @@ const GroupChannelRegisterOperatorScreen = (params: { channelUrl: string }) => {
 const GroupChannelRegisterOperatorFragment2 = createGroupChannelRegisterOperatorFragment({
     Header: () => <MyHeader />, // Use custom header
 });
-const GroupChannelRegisterOperatorScreen2 = (params: { channelUrl: string }) => {
+const GroupChannelRegisterOperatorScreen2 = ({ route: { params } }: any) => {
     const { sdk } = useSendbirdChat();
     const { channel } = useGroupChannel(sdk, params.channelUrl);
     if (!channel) return null;
