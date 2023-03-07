@@ -86,7 +86,7 @@ const createGroupChannelMutedMembersFragment = (
           ErrorComponent={<GroupChannelMutedMembersModule.StatusError onPressRetry={refresh} />}
         >
           <GroupChannelMutedMembersModule.List
-            mutedParticipants={users}
+            mutedMembers={users}
             onLoadNext={next}
             renderUser={_renderUser}
             ListEmptyComponent={<GroupChannelMutedMembersModule.StatusEmpty />}
