@@ -11,23 +11,21 @@ import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
  * {@link }
  * */
 import React, { useState } from 'react';
-import { useSendbirdChat, createGroupChannelMembersFragment } from '@sendbird/uikit-react-native';
-import { useGroupChannel } from "@sendbird/uikit-chat-hooks";
+import { useSendbirdChat, createOpenChannelParticipantsFragment } from '@sendbird/uikit-react-native';
+import { useOpenChannel } from "@sendbird/uikit-chat-hooks";
 
-const GroupChannelMembersFragment = createGroupChannelMembersFragment();
-const GroupChannelMembersScreen = ({ route: { params } }: any) => {
+const OpenChannelParticipantsFragment = createOpenChannelParticipantsFragment();
+const OpenChannelParticipantsScreen = ({ route: { params } }: any) => {
   const { sdk } = useSendbirdChat();
-  const { channel } = useGroupChannel(sdk, params.channelUrl);
+  const { channel } = useOpenChannel(sdk, params.channelUrl);
   if (!channel) return null;
 
   const navigateToBack = () => {};
-  const navigateToGroupChannelInvite = () => {};
 
   return (
-    <GroupChannelMembersFragment
+    <OpenChannelParticipantsFragment
       channel={channel}
       onPressHeaderLeft={navigateToBack}
-      onPressHeaderRight={navigateToGroupChannelInvite}
     />
   );
 };
@@ -77,25 +75,23 @@ const Component2 = () => {
  * {@link }
  * */
 // import React, { useState } from 'react';
-// import { useSendbirdChat, createGroupChannelMembersFragment, UserActionBar } from '@sendbird/uikit-react-native';
+// import { useSendbirdChat, createOpenChannelParticipantsFragment, UserActionBar } from '@sendbird/uikit-react-native';
 // import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
 
-const GroupChannelMembersFragment2 = createGroupChannelMembersFragment();
-const GroupChannelMembersScreen2 = ({ route: { params } }: any) => {
+const OpenChannelParticipantsFragment2 = createOpenChannelParticipantsFragment();
+const OpenChannelParticipantsScreen2 = ({ route: { params } }: any) => {
   const { openSheet } = useBottomSheet();
 
   const { sdk } = useSendbirdChat();
-  const { channel } = useGroupChannel(sdk, params.channelUrl);
+  const { channel } = useOpenChannel(sdk, params.channelUrl);
   if (!channel) return null;
 
   const navigateToBack = () => {};
-  const navigateToGroupChannelInvite = () => {};
 
   return (
-    <GroupChannelMembersFragment2
+    <OpenChannelParticipantsFragment2
       channel={channel}
       onPressHeaderLeft={navigateToBack}
-      onPressHeaderRight={navigateToGroupChannelInvite}
       renderUser={(user) => {
         return (
           <UserActionBar
