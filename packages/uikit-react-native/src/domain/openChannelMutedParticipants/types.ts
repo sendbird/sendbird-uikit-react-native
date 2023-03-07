@@ -16,7 +16,7 @@ export type OpenChannelMutedParticipantsProps = {
   List: {
     renderUser: (props: { user: SendbirdRestrictedUser }) => React.ReactElement | null;
     onLoadNext: () => void;
-    mutedMembers: SendbirdRestrictedUser[];
+    mutedParticipants: SendbirdRestrictedUser[];
     ListEmptyComponent?: React.ReactElement;
   };
   StatusError: {
