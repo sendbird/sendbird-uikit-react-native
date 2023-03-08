@@ -9,7 +9,7 @@ import { useSendbirdChat, createOpenChannelSettingsFragment } from '@sendbird/ui
 import { useOpenChannel } from "@sendbird/uikit-chat-hooks";
 
 const OpenChannelSettingsFragment = createOpenChannelSettingsFragment();
-const OpenChannelSettingsScreen = ({ params }: { params: { channelUrl: string } }) => {
+const OpenChannelSettingsScreen = ({ route: { params } }: any) => {
   const { sdk } = useSendbirdChat();
   const { channel } = useOpenChannel(sdk, params.channelUrl);
   if (!channel) return null;
@@ -69,7 +69,7 @@ import { Icon } from '@sendbird/uikit-react-native-foundation';
 // import { useOpenChannel } from "@sendbird/uikit-chat-hooks";
 
 const OpenChannelSettingsFragment2 = createOpenChannelSettingsFragment();
-const OpenChannelSettingsScreen2 = ({ params }: { params: { channelUrl: string } }) => {
+const OpenChannelSettingsScreen2 = ({ route: { params } }: any) => {
   const { sdk } = useSendbirdChat();
   const { channel } = useOpenChannel(sdk, params.channelUrl);
   if (!channel) return null;

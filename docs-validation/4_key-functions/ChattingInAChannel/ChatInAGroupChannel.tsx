@@ -11,7 +11,7 @@ import { useGroupChannel } from "@sendbird/uikit-chat-hooks";
 
 const GroupChannelFragment = createGroupChannelFragment();
 
-const GroupChannelScreen = ({ params }: { params: { channelUrl: string } }) => {
+const GroupChannelScreen = ({ route: { params } }: any) => {
   const { sdk } = useSendbirdChat();
   const { channel } = useGroupChannel(sdk, params.channelUrl);
   if (!channel) return null;
@@ -112,7 +112,7 @@ const UseReactNavigationHeader: GroupChannelModule['Header'] = ({ onPressHeaderR
 const GroupChannelFragment2 = createGroupChannelFragment({
   Header: UseReactNavigationHeader, // Hide header and use react-navigation header
 });
-const GroupChannelScreen2 = ({ params }: { params: { channelUrl: string } }) => {
+const GroupChannelScreen2 = ({ route: { params } }: any) => {
   const height = useHeaderHeight();
 
   const { sdk } = useSendbirdChat();

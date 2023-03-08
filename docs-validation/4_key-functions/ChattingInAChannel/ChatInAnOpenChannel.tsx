@@ -11,7 +11,7 @@ import { useOpenChannel } from "@sendbird/uikit-chat-hooks";
 
 const OpenChannelFragment = createOpenChannelFragment();
 
-const OpenChannelScreen = ({ params }: { params: { channelUrl: string } }) => {
+const OpenChannelScreen = ({ route: { params } }: any) => {
   const { sdk } = useSendbirdChat();
   const { channel } = useOpenChannel(sdk, params.channelUrl);
   if (!channel) return null;
@@ -103,7 +103,7 @@ const UseReactNavigationHeader: OpenChannelModule['Header'] = ({ rightIconName, 
 const OpenChannelFragment2 = createOpenChannelFragment({
   Header: UseReactNavigationHeader, // Hide header and use react-navigation header
 });
-const OpenChannelScreen2 = ({ params }: { params: { channelUrl: string } }) => {
+const OpenChannelScreen2 = ({ route: { params } }: any) => {
   const height = useHeaderHeight();
 
   const { sdk } = useSendbirdChat();
