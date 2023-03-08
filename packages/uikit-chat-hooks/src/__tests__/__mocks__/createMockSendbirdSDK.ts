@@ -1,72 +1,129 @@
+import { ChannelType } from '@sendbird/chat';
 import type { GroupChannelHandler } from '@sendbird/chat/groupChannel';
 import type { GroupChannelHandlerParams, OpenChannelHandlerParams } from '@sendbird/chat/lib/__definition';
 import type { OpenChannelHandler } from '@sendbird/chat/openChannel';
-import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
+import type { SendbirdChatSDK, SendbirdGroupChannel, SendbirdOpenChannel } from '@sendbird/uikit-utils';
 
-const mockPromiseValue = {
-  success: 'mockResolvedValue',
-  failure: 'mockRejectedValue',
-} as const;
+import { createFixtureContext } from '../__fixtures__/createFixtureContext';
+import { createMockChannel } from './createMockChannel';
+import { createMockUser } from './createMockUser';
 
-interface MockSendbirdChatSDK extends SendbirdChatSDK {
+const fixture = createFixtureContext();
+
+export interface MockSendbirdChatSDK extends SendbirdChatSDK {
   __emit(
     type: 'channel' | 'message',
     name: `group_${keyof GroupChannelHandlerParams}` | `open_${keyof OpenChannelHandlerParams}`,
   ): void;
   __context: {
+    openChannels: SendbirdOpenChannel[];
+    groupChannels: SendbirdGroupChannel[];
     groupChannelHandlers: Record<string, GroupChannelHandler>;
     openChannelHandlers: Record<string, OpenChannelHandler>;
   };
+  __configs: MockSDKConfigs;
+  __throwIfFailureTest(): void;
 }
 
-export const createMockSendbird = (type: 'success' | 'failure' = 'success'): MockSendbirdChatSDK => {
-  const pkey = mockPromiseValue[type];
-  const __context: MockSendbirdChatSDK['__context'] = {
+type MockSDKConfigs = { testType: 'success' | 'failure'; userId?: string };
+
+const defaultConfigs: MockSDKConfigs = { testType: 'success', userId: 'user_id_' + fixture.getHash() };
+
+export const createMockSendbird = (configs: MockSDKConfigs = defaultConfigs): MockSendbirdChatSDK => {
+  return new MockSDK(configs).asMockSendbirdChatSDK();
+};
+
+// @ts-ignore
+
+class MockSDK implements MockSendbirdChatSDK {
+  __configs = defaultConfigs;
+  __context = {
+    groupChannels: [] as SendbirdGroupChannel[],
+    openChannels: [] as SendbirdOpenChannel[],
     groupChannelHandlers: {} as Record<string, GroupChannelHandler>,
     openChannelHandlers: {} as Record<string, OpenChannelHandler>,
   };
 
-  return {
-    groupChannel: {
-      getChannel: jest.fn()[pkey]({}),
-      addGroupChannelHandler: jest.fn(function (id: string, handler: GroupChannelHandler) {
-        __context.groupChannelHandlers[id] = handler;
-      }),
-      removeGroupChannelHandler: jest.fn(function (id: string) {
-        delete __context.groupChannelHandlers[id];
-      }),
-    },
-    openChannel: {
-      getChannel: jest.fn()[pkey]({}),
-      addOpenChannelHandler: jest.fn(function (id: string, handler: OpenChannelHandler) {
-        __context.openChannelHandlers[id] = handler;
-      }),
-      removeOpenChannelHandler: jest.fn(function (id: string) {
-        delete __context.openChannelHandlers[id];
-      }),
-    },
-    __context,
-    __emit(...[name, type]: Parameters<MockSendbirdChatSDK['__emit']>) {
-      switch (name) {
-        case 'channel': {
-          if (type.startsWith('open_')) {
-            const eventName = type.replace('open_', '') as keyof OpenChannelHandlerParams;
-            Object.values(__context.openChannelHandlers).forEach((handler) => {
-              handler[eventName]?.({} as never, {} as never);
-            });
-          }
-          if (type.startsWith('group_')) {
-            const eventName = type.replace('group_', '') as keyof GroupChannelHandlerParams;
-            Object.values(__context.groupChannelHandlers).forEach((handler) => {
-              handler[eventName]?.({} as never, {} as never, {} as never);
-            });
-          }
-          break;
+  __emit(...[name, type]: Parameters<MockSendbirdChatSDK['__emit']>) {
+    switch (name) {
+      case 'channel': {
+        if (type.startsWith('open_')) {
+          const eventName = type.replace('open_', '') as keyof OpenChannelHandlerParams;
+          Object.values(this.__context.openChannelHandlers).forEach((handler) => {
+            handler[eventName]?.({} as never, {} as never);
+          });
         }
-        case 'message': {
-          break;
+        if (type.startsWith('group_')) {
+          const eventName = type.replace('group_', '') as keyof GroupChannelHandlerParams;
+          Object.values(this.__context.groupChannelHandlers).forEach((handler) => {
+            handler[eventName]?.({} as never, {} as never, {} as never);
+          });
         }
+        break;
       }
-    },
-  } as unknown as MockSendbirdChatSDK;
-};
+      case 'message': {
+        break;
+      }
+    }
+  }
+  __throwIfFailureTest() {
+    if (this.__configs.testType === 'failure') throw new Error('Failure test');
+  }
+
+  currentUser = createMockUser(this.__configs);
+  groupChannel = {
+    getChannel: jest.fn(async (url: string) => {
+      this.__throwIfFailureTest();
+
+      const channelInContext = this.__context.groupChannels.find((it) => it.url === url);
+      if (channelInContext) {
+        return channelInContext;
+      } else {
+        const channel = createMockChannel({
+          channelType: ChannelType.GROUP,
+          url,
+          sdk: this.asMockSendbirdChatSDK(),
+        }).asGroupChannel();
+        this.__context.groupChannels.push(channel);
+        return channel;
+      }
+    }),
+    addGroupChannelHandler: jest.fn((id: string, handler: GroupChannelHandler) => {
+      this.__context.groupChannelHandlers[id] = handler;
+    }),
+    removeGroupChannelHandler: jest.fn((id: string) => {
+      delete this.__context.groupChannelHandlers[id];
+    }),
+  } as unknown as SendbirdChatSDK['groupChannel'];
+
+  openChannel = {
+    getChannel: jest.fn(async (url: string) => {
+      this.__throwIfFailureTest();
+
+      const channelInContext = this.__context.openChannels.find((it) => it.url === url);
+      if (channelInContext) {
+        return channelInContext;
+      } else {
+        const channel = createMockChannel({
+          channelType: ChannelType.OPEN,
+          url,
+          sdk: this.asMockSendbirdChatSDK(),
+        }).asOpenChannel();
+        this.__context.openChannels.push(channel);
+        return channel;
+      }
+    }),
+    addOpenChannelHandler: jest.fn((id: string, handler: OpenChannelHandler) => {
+      this.__context.openChannelHandlers[id] = handler;
+    }),
+    removeOpenChannelHandler: jest.fn((id: string) => {
+      delete this.__context.openChannelHandlers[id];
+    }),
+  } as unknown as SendbirdChatSDK['openChannel'];
+  constructor(configs: MockSDKConfigs = defaultConfigs) {
+    this.__configs = { ...defaultConfigs, ...configs };
+  }
+  asMockSendbirdChatSDK() {
+    return this as unknown as MockSendbirdChatSDK;
+  }
+}
