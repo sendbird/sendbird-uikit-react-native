@@ -9,14 +9,11 @@ describe('useChannelHandler', () => {
     const handlerId = 'test-handler-id';
     const handler = { onMessageReceived: jest.fn() };
 
-    const removeGroupChannelHandler = sdk.groupChannel.removeGroupChannelHandler;
-    const addGroupChannelHandler = sdk.groupChannel.addGroupChannelHandler;
-
     const { unmount } = renderHook(() => useChannelHandler(sdk, handlerId, handler, 'group'));
-    expect(addGroupChannelHandler).toHaveBeenCalledWith(handlerId, expect.any(Object));
+    expect(sdk.groupChannel.addGroupChannelHandler).toHaveBeenCalledWith(handlerId, expect.any(Object));
 
     unmount();
-    expect(removeGroupChannelHandler).toHaveBeenCalledWith(handlerId);
+    expect(sdk.groupChannel.removeGroupChannelHandler).toHaveBeenCalledWith(handlerId);
   });
 
   it('should channel handler triggered when event received', () => {

@@ -6,7 +6,7 @@ import { createMockSendbird } from '../__mocks__/createMockSendbirdSDK';
 describe('useOpenChannel', () => {
   it('should fetch open channel and return it', async () => {
     const channelUrl = 'test_channel_url';
-    const sdk = createMockSendbird('success');
+    const sdk = createMockSendbird();
     const { result } = renderHook(() => useOpenChannel(sdk, channelUrl));
 
     expect(result.current.loading).toBe(true);
@@ -23,7 +23,7 @@ describe('useOpenChannel', () => {
 
   it('should set error state if fetching open channel fails', async () => {
     const channelUrl = 'test_channel_url';
-    const sdk = createMockSendbird('failure');
+    const sdk = createMockSendbird({ testType: 'failure' });
     const { result } = renderHook(() => useOpenChannel(sdk, channelUrl));
 
     expect(result.current.loading).toBe(true);
