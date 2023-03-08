@@ -1,7 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react-native';
 
-import { useOpenChannel } from '../channel/useOpenChannel';
-import { createMockSendbird } from './__mocks__/createMockSendbirdSDK';
+import { useOpenChannel } from '../../channel/useOpenChannel';
+import { createMockSendbird } from '../__mocks__/createMockSendbirdSDK';
 
 describe('useOpenChannel', () => {
   it('should fetch open channel and return it', async () => {

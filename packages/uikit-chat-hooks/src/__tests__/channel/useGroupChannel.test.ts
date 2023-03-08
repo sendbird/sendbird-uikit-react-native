@@ -1,7 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react-native';
 
-import { useGroupChannel } from '../channel/useGroupChannel';
-import { createMockSendbird } from './__mocks__/createMockSendbirdSDK';
+import { useGroupChannel } from '../../channel/useGroupChannel';
+import { createMockSendbird } from '../__mocks__/createMockSendbirdSDK';
 
 describe('useGroupChannel', () => {
   it('should fetch group channel and return it', async () => {

@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-native';
 
-import { useChannelHandler } from '../handler/useChannelHandler';
-import { createMockSendbird } from './__mocks__/createMockSendbirdSDK';
+import { useChannelHandler } from '../../handler/useChannelHandler';
+import { createMockSendbird } from '../__mocks__/createMockSendbirdSDK';
 
 describe('useChannelHandler', () => {
   it('should add and remove the channel handler when mounted and unmounted', () => {
