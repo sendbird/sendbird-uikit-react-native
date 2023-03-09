@@ -85,8 +85,6 @@
     "moduleNameMapper": {
       "@sendbird/uikit-([^/]+)": "<rootDir>/packages/uikit-$1/src"
     },
-    "coverageReporters": [
-      "json-summary"
-    ]
+    "collectCoverage": true
   }
 }
