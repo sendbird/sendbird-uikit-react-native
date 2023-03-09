@@ -14,6 +14,7 @@ export interface MockSendbirdChatSDK extends SendbirdChatSDK {
   __emit(
     type: 'channel' | 'message',
     name: `group_${keyof GroupChannelHandlerParams}` | `open_${keyof OpenChannelHandlerParams}`,
+    ...args: unknown[]
   ): void;
   __context: {
     openChannels: SendbirdOpenChannel[];
@@ -44,19 +45,21 @@ class MockSDK implements MockSendbirdChatSDK {
     openChannelHandlers: {} as Record<string, OpenChannelHandler>,
   };
 
-  __emit(...[name, type]: Parameters<MockSendbirdChatSDK['__emit']>) {
+  __emit(...[name, type, ...args]: Parameters<MockSendbirdChatSDK['__emit']>) {
     switch (name) {
       case 'channel': {
         if (type.startsWith('open_')) {
           const eventName = type.replace('open_', '') as keyof OpenChannelHandlerParams;
           Object.values(this.__context.openChannelHandlers).forEach((handler) => {
-            handler[eventName]?.({} as never, {} as never);
+            // @ts-ignore
+            handler[eventName]?.(...args);
           });
         }
         if (type.startsWith('group_')) {
           const eventName = type.replace('group_', '') as keyof GroupChannelHandlerParams;
           Object.values(this.__context.groupChannelHandlers).forEach((handler) => {
-            handler[eventName]?.({} as never, {} as never, {} as never);
+            // @ts-ignore
+            handler[eventName]?.(...args);
           });
         }
         break;
