@@ -30,13 +30,13 @@ class MockUser implements SendbirdUser {
   metaData: object = {};
   connectionStatus: UserOnlineState = UserOnlineState.OFFLINE;
   isActive = false;
-  lastSeenAt = fixture.date + fixture.incremental;
+  lastSeenAt = fixture.date + fixture.increment;
   preferredLanguages: string[] = [];
   friendDiscoveryKey = fixture.getHash();
   friendName = 'friend_name_' + fixture.getHash();
 
   constructor(params: UserParams) {
-    fixture.increaseIncremental();
+    fixture.increaseIncrement();
     Object.entries(params).forEach(([key, value]) => {
       // @ts-ignore
       this[key] = value;

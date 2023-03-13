@@ -71,7 +71,7 @@ class MockChannel implements SendbirdBaseChannel, SendbirdOpenChannel, SendbirdG
   data = '';
   creator = createMockUser({ userId: 'creator-user-id' });
 
-  createdAt: number = fixture.date + fixture.incremental;
+  createdAt: number = fixture.date + fixture.increment;
   participantCount = 0;
   operators = [];
   hiddenState = HiddenState.UNHIDDEN;
@@ -104,7 +104,7 @@ class MockChannel implements SendbirdBaseChannel, SendbirdOpenChannel, SendbirdG
   unreadMessageCount = 0;
 
   constructor(params: ChannelParams) {
-    fixture.increaseIncremental();
+    fixture.increaseIncrement();
     Object.entries(params).forEach(([key, value]) => {
       // @ts-ignore
       this[key] = value;

@@ -1,21 +1,23 @@
 type FixtureContext = {
   get date(): number;
-  get incremental(): number;
-  increaseIncremental(): void;
+  get increment(): number;
+  increaseIncrement(): void;
   getHash(): string;
   getRandom(): number;
 };
 export const createFixtureContext = <T>(additionalContext?: T): FixtureContext & T => {
-  const _date = Date.now();
-  let _incremental = 0;
+  const context = {
+    date: Date.now(),
+    increment: 0,
+  };
   return {
     get date() {
-      return _date;
+      return context.date;
     },
-    get incremental() {
-      return _incremental;
+    get increment() {
+      return context.increment;
     },
-    increaseIncremental: () => _incremental++,
+    increaseIncrement: () => context.increment++,
     getHash: () => Math.random().toString(16).slice(2),
     getRandom: () => Math.random(),
     ...additionalContext,

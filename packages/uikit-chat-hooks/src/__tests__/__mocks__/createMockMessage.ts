@@ -23,11 +23,11 @@ class MockMessage implements SendbirdBaseMessage {
   sdk?: MockSendbirdChatSDK;
   channelType: ChannelType = ChannelType.BASE;
   channelUrl: string = 'channel_url_' + fixture.getHash();
-  createdAt: number = fixture.date + fixture.incremental;
+  createdAt: number = fixture.date + fixture.increment;
   messageId: number = fixture.getRandom();
   messageType = MessageType.BASE;
   constructor(params: MessageParams) {
-    fixture.increaseIncremental();
+    fixture.increaseIncrement();
     Object.entries(params).forEach(([key, value]) => {
       // @ts-ignore
       this[key] = value;
