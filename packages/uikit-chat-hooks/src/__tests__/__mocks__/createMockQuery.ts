@@ -1,8 +1,10 @@
+import { ChannelType } from '@sendbird/chat';
+
 import { createMockChannel } from './createMockChannel';
 import { createMockMessage } from './createMockMessage';
 import { createMockUser } from './createMockUser';
 
-type QueryType = 'message' | 'channel' | 'user';
+type QueryType = 'message' | 'user' | 'openChannel' | 'groupChannel';
 type QueryParams = {
   type: QueryType;
   limit?: number;
@@ -16,8 +18,10 @@ const dataListFactory = (type: QueryType = 'message', dataLength = 100) => {
       switch (type) {
         case 'message':
           return createMockMessage({});
-        case 'channel':
-          return createMockChannel({});
+        case 'openChannel':
+          return createMockChannel({ channelType: ChannelType.OPEN });
+        case 'groupChannel':
+          return createMockChannel({ channelType: ChannelType.GROUP });
         case 'user':
           return createMockUser({});
       }

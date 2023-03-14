@@ -13,7 +13,7 @@ describe('useOpenChannelMessagesWithQuery', () => {
     );
 
     await waitFor(() => {
-      expect(channel.enter).toHaveBeenCalled();
+      expect(channel.enter).toHaveBeenCalledTimes(1);
       expect(channel.createPreviousMessageListQuery).toHaveBeenCalledTimes(1);
       expect(result.current.loading).toBe(false);
       expect(result.current.refreshing).toBe(false);
@@ -56,7 +56,7 @@ describe('useOpenChannelMessagesWithQuery', () => {
     renderHook(() => useOpenChannelMessagesWithQuery(sdk, channel, sdk.currentUser.userId, options));
 
     await waitFor(() => {
-      expect(channel.enter).toHaveBeenCalled();
+      expect(channel.enter).toHaveBeenCalledTimes(1);
       expect(options.onError).toHaveBeenCalledWith(new Error('test-error'));
       expect(options.onChannelDeleted).toHaveBeenCalled();
     });
