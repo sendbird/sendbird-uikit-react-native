@@ -46,6 +46,20 @@ describe('useChannelHandler', () => {
     expect(sdk.groupChannel.addGroupChannelHandler).toHaveBeenCalledWith(handlerId, expect.any(Object));
   });
 
+  it('should not handle handlers when an unknown type is provided to useChannelHandler', () => {
+    const sdk = createMockSendbird();
+
+    const { unmount } = renderHook(() => useChannelHandler(sdk, 'test-handler-id', {} as never, 'wrong' as never));
+
+    expect(sdk.groupChannel.addGroupChannelHandler).not.toHaveBeenCalled();
+    expect(sdk.openChannel.addOpenChannelHandler).not.toHaveBeenCalled();
+
+    unmount();
+
+    expect(sdk.groupChannel.removeGroupChannelHandler).not.toHaveBeenCalled();
+    expect(sdk.openChannel.removeOpenChannelHandler).not.toHaveBeenCalled();
+  });
+
   it('should channel handler triggered when event received', () => {
     const sdk = createMockSendbird();
     const handlerId = 'test-handler-id';
