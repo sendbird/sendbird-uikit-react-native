@@ -86,9 +86,21 @@ describe('useOpenChannelListWithQuery', () => {
     };
 
     const { result } = renderHook(() => useOpenChannelListWithQuery(sdk, sdk.currentUser.userId, options));
+    expect(result.current.error).toEqual(null);
 
     await waitFor(() => {
       expect(options.queryCreator).toHaveBeenCalledTimes(1);
+      expect(result.current.error).toEqual(error);
+    });
+
+    act(() => {
+      result.current.refresh();
+    });
+
+    expect(result.current.error).toEqual(null);
+
+    await waitFor(() => {
+      expect(options.queryCreator).toHaveBeenCalledTimes(2);
       expect(result.current.error).toEqual(error);
     });
   });
