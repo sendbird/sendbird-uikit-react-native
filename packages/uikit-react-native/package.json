@@ -67,7 +67,7 @@
     "inquirer": "^8.2.0",
     "js-convert-case": "^4.2.0",
     "react": "17.0.2",
-    "react-native": "0.66.4",
+    "react-native": "0.66.5",
     "react-native-builder-bob": "^0.18.0",
     "react-native-create-thumbnail": "^1.5.1",
     "react-native-document-picker": "^8.0.0",
