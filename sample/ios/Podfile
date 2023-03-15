@@ -1,5 +1,8 @@
-require_relative '../node_modules/react-native/scripts/react_native_pods'
-require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+# Path should point out the hoisted node_modules
+require_relative '../../node_modules/react-native/scripts/react_native_pods'
+require_relative '../../node_modules/@react-native-community/cli-platform-ios/native_modules'
+permissions_path = '../../node_modules/react-native-permissions/ios'
+notifee_path = '../../node_modules/@notifee/react-native/RNNotifeeCore.podspec'
 
 platform :ios, '11.0'
 
@@ -12,7 +15,6 @@ target 'SendbirdUIKitSample' do
     :hermes_enabled => false
   )
 
-  permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
   pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone"
   pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
@@ -42,5 +44,5 @@ end
 $NotifeeExtension = true
 
 target 'NotificationService' do
-  pod 'RNNotifeeCore', :path => '../node_modules/@notifee/react-native/RNNotifeeCore.podspec'
+  pod 'RNNotifeeCore', :path => notifee_path
 end
