@@ -86,6 +86,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
     HeaderComponent?: HeaderStyleContextType['HeaderComponent'];
   };
   errorBoundary?: {
+    disabled?: boolean;
     onError?: (props: ErrorBoundaryProps) => void;
     ErrorInfoComponent?: (props: ErrorBoundaryProps) => JSX.Element;
   };
@@ -142,17 +143,20 @@ const SendbirdUIKitContainer = ({
       trigger: MentionConfig.DEFAULT.TRIGGER,
     });
     return new MentionManager(config, chatOptions?.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION);
-  }, [userMention?.mentionLimit, userMention?.suggestionLimit, userMention?.debounceMills]);
+  }, [
+    chatOptions?.enableUserMention,
+    userMention?.mentionLimit,
+    userMention?.suggestionLimit,
+    userMention?.debounceMills,
+  ]);
 
-  const imageCompressionConfig = useMemo(
-    () =>
-      new ImageCompressionConfig({
-        compressionRate: imageCompression?.compressionRate || ImageCompressionConfig.DEFAULT.COMPRESSION_RATE,
-        width: imageCompression?.width,
-        height: imageCompression?.height,
-      }),
-    [imageCompression?.compressionRate, imageCompression?.width, imageCompression?.height],
-  );
+  const imageCompressionConfig = useMemo(() => {
+    return new ImageCompressionConfig({
+      compressionRate: imageCompression?.compressionRate || ImageCompressionConfig.DEFAULT.COMPRESSION_RATE,
+      width: imageCompression?.width,
+      height: imageCompression?.height,
+    });
+  }, [imageCompression?.compressionRate, imageCompression?.width, imageCompression?.height]);
 
   useLayoutEffect(() => {
     if (!isFirstMount) {
@@ -171,6 +175,14 @@ const SendbirdUIKitContainer = ({
       }
     };
   }, [appId, internalStorage]);
+
+  const renderChildren = () => {
+    if (errorBoundary?.disabled) {
+      return children;
+    } else {
+      return <InternalErrorBoundaryContainer {...errorBoundary}>{children}</InternalErrorBoundaryContainer>;
+    }
+  };
 
   return (
     <SafeAreaProvider>
@@ -212,6 +224,7 @@ const SendbirdUIKitContainer = ({
                   <UserProfileProvider
                     onCreateChannel={userProfile?.onCreateChannel}
                     onBeforeCreateChannel={userProfile?.onBeforeCreateChannel}
+                    statusBarTranslucent={styles?.statusBarTranslucent ?? true}
                   >
                     <ReactionProvider>
                       <LocalizationContext.Consumer>
@@ -228,9 +241,7 @@ const SendbirdUIKitContainer = ({
                                 },
                               }}
                             >
-                              <InternalErrorBoundaryContainer {...errorBoundary}>
-                                {children}
-                              </InternalErrorBoundaryContainer>
+                              {renderChildren()}
                             </DialogProvider>
                           );
                         }}

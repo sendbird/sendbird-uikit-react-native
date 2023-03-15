@@ -9,7 +9,7 @@ import { useSendbirdChat, createGroupChannelSettingsFragment } from '@sendbird/u
 import { useGroupChannel } from "@sendbird/uikit-chat-hooks";
 
 const GroupChannelSettingsFragment = createGroupChannelSettingsFragment();
-const GroupChannelSettingsScreen = ({ params }: { params: { channelUrl: string } }) => {
+const GroupChannelSettingsScreen = ({ route: { params } }: any) => {
   const { sdk } = useSendbirdChat();
   const { channel } = useGroupChannel(sdk, params.channelUrl);
   if (!channel) return null;
@@ -70,7 +70,7 @@ import { Icon } from '@sendbird/uikit-react-native-foundation';
 // import { useGroupChannel } from "@sendbird/uikit-chat-hooks";
 
 const GroupChannelSettingsFragment2 = createGroupChannelSettingsFragment();
-const GroupChannelSettingsScreen2 = ({ params }: { params: { channelUrl: string } }) => {
+const GroupChannelSettingsScreen2 = ({ route: { params } }: any) => {
   const { sdk } = useSendbirdChat();
   const { channel } = useGroupChannel(sdk, params.channelUrl);
   if (!channel) return null;

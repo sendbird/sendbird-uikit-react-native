@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/uikit-react-native",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "react-native-uikit",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -42,9 +42,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@sendbird/uikit-chat-hooks": "2.3.0",
-    "@sendbird/uikit-react-native-foundation": "2.3.0",
-    "@sendbird/uikit-utils": "2.3.0"
+    "@sendbird/uikit-chat-hooks": "2.4.0",
+    "@sendbird/uikit-react-native-foundation": "2.4.0",
+    "@sendbird/uikit-utils": "2.4.0"
   },
   "devDependencies": {
     "@bam.tech/react-native-image-resizer": "^3.0.4",
@@ -70,7 +70,7 @@
     "inquirer": "^8.2.0",
     "js-convert-case": "^4.2.0",
     "react": "17.0.2",
-    "react-native": "0.67.4",
+    "react-native": "0.67.5",
     "react-native-builder-bob": "^0.18.0",
     "react-native-create-thumbnail": "^1.5.1",
     "react-native-document-picker": "^8.0.0",

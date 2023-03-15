@@ -6,7 +6,7 @@ import TypedPlaceholder from '../../../components/TypedPlaceholder';
 const OpenChannelListStatusEmpty = () => {
   return (
     <View style={styles.container}>
-      <TypedPlaceholder type={'no-messages'} />
+      <TypedPlaceholder type={'no-channels'} />
     </View>
   );
 };

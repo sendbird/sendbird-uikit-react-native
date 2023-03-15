@@ -17,10 +17,10 @@ import type { GroupChannelType, UserListContextsType } from "@sendbird/uikit-rea
 import type { SendbirdUser } from '@sendbird/uikit-utils';
 
 const GroupChannelCreateFragment = createGroupChannelCreateFragment<SendbirdUser>();
-const GroupChannelCreateScreen = ({ params }: { params: { channelType: GroupChannelType } }) => {
+const GroupChannelCreateScreen = ({ route: { params } }: any) => {
   const navigateToBack = () => {};
   const replaceToGroupChannelScreen = () => {};
-  const channelTypeFromGroupChannelListScreen = params.channelType;
+  const channelTypeFromGroupChannelListScreen = params.channelType as GroupChannelType;
 
   return (
     <GroupChannelCreateFragment
@@ -97,10 +97,10 @@ const myAppUserQueryCreator = () => {
 };
 
 const GroupChannelCreateFragment2 = createGroupChannelCreateFragment<MyAppUser>();
-const GroupChannelCreateScreen2 = ({ params }: { params: { channelType: GroupChannelType } }) => {
+const GroupChannelCreateScreen2 = ({ route: { params } }: any) => {
   const navigateToBack = () => {};
   const replaceToGroupChannelScreen = () => {};
-  const channelTypeFromGroupChannelListScreen = params.channelType;
+  const channelTypeFromGroupChannelListScreen = params.channelType as GroupChannelType;
 
   return (
     <GroupChannelCreateFragment2

@@ -68,7 +68,7 @@ const OpenChannelListLiveStreamsScreen = () => {
         ),
         [],
       )}
-      flatListProps={{ bounces: false }}
+      flatListProps={{ bounces: false, onRefresh: undefined }}
     />
   );
 };
@@ -81,7 +81,7 @@ const LiveStreamPreview = ({ channel }: { channel: SendbirdOpenChannel }) => {
 
   return (
     <Box flexDirection={'row'} paddingVertical={12} paddingHorizontal={16}>
-      <Box width={120} height={72}>
+      <Box width={120} height={72} backgroundColor={colors.onBackground04}>
         <Image resizeMode={'cover'} source={{ uri: streamData.live_channel_url }} style={StyleSheet.absoluteFill} />
         <Box
           backgroundColor={colors.error}

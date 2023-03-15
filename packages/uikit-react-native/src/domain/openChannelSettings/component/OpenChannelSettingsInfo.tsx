@@ -24,8 +24,8 @@ const OpenChannelSettingsInfo = (_: OpenChannelSettingsProps['Info']) => {
       <Divider />
 
       <Box paddingVertical={16}>
-        <Text body2 color={colors.onBackground02} style={styles.menuUrl}>
-          {STRINGS.OPEN_CHANNEL_SETTINGS.MENU_URL}
+        <Text body2 color={colors.onBackground02} style={styles.infoUrl}>
+          {STRINGS.OPEN_CHANNEL_SETTINGS.INFO_URL}
         </Text>
         <Text body3 color={colors.onBackground01}>
           {channel.url}
@@ -40,7 +40,7 @@ const styles = createStyleSheet({
   avatarContainer: {
     marginBottom: 12,
   },
-  menuUrl: {
+  infoUrl: {
     marginBottom: 4,
   },
 });

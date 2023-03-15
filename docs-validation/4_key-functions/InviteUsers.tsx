@@ -19,7 +19,7 @@ import type { SendbirdUser } from "@sendbird/uikit-utils";
 import { useGroupChannel } from "@sendbird/uikit-chat-hooks";
 
 const GroupChannelInviteFragment = createGroupChannelInviteFragment<SendbirdUser>();
-const GroupChannelInviteScreen = ({ params }: { params: { channelUrl: string } }) => {
+const GroupChannelInviteScreen = ({ route: { params } }: any) => {
   const { sdk } = useSendbirdChat();
   const { channel } = useGroupChannel(sdk, params.channelUrl);
   if (!channel) return null;
@@ -109,7 +109,7 @@ const myAppUserQueryCreator = () => {
 };
 
 const GroupChannelInviteFragment2 = createGroupChannelInviteFragment<MyAppUser>();
-const GroupChannelInviteScreen2 = ({ params }: { params: { channelUrl: string } }) => {
+const GroupChannelInviteScreen2 = ({ route: { params } }: any) => {
   const { sdk } = useSendbirdChat();
   const { channel } = useGroupChannel(sdk, params.channelUrl);
   if (!channel) return null;

@@ -20,6 +20,7 @@ const OpenChannelTabs = () => {
     <Tab.Navigator
       initialRouteName={Routes.OpenChannelListLiveStreams}
       screenOptions={{
+        lazy: false,
         headerShown: false,
         tabBarActiveTintColor: colors.primary,
         tabBarLabelStyle: typography.caption2,

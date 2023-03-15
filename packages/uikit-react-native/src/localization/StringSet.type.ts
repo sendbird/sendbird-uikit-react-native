@@ -40,8 +40,10 @@ export interface StringSet {
     HEADER_TITLE: string;
     HEADER_RIGHT: string;
 
+    /** OpenChannelSettings > Info */
+    INFO_URL: string;
+
     /** OpenChannelSettings > Menu */
-    MENU_URL: string;
     MENU_MODERATION: string;
     MENU_PARTICIPANTS: string;
     MENU_DELETE_CHANNEL: string;

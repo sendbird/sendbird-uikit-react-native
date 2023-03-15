@@ -48,7 +48,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     OPEN_CHANNEL_SETTINGS: {
       HEADER_TITLE: 'Channel information',
       HEADER_RIGHT: 'Edit',
-      MENU_URL: 'URL',
+      INFO_URL: 'URL',
       MENU_MODERATION: 'Moderation',
       MENU_PARTICIPANTS: 'Participants',
       MENU_DELETE_CHANNEL: 'Delete channel',

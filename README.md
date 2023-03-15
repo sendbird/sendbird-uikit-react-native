@@ -117,7 +117,7 @@ yarn workspace @sendbird/package add package-name
 yarn workspace @sendbird/package remove package-name
 
 # Add dependency to root
-yarn workspace -W add package-name
+yarn -W add package-name
 ```
 
 > **Warning** You should better install to root if you're trying to install native view modules.

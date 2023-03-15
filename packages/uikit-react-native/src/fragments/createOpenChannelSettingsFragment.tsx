@@ -19,13 +19,14 @@ const createOpenChannelSettingsFragment = (
     onPressMenuModeration,
     onPressMenuParticipants,
     onPressMenuDeleteChannel,
+    onNavigateToOpenChannel,
     menuItemsCreator,
   }) => {
     const { colors } = useUIKitTheme();
     const { left, right } = useSafeAreaInsets();
 
     return (
-      <OpenChannelSettingsModule.Provider channel={channel}>
+      <OpenChannelSettingsModule.Provider channel={channel} onNavigateToOpenChannel={onNavigateToOpenChannel}>
         <OpenChannelSettingsModule.Header onPressHeaderLeft={onPressHeaderLeft} />
         <ScrollView
           style={{ backgroundColor: colors.background }}

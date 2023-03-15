@@ -8,7 +8,7 @@ import type {
   SendbirdMember,
   SendbirdUser,
 } from '@sendbird/uikit-utils';
-import { Logger, PASS, useIIFE } from '@sendbird/uikit-utils';
+import { Logger, PASS, getDefaultGroupChannelCreateParams, useIIFE } from '@sendbird/uikit-utils';
 
 import { LocalizationContext } from '../contexts/LocalizationCtx';
 import { SendbirdChatContext } from '../contexts/SendbirdChatCtx';
@@ -31,12 +31,18 @@ export type UserProfileContextType = {
 type Props = React.PropsWithChildren<{
   onCreateChannel?: OnCreateChannel;
   onBeforeCreateChannel?: OnBeforeCreateChannel;
+  statusBarTranslucent?: boolean;
 }>;
 
 let WARN_onCreateChannel = false;
 
 export const UserProfileContext = React.createContext<UserProfileContextType | null>(null);
-export const UserProfileProvider = ({ children, onCreateChannel, onBeforeCreateChannel = PASS }: Props) => {
+export const UserProfileProvider = ({
+  children,
+  onCreateChannel,
+  onBeforeCreateChannel = PASS,
+  statusBarTranslucent = true,
+}: Props) => {
   const chatContext = useContext(SendbirdChatContext);
   const localizationContext = useContext(LocalizationContext);
 
@@ -78,16 +84,12 @@ export const UserProfileProvider = ({ children, onCreateChannel, onBeforeCreateC
 
     const onPressMessageButton = async () => {
       if (user) {
-        const params: SendbirdGroupChannelCreateParams = {
+        const params = getDefaultGroupChannelCreateParams({
           invitedUserIds: [user.userId],
-          name: '',
-          coverUrl: '',
-          isDistinct: false,
-        };
+          currentUserId: chatContext.currentUser?.userId,
+        });
 
-        if (chatContext.currentUser) params.operatorUserIds = [chatContext.currentUser.userId];
         const processedParams = await onBeforeCreateChannel(params, [user]);
-
         hide();
         const channel = await chatContext.sdk.groupChannel.createChannel(processedParams);
 
@@ -117,6 +119,7 @@ export const UserProfileProvider = ({ children, onCreateChannel, onBeforeCreateC
         onDismiss={onDismiss}
         visible={visible && Boolean(user)}
         backgroundStyle={styles.modal}
+        statusBarTranslucent={statusBarTranslucent}
       >
         {user && (
           <ProfileCard

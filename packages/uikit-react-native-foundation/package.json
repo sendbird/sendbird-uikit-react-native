@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/uikit-react-native-foundation",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "react-native-uikit",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -39,13 +39,13 @@
     "access": "public"
   },
   "dependencies": {
-    "@sendbird/uikit-utils": "2.3.0"
+    "@sendbird/uikit-utils": "2.4.0"
   },
   "devDependencies": {
     "@types/react": "*",
     "@types/react-native": "*",
     "react": "17.0.2",
-    "react-native": "0.67.4",
+    "react-native": "0.67.5",
     "react-native-builder-bob": "^0.18.0",
     "react-native-fast-image": "^8.5.11",
     "react-native-safe-area-context": "^3.3.2",

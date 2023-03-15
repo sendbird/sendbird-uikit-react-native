@@ -6,7 +6,7 @@
   ],
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "version": "2.3.0",
+  "version": "2.4.0",
   "command": {
     "publish": {
       "conventionalCommits": true,
@@ -44,7 +44,8 @@
           },
           {
             "type": "docs",
-            "section": "Documentation"
+            "section": "Documentation",
+            "hidden": true
           },
           {
             "type": "revert",

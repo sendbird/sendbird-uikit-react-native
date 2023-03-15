@@ -79,15 +79,17 @@ const OpenGraphUserMessage = (props: OpenChannelMessageProps<SendbirdUserMessage
                   </Text>
 
                   {Boolean(props.message.ogMetaData.description) && (
-                    <Text numberOfLines={2} caption2 color={colors.onBackground01} style={styles.ogDesc}>
+                    <Text numberOfLines={2} caption2 color={colors.onBackground01}>
                       {props.message.ogMetaData.description}
                     </Text>
                   )}
 
-                  <ImageWithPlaceholder
-                    style={styles.ogImage}
-                    source={{ uri: props.message.ogMetaData.defaultImage.url }}
-                  />
+                  {Boolean(props.message.ogMetaData.defaultImage) && (
+                    <ImageWithPlaceholder
+                      style={styles.ogImage}
+                      source={{ uri: props.message.ogMetaData.defaultImage.url }}
+                    />
+                  )}
                 </Box>
               )
             }
@@ -108,12 +110,10 @@ const styles = createStyleSheet({
   ogTitle: {
     marginBottom: 8,
   },
-  ogDesc: {
-    marginBottom: 12,
-  },
   ogImage: {
     width: '100%',
     height: 156,
+    marginTop: 12,
   },
 });
 

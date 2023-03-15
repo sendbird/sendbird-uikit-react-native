@@ -1,5 +1,11 @@
 import { BufferedRequest } from '../shared/bufferedRequest';
-import type { SendbirdBaseChannel, SendbirdChannel, SendbirdGroupChannel, SendbirdOpenChannel } from '../types';
+import type {
+  SendbirdBaseChannel,
+  SendbirdChannel,
+  SendbirdGroupChannel,
+  SendbirdGroupChannelCreateParams,
+  SendbirdOpenChannel,
+} from '../types';
 
 /**
  * Diff utils for channel
@@ -58,4 +64,20 @@ export function getOpenChannels(channels: SendbirdChannel[]): SendbirdOpenChanne
 
 export function getChannelUniqId(channel: SendbirdChannel) {
   return channel.url;
+}
+
+export function getDefaultGroupChannelCreateParams(params: {
+  invitedUserIds: string[];
+  currentUserId?: string;
+}): SendbirdGroupChannelCreateParams {
+  const createParams: SendbirdGroupChannelCreateParams = {
+    name: '',
+    coverUrl: '',
+    isDistinct: false,
+    invitedUserIds: params.invitedUserIds,
+  };
+
+  if (params.currentUserId) createParams.operatorUserIds = [params.currentUserId];
+
+  return createParams;
 }

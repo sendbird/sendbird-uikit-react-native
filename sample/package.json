@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/uikit-sample-cli",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "private": true,
   "scripts": {
     "postinstall": "patch-package",
@@ -40,7 +40,7 @@
     "axios": "^0.27.2",
     "fbjs": "^3.0.4",
     "react": "17.0.2",
-    "react-native": "0.67.4",
+    "react-native": "0.67.5",
     "react-native-create-thumbnail": "^1.5.1",
     "react-native-document-picker": "^8.0.0",
     "react-native-fast-image": "^8.5.11",
@@ -50,7 +50,7 @@
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "3.14.0",
     "react-native-touch-reload": "sendbird/react-native-touch-reload",
-    "react-native-video": "^5.2.0"
+    "react-native-video": "^5.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

@@ -17,24 +17,27 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
   const OpenChannelModule = createOpenChannelModule(initModule);
 
   return ({
-    renderNewMessagesButton = () => null,
-    renderScrollToBottomButton = (props) => <ScrollToBottomButton {...props} />,
-    renderMessage,
-    enableMessageGrouping = true,
+    channel,
+    onChannelDeleted = NOOP,
     onPressHeaderLeft = NOOP,
     onPressHeaderRightWithSettings = NOOP,
     onPressHeaderRightWithParticipants = NOOP,
-    onPressMediaMessage = NOOP,
-    onChannelDeleted = NOOP,
+
     onBeforeSendUserMessage = PASS,
     onBeforeSendFileMessage = PASS,
     onBeforeUpdateUserMessage = PASS,
     onBeforeUpdateFileMessage = PASS,
-    channel,
+    onPressMediaMessage = NOOP,
+
+    renderMessage,
+    renderNewMessagesButton = () => null,
+    renderScrollToBottomButton = (props) => <ScrollToBottomButton {...props} />,
+
+    enableMessageGrouping = true,
     keyboardAvoidOffset,
+    flatListProps,
     queryCreator,
     sortComparator = messageComparator,
-    flatListProps,
   }) => {
     const { sdk, currentUser } = useSendbirdChat();
     const { STRINGS } = useLocalization();

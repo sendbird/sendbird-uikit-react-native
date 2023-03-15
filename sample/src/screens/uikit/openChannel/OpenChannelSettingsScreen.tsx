@@ -40,6 +40,10 @@ const OpenChannelSettingsScreen = () => {
           navigation.navigate(Routes.OpenChannelTabs);
         }
       }}
+      onNavigateToOpenChannel={() => {
+        // Navigate to open channel. This function is called when current user is unregistered from the operator.
+        navigation.navigate(Routes.OpenChannel, params);
+      }}
     />
   );
 };

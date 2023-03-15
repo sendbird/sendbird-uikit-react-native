@@ -19,7 +19,7 @@ const createOpenChannelListFragment = (initModule?: Partial<OpenChannelListModul
   return ({ onPressCreateChannel, onPressChannel = NOOP, flatListProps, renderOpenChannelPreview, queryCreator }) => {
     const { sdk, currentUser } = useSendbirdChat();
     const { STRINGS } = useLocalization();
-    const { openChannels, next, refresh, refreshing, loading } = useOpenChannelList(sdk, currentUser?.userId, {
+    const { openChannels, next, refresh, refreshing, loading, error } = useOpenChannelList(sdk, currentUser?.userId, {
       queryCreator,
     });
 
@@ -40,7 +40,12 @@ const createOpenChannelListFragment = (initModule?: Partial<OpenChannelListModul
     return (
       <OpenChannelListModule.Provider>
         <OpenChannelListModule.Header onPressHeaderRight={onPressCreateChannel} />
-        <StatusComposition loading={loading} LoadingComponent={<OpenChannelListModule.StatusLoading />}>
+        <StatusComposition
+          loading={loading}
+          LoadingComponent={<OpenChannelListModule.StatusLoading />}
+          error={Boolean(error)}
+          ErrorComponent={<OpenChannelListModule.StatusError onPressRetry={refresh} />}
+        >
           <OpenChannelListModule.List
             renderOpenChannelPreview={_renderOpenChannelPreview}
             openChannels={openChannels}

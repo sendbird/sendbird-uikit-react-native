@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StatusBar, StyleSheet, useWindowDimensions } from 'react-native';
+import { StyleSheet, useWindowDimensions } from 'react-native';
 
 import { useChannelHandler, useOpenChannel } from '@sendbird/uikit-chat-hooks';
 import { OpenChannelContexts, createOpenChannelFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
@@ -27,7 +27,7 @@ const useIsLandscape = () => {
   return width > height;
 };
 
-const StreamView = (props: { channel: SendbirdOpenChannel }) => {
+const StreamView = (props: { channel: SendbirdOpenChannel; height: number | string }) => {
   const { navigation } = useAppNavigation<Routes.OpenChannelLiveStream>();
   const { topInset } = useHeaderStyle();
   const { colors, palette } = useUIKitTheme();
@@ -51,8 +51,7 @@ const StreamView = (props: { channel: SendbirdOpenChannel }) => {
   if (!streamData) return null;
 
   return (
-    <Box style={{ height: isLandscape ? '100%' : 200 + topInset, width: '100%' }} flex={isLandscape ? 1.2 : 0}>
-      <StatusBar hidden animated />
+    <Box style={{ height: props.height, width: '100%' }} flex={isLandscape ? 1.2 : 0}>
       <Image style={StyleSheet.absoluteFill} resizeMode={'cover'} source={{ uri: streamData.live_channel_url }} />
       <Box style={StyleSheet.absoluteFill} backgroundColor={palette.overlay02} />
       <PressBox activeOpacity={0.8} onPress={() => navigation.goBack()}>
@@ -111,15 +110,21 @@ const OpenChannelFragment = createOpenChannelFragment({
 const OpenChannelLiveStreamScreen = () => {
   const { navigation, params } = useAppNavigation<Routes.OpenChannelLiveStream>();
   const isLandscape = useIsLandscape();
+  const { topInset } = useHeaderStyle();
 
   const { sdk } = useSendbirdChat();
   const { channel } = useOpenChannel(sdk, params.channelUrl);
   if (!channel) return null;
 
+  const streamViewHeight = isLandscape ? '100%' : 200 + topInset;
+  const keyboardAvoidOffset = isLandscape ? 0 : (streamViewHeight as number);
+
   return (
     <Box flex={1} flexDirection={isLandscape ? 'row' : 'column'}>
-      <StreamView channel={channel} />
+      {/*<StatusBar hidden animated />*/}
+      <StreamView height={streamViewHeight} channel={channel} />
       <OpenChannelFragment
+        keyboardAvoidOffset={keyboardAvoidOffset}
         channel={channel}
         onPressMediaMessage={(fileMessage, deleteMessage) => {
           // Navigate to media viewer

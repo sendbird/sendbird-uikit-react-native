@@ -1,31 +1,33 @@
-import type { GroupChannelContextsType } from '@sendbird/uikit-react-native';
+import type { OpenChannelContextsType } from '@sendbird/uikit-react-native';
 
-const AdvertiseMessage = (_:object) => <></>
+const DonationMessage = (_:object) => <></>
 
 /**
  * Usage
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-usage}
+ * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-an-open-channel#2-usage}
  * */
-import { useSendbirdChat, createGroupChannelFragment } from "@sendbird/uikit-react-native";
-import { useGroupChannel } from "@sendbird/uikit-chat-hooks";
+import { useSendbirdChat, createOpenChannelFragment } from "@sendbird/uikit-react-native";
+import { useOpenChannel } from "@sendbird/uikit-chat-hooks";
 
-const GroupChannelFragment = createGroupChannelFragment();
+const OpenChannelFragment = createOpenChannelFragment();
 
-const GroupChannelScreen = ({ route: { params } }: any) => {
+const OpenChannelScreen = ({ route: { params } }: any) => {
   const { sdk } = useSendbirdChat();
-  const { channel } = useGroupChannel(sdk, params.channelUrl);
+  const { channel } = useOpenChannel(sdk, params.channelUrl);
   if (!channel) return null;
 
-  const navigateToGroupChannelListScreen = () => {};
-  const navigateToGroupChannelSettingsScreen = () => {};
   const navigateToBack = () => {};
+  const navigateToOpenChannelList = () => {};
+  const navigateToOpenChannelParticipants = () => {};
+  const navigateToOpenChannelSettings = () => {};
 
   return (
-    <GroupChannelFragment
+    <OpenChannelFragment
       channel={channel}
       onPressHeaderLeft={navigateToBack}
-      onPressHeaderRight={navigateToGroupChannelSettingsScreen}
-      onChannelDeleted={navigateToGroupChannelListScreen}
+      onPressHeaderRightWithSettings={navigateToOpenChannelSettings}
+      onPressHeaderRightWithParticipants={navigateToOpenChannelParticipants}
+      onChannelDeleted={navigateToOpenChannelList}
     />
   );
 };
@@ -35,16 +37,13 @@ const GroupChannelScreen = ({ route: { params } }: any) => {
  * Context
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-context}
  * */
-function _context(_: GroupChannelContextsType) {
+function _context(_: OpenChannelContextsType) {
   const fragment = useContext(_.Fragment);
   fragment.headerTitle;
   fragment.channel;
   fragment.messageToEdit;
   fragment.setMessageToEdit;
   fragment.keyboardAvoidOffset;
-
-  const typing = useContext(_.TypingIndicator);
-  typing.typingUsers;
 }
 /** ------------------ **/
 
@@ -59,16 +58,7 @@ const Component = () => {
     messageToEdit,
     setMessageToEdit,
     keyboardAvoidOffset,
-  } = useContext(GroupChannelContexts.Fragment);
-};
-/** ------------------ **/
-
-/**
- * TypingIndicator
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-context-3-typeselector}
- * */
-const Component2 = () => {
-  const { typingUsers } = useContext(GroupChannelContexts.TypingIndicator);
+  } = useContext(OpenChannelContexts.Fragment);
 };
 /** ------------------ **/
 
@@ -82,12 +72,13 @@ import { Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/elements';
 
-import { GroupChannelContexts, GroupChannelModule, MessageRenderer } from '@sendbird/uikit-react-native';
+import { OpenChannelContexts, OpenChannelModule, OpenChannelMessageRenderer } from '@sendbird/uikit-react-native';
 import { Icon } from '@sendbird/uikit-react-native-foundation';
+// import { useOpenChannel } from "@sendbird/uikit-chat-hooks";
 
-const UseReactNavigationHeader: GroupChannelModule['Header'] = ({ onPressHeaderRight, onPressHeaderLeft }) => {
+const UseReactNavigationHeader: OpenChannelModule['Header'] = ({ rightIconName, onPressHeaderRight, onPressHeaderLeft }) => {
   const navigation = useNavigation();
-  const { headerTitle } = useContext(GroupChannelContexts.Fragment);
+  const { headerTitle } = useContext(OpenChannelContexts.Fragment);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -100,7 +91,7 @@ const UseReactNavigationHeader: GroupChannelModule['Header'] = ({ onPressHeaderR
       ),
       headerRight: () => (
         <Pressable onPress={onPressHeaderRight}>
-          <Icon icon={'info'} />
+          <Icon icon={rightIconName} />
         </Pressable>
       ),
     });
@@ -109,33 +100,35 @@ const UseReactNavigationHeader: GroupChannelModule['Header'] = ({ onPressHeaderR
   return null;
 };
 
-const GroupChannelFragment2 = createGroupChannelFragment({
+const OpenChannelFragment2 = createOpenChannelFragment({
   Header: UseReactNavigationHeader, // Hide header and use react-navigation header
 });
-const GroupChannelScreen2 = ({ route: { params } }: any) => {
+const OpenChannelScreen2 = ({ route: { params } }: any) => {
   const height = useHeaderHeight();
 
   const { sdk } = useSendbirdChat();
-  const { channel } = useGroupChannel(sdk, params.channelUrl);
+  const { channel } = useOpenChannel(sdk, params.channelUrl);
   if (!channel) return null;
 
-  const navigateToGroupChannelListScreen = () => {};
-  const navigateToGroupChannelSettingsScreen = () => {};
   const navigateToBack = () => {};
+  const navigateToOpenChannelList = () => {};
+  const navigateToOpenChannelParticipants = () => {};
+  const navigateToOpenChannelSettings = () => {};
 
   return (
-    <GroupChannelFragment2
+    <OpenChannelFragment2
       keyboardAvoidOffset={height}
       channel={channel}
       onPressHeaderLeft={navigateToBack}
-      onPressHeaderRight={navigateToGroupChannelSettingsScreen}
-      onChannelDeleted={navigateToGroupChannelListScreen}
+      onPressHeaderRightWithSettings={navigateToOpenChannelSettings}
+      onPressHeaderRightWithParticipants={navigateToOpenChannelParticipants}
+      onChannelDeleted={navigateToOpenChannelList}
       // Render custom message
       renderMessage={(props) => {
-        if(props.message.customType === 'Advertise') {
-          return <AdvertiseMessage {...props} />
+        if(props.message.customType === 'donation') {
+          return <DonationMessage {...props} />
         }
-        return <MessageRenderer {...props} />
+        return <OpenChannelMessageRenderer {...props} />
       }}
     />
   );

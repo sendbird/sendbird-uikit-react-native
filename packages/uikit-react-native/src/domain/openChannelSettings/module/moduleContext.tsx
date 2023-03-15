@@ -27,11 +27,15 @@ export const OpenChannelSettingsContexts: OpenChannelSettingsContextsType = {
   }),
 };
 
-export const OpenChannelSettingsContextsProvider: OpenChannelSettingsModule['Provider'] = ({ channel, children }) => {
+export const OpenChannelSettingsContextsProvider: OpenChannelSettingsModule['Provider'] = ({
+  channel,
+  onNavigateToOpenChannel,
+  children,
+}) => {
   const handlerId = useUniqHandlerId('OpenChannelSettingsContextsProvider');
   const forceUpdate = useForceUpdate();
   const { STRINGS } = useLocalization();
-  const { sdk } = useSendbirdChat();
+  const { sdk, currentUser } = useSendbirdChat();
   const { fileService } = usePlatformService();
   const { alert } = useAlert();
 
@@ -39,13 +43,25 @@ export const OpenChannelSettingsContextsProvider: OpenChannelSettingsModule['Pro
     if (isDifferentChannel(eventChannel, channel)) return;
     forceUpdate();
   };
+  const onOperatorUpdated = (eventChannel: SendbirdBaseChannel) => {
+    if (isDifferentChannel(eventChannel, channel) || !eventChannel.isOpenChannel()) return;
+    if (currentUser && !eventChannel.isOperator(currentUser.userId)) {
+      onNavigateToOpenChannel();
+    }
+  };
 
-  useChannelHandler(sdk, handlerId, {
-    onChannelChanged: onChannelChanged,
-    onChannelFrozen: onChannelChanged,
-    onChannelUnfrozen: onChannelChanged,
-    onUserBanned: onChannelChanged,
-  });
+  useChannelHandler(
+    sdk,
+    handlerId,
+    {
+      onOperatorUpdated: onOperatorUpdated,
+      onChannelUnfrozen: onChannelChanged,
+      onChannelChanged: onChannelChanged,
+      onChannelFrozen: onChannelChanged,
+      onUserBanned: onChannelChanged,
+    },
+    'open',
+  );
 
   const toast = useToast();
   const { openSheet } = useBottomSheet();

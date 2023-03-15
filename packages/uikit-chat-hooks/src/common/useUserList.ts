@@ -99,6 +99,7 @@ export const useUserList = <
       await init();
     } catch (e) {
       setError(e);
+      setUsers([]);
     } finally {
       setLoading(false);
     }
@@ -111,6 +112,7 @@ export const useUserList = <
       await init();
     } catch (e) {
       setError(e);
+      setUsers([]);
     } finally {
       setRefreshing(false);
     }

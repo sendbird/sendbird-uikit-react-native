@@ -87,7 +87,7 @@ const createOpenChannelMutedParticipantsFragment = (
         >
           <OpenChannelMutedParticipantsModule.List
             renderUser={_renderUser}
-            mutedMembers={users}
+            mutedParticipants={users}
             onLoadNext={next}
             ListEmptyComponent={<OpenChannelMutedParticipantsModule.StatusEmpty />}
           />

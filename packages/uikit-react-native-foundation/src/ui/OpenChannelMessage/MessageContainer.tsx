@@ -1,7 +1,8 @@
 import React from 'react';
 
+import { SendingStatus } from '@sendbird/chat/message';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
-import { getMessageTimeFormat, useSafeAreaPadding } from '@sendbird/uikit-utils';
+import { getMessageTimeFormat } from '@sendbird/uikit-utils';
 
 import Box from '../../components/Box';
 import Icon from '../../components/Icon';
@@ -10,6 +11,7 @@ import Text from '../../components/Text';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import Avatar from '../Avatar';
+import LoadingSpinner from '../LoadingSpinner';
 import type { OpenChannelMessageProps } from './index';
 
 type Props = {
@@ -24,15 +26,38 @@ const MessageContainer = ({
   ...props
 }: OpenChannelMessageProps<SendbirdMessage, Props>) => {
   const { colors } = useUIKitTheme();
-  const { paddingLeft, paddingRight } = useSafeAreaPadding(['left', 'right']);
   const color = colors.ui.openChannelMessage.default;
+
+  const renderSendingStatus = () => {
+    if (!('sendingStatus' in props.message)) return null;
+
+    switch (props.message.sendingStatus) {
+      case SendingStatus.PENDING: {
+        return (
+          <SendingStatusContainer>
+            <LoadingSpinner color={colors.primary} size={16} />
+          </SendingStatusContainer>
+        );
+      }
+      case SendingStatus.FAILED: {
+        return (
+          <SendingStatusContainer>
+            <Icon icon={'error'} color={colors.error} size={16} />
+          </SendingStatusContainer>
+        );
+      }
+      default: {
+        return null;
+      }
+    }
+  };
 
   return (
     <Box
       flexDirection={'row'}
       paddingVertical={grouped ? 5 : 6}
-      paddingLeft={12 + paddingLeft}
-      paddingRight={12 + paddingRight}
+      paddingLeft={12}
+      paddingRight={12}
       backgroundColor={pressed ? color.pressed.background : color.enabled.background}
     >
       <Box marginRight={12}>
@@ -47,9 +72,11 @@ const MessageContainer = ({
       <Box flexShrink={1} flex={1} flexDirection={'column'} alignItems={'flex-start'}>
         {!grouped && 'sender' in props.message && (
           <Box flexDirection={'row'} alignItems={'center'} marginBottom={2}>
-            <Box marginRight={4}>
+            <Box marginRight={4} flexShrink={1}>
               <Text
                 caption1
+                ellipsizeMode={'middle'}
+                numberOfLines={1}
                 color={
                   channel.isOperator(props.message.sender.userId)
                     ? color.enabled.textOperator
@@ -67,16 +94,17 @@ const MessageContainer = ({
           </Box>
         )}
         <Box style={styles.message}>{children}</Box>
-        {'sender' in props.message && (
-          <Box flexDirection={'row'}>
-            {props.message.sendingStatus === 'failed' && (
-              <Box marginTop={2}>
-                <Icon icon={'error'} color={colors.error} size={16} />
-              </Box>
-            )}
-          </Box>
-        )}
+
+        {renderSendingStatus()}
       </Box>
+    </Box>
+  );
+};
+
+const SendingStatusContainer = ({ children }: { children: React.ReactElement }) => {
+  return (
+    <Box flexDirection={'row'}>
+      <Box marginTop={2}>{children}</Box>
     </Box>
   );
 };

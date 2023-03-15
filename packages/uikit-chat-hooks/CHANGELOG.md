@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.3.0...v2.4.0) (2023-03-15)
+
+
+### Features
+
+* **hooks:** added useGroupChannel hook ([9a6b996](https://github.com/sendbird/sendbird-uikit-react-native/commit/9a6b99619dee103a776b5cc390d5366bc41a04af))
+* **hooks:** added useOpenChannelList and useOpenChannelMessages hooks ([e41e076](https://github.com/sendbird/sendbird-uikit-react-native/commit/e41e0765f4b324ddcc156be1d8652036b77eb6b0))
+* **hooks:** useChannelHandler supports open channel handler ([3d95e7b](https://github.com/sendbird/sendbird-uikit-react-native/commit/3d95e7b306f7ae1efc22a35c73ff5493b454bf60))
+* **uikit:** added open channel create fragment ([21d4bb5](https://github.com/sendbird/sendbird-uikit-react-native/commit/21d4bb5a45a48e4404509b825eb34a873dd5e8a7))
+* **uikit:** added open channel fragment ([6250770](https://github.com/sendbird/sendbird-uikit-react-native/commit/62507708a40a3c92655d29615ff90fb3961877a5))
+* **uikit:** added open channel settings fragment ([48ebf2a](https://github.com/sendbird/sendbird-uikit-react-native/commit/48ebf2ae8888a93de710c313d4151d955ef67735))
+
+
+### Bug Fixes
+
+* **chat-hooks:** modified to manually update failed messages when using query in useChannelMessages hook ([0f7b0ce](https://github.com/sendbird/sendbird-uikit-react-native/commit/0f7b0cec0103ac4fa35fb0e655c45709d92f5fc6))
+
+
+### Improvements
+
+* replaced useUniqId to useUniqHandlerId ([543e149](https://github.com/sendbird/sendbird-uikit-react-native/commit/543e1496f9ac9c92845fd2d98902dc3efe28ec06))
+* **uikit:** expanded interfaces for channel input to make customization implementation easier ([4d3f183](https://github.com/sendbird/sendbird-uikit-react-native/commit/4d3f1838c89e7be88ca2e12deb237b09afb5996a))
+
+
+
 ## [2.3.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.2.0...v2.3.0) (2023-02-09)
 
 

@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.3.0...v2.4.0) (2023-03-15)
+
+
+### Features
+
+* added open channel message components ([2cbdcba](https://github.com/sendbird/sendbird-uikit-react-native/commit/2cbdcbab09f737918d9e93fe8ae325abf7424280))
+* **uikit:** added open channel create fragment ([21d4bb5](https://github.com/sendbird/sendbird-uikit-react-native/commit/21d4bb5a45a48e4404509b825eb34a873dd5e8a7))
+* **uikit:** added open channel fragment ([6250770](https://github.com/sendbird/sendbird-uikit-react-native/commit/62507708a40a3c92655d29615ff90fb3961877a5))
+* **uikit:** added open channel muted participants fragment ([f876ba7](https://github.com/sendbird/sendbird-uikit-react-native/commit/f876ba7777279b7b6080f764d25aaf86b5b49233))
+* **uikit:** added open channel participants fragment ([c4dd37f](https://github.com/sendbird/sendbird-uikit-react-native/commit/c4dd37f67f4c69b4ae70939e7beb374f3eb81af8))
+* **uikit:** added open channel settings fragment ([48ebf2a](https://github.com/sendbird/sendbird-uikit-react-native/commit/48ebf2ae8888a93de710c313d4151d955ef67735))
+* **utils:** added useDebounceEffect hook ([dc90bb4](https://github.com/sendbird/sendbird-uikit-react-native/commit/dc90bb420c42c705bf3b01a4ab6250e89c68ab4f))
+* **utils:** added usePartialState hook ([f76fe69](https://github.com/sendbird/sendbird-uikit-react-native/commit/f76fe69f7f4b2d54902ce25506a84f638023d496))
+
+
+### Improvements
+
+* **uikit:** expanded interfaces for channel input to make customization implementation easier ([4d3f183](https://github.com/sendbird/sendbird-uikit-react-native/commit/4d3f1838c89e7be88ca2e12deb237b09afb5996a))
+
+
+
 ## [2.3.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.2.0...v2.3.0) (2023-02-09)
 
 

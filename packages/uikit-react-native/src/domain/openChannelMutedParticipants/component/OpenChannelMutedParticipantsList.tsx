@@ -8,7 +8,7 @@ import type { OpenChannelMutedParticipantsProps } from '../types';
 
 const OpenChannelMutedParticipantsList = ({
   renderUser,
-  mutedMembers,
+  mutedParticipants,
   ListEmptyComponent,
   onLoadNext,
 }: OpenChannelMutedParticipantsProps['List']) => {
@@ -19,7 +19,7 @@ const OpenChannelMutedParticipantsList = ({
 
   return (
     <FlatList
-      data={mutedMembers}
+      data={mutedParticipants}
       renderItem={renderItem}
       contentContainerStyle={{ paddingLeft: left, paddingRight: right, flexGrow: 1 }}
       ListEmptyComponent={ListEmptyComponent}

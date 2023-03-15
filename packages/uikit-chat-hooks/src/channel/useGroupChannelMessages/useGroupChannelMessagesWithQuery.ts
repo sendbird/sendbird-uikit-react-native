@@ -169,7 +169,8 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
               resolve(sentMessage);
             }
           })
-          .onFailed((err) => {
+          .onFailed((err, sentMessage) => {
+            updateNextMessages([sentMessage], false, sdk.currentUser.userId);
             reject(err);
           });
       });
@@ -193,7 +194,8 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
               resolve(sentMessage);
             }
           })
-          .onFailed((err) => {
+          .onFailed((err, sentMessage) => {
+            updateNextMessages([sentMessage], false, sdk.currentUser.userId);
             reject(err);
           });
       });
