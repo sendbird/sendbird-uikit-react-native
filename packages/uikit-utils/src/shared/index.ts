@@ -1,5 +1,3 @@
-import { getFileExtension, getFileType } from './regex';
-
 /**
  * Converts a given string to a hashed string.
  * */
@@ -23,41 +21,16 @@ export function conditionChaining<T, V>(conditions: T[], values: V[]) {
 }
 
 /**
- * Calculates the downscale size.
- * */
-type Size = { width: number; height: number };
-export function getDownscaleSize(origin: Size, resizing: Partial<Size>) {
-  let ratio;
-
-  const maxWidth = resizing.width || origin.width,
-    maxHeight = resizing.height || origin.height;
-
-  if (origin.width <= maxWidth && origin.height <= maxHeight) {
-    ratio = 1;
-  } else if (origin.width > maxWidth && origin.height <= maxHeight) {
-    ratio = maxWidth / origin.width;
-  } else if (origin.width <= maxWidth && origin.height > maxHeight) {
-    ratio = maxHeight / origin.height;
-  } else {
-    ratio = Math.max(maxWidth / origin.width, maxHeight / origin.height);
-  }
-
-  return { width: origin.width * ratio, height: origin.height * ratio };
-}
-
-export function isImage(filePath: string, mimeType?: string) {
-  const type = getFileType(mimeType || getFileExtension(filePath));
-  return type === 'image';
-}
-
-export function shouldCompressImage(filePath: string, compressionEnabled = true) {
-  const extension = getFileExtension(filePath);
-  return Boolean(extension.match(/jpg|jpeg|png/i) && compressionEnabled);
-}
-
-/**
- * Returns the picked data from object.
- * */
+ * Returns a new object with only the specified keys from the input object.
+ *
+ * @param {Object} obj - The input object to pick keys from.
+ * @param {Array<string>} keys - An array of keys to pick from the input object.
+ * @returns {Object} - A new object containing only the specified keys from the input object.
+ * @example
+ * ```ts
+ *   pick({ a: 1, b: '2', c: true }, ['a', 'c']); // returns { a: 1, c: true }
+ * ```
+ */
 export function pick<T extends { [key: string]: unknown }, Keys extends keyof T>(obj: T, keys: Keys[]) {
   return keys.reduce((pickedObj, key) => {
     pickedObj[key] = obj[key];

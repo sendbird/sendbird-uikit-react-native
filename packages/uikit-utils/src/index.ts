@@ -1,24 +1,8 @@
 export { Logger } from './shared/logger';
 export { default as arrayToMap, arrayToMapWithGetter } from './shared/arrayToMap';
-export { createPubSub } from './shared/pubsub';
-export {
-  urlRegexStrict,
-  urlRegexRough,
-  newLineRegex,
-  audioExtRegex,
-  videoExtRegex,
-  imageExtRegex,
-  getFileType,
-  getFileExtension,
-  replaceUrlAsComponents,
-  normalizeFileName,
-  emailRegex,
-  phoneRegex,
-  replaceWithRegex,
-  createMentionTemplateRegex,
-} from './shared/regex';
-export { BufferedRequest } from './shared/bufferedRequest';
-
+export * from './shared/regex';
+export * from './shared/bufferedRequest';
+export * from './shared/file';
 export * from './shared';
 
 export * from './hooks';

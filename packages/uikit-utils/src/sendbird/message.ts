@@ -1,4 +1,4 @@
-import { getFileExtension, getFileType } from '../shared/regex';
+import { getFileExtension, getFileType } from '../shared/file';
 import type {
   SendbirdBaseChannel,
   SendbirdBaseMessage,

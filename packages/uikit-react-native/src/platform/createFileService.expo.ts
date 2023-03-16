@@ -3,12 +3,12 @@ import type * as ExpoFs from 'expo-file-system';
 import type * as ExpoImagePicker from 'expo-image-picker';
 import type * as ExpoMediaLibrary from 'expo-media-library';
 
-import { getFileExtension, getFileType } from '@sendbird/uikit-utils';
+import { getFileExtension, getFileType, getMimeFromFileExtension } from '@sendbird/uikit-utils';
 
 import SBUError from '../libs/SBUError';
 import type { ExpoMediaLibraryPermissionResponse, ExpoPermissionResponse } from '../utils/expoPermissionGranted';
 import expoPermissionGranted from '../utils/expoPermissionGranted';
-import fileTypeGuard from '../utils/fileTypeGuard';
+import normalizeFile from '../utils/normalizeFile';
 import type {
   FilePickerResponse,
   FileServiceInterface,
@@ -83,7 +83,7 @@ const createExpoFileService = ({
       const ext = getFileExtension(uri);
       const type = getFileType(ext);
 
-      return fileTypeGuard({ uri, size, type: `${type}/${ext.slice(1)}`, name: Date.now() + ext });
+      return normalizeFile({ uri, size, type: getMimeFromFileExtension(ext) || `${type}/${ext.slice(1)}` });
     }
     async openMediaLibrary(options: OpenMediaLibraryOptions) {
       const hasPermission = await this.hasMediaLibraryPermission('read');
@@ -115,7 +115,7 @@ const createExpoFileService = ({
       const { size } = await fsModule.getInfoAsync(uri);
       const ext = getFileExtension(uri);
       const type = getFileType(ext);
-      return [fileTypeGuard({ uri, size, type: `${type}/${ext.slice(1)}`, name: Date.now() + ext })];
+      return [normalizeFile({ uri, size, type: getMimeFromFileExtension(ext) || `${type}/${ext.slice(1)}` })];
     }
 
     async openDocument(options?: OpenDocumentOptions): Promise<FilePickerResponse> {
@@ -123,7 +123,7 @@ const createExpoFileService = ({
         const response = await documentPickerModule.getDocumentAsync({ type: '*/*' });
         if (response.type === 'cancel') return null;
         const { mimeType, uri, size, name } = response;
-        return fileTypeGuard({ uri, size, name, type: mimeType });
+        return normalizeFile({ uri, size, name, type: mimeType });
       } catch (e) {
         options?.onOpenFailure?.(SBUError.UNKNOWN, e);
         return null;
