@@ -121,7 +121,7 @@ describe('getFileExtensionFromMime', () => {
   });
 
   it('should return correct extension for known mime type', () => {
-    expect(getFileExtensionFromMime('image/jpeg')).toBe('jpg');
+    expect(getFileExtensionFromMime('image/jpeg')).toMatch(/jpg|jpeg/);
     expect(getFileExtensionFromMime('video/mp4')).toBe('mp4');
     expect(getFileExtensionFromMime('audio/mpeg')).toBe('mp3');
     expect(getFileExtensionFromMime('text/plain')).toBe('txt');

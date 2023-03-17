@@ -163,9 +163,11 @@ const createNativeFileService = ({
         return null;
       }
 
-      return (response.assets || [])
-        .slice(0, selectionLimit)
-        .map(({ fileName: name, fileSize: size, type, uri }) => normalizeFile({ uri, size, name, type }));
+      return Promise.all(
+        (response.assets || [])
+          .slice(0, selectionLimit)
+          .map(({ fileName: name, fileSize: size, type, uri }) => normalizeFile({ uri, size, name, type })),
+      );
     }
     async openDocument(options?: OpenDocumentOptions): Promise<FilePickerResponse> {
       try {

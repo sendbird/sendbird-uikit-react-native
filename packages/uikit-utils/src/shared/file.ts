@@ -1,39 +1,41 @@
-const MIME_EXTENSION_MAP = {
+const EXTENSION_MIME_MAP = {
   // Image
-  'image/jpeg': 'jpg',
-  'image/png': 'png',
-  'image/gif': 'gif',
-  'image/webp': 'webp',
-  'image/svg+xml': 'svg',
+  'jpeg': 'image/jpeg',
+  'jpg': 'image/jpeg',
+  'png': 'image/png',
+  'gif': 'image/gif',
+  'webp': 'image/webp',
+  'svg': 'image/svg+xml',
 
   // Video
-  'video/3gpp': '3gp',
-  'video/mp4': 'mp4',
-  'video/mpeg': 'mpeg',
-  'video/ogg': 'ogv',
+  '3gp': 'video/3gpp',
+  'mp4': 'video/mp4',
+  'mpeg': 'video/mpeg',
+  'ogv': 'video/ogg',
   'video/quicktime': 'mov',
-  'video/webm': 'webm',
-  'video/x-msvideo': 'avi',
+  'webm': 'video/webm',
+  'avi': 'video/x-msvideo',
 
   // Audio
-  'audio/aac': 'aac',
-  'audio/midi': 'mid',
-  'audio/mpeg': 'mp3',
-  'audio/ogg': 'ogg',
-  'audio/wav': 'wav',
-  'audio/webm': 'weba',
+  'aac': 'audio/aac',
+  'mid': 'audio/midi',
+  'mp3': 'audio/mpeg',
+  'ogg': 'audio/ogg',
+  'wav': 'audio/wav',
+  'weba': 'audio/webm',
 
   // Files
-  'text/plain': 'txt',
-  'application/pdf': 'pdf',
-  'application/msword': 'doc',
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
-  'application/vnd.ms-excel': 'xls',
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xlsx',
-  'application/vnd.ms-powerpoint': 'ppt',
-  'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'pptx',
-  'application/zip': 'zip',
-  'application/x-gzip': 'gzip',
+  'txt': 'text/plain',
+  'pdf': 'application/pdf',
+  'doc': 'application/msword',
+  'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'xls': 'application/vnd.ms-excel',
+  'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'ppt': 'application/vnd.ms-powerpoint',
+  'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  'zip': 'application/zip',
+  'json': 'application/json',
+  'gzip': 'application/x-gzip',
 } as Record<string, string>;
 
 export const imageExtRegex = /jpeg|jpg|png|webp|gif/i;
@@ -141,7 +143,11 @@ export function parseMimeType(mimeType: string): MimeType {
  */
 export function getFileExtensionFromMime(mimeType?: string | null): string {
   if (!mimeType) return '';
-  return MIME_EXTENSION_MAP[mimeType] || '';
+  const MIME_EXTENSION_MAP = Object.entries(EXTENSION_MIME_MAP).reduce((acc, [key, value]) => {
+    acc[value] = key;
+    return acc;
+  }, {} as Record<string, string>);
+  return MIME_EXTENSION_MAP[mimeType.toLowerCase()] || '';
 }
 
 /**
@@ -152,10 +158,6 @@ export function getFileExtensionFromMime(mimeType?: string | null): string {
  */
 export function getMimeFromFileExtension(ext?: string | null) {
   if (!ext) return '';
-  const EXTENSION_MIME_MAP = Object.entries(MIME_EXTENSION_MAP).reduce((acc, [key, value]) => {
-    acc[value] = key;
-    return acc;
-  }, {} as Record<string, string>);
   return EXTENSION_MIME_MAP[ext.toLowerCase()] || '';
 }
 
@@ -173,12 +175,16 @@ export function getFileExtension(filePath: string) {
   else return result;
 }
 
+export function getFileExtensionFromUri(uri: string) {
+  return fetch(uri).then((response) => response.headers.get('content-type'));
+}
+
 export function isImage(filePath: string, mimeType?: string) {
   const type = getFileType(mimeType || getFileExtension(filePath));
   return type === 'image';
 }
 
-export function shouldCompressImage(filePath: string, compressionEnabled = true) {
-  const extension = getFileExtension(filePath);
+export function shouldCompressImage(mime: string, compressionEnabled = true) {
+  const extension = getFileExtensionFromMime(mime);
   return Boolean(extension.match(/jpg|jpeg|png/i) && compressionEnabled);
 }

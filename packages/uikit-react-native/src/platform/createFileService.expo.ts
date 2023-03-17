@@ -3,7 +3,7 @@ import type * as ExpoFs from 'expo-file-system';
 import type * as ExpoImagePicker from 'expo-image-picker';
 import type * as ExpoMediaLibrary from 'expo-media-library';
 
-import { getFileExtension, getFileType, getMimeFromFileExtension } from '@sendbird/uikit-utils';
+import { getFileType } from '@sendbird/uikit-utils';
 
 import SBUError from '../libs/SBUError';
 import type { ExpoMediaLibraryPermissionResponse, ExpoPermissionResponse } from '../utils/expoPermissionGranted';
@@ -80,10 +80,8 @@ const createExpoFileService = ({
 
       const { uri } = response;
       const { size } = await fsModule.getInfoAsync(response.uri);
-      const ext = getFileExtension(uri);
-      const type = getFileType(ext);
 
-      return normalizeFile({ uri, size, type: getMimeFromFileExtension(ext) || `${type}/${ext.slice(1)}` });
+      return normalizeFile({ uri, size });
     }
     async openMediaLibrary(options: OpenMediaLibraryOptions) {
       const hasPermission = await this.hasMediaLibraryPermission('read');
@@ -111,11 +109,8 @@ const createExpoFileService = ({
       });
       if (response.cancelled) return null;
       const { uri } = response;
-
       const { size } = await fsModule.getInfoAsync(uri);
-      const ext = getFileExtension(uri);
-      const type = getFileType(ext);
-      return [normalizeFile({ uri, size, type: getMimeFromFileExtension(ext) || `${type}/${ext.slice(1)}` })];
+      return [await normalizeFile({ uri, size })];
     }
 
     async openDocument(options?: OpenDocumentOptions): Promise<FilePickerResponse> {
