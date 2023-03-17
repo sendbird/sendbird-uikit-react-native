@@ -85,7 +85,6 @@
     "moduleNameMapper": {
       "@sendbird/uikit-([^/]+)": "<rootDir>/packages/uikit-$1/src"
     },
-    "collectCoverage": true,
     "collectCoverageFrom": [
       "**/packages/*/src/**",
       "!**/__mocks__/**",

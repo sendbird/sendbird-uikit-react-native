@@ -106,7 +106,7 @@ jobs:
           key: ${{ needs.prepare.outputs.cache_node_modules_key }}
 
       - name: Run test
-        run: yarn test
+        run: yarn test --collect-coverage
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
