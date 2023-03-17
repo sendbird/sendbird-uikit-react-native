@@ -1,5 +1,6 @@
 import { ChannelType } from '@sendbird/chat';
-import { MessageType } from '@sendbird/chat/message';
+import type { SendableMessage } from '@sendbird/chat/lib/__definition';
+import { MessageType, SendingStatus } from '@sendbird/chat/message';
 import type {
   SendbirdAdminMessage,
   SendbirdBaseMessage,
@@ -28,11 +29,29 @@ class MockMessage implements SendbirdBaseMessage {
   messageType = MessageType.BASE;
   constructor(params: MessageParams) {
     fixture.increaseIncrement();
+    this.__updateIdsBySendingStatus(params.sendingStatus);
+
     Object.entries(params).forEach(([key, value]) => {
       // @ts-ignore
       this[key] = value;
     });
     this.sdk = params.sdk;
+  }
+
+  __updateIdsBySendingStatus(sendingStatus: MessageParams['sendingStatus']) {
+    if (!sendingStatus) return;
+
+    const self = this.asSendableMessage();
+    const notSent = [SendingStatus.PENDING, SendingStatus.FAILED, SendingStatus.CANCELED].some(
+      (it) => sendingStatus === it,
+    );
+    if (notSent) {
+      self.messageId = 0;
+      self.reqId = String(Date.now()) + fixture.increment;
+    } else {
+      self.messageId = fixture.getRandom();
+      self.reqId = '';
+    }
   }
 
   isFileMessage(): this is SendbirdFileMessage {
@@ -80,5 +99,8 @@ class MockMessage implements SendbirdBaseMessage {
   }
   asAdminMessage(): SendbirdAdminMessage {
     return this as unknown as SendbirdAdminMessage;
+  }
+  asSendableMessage(): SendableMessage {
+    return this as unknown as SendableMessage;
   }
 }
