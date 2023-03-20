@@ -1,9 +1,10 @@
-import { ChannelType, ConnectionHandler } from '@sendbird/chat';
+import { ChannelType, ConnectionHandler, UserEventHandler } from '@sendbird/chat';
 import type { GroupChannelHandler, GroupChannelListQueryParams } from '@sendbird/chat/groupChannel';
 import type {
   ConnectionHandlerParams,
   GroupChannelHandlerParams,
   OpenChannelHandlerParams,
+  UserEventHandlerParams,
 } from '@sendbird/chat/lib/__definition';
 import type { OpenChannelHandler, OpenChannelListQueryParams } from '@sendbird/chat/openChannel';
 import type { SendbirdChatSDK, SendbirdGroupChannel, SendbirdOpenChannel } from '@sendbird/uikit-utils';
@@ -17,11 +18,12 @@ const fixture = createFixtureContext();
 
 export interface MockSendbirdChatSDK extends SendbirdChatSDK {
   __emit(
-    type: 'channel' | 'connection',
+    type: 'channel' | 'connection' | 'userEvent',
     name:
       | `group_${keyof GroupChannelHandlerParams}`
       | `open_${keyof OpenChannelHandlerParams}`
-      | keyof ConnectionHandlerParams,
+      | keyof ConnectionHandlerParams
+      | keyof UserEventHandlerParams,
     ...args: unknown[]
   ): void;
   __context: {
@@ -30,6 +32,7 @@ export interface MockSendbirdChatSDK extends SendbirdChatSDK {
     groupChannelHandlers: Record<string, GroupChannelHandler>;
     openChannelHandlers: Record<string, OpenChannelHandler>;
     connectionHandlers: Record<string, ConnectionHandler>;
+    userEventHandlers: Record<string, UserEventHandler>;
   };
   __configs: MockSDKConfigs;
   __throwIfFailureTest(): void;
@@ -53,6 +56,7 @@ class MockSDK implements MockSendbirdChatSDK {
     groupChannelHandlers: {} as Record<string, GroupChannelHandler>,
     openChannelHandlers: {} as Record<string, OpenChannelHandler>,
     connectionHandlers: {} as Record<string, ConnectionHandler>,
+    userEventHandlers: {} as Record<string, UserEventHandler>,
   };
 
   __emit(...[name, type, ...args]: Parameters<MockSendbirdChatSDK['__emit']>) {
@@ -80,7 +84,14 @@ class MockSDK implements MockSendbirdChatSDK {
           // @ts-ignore
           handler[eventName]?.(...args);
         });
-
+        break;
+      }
+      case 'userEvent': {
+        const eventName = type as keyof UserEventHandlerParams;
+        Object.values(this.__context.userEventHandlers).forEach((handler) => {
+          // @ts-ignore
+          handler[eventName]?.(...args);
+        });
         break;
       }
     }
@@ -96,6 +107,13 @@ class MockSDK implements MockSendbirdChatSDK {
   removeConnectionHandler = jest.fn((id: string) => {
     delete this.__context.connectionHandlers[id];
   });
+  addUserEventHandler = jest.fn((id: string, handler: UserEventHandler) => {
+    this.__context.userEventHandlers[id] = handler;
+  });
+  removeUserEventHandler = jest.fn((id: string) => {
+    delete this.__context.userEventHandlers[id];
+  });
+
   connect = jest.fn(async () => {
     this.__throwIfFailureTest();
     this.__emit('connection', 'onReconnectStarted');
