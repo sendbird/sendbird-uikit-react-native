@@ -1,11 +1,12 @@
 import { renderHook } from '@testing-library/react-native';
 
+import { createMockSendbirdChat } from '@sendbird/uikit-testing-tools';
+
 import { useChannelHandler } from '../../handler/useChannelHandler';
-import { createMockSendbird } from '../__mocks__/createMockSendbirdSDK';
 
 describe('useChannelHandler', () => {
   it('should add and remove the group channel handler when mounted and unmounted', () => {
-    const sdk = createMockSendbird();
+    const sdk = createMockSendbirdChat();
     const handlerId = 'test-handler-id';
     const handler = { onMessageReceived: jest.fn() };
 
@@ -21,7 +22,7 @@ describe('useChannelHandler', () => {
   });
 
   it('should add and remove the open channel handler when mounted and unmounted', () => {
-    const sdk = createMockSendbird();
+    const sdk = createMockSendbirdChat();
     const handlerId = 'test-handler-id';
     const handler = { onMessageReceived: jest.fn() };
 
@@ -37,7 +38,7 @@ describe('useChannelHandler', () => {
   });
 
   it('should use group type as default when type is not provided to useChannelHandler', () => {
-    const sdk = createMockSendbird();
+    const sdk = createMockSendbirdChat();
     const handlerId = 'test-handler-id';
     const handler = { onMessageReceived: jest.fn() };
 
@@ -47,7 +48,7 @@ describe('useChannelHandler', () => {
   });
 
   it('should not handle handlers when an unknown type is provided to useChannelHandler', () => {
-    const sdk = createMockSendbird();
+    const sdk = createMockSendbirdChat();
 
     const { unmount } = renderHook(() => useChannelHandler(sdk, 'test-handler-id', {} as never, 'wrong' as never));
 
@@ -61,7 +62,7 @@ describe('useChannelHandler', () => {
   });
 
   it('should channel handler triggered when event received', () => {
-    const sdk = createMockSendbird();
+    const sdk = createMockSendbirdChat();
     const handlerId = 'test-handler-id';
     const handler = { onMessageReceived: jest.fn() };
 

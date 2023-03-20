@@ -9,7 +9,7 @@ import type {
 import type { OpenChannelHandler, OpenChannelListQueryParams } from '@sendbird/chat/openChannel';
 import type { SendbirdChatSDK, SendbirdGroupChannel, SendbirdOpenChannel } from '@sendbird/uikit-utils';
 
-import { createFixtureContext } from '../__fixtures__/createFixtureContext';
+import { createFixtureContext } from '../fixtures/createFixtureContext';
 import { createMockChannel } from './createMockChannel';
 import { createMockQuery } from './createMockQuery';
 import { createMockUser } from './createMockUser';
@@ -42,7 +42,7 @@ type MockSDKConfigs = { testType: 'success' | 'failure'; userId?: string };
 
 const defaultConfigs: MockSDKConfigs = { testType: 'success', userId: 'user_id_' + fixture.getHash() };
 
-export const createMockSendbird = (configs: MockSDKConfigs = defaultConfigs): MockSendbirdChatSDK => {
+export const createMockSendbirdChat = (configs: MockSDKConfigs = defaultConfigs): MockSendbirdChatSDK => {
   return new MockSDK(configs).asMockSendbirdChatSDK();
 };
 

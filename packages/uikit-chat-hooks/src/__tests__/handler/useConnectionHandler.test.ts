@@ -1,13 +1,13 @@
 import { renderHook } from '@testing-library/react-native';
 
 import { ConnectionHandler } from '@sendbird/chat';
+import { createMockSendbirdChat } from '@sendbird/uikit-testing-tools';
 
 import { useConnectionHandler } from '../../handler/useConnectionHandler';
-import { createMockSendbird } from '../__mocks__/createMockSendbirdSDK';
 
 describe('useConnectionHandler', () => {
   it('should call addConnectionHandler with the correct arguments', () => {
-    const sdk = createMockSendbird();
+    const sdk = createMockSendbirdChat();
     const handlerId = 'test_handler_id';
 
     renderHook(() => useConnectionHandler(sdk, handlerId, {}));
@@ -16,7 +16,7 @@ describe('useConnectionHandler', () => {
   });
 
   it('should call removeConnectionHandler with the correct arguments', () => {
-    const sdk = createMockSendbird();
+    const sdk = createMockSendbirdChat();
     const handlerId = 'test_handler_id';
 
     const { unmount } = renderHook(() => useConnectionHandler(sdk, handlerId, {}));
@@ -27,7 +27,7 @@ describe('useConnectionHandler', () => {
   });
 
   it('should connection handler triggered when event received', () => {
-    const sdk = createMockSendbird();
+    const sdk = createMockSendbirdChat();
     const handlerId = 'test_handler_id';
     const hookHandler = { onReconnectStarted: jest.fn() };
 

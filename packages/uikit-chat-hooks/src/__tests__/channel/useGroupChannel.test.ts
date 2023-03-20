@@ -1,12 +1,13 @@
 import { renderHook, waitFor } from '@testing-library/react-native';
 
+import { createMockSendbirdChat } from '@sendbird/uikit-testing-tools';
+
 import { useGroupChannel } from '../../channel/useGroupChannel';
-import { createMockSendbird } from '../__mocks__/createMockSendbirdSDK';
 
 describe('useGroupChannel', () => {
   it('should fetch group channel and return it', async () => {
     const channelUrl = 'test_channel_url';
-    const sdk = createMockSendbird();
+    const sdk = createMockSendbirdChat();
     const { result } = renderHook(() => useGroupChannel(sdk, channelUrl));
 
     expect(result.current.loading).toBe(true);
@@ -23,7 +24,7 @@ describe('useGroupChannel', () => {
 
   it('should set error state if fetching group channel fails', async () => {
     const channelUrl = 'test_channel_url';
-    const sdk = createMockSendbird({ testType: 'failure' });
+    const sdk = createMockSendbirdChat({ testType: 'failure' });
     const { result } = renderHook(() => useGroupChannel(sdk, channelUrl));
 
     expect(result.current.loading).toBe(true);

@@ -1,12 +1,13 @@
 import { renderHook, waitFor } from '@testing-library/react-native';
 
+import { createMockSendbirdChat } from '@sendbird/uikit-testing-tools';
+
 import { useOpenChannel } from '../../channel/useOpenChannel';
-import { createMockSendbird } from '../__mocks__/createMockSendbirdSDK';
 
 describe('useOpenChannel', () => {
   it('should fetch open channel and return it', async () => {
     const channelUrl = 'test_channel_url';
-    const sdk = createMockSendbird();
+    const sdk = createMockSendbirdChat();
     const { result } = renderHook(() => useOpenChannel(sdk, channelUrl));
 
     expect(result.current.loading).toBe(true);
@@ -23,7 +24,7 @@ describe('useOpenChannel', () => {
 
   it('should set error state if fetching open channel fails', async () => {
     const channelUrl = 'test_channel_url';
-    const sdk = createMockSendbird({ testType: 'failure' });
+    const sdk = createMockSendbirdChat({ testType: 'failure' });
     const { result } = renderHook(() => useOpenChannel(sdk, channelUrl));
 
     expect(result.current.loading).toBe(true);

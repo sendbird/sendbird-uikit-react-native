@@ -1,10 +1,11 @@
 import { renderHook, waitFor } from '@testing-library/react-native';
 
+import { createMockSendbirdChat } from '@sendbird/uikit-testing-tools';
+
 import { useOpenChannelMessagesWithQuery } from '../../../channel/useOpenChannelMessages/useOpenChannelMessagesWithQuery';
-import { createMockSendbird } from '../../__mocks__/createMockSendbirdSDK';
 
 describe('useOpenChannelMessagesWithQuery', () => {
-  const sdk = createMockSendbird({ testType: 'success', userId: 'user-id' });
+  const sdk = createMockSendbirdChat({ testType: 'success', userId: 'user-id' });
 
   it('should initialize messages when entering channel', async () => {
     const channel = await sdk.openChannel.getChannel('channel-1');

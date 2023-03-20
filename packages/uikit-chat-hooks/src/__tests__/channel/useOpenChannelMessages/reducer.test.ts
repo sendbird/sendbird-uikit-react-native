@@ -1,10 +1,9 @@
 import { act, renderHook } from '@testing-library/react-native';
 
 import { MessageType, SendingStatus } from '@sendbird/chat/message';
+import { createMockMessage, createMockUser } from '@sendbird/uikit-testing-tools';
 
 import { useOpenChannelMessagesReducer } from '../../../channel/useOpenChannelMessages/reducer';
-import { createMockMessage } from '../../__mocks__/createMockMessage';
-import { createMockUser } from '../../__mocks__/createMockUser';
 
 describe('useOpenChannelMessagesReducer', () => {
   const messages = [

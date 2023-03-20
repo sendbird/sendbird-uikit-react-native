@@ -1,15 +1,16 @@
 import { renderHook, waitFor } from '@testing-library/react-native';
 
+import { createMockSendbirdChat } from '@sendbird/uikit-testing-tools';
+
 import { useOpenChannelList } from '../../../channel/useOpenChannelList';
 import { useOpenChannelListWithQuery } from '../../../channel/useOpenChannelList/useOpenChannelListWithQuery';
-import { createMockSendbird } from '../../__mocks__/createMockSendbirdSDK';
 
 jest.mock('../../../channel/useOpenChannelList/useOpenChannelListWithQuery', () => ({
   useOpenChannelListWithQuery: jest.fn(),
 }));
 
 describe('useOpenChannelList', () => {
-  const sdk = createMockSendbird();
+  const sdk = createMockSendbirdChat();
 
   afterAll(() => {
     jest.clearAllMocks();

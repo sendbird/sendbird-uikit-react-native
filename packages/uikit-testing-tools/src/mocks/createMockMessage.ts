@@ -8,7 +8,7 @@ import type {
   SendbirdUserMessage,
 } from '@sendbird/uikit-utils';
 
-import { createFixtureContext } from '../__fixtures__/createFixtureContext';
+import { createFixtureContext } from '../fixtures/createFixtureContext';
 import type { MockSendbirdChatSDK } from './createMockSendbirdSDK';
 
 type MessageParams = { sdk?: MockSendbirdChatSDK } & Partial<SendbirdFileMessage> &

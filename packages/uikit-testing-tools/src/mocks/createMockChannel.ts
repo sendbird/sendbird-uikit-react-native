@@ -46,7 +46,7 @@ import type {
   SendbirdUserMessage,
 } from '@sendbird/uikit-utils';
 
-import { createFixtureContext } from '../__fixtures__/createFixtureContext';
+import { createFixtureContext } from '../fixtures/createFixtureContext';
 import { createMockMessage } from './createMockMessage';
 import { createMockQuery } from './createMockQuery';
 import type { MockSendbirdChatSDK } from './createMockSendbirdSDK';

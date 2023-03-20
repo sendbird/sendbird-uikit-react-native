@@ -1,11 +1,12 @@
 import { act, renderHook, waitFor } from '@testing-library/react-native';
 
+import { createMockSendbirdChat } from '@sendbird/uikit-testing-tools';
+
 import { useOpenChannelListWithQuery } from '../../../channel/useOpenChannelList/useOpenChannelListWithQuery';
-import { createMockSendbird } from '../../__mocks__/createMockSendbirdSDK';
 
 describe('useOpenChannelListWithQuery', () => {
   it('should initialize and return open channels', async () => {
-    const sdk = createMockSendbird({ testType: 'success', userId: 'test' });
+    const sdk = createMockSendbirdChat({ testType: 'success', userId: 'test' });
     const { result } = renderHook(() => useOpenChannelListWithQuery(sdk, sdk.currentUser.userId));
 
     expect(result.current.loading).toBe(true);
@@ -19,7 +20,7 @@ describe('useOpenChannelListWithQuery', () => {
   });
 
   it('should refresh open channels', async () => {
-    const sdk = createMockSendbird({ testType: 'success', userId: 'test' });
+    const sdk = createMockSendbirdChat({ testType: 'success', userId: 'test' });
     const { result } = renderHook(() => useOpenChannelListWithQuery(sdk, sdk.currentUser.userId));
 
     await waitFor(() => {
@@ -39,7 +40,7 @@ describe('useOpenChannelListWithQuery', () => {
   });
 
   it('should fetch next open channels', async () => {
-    const sdk = createMockSendbird({ testType: 'success', userId: 'test' });
+    const sdk = createMockSendbirdChat({ testType: 'success', userId: 'test' });
     const { result } = renderHook(() => useOpenChannelListWithQuery(sdk, sdk.currentUser.userId));
 
     let limit = 0;
@@ -59,7 +60,7 @@ describe('useOpenChannelListWithQuery', () => {
   });
 
   it('should use queryCreator when creating query', async () => {
-    const sdk = createMockSendbird({ testType: 'success', userId: 'test' });
+    const sdk = createMockSendbirdChat({ testType: 'success', userId: 'test' });
     const queryParams = { limit: 5 };
     const options = { queryCreator: jest.fn(() => sdk.openChannel.createOpenChannelListQuery(queryParams)) };
 
@@ -75,7 +76,7 @@ describe('useOpenChannelListWithQuery', () => {
   });
 
   it('should handle error when query throws an error', async () => {
-    const sdk = createMockSendbird({ testType: 'failure', userId: 'test' });
+    const sdk = createMockSendbirdChat({ testType: 'failure', userId: 'test' });
     const error = new Error('Fetch failure');
     const options = {
       queryCreator: jest.fn(() => {

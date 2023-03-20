@@ -1,9 +1,9 @@
 import { act, renderHook } from '@testing-library/react-native';
 
 import { ChannelType } from '@sendbird/chat';
+import { createMockChannel } from '@sendbird/uikit-testing-tools';
 
 import { useOpenChannelListReducer } from '../../../channel/useOpenChannelList/reducer';
-import { createMockChannel } from '../../__mocks__/createMockChannel';
 
 describe('useOpenChannelListReducer', () => {
   const mockChannels = [
