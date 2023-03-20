@@ -6,7 +6,13 @@ import type * as ImagePicker from 'react-native-image-picker';
 import type * as Permissions from 'react-native-permissions';
 import type { Permission } from 'react-native-permissions';
 
-import { getFileExtension, getFileExtensionFromMime, getFileType, normalizeFileName } from '@sendbird/uikit-utils';
+import {
+  getFileExtension,
+  getFileExtensionFromMime,
+  getFileExtensionFromUri,
+  getFileType,
+  normalizeFileName,
+} from '@sendbird/uikit-utils';
 
 import SBUError from '../libs/SBUError';
 import nativePermissionGranted from '../utils/nativePermissionGranted';
@@ -206,13 +212,14 @@ const createNativeFileService = ({
       return downloadedPath;
     }
 
-    private buildDownloadPath = (options: SaveOptions) => {
+    private buildDownloadPath = async (options: SaveOptions) => {
       const dirname = Platform.select({ android: fsModule.Dirs.CacheDir, default: fsModule.Dirs.DocumentDir });
       const context = { dirname, filename: options.fileName };
       const extension =
         getFileExtension(options.fileName) ||
+        getFileExtensionFromMime(options.fileType) ||
         getFileExtension(options.fileUrl) ||
-        getFileExtensionFromMime(options.fileType);
+        (await getFileExtensionFromUri(options.fileUrl));
 
       if (extension) context.filename = normalizeFileName(context.filename, extension);
 
@@ -220,7 +227,7 @@ const createNativeFileService = ({
     };
 
     private downloadFile = async (options: SaveOptions) => {
-      const { path, filename } = this.buildDownloadPath(options);
+      const { path, filename } = await this.buildDownloadPath(options);
       await fsModule.FileSystem.fetch(options.fileUrl, { path });
       return {
         downloadedPath: path,
