@@ -3,7 +3,6 @@ import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import Clipboard from '@react-native-clipboard/clipboard';
 import RNFBMessaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import axios from 'axios';
 import { Platform, StatusBar } from 'react-native';
 import * as CreateThumbnail from 'react-native-create-thumbnail';
 import * as DocumentPicker from 'react-native-document-picker';
@@ -50,21 +49,21 @@ export const GetTranslucent = (state = true) => {
   return Platform.select({ ios: state, android: state });
 };
 
-const createSendbirdFetcher = (appId: string, apiToken: string) => {
-  const client = axios.create({ baseURL: `https://api-${appId}.sendbird.com/v3`, headers: { 'Api-Token': apiToken } });
-  client.interceptors.response.use((res) => res.data);
-  return client;
-};
-
 const createSendbirdAPI = (appId: string, apiToken: string) => {
-  const fetcher = createSendbirdFetcher(appId, apiToken);
   const MIN = 60 * 1000;
+  const endpoint = (path: string) => `https://api-${appId}.sendbird.com/v3${path}`;
+  const getHeaders = (headers?: object) => ({ 'Api-Token': apiToken, ...headers });
+
   return {
     getSessionToken(
       userId: string,
       expires_at = Date.now() + 10 * MIN,
     ): Promise<{ user_id: string; token: string; expires_at: number }> {
-      return fetcher.post(`/users/${userId}/token`, { expires_at });
+      return fetch(endpoint(`/users/${userId}/token`), {
+        method: 'post',
+        headers: getHeaders(),
+        body: JSON.stringify({ expires_at }),
+      }).then((res) => res.json());
     },
   };
 };
