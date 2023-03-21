@@ -1,4 +1,4 @@
-import { ChannelType, ConnectionHandler, UserEventHandler } from '@sendbird/chat';
+import { ApplicationUserListQueryParams, ChannelType, ConnectionHandler, UserEventHandler } from '@sendbird/chat';
 import type { GroupChannelHandler, GroupChannelListQueryParams } from '@sendbird/chat/groupChannel';
 import type {
   ConnectionHandlerParams,
@@ -120,6 +120,9 @@ class MockSDK implements MockSendbirdChatSDK {
     this.__emit('connection', 'onReconnectSucceeded');
     return this.currentUser;
   });
+  createApplicationUserListQuery = jest.fn((params?: ApplicationUserListQueryParams) => {
+    return createMockQuery({ type: 'user', limit: params?.limit, dataLength: 200, sdk: this.asMockSendbirdChatSDK() });
+  }) as unknown as SendbirdChatSDK['createApplicationUserListQuery'];
 
   groupChannel = {
     getChannel: jest.fn(async (url: string) => {
@@ -145,7 +148,12 @@ class MockSDK implements MockSendbirdChatSDK {
       delete this.__context.groupChannelHandlers[id];
     }),
     createGroupChannelListQuery: jest.fn((params?: GroupChannelListQueryParams) => {
-      return createMockQuery({ type: 'groupChannel', limit: params?.limit, dataLength: 200 });
+      return createMockQuery({
+        type: 'groupChannel',
+        limit: params?.limit,
+        dataLength: 200,
+        sdk: this.asMockSendbirdChatSDK(),
+      });
     }),
   } as unknown as SendbirdChatSDK['groupChannel'];
 
@@ -173,7 +181,12 @@ class MockSDK implements MockSendbirdChatSDK {
       delete this.__context.openChannelHandlers[id];
     }),
     createOpenChannelListQuery: jest.fn((params?: OpenChannelListQueryParams) => {
-      return createMockQuery({ type: 'openChannel', limit: params?.limit, dataLength: 200 });
+      return createMockQuery({
+        type: 'openChannel',
+        limit: params?.limit,
+        dataLength: 200,
+        sdk: this.asMockSendbirdChatSDK(),
+      });
     }),
   } as unknown as SendbirdChatSDK['openChannel'];
   constructor(configs: MockSDKConfigs = defaultConfigs) {

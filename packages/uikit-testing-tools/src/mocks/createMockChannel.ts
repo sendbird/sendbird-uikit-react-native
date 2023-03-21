@@ -149,24 +149,39 @@ class MockChannel implements SendbirdBaseChannel, SendbirdOpenChannel, SendbirdG
   isEqual(channel: SendbirdBaseChannel): boolean {
     return Object.is(channel, this);
   }
-  createOperatorListQuery = jest.fn(function (params?: BaseListQueryParams | undefined): OperatorListQuery {
-    const query = createMockQuery<SendbirdRestrictedUser>({ type: 'user', dataLength: 50, limit: params?.limit });
+  createOperatorListQuery = jest.fn((params?: BaseListQueryParams | undefined): OperatorListQuery => {
+    const query = createMockQuery<SendbirdRestrictedUser>({
+      type: 'user',
+      dataLength: 50,
+      limit: params?.limit,
+      sdk: this.sdk,
+    });
     return {
       channelType: ChannelType.BASE,
       channelUrl: 'channel_url_' + fixture.getHash(),
       ...query,
     };
   });
-  createMutedUserListQuery = jest.fn(function (params?: BaseListQueryParams | undefined): MutedUserListQuery {
-    const query = createMockQuery<SendbirdRestrictedUser>({ type: 'user', dataLength: 50, limit: params?.limit });
+  createMutedUserListQuery = jest.fn((params?: BaseListQueryParams | undefined): MutedUserListQuery => {
+    const query = createMockQuery<SendbirdRestrictedUser>({
+      type: 'user',
+      dataLength: 50,
+      limit: params?.limit,
+      sdk: this.sdk,
+    });
     return {
       channelType: ChannelType.BASE,
       channelUrl: 'channel_url_' + fixture.getHash(),
       ...query,
     };
   });
-  createBannedUserListQuery = jest.fn(function (params?: BaseListQueryParams | undefined): BannedUserListQuery {
-    const query = createMockQuery<SendbirdRestrictedUser>({ type: 'user', dataLength: 50, limit: params?.limit });
+  createBannedUserListQuery = jest.fn((params?: BaseListQueryParams | undefined): BannedUserListQuery => {
+    const query = createMockQuery<SendbirdRestrictedUser>({
+      type: 'user',
+      dataLength: 50,
+      limit: params?.limit,
+      sdk: this.sdk,
+    });
     return {
       channelType: ChannelType.BASE,
       channelUrl: 'channel_url_' + fixture.getHash(),
@@ -174,16 +189,26 @@ class MockChannel implements SendbirdBaseChannel, SendbirdOpenChannel, SendbirdG
     };
   });
 
-  createParticipantListQuery = jest.fn(function (params: BaseListQueryParams): ParticipantListQuery {
-    const query = createMockQuery<SendbirdRestrictedUser>({ type: 'user', dataLength: 50, limit: params?.limit });
+  createParticipantListQuery = jest.fn((params: BaseListQueryParams): ParticipantListQuery => {
+    const query = createMockQuery<SendbirdRestrictedUser>({
+      type: 'user',
+      dataLength: 50,
+      limit: params?.limit,
+      sdk: this.sdk,
+    });
     return {
       channelType: ChannelType.OPEN,
       channelUrl: 'channel_url_' + fixture.getHash(),
       ...query,
     };
   });
-  createMemberListQuery = jest.fn(function (params?: MemberListQueryParams): MemberListQuery {
-    const query = createMockQuery<SendbirdMember>({ type: 'user', dataLength: 50, limit: params?.limit });
+  createMemberListQuery = jest.fn((params?: MemberListQueryParams): MemberListQuery => {
+    const query = createMockQuery<SendbirdMember>({
+      type: 'user',
+      dataLength: 50,
+      limit: params?.limit,
+      sdk: this.sdk,
+    });
     return {
       channelType: ChannelType.GROUP,
       memberStateFilter: MemberStateFilter.ALL,
@@ -198,7 +223,12 @@ class MockChannel implements SendbirdBaseChannel, SendbirdOpenChannel, SendbirdG
   createPreviousMessageListQuery = jest.fn(function (
     params?: PreviousMessageListQueryParams | undefined,
   ): PreviousMessageListQuery {
-    const query = createMockQuery<SendbirdBaseMessage>({ type: 'message', dataLength: 300, limit: params?.limit });
+    const query = createMockQuery<SendbirdBaseMessage>({
+      type: 'message',
+      dataLength: 300,
+      limit: params?.limit,
+      sdk: this.sdk,
+    });
     return {
       reverse: false,
       channelType: ChannelType.BASE,

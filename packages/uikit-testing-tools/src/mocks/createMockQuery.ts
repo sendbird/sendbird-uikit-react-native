@@ -2,6 +2,7 @@ import { ChannelType } from '@sendbird/chat';
 
 import { createMockChannel } from './createMockChannel';
 import { createMockMessage } from './createMockMessage';
+import type { MockSendbirdChatSDK } from './createMockSendbirdSDK';
 import { createMockUser } from './createMockUser';
 
 type QueryType = 'message' | 'user' | 'openChannel' | 'groupChannel';
@@ -9,28 +10,29 @@ type QueryParams = {
   type: QueryType;
   limit?: number;
   dataLength?: number;
+  sdk?: MockSendbirdChatSDK;
 };
 
-const dataListFactory = (type: QueryType = 'message', dataLength = 100) => {
+const dataListFactory = (type: QueryType = 'message', dataLength = 100, sdk?: MockSendbirdChatSDK) => {
   return Array(dataLength)
     .fill(0)
     .map(() => {
       switch (type) {
         case 'message':
-          return createMockMessage({});
+          return createMockMessage({ sdk });
         case 'openChannel':
-          return createMockChannel({ channelType: ChannelType.OPEN });
+          return createMockChannel({ sdk, channelType: ChannelType.OPEN });
         case 'groupChannel':
-          return createMockChannel({ channelType: ChannelType.GROUP });
+          return createMockChannel({ sdk, channelType: ChannelType.GROUP });
         case 'user':
-          return createMockUser({});
+          return createMockUser({ sdk });
       }
     });
 };
 
 export const createMockQuery = <T>(params: QueryParams) => {
   const context = {
-    data: dataListFactory(params.type, params.dataLength) as T[],
+    data: dataListFactory(params.type, params.dataLength, params.sdk) as T[],
     limit: params.limit || 10,
     cursor: 0,
     loading: false,
