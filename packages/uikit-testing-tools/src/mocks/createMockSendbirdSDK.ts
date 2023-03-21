@@ -155,6 +155,12 @@ class MockSDK implements MockSendbirdChatSDK {
         sdk: this.asMockSendbirdChatSDK(),
       });
     }),
+    getTotalUnreadMessageCount: jest.fn(() => {
+      return 10;
+    }),
+    getTotalUnreadChannelCount: jest.fn(() => {
+      return 10;
+    }),
   } as unknown as SendbirdChatSDK['groupChannel'];
 
   openChannel = {
