@@ -1,4 +1,10 @@
-import { ApplicationUserListQueryParams, ChannelType, ConnectionHandler, UserEventHandler } from '@sendbird/chat';
+import {
+  ApplicationUserListQueryParams,
+  ChannelType,
+  ConnectionHandler,
+  PushTriggerOption,
+  UserEventHandler,
+} from '@sendbird/chat';
 import type { GroupChannelHandler, GroupChannelListQueryParams } from '@sendbird/chat/groupChannel';
 import type {
   ConnectionHandlerParams,
@@ -57,6 +63,7 @@ class MockSDK implements MockSendbirdChatSDK {
     openChannelHandlers: {} as Record<string, OpenChannelHandler>,
     connectionHandlers: {} as Record<string, ConnectionHandler>,
     userEventHandlers: {} as Record<string, UserEventHandler>,
+    pushTriggerOption: PushTriggerOption.DEFAULT,
   };
 
   __emit(...[name, type, ...args]: Parameters<MockSendbirdChatSDK['__emit']>) {
@@ -112,6 +119,15 @@ class MockSDK implements MockSendbirdChatSDK {
   });
   removeUserEventHandler = jest.fn((id: string) => {
     delete this.__context.userEventHandlers[id];
+  });
+  setPushTriggerOption = jest.fn(async (option: PushTriggerOption) => {
+    this.__throwIfFailureTest();
+    this.__context.pushTriggerOption = option;
+    return this.__context.pushTriggerOption;
+  });
+  getPushTriggerOption = jest.fn(async () => {
+    this.__throwIfFailureTest();
+    return this.__context.pushTriggerOption;
   });
 
   connect = jest.fn(async () => {
