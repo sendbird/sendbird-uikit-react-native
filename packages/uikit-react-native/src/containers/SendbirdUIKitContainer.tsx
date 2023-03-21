@@ -289,6 +289,10 @@ const initializeSendbird = (
   if (NetInfo?.addEventListener) {
     try {
       // NOTE: For removing buggy behavior of NetInfo.addEventListener
+      //  When you first add an event listener, it is assumed that the initialization of the internal event detector is done simultaneously.
+      //  In other words, when you call the first event listener two events are triggered immediately
+      //   - the one that is called when adding the event listener
+      //   - and the internal initialization event
       NetInfo.addEventListener(NOOP)();
     } catch {}
 
