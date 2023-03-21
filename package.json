@@ -87,6 +87,7 @@
     },
     "collectCoverageFrom": [
       "**/packages/*/src/**",
+      "!packages/uikit-testing-tools/**",
       "!**/__mocks__/**",
       "!**/__fixtures__/**"
     ]
