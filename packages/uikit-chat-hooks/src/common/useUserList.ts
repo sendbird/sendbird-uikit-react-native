@@ -36,7 +36,7 @@ const createUserQuery = <User extends UserStruct>(
  * ```
  * */
 export const useUserList = <
-  Options extends UseUserListOptions<QueriedUser>,
+  Options extends UseUserListOptions<UserStruct>,
   QueriedUser extends UserStruct = Options['queryCreator'] extends Optional<
     () => CustomQueryInterface<infer User extends UserStruct>
   >
@@ -44,7 +44,7 @@ export const useUserList = <
     : SendbirdUser,
 >(
   sdk: SendbirdChatSDK,
-  options?: Options,
+  options?: UseUserListOptions<QueriedUser>,
 ): UseUserListReturn<QueriedUser> => {
   const query = useRef<CustomQueryInterface<QueriedUser>>();
 
