@@ -27,7 +27,7 @@ jobs:
 
       - name: Get lockfile hash
         id: lockfile_hash
-        run: echo "::set-output name=hash::${{ hashFiles('**/yarn.lock') }}"
+        run: echo "hash=${{ hashFiles('**/yarn.lock') }}" >> $GITHUB_OUTPUT
 
       - name: Check cached node_modules
         id: check_cache
