@@ -483,17 +483,11 @@ class MockChannel implements SendbirdBaseChannel, SendbirdOpenChannel, SendbirdG
     return [];
   }
 
-  getUndeliveredMemberCount(): number {
-    return 0;
-  }
+  getUndeliveredMemberCount = jest.fn(() => 0);
 
-  getUnreadMemberCount(): number {
-    return 0;
-  }
+  getUnreadMemberCount = jest.fn(() => 0);
 
-  getUnreadMembers(): SendbirdMember[] {
-    return [];
-  }
+  getUnreadMembers = jest.fn(() => []);
 
   hide(): Promise<SendbirdGroupChannel> {
     throw new Error('Method not implemented.');

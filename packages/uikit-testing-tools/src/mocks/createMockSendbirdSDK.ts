@@ -7,6 +7,7 @@ import {
 } from '@sendbird/chat';
 import type { GroupChannelHandler, GroupChannelListQueryParams } from '@sendbird/chat/groupChannel';
 import type {
+  AppInfo,
   ConnectionHandlerParams,
   GroupChannelHandlerParams,
   OpenChannelHandlerParams,
@@ -14,6 +15,7 @@ import type {
 } from '@sendbird/chat/lib/__definition';
 import type { OpenChannelHandler, OpenChannelListQueryParams } from '@sendbird/chat/openChannel';
 import type { SendbirdChatSDK, SendbirdGroupChannel, SendbirdOpenChannel } from '@sendbird/uikit-utils';
+import { ApplicationAttributes, PremiumFeatures } from '@sendbird/uikit-utils';
 
 import { createFixtureContext } from '../fixtures/createFixtureContext';
 import { createMockChannel } from './createMockChannel';
@@ -39,12 +41,17 @@ export interface MockSendbirdChatSDK extends SendbirdChatSDK {
     openChannelHandlers: Record<string, OpenChannelHandler>;
     connectionHandlers: Record<string, ConnectionHandler>;
     userEventHandlers: Record<string, UserEventHandler>;
+    appInfo: AppInfo;
   };
   __configs: MockSDKConfigs;
   __throwIfFailureTest(): void;
 }
 
-type MockSDKConfigs = { testType: 'success' | 'failure'; userId?: string };
+type MockSDKConfigs = {
+  testType?: 'success' | 'failure';
+  userId?: string;
+  appInfo?: Partial<AppInfo>;
+};
 
 const defaultConfigs: MockSDKConfigs = { testType: 'success', userId: 'user_id_' + fixture.getHash() };
 
@@ -64,6 +71,14 @@ class MockSDK implements MockSendbirdChatSDK {
     connectionHandlers: {} as Record<string, ConnectionHandler>,
     userEventHandlers: {} as Record<string, UserEventHandler>,
     pushTriggerOption: PushTriggerOption.DEFAULT,
+    appInfo: {
+      emojiHash: 'hash',
+      uploadSizeLimit: 999999,
+      useReaction: true,
+      applicationAttributes: Object.values(ApplicationAttributes),
+      premiumFeatureList: Object.values(PremiumFeatures),
+      enabledChannelMemberShipHistory: false,
+    } as AppInfo,
   };
 
   __emit(...[name, type, ...args]: Parameters<MockSendbirdChatSDK['__emit']>) {
@@ -139,6 +154,9 @@ class MockSDK implements MockSendbirdChatSDK {
   createApplicationUserListQuery = jest.fn((params?: ApplicationUserListQueryParams) => {
     return createMockQuery({ type: 'user', limit: params?.limit, dataLength: 200, sdk: this.asMockSendbirdChatSDK() });
   }) as unknown as SendbirdChatSDK['createApplicationUserListQuery'];
+  get appInfo() {
+    return this.__context.appInfo;
+  }
 
   groupChannel = {
     getChannel: jest.fn(async (url: string) => {
@@ -213,6 +231,10 @@ class MockSDK implements MockSendbirdChatSDK {
   } as unknown as SendbirdChatSDK['openChannel'];
   constructor(configs: MockSDKConfigs = defaultConfigs) {
     this.__configs = { ...defaultConfigs, ...configs };
+    this.__context.appInfo = {
+      ...this.__context.appInfo,
+      ...this.__configs.appInfo,
+    };
   }
   asMockSendbirdChatSDK() {
     return this as unknown as MockSendbirdChatSDK;
