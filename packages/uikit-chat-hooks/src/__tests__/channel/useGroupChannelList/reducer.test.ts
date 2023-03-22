@@ -160,21 +160,21 @@ describe('useGroupChannelListReducer', () => {
         name: 'B',
         url: 'channel_url_2',
         coverUrl: 'cover-2',
-        lastMessage: createMockMessage({ createdAt: 4 }),
+        lastMessage: createMockMessage({ createdAt: 1 }),
       }),
       createMockChannel({
         channelType: ChannelType.GROUP,
         name: 'D',
         url: 'channel_url_4',
         coverUrl: 'cover-4',
-        lastMessage: createMockMessage({ createdAt: 3 }),
+        lastMessage: undefined,
       }),
       createMockChannel({
         channelType: ChannelType.GROUP,
         name: 'C',
         url: 'channel_url_3',
         coverUrl: 'cover-3',
-        lastMessage: createMockMessage({ createdAt: 1 }),
+        lastMessage: undefined,
       }),
       createMockChannel({
         channelType: ChannelType.GROUP,
@@ -217,7 +217,7 @@ describe('useGroupChannelListReducer', () => {
       result.current.updateOrder('latest_last_message');
     });
     await waitFor(() => {
-      expect(result.current.groupChannels).toEqual([channels[0], channels[1], channels[3], channels[2]]);
+      expect(result.current.groupChannels).toEqual([channels[3], channels[0], channels[2], channels[1]]);
     });
   });
 });
