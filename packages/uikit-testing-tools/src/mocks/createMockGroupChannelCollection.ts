@@ -6,30 +6,36 @@ import {
   GroupChannelFilter,
   GroupChannelListOrder,
 } from '@sendbird/chat/groupChannel';
+import { createTestContext } from '@sendbird/uikit-testing-tools';
 import type { SendbirdGroupChannelCollection } from '@sendbird/uikit-utils';
 
 import type { GetMockParams, GetMockProps } from '../types';
 import { createMockChannel } from './createMockChannel';
 
-type Params = GetMockParams<GroupChannelCollectionParams>;
+type Params = GetMockParams<GroupChannelCollectionParams & { hasMore: boolean }>;
 export const createMockGroupChannelCollection = (params: Params) => {
   return new MockGroupChannelCollection(params);
 };
+
+const tc = createTestContext();
 
 class MockGroupChannelCollection implements GetMockProps<Params, SendbirdGroupChannelCollection> {
   constructor(public params: Params) {
     Object.assign(this, params);
   }
+  __handlerId?: string;
 
   channels: GroupChannel[] = [];
   filter: GroupChannelFilter = new GroupChannelFilter();
   order: GroupChannelListOrder = GroupChannelListOrder.LATEST_LAST_MESSAGE;
 
-  dispose = jest.fn();
+  dispose = jest.fn(() => {
+    if (this.__handlerId && this.params.sdk) {
+      delete this.params.sdk.__context.groupChannelCollectionHandlers[this.__handlerId];
+    }
+  });
 
-  get hasMore(): boolean {
-    return true;
-  }
+  hasMore = true;
 
   loadMore = jest.fn(async () => {
     const channels = Array(this.params.limit ?? 20)
@@ -42,10 +48,8 @@ class MockGroupChannelCollection implements GetMockProps<Params, SendbirdGroupCh
 
   setGroupChannelCollectionHandler = jest.fn((handler: GroupChannelCollectionEventHandler) => {
     if (this.params.sdk) {
-      const index = this.params.sdk?.__context.groupChannelCollectionHandlers.push(handler) - 1;
-      this.dispose = jest.fn(() => {
-        delete this.params.sdk?.__context.groupChannelCollectionHandlers[index];
-      });
+      this.__handlerId = String(tc.getRandom());
+      this.params.sdk.__context.groupChannelCollectionHandlers[this.__handlerId] = handler;
     }
   });
 }

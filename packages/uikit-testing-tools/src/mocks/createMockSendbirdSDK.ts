@@ -53,7 +53,7 @@ export interface MockSendbirdChatSDK extends SendbirdChatSDK {
     openChannelHandlers: Record<string, OpenChannelHandler>;
     connectionHandlers: Record<string, ConnectionHandler>;
     userEventHandlers: Record<string, UserEventHandler>;
-    groupChannelCollectionHandlers: GroupChannelCollectionEventHandler[];
+    groupChannelCollectionHandlers: Record<string, GroupChannelCollectionEventHandler>;
     appInfo: AppInfo;
     localCacheEnabled: boolean;
   };
@@ -98,7 +98,7 @@ class MockSDK implements MockSendbirdChatSDK {
     openChannelHandlers: {} as Record<string, OpenChannelHandler>,
     connectionHandlers: {} as Record<string, ConnectionHandler>,
     userEventHandlers: {} as Record<string, UserEventHandler>,
-    groupChannelCollectionHandlers: [] as GroupChannelCollectionEventHandler[],
+    groupChannelCollectionHandlers: {} as Record<string, GroupChannelCollectionEventHandler>,
     pushTriggerOption: PushTriggerOption.DEFAULT,
     appInfo: this.__params.appInfo as AppInfo,
     localCacheEnabled: this.__params.localCacheEnabled,
@@ -185,7 +185,7 @@ class MockSDK implements MockSendbirdChatSDK {
   }
 
   groupChannel = {
-    createGroupChannelCollection: jest.fn(async (params?: GroupChannelCollectionParams) => {
+    createGroupChannelCollection: jest.fn((params?: GroupChannelCollectionParams) => {
       this.__throwIfFailureTest();
 
       const gcc = createMockGroupChannelCollection({ ...params, sdk: this.asMockSendbirdChatSDK() });
