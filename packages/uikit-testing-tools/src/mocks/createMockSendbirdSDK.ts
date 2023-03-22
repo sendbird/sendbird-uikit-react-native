@@ -42,27 +42,41 @@ export interface MockSendbirdChatSDK extends SendbirdChatSDK {
     connectionHandlers: Record<string, ConnectionHandler>;
     userEventHandlers: Record<string, UserEventHandler>;
     appInfo: AppInfo;
+    localCacheEnabled: boolean;
   };
-  __configs: MockSDKConfigs;
+  __params: InitParams;
   __throwIfFailureTest(): void;
 }
 
-type MockSDKConfigs = {
+type InitParams = {
   testType?: 'success' | 'failure';
   userId?: string;
   appInfo?: Partial<AppInfo>;
+  localCacheEnabled?: boolean;
 };
 
-const defaultConfigs: MockSDKConfigs = { testType: 'success', userId: 'user_id_' + fixture.getHash() };
+const defaultParams: Required<InitParams> = {
+  testType: 'success',
+  userId: 'user_id_' + fixture.getHash(),
+  appInfo: {
+    emojiHash: 'hash',
+    uploadSizeLimit: 999999,
+    useReaction: true,
+    applicationAttributes: Object.values(ApplicationAttributes),
+    premiumFeatureList: Object.values(PremiumFeatures),
+    enabledChannelMemberShipHistory: false,
+  },
+  localCacheEnabled: false,
+};
 
-export const createMockSendbirdChat = (configs: MockSDKConfigs = defaultConfigs): MockSendbirdChatSDK => {
-  return new MockSDK(configs).asMockSendbirdChatSDK();
+export const createMockSendbirdChat = (params: InitParams = defaultParams): MockSendbirdChatSDK => {
+  return new MockSDK(params).asMockSendbirdChatSDK();
 };
 
 // @ts-ignore
 
 class MockSDK implements MockSendbirdChatSDK {
-  __configs = defaultConfigs;
+  __params = defaultParams;
   __context = {
     groupChannels: [] as SendbirdGroupChannel[],
     openChannels: [] as SendbirdOpenChannel[],
@@ -71,14 +85,8 @@ class MockSDK implements MockSendbirdChatSDK {
     connectionHandlers: {} as Record<string, ConnectionHandler>,
     userEventHandlers: {} as Record<string, UserEventHandler>,
     pushTriggerOption: PushTriggerOption.DEFAULT,
-    appInfo: {
-      emojiHash: 'hash',
-      uploadSizeLimit: 999999,
-      useReaction: true,
-      applicationAttributes: Object.values(ApplicationAttributes),
-      premiumFeatureList: Object.values(PremiumFeatures),
-      enabledChannelMemberShipHistory: false,
-    } as AppInfo,
+    appInfo: this.__params.appInfo as AppInfo,
+    localCacheEnabled: this.__params.localCacheEnabled,
   };
 
   __emit(...[name, type, ...args]: Parameters<MockSendbirdChatSDK['__emit']>) {
@@ -119,10 +127,10 @@ class MockSDK implements MockSendbirdChatSDK {
     }
   }
   __throwIfFailureTest() {
-    if (this.__configs.testType === 'failure') throw new Error('Failure test');
+    if (this.__params.testType === 'failure') throw new Error('Failure test');
   }
 
-  currentUser = createMockUser(this.__configs);
+  currentUser = createMockUser(this.__params);
   addConnectionHandler = jest.fn((id: string, handler: ConnectionHandler) => {
     this.__context.connectionHandlers[id] = handler;
   });
@@ -156,6 +164,9 @@ class MockSDK implements MockSendbirdChatSDK {
   }) as unknown as SendbirdChatSDK['createApplicationUserListQuery'];
   get appInfo() {
     return this.__context.appInfo;
+  }
+  get isCacheEnabled() {
+    return this.__context.localCacheEnabled;
   }
 
   groupChannel = {
@@ -229,12 +240,13 @@ class MockSDK implements MockSendbirdChatSDK {
       });
     }),
   } as unknown as SendbirdChatSDK['openChannel'];
-  constructor(configs: MockSDKConfigs = defaultConfigs) {
-    this.__configs = { ...defaultConfigs, ...configs };
+  constructor(params: InitParams = defaultParams) {
+    this.__params = { ...defaultParams, ...params };
     this.__context.appInfo = {
       ...this.__context.appInfo,
-      ...this.__configs.appInfo,
+      ...this.__params.appInfo,
     };
+    this.__context.localCacheEnabled = this.__params.localCacheEnabled;
   }
   asMockSendbirdChatSDK() {
     return this as unknown as MockSendbirdChatSDK;
