@@ -1,58 +1,51 @@
 import { ChannelType } from '@sendbird/chat';
-import type { SendableMessage } from '@sendbird/chat/lib/__definition';
 import { MessageType, SendingStatus } from '@sendbird/chat/message';
 import type {
   SendbirdAdminMessage,
   SendbirdBaseMessage,
   SendbirdFileMessage,
+  SendbirdSendableMessage,
   SendbirdUserMessage,
 } from '@sendbird/uikit-utils';
 
-import { createFixtureContext } from '../fixtures/createFixtureContext';
-import type { MockSendbirdChatSDK } from './createMockSendbirdSDK';
+import type { GetMockParams, GetMockProps } from '../types';
+import { createTestContext } from '../utils/createTestContext';
 
-type MessageParams = { sdk?: MockSendbirdChatSDK } & Partial<SendbirdFileMessage> &
-  Partial<SendbirdUserMessage> &
-  Partial<SendbirdAdminMessage>;
-export const createMockMessage = (params: MessageParams) => {
+type Params = GetMockParams<SendbirdFileMessage & SendbirdUserMessage & SendbirdAdminMessage>;
+export const createMockMessage = (params: Params) => {
   return new MockMessage(params);
 };
 
-const fixture = createFixtureContext();
+const tc = createTestContext();
 
-class MockMessage implements SendbirdBaseMessage {
-  sdk?: MockSendbirdChatSDK;
-  channelType: ChannelType = ChannelType.BASE;
-  channelUrl: string = 'channel_url_' + fixture.getHash();
-  createdAt: number = fixture.date + fixture.increment;
-  messageId: number = fixture.getRandom();
-  messageType = MessageType.BASE;
-  constructor(params: MessageParams) {
-    fixture.increaseIncrement();
-    this.__updateIdsBySendingStatus(params.sendingStatus);
-
-    Object.entries(params).forEach(([key, value]) => {
-      // @ts-ignore
-      this[key] = value;
-    });
-    this.sdk = params.sdk;
+class MockMessage implements GetMockProps<Params, SendbirdBaseMessage> {
+  constructor(public params: Params) {
+    tc.increaseIncrement();
+    this.__updateIdsBySendingStatus();
+    Object.assign(this, params);
   }
 
-  __updateIdsBySendingStatus(sendingStatus: MessageParams['sendingStatus']) {
-    if (!sendingStatus) return;
+  __updateIdsBySendingStatus() {
+    if (!this.params.sendingStatus) return;
 
     const self = this.asSendableMessage();
     const notSent = [SendingStatus.PENDING, SendingStatus.FAILED, SendingStatus.CANCELED].some(
-      (it) => sendingStatus === it,
+      (it) => this.params.sendingStatus === it,
     );
     if (notSent) {
       self.messageId = 0;
-      self.reqId = String(Date.now()) + fixture.increment;
+      self.reqId = String(Date.now()) + tc.increment;
     } else {
-      self.messageId = fixture.getRandom();
+      self.messageId = tc.getRandom();
       self.reqId = '';
     }
   }
+
+  channelType: ChannelType = ChannelType.BASE;
+  channelUrl: string = 'channel_url_' + tc.getHash();
+  createdAt: number = tc.date + tc.increment;
+  messageId: number = tc.getRandom();
+  messageType = MessageType.BASE;
 
   isFileMessage(): this is SendbirdFileMessage {
     return this.messageType === MessageType.FILE;
@@ -100,7 +93,7 @@ class MockMessage implements SendbirdBaseMessage {
   asAdminMessage(): SendbirdAdminMessage {
     return this as unknown as SendbirdAdminMessage;
   }
-  asSendableMessage(): SendableMessage {
-    return this as unknown as SendableMessage;
+  asSendableMessage(): SendbirdSendableMessage {
+    return this as unknown as SendbirdSendableMessage;
   }
 }

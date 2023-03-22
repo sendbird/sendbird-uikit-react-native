@@ -5,7 +5,7 @@ type FixtureContext = {
   getHash(): string;
   getRandom(): number;
 };
-export const createFixtureContext = <T>(additionalContext?: T): FixtureContext & T => {
+export const createTestContext = <T>(additionalContext?: T): FixtureContext & T => {
   const context = {
     date: Date.now(),
     increment: 0,

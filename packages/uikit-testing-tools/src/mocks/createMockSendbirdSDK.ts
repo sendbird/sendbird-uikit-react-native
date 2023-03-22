@@ -5,7 +5,12 @@ import {
   PushTriggerOption,
   UserEventHandler,
 } from '@sendbird/chat';
-import type { GroupChannelHandler, GroupChannelListQueryParams } from '@sendbird/chat/groupChannel';
+import type {
+  GroupChannelCollectionEventHandler,
+  GroupChannelCollectionParams,
+  GroupChannelHandler,
+  GroupChannelListQueryParams,
+} from '@sendbird/chat/groupChannel';
 import type {
   AppInfo,
   ConnectionHandlerParams,
@@ -14,15 +19,21 @@ import type {
   UserEventHandlerParams,
 } from '@sendbird/chat/lib/__definition';
 import type { OpenChannelHandler, OpenChannelListQueryParams } from '@sendbird/chat/openChannel';
-import type { SendbirdChatSDK, SendbirdGroupChannel, SendbirdOpenChannel } from '@sendbird/uikit-utils';
+import type {
+  SendbirdChatSDK,
+  SendbirdGroupChannel,
+  SendbirdGroupChannelCollection,
+  SendbirdOpenChannel,
+} from '@sendbird/uikit-utils';
 import { ApplicationAttributes, PremiumFeatures } from '@sendbird/uikit-utils';
 
-import { createFixtureContext } from '../fixtures/createFixtureContext';
+import { createTestContext } from '../utils/createTestContext';
 import { createMockChannel } from './createMockChannel';
+import { createMockGroupChannelCollection } from './createMockGroupChannelCollection';
 import { createMockQuery } from './createMockQuery';
 import { createMockUser } from './createMockUser';
 
-const fixture = createFixtureContext();
+const tc = createTestContext();
 
 export interface MockSendbirdChatSDK extends SendbirdChatSDK {
   __emit(
@@ -37,10 +48,12 @@ export interface MockSendbirdChatSDK extends SendbirdChatSDK {
   __context: {
     openChannels: SendbirdOpenChannel[];
     groupChannels: SendbirdGroupChannel[];
+    groupChannelCollections: SendbirdGroupChannelCollection[];
     groupChannelHandlers: Record<string, GroupChannelHandler>;
     openChannelHandlers: Record<string, OpenChannelHandler>;
     connectionHandlers: Record<string, ConnectionHandler>;
     userEventHandlers: Record<string, UserEventHandler>;
+    groupChannelCollectionHandlers: GroupChannelCollectionEventHandler[];
     appInfo: AppInfo;
     localCacheEnabled: boolean;
   };
@@ -57,7 +70,7 @@ type InitParams = {
 
 const defaultParams: Required<InitParams> = {
   testType: 'success',
-  userId: 'user_id_' + fixture.getHash(),
+  userId: 'user_id_' + tc.getHash(),
   appInfo: {
     emojiHash: 'hash',
     uploadSizeLimit: 999999,
@@ -80,10 +93,12 @@ class MockSDK implements MockSendbirdChatSDK {
   __context = {
     groupChannels: [] as SendbirdGroupChannel[],
     openChannels: [] as SendbirdOpenChannel[],
+    groupChannelCollections: [] as SendbirdGroupChannelCollection[],
     groupChannelHandlers: {} as Record<string, GroupChannelHandler>,
     openChannelHandlers: {} as Record<string, OpenChannelHandler>,
     connectionHandlers: {} as Record<string, ConnectionHandler>,
     userEventHandlers: {} as Record<string, UserEventHandler>,
+    groupChannelCollectionHandlers: [] as GroupChannelCollectionEventHandler[],
     pushTriggerOption: PushTriggerOption.DEFAULT,
     appInfo: this.__params.appInfo as AppInfo,
     localCacheEnabled: this.__params.localCacheEnabled,
@@ -170,6 +185,13 @@ class MockSDK implements MockSendbirdChatSDK {
   }
 
   groupChannel = {
+    createGroupChannelCollection: jest.fn(async (params?: GroupChannelCollectionParams) => {
+      this.__throwIfFailureTest();
+
+      const gcc = createMockGroupChannelCollection({ ...params, sdk: this.asMockSendbirdChatSDK() });
+      this.__context.groupChannelCollections.push(gcc);
+      return gcc;
+    }),
     getChannel: jest.fn(async (url: string) => {
       this.__throwIfFailureTest();
 

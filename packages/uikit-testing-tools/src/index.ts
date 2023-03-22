@@ -1,4 +1,4 @@
-export * from './fixtures/createFixtureContext';
+export * from './utils/createTestContext';
 
 export * from './mocks/createMockChannel';
 export * from './mocks/createMockMessage';

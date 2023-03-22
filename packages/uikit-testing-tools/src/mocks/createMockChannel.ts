@@ -46,32 +46,36 @@ import type {
   SendbirdUserMessage,
 } from '@sendbird/uikit-utils';
 
-import { createFixtureContext } from '../fixtures/createFixtureContext';
+import type { GetMockParams, GetMockProps } from '../types';
+import { createTestContext } from '../utils/createTestContext';
 import { createMockMessage } from './createMockMessage';
 import { createMockQuery } from './createMockQuery';
-import type { MockSendbirdChatSDK } from './createMockSendbirdSDK';
 import { createMockUser } from './createMockUser';
 
-const fixture = createFixtureContext();
+const tc = createTestContext();
 
-type ChannelParams = { sdk?: MockSendbirdChatSDK } & Partial<SendbirdOpenChannel> & Partial<SendbirdGroupChannel>;
-export const createMockChannel = (params: ChannelParams) => {
+type Params = GetMockParams<SendbirdOpenChannel & SendbirdGroupChannel>;
+
+export const createMockChannel = (params: Params) => {
   return new MockChannel(params);
 };
+class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & SendbirdOpenChannel & SendbirdGroupChannel> {
+  constructor(public params: Params) {
+    tc.increaseIncrement();
+    Object.assign(this, params);
+  }
 
-class MockChannel implements SendbirdBaseChannel, SendbirdOpenChannel, SendbirdGroupChannel {
-  sdk?: MockSendbirdChatSDK;
   channelType: ChannelType = ChannelType.BASE;
-  url = 'channel_url_' + fixture.getHash();
-  name = 'channel_name_' + fixture.getHash();
-  coverUrl = 'channel_cover_url_' + fixture.getHash();
+  url = 'channel_url_' + tc.getHash();
+  name = 'channel_name_' + tc.getHash();
+  coverUrl = 'channel_cover_url_' + tc.getHash();
   isFrozen = false;
   isEphemeral = false;
   customType = '';
   data = '';
   creator = createMockUser({ userId: 'creator-user-id' });
 
-  createdAt: number = fixture.date + fixture.increment;
+  createdAt: number = tc.date + tc.increment;
   participantCount = 0;
   operators = [];
   hiddenState = HiddenState.UNHIDDEN;
@@ -103,15 +107,6 @@ class MockChannel implements SendbirdBaseChannel, SendbirdOpenChannel, SendbirdG
   unreadMentionCount = 0;
   unreadMessageCount = 0;
 
-  constructor(params: ChannelParams) {
-    fixture.increaseIncrement();
-    Object.entries(params).forEach(([key, value]) => {
-      // @ts-ignore
-      this[key] = value;
-    });
-    this.sdk = params.sdk;
-  }
-
   serialize(): object {
     throw new Error('Method not implemented.');
   }
@@ -119,7 +114,7 @@ class MockChannel implements SendbirdBaseChannel, SendbirdOpenChannel, SendbirdG
     throw new Error('Method not implemented.');
   }
   refresh = jest.fn(async (): Promise<never> => {
-    this.sdk?.__throwIfFailureTest();
+    this.params.sdk?.__throwIfFailureTest();
 
     if (this.isGroupChannel()) {
       return this.asGroupChannel() as never;
@@ -129,13 +124,13 @@ class MockChannel implements SendbirdBaseChannel, SendbirdOpenChannel, SendbirdG
   });
 
   enter = jest.fn(async () => {
-    this.sdk?.__throwIfFailureTest();
+    this.params.sdk?.__throwIfFailureTest();
   });
   exit = jest.fn(async () => {
-    this.sdk?.__throwIfFailureTest();
+    this.params.sdk?.__throwIfFailureTest();
   });
   delete = jest.fn(async () => {
-    this.sdk?.__throwIfFailureTest();
+    this.params.sdk?.__throwIfFailureTest();
   });
   updateChannel = jest.fn();
   updateChannelWithOperatorUserIds = jest.fn();
@@ -154,11 +149,11 @@ class MockChannel implements SendbirdBaseChannel, SendbirdOpenChannel, SendbirdG
       type: 'user',
       dataLength: 50,
       limit: params?.limit,
-      sdk: this.sdk,
+      sdk: this.params.sdk,
     });
     return {
       channelType: ChannelType.BASE,
-      channelUrl: 'channel_url_' + fixture.getHash(),
+      channelUrl: 'channel_url_' + tc.getHash(),
       ...query,
     };
   });
@@ -167,11 +162,11 @@ class MockChannel implements SendbirdBaseChannel, SendbirdOpenChannel, SendbirdG
       type: 'user',
       dataLength: 50,
       limit: params?.limit,
-      sdk: this.sdk,
+      sdk: this.params.sdk,
     });
     return {
       channelType: ChannelType.BASE,
-      channelUrl: 'channel_url_' + fixture.getHash(),
+      channelUrl: 'channel_url_' + tc.getHash(),
       ...query,
     };
   });
@@ -180,11 +175,11 @@ class MockChannel implements SendbirdBaseChannel, SendbirdOpenChannel, SendbirdG
       type: 'user',
       dataLength: 50,
       limit: params?.limit,
-      sdk: this.sdk,
+      sdk: this.params.sdk,
     });
     return {
       channelType: ChannelType.BASE,
-      channelUrl: 'channel_url_' + fixture.getHash(),
+      channelUrl: 'channel_url_' + tc.getHash(),
       ...query,
     };
   });
@@ -194,11 +189,11 @@ class MockChannel implements SendbirdBaseChannel, SendbirdOpenChannel, SendbirdG
       type: 'user',
       dataLength: 50,
       limit: params?.limit,
-      sdk: this.sdk,
+      sdk: this.params.sdk,
     });
     return {
       channelType: ChannelType.OPEN,
-      channelUrl: 'channel_url_' + fixture.getHash(),
+      channelUrl: 'channel_url_' + tc.getHash(),
       ...query,
     };
   });
@@ -207,7 +202,7 @@ class MockChannel implements SendbirdBaseChannel, SendbirdOpenChannel, SendbirdG
       type: 'user',
       dataLength: 50,
       limit: params?.limit,
-      sdk: this.sdk,
+      sdk: this.params.sdk,
     });
     return {
       channelType: ChannelType.GROUP,
@@ -216,7 +211,7 @@ class MockChannel implements SendbirdBaseChannel, SendbirdOpenChannel, SendbirdG
       nicknameStartsWithFilter: '',
       operatorFilter: OperatorFilter.ALL,
       order: MemberListOrder.MEMBER_NICKNAME_ALPHABETICAL,
-      channelUrl: 'channel_url_' + fixture.getHash(),
+      channelUrl: 'channel_url_' + tc.getHash(),
       ...query,
     };
   });
@@ -227,12 +222,12 @@ class MockChannel implements SendbirdBaseChannel, SendbirdOpenChannel, SendbirdG
       type: 'message',
       dataLength: 300,
       limit: params?.limit,
-      sdk: this.sdk,
+      sdk: this.params.sdk,
     });
     return {
       reverse: false,
       channelType: ChannelType.BASE,
-      channelUrl: 'channel_url_' + fixture.getHash(),
+      channelUrl: 'channel_url_' + tc.getHash(),
       customTypesFilter: [],
       includeMetaArray: false,
       includeParentMessageInfo: false,

@@ -1,17 +1,13 @@
 import { ChannelType } from '@sendbird/chat';
 
+import type { GetMockParams } from '../types';
 import { createMockChannel } from './createMockChannel';
 import { createMockMessage } from './createMockMessage';
 import type { MockSendbirdChatSDK } from './createMockSendbirdSDK';
 import { createMockUser } from './createMockUser';
 
 type QueryType = 'message' | 'user' | 'openChannel' | 'groupChannel';
-type QueryParams = {
-  type: QueryType;
-  limit?: number;
-  dataLength?: number;
-  sdk?: MockSendbirdChatSDK;
-};
+type Params = GetMockParams<{ type: QueryType; dataLength?: number; limit?: number }>;
 
 const dataListFactory = (type: QueryType = 'message', dataLength = 100, sdk?: MockSendbirdChatSDK) => {
   return Array(dataLength)
@@ -30,7 +26,7 @@ const dataListFactory = (type: QueryType = 'message', dataLength = 100, sdk?: Mo
     });
 };
 
-export const createMockQuery = <T>(params: QueryParams) => {
+export const createMockQuery = <T>(params: Params) => {
   const context = {
     data: dataListFactory(params.type, params.dataLength, params.sdk) as T[],
     limit: params.limit || 10,

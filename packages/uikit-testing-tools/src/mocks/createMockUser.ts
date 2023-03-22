@@ -8,41 +8,34 @@ import type {
   SendbirdUserMessage,
 } from '@sendbird/uikit-utils';
 
-import { createFixtureContext } from '../fixtures/createFixtureContext';
-import type { MockSendbirdChatSDK } from './createMockSendbirdSDK';
+import type { GetMockParams } from '../types';
+import { createTestContext } from '../utils/createTestContext';
 
-type UserParams = { sdk?: MockSendbirdChatSDK } & Partial<Sender> &
-  Partial<SendbirdUserMessage> &
-  Partial<SendbirdParticipant> &
-  Partial<SendbirdMember>;
-export const createMockUser = (params: UserParams) => {
+const tc = createTestContext();
+
+type Params = GetMockParams<Sender & SendbirdUserMessage & SendbirdParticipant & SendbirdMember>;
+
+export const createMockUser = (params: Params) => {
   return new MockUser(params);
 };
 
-const fixture = createFixtureContext();
-
 class MockUser implements SendbirdUser {
-  sdk?: MockSendbirdChatSDK;
-  userId: string = 'user_id_' + fixture.getHash();
+  constructor(public params: Params) {
+    tc.increaseIncrement();
+    Object.assign(this, params);
+  }
+
+  userId: string = 'user_id_' + tc.getHash();
   requireAuth = true;
-  nickname = 'nickname_' + fixture.getHash();
-  plainProfileUrl = 'profile_url_' + fixture.getHash();
+  nickname = 'nickname_' + tc.getHash();
+  plainProfileUrl = 'profile_url_' + tc.getHash();
   metaData: object = {};
   connectionStatus: UserOnlineState = UserOnlineState.OFFLINE;
   isActive = false;
-  lastSeenAt = fixture.date + fixture.increment;
+  lastSeenAt = tc.date + tc.increment;
   preferredLanguages: string[] = [];
-  friendDiscoveryKey = fixture.getHash();
-  friendName = 'friend_name_' + fixture.getHash();
-
-  constructor(params: UserParams) {
-    fixture.increaseIncrement();
-    Object.entries(params).forEach(([key, value]) => {
-      // @ts-ignore
-      this[key] = value;
-    });
-    this.sdk = params?.sdk;
-  }
+  friendDiscoveryKey = tc.getHash();
+  friendName = 'friend_name_' + tc.getHash();
 
   get profileUrl(): string {
     throw new Error('Method not implemented.');
