@@ -1,4 +1,4 @@
-import type { MockSendbirdChatSDK } from '@sendbird/uikit-testing-tools';
+import type { MockSendbirdChatSDK } from './mocks/createMockSendbirdSDK';
 
 type MockBasicParams = { sdk: MockSendbirdChatSDK };
 

@@ -6,10 +6,10 @@ import {
   GroupChannelFilter,
   GroupChannelListOrder,
 } from '@sendbird/chat/groupChannel';
-import { createMockChannel } from '@sendbird/uikit-testing-tools';
 import type { SendbirdGroupChannelCollection } from '@sendbird/uikit-utils';
 
 import type { GetMockParams, GetMockProps } from '../types';
+import { createMockChannel } from './createMockChannel';
 
 type Params = GetMockParams<GroupChannelCollectionParams>;
 export const createMockGroupChannelCollection = (params: Params) => {
