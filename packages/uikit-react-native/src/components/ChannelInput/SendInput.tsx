@@ -120,7 +120,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
               // Image compression
               if (
                 isImage(mediaFile.uri, mediaFile.type) &&
-                shouldCompressImage(mediaFile.uri, features.imageCompressionEnabled)
+                shouldCompressImage(mediaFile.type, features.imageCompressionEnabled)
               ) {
                 await SBUUtils.safeRun(async () => {
                   const compressed = await mediaService.compressImage({
@@ -170,7 +170,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
               // Image compression
               if (
                 isImage(mediaFile.uri, mediaFile.type) &&
-                shouldCompressImage(mediaFile.uri, features.imageCompressionEnabled)
+                shouldCompressImage(mediaFile.type, features.imageCompressionEnabled)
               ) {
                 await SBUUtils.safeRun(async () => {
                   const compressed = await mediaService.compressImage({
@@ -203,7 +203,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
               // Image compression
               if (
                 isImage(documentFile.uri, documentFile.type) &&
-                shouldCompressImage(documentFile.uri, features.imageCompressionEnabled)
+                shouldCompressImage(documentFile.type, features.imageCompressionEnabled)
               ) {
                 await SBUUtils.safeRun(async () => {
                   const compressed = await mediaService.compressImage({
