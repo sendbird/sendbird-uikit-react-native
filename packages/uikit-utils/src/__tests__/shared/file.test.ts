@@ -161,9 +161,21 @@ describe('getFileExtension', () => {
     expect(getFileExtension('/path/to/doc.docx')).toEqual('.docx');
   });
 
+  it('should return the correct file extension for a given file name', () => {
+    expect(getFileExtension('file.pdf')).toEqual('.pdf');
+    expect(getFileExtension('image.JPG')).toEqual('.jpg');
+    expect(getFileExtension('doc.docx')).toEqual('.docx');
+  });
+
   it('should return an empty string if the input does not contain a file extension', () => {
     expect(getFileExtension('/path/to/file')).toEqual('');
     expect(getFileExtension('/path/to/file.')).toEqual('');
     expect(getFileExtension('/path/to/file/')).toEqual('');
+  });
+
+  it('should remove the query string from the file path', () => {
+    expect(getFileExtension('/path/to/file.pdf?query=string')).toEqual('.pdf');
+    expect(getFileExtension('/path/to/file.jpg?query=string;key=test123')).toEqual('.jpg');
+    expect(getFileExtension('/path/to/file?query=string;key=test123')).toEqual('');
   });
 });

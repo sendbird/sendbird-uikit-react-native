@@ -168,9 +168,12 @@ export function getMimeFromFileExtension(ext?: string | null) {
  * @returns {string} - The file extension, or an empty string if the file path does not have an extension.
  */
 export function getFileExtension(filePath: string) {
-  const idx = filePath.lastIndexOf('.');
+  const pathWithoutParams = filePath.split('?')[0];
+
+  const idx = pathWithoutParams.lastIndexOf('.');
   if (idx === -1) return '';
-  const result = filePath.slice(idx - filePath.length).toLowerCase();
+
+  const result = pathWithoutParams.slice(idx - pathWithoutParams.length).toLowerCase();
   if (result === '.') return '';
   else return result;
 }
