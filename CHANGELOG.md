@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.4.0...v2.4.1) (2023-03-24)
+
+
+### Bug Fixes
+
+* **uikit:** fixed connection failure due to duplicate network listener invocation on v4.6.0+ session token connection. ([ff761f3](https://github.com/sendbird/sendbird-uikit-react-native/commit/ff761f3414bb6018813561c0014ff95388827097))
+* **utils:** properly retrieve file extensions from URLs that contain query parameters ([7401d55](https://github.com/sendbird/sendbird-uikit-react-native/commit/7401d55d43e1fd0094ea459c554ea85ee48c9f2c))
+
+
+### Improvements
+
+* refactored createFileService functions and utils structure ([5e44d4f](https://github.com/sendbird/sendbird-uikit-react-native/commit/5e44d4f7a989df54f103efc67f7d18c28405426c))
+
+
+
 ## [2.4.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.3.0...v2.4.0) (2023-03-15)
 
 

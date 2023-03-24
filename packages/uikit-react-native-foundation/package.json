@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/uikit-react-native-foundation",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "react-native-uikit",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -39,7 +39,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@sendbird/uikit-utils": "2.4.0"
+    "@sendbird/uikit-utils": "2.4.1"
   },
   "devDependencies": {
     "@types/react": "*",
