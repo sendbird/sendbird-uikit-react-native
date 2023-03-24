@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.5](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.1.4...v1.1.5) (2023-03-24)
+
+
+### Bug Fixes
+
+* **utils:** properly retrieve file extensions from URLs that contain query parameters ([68b1b5a](https://github.com/sendbird/sendbird-uikit-react-native/commit/68b1b5a610db92fa0367677c549841adbc610d08))
+
+
+
 ## [1.1.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v1.1.3...v1.1.4) (2023-01-31)
 
 
