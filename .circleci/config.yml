@@ -1,19 +1,19 @@
 ### Aliases
 aliases:
   - &restore_node_modules_base
-    key: yarn-base-{{ arch }}-{{ checksum "yarn.lock" }}-v2
+    key: v{{ .Environment.CACHE_VERSION }}-yarn-base-{{ arch }}-{{ checksum "yarn.lock" }}
   - &restore_node_modules_packages
-    key: yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}-v2
+    key: v{{ .Environment.CACHE_VERSION }}-yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
   - &install_node_modules
     name: Install node_modules
     command: yarn install --frozen-lockfiles
   - &save_node_modules_base
-    key: yarn-base-{{ arch }}-{{ checksum "yarn.lock" }}-v2
+    key: v{{ .Environment.CACHE_VERSION }}-yarn-base-{{ arch }}-{{ checksum "yarn.lock" }}
     paths:
       - ~/.cache/yarn
       - node_modules
   - &save_node_modules_packages
-    key: yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}-v2
+    key: v{{ .Environment.CACHE_VERSION }}-yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
     paths:
       - sample/node_modules
       - packages/uikit-chat-hooks/node_modules
@@ -25,8 +25,9 @@ aliases:
     command: echo "export const APP_ID = '${SENDBIRD_APP_ID}';" >> sample/src/env.ts
 
 ### Circle CI
-# https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
-# https://circleci.com/docs/2.0/testing-ios/#supported-xcode-versions
+# Built-in env vars - https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
+# Xcode versions - https://circleci.com/docs/2.0/testing-ios/#supported-xcode-versions
+# Cache key template - https://circleci.com/docs/caching/#using-keys-and-templates
 version: 2.1
 orbs:
   ruby: circleci/ruby@1.6.0
@@ -48,7 +49,7 @@ jobs:
       - macos/switch-ruby:
           version: '2.7.6'
       - ruby/install-deps:
-          key: gems-ios
+          key: v{{ .Environment.CACHE_VERSION }}-gems-ios
           app-dir: ./sample/ios
       - restore_cache: *restore_node_modules_base
       - restore_cache: *restore_node_modules_packages
@@ -56,13 +57,13 @@ jobs:
       - save_cache: *save_node_modules_base
       - save_cache: *save_node_modules_packages
       - restore_cache:
-          key: pods-{{ arch }}-{{ checksum "sample/ios/Podfile.lock" }}-v2
+          key: v{{ .Environment.CACHE_VERSION }}-pods-{{ arch }}-{{ checksum "sample/ios/Podfile.lock" }}
       - run:
           name: Install pods
           working_directory: sample/ios
           command: bundle exec pod install
       - save_cache:
-          key: pods-{{ arch }}-{{ checksum "sample/ios/Podfile.lock" }}-v2
+          key: v{{ .Environment.CACHE_VERSION }}-pods-{{ arch }}-{{ checksum "sample/ios/Podfile.lock" }}
           paths:
             - sample/ios/Pods
       - run: *create_app_env
