@@ -185,6 +185,14 @@ class MockSDK implements MockSendbirdChatSDK {
   }
 
   groupChannel = {
+    createMyGroupChannelListQuery: jest.fn((params?: GroupChannelListQueryParams) => {
+      return createMockQuery({
+        type: 'groupChannel',
+        limit: params?.limit,
+        dataLength: 200,
+        sdk: this.asMockSendbirdChatSDK(),
+      });
+    }),
     createGroupChannelCollection: jest.fn((params?: GroupChannelCollectionParams) => {
       this.__throwIfFailureTest();
 
@@ -213,14 +221,6 @@ class MockSDK implements MockSendbirdChatSDK {
     }),
     removeGroupChannelHandler: jest.fn((id: string) => {
       delete this.__context.groupChannelHandlers[id];
-    }),
-    createGroupChannelListQuery: jest.fn((params?: GroupChannelListQueryParams) => {
-      return createMockQuery({
-        type: 'groupChannel',
-        limit: params?.limit,
-        dataLength: 200,
-        sdk: this.asMockSendbirdChatSDK(),
-      });
     }),
     getTotalUnreadMessageCount: jest.fn(() => {
       return 10;
