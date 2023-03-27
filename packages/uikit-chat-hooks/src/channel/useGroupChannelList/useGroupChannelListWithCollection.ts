@@ -90,7 +90,7 @@ export const useGroupChannelListWithCollection: UseGroupChannelList = (sdk, user
     updateLoading(true);
     await init(userId);
     updateLoading(false);
-  }, [init, userId]);
+  }, [userId]);
 
   useChannelHandler(sdk, handlerId, {
     onUserBanned: (channel, user) => {

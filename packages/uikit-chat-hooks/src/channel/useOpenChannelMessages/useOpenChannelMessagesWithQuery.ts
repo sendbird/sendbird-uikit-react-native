@@ -124,7 +124,7 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
     return () => {
       channel.exit().catch(NOOP);
     };
-  }, [init, userId]);
+  }, [channel.url, userId]);
 
   const refresh: ReturnType<UseOpenChannelMessages>['refresh'] = useFreshCallback(async () => {
     updateRefreshing(true);
