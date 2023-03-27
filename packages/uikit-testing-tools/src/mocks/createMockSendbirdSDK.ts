@@ -10,6 +10,7 @@ import type {
   GroupChannelCollectionParams,
   GroupChannelHandler,
   GroupChannelListQueryParams,
+  MessageCollectionEventHandler,
 } from '@sendbird/chat/groupChannel';
 import type {
   AppInfo,
@@ -54,6 +55,7 @@ export interface MockSendbirdChatSDK extends SendbirdChatSDK {
     connectionHandlers: Record<string, ConnectionHandler>;
     userEventHandlers: Record<string, UserEventHandler>;
     groupChannelCollectionHandlers: Record<string, GroupChannelCollectionEventHandler>;
+    groupChannelMessageCollectionHandlers: Record<string, Record<string, MessageCollectionEventHandler>>;
     appInfo: AppInfo;
     localCacheEnabled: boolean;
   };
@@ -99,6 +101,7 @@ class MockSDK implements MockSendbirdChatSDK {
     connectionHandlers: {} as Record<string, ConnectionHandler>,
     userEventHandlers: {} as Record<string, UserEventHandler>,
     groupChannelCollectionHandlers: {} as Record<string, GroupChannelCollectionEventHandler>,
+    groupChannelMessageCollectionHandlers: {} as Record<string, Record<string, MessageCollectionEventHandler>>,
     pushTriggerOption: PushTriggerOption.DEFAULT,
     appInfo: this.__params.appInfo as AppInfo,
     localCacheEnabled: this.__params.localCacheEnabled,

@@ -17,7 +17,7 @@ import {
   MemberListQueryParams,
   MemberState,
   MemberStateFilter,
-  MessageCollection,
+  MessageCollectionParams,
   MutedMemberFilter,
   MutedState,
   OperatorFilter,
@@ -41,6 +41,7 @@ import type {
   SendbirdFileMessage,
   SendbirdGroupChannel,
   SendbirdMember,
+  SendbirdMessageCollection,
   SendbirdOpenChannel,
   SendbirdRestrictedUser,
   SendbirdUserMessage,
@@ -49,6 +50,7 @@ import type {
 import type { GetMockParams, GetMockProps } from '../types';
 import { createTestContext } from '../utils/createTestContext';
 import { createMockMessage } from './createMockMessage';
+import { createMockMessageCollection } from './createMockMessageCollection';
 import { createMockQuery } from './createMockQuery';
 import { createMockUser } from './createMockUser';
 
@@ -241,6 +243,14 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
       ...query,
     };
   });
+  createMessageCollection = jest.fn((params?: MessageCollectionParams | undefined): SendbirdMessageCollection => {
+    return createMockMessageCollection({
+      ...params,
+      sdk: this.params.sdk,
+      groupChannel: this.asGroupChannel(),
+    }).asMessageCollection();
+  });
+
   addOperators(): Promise<void> {
     throw new Error('Method not implemented.');
   }
@@ -429,10 +439,6 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
   cancelScheduledMessage = jest.fn();
 
   closePoll = jest.fn();
-
-  createMessageCollection(): MessageCollection {
-    throw new Error('Method not implemented.');
-  }
 
   createPollListQuery(): PollListQuery {
     throw new Error('Method not implemented.');

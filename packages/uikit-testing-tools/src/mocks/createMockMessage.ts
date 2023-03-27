@@ -96,4 +96,7 @@ class MockMessage implements GetMockProps<Params, SendbirdBaseMessage> {
   asSendableMessage(): SendbirdSendableMessage {
     return this as unknown as SendbirdSendableMessage;
   }
+  asBaseMessage(): SendbirdBaseMessage {
+    return this as unknown as SendbirdBaseMessage;
+  }
 }
