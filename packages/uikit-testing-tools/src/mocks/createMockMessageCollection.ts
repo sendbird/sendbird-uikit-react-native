@@ -7,7 +7,6 @@ import {
   MessageFilter,
 } from '@sendbird/chat/groupChannel';
 import { SendingStatus } from '@sendbird/chat/message';
-import { createMockMessage } from '@sendbird/uikit-testing-tools';
 import type {
   SendbirdBaseMessage,
   SendbirdGroupChannel,
@@ -17,6 +16,7 @@ import type {
 
 import type { GetMockParams, GetMockProps } from '../types';
 import { createTestContext } from '../utils/createTestContext';
+import { createMockMessage } from './createMockMessage';
 
 type Params = GetMockParams<MessageCollectionParams & { groupChannel: SendbirdGroupChannel; dataLength: number }>;
 export const createMockMessageCollection = (params: Params) => {
