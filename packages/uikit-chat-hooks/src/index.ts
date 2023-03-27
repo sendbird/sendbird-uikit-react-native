@@ -9,7 +9,6 @@ export { useOpenChannel } from './channel/useOpenChannel';
 export { useAppFeatures } from './common/useAppFeatures';
 export { useMessageOutgoingStatus } from './common/useMessageOutgoingStatus';
 export { usePushTrigger } from './common/usePushTrigger';
-export { useTotalUnreadChannelCount } from './common/useTotalUnreadChannelCount';
 export { useTotalUnreadMessageCount } from './common/useTotalUnreadMessageCount';
 export { useUserList } from './common/useUserList';
 

@@ -27,7 +27,7 @@ jobs:
 
       - name: Get lockfile hash
         id: lockfile_hash
-        run: echo "::set-output name=hash::${{ hashFiles('**/yarn.lock') }}"
+        run: echo "hash=${{ hashFiles('**/yarn.lock') }}" >> $GITHUB_OUTPUT
 
       - name: Check cached node_modules
         id: check_cache
@@ -106,7 +106,13 @@ jobs:
           key: ${{ needs.prepare.outputs.cache_node_modules_key }}
 
       - name: Run test
-        run: yarn test
+        run: yarn test --collect-coverage
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
 
   run-docs-validation:
     needs: prepare

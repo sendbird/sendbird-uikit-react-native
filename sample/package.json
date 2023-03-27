@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@bam.tech/react-native-image-resizer": "^3.0.4",
-    "@faker-js/faker": "^6.0.0-alpha.7",
+    "@faker-js/faker": "^7.6.0",
     "@notifee/react-native": "^5.3.0",
     "@react-native-async-storage/async-storage": "^1.15.17",
     "@react-native-camera-roll/camera-roll": "^5.0.4",

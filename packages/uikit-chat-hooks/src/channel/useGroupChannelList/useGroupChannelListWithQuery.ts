@@ -63,7 +63,7 @@ export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, o
     updateLoading(true);
     await init(userId);
     updateLoading(false);
-  }, [init, userId]);
+  }, [userId]);
 
   useChannelHandler(sdk, handlerId, {
     onChannelChanged: (channel) => updateChannels([channel]),

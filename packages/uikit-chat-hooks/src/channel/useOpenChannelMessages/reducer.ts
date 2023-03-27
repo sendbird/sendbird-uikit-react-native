@@ -12,7 +12,7 @@ type Action =
     }
   | {
       type: 'update_messages' | 'update_next_messages';
-      value: { messages: SendbirdBaseMessage[]; clearPrev: boolean; currentUserId?: string };
+      value: { messages: SendbirdBaseMessage[]; clearBeforeAction: boolean; currentUserId?: string };
     }
   | {
       type: 'delete_messages' | 'delete_next_messages';
@@ -28,18 +28,19 @@ type State = {
 
 const defaultReducer = ({ ...draft }: State, action: Action) => {
   switch (action.type) {
-    case 'update_refreshing':
+    case 'update_refreshing': {
+      draft['refreshing'] = action.value.status;
+      return draft;
+    }
     case 'update_loading': {
-      const key = action.type === 'update_loading' ? 'loading' : 'refreshing';
-      draft[key] = action.value.status;
-
+      draft['loading'] = action.value.status;
       return draft;
     }
     case 'update_messages':
     case 'update_next_messages': {
       const key = action.type === 'update_messages' ? 'messageMap' : 'nextMessageMap';
       const receivedMessagesAsMap = arrayToMapWithGetter(action.value.messages, getMessageUniqId);
-      if (action.value.clearPrev) {
+      if (action.value.clearBeforeAction) {
         draft[key] = receivedMessagesAsMap;
       } else {
         draft[key] = { ...draft[key], ...receivedMessagesAsMap };
@@ -82,14 +83,14 @@ export const useOpenChannelMessagesReducer = (
     nextMessageMap: {},
   });
 
-  const updateMessages = (messages: SendbirdBaseMessage[], clearPrev: boolean, currentUserId?: string) => {
-    dispatch({ type: 'update_messages', value: { messages, clearPrev, currentUserId } });
+  const updateMessages = (messages: SendbirdBaseMessage[], clearBeforeAction: boolean, currentUserId?: string) => {
+    dispatch({ type: 'update_messages', value: { messages, clearBeforeAction, currentUserId } });
   };
   const deleteMessages = (messageIds: number[], reqIds: string[]) => {
     dispatch({ type: 'delete_messages', value: { messageIds, reqIds } });
   };
-  const updateNextMessages = (messages: SendbirdBaseMessage[], clearPrev: boolean, currentUserId?: string) => {
-    dispatch({ type: 'update_next_messages', value: { messages, clearPrev, currentUserId } });
+  const updateNextMessages = (messages: SendbirdBaseMessage[], clearBeforeAction: boolean, currentUserId?: string) => {
+    dispatch({ type: 'update_next_messages', value: { messages, clearBeforeAction, currentUserId } });
   };
   const deleteNextMessages = (messageIds: number[], reqIds: string[]) => {
     dispatch({ type: 'delete_next_messages', value: { messageIds, reqIds } });

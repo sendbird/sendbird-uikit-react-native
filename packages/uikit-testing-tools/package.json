@@ -1,0 +1,67 @@
+{
+  "name": "@sendbird/uikit-testing-tools",
+  "version": "2.4.1",
+  "private": true,
+  "description": "UIKit testing tools",
+  "main": "lib/commonjs/index",
+  "module": "lib/module/index",
+  "types": "lib/typescript/src/index.d.ts",
+  "react-native": "src/index",
+  "source": "src/index",
+  "files": [
+    "src",
+    "lib",
+    "!**/__tests__"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "test": "jest",
+    "build": "bob build",
+    "clean": "del lib"
+  },
+  "keywords": [
+    "react",
+    "sendbird"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sendbird/sendbird-uikit-react-native.git",
+    "directory": "packages/uikit-testing-tools"
+  },
+  "author": "Sendbird <support@sendbird.com>",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "bugs": {
+    "url": "https://github.com/sendbird/sendbird-uikit-react-native.git/issues"
+  },
+  "homepage": "https://github.com/sendbird/sendbird-uikit-react-native.git#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "devDependencies": {
+    "@sendbird/chat": "^4.3.0",
+    "@sendbird/uikit-utils": "2.4.1",
+    "@types/jest": "^29.4.0",
+    "@types/react": "*",
+    "@types/react-native": "*",
+    "jest": "^29.4.3",
+    "react": "17.0.2",
+    "react-native": "0.67.5",
+    "react-native-builder-bob": "^0.18.0",
+    "typescript": "4.9.4"
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      [
+        "typescript",
+        {
+          "project": "tsconfig.build.json"
+        }
+      ]
+    ]
+  }
+}

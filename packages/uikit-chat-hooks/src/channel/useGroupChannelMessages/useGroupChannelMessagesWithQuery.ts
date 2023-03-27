@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useRef } from 'react';
 
 import type {
   SendbirdBaseChannel,
@@ -11,6 +11,7 @@ import {
   isDifferentChannel,
   useAsyncEffect,
   useForceUpdate,
+  useFreshCallback,
   useUniqHandlerId,
 } from '@sendbird/uikit-utils';
 
@@ -57,20 +58,17 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
     }
   };
 
-  const init = useCallback(
-    async (uid?: string) => {
-      if (uid) {
-        queryRef.current = createMessageQuery(channel, options?.queryCreator);
-        channelMarkAsRead();
-        if (queryRef.current?.hasNext) {
-          const list = await queryRef.current?.load();
-          updateMessages(list, true, sdk.currentUser.userId);
-        }
-        updateNextMessages([], true, sdk.currentUser.userId);
+  const init = useFreshCallback(async (uid?: string) => {
+    if (uid) {
+      queryRef.current = createMessageQuery(channel, options?.queryCreator);
+      channelMarkAsRead();
+      if (queryRef.current?.hasNext) {
+        const list = await queryRef.current?.load();
+        updateMessages(list, true, sdk.currentUser.userId);
       }
-    },
-    [sdk, channel.url, options?.queryCreator],
-  );
+      updateNextMessages([], true, sdk.currentUser.userId);
+    }
+  });
 
   const channelUpdater = (channel: SendbirdBaseChannel) => {
     if (channel.isGroupChannel() && !isDifferentChannel(channel, channel)) {
@@ -130,29 +128,29 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
     updateLoading(true);
     await init(userId);
     updateLoading(false);
-  }, [init, userId]);
+  }, [channel.url, userId]);
 
-  const refresh: ReturnType<UseGroupChannelMessages>['refresh'] = useCallback(async () => {
+  const refresh: ReturnType<UseGroupChannelMessages>['refresh'] = useFreshCallback(async () => {
     updateRefreshing(true);
     await init(userId);
     updateRefreshing(false);
-  }, [init, userId]);
+  });
 
-  const prev: ReturnType<UseGroupChannelMessages>['prev'] = useCallback(async () => {
+  const prev: ReturnType<UseGroupChannelMessages>['prev'] = useFreshCallback(async () => {
     if (queryRef.current && queryRef.current?.hasNext) {
       const list = await queryRef.current?.load();
       updateMessages(list, false, sdk.currentUser.userId);
     }
-  }, []);
+  });
 
-  const next: ReturnType<UseGroupChannelMessages>['next'] = useCallback(async () => {
+  const next: ReturnType<UseGroupChannelMessages>['next'] = useFreshCallback(async () => {
     if (nextMessages.length > 0) {
       updateMessages(nextMessages, false, sdk.currentUser.userId);
       updateNextMessages([], true, sdk.currentUser.userId);
     }
-  }, [nextMessages.length]);
+  });
 
-  const sendUserMessage: ReturnType<UseGroupChannelMessages>['sendUserMessage'] = useCallback(
+  const sendUserMessage: ReturnType<UseGroupChannelMessages>['sendUserMessage'] = useFreshCallback(
     (params, onPending) => {
       return new Promise((resolve, reject) => {
         channel
@@ -175,9 +173,8 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
           });
       });
     },
-    [channel],
   );
-  const sendFileMessage: ReturnType<UseGroupChannelMessages>['sendFileMessage'] = useCallback(
+  const sendFileMessage: ReturnType<UseGroupChannelMessages>['sendFileMessage'] = useFreshCallback(
     (params, onPending) => {
       return new Promise((resolve, reject) => {
         channel
@@ -200,25 +197,22 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
           });
       });
     },
-    [channel],
   );
-  const updateUserMessage: ReturnType<UseGroupChannelMessages>['updateUserMessage'] = useCallback(
+  const updateUserMessage: ReturnType<UseGroupChannelMessages>['updateUserMessage'] = useFreshCallback(
     async (messageId, params) => {
       const updatedMessage = await channel.updateUserMessage(messageId, params);
       updateMessages([updatedMessage], false, sdk.currentUser.userId);
       return updatedMessage;
     },
-    [channel],
   );
-  const updateFileMessage: ReturnType<UseGroupChannelMessages>['updateFileMessage'] = useCallback(
+  const updateFileMessage: ReturnType<UseGroupChannelMessages>['updateFileMessage'] = useFreshCallback(
     async (messageId, params) => {
       const updatedMessage = await channel.updateFileMessage(messageId, params);
       updateMessages([updatedMessage], false, sdk.currentUser.userId);
       return updatedMessage;
     },
-    [channel],
   );
-  const resendMessage: ReturnType<UseGroupChannelMessages>['resendMessage'] = useCallback(
+  const resendMessage: ReturnType<UseGroupChannelMessages>['resendMessage'] = useFreshCallback(
     async (failedMessage) => {
       const message = await (() => {
         if (failedMessage.isUserMessage()) return channel.resendUserMessage(failedMessage);
@@ -228,19 +222,15 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
 
       if (message) updateNextMessages([message], false, sdk.currentUser.userId);
     },
-    [channel],
   );
-  const deleteMessage: ReturnType<UseGroupChannelMessages>['deleteMessage'] = useCallback(
-    async (message) => {
-      if (message.sendingStatus === 'succeeded') {
-        if (message.isUserMessage()) await channel.deleteMessage(message);
-        if (message.isFileMessage()) await channel.deleteMessage(message);
-      } else {
-        deleteMessages([message.messageId], [message.reqId]);
-      }
-    },
-    [channel],
-  );
+  const deleteMessage: ReturnType<UseGroupChannelMessages>['deleteMessage'] = useFreshCallback(async (message) => {
+    if (message.sendingStatus === 'succeeded') {
+      if (message.isUserMessage()) await channel.deleteMessage(message);
+      if (message.isFileMessage()) await channel.deleteMessage(message);
+    } else {
+      deleteMessages([message.messageId], [message.reqId]);
+    }
+  });
 
   return {
     loading,

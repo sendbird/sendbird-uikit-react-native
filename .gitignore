@@ -11,10 +11,9 @@ dist
 lib
 build
 
-/coverage/
-/types/
-/dist/
-/lib/
+**/coverage/
+**/dist/
+**/lib/
 
 env.ts
 version.ts

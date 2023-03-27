@@ -5,6 +5,7 @@
  * @format
  */
 
+const path = require('path');
 const exclusionList = require('metro-config/src/defaults/exclusionList');
 const { getMetroTools, getMetroAndroidAssetsResolutionFix } = require('react-native-monorepo-tools');
 const monorepoMetroTools = getMetroTools();
@@ -25,7 +26,7 @@ module.exports = {
       return androidAssetsResolutionFix.applyMiddleware(middleware);
     },
   },
-  watchFolders: monorepoMetroTools.watchFolders,
+  watchFolders: [...monorepoMetroTools.watchFolders, path.resolve(__dirname, '../node_modules')],
   resolver: {
     blockList: exclusionList(monorepoMetroTools.blockList),
     extraNodeModules: monorepoMetroTools.extraNodeModules,

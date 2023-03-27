@@ -79,7 +79,7 @@ export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, opt
     } finally {
       updateLoading(false);
     }
-  }, [init, userId]);
+  }, [userId]);
 
   const refresh = useFreshCallback(async () => {
     updateRefreshing(true);
