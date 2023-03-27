@@ -41,11 +41,12 @@ describe('useGroupChannelListWithQuery', () => {
   it('should refresh query', async () => {
     const sdk = createMockSendbirdChat();
 
-    const query = {
-      hasNext: true,
-      next: jest.fn(() => Promise.resolve([])),
-      order: 'latest_last_message',
-    };
+    const query = createMockQuery({
+      type: 'groupChannel',
+      limit: 10,
+      dataLength: 200,
+      sdk,
+    }) as unknown as GroupChannelListQuery;
     const queryCreator = jest.fn(() => query);
 
     const { result } = renderHook(() => useGroupChannelListWithQuery(sdk, sdk.currentUser.userId, { queryCreator }));
