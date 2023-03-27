@@ -89,6 +89,7 @@ describe('useGroupChannelListWithCollection', () => {
     );
 
     await waitFor(() => {
+      expect(fetchableCollection.loadMore).toHaveBeenCalledTimes(1);
       expect(result.current.groupChannels).toHaveLength(10);
     });
 
@@ -97,7 +98,7 @@ describe('useGroupChannelListWithCollection', () => {
     });
 
     await waitFor(() => {
-      expect(fetchableCollection.loadMore).toHaveBeenCalled();
+      expect(fetchableCollection.loadMore).toHaveBeenCalledTimes(2);
       expect(result.current.groupChannels).toHaveLength(20);
     });
   });
