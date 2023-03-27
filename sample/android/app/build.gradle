@@ -80,7 +80,7 @@ import com.android.build.OutputFile
 
 project.ext.react = [
     enableHermes: false,  // clean and rebuild if changing
-    cliPath: ["node", "-e", "console.log(require('react-native/cli').bin);"].execute([], projectDir).text.trim(),
+    cliPath: "../../../node_modules/react-native/cli.js" // ["node", "-e", "console.log(require('react-native/cli').bin);"].execute([], projectDir).text.trim() >> not working because weird behavior of [react-native/react.gradle > detectCliPath]
 ]
 
 apply from: "../../../node_modules/react-native/react.gradle"
