@@ -7,7 +7,7 @@ import type {
 } from '@sendbird/uikit-utils';
 import { Logger, hash } from '@sendbird/uikit-utils';
 
-import { GPT_USER_ID, GPT_USER_NAME } from '../constants';
+import { GPT_MESSAGE_TYPE, GPT_USER_ID, GPT_USER_NAME } from '../constants';
 
 export interface ChatGPTInterface {
   prompt(message: string, context?: string[]): Promise<string>;
@@ -65,7 +65,12 @@ export class ChatGPTUser implements ChatGPTUserInterface {
       const channelId = hash(this.userId);
       const handler = new GroupChannelHandler({
         onMessageReceived: async (channel: SendbirdBaseChannel, message: SendbirdBaseMessage) => {
-          if (channel.url === this.focusedChannelUrl && channel.isGroupChannel() && message.isUserMessage()) {
+          if (
+            channel.url === this.focusedChannelUrl &&
+            channel.isGroupChannel() &&
+            message.isUserMessage() &&
+            message.customType !== GPT_MESSAGE_TYPE
+          ) {
             channel.markAsRead().catch(() => void 0);
             channel.markAsDelivered().catch(() => void 0);
             await channel.startTyping().catch(() => void 0);

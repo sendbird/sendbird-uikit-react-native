@@ -302,6 +302,7 @@ export interface StringSet {
     CHANNEL_MESSAGE_EDIT: string;
     CHANNEL_MESSAGE_SAVE: string;
     CHANNEL_MESSAGE_DELETE: string;
+    CHANNEL_MESSAGE_ASK_TO_GPT: string;
     /** Channel > Message > Delete confirm **/
     CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE: string;
     CHANNEL_MESSAGE_DELETE_CONFIRM_OK: string;

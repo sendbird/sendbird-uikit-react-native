@@ -27,7 +27,7 @@ import {
 import type { ChatFlatListRef } from '../../../components/ChatFlatList';
 import ChatFlatList from '../../../components/ChatFlatList';
 import { ReactionAddons } from '../../../components/ReactionAddons';
-import { DEPRECATION_WARNING } from '../../../constants';
+import { DEPRECATION_WARNING, GPT_MESSAGE_TYPE } from '../../../constants';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../../hooks/useContext';
 import SBUUtils from '../../../libs/SBUUtils';
 import { GroupChannelContexts } from '../module/moduleContext';
@@ -165,7 +165,7 @@ const useGetMessagePressActions = ({
   const { openSheet } = useBottomSheet();
   const { alert } = useAlert();
   const { clipboardService, fileService } = usePlatformService();
-  const { features } = useSendbirdChat();
+  const { features, chatGPT } = useSendbirdChat();
   const { setMessageToEdit } = useContext(GroupChannelContexts.Fragment);
 
   const handleFailedMessage = (message: HandleableMessage) => {
@@ -212,6 +212,20 @@ const useGetMessagePressActions = ({
     };
 
     if (msg.isUserMessage()) {
+      sheetItems.push({
+        icon: 'chat-show',
+        title: STRINGS.LABELS.CHANNEL_MESSAGE_ASK_TO_GPT,
+        onPress: async () => {
+          try {
+            toast.show('🤖...');
+            const response = await chatGPT.prompt(`${msg.message}`);
+            channel.sendUserMessage({ message: response, customType: GPT_MESSAGE_TYPE });
+          } catch (e) {
+            toast.show(STRINGS.TOAST.UNKNOWN_ERROR, 'error');
+          }
+        },
+      });
+
       sheetItems.push({
         icon: 'copy',
         title: STRINGS.LABELS.CHANNEL_MESSAGE_COPY,

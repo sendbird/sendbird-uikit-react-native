@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { Pressable, PressableProps, View } from 'react-native';
 
-import { createStyleSheet } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdMessage } from '@sendbird/uikit-utils';
+import { Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import type { SendbirdMessage, SendbirdUserMessage } from '@sendbird/uikit-utils';
 import {
   calcMessageGrouping,
   conditionChaining,
@@ -11,7 +11,7 @@ import {
   useIIFE,
 } from '@sendbird/uikit-utils';
 
-import { DEFAULT_LONG_PRESS_DELAY } from '../../constants';
+import { DEFAULT_LONG_PRESS_DELAY, GPT_MESSAGE_TYPE } from '../../constants';
 import type { GroupChannelProps } from '../../domain/groupChannel/types';
 import { useSendbirdChat } from '../../hooks/useContext';
 import { ReactionAddons } from '../ReactionAddons';
@@ -118,6 +118,24 @@ const MessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
     );
   });
 
+  if (message.customType === GPT_MESSAGE_TYPE && message.isUserMessage()) {
+    return (
+      <MessageContainer>
+        <MessageDateSeparator message={message} prevMessage={rest.prevMessage} />
+        <Pressable
+          {...{
+            disabled: !onPress && !onLongPress,
+            onPress,
+            onLongPress,
+            delayLongPress: DEFAULT_LONG_PRESS_DELAY,
+          }}
+        >
+          <GPTMessageView message={message}>{reactionChildren}</GPTMessageView>
+        </Pressable>
+      </MessageContainer>
+    );
+  }
+
   return (
     <MessageContainer>
       <MessageDateSeparator message={message} prevMessage={rest.prevMessage} />
@@ -149,6 +167,18 @@ const MessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
         </View>
       )}
     </MessageContainer>
+  );
+};
+
+const GPTMessageView = (props: PropsWithChildren<{ message: SendbirdUserMessage }>) => {
+  const { colors } = useUIKitTheme();
+  return (
+    <View style={{ padding: 12, backgroundColor: colors.secondary, borderRadius: 8, marginBottom: 6, marginTop: 2 }}>
+      <Text caption2 color={colors.onBackgroundReverse01}>
+        {props.message.message}
+      </Text>
+      {props.children ? <View style={{ paddingTop: 8 }}>{props.children}</View> : null}
+    </View>
   );
 };
 
