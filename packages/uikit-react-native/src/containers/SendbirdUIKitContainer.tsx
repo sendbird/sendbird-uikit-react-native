@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -29,12 +29,14 @@ import { ReactionProvider } from '../contexts/ReactionCtx';
 import type { UIKitFeaturesInSendbirdChatContext } from '../contexts/SendbirdChatCtx';
 import { SendbirdChatProvider } from '../contexts/SendbirdChatCtx';
 import { UserProfileProvider } from '../contexts/UserProfileCtx';
-import EmojiManager from '../libs/EmojiManager';
+import { useEmojiManager } from '../hooks/libs/useEmojiManager';
+import { useImageCompressionConfig } from '../hooks/libs/useImageCompressionConfig';
+import { useInternalStorage } from '../hooks/libs/useInternalStorage';
+import { useMentionManager } from '../hooks/libs/useMentionManager';
+import type { GiphyServiceInterface } from '../libs/GiphyService';
 import type { ImageCompressionConfigInterface } from '../libs/ImageCompressionConfig';
-import ImageCompressionConfig from '../libs/ImageCompressionConfig';
-import InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
-import MentionConfig, { MentionConfigInterface } from '../libs/MentionConfig';
-import MentionManager from '../libs/MentionManager';
+import type InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
+import type { MentionConfigInterface } from '../libs/MentionConfig';
 import StringSetEn from '../localization/StringSet.en';
 import type { StringSet } from '../localization/StringSet.type';
 import SBUDynamicModule from '../platform/dynamicModule';
@@ -60,6 +62,7 @@ export const SendbirdUIKit = Object.freeze({
     USE_USER_ID_FOR_NICKNAME: false,
     USER_MENTION: false,
     IMAGE_COMPRESSION: true,
+    GIPHY: false,
   },
 });
 
@@ -102,6 +105,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   };
   userMention?: Pick<Partial<MentionConfigInterface>, 'mentionLimit' | 'suggestionLimit' | 'debounceMills'>;
   imageCompression?: Partial<ImageCompressionConfigInterface>;
+  giphyService: GiphyServiceInterface;
 }>;
 
 const SendbirdUIKitContainer = ({
@@ -116,14 +120,20 @@ const SendbirdUIKitContainer = ({
   userProfile,
   userMention,
   imageCompression,
+  giphyService,
 }: SendbirdUIKitContainerProps) => {
+  const theme = styles?.theme ?? LightUIKitTheme;
   const defaultStringSet = localization?.stringSet ?? StringSetEn;
 
   const isFirstMount = useIsFirstMount();
   const unsubscribes = useRef<Array<() => void>>([]);
-  const internalStorage = useMemo(
-    () => (chatOptions?.localCacheStorage ? new InternalLocalCacheStorage(chatOptions.localCacheStorage) : undefined),
-    [chatOptions?.localCacheStorage],
+
+  const imageCompressionConfig = useImageCompressionConfig(imageCompression);
+  const internalStorage = useInternalStorage(chatOptions?.localCacheStorage);
+  const emojiManager = useEmojiManager(internalStorage);
+  const mentionManager = useMentionManager(
+    chatOptions?.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION,
+    userMention,
   );
 
   const [sdkInstance, setSdkInstance] = useState<SendbirdChatSDK>(() => {
@@ -132,31 +142,11 @@ const SendbirdUIKitContainer = ({
     return sendbird.chatSDK;
   });
 
-  const emojiManager = useMemo(() => new EmojiManager(internalStorage), [internalStorage]);
-
-  const mentionManager = useMemo(() => {
-    const config = new MentionConfig({
-      mentionLimit: userMention?.mentionLimit || MentionConfig.DEFAULT.MENTION_LIMIT,
-      suggestionLimit: userMention?.suggestionLimit || MentionConfig.DEFAULT.SUGGESTION_LIMIT,
-      debounceMills: userMention?.debounceMills ?? MentionConfig.DEFAULT.DEBOUNCE_MILLS,
-      delimiter: MentionConfig.DEFAULT.DELIMITER,
-      trigger: MentionConfig.DEFAULT.TRIGGER,
-    });
-    return new MentionManager(config, chatOptions?.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION);
-  }, [
-    chatOptions?.enableUserMention,
-    userMention?.mentionLimit,
-    userMention?.suggestionLimit,
-    userMention?.debounceMills,
-  ]);
-
-  const imageCompressionConfig = useMemo(() => {
-    return new ImageCompressionConfig({
-      compressionRate: imageCompression?.compressionRate || ImageCompressionConfig.DEFAULT.COMPRESSION_RATE,
-      width: imageCompression?.width,
-      height: imageCompression?.height,
-    });
-  }, [imageCompression?.compressionRate, imageCompression?.width, imageCompression?.height]);
+  useEffect(() => {
+    if (giphyService) {
+      giphyService.updateDialogConfig({ theme: theme.colorScheme });
+    }
+  }, [giphyService, theme.colorScheme]);
 
   useLayoutEffect(() => {
     if (!isFirstMount) {
@@ -191,6 +181,7 @@ const SendbirdUIKitContainer = ({
         emojiManager={emojiManager}
         mentionManager={mentionManager}
         imageCompressionConfig={imageCompressionConfig}
+        giphyService={giphyService}
         enableAutoPushTokenRegistration={
           chatOptions?.enableAutoPushTokenRegistration ?? SendbirdUIKit.DEFAULT.AUTO_PUSH_TOKEN_REGISTRATION
         }
@@ -206,6 +197,7 @@ const SendbirdUIKitContainer = ({
         }
         enableUserMention={chatOptions?.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION}
         enableImageCompression={chatOptions?.enableImageCompression ?? SendbirdUIKit.DEFAULT.IMAGE_COMPRESSION}
+        enableGiphy={chatOptions?.enableGiphy ?? SendbirdUIKit.DEFAULT.GIPHY}
       >
         <LocalizationProvider stringSet={defaultStringSet}>
           <PlatformServiceProvider
@@ -214,7 +206,7 @@ const SendbirdUIKitContainer = ({
             clipboardService={platformServices.clipboard}
             mediaService={platformServices.media}
           >
-            <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
+            <UIKitThemeProvider theme={theme}>
               <HeaderStyleProvider
                 HeaderComponent={styles?.HeaderComponent ?? Header}
                 defaultTitleAlign={styles?.defaultHeaderTitleAlign ?? 'left'}

@@ -300,6 +300,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       CHANNEL_INPUT_ATTACHMENT_PHOTO_LIBRARY:
         overrides?.GROUP_CHANNEL?.DIALOG_ATTACHMENT_PHOTO_LIBRARY ?? 'Photo library',
       CHANNEL_INPUT_ATTACHMENT_FILES: overrides?.GROUP_CHANNEL?.DIALOG_ATTACHMENT_FILES ?? 'Files',
+      CHANNEL_INPUT_ATTACHMENT_GIPHY: 'GIPHY',
       CHANNEL_INPUT_PLACEHOLDER_ACTIVE: overrides?.GROUP_CHANNEL?.INPUT_PLACEHOLDER_ACTIVE ?? 'Enter message',
       CHANNEL_INPUT_PLACEHOLDER_DISABLED:
         overrides?.GROUP_CHANNEL?.INPUT_PLACEHOLDER_DISABLED ?? 'Chat not available in this channel.',

@@ -99,6 +99,11 @@ PODS:
     - FlipperKit/Core
     - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
+  - Giphy (2.2.2):
+    - libwebp
+  - giphy-react-native-sdk (2.1.3):
+    - Giphy (= 2.2.2)
+    - React-Core
   - glog (0.3.5)
   - GoogleDataTransport (9.2.1):
     - GoogleUtilities/Environment (~> 7.7)
@@ -502,6 +507,7 @@ DEPENDENCIES:
   - FlipperKit/FlipperKitReactPlugin (= 0.99.0)
   - FlipperKit/FlipperKitUserDefaultsPlugin (= 0.99.0)
   - FlipperKit/SKIOSNetworkPlugin (= 0.99.0)
+  - "giphy-react-native-sdk (from `../../node_modules/@giphy/react-native-sdk`)"
   - glog (from `../../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - OpenSSL-Universal (= 1.1.180)
   - Permission-Camera (from `../../node_modules/react-native-permissions/ios/Camera`)
@@ -576,6 +582,7 @@ SPEC REPOS:
     - Flipper-RSocket
     - FlipperKit
     - fmt
+    - Giphy
     - GoogleDataTransport
     - GoogleUtilities
     - libevent
@@ -597,6 +604,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/Libraries/FBLazyVector"
   FBReactNativeSpec:
     :path: "../../node_modules/react-native/React/FBReactNativeSpec"
+  giphy-react-native-sdk:
+    :path: "../../node_modules/@giphy/react-native-sdk"
   glog:
     :podspec: "../../node_modules/react-native/third-party-podspecs/glog.podspec"
   Permission-Camera:
@@ -723,6 +732,8 @@ SPEC CHECKSUMS:
   Flipper-RSocket: d9d9ade67cbecf6ac10730304bf5607266dd2541
   FlipperKit: d8d346844eca5d9120c17d441a2f38596e8ed2b9
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
+  Giphy: 18fd77d3a0fe8584bf32d80e59df8e5c0e4215ba
+  giphy-react-native-sdk: 0249c4872954ae09a423d02c9b0ce0ffaa72aef4
   glog: 85ecdd10ee8d8ec362ef519a6a45ff9aa27b2e85
   GoogleDataTransport: ea169759df570f4e37bdee1623ec32a7e64e67c4
   GoogleUtilities: c2bdc4cf2ce786c4d2e6b3bcfd599a25ca78f06f

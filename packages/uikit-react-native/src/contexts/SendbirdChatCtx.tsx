@@ -10,31 +10,17 @@ import type {
 import { confirmAndMarkAsDelivered, useAppState, useForceUpdate } from '@sendbird/uikit-utils';
 
 import type EmojiManager from '../libs/EmojiManager';
+import type { GiphyServiceInterface } from '../libs/GiphyService';
 import type ImageCompressionConfig from '../libs/ImageCompressionConfig';
 import type MentionManager from '../libs/MentionManager';
 import type { FileType } from '../platform/types';
-
-export interface UIKitFeaturesInSendbirdChatContext {
-  enableAutoPushTokenRegistration: boolean;
-  enableChannelListTypingIndicator: boolean;
-  enableChannelListMessageReceiptStatus: boolean;
-  enableUseUserIdForNickname: boolean;
-  enableUserMention: boolean;
-  enableImageCompression: boolean;
-}
-
-interface Props extends UIKitFeaturesInSendbirdChatContext, React.PropsWithChildren {
-  sdkInstance: SendbirdChatSDK;
-  emojiManager: EmojiManager;
-  mentionManager: MentionManager;
-  imageCompressionConfig: ImageCompressionConfig;
-}
 
 export type SendbirdChatContextType = {
   sdk: SendbirdChatSDK;
   emojiManager: EmojiManager;
   mentionManager: MentionManager;
   imageCompressionConfig: ImageCompressionConfig;
+  giphyService: GiphyServiceInterface;
   currentUser?: SendbirdUser;
   setCurrentUser: React.Dispatch<React.SetStateAction<SendbirdUser | undefined>>;
 
@@ -50,6 +36,7 @@ export type SendbirdChatContextType = {
     useUserIdForNicknameEnabled: boolean;
     userMentionEnabled: boolean;
     imageCompressionEnabled: boolean;
+    giphyEnabled: boolean;
 
     // Sendbird application features
     deliveryReceiptEnabled: boolean;
@@ -59,6 +46,24 @@ export type SendbirdChatContextType = {
   };
 };
 
+export interface UIKitFeaturesInSendbirdChatContext {
+  enableAutoPushTokenRegistration: boolean;
+  enableChannelListTypingIndicator: boolean;
+  enableChannelListMessageReceiptStatus: boolean;
+  enableUseUserIdForNickname: boolean;
+  enableUserMention: boolean;
+  enableImageCompression: boolean;
+  enableGiphy: boolean;
+}
+
+interface Props extends UIKitFeaturesInSendbirdChatContext, React.PropsWithChildren {
+  sdkInstance: SendbirdChatSDK;
+  emojiManager: EmojiManager;
+  mentionManager: MentionManager;
+  imageCompressionConfig: ImageCompressionConfig;
+  giphyService: GiphyServiceInterface;
+}
+
 export const SendbirdChatContext = React.createContext<SendbirdChatContextType | null>(null);
 export const SendbirdChatProvider = ({
   children,
@@ -66,12 +71,14 @@ export const SendbirdChatProvider = ({
   emojiManager,
   mentionManager,
   imageCompressionConfig,
+  giphyService,
   enableAutoPushTokenRegistration,
   enableChannelListMessageReceiptStatus,
   enableChannelListTypingIndicator,
   enableUseUserIdForNickname,
   enableUserMention,
   enableImageCompression,
+  enableGiphy,
 }: Props) => {
   const [currentUser, _setCurrentUser] = useState<SendbirdUser>();
   const forceUpdate = useForceUpdate();
@@ -133,6 +140,8 @@ export const SendbirdChatProvider = ({
     emojiManager,
     mentionManager,
     imageCompressionConfig,
+    giphyService,
+
     currentUser,
     setCurrentUser,
 
@@ -147,6 +156,7 @@ export const SendbirdChatProvider = ({
       useUserIdForNicknameEnabled: enableUseUserIdForNickname,
       userMentionEnabled: enableUserMention,
       imageCompressionEnabled: enableImageCompression,
+      giphyEnabled: enableGiphy,
     },
   };
 
