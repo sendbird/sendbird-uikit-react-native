@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 import { AppState } from 'react-native';
 
 import { SendbirdUIKitContainer, useSendbirdChat } from '@sendbird/uikit-react-native';
+import { GiphyService } from '@sendbird/uikit-react-native';
 import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 // import LogView from './components/LogView';
@@ -61,6 +62,7 @@ const App = () => {
   return (
     <SendbirdUIKitContainer
       appId={APP_ID}
+      giphyService={new GiphyService('ZXuni8gSq1FY7qHnHQP7QoDsF8JmwHQl')}
       chatOptions={{
         localCacheStorage: AsyncStorage,
         onInitialized: SetSendbirdSDK,

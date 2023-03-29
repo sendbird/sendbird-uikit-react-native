@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -33,6 +33,7 @@ import { useEmojiManager } from '../hooks/libs/useEmojiManager';
 import { useImageCompressionConfig } from '../hooks/libs/useImageCompressionConfig';
 import { useInternalStorage } from '../hooks/libs/useInternalStorage';
 import { useMentionManager } from '../hooks/libs/useMentionManager';
+import type { GiphyServiceInterface } from '../libs/GiphyService';
 import type { ImageCompressionConfigInterface } from '../libs/ImageCompressionConfig';
 import type InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
 import type { MentionConfigInterface } from '../libs/MentionConfig';
@@ -103,6 +104,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   };
   userMention?: Pick<Partial<MentionConfigInterface>, 'mentionLimit' | 'suggestionLimit' | 'debounceMills'>;
   imageCompression?: Partial<ImageCompressionConfigInterface>;
+  giphyService?: GiphyServiceInterface;
 }>;
 
 const SendbirdUIKitContainer = ({
@@ -117,6 +119,7 @@ const SendbirdUIKitContainer = ({
   userProfile,
   userMention,
   imageCompression,
+  giphyService,
 }: SendbirdUIKitContainerProps) => {
   const theme = styles?.theme ?? LightUIKitTheme;
   const defaultStringSet = localization?.stringSet ?? StringSetEn;
@@ -136,6 +139,12 @@ const SendbirdUIKitContainer = ({
     unsubscribes.current = sendbird.unsubscribes;
     return sendbird.chatSDK;
   });
+
+  useEffect(() => {
+    if (giphyService) {
+      giphyService.updateDialogConfig({ theme: theme.colorScheme });
+    }
+  }, [giphyService, theme.colorScheme]);
 
   useLayoutEffect(() => {
     if (!isFirstMount) {

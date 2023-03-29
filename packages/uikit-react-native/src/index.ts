@@ -1,8 +1,8 @@
-/** Components **/
 import { Platform } from 'react-native';
 
 import { Logger } from '@sendbird/uikit-utils';
 
+/** Components **/
 export { default as ChannelInput } from './components/ChannelInput';
 export { default as MessageRenderer } from './components/MessageRenderer';
 export { default as OpenChannelMessageRenderer } from './components/OpenChannelMessageRenderer';
@@ -123,6 +123,7 @@ export { default as SendbirdUIKitContainer, SendbirdUIKit } from './containers/S
 export type { SendbirdUIKitContainerProps } from './containers/SendbirdUIKitContainer';
 export { default as SBUError } from './libs/SBUError';
 export { default as SBUUtils } from './libs/SBUUtils';
+export { GiphyService } from './libs/GiphyService';
 
 export * from './types';
 
