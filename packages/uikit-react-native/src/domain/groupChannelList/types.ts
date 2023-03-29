@@ -84,4 +84,4 @@ export interface GroupChannelListModule {
 }
 
 export type GroupChannelListFragment = CommonComponent<GroupChannelListProps['Fragment']>;
-export type GroupChannelType = 'GROUP' | 'SUPER_GROUP' | 'BROADCAST';
+export type GroupChannelType = 'GROUP' | 'SUPER_GROUP' | 'BROADCAST' | 'CHAT_GPT';

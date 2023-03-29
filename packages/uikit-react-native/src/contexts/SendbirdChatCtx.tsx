@@ -9,6 +9,7 @@ import type {
 } from '@sendbird/uikit-utils';
 import { confirmAndMarkAsDelivered, useAppState, useForceUpdate } from '@sendbird/uikit-utils';
 
+import type { ChatGPTInterface, ChatGPTUserInterface } from '../libs/ChatGPT';
 import type EmojiManager from '../libs/EmojiManager';
 import type { GiphyServiceInterface } from '../libs/GiphyService';
 import type ImageCompressionConfig from '../libs/ImageCompressionConfig';
@@ -21,6 +22,8 @@ export type SendbirdChatContextType = {
   mentionManager: MentionManager;
   imageCompressionConfig: ImageCompressionConfig;
   giphyService: GiphyServiceInterface;
+  chatGPT: ChatGPTInterface;
+  chatGPTUser: ChatGPTUserInterface;
   currentUser?: SendbirdUser;
   setCurrentUser: React.Dispatch<React.SetStateAction<SendbirdUser | undefined>>;
 
@@ -54,6 +57,8 @@ export interface UIKitFeaturesInSendbirdChatContext {
   enableUserMention: boolean;
   enableImageCompression: boolean;
   enableGiphy: boolean;
+  enableChatGPTReply: boolean;
+  enableChatGPTConversation: boolean;
 }
 
 interface Props extends UIKitFeaturesInSendbirdChatContext, React.PropsWithChildren {
@@ -62,6 +67,8 @@ interface Props extends UIKitFeaturesInSendbirdChatContext, React.PropsWithChild
   mentionManager: MentionManager;
   imageCompressionConfig: ImageCompressionConfig;
   giphyService: GiphyServiceInterface;
+  chatGPT: ChatGPTInterface;
+  chatGPTUser: ChatGPTUserInterface;
 }
 
 export const SendbirdChatContext = React.createContext<SendbirdChatContextType | null>(null);
@@ -72,6 +79,8 @@ export const SendbirdChatProvider = ({
   mentionManager,
   imageCompressionConfig,
   giphyService,
+  chatGPT,
+  chatGPTUser,
   enableAutoPushTokenRegistration,
   enableChannelListMessageReceiptStatus,
   enableChannelListTypingIndicator,
@@ -141,6 +150,8 @@ export const SendbirdChatProvider = ({
     mentionManager,
     imageCompressionConfig,
     giphyService,
+    chatGPT,
+    chatGPTUser,
 
     currentUser,
     setCurrentUser,

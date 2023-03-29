@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -33,6 +33,7 @@ import { useEmojiManager } from '../hooks/libs/useEmojiManager';
 import { useImageCompressionConfig } from '../hooks/libs/useImageCompressionConfig';
 import { useInternalStorage } from '../hooks/libs/useInternalStorage';
 import { useMentionManager } from '../hooks/libs/useMentionManager';
+import { ChatGPTUser, chatGPTService } from '../libs/ChatGPT';
 import type { GiphyServiceInterface } from '../libs/GiphyService';
 import type { ImageCompressionConfigInterface } from '../libs/ImageCompressionConfig';
 import type InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
@@ -63,11 +64,14 @@ export const SendbirdUIKit = Object.freeze({
     USER_MENTION: false,
     IMAGE_COMPRESSION: true,
     GIPHY: false,
+    CHAT_GPT_REPLY: false,
+    CHAT_GPT_CONVERSATION: false,
   },
 });
 
 export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   appId: string;
+  openaiAPIKey?: string;
   platformServices: {
     file: FileServiceInterface;
     notification: NotificationServiceInterface;
@@ -111,6 +115,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
 const SendbirdUIKitContainer = ({
   children,
   appId,
+  openaiAPIKey,
   chatOptions,
   platformServices,
   localization,
@@ -141,6 +146,18 @@ const SendbirdUIKitContainer = ({
     unsubscribes.current = sendbird.unsubscribes;
     return sendbird.chatSDK;
   });
+
+  const chatGPT = useMemo(() => chatGPTService(openaiAPIKey), [openaiAPIKey]);
+  const chatGPTUser = useMemo(() => {
+    const gptUserSDK = Sendbird.init({
+      appId,
+      modules: [new GroupChannelModule(), new OpenChannelModule()],
+      localCacheEnabled: Boolean(internalStorage), // Remove this
+      useAsyncStorageStore: internalStorage as never, // Remove this
+      newInstance: true,
+    });
+    return new ChatGPTUser(gptUserSDK, chatGPT);
+  }, [chatGPT]);
 
   useEffect(() => {
     if (giphyService) {
@@ -182,6 +199,8 @@ const SendbirdUIKitContainer = ({
         mentionManager={mentionManager}
         imageCompressionConfig={imageCompressionConfig}
         giphyService={giphyService}
+        chatGPT={chatGPT}
+        chatGPTUser={chatGPTUser}
         enableAutoPushTokenRegistration={
           chatOptions?.enableAutoPushTokenRegistration ?? SendbirdUIKit.DEFAULT.AUTO_PUSH_TOKEN_REGISTRATION
         }
@@ -198,6 +217,10 @@ const SendbirdUIKitContainer = ({
         enableUserMention={chatOptions?.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION}
         enableImageCompression={chatOptions?.enableImageCompression ?? SendbirdUIKit.DEFAULT.IMAGE_COMPRESSION}
         enableGiphy={chatOptions?.enableGiphy ?? SendbirdUIKit.DEFAULT.GIPHY}
+        enableChatGPTReply={chatOptions?.enableChatGPTReply ?? SendbirdUIKit.DEFAULT.CHAT_GPT_REPLY}
+        enableChatGPTConversation={
+          chatOptions?.enableChatGPTConversation ?? SendbirdUIKit.DEFAULT.CHAT_GPT_CONVERSATION
+        }
       >
         <LocalizationProvider stringSet={defaultStringSet}>
           <PlatformServiceProvider

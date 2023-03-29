@@ -227,6 +227,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       TYPE_SELECTOR_GROUP: 'Group',
       TYPE_SELECTOR_SUPER_GROUP: 'Super group',
       TYPE_SELECTOR_BROADCAST: 'Broadcast',
+      TYPE_SELECTOR_CHAT_GPT: 'ChatGPT',
       DIALOG_CHANNEL_TITLE: (currentUserId, channel) =>
         getGroupChannelTitle(currentUserId, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       DIALOG_CHANNEL_NOTIFICATION: (channel) => {
@@ -290,6 +291,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       CHANNEL_MESSAGE_EDIT: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_EDIT ?? 'Edit',
       CHANNEL_MESSAGE_SAVE: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_SAVE ?? 'Save',
       CHANNEL_MESSAGE_DELETE: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_DELETE ?? 'Delete',
+      CHANNEL_MESSAGE_ASK_TO_GPT: 'Ask to ChatGPT',
       CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE:
         overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_DELETE_CONFIRM_TITLE ?? 'Delete message?',
       CHANNEL_MESSAGE_DELETE_CONFIRM_OK: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_DELETE_CONFIRM_OK ?? 'Delete',

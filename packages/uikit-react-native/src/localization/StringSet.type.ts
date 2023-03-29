@@ -239,6 +239,7 @@ export interface StringSet {
     TYPE_SELECTOR_GROUP: string;
     TYPE_SELECTOR_SUPER_GROUP: string;
     TYPE_SELECTOR_BROADCAST: string;
+    TYPE_SELECTOR_CHAT_GPT: string;
 
     /** GroupChannelList > Dialog > Channel */
     DIALOG_CHANNEL_TITLE: (currentUserId: string, channel: SendbirdGroupChannel) => string;
@@ -301,6 +302,7 @@ export interface StringSet {
     CHANNEL_MESSAGE_EDIT: string;
     CHANNEL_MESSAGE_SAVE: string;
     CHANNEL_MESSAGE_DELETE: string;
+    CHANNEL_MESSAGE_ASK_TO_GPT: string;
     /** Channel > Message > Delete confirm **/
     CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE: string;
     CHANNEL_MESSAGE_DELETE_CONFIRM_OK: string;
