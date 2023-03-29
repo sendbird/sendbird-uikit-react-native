@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -29,12 +29,13 @@ import { ReactionProvider } from '../contexts/ReactionCtx';
 import type { UIKitFeaturesInSendbirdChatContext } from '../contexts/SendbirdChatCtx';
 import { SendbirdChatProvider } from '../contexts/SendbirdChatCtx';
 import { UserProfileProvider } from '../contexts/UserProfileCtx';
-import EmojiManager from '../libs/EmojiManager';
+import { useEmojiManager } from '../hooks/libs/useEmojiManager';
+import { useImageCompressionConfig } from '../hooks/libs/useImageCompressionConfig';
+import { useInternalStorage } from '../hooks/libs/useInternalStorage';
+import { useMentionManager } from '../hooks/libs/useMentionManager';
 import type { ImageCompressionConfigInterface } from '../libs/ImageCompressionConfig';
-import ImageCompressionConfig from '../libs/ImageCompressionConfig';
-import InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
-import MentionConfig, { MentionConfigInterface } from '../libs/MentionConfig';
-import MentionManager from '../libs/MentionManager';
+import type InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
+import type { MentionConfigInterface } from '../libs/MentionConfig';
 import StringSetEn from '../localization/StringSet.en';
 import type { StringSet } from '../localization/StringSet.type';
 import SBUDynamicModule from '../platform/dynamicModule';
@@ -117,46 +118,24 @@ const SendbirdUIKitContainer = ({
   userMention,
   imageCompression,
 }: SendbirdUIKitContainerProps) => {
+  const theme = styles?.theme ?? LightUIKitTheme;
   const defaultStringSet = localization?.stringSet ?? StringSetEn;
 
   const isFirstMount = useIsFirstMount();
   const unsubscribes = useRef<Array<() => void>>([]);
-  const internalStorage = useMemo(
-    () => (chatOptions?.localCacheStorage ? new InternalLocalCacheStorage(chatOptions.localCacheStorage) : undefined),
-    [chatOptions?.localCacheStorage],
+  const internalStorage = useInternalStorage(chatOptions?.localCacheStorage);
+  const emojiManager = useEmojiManager(internalStorage);
+  const mentionManager = useMentionManager(
+    chatOptions?.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION,
+    userMention,
   );
+  const imageCompressionConfig = useImageCompressionConfig(imageCompression);
 
   const [sdkInstance, setSdkInstance] = useState<SendbirdChatSDK>(() => {
     const sendbird = initializeSendbird(appId, internalStorage, chatOptions?.onInitialized);
     unsubscribes.current = sendbird.unsubscribes;
     return sendbird.chatSDK;
   });
-
-  const emojiManager = useMemo(() => new EmojiManager(internalStorage), [internalStorage]);
-
-  const mentionManager = useMemo(() => {
-    const config = new MentionConfig({
-      mentionLimit: userMention?.mentionLimit || MentionConfig.DEFAULT.MENTION_LIMIT,
-      suggestionLimit: userMention?.suggestionLimit || MentionConfig.DEFAULT.SUGGESTION_LIMIT,
-      debounceMills: userMention?.debounceMills ?? MentionConfig.DEFAULT.DEBOUNCE_MILLS,
-      delimiter: MentionConfig.DEFAULT.DELIMITER,
-      trigger: MentionConfig.DEFAULT.TRIGGER,
-    });
-    return new MentionManager(config, chatOptions?.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION);
-  }, [
-    chatOptions?.enableUserMention,
-    userMention?.mentionLimit,
-    userMention?.suggestionLimit,
-    userMention?.debounceMills,
-  ]);
-
-  const imageCompressionConfig = useMemo(() => {
-    return new ImageCompressionConfig({
-      compressionRate: imageCompression?.compressionRate || ImageCompressionConfig.DEFAULT.COMPRESSION_RATE,
-      width: imageCompression?.width,
-      height: imageCompression?.height,
-    });
-  }, [imageCompression?.compressionRate, imageCompression?.width, imageCompression?.height]);
 
   useLayoutEffect(() => {
     if (!isFirstMount) {
@@ -214,7 +193,7 @@ const SendbirdUIKitContainer = ({
             clipboardService={platformServices.clipboard}
             mediaService={platformServices.media}
           >
-            <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
+            <UIKitThemeProvider theme={theme}>
               <HeaderStyleProvider
                 HeaderComponent={styles?.HeaderComponent ?? Header}
                 defaultTitleAlign={styles?.defaultHeaderTitleAlign ?? 'left'}
