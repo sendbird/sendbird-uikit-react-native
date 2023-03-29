@@ -71,7 +71,7 @@ export const SendbirdUIKit = Object.freeze({
 
 export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   appId: string;
-  openaiAPIKey: string;
+  openaiAPIKey?: string;
   platformServices: {
     file: FileServiceInterface;
     notification: NotificationServiceInterface;

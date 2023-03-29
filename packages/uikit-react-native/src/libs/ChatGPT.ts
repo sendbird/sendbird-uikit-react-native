@@ -10,6 +10,7 @@ import { Logger, hash } from '@sendbird/uikit-utils';
 import { GPT_MESSAGE_TYPE, GPT_USER_ID, GPT_USER_NAME } from '../constants';
 
 export interface ChatGPTInterface {
+  activated: boolean;
   prompt(message: string, context?: string[]): Promise<string>;
 }
 
@@ -18,7 +19,16 @@ export interface ChatGPTUserInterface {
   blur(): void;
 }
 
-export function chatGPTService(apiKey: string): ChatGPTInterface {
+export function chatGPTService(apiKey?: string): ChatGPTInterface {
+  if (!apiKey) {
+    return {
+      activated: false,
+      async prompt() {
+        return 'openai api key required';
+      },
+    };
+  }
+
   const headers = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${apiKey}`,
@@ -35,6 +45,7 @@ export function chatGPTService(apiKey: string): ChatGPTInterface {
   const baseURL = 'https://api.openai.com/v1/completions';
 
   return {
+    activated: true,
     async prompt(message: string, _context?: string[]): Promise<string> {
       let responseText = 'API request failure';
 
@@ -60,6 +71,8 @@ export class ChatGPTUser implements ChatGPTUserInterface {
   public focusedChannelUrl?: string;
 
   constructor(public sdk: SendbirdChatSDK, public chatGPT: ChatGPTInterface) {
+    if (!chatGPT.activated) return;
+
     this.sdk.connect(this.userId).then(async () => {
       await this.sdk.updateCurrentUserInfo({ nickname: GPT_USER_NAME });
       const channelId = hash(this.userId);
@@ -89,10 +102,14 @@ export class ChatGPTUser implements ChatGPTUserInterface {
   }
 
   deinit() {
+    if (!this.chatGPT.activated) return;
+
     this.sdk.groupChannel.removeAllGroupChannelHandlers();
   }
 
   async focus(channel: SendbirdGroupChannel) {
+    if (!this.chatGPT.activated) return;
+
     if (!channel.isGroupChannel()) {
       throw new Error('Cannot enter, channel is not a group channel');
     }
@@ -104,6 +121,8 @@ export class ChatGPTUser implements ChatGPTUserInterface {
     this.focusedChannelUrl = channel.url;
   }
   blur() {
+    if (!this.chatGPT.activated) return;
+
     this.focusedChannelUrl = undefined;
   }
 }
