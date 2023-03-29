@@ -9,7 +9,8 @@ import {
   createNativeFileService,
   createNativeMediaService,
   createNativeNotificationService,
-} from '@sendbird/uikit-react-native';
+  GiphyService
+} from "@sendbird/uikit-react-native";
 
 import Clipboard from '@react-native-clipboard/clipboard';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
@@ -52,6 +53,7 @@ const App = () => {
   return (
     <SendbirdUIKitContainer
       appId={'APP_ID'}
+      giphyService={new GiphyService('GIPHY_API_KEY')}
       chatOptions={{ localCacheStorage: AsyncStorage }}
       platformServices={{
         file: FileService,
@@ -176,6 +178,7 @@ const App2 = () => {
   return (
     <SendbirdUIKitContainer
       appId={'APP_ID'}
+      giphyService={new GiphyService('GIPHY_API_KEY')}
       chatOptions={{ localCacheStorage: AsyncStorage }}
       platformServices={{
         file: FileService,
