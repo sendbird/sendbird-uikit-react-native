@@ -294,6 +294,7 @@ export interface StringSet {
     CHANNEL_INPUT_ATTACHMENT_CAMERA: string;
     CHANNEL_INPUT_ATTACHMENT_PHOTO_LIBRARY: string;
     CHANNEL_INPUT_ATTACHMENT_FILES: string;
+    CHANNEL_INPUT_ATTACHMENT_GIPHY: string;
 
     /** Channel > Message **/
     CHANNEL_MESSAGE_COPY: string;

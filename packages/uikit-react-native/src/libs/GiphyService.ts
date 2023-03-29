@@ -7,8 +7,11 @@ import {
   GiphyThemePreset,
 } from '@giphy/react-native-sdk';
 
+import { Logger, getFileExtension, normalizeFileName } from '@sendbird/uikit-utils';
+
 interface FileMessageParamsForGiphy {
-  url: string;
+  name: string;
+  uri: string;
   size: number;
   type: 'image/gif';
 }
@@ -30,14 +33,19 @@ export class GiphyService implements GiphyServiceInterface {
       const selectSubscribe = GiphyDialog.addListener(GiphyDialogEvent.MediaSelected, (e: { media: GiphyMedia }) => {
         GiphyDialog.hide();
 
-        if (e.media.data.type === 'gif') {
+        const media = e.media.data.images.fixed_width;
+        const ext = getFileExtension(media.url).slice(1);
+        if (ext === 'gif') {
           resolve({
-            url: e.media.url,
-            size: Number(e.media.data.images.original.size ?? 0),
+            name: normalizeFileName(e.media.data.title, 'gif'),
+            uri: media.url,
             type: 'image/gif',
+            size: Number(media.size ?? 0),
           });
         } else {
-          reject(new Error('Invalid data type'));
+          const message = 'Selected media is not GIF';
+          Logger.warn(message, e.media.url, e.media.data.type);
+          reject(new Error(message));
         }
       });
 

@@ -9,7 +9,7 @@ import { GiphyService } from '@sendbird/uikit-react-native';
 import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 // import LogView from './components/LogView';
-import { APP_ID } from './env';
+import { APP_ID, GIPHY_KEY } from './env';
 import {
   ClipboardService,
   FileService,
@@ -62,7 +62,7 @@ const App = () => {
   return (
     <SendbirdUIKitContainer
       appId={APP_ID}
-      giphyService={new GiphyService('ZXuni8gSq1FY7qHnHQP7QoDsF8JmwHQl')}
+      giphyService={new GiphyService(GIPHY_KEY)}
       chatOptions={{
         localCacheStorage: AsyncStorage,
         onInitialized: SetSendbirdSDK,
@@ -70,6 +70,7 @@ const App = () => {
         enableChannelListTypingIndicator: true,
         enableChannelListMessageReceiptStatus: true,
         enableUserMention: true,
+        enableGiphy: true,
       }}
       platformServices={{
         file: FileService,

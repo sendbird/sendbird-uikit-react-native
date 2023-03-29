@@ -62,6 +62,7 @@ export const SendbirdUIKit = Object.freeze({
     USE_USER_ID_FOR_NICKNAME: false,
     USER_MENTION: false,
     IMAGE_COMPRESSION: true,
+    GIPHY: false,
   },
 });
 
@@ -104,7 +105,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   };
   userMention?: Pick<Partial<MentionConfigInterface>, 'mentionLimit' | 'suggestionLimit' | 'debounceMills'>;
   imageCompression?: Partial<ImageCompressionConfigInterface>;
-  giphyService?: GiphyServiceInterface;
+  giphyService: GiphyServiceInterface;
 }>;
 
 const SendbirdUIKitContainer = ({
@@ -126,13 +127,14 @@ const SendbirdUIKitContainer = ({
 
   const isFirstMount = useIsFirstMount();
   const unsubscribes = useRef<Array<() => void>>([]);
+
+  const imageCompressionConfig = useImageCompressionConfig(imageCompression);
   const internalStorage = useInternalStorage(chatOptions?.localCacheStorage);
   const emojiManager = useEmojiManager(internalStorage);
   const mentionManager = useMentionManager(
     chatOptions?.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION,
     userMention,
   );
-  const imageCompressionConfig = useImageCompressionConfig(imageCompression);
 
   const [sdkInstance, setSdkInstance] = useState<SendbirdChatSDK>(() => {
     const sendbird = initializeSendbird(appId, internalStorage, chatOptions?.onInitialized);
@@ -179,6 +181,7 @@ const SendbirdUIKitContainer = ({
         emojiManager={emojiManager}
         mentionManager={mentionManager}
         imageCompressionConfig={imageCompressionConfig}
+        giphyService={giphyService}
         enableAutoPushTokenRegistration={
           chatOptions?.enableAutoPushTokenRegistration ?? SendbirdUIKit.DEFAULT.AUTO_PUSH_TOKEN_REGISTRATION
         }
@@ -194,6 +197,7 @@ const SendbirdUIKitContainer = ({
         }
         enableUserMention={chatOptions?.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION}
         enableImageCompression={chatOptions?.enableImageCompression ?? SendbirdUIKit.DEFAULT.IMAGE_COMPRESSION}
+        enableGiphy={chatOptions?.enableGiphy ?? SendbirdUIKit.DEFAULT.GIPHY}
       >
         <LocalizationProvider stringSet={defaultStringSet}>
           <PlatformServiceProvider
