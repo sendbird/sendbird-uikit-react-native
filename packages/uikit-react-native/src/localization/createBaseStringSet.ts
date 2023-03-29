@@ -227,6 +227,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       TYPE_SELECTOR_GROUP: 'Group',
       TYPE_SELECTOR_SUPER_GROUP: 'Super group',
       TYPE_SELECTOR_BROADCAST: 'Broadcast',
+      TYPE_SELECTOR_CHAT_GPT: 'ChatGPT',
       DIALOG_CHANNEL_TITLE: (currentUserId, channel) =>
         getGroupChannelTitle(currentUserId, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       DIALOG_CHANNEL_NOTIFICATION: (channel) => {

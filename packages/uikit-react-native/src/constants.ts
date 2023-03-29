@@ -8,3 +8,4 @@ export const DEPRECATION_WARNING = {
 export const UNKNOWN_USER_ID = '##__USER_ID_IS_NOT_PROVIDED__##';
 export const GPT_MESSAGE_TYPE = '##__SBU_GPT_MSG__##';
 export const GPT_USER_ID = '##__SBU_GPT_USER_ID__##';
+export const GPT_USER_NAME = 'ChatGPT bot';

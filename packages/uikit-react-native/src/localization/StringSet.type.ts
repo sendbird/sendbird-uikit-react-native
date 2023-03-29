@@ -239,6 +239,7 @@ export interface StringSet {
     TYPE_SELECTOR_GROUP: string;
     TYPE_SELECTOR_SUPER_GROUP: string;
     TYPE_SELECTOR_BROADCAST: string;
+    TYPE_SELECTOR_CHAT_GPT: string;
 
     /** GroupChannelList > Dialog > Channel */
     DIALOG_CHANNEL_TITLE: (currentUserId: string, channel: SendbirdGroupChannel) => string;

@@ -5,9 +5,9 @@ import type {
   SendbirdChatSDK,
   SendbirdGroupChannel,
 } from '@sendbird/uikit-utils';
-import { hash } from '@sendbird/uikit-utils';
+import { Logger, hash } from '@sendbird/uikit-utils';
 
-import { GPT_USER_ID } from '../constants';
+import { GPT_USER_ID, GPT_USER_NAME } from '../constants';
 
 export interface ChatGPTInterface {
   prompt(message: string, context?: string[]): Promise<string>;
@@ -18,25 +18,39 @@ export interface ChatGPTUserInterface {
   blur(): void;
 }
 
-export function chatGPTService(_apiKey: string): ChatGPTInterface {
-  // const headers = { 'Api-Key': apiKey };
-  // const fetcher = {
-  //   get: (url: string) => {
-  //     return fetch(url, { method: 'GET', headers }).then((res) => res.json());
-  //   },
-  //   post: (url: string, body: { [key: string]: unknown }) => {
-  //     return fetch(url, { method: 'GET', headers, body: JSON.stringify(body) }).then((res) => res.json());
-  //   },
-  // };
+export function chatGPTService(apiKey: string): ChatGPTInterface {
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${apiKey}`,
+  };
+  const fetcher = {
+    get: (url: string) => {
+      return fetch(url, { method: 'GET', headers }).then((res) => res.json());
+    },
+    post: (url: string, body: { [key: string]: unknown }) => {
+      return fetch(url, { method: 'POST', headers, body: JSON.stringify(body) }).then((res) => res.json());
+    },
+  };
+
+  const baseURL = 'https://api.openai.com/v1/completions';
 
   return {
-    prompt(_message: string, _context?: string[]): Promise<string> {
-      // Interact with api or sdk
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve('API 준비중입니다.');
-        }, 3000);
-      });
+    async prompt(message: string, _context?: string[]): Promise<string> {
+      let responseText = 'API request failure';
+
+      try {
+        const response = await fetcher.post(baseURL, {
+          prompt: message,
+          max_tokens: 512,
+          temperature: 0.5,
+          model: 'text-davinci-003',
+        });
+        responseText = response.choices?.[0]?.text.trim();
+      } catch (e) {
+        Logger.warn('ChatGPT request failure:', e);
+      }
+
+      return responseText;
     },
   };
 }
@@ -46,12 +60,15 @@ export class ChatGPTUser implements ChatGPTUserInterface {
   public focusedChannelUrl?: string;
 
   constructor(public sdk: SendbirdChatSDK, public chatGPT: ChatGPTInterface) {
-    this.sdk.connect(this.userId).then(() => {
+    this.sdk.connect(this.userId).then(async () => {
+      await this.sdk.updateCurrentUserInfo({ nickname: GPT_USER_NAME });
       const channelId = hash(this.userId);
       const handler = new GroupChannelHandler({
         onMessageReceived: async (channel: SendbirdBaseChannel, message: SendbirdBaseMessage) => {
           if (channel.url === this.focusedChannelUrl && channel.isGroupChannel() && message.isUserMessage()) {
-            await channel.startTyping();
+            channel.markAsRead().catch(() => void 0);
+            channel.markAsDelivered().catch(() => void 0);
+            await channel.startTyping().catch(() => void 0);
             try {
               const response = await this.chatGPT.prompt(message.message);
               await channel.sendUserMessage({ message: response });
@@ -71,11 +88,15 @@ export class ChatGPTUser implements ChatGPTUserInterface {
   }
 
   async focus(channel: SendbirdGroupChannel) {
-    if (channel.isGroupChannel()) {
-      this.focusedChannelUrl = channel.url;
-    } else {
+    if (!channel.isGroupChannel()) {
       throw new Error('Cannot enter, channel is not a group channel');
     }
+
+    if (!channel.members.find((it) => it.userId === this.userId)) {
+      throw new Error('ChatGPT Bot is not a member');
+    }
+
+    this.focusedChannelUrl = channel.url;
   }
   blur() {
     this.focusedChannelUrl = undefined;

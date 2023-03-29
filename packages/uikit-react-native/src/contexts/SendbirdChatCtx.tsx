@@ -22,6 +22,8 @@ export type SendbirdChatContextType = {
   mentionManager: MentionManager;
   imageCompressionConfig: ImageCompressionConfig;
   giphyService: GiphyServiceInterface;
+  chatGPT: ChatGPTInterface;
+  chatGPTUser: ChatGPTUserInterface;
   currentUser?: SendbirdUser;
   setCurrentUser: React.Dispatch<React.SetStateAction<SendbirdUser | undefined>>;
 
@@ -77,6 +79,8 @@ export const SendbirdChatProvider = ({
   mentionManager,
   imageCompressionConfig,
   giphyService,
+  chatGPT,
+  chatGPTUser,
   enableAutoPushTokenRegistration,
   enableChannelListMessageReceiptStatus,
   enableChannelListTypingIndicator,
@@ -146,6 +150,8 @@ export const SendbirdChatProvider = ({
     mentionManager,
     imageCompressionConfig,
     giphyService,
+    chatGPT,
+    chatGPTUser,
 
     currentUser,
     setCurrentUser,

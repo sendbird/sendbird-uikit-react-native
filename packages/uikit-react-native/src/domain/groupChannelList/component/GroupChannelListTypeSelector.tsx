@@ -14,11 +14,12 @@ import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelListContexts } from '../module/moduleContext';
 import type { GroupChannelListProps, GroupChannelType } from '../types';
 
-const TYPES: GroupChannelType[] = ['GROUP', 'SUPER_GROUP', 'BROADCAST'];
+const TYPES: GroupChannelType[] = ['GROUP', 'SUPER_GROUP', 'BROADCAST', 'CHAT_GPT'];
 const TYPE_ICONS: Record<GroupChannelType, keyof typeof Icon.Assets> = {
   'GROUP': 'chat',
   'SUPER_GROUP': 'supergroup',
   'BROADCAST': 'broadcast',
+  'CHAT_GPT': 'chat-show',
 };
 const STATUS_BAR_TOP_INSET_AS: 'margin' | 'padding' = Platform.select({ android: 'margin', default: 'padding' });
 

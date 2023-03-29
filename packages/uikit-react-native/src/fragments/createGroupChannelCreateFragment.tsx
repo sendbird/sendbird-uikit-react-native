@@ -7,11 +7,13 @@ import {
   SendbirdUser,
   UserStruct,
   getDefaultGroupChannelCreateParams,
+  useAsyncEffect,
   useFreshCallback,
 } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import UserSelectableBar from '../components/UserSelectableBar';
+import { GPT_USER_ID } from '../constants';
 import type { GroupChannelCreateFragment } from '../domain/groupChannelUserList/types';
 import createUserListModule from '../domain/userList/module/createUserListModule';
 import type { UserListModule } from '../domain/userList/types';
@@ -37,6 +39,18 @@ const createGroupChannelCreateFragment = <UserType extends UserStruct>(
       queryCreator,
       sortComparator,
     });
+
+    useAsyncEffect(async () => {
+      if (channelType === 'CHAT_GPT') {
+        const params = getDefaultGroupChannelCreateParams({
+          invitedUserIds: [GPT_USER_ID],
+        });
+
+        const processedParams = await onBeforeCreateChannel(params, users);
+        const channel = await sdk.groupChannel.createChannel(processedParams);
+        onCreateChannel(channel);
+      }
+    }, []);
 
     const _renderUser: NonNullable<typeof renderUser> = useFreshCallback((user, selectedUsers, setSelectedUsers) => {
       if (queryCreator && !renderUser) {

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
 import { NOOP, PASS, SendbirdGroupChannel, messageComparator, useFreshCallback } from '@sendbird/uikit-utils';
@@ -36,7 +36,12 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     flatListProps,
     onPressImageMessage,
   }) => {
-    const { sdk, currentUser } = useSendbirdChat();
+    const { sdk, currentUser, chatGPTUser } = useSendbirdChat();
+
+    useEffect(() => {
+      chatGPTUser.focus(channel);
+      return () => chatGPTUser.blur();
+    }, []);
 
     const {
       messages,
