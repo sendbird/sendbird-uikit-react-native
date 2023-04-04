@@ -94,15 +94,7 @@ Add the following permission usage descriptions to your `info.plist` file.
 | Privacy - Photo Library Usage Description           | string | $(PRODUCT_NAME) would like access to your photo library         |
 | Privacy - Photo Library Additions Usage Description | string | $(PRODUCT_NAME) would like to save photos to your photo library |
 
-> **NOTE**: If you use [react-native-permissions](https://github.com/zoontek/react-native-permissions#ios), you must update `Podfile` and run `pod install`
->
-> ```ruby
-> permissions_path = '../node_modules/react-native-permissions/ios'
-> pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
-> pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
-> pod 'Permission-MediaLibrary', :path => "#{permissions_path}/MediaLibrary"
-> pod 'Permission-PhotoLibraryAddOnly', :path => "#{permissions_path}/PhotoLibraryAddOnly"
-> ```
+> **NOTE**: If you use [react-native-permissions](https://github.com/zoontek/react-native-permissions#ios), you must update permissions and run `pod install`
 
 <br/>
 
@@ -157,16 +149,16 @@ npx pod-install
 ```
 
 ```ts
-import Clipboard from '@react-native-clipboard/clipboard';
+import * as ImageResizer from '@bam.tech/react-native-image-resizer';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
+import Clipboard from '@react-native-clipboard/clipboard';
 import RNFBMessaging from '@react-native-firebase/messaging';
-import Video from 'react-native-video';
+import * as CreateThumbnail from 'react-native-create-thumbnail';
 import * as DocumentPicker from 'react-native-document-picker';
 import * as FileAccess from 'react-native-file-access';
 import * as ImagePicker from 'react-native-image-picker';
 import * as Permissions from 'react-native-permissions';
-import * as CreateThumbnail from 'react-native-create-thumbnail';
-import * as ImageResizer from '@bam.tech/react-native-image-resizer';
+import Video from 'react-native-video';
 
 const NativeClipboardService = createNativeClipboardService(Clipboard);
 const NativeNotificationService = createNativeNotificationService({
@@ -204,15 +196,15 @@ expo install expo-image-picker \
 ```
 
 ```ts
+import * as ExpoAV from 'expo-av';
 import * as ExpoClipboard from 'expo-clipboard';
 import * as ExpoDocumentPicker from 'expo-document-picker';
 import * as ExpoFS from 'expo-file-system';
+import * as ExpoImageManipulator from 'expo-image-manipulator';
 import * as ExpoImagePicker from 'expo-image-picker';
 import * as ExpoMediaLibrary from 'expo-media-library';
 import * as ExpoNotifications from 'expo-notifications';
-import * as ExpoAV from 'expo-av';
 import * as ExpoVideoThumbnail from 'expo-video-thumbnails';
-import * as ExpoImageManipulator from 'expo-image-manipulator';
 
 const ExpoNotificationService = createExpoNotificationService(ExpoNotifications);
 const ExpoClipboardService = createExpoClipboardService(ExpoClipboard);
@@ -227,7 +219,7 @@ const ExpoMediaService = createExpoMediaService({
   thumbnailModule: ExpoVideoThumbnail,
   imageManipulator: ExpoImageManipulator,
   fsModule: ExpoFS,
-})
+});
 ```
 
 ### Local caching (optional)
@@ -289,12 +281,12 @@ The example below shows how to integrate using `react-navigation`.
 ```tsx
 import { useNavigation, useRoute } from '@react-navigation/native';
 
+import { useGroupChannel } from '@sendbird/uikit-chat-hooks';
 import {
   createGroupChannelCreateFragment,
   createGroupChannelFragment,
   createGroupChannelListFragment,
 } from '@sendbird/uikit-react-native';
-import { useGroupChannel } from '@sendbird/uikit-chat-hooks';
 
 const GroupChannelListFragment = createGroupChannelListFragment();
 const GroupChannelCreateFragment = createGroupChannelCreateFragment();
@@ -340,7 +332,7 @@ const GroupChannelScreen = () => {
   const { sdk } = useSendbirdChat();
   const { channel } = useGroupChannel(sdk, params.channelUrl);
   if (!channel) return null;
-  
+
   return (
     <GroupChannelFragment
       channel={channel}
