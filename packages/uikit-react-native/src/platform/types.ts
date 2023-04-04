@@ -3,7 +3,12 @@ import type SBUError from '../libs/SBUError';
 export type Unsubscribe = () => void | undefined;
 export type DownloadedPath = string;
 export type FilePickerResponse = FileType | null;
-export type FileType = { uri: string; size: number; name: string; type: string };
+
+/**
+ * We are following the file format of react-native FormData
+ * @see https://github.com/facebook/react-native/blob/main/packages/react-native/Libraries/Network/FormData.js#L37-L41
+ * */
+export type FileType = { name: string; uri: string; size: number; type: string };
 
 // ---------- NotificationService ---------- //
 export interface NotificationServiceInterface {
