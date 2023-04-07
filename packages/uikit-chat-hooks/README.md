@@ -1,9 +1,9 @@
 # @sendbird/uikit-chat-hooks
 
-React custom hooks with Sendbird Chat SDK v4, made for UIKit
+A set of React hooks for integrating Sendbird chat functionality into your React app.
 
 ## Installation
 
 ```sh
-npm i @sendbird/uikit-chat-hooks
+npm i @sendbird/uikit-chat-hooks @sendbird/chat
 ```

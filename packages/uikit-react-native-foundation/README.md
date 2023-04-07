@@ -1,6 +1,6 @@
 # @sendbird/uikit-react-native-foundation
 
-Sendbird UIKit foundation library for React-Native
+A foundational UI kit for building chat-enabled React Native apps.
 
 ## Installation
 

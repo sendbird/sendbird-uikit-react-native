@@ -1,9 +1,3 @@
-# @sendbird/uikit-utils
+# @sendbird/uikit-testing-tools
 
-Utility library for Sendbird UIKit
-
-## Installation
-
-```sh
-npm i @sendbird/uikit-utils
-```
+Testing tools for uikit

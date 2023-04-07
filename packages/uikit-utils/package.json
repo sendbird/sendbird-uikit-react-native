@@ -1,7 +1,15 @@
 {
   "name": "@sendbird/uikit-utils",
   "version": "2.4.1",
-  "description": "UIKit utilities",
+  "description": "A collection of utility functions and constants for building chat UI components with Sendbird UIKit.",
+  "keywords": [
+    "sendbird",
+    "uikit",
+    "chat",
+    "UI components",
+    "utility functions",
+    "constants"
+  ],
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/src/index.d.ts",
@@ -18,10 +26,6 @@
     "build": "bob build",
     "clean": "del lib"
   },
-  "keywords": [
-    "react",
-    "sendbird"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/sendbird/sendbird-uikit-react-native.git",

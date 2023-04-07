@@ -1,7 +1,16 @@
 {
   "name": "@sendbird/uikit-chat-hooks",
   "version": "2.4.1",
-  "description": "React hooks that built with SendbirdChat SDK",
+  "description": "A set of React hooks for integrating Sendbird chat functionality into your React app.",
+  "keywords": [
+    "sendbird",
+    "uikit",
+    "chat",
+    "React",
+    "hooks",
+    "messaging",
+    "real-time"
+  ],
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/src/index.d.ts",
@@ -18,10 +27,6 @@
     "build": "bob build",
     "clean": "del lib"
   },
-  "keywords": [
-    "react",
-    "sendbird"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/sendbird/sendbird-uikit-react-native.git",
