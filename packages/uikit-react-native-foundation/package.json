@@ -1,7 +1,18 @@
 {
   "name": "@sendbird/uikit-react-native-foundation",
   "version": "2.4.1",
-  "description": "react-native-uikit",
+  "description": "A foundational UI kit for building chat-enabled React Native apps.",
+  "keywords": [
+    "sendbird",
+    "uikit",
+    "React Native",
+    "chat",
+    "messaging",
+    "UI components",
+    "customizable",
+    "theme",
+    "design system"
+  ],
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/src/index.d.ts",
@@ -19,10 +30,6 @@
     "clean": "del lib",
     "generate-icons": "node src/assets/bundle-icons.js"
   },
-  "keywords": [
-    "react-native",
-    "sendbird"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/sendbird/sendbird-uikit-react-native.git",

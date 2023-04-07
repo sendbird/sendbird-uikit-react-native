@@ -1,6 +1,6 @@
 # @sendbird/uikit-utils
 
-Utility library for Sendbird UIKit
+A collection of utility functions and constants for building chat UI components with Sendbird UIKit.
 
 ## Installation
 
