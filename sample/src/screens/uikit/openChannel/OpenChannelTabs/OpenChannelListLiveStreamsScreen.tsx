@@ -1,9 +1,11 @@
 import React, { useCallback } from 'react';
 import { StyleSheet } from 'react-native';
 
-import type { OpenChannel } from '@sendbird/chat/openChannel';
-import { createOpenChannelListFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
-import { createOpenChannelListModule } from '@sendbird/uikit-react-native';
+import {
+  createOpenChannelListFragment,
+  createOpenChannelListModule,
+  useSendbirdChat,
+} from '@sendbird/uikit-react-native';
 import {
   Avatar,
   Box,
@@ -61,7 +63,7 @@ const OpenChannelListLiveStreamsScreen = () => {
         });
       }}
       renderOpenChannelPreview={useCallback(
-        (props: { channel: OpenChannel }) => (
+        (props: { channel: SendbirdOpenChannel }) => (
           <PressBox onPress={() => navigateToOpenChannel(props.channel)}>
             <LiveStreamPreview {...props} />
           </PressBox>
