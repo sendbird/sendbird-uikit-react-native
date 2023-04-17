@@ -8,6 +8,7 @@
       "docs-validation"
     ]
   },
+  "packageManager": "yarn@1.22.19",
   "scripts": {
     "postinstall": "patch-package",
     "prepare": "lerna run --stream --sort prepare",

@@ -32,7 +32,8 @@ If you need any help in resolving any issues or have questions, visit [our commu
 - XCode
 - Android Studio
 
-More details, please see https://reactnative.dev/docs/environment-setup
+> More details, please see https://reactnative.dev/docs/environment-setup
+> <br/>*_we strongly recommend installing yarn using [corepack](https://nodejs.org/dist/latest/docs/api/corepack.html)_
 
 <br/>
 
