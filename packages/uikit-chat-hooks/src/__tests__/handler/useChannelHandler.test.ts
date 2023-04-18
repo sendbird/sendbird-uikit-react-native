@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-native';
+import { act, renderHook } from '@testing-library/react-native';
 
 import { createMockSendbirdChat } from '@sendbird/uikit-testing-tools';
 
@@ -74,5 +74,35 @@ describe('useChannelHandler', () => {
     expect(handler.onMessageReceived).toHaveBeenCalledTimes(2);
     sdk.__emit('channel', 'open_onMessageReceived');
     expect(handler.onMessageReceived).toHaveBeenCalledTimes(2);
+  });
+
+  it('should channel handler functions updated when re-rendered', () => {
+    const sdk = createMockSendbirdChat();
+    const handlerId = 'test-handler-id';
+    const handlerBefore = { onMessageReceived: jest.fn() };
+    const handlerAfter = { onMessageReceived: jest.fn() };
+
+    const { rerender } = renderHook(({ handler }) => useChannelHandler(sdk, handlerId, handler, 'group'), {
+      initialProps: {
+        handler: handlerBefore,
+      },
+    });
+    expect(handlerBefore.onMessageReceived).toHaveBeenCalledTimes(0);
+    sdk.__emit('channel', 'group_onMessageReceived');
+    expect(handlerBefore.onMessageReceived).toHaveBeenCalledTimes(1);
+    sdk.__emit('channel', 'group_onMessageReceived');
+    expect(handlerBefore.onMessageReceived).toHaveBeenCalledTimes(2);
+
+    act(() => {
+      rerender({ handler: handlerAfter });
+    });
+
+    expect(handlerAfter.onMessageReceived).toHaveBeenCalledTimes(0);
+    sdk.__emit('channel', 'group_onMessageReceived');
+    expect(handlerAfter.onMessageReceived).toHaveBeenCalledTimes(1);
+    sdk.__emit('channel', 'group_onMessageReceived');
+    expect(handlerAfter.onMessageReceived).toHaveBeenCalledTimes(2);
+
+    expect(handlerBefore.onMessageReceived).toHaveBeenCalledTimes(2);
   });
 });

@@ -2,26 +2,15 @@ import { useEffect, useLayoutEffect, useRef } from 'react';
 
 import { GroupChannelHandler } from '@sendbird/chat/groupChannel';
 import { OpenChannelHandler } from '@sendbird/chat/openChannel';
-import { Logger, SendbirdChatSDK } from '@sendbird/uikit-utils';
+import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 
 type ChannelType = 'open' | 'group';
 
-function getChannelHandler(type: ChannelType) {
-  switch (type) {
-    case 'open': {
-      return new OpenChannelHandler();
-    }
-    case 'group':
-    default: {
-      return new GroupChannelHandler();
-    }
-  }
-}
 export const useChannelHandler = <T extends ChannelType = 'group'>(
   sdk: SendbirdChatSDK,
   handlerId: string,
   hookHandler: Partial<T extends 'group' ? GroupChannelHandler : OpenChannelHandler>,
-  type = 'group' as T,
+  type: T = 'group' as T,
 ) => {
   const handlerRef = useRef(hookHandler);
   useLayoutEffect(() => {
@@ -29,21 +18,19 @@ export const useChannelHandler = <T extends ChannelType = 'group'>(
   });
 
   useEffect(() => {
-    Logger.debug('[useChannelHandler] hook called by', handlerId);
-
-    const handler = getChannelHandler(type);
-    const handlerKeys = Object.keys(handler) as (keyof typeof handler)[];
-    handlerKeys.forEach((key) => {
-      handler[key] = (...args: unknown[]) => {
+    const handlerMapper = <T extends GroupChannelHandler | OpenChannelHandler>(handler: T): T => {
+      const handlerKeys = Object.keys(handler) as (keyof T)[];
+      handlerKeys.forEach((key) => {
         // @ts-ignore
-        handlerRef.current[key]?.(...args);
-      };
-    });
+        handler[key] = (...args: unknown[]) => handlerRef.current?.[key]?.(...args);
+      });
+      return handler;
+    };
 
     if (type === 'group') {
-      sdk.groupChannel.addGroupChannelHandler(handlerId, handler);
+      sdk.groupChannel.addGroupChannelHandler(handlerId, handlerMapper(new GroupChannelHandler()));
     } else if (type === 'open') {
-      sdk.openChannel.addOpenChannelHandler(handlerId, handler);
+      sdk.openChannel.addOpenChannelHandler(handlerId, handlerMapper(new OpenChannelHandler()));
     }
 
     return () => {

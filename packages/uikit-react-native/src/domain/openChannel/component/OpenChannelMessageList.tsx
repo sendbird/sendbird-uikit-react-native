@@ -106,7 +106,6 @@ const OpenChannelMessageList = ({
         onLeaveScrollBottom={onLeaveScrollBottom}
         currentUserId={currentUserId}
         {...flatListProps}
-        listKey={`open-channel-messages-${channel.url}`}
         ref={scrollRef}
         data={messages}
         renderItem={renderItem}

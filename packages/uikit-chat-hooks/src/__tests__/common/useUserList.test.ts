@@ -85,7 +85,7 @@ describe('useUserList', () => {
       { userId: 'user2', nickname: 'Bob' },
     ];
     const query = { hasNext: true, next: jest.fn().mockResolvedValue(users) };
-    const queryCreator: () => CustomQueryInterface<typeof users[0]> = jest.fn().mockReturnValue(query);
+    const queryCreator: () => CustomQueryInterface<(typeof users)[0]> = jest.fn().mockReturnValue(query);
 
     const { result } = renderHook(() => {
       return useUserList(sdk, {

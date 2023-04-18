@@ -110,7 +110,6 @@ const GroupChannelMessageList = ({
         onLeaveScrollBottom={onLeaveScrollBottom}
         currentUserId={currentUserId}
         {...flatListProps}
-        listKey={`group-channel-messages-${channel.url}`}
         ref={scrollRef}
         data={messages}
         renderItem={renderItem}
