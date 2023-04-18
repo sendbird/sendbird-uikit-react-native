@@ -3283,6 +3283,11 @@
   resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.7.1.tgz#1e148e9977b757dd703a0e40572f2eeff914cc4e"
   integrity sha512-M/6rnDiAGJZmKh1obQ5IK2M5o/lMEq9w2SMqDZ2gcTt2aldz045LAxObFZuPu7wgzAIVsy/82SF5t/fULXpRVQ==
 
+"@sendbird/react-native-scrollview-enhancer@^0.1.0-beta.0":
+  version "0.1.0-beta.0"
+  resolved "https://registry.yarnpkg.com/@sendbird/react-native-scrollview-enhancer/-/react-native-scrollview-enhancer-0.1.0-beta.0.tgz#69001ba1b36093b9bd5fd0a6d3f8998bb9876fb0"
+  integrity sha512-d4Y6k7htSiUI3ECB0A6KM/uSE/dWBj+p+hQlFlcVptcDSNUuUg0J8j0j4odt+1f63bYOxyDnmRJCWaY0Ys/2Tw==
+
 "@sideway/address@^4.1.3":
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/@sideway/address/-/address-4.1.4.tgz#03dccebc6ea47fdc226f7d3d1ad512955d4783f0"
