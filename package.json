@@ -92,5 +92,8 @@
       "!**/__mocks__/**",
       "!**/__fixtures__/**"
     ]
+  },
+  "resolutions": {
+    "@sendbird/chat": "4.6.2"
   }
 }

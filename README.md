@@ -32,8 +32,8 @@ If you need any help in resolving any issues or have questions, visit [our commu
 - XCode
 - Android Studio
 
-> More details, please see https://reactnative.dev/docs/environment-setup
-> <br/>*_we strongly recommend installing yarn using [corepack](https://nodejs.org/dist/latest/docs/api/corepack.html)_
+⚑ More details, please see https://reactnative.dev/docs/environment-setup <br/>
+⚑ _we strongly recommend installing yarn using [corepack](https://nodejs.org/dist/latest/docs/api/corepack.html)_
 
 <br/>
 
@@ -82,6 +82,9 @@ export const APP_ID = '2D7B4CDB-932F-4082-9B09-A1153792DC8D';
 If you would like to try the sample app specifically fit to your usage, you can do so by replacing the default sample app ID with yours, which you can obtain by creating your [Sendbird application from the dashboard](https://dashboard.sendbird.com/).
 
 <br />
+
+> **Note** Update Chat SDK version of sample app <br/>
+> Edit `package.json` and change the version of `resolutions > @sendbird/chat` to the version you want to use.
 
 ## Development
 

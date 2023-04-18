@@ -3278,15 +3278,10 @@
   dependencies:
     nanoid "^3.1.23"
 
-"@sendbird/chat@^4.3.0", "@sendbird/chat@^4.7.0":
-  version "4.7.0"
-  resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.7.0.tgz#58c8cb18be7f05b2b9acc38c2fcb6d38375e3fbc"
-  integrity sha512-WOzHAyAO+bYEW6Pb6cg0lO8o0Vj/v0rBE01XO8C+7+Fxq8mPcapg7TSjntoocbByXU8f6JPWEKcFRTV2ldzi5w==
-
-"@sendbird/react-native-scrollview-enhancer@^0.1.0-beta.0":
-  version "0.1.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@sendbird/react-native-scrollview-enhancer/-/react-native-scrollview-enhancer-0.1.0-beta.0.tgz#69001ba1b36093b9bd5fd0a6d3f8998bb9876fb0"
-  integrity sha512-d4Y6k7htSiUI3ECB0A6KM/uSE/dWBj+p+hQlFlcVptcDSNUuUg0J8j0j4odt+1f63bYOxyDnmRJCWaY0Ys/2Tw==
+"@sendbird/chat@4.6.2", "@sendbird/chat@^4.3.0":
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.6.2.tgz#a10630692d4d19db4fda5ec8192ad48a9a9ab88f"
+  integrity sha512-ItUTjPt7NBu0ZkxE+WUpKSKBF5uVFRnPNhnXGmOvKAWSRF+8Pi8N8Jq7dMErl7W/vXAIa28ulLZaq52lXcXVBw==
 
 "@sideway/address@^4.1.3":
   version "4.1.4"
