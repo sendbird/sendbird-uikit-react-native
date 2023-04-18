@@ -601,4 +601,8 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
   declineInvitation(): Promise<SendbirdGroupChannel> {
     throw new Error('Method not implemented.');
   }
+
+  get messageCollectionLastAccessedAt(): number {
+    throw new Error('Method not implemented.');
+  }
 }
