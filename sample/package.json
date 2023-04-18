@@ -3,7 +3,6 @@
   "version": "2.4.1",
   "private": true,
   "scripts": {
-    "postinstall": "patch-package",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
@@ -29,7 +28,7 @@
     "@react-navigation/bottom-tabs": "^6.2.0",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.7.0",
-    "@sendbird/chat": "^4.6.1",
+    "@sendbird/chat": "^4.7.0",
     "@storybook/addon-actions": "^6.4.19",
     "@storybook/addon-controls": "^6.4.19",
     "@storybook/addon-ondevice-actions": "^6.0.1-alpha.7",
