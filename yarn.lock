@@ -3278,10 +3278,10 @@
   dependencies:
     nanoid "^3.1.23"
 
-"@sendbird/chat@4.6.2", "@sendbird/chat@^4.3.0":
-  version "4.6.2"
-  resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.6.2.tgz#a10630692d4d19db4fda5ec8192ad48a9a9ab88f"
-  integrity sha512-ItUTjPt7NBu0ZkxE+WUpKSKBF5uVFRnPNhnXGmOvKAWSRF+8Pi8N8Jq7dMErl7W/vXAIa28ulLZaq52lXcXVBw==
+"@sendbird/chat@4.7.1", "@sendbird/chat@^4.3.0":
+  version "4.7.1"
+  resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.7.1.tgz#1e148e9977b757dd703a0e40572f2eeff914cc4e"
+  integrity sha512-M/6rnDiAGJZmKh1obQ5IK2M5o/lMEq9w2SMqDZ2gcTt2aldz045LAxObFZuPu7wgzAIVsy/82SF5t/fULXpRVQ==
 
 "@sideway/address@^4.1.3":
   version "4.1.4"
