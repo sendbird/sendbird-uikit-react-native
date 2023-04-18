@@ -30,6 +30,13 @@ function convertSource(source: SendbirdImageProps['source']): Source | number {
     cache: convertCache(source.cache), //'immutable' | 'web' | 'cacheOnly'
   };
 }
+function convertDefaultSource(source?: SendbirdImageProps['defaultSource']): number | undefined {
+  if (typeof source === 'number') {
+    return source;
+  }
+
+  return undefined;
+}
 
 function convertResizeMode(mode?: SendbirdImageProps['resizeMode']): ResizeMode | undefined {
   switch (mode) {
@@ -52,7 +59,15 @@ try {
   FastImage = require('react-native-fast-image') as (props: FastImageProps) => JSX.Element;
 } catch {}
 
-const Image_FastImage: SendbirdImageComponent = ({ source, resizeMode, onLoad, onError, style, ...props }) => {
+const Image_FastImage: SendbirdImageComponent = ({
+  source,
+  defaultSource,
+  resizeMode,
+  onLoad,
+  onError,
+  style,
+  ...props
+}) => {
   return (
     <FastImage
       {...props}
@@ -60,6 +75,7 @@ const Image_FastImage: SendbirdImageComponent = ({ source, resizeMode, onLoad, o
       onError={onError && (() => onError({}))}
       style={style as FastImageProps['style']}
       source={convertSource(source)}
+      defaultSource={convertDefaultSource(defaultSource)}
       resizeMode={convertResizeMode(resizeMode)}
     />
   );
