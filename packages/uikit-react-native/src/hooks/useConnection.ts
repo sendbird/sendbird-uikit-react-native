@@ -1,12 +1,27 @@
 import { useCallback } from 'react';
 
-import { Logger, SendbirdError, SendbirdUser } from '@sendbird/uikit-utils';
+import { Logger, SendbirdChatSDK, SendbirdError, SendbirdUser } from '@sendbird/uikit-utils';
 
+import type EmojiManager from '../libs/EmojiManager';
 import { useSendbirdChat } from './useContext';
 import usePushTokenRegistration from './usePushTokenRegistration';
 
 type ConnectOptions = { nickname?: string; accessToken?: string };
+
 const cacheRestrictCodes = [400300, 400301, 400302, 400310];
+function isCacheRestrictedError(error: SendbirdError) {
+  return cacheRestrictCodes.some((code) => error.code === code);
+}
+
+async function initEmoji(sdk: SendbirdChatSDK, emojiManager: EmojiManager) {
+  await emojiManager.init();
+  if (sdk.appInfo.emojiHash !== emojiManager.emojiHash) {
+    try {
+      const container = await sdk.getAllEmoji();
+      await emojiManager.init(container);
+    } catch {}
+  }
+}
 
 const useConnection = () => {
   const { sdk, emojiManager, setCurrentUser, features } = useSendbirdChat();
@@ -35,23 +50,25 @@ const useConnection = () => {
           });
         }
 
+        await initEmoji(sdk, emojiManager);
+
         Logger.debug('[useConnection]', 'connected! (online)');
         setCurrentUser(user);
-        sdk.getAllEmoji().then(emojiManager.init);
 
         return user;
       } catch (e) {
         const error = e as unknown as SendbirdError;
 
         if (sdk.isCacheEnabled) {
-          if (cacheRestrictCodes.some((code) => error.code === code)) {
+          if (isCacheRestrictedError(error)) {
             Logger.warn('[useConnection]', 'offline connect restricted', error.message, error.code);
             Logger.warn('[useConnection]', 'clear cached-data');
             await sdk.clearCachedData().catch((e) => Logger.warn('[useConnection]', 'clear cached-data failure', e));
           } else if (sdk.currentUser) {
+            await initEmoji(sdk, emojiManager);
+
             Logger.debug('[useConnection]', 'connected! (offline)');
             setCurrentUser(sdk.currentUser);
-            sdk.getAllEmoji().finally(emojiManager.init);
             return sdk.currentUser;
           }
         }

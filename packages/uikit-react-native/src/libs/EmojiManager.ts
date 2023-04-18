@@ -31,17 +31,17 @@ class EmojiManager {
   ) {}
 
   private emojiStorage = {
-    data: null as null | SendbirdEmojiContainer,
+    container: null as null | SendbirdEmojiContainer,
     get: async () => {
-      if (!this.emojiStorage.data) {
+      if (!this.emojiStorage.container) {
         const strItem = await this.internalStorage.getItem(EmojiManager.key);
-        if (strItem) this.emojiStorage.data = Object.freeze(JSON.parse(strItem));
+        if (strItem) this.emojiStorage.container = Object.freeze(JSON.parse(strItem));
       }
-      return this.emojiStorage.data;
+      return this.emojiStorage.container;
     },
-    set: async (data: SendbirdEmojiContainer) => {
-      this.emojiStorage.data = Object.freeze(data);
-      await this.internalStorage.setItem(EmojiManager.key, JSON.stringify(data));
+    set: async (container: SendbirdEmojiContainer) => {
+      this.emojiStorage.container = Object.freeze(container);
+      await this.internalStorage.setItem(EmojiManager.key, JSON.stringify(container));
     },
   };
 
@@ -75,6 +75,10 @@ class EmojiManager {
       this._allEmoji = Object.values(this._allEmojiMap);
     }
   };
+
+  public get emojiHash() {
+    return this.emojiStorage.container?.emojiHash;
+  }
 }
 
 export default EmojiManager;
