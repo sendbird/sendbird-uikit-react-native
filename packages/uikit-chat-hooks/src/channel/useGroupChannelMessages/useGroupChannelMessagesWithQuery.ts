@@ -6,9 +6,11 @@ import type {
   SendbirdPreviousMessageListQuery,
 } from '@sendbird/uikit-utils';
 import {
+  ASYNC_NOOP,
   Logger,
   confirmAndMarkAsRead,
   isDifferentChannel,
+  isMyMessage,
   useAsyncEffect,
   useForceUpdate,
   useFreshCallback,
@@ -17,7 +19,7 @@ import {
 
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';
-import { useGroupChannelMessagesReducer } from './reducer';
+import { useChannelMessagesReducer } from '../useChannelMessagesReducer';
 
 const createMessageQuery = (
   channel: SendbirdGroupChannel,
@@ -40,15 +42,14 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
     loading,
     refreshing,
     messages,
-    nextMessages,
-    newMessagesFromMembers,
+    newMessages,
     updateMessages,
-    updateNextMessages,
-    deleteNextMessages,
     deleteMessages,
+    updateNewMessages,
+    deleteNewMessages,
     updateLoading,
     updateRefreshing,
-  } = useGroupChannelMessagesReducer(userId, options?.sortComparator);
+  } = useChannelMessagesReducer(options?.sortComparator);
 
   const channelMarkAsRead = async () => {
     try {
@@ -60,13 +61,14 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
 
   const init = useFreshCallback(async (uid?: string) => {
     if (uid) {
-      queryRef.current = createMessageQuery(channel, options?.queryCreator);
       channelMarkAsRead();
+      updateNewMessages([], true, sdk.currentUser.userId);
+
+      queryRef.current = createMessageQuery(channel, options?.queryCreator);
       if (queryRef.current?.hasNext) {
         const list = await queryRef.current?.load();
         updateMessages(list, true, sdk.currentUser.userId);
       }
-      updateNextMessages([], true, sdk.currentUser.userId);
     }
   });
 
@@ -80,17 +82,25 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
     // Messages
     onMessageReceived(eventChannel, message) {
       if (isDifferentChannel(channel, eventChannel)) return;
+      if (isMyMessage(message, sdk.currentUser.userId)) return;
+
       channelMarkAsRead();
-      updateNextMessages([message], false, sdk.currentUser.userId);
+
+      updateMessages([message], false, sdk.currentUser.userId);
+      if (options?.shouldCountNewMessages?.()) {
+        updateNewMessages([message], false, sdk.currentUser.userId);
+      }
     },
     onMessageUpdated(eventChannel, message) {
       if (isDifferentChannel(channel, eventChannel)) return;
+      if (isMyMessage(message, sdk.currentUser.userId)) return;
+
       updateMessages([message], false, sdk.currentUser.userId);
     },
     onMessageDeleted(eventChannel, messageId) {
       if (isDifferentChannel(channel, eventChannel)) return;
       deleteMessages([messageId], []);
-      deleteNextMessages([messageId], []);
+      deleteNewMessages([messageId], []);
     },
     // Channels
     onChannelChanged: channelUpdater,
@@ -143,12 +153,7 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
     }
   });
 
-  const next: ReturnType<UseGroupChannelMessages>['next'] = useFreshCallback(async () => {
-    if (nextMessages.length > 0) {
-      updateMessages(nextMessages, false, sdk.currentUser.userId);
-      updateNextMessages([], true, sdk.currentUser.userId);
-    }
-  });
+  const next: ReturnType<UseGroupChannelMessages>['next'] = useFreshCallback(ASYNC_NOOP);
 
   const sendUserMessage: ReturnType<UseGroupChannelMessages>['sendUserMessage'] = useFreshCallback(
     (params, onPending) => {
@@ -157,18 +162,18 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
           .sendUserMessage(params)
           .onPending((pendingMessage) => {
             if (pendingMessage.isUserMessage()) {
-              updateNextMessages([pendingMessage], false, sdk.currentUser.userId);
+              updateMessages([pendingMessage], false, sdk.currentUser.userId);
               onPending?.(pendingMessage);
             }
           })
           .onSucceeded((sentMessage) => {
             if (sentMessage.isUserMessage()) {
-              updateNextMessages([sentMessage], false, sdk.currentUser.userId);
+              updateMessages([sentMessage], false, sdk.currentUser.userId);
               resolve(sentMessage);
             }
           })
           .onFailed((err, sentMessage) => {
-            updateNextMessages([sentMessage], false, sdk.currentUser.userId);
+            updateMessages([sentMessage], false, sdk.currentUser.userId);
             reject(err);
           });
       });
@@ -181,18 +186,18 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
           .sendFileMessage(params)
           .onPending((pendingMessage) => {
             if (pendingMessage.isFileMessage()) {
-              updateNextMessages([pendingMessage], false, sdk.currentUser.userId);
+              updateMessages([pendingMessage], false, sdk.currentUser.userId);
               onPending?.(pendingMessage);
             }
           })
           .onSucceeded((sentMessage) => {
             if (sentMessage.isFileMessage()) {
-              updateNextMessages([sentMessage], false, sdk.currentUser.userId);
+              updateMessages([sentMessage], false, sdk.currentUser.userId);
               resolve(sentMessage);
             }
           })
           .onFailed((err, sentMessage) => {
-            updateNextMessages([sentMessage], false, sdk.currentUser.userId);
+            updateMessages([sentMessage], false, sdk.currentUser.userId);
             reject(err);
           });
       });
@@ -220,7 +225,7 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
         return null;
       })();
 
-      if (message) updateNextMessages([message], false, sdk.currentUser.userId);
+      if (message) updateMessages([message], false, sdk.currentUser.userId);
     },
   );
   const deleteMessage: ReturnType<UseGroupChannelMessages>['deleteMessage'] = useFreshCallback(async (message) => {
@@ -231,14 +236,17 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
       deleteMessages([message.messageId], [message.reqId]);
     }
   });
+  const resetNewMessages: ReturnType<UseGroupChannelMessages>['resetNewMessages'] = useFreshCallback(() => {
+    updateNewMessages([], true, sdk.currentUser.userId);
+  });
 
   return {
     loading,
     refreshing,
     refresh,
     messages,
-    nextMessages,
-    newMessagesFromMembers,
+    newMessages,
+    resetNewMessages,
     next,
     prev,
     sendUserMessage,
@@ -247,5 +255,8 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
     updateFileMessage,
     resendMessage,
     deleteMessage,
+
+    nextMessages: newMessages,
+    newMessagesFromMembers: newMessages,
   };
 };

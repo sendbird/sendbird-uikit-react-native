@@ -21,7 +21,6 @@ export interface StringSet {
     HEADER_SUBTITLE: (channel: SendbirdOpenChannel) => string;
 
     /** OpenChannel > List */
-    LIST_BANNER_FROZEN: string;
     LIST_DATE_SEPARATOR: (date: Date, locale?: Locale) => string;
 
     /** OpenChannel > Message bubble */
@@ -30,6 +29,9 @@ export interface StringSet {
     MESSAGE_BUBBLE_EDITED_POSTFIX: string;
     MESSAGE_BUBBLE_UNKNOWN_TITLE: (message: SendbirdMessage) => string;
     MESSAGE_BUBBLE_UNKNOWN_DESC: (message: SendbirdMessage) => string;
+
+    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_LIST_FROZEN **/
+    LIST_BANNER_FROZEN: string;
   };
   OPEN_CHANNEL_PARTICIPANTS: {
     /** OpenChannelParticipants > Header */
@@ -113,7 +115,6 @@ export interface StringSet {
     HEADER_TITLE: (currentUserId: string, channel: SendbirdGroupChannel) => string;
 
     /** GroupChannel > List */
-    LIST_BANNER_FROZEN: string;
     LIST_DATE_SEPARATOR: (date: Date, locale?: Locale) => string;
     LIST_BUTTON_NEW_MSG: (newMessages: SendbirdMessage[]) => string;
 
@@ -127,6 +128,8 @@ export interface StringSet {
     /** GroupChannel > Suggested mention list */
     MENTION_LIMITED: (mentionLimit: number) => string;
 
+    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_LIST_FROZEN **/
+    LIST_BANNER_FROZEN: string;
     /** @deprecated Please use LABELS.CHANNEL_MESSAGE_COPY **/
     DIALOG_MESSAGE_COPY: string;
     /** @deprecated Please use LABELS.CHANNEL_MESSAGE_EDIT **/
@@ -283,6 +286,9 @@ export interface StringSet {
     UNMUTE: string;
     BAN: string;
     UNBAN: string;
+
+    /** ChannelMessageList **/
+    CHANNEL_MESSAGE_LIST_FROZEN: string;
 
     /** ChannelInput **/
     CHANNEL_INPUT_PLACEHOLDER_ACTIVE: string;

@@ -1,7 +1,14 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
-import { NOOP, PASS, SendbirdGroupChannel, messageComparator, useFreshCallback } from '@sendbird/uikit-utils';
+import {
+  NOOP,
+  PASS,
+  SendbirdGroupChannel,
+  messageComparator,
+  useFreshCallback,
+  useRefTracker,
+} from '@sendbird/uikit-utils';
 
 import MessageRenderer from '../components/MessageRenderer';
 import NewMessagesButton from '../components/NewMessagesButton';
@@ -37,11 +44,14 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     onPressImageMessage,
   }) => {
     const { sdk, currentUser } = useSendbirdChat();
+    const [scrolledAwayFromBottom, setScrolledAwayFromBottom] = useState(false);
+    const scrolledAwayFromBottomRef = useRefTracker(scrolledAwayFromBottom);
 
     const {
+      loading,
       messages,
-      nextMessages,
-      newMessagesFromMembers,
+      newMessages,
+      resetNewMessages,
       next,
       prev,
       sendFileMessage,
@@ -50,13 +60,13 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       updateUserMessage,
       resendMessage,
       deleteMessage,
-      loading,
     } = useGroupChannelMessages(sdk, channel, currentUser?.userId, {
       collectionCreator,
       queryCreator,
       sortComparator,
       onChannelDeleted,
       enableCollectionWithoutLocalCache: !queryCreator,
+      shouldCountNewMessages: () => scrolledAwayFromBottomRef.current,
     });
 
     const _renderMessage: GroupChannelProps['MessageList']['renderMessage'] = useFreshCallback((props) => {
@@ -70,7 +80,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
         contentContainerStyle: { flexGrow: 1 },
         ...flatListProps,
       }),
-      [loading, flatListProps],
+      [flatListProps],
     );
 
     const onPressSendUserMessage: GroupChannelProps['Input']['onPressSendUserMessage'] = useFreshCallback(
@@ -97,6 +107,10 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
         await updateFileMessage(message.messageId, processedParams);
       },
     );
+    const onScrolledAwayFromBottom = useFreshCallback((value: boolean) => {
+      if (!value) resetNewMessages();
+      setScrolledAwayFromBottom(value);
+    });
 
     /** @deprecated **/
     const onSendFileMessage: GroupChannelProps['Input']['onSendFileMessage'] = useFreshCallback(async (file) => {
@@ -149,17 +163,20 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             currentUserId={currentUser?.userId}
             renderMessage={_renderMessage}
             messages={messages}
-            nextMessages={nextMessages}
-            newMessagesFromMembers={newMessagesFromMembers}
+            newMessages={newMessages}
             onTopReached={prev}
             onBottomReached={next}
+            scrolledAwayFromBottom={scrolledAwayFromBottom}
+            onScrolledAwayFromBottom={onScrolledAwayFromBottom}
             renderNewMessagesButton={renderNewMessagesButton}
             renderScrollToBottomButton={renderScrollToBottomButton}
             onResendFailedMessage={resendMessage}
             onDeleteMessage={deleteMessage}
-            onPressImageMessage={onPressImageMessage}
             onPressMediaMessage={onPressMediaMessage}
             flatListProps={memoizedFlatListProps}
+            nextMessages={newMessages}
+            newMessagesFromMembers={newMessages}
+            onPressImageMessage={onPressImageMessage}
           />
           <GroupChannelModule.Input
             SuggestedMentionList={GroupChannelModule.SuggestedMentionList}

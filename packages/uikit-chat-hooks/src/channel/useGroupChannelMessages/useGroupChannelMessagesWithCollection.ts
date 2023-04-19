@@ -1,16 +1,12 @@
 import { useEffect, useRef } from 'react';
 
 import { MessageCollectionInitPolicy, MessageEventSource, MessageFilter } from '@sendbird/chat/groupChannel';
-import type {
-  SendbirdBaseMessage,
-  SendbirdFileMessage,
-  SendbirdGroupChannel,
-  SendbirdMessageCollection,
-} from '@sendbird/uikit-utils';
+import type { SendbirdFileMessage, SendbirdGroupChannel, SendbirdMessageCollection } from '@sendbird/uikit-utils';
 import {
   Logger,
   confirmAndMarkAsRead,
   isDifferentChannel,
+  isMyMessage,
   useForceUpdate,
   useFreshCallback,
   useUniqHandlerId,
@@ -18,7 +14,7 @@ import {
 
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';
-import { useGroupChannelMessagesReducer } from './reducer';
+import { useChannelMessagesReducer } from '../useChannelMessagesReducer';
 
 const createMessageCollection = (
   channel: SendbirdGroupChannel,
@@ -29,6 +25,11 @@ const createMessageCollection = (
   return channel.createMessageCollection({ filter, limit: 100 });
 };
 
+function isNotEmpty(arr?: unknown[]): arr is unknown[] {
+  if (!arr) return false;
+  return arr.length !== 0;
+}
+
 export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (sdk, channel, userId, options) => {
   const forceUpdate = useForceUpdate();
   const collectionRef = useRef<SendbirdMessageCollection>();
@@ -38,15 +39,14 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     loading,
     refreshing,
     messages,
-    nextMessages,
-    newMessagesFromMembers,
+    newMessages,
     updateMessages,
-    updateNextMessages,
-    deleteNextMessages,
+    updateNewMessages,
+    deleteNewMessages,
     deleteMessages,
     updateLoading,
     updateRefreshing,
-  } = useGroupChannelMessagesReducer(userId, options?.sortComparator);
+  } = useChannelMessagesReducer(options?.sortComparator);
 
   const channelMarkAsRead = async (source?: MessageEventSource) => {
     try {
@@ -63,40 +63,51 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     }
   };
 
+  const updateUnsendMessages = () => {
+    const { pendingMessages, failedMessages } = collectionRef.current ?? {};
+    if (isNotEmpty(pendingMessages)) updateMessages(pendingMessages, false, sdk.currentUser.userId);
+    if (isNotEmpty(failedMessages)) updateMessages(failedMessages, false, sdk.currentUser.userId);
+  };
+
   const init = useFreshCallback(async (uid?: string, callback?: () => void) => {
     if (collectionRef.current) collectionRef.current?.dispose();
 
     if (uid) {
-      collectionRef.current = createMessageCollection(channel, options?.collectionCreator);
-      updateNextMessages([], true, sdk.currentUser.userId);
       channelMarkAsRead();
+      updateNewMessages([], true, sdk.currentUser.userId);
 
+      collectionRef.current = createMessageCollection(channel, options?.collectionCreator);
       collectionRef.current?.setMessageCollectionHandler({
         onMessagesAdded: (_, __, messages) => {
           channelMarkAsRead(_.source);
-          updateNextMessages(messages, false, sdk.currentUser.userId);
+
+          const incomingMessages = messages.filter((it) => !isMyMessage(it, sdk.currentUser.userId));
+          if (incomingMessages.length > 0) {
+            updateMessages(incomingMessages, false, sdk.currentUser.userId);
+
+            if (options?.shouldCountNewMessages?.()) {
+              updateNewMessages(incomingMessages, false, sdk.currentUser.userId);
+            }
+          }
         },
         onMessagesUpdated: (_, __, messages) => {
           channelMarkAsRead(_.source);
 
-          // NOTE: admin message is not added via onMessagesAdded handler, not checked yet is this a bug.
-          if (_.source === MessageEventSource.EVENT_MESSAGE_RECEIVED) {
-            const nextMessageIds = nextMessages.map((it) => it.messageId);
-            const nonAddedMessagesFromReceivedEvent = messages.filter(
-              (it) => nextMessageIds.indexOf(it.messageId) === -1,
-            );
-            updateNextMessages(nonAddedMessagesFromReceivedEvent, false, sdk.currentUser.userId);
-          }
-
-          // NOTE: v4 MESSAGE_RECEIVED is called twice from onMessagesAdded and onMessagesUpdated when receiving new message.
-          //  This is not intended behavior but not bugs.
-          if (_.source !== MessageEventSource.EVENT_MESSAGE_RECEIVED) {
+          const incomingMessages = messages.filter((it) => !isMyMessage(it, sdk.currentUser.userId));
+          if (incomingMessages.length > 0) {
+            // NOTE: admin message is not added via onMessagesAdded handler, not checked yet is this a bug.
             updateMessages(messages, false, sdk.currentUser.userId);
+
+            if (options?.shouldCountNewMessages?.()) {
+              if (_.source === MessageEventSource.EVENT_MESSAGE_RECEIVED) {
+                updateNewMessages(messages, false, sdk.currentUser.userId);
+              }
+            }
           }
         },
         onMessagesDeleted: (_, __, messageIds) => {
           deleteMessages(messageIds, []);
-          deleteNextMessages(messageIds, []);
+          deleteNewMessages(messageIds, []);
         },
         onChannelDeleted: () => {
           options?.onChannelDeleted?.();
@@ -119,8 +130,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
             Logger.debug('[useGroupChannelMessagesWithCollection/onCacheResult]', 'message length:', messages.length);
 
             updateMessages(messages, true, sdk.currentUser.userId);
-            updateMessages(collectionRef.current?.pendingMessages ?? [], false, sdk.currentUser.userId);
-            updateMessages(collectionRef.current?.failedMessages ?? [], false, sdk.currentUser.userId);
+            updateUnsendMessages();
           }
           callback?.();
         })
@@ -130,10 +140,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
             Logger.debug('[useGroupChannelMessagesWithCollection/onApiResult]', 'message length:', messages.length);
 
             updateMessages(messages, true, sdk.currentUser.userId);
-            if (sdk.isCacheEnabled) {
-              updateMessages(collectionRef.current?.pendingMessages ?? [], false, sdk.currentUser.userId);
-              updateMessages(collectionRef.current?.failedMessages ?? [], false, sdk.currentUser.userId);
-            }
+            if (sdk.isCacheEnabled) updateUnsendMessages();
           }
           callback?.();
         });
@@ -181,22 +188,11 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
   });
 
   const next: ReturnType<UseGroupChannelMessages>['next'] = useFreshCallback(async () => {
-    const messageCandidates: SendbirdBaseMessage[] = [];
-
     if (collectionRef.current && collectionRef.current?.hasNext) {
       try {
         const fetchedList = await collectionRef.current?.loadNext();
-        messageCandidates.push(...fetchedList);
+        updateMessages(fetchedList, false, sdk.currentUser.userId);
       } catch {}
-    }
-
-    if (nextMessages.length > 0) {
-      messageCandidates.push(...nextMessages);
-    }
-
-    if (messageCandidates.length > 0) {
-      updateMessages(messageCandidates, false, sdk.currentUser.userId);
-      updateNextMessages([], true, sdk.currentUser.userId);
     }
   });
 
@@ -285,21 +281,26 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
       }
     }
   });
+  const resetNewMessages: ReturnType<UseGroupChannelMessages>['resetNewMessages'] = useFreshCallback(() => {
+    updateNewMessages([], true, sdk.currentUser.userId);
+  });
 
   return {
     loading,
     refreshing,
     refresh,
     messages,
-    nextMessages,
-    newMessagesFromMembers,
     next,
     prev,
+    newMessages,
+    resetNewMessages,
     sendUserMessage,
     sendFileMessage,
     updateUserMessage,
     updateFileMessage,
     resendMessage,
     deleteMessage,
+    nextMessages: newMessages,
+    newMessagesFromMembers: newMessages,
   };
 };

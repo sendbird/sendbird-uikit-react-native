@@ -74,7 +74,7 @@ export type UseGroupChannelListOptions = {
 /**
  * @interface UseGroupChannelMessages
  * @description interface for group channel messages hook
- * - Receive new messages from other users -> append to state(nextMessages)
+ * - Receive new messages from other users -> append to state(newMessages)
  * - onTopReached -> prev() -> fetch prev messages and append to state(messages)
  * - onBottomReached -> next() -> nextMessages append to state(messages)
  * */
@@ -111,26 +111,23 @@ export interface UseGroupChannelMessages {
     prev: () => Promise<void>;
 
     /**
-     * Get messages, this state is for temporary data before render
-     * For example, if a user receives a new messages while searching for an old message
-     * for this case, new messages will be included here.
+     * Fetch next messages to state
+     * @return {Promise<void>}
      * */
-    nextMessages: SendbirdMessage[];
+    next: () => Promise<void>;
 
     /**
-     * Get new messages from nextMessages
      * A new message means a message that meets the below conditions
      * - Not admin message
      * - Not updated message
      * - Not current user's message
      * */
-    newMessagesFromMembers: SendbirdMessage[];
+    newMessages: SendbirdMessage[];
 
     /**
-     * Fetch next messages to state
-     * @return {Promise<void>}
+     * Reset new messages
      * */
-    next: () => Promise<void>;
+    resetNewMessages: () => void;
 
     /**
      * Send file message
@@ -183,6 +180,11 @@ export interface UseGroupChannelMessages {
      * @return {Promise<void>}
      * */
     deleteMessage: (message: SendbirdFileMessage | SendbirdUserMessage) => Promise<void>;
+
+    /** @deprecated Please use `newMessages` instead **/
+    newMessagesFromMembers: SendbirdMessage[];
+    /** @deprecated Please use `newMessages` instead **/
+    nextMessages: SendbirdMessage[];
   };
 }
 
@@ -192,6 +194,7 @@ export type UseGroupChannelMessagesOptions = {
   collectionCreator?: () => SendbirdMessageCollection;
   enableCollectionWithoutLocalCache?: boolean;
   onChannelDeleted?: () => void;
+  shouldCountNewMessages?: () => boolean;
 };
 
 /**
@@ -240,7 +243,7 @@ export type UseOpenChannelListOptions = {
 /**
  * @interface UseOpenChannelMessages
  * @description interface for open channel messages hook
- * - Receive new messages from other users -> append to state(nextMessages)
+ * - Receive new messages from other users -> append to state(newMessages)
  * - onTopReached -> prev() -> fetch prev messages and append to state(messages)
  * - onBottomReached -> next() -> nextMessages append to state(messages)
  * */
@@ -277,20 +280,17 @@ export interface UseOpenChannelMessages {
     prev: () => Promise<void>;
 
     /**
-     * Get messages, this state is for temporary data before render
-     * For example, if a user receives a new messages while searching for an old message
-     * for this case, new messages will be included here.
-     * */
-    nextMessages: SendbirdMessage[];
-
-    /**
-     * Get new messages from nextMessages
      * A new message means a message that meets the below conditions
      * - Not admin message
      * - Not updated message
      * - Not current user's message
      * */
-    newMessagesFromMembers: SendbirdMessage[];
+    newMessages: SendbirdMessage[];
+
+    /**
+     * Reset new messages
+     * */
+    resetNewMessages: () => void;
 
     /**
      * Fetch next messages to state
@@ -349,6 +349,11 @@ export interface UseOpenChannelMessages {
      * @return {Promise<void>}
      * */
     deleteMessage: (message: SendbirdFileMessage | SendbirdUserMessage) => Promise<void>;
+
+    /** @deprecated Please use `newMessages` instead **/
+    newMessagesFromMembers: SendbirdMessage[];
+    /** @deprecated Please use `newMessages` instead **/
+    nextMessages: SendbirdMessage[];
   };
 }
 
@@ -357,6 +362,7 @@ export type UseOpenChannelMessagesOptions = {
   queryCreator?: () => SendbirdPreviousMessageListQuery;
   onChannelDeleted?: () => void;
   onError?: (error?: unknown) => void;
+  shouldCountNewMessages?: () => boolean;
 };
 
 /**

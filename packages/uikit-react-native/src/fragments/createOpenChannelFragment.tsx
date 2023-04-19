@@ -40,6 +40,7 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
     sortComparator = messageComparator,
   }) => {
     const { sdk, currentUser } = useSendbirdChat();
+
     const { STRINGS } = useLocalization();
     const { show: showToast } = useToast();
     const { show: showUserProfile } = useUserProfile();
@@ -47,7 +48,6 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
     const {
       messages,
       nextMessages,
-      newMessagesFromMembers,
       next,
       prev,
       sendFileMessage,
@@ -130,10 +130,11 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
             currentUserId={currentUser?.userId}
             renderMessage={_renderMessage}
             messages={messages}
-            nextMessages={nextMessages}
-            newMessagesFromMembers={newMessagesFromMembers}
+            newMessages={nextMessages}
             onTopReached={prev}
             onBottomReached={next}
+            scrolledAwayFromBottom={false}
+            onScrolledAwayFromBottom={NOOP}
             renderNewMessagesButton={renderNewMessagesButton}
             renderScrollToBottomButton={renderScrollToBottomButton}
             onResendFailedMessage={resendMessage}

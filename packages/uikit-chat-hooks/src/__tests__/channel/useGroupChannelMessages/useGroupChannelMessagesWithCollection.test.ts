@@ -14,7 +14,7 @@ describe('useGroupChannelMessagesWithCollection', () => {
     expect(result.current.loading).toBe(true);
     expect(result.current.refreshing).toBe(false);
     expect(result.current.messages).toEqual([]);
-    expect(result.current.nextMessages).toEqual([]);
+    expect(result.current.newMessages).toEqual([]);
     expect(result.current.newMessagesFromMembers).toEqual([]);
     expect(result.current.next).toBeInstanceOf(Function);
     expect(result.current.refresh).toBeInstanceOf(Function);

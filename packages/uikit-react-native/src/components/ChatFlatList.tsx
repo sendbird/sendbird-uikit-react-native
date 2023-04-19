@@ -1,33 +1,33 @@
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from 'react';
-import { FlatList, FlatListProps, Platform } from 'react-native';
+import { FlatListProps, Platform, FlatList as RNFlatList, StyleSheet } from 'react-native';
 
+import { FlatList } from '@sendbird/react-native-scrollview-enhancer';
 import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { SendbirdMessage, getMessageUniqId, isMyMessage } from '@sendbird/uikit-utils';
 
 let ANDROID_BUG_ALERT_SHOWED = Platform.OS !== 'android';
 const BOTTOM_DETECT_THRESHOLD = 25;
-// const AUTO_SCROLL_TO_TOP_THRESHOLD = 15;
-
-function hasReachedToBottom(yPos: number, thresholdPx = 0) {
-  return thresholdPx >= yPos;
-}
 
 export type ChatFlatListRef = { scrollToBottom: (animated?: boolean) => void };
 type Props = Omit<FlatListProps<SendbirdMessage>, 'onEndReached'> & {
   currentUserId?: string;
   onBottomReached: () => void;
   onTopReached: () => void;
-  nextMessages: SendbirdMessage[];
-  onLeaveScrollBottom: (value: boolean) => void;
+  onScrolledAwayFromBottom: (value: boolean) => void;
+
+  /** @deprecated Please use `onScrolledAwayFromBottom` **/
+  onLeaveScrollBottom?: (value: boolean) => void;
+  /** @deprecated Not used anymore **/
+  nextMessages?: unknown;
 };
 // FIXME: Inverted FlatList performance issue on Android {@link https://github.com/facebook/react-native/issues/30034}
 const ChatFlatList = forwardRef<ChatFlatListRef, Props>(function CustomFlatList(
-  { onTopReached, nextMessages, onBottomReached, onLeaveScrollBottom, onScroll, currentUserId, ...props },
+  { onTopReached, onBottomReached, onScrolledAwayFromBottom, onLeaveScrollBottom, onScroll, currentUserId, ...props },
   ref,
 ) {
   const { select } = useUIKitTheme();
-  const scrollRef = useRef<FlatList<SendbirdMessage>>(null);
-  const yPos = useRef(0);
+  const scrollRef = useRef<RNFlatList<SendbirdMessage>>(null);
+  const contentOffsetY = useRef(0);
 
   useImperativeHandle(
     ref,
@@ -37,32 +37,34 @@ const ChatFlatList = forwardRef<ChatFlatListRef, Props>(function CustomFlatList(
     [],
   );
 
+  // Scroll to bottom when current user send a message
+  const recentMessage = props.data?.[0];
   useEffect(() => {
-    const latestMessage = nextMessages[nextMessages.length - 1];
-    if (!latestMessage) return;
-
-    if (hasReachedToBottom(yPos.current)) {
-      onBottomReached();
-    } else if (isMyMessage(latestMessage, currentUserId)) {
+    if (isMyMessage(recentMessage, currentUserId)) {
       scrollRef.current?.scrollToOffset({ animated: false, offset: 0 });
     }
-  }, [onBottomReached, nextMessages, currentUserId]);
+  }, [currentUserId, recentMessage]);
 
   const _onScroll = useCallback<NonNullable<Props['onScroll']>>(
     (event) => {
+      onScroll?.(event);
+
       const { contentOffset } = event.nativeEvent;
-      if (BOTTOM_DETECT_THRESHOLD < yPos.current && contentOffset.y <= BOTTOM_DETECT_THRESHOLD) {
-        onLeaveScrollBottom(false);
-      } else if (BOTTOM_DETECT_THRESHOLD < contentOffset.y && yPos.current <= BOTTOM_DETECT_THRESHOLD) {
-        onLeaveScrollBottom(true);
+
+      const prevOffsetY = contentOffsetY.current;
+      const currOffsetY = contentOffset.y;
+
+      if (BOTTOM_DETECT_THRESHOLD < prevOffsetY && currOffsetY <= BOTTOM_DETECT_THRESHOLD) {
+        onScrolledAwayFromBottom(false);
+        onLeaveScrollBottom?.(false);
+      } else if (BOTTOM_DETECT_THRESHOLD < currOffsetY && prevOffsetY <= BOTTOM_DETECT_THRESHOLD) {
+        onScrolledAwayFromBottom(true);
+        onLeaveScrollBottom?.(true);
       }
 
-      yPos.current = contentOffset.y;
-
-      onScroll?.(event);
-      if (hasReachedToBottom(yPos.current)) onBottomReached();
+      contentOffsetY.current = contentOffset.y;
     },
-    [onScroll, onBottomReached],
+    [onScroll],
   );
 
   if (__DEV__ && !ANDROID_BUG_ALERT_SHOWED) {
@@ -83,14 +85,16 @@ const ChatFlatList = forwardRef<ChatFlatListRef, Props>(function CustomFlatList(
       {...props}
       // FIXME: inverted list of ListEmptyComponent is reversed {@link https://github.com/facebook/react-native/issues/21196#issuecomment-836937743}
       inverted={Boolean(props.data?.length)}
-      // FIXME: maintainVisibleContentPosition is not working on Android {@link https://github.com/facebook/react-native/issues/25239}
-      // maintainVisibleContentPosition={{ minIndexForVisible: 1, autoscrollToTopThreshold: AUTO_SCROLL_TO_TOP_THRESHOLD }}
       ref={scrollRef}
       onEndReachedThreshold={0.5}
       onEndReached={onTopReached}
+      onStartReachedThreshold={0.5}
+      onStartReached={onBottomReached}
       scrollEventThrottle={16}
       onScroll={_onScroll}
       keyExtractor={getMessageUniqId}
+      style={{ flex: 1, ...StyleSheet.flatten(props.style) }}
+      maintainVisibleContentPosition={{ minIndexForVisible: 0, autoscrollToTopThreshold: BOTTOM_DETECT_THRESHOLD }}
     />
   );
 });

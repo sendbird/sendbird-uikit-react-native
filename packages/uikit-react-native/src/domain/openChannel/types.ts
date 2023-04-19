@@ -1,5 +1,4 @@
 import type React from 'react';
-import type { FlatListProps } from 'react-native';
 
 import type { UseOpenChannelMessagesOptions } from '@sendbird/uikit-chat-hooks';
 import type { Icon } from '@sendbird/uikit-react-native-foundation';
@@ -8,7 +7,6 @@ import type {
   SendbirdFileMessage,
   SendbirdFileMessageCreateParams,
   SendbirdFileMessageUpdateParams,
-  SendbirdMessage,
   SendbirdOpenChannel,
   SendbirdUserMessage,
   SendbirdUserMessageCreateParams,
@@ -16,7 +14,7 @@ import type {
 } from '@sendbird/uikit-utils';
 
 import type { ChannelInputProps } from '../../components/ChannelInput';
-import type { UserProfileContextType } from '../../contexts/UserProfileCtx';
+import type { ChannelMessageListProps } from '../../components/ChannelMessageList';
 import type { CommonComponent } from '../../types';
 
 export type OpenChannelProps = {
@@ -50,42 +48,26 @@ export type OpenChannelProps = {
     onPressHeaderRight: () => void;
   };
 
-  MessageList: {
-    enableMessageGrouping: boolean;
-    currentUserId?: string;
-    channel: SendbirdOpenChannel;
-    messages: SendbirdMessage[];
-    nextMessages: SendbirdMessage[];
-    newMessagesFromMembers: SendbirdMessage[];
-    onTopReached: () => void;
-    onBottomReached: () => void;
-
-    onResendFailedMessage: (failedMessage: SendbirdUserMessage | SendbirdFileMessage) => Promise<void>;
-    onDeleteMessage: (message: SendbirdUserMessage | SendbirdFileMessage) => Promise<void>;
-    onPressMediaMessage?: (message: SendbirdFileMessage, deleteMessage: () => Promise<void>, uri: string) => void;
-
-    renderMessage: (props: {
-      message: SendbirdMessage;
-      prevMessage?: SendbirdMessage;
-      nextMessage?: SendbirdMessage;
-      onPress?: () => void;
-      onLongPress?: () => void;
-      onPressAvatar?: UserProfileContextType['show'];
-      channel: OpenChannelProps['MessageList']['channel'];
-      currentUserId?: OpenChannelProps['MessageList']['currentUserId'];
-      enableMessageGrouping: OpenChannelProps['MessageList']['enableMessageGrouping'];
-    }) => React.ReactElement | null;
-    renderNewMessagesButton: null | CommonComponent<{
-      visible: boolean;
-      onPress: () => void;
-      newMessages: SendbirdMessage[];
-    }>;
-    renderScrollToBottomButton: null | CommonComponent<{
-      visible: boolean;
-      onPress: () => void;
-    }>;
-    flatListProps?: Omit<FlatListProps<SendbirdMessage>, 'data' | 'renderItem'>;
-  };
+  MessageList: Pick<
+    ChannelMessageListProps<SendbirdOpenChannel>,
+    | 'enableMessageGrouping'
+    | 'currentUserId'
+    | 'channel'
+    | 'messages'
+    | 'newMessages'
+    | 'scrolledAwayFromBottom'
+    | 'onScrolledAwayFromBottom'
+    | 'onTopReached'
+    | 'onBottomReached'
+    | 'onResendFailedMessage'
+    | 'onDeleteMessage'
+    | 'onPressMediaMessage'
+    | 'renderMessage'
+    | 'renderNewMessagesButton'
+    | 'renderScrollToBottomButton'
+    | 'flatListProps'
+    | 'onPressImageMessage'
+  >;
   Input: Pick<
     ChannelInputProps,
     | 'shouldRenderInput'

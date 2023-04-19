@@ -2,8 +2,10 @@ import { useRef } from 'react';
 
 import type { SendbirdBaseChannel, SendbirdOpenChannel, SendbirdPreviousMessageListQuery } from '@sendbird/uikit-utils';
 import {
+  ASYNC_NOOP,
   NOOP,
   isDifferentChannel,
+  isMyMessage,
   useAsyncEffect,
   useForceUpdate,
   useFreshCallback,
@@ -12,7 +14,7 @@ import {
 
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseOpenChannelMessages, UseOpenChannelMessagesOptions } from '../../types';
-import { useOpenChannelMessagesReducer } from './reducer';
+import { useChannelMessagesReducer } from '../useChannelMessagesReducer';
 
 const createMessageQuery = (channel: SendbirdOpenChannel, creator?: UseOpenChannelMessagesOptions['queryCreator']) => {
   if (creator) return creator();
@@ -31,15 +33,14 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
     loading,
     refreshing,
     messages,
-    nextMessages,
-    newMessagesFromMembers,
+    newMessages,
     updateMessages,
-    updateNextMessages,
-    deleteNextMessages,
+    updateNewMessages,
+    deleteNewMessages,
     deleteMessages,
     updateLoading,
     updateRefreshing,
-  } = useOpenChannelMessagesReducer(userId, options?.sortComparator);
+  } = useChannelMessagesReducer(options?.sortComparator);
 
   const init = useFreshCallback(async (uid?: string) => {
     if (uid) {
@@ -49,7 +50,7 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
 
         updateMessages(list, true, sdk.currentUser.userId);
       }
-      updateNextMessages([], true, sdk.currentUser.userId);
+      updateNewMessages([], true, sdk.currentUser.userId);
     }
   });
 
@@ -66,16 +67,23 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
       // Messages
       onMessageReceived(eventChannel, message) {
         if (isDifferentChannel(channel, eventChannel)) return;
-        updateNextMessages([message], false, sdk.currentUser.userId);
+        if (isMyMessage(message, sdk.currentUser.userId)) return;
+
+        updateMessages([message], false, sdk.currentUser.userId);
+        if (options?.shouldCountNewMessages?.()) {
+          updateNewMessages([message], false, sdk.currentUser.userId);
+        }
       },
       onMessageUpdated(eventChannel, message) {
         if (isDifferentChannel(channel, eventChannel)) return;
+        if (isMyMessage(message, sdk.currentUser.userId)) return;
+
         updateMessages([message], false, sdk.currentUser.userId);
       },
       onMessageDeleted(eventChannel, messageId) {
         if (isDifferentChannel(channel, eventChannel)) return;
         deleteMessages([messageId], []);
-        deleteNextMessages([messageId], []);
+        deleteNewMessages([messageId], []);
       },
       // Channels
       onChannelChanged: channelUpdater,
@@ -139,12 +147,7 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
     }
   });
 
-  const next: ReturnType<UseOpenChannelMessages>['next'] = useFreshCallback(async () => {
-    if (nextMessages.length > 0) {
-      updateMessages(nextMessages, false, sdk.currentUser.userId);
-      updateNextMessages([], true, sdk.currentUser.userId);
-    }
-  });
+  const next: ReturnType<UseOpenChannelMessages>['next'] = useFreshCallback(ASYNC_NOOP);
 
   const sendUserMessage: ReturnType<UseOpenChannelMessages>['sendUserMessage'] = useFreshCallback(
     (params, onPending) => {
@@ -153,18 +156,18 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
           .sendUserMessage(params)
           .onPending((pendingMessage) => {
             if (pendingMessage.isUserMessage()) {
-              updateNextMessages([pendingMessage], false, sdk.currentUser.userId);
+              updateMessages([pendingMessage], false, sdk.currentUser.userId);
               onPending?.(pendingMessage);
             }
           })
           .onSucceeded((sentMessage) => {
             if (sentMessage.isUserMessage()) {
-              updateNextMessages([sentMessage], false, sdk.currentUser.userId);
+              updateMessages([sentMessage], false, sdk.currentUser.userId);
               resolve(sentMessage);
             }
           })
           .onFailed((err, sentMessage) => {
-            updateNextMessages([sentMessage], false, sdk.currentUser.userId);
+            updateMessages([sentMessage], false, sdk.currentUser.userId);
             reject(err);
           });
       });
@@ -178,18 +181,18 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
           .sendFileMessage(params)
           .onPending((pendingMessage) => {
             if (pendingMessage.isFileMessage()) {
-              updateNextMessages([pendingMessage], false, sdk.currentUser.userId);
+              updateMessages([pendingMessage], false, sdk.currentUser.userId);
               onPending?.(pendingMessage);
             }
           })
           .onSucceeded((sentMessage) => {
             if (sentMessage.isFileMessage()) {
-              updateNextMessages([sentMessage], false, sdk.currentUser.userId);
+              updateMessages([sentMessage], false, sdk.currentUser.userId);
               resolve(sentMessage);
             }
           })
           .onFailed((err, sentMessage) => {
-            updateNextMessages([sentMessage], false, sdk.currentUser.userId);
+            updateMessages([sentMessage], false, sdk.currentUser.userId);
             reject(err);
           });
       });
@@ -217,7 +220,7 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
       return null;
     })();
 
-    if (message) updateNextMessages([message], false, sdk.currentUser.userId);
+    if (message) updateMessages([message], false, sdk.currentUser.userId);
   });
   const deleteMessage: ReturnType<UseOpenChannelMessages>['deleteMessage'] = useFreshCallback(async (message) => {
     if (message.sendingStatus === 'succeeded') {
@@ -227,14 +230,16 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
       deleteMessages([message.messageId], [message.reqId]);
     }
   });
+  const resetNewMessages: ReturnType<UseOpenChannelMessages>['resetNewMessages'] = useFreshCallback(() => {
+    updateNewMessages([], true, sdk.currentUser.userId);
+  });
 
   return {
     loading,
     refreshing,
     refresh,
     messages,
-    nextMessages,
-    newMessagesFromMembers,
+    newMessages,
     next,
     prev,
     sendUserMessage,
@@ -243,5 +248,9 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
     updateFileMessage,
     resendMessage,
     deleteMessage,
+    resetNewMessages,
+
+    nextMessages: newMessages,
+    newMessagesFromMembers: newMessages,
   };
 };
