@@ -29,7 +29,7 @@
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.7.0",
     "@sendbird/chat": "^4.3.0",
-    "@sendbird/react-native-scrollview-enhancer": "^0.1.0-beta.0",
+    "@sendbird/react-native-scrollview-enhancer": "^0.1.0-beta.3",
     "@storybook/addon-actions": "^6.4.19",
     "@storybook/addon-controls": "^6.4.19",
     "@storybook/addon-ondevice-actions": "^6.0.1-alpha.7",

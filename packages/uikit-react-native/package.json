@@ -67,7 +67,7 @@
     "@react-native-community/netinfo": "^9.3.0",
     "@react-native-firebase/app": "^14.4.0",
     "@react-native-firebase/messaging": "^14.4.0",
-    "@sendbird/react-native-scrollview-enhancer": "^0.1.0-beta.0",
+    "@sendbird/react-native-scrollview-enhancer": "^0.1.0-beta.3",
     "@types/react": "*",
     "@types/react-native": "*",
     "@types/react-native-video": "^5.0.14",
