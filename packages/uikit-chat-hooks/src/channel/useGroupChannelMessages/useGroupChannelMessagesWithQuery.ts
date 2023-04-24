@@ -90,6 +90,9 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
       if (options?.shouldCountNewMessages?.()) {
         updateNewMessages([message], false, sdk.currentUser.userId);
       }
+      if (options?.onMessagesReceived) {
+        options.onMessagesReceived([message]);
+      }
     },
     onMessageUpdated(eventChannel, message) {
       if (isDifferentChannel(channel, eventChannel)) return;

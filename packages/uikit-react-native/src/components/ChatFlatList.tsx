@@ -1,16 +1,15 @@
-import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from 'react';
+import React, { forwardRef, useCallback, useRef } from 'react';
 import { FlatListProps, Platform, FlatList as RNFlatList, StyleSheet } from 'react-native';
 
 import { FlatList } from '@sendbird/react-native-scrollview-enhancer';
 import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { SendbirdMessage, getMessageUniqId, isMyMessage } from '@sendbird/uikit-utils';
+import { SendbirdMessage, getMessageUniqId } from '@sendbird/uikit-utils';
 
 let ANDROID_BUG_ALERT_SHOWED = Platform.OS !== 'android';
 const BOTTOM_DETECT_THRESHOLD = 25;
+const UNREACHABLE_THRESHOLD = Number.MIN_SAFE_INTEGER;
 
-export type ChatFlatListRef = { scrollToBottom: (animated?: boolean) => void };
 type Props = Omit<FlatListProps<SendbirdMessage>, 'onEndReached'> & {
-  currentUserId?: string;
   onBottomReached: () => void;
   onTopReached: () => void;
   onScrolledAwayFromBottom: (value: boolean) => void;
@@ -21,29 +20,12 @@ type Props = Omit<FlatListProps<SendbirdMessage>, 'onEndReached'> & {
   nextMessages?: unknown;
 };
 // FIXME: Inverted FlatList performance issue on Android {@link https://github.com/facebook/react-native/issues/30034}
-const ChatFlatList = forwardRef<ChatFlatListRef, Props>(function CustomFlatList(
-  { onTopReached, onBottomReached, onScrolledAwayFromBottom, onLeaveScrollBottom, onScroll, currentUserId, ...props },
+const ChatFlatList = forwardRef<RNFlatList<SendbirdMessage>, Props>(function CustomFlatList(
+  { onTopReached, onBottomReached, onScrolledAwayFromBottom, onLeaveScrollBottom, onScroll, ...props },
   ref,
 ) {
   const { select } = useUIKitTheme();
-  const scrollRef = useRef<RNFlatList<SendbirdMessage>>(null);
   const contentOffsetY = useRef(0);
-
-  useImperativeHandle(
-    ref,
-    () => ({
-      scrollToBottom: (animated = true) => scrollRef.current?.scrollToOffset({ animated, offset: 0 }),
-    }),
-    [],
-  );
-
-  // Scroll to bottom when current user send a message
-  const recentMessage = props.data?.[0];
-  useEffect(() => {
-    if (isMyMessage(recentMessage, currentUserId)) {
-      scrollRef.current?.scrollToOffset({ animated: false, offset: 0 });
-    }
-  }, [currentUserId, recentMessage]);
 
   const _onScroll = useCallback<NonNullable<Props['onScroll']>>(
     (event) => {
@@ -85,16 +67,14 @@ const ChatFlatList = forwardRef<ChatFlatListRef, Props>(function CustomFlatList(
       {...props}
       // FIXME: inverted list of ListEmptyComponent is reversed {@link https://github.com/facebook/react-native/issues/21196#issuecomment-836937743}
       inverted={Boolean(props.data?.length)}
-      ref={scrollRef}
-      onEndReachedThreshold={0.5}
+      ref={ref}
       onEndReached={onTopReached}
-      onStartReachedThreshold={0.5}
       onStartReached={onBottomReached}
       scrollEventThrottle={16}
       onScroll={_onScroll}
       keyExtractor={getMessageUniqId}
       style={{ flex: 1, ...StyleSheet.flatten(props.style) }}
-      maintainVisibleContentPosition={{ minIndexForVisible: 0, autoscrollToTopThreshold: BOTTOM_DETECT_THRESHOLD }}
+      maintainVisibleContentPosition={{ minIndexForVisible: 0, autoscrollToTopThreshold: UNREACHABLE_THRESHOLD }}
     />
   );
 });

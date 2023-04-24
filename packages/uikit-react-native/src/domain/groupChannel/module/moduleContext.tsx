@@ -13,7 +13,8 @@ import {
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
-import type { GroupChannelContextsType, GroupChannelModule } from '../types';
+import type { PubSub } from '../../../utils/pubsub';
+import type { GroupChannelContextsType, GroupChannelModule, GroupChannelPubSubContextPayload } from '../types';
 
 export const GroupChannelContexts: GroupChannelContextsType = {
   Fragment: createContext({
@@ -24,6 +25,10 @@ export const GroupChannelContexts: GroupChannelContextsType = {
   TypingIndicator: createContext({
     typingUsers: [] as SendbirdUser[],
   }),
+  PubSub: createContext({
+    publish: NOOP,
+    subscribe: () => NOOP,
+  } as PubSub<GroupChannelPubSubContextPayload>),
 };
 
 export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
@@ -31,6 +36,7 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
   channel,
   enableTypingIndicator,
   keyboardAvoidOffset = 0,
+  groupChannelPubSub,
 }) => {
   if (!channel) throw new Error('GroupChannel is not provided to GroupChannelModule');
 
@@ -61,7 +67,9 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
         }}
       >
         <GroupChannelContexts.TypingIndicator.Provider value={{ typingUsers }}>
-          {children}
+          <GroupChannelContexts.PubSub.Provider value={groupChannelPubSub}>
+            {children}
+          </GroupChannelContexts.PubSub.Provider>
         </GroupChannelContexts.TypingIndicator.Provider>
       </GroupChannelContexts.Fragment.Provider>
     </ProviderLayout>

@@ -208,6 +208,7 @@ export type UseGroupChannelMessagesOptions = {
   onChannelDeleted?: () => void;
   shouldCountNewMessages?: () => boolean;
   startingPoint?: number;
+  onMessagesReceived?: (messages: SendbirdMessage[]) => void;
 };
 
 /**
@@ -388,6 +389,7 @@ export type UseOpenChannelMessagesOptions = {
   onChannelDeleted?: () => void;
   onError?: (error?: unknown) => void;
   shouldCountNewMessages?: () => boolean;
+  onMessagesReceived?: (messages: SendbirdMessage[]) => void;
 };
 
 /**

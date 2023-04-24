@@ -4,7 +4,9 @@ import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
 import {
   NOOP,
   PASS,
+  SendbirdFileMessage,
   SendbirdGroupChannel,
+  SendbirdUserMessage,
   messageComparator,
   useFreshCallback,
   useRefTracker,
@@ -15,8 +17,14 @@ import NewMessagesButton from '../components/NewMessagesButton';
 import ScrollToBottomButton from '../components/ScrollToBottomButton';
 import StatusComposition from '../components/StatusComposition';
 import createGroupChannelModule from '../domain/groupChannel/module/createGroupChannelModule';
-import type { GroupChannelFragment, GroupChannelModule, GroupChannelProps } from '../domain/groupChannel/types';
+import type {
+  GroupChannelFragment,
+  GroupChannelModule,
+  GroupChannelProps,
+  GroupChannelPubSubContextPayload,
+} from '../domain/groupChannel/types';
 import { useSendbirdChat } from '../hooks/useContext';
+import pubsub from '../utils/pubsub';
 
 const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): GroupChannelFragment => {
   const GroupChannelModule = createGroupChannelModule(initModule);
@@ -44,6 +52,8 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     onPressImageMessage,
   }) => {
     const { sdk, currentUser } = useSendbirdChat();
+
+    const [groupChannelPubSub] = useState(() => pubsub<GroupChannelPubSubContextPayload>());
     const [scrolledAwayFromBottom, setScrolledAwayFromBottom] = useState(false);
     const scrolledAwayFromBottomRef = useRefTracker(scrolledAwayFromBottom);
 
@@ -54,6 +64,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       resetNewMessages,
       next,
       prev,
+      hasNext,
       sendFileMessage,
       sendUserMessage,
       updateFileMessage,
@@ -67,6 +78,10 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       onChannelDeleted,
       enableCollectionWithoutLocalCache: !queryCreator,
       shouldCountNewMessages: () => scrolledAwayFromBottomRef.current,
+      onMessagesReceived(messages) {
+        groupChannelPubSub.publish({ type: 'MESSAGES_RECEIVED', data: { messages } });
+      },
+      // startingPoint: 1681828275410, //1681828362945
     });
 
     const _renderMessage: GroupChannelProps['MessageList']['renderMessage'] = useFreshCallback((props) => {
@@ -83,16 +98,20 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       [flatListProps],
     );
 
+    const onPending = (message: SendbirdFileMessage | SendbirdUserMessage) => {
+      groupChannelPubSub.publish({ type: 'MESSAGE_SENT_PENDING', data: { message } });
+    };
+
     const onPressSendUserMessage: GroupChannelProps['Input']['onPressSendUserMessage'] = useFreshCallback(
       async (params) => {
         const processedParams = await onBeforeSendUserMessage(params);
-        await sendUserMessage(processedParams);
+        await sendUserMessage(processedParams, onPending);
       },
     );
     const onPressSendFileMessage: GroupChannelProps['Input']['onPressSendFileMessage'] = useFreshCallback(
       async (params) => {
         const processedParams = await onBeforeSendFileMessage(params);
-        await sendFileMessage(processedParams);
+        await sendFileMessage(processedParams, onPending);
       },
     );
     const onPressUpdateUserMessage: GroupChannelProps['Input']['onPressUpdateUserMessage'] = useFreshCallback(
@@ -115,7 +134,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     /** @deprecated **/
     const onSendFileMessage: GroupChannelProps['Input']['onSendFileMessage'] = useFreshCallback(async (file) => {
       const processedParams = await onBeforeSendFileMessage({ file });
-      await sendFileMessage(processedParams);
+      await sendFileMessage(processedParams, onPending);
     });
     /** @deprecated **/
     const onSendUserMessage: GroupChannelProps['Input']['onSendUserMessage'] = useFreshCallback(
@@ -126,7 +145,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
           mentionedMessageTemplate: mention?.messageTemplate,
           mentionType: mention?.type,
         });
-        await sendUserMessage(processedParams);
+        await sendUserMessage(processedParams, onPending);
       },
     );
     /** @deprecated **/
@@ -152,6 +171,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     return (
       <GroupChannelModule.Provider
         channel={channel}
+        groupChannelPubSub={groupChannelPubSub}
         enableTypingIndicator={enableTypingIndicator}
         keyboardAvoidOffset={keyboardAvoidOffset}
       >
@@ -166,6 +186,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             newMessages={newMessages}
             onTopReached={prev}
             onBottomReached={next}
+            hasNext={hasNext}
             scrolledAwayFromBottom={scrolledAwayFromBottom}
             onScrolledAwayFromBottom={onScrolledAwayFromBottom}
             renderNewMessagesButton={renderNewMessagesButton}

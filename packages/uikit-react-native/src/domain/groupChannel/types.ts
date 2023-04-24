@@ -17,6 +17,7 @@ import type {
 import type { ChannelInputProps, SuggestedMentionListProps } from '../../components/ChannelInput';
 import type { ChannelMessageListProps } from '../../components/ChannelMessageList';
 import type { CommonComponent } from '../../types';
+import type { PubSub } from '../../utils/pubsub';
 
 export interface GroupChannelProps {
   Fragment: {
@@ -43,6 +44,7 @@ export interface GroupChannelProps {
     sortComparator?: UseGroupChannelMessagesOptions['sortComparator'];
     collectionCreator?: UseGroupChannelMessagesOptions['collectionCreator'];
     queryCreator?: UseGroupChannelMessagesOptions['queryCreator'];
+    startingPoint?: UseGroupChannelMessagesOptions['startingPoint'];
 
     /** @deprecated Please use `onPressMediaMessage` instead **/
     onPressImageMessage?: GroupChannelProps['MessageList']['onPressImageMessage'];
@@ -70,6 +72,7 @@ export interface GroupChannelProps {
     | 'renderScrollToBottomButton'
     | 'flatListProps'
     | 'onPressImageMessage'
+    | 'hasNext'
   > & {
     /** @deprecated Please use `newMessages` instead */
     newMessagesFromMembers: SendbirdMessage[];
@@ -95,6 +98,7 @@ export interface GroupChannelProps {
     channel: SendbirdGroupChannel;
     enableTypingIndicator: boolean;
     keyboardAvoidOffset?: number;
+    groupChannelPubSub: PubSub<GroupChannelPubSubContextPayload>;
   };
 }
 
@@ -114,6 +118,7 @@ export interface GroupChannelContextsType {
   TypingIndicator: React.Context<{
     typingUsers: SendbirdUser[];
   }>;
+  PubSub: React.Context<PubSub<GroupChannelPubSubContextPayload>>;
 }
 export interface GroupChannelModule {
   Provider: CommonComponent<GroupChannelProps['Provider']>;
@@ -126,3 +131,17 @@ export interface GroupChannelModule {
 }
 
 export type GroupChannelFragment = CommonComponent<GroupChannelProps['Fragment']>;
+
+export type GroupChannelPubSubContextPayload =
+  | {
+      type: 'MESSAGE_SENT_PENDING';
+      data: {
+        message: SendbirdUserMessage | SendbirdFileMessage;
+      };
+    }
+  | {
+      type: 'MESSAGES_RECEIVED';
+      data: {
+        messages: SendbirdMessage[];
+      };
+    };

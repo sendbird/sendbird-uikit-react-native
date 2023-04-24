@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { FlatListProps, ListRenderItem, View } from 'react-native';
+import React, { Ref } from 'react';
+import { FlatList, FlatListProps, ListRenderItem, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -33,9 +33,10 @@ import type { UserProfileContextType } from '../../contexts/UserProfileCtx';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 import SBUUtils from '../../libs/SBUUtils';
 import type { CommonComponent } from '../../types';
-import ChatFlatList, { ChatFlatListRef } from '../ChatFlatList';
+import ChatFlatList from '../ChatFlatList';
 import { ReactionAddons } from '../ReactionAddons';
 
+type PressActions = { onPress?: () => void; onLongPress?: () => void };
 type HandleableMessage = SendbirdUserMessage | SendbirdFileMessage;
 export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpenChannel> = {
   enableMessageGrouping: boolean;
@@ -48,6 +49,10 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
   onScrolledAwayFromBottom: (value: boolean) => void;
   onTopReached: () => void;
   onBottomReached: () => void;
+  hasNext: () => boolean;
+
+  onPressNewMessagesButton: (animated?: boolean) => void;
+  onPressScrollToBottomButton: (animated?: boolean) => void;
 
   onEditMessage: (message: HandleableMessage) => void;
   onDeleteMessage: (message: HandleableMessage) => Promise<void>;
@@ -78,32 +83,39 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
 
   /** @deprecated Please use `onPressMediaMessage` instead **/
   onPressImageMessage?: (message: SendbirdFileMessage, uri: string) => void;
+} & {
+  ref?: Ref<FlatList<SendbirdMessage>> | undefined;
 };
 
-const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel>({
-  channel,
-  onEditMessage,
-  onDeleteMessage,
-  onResendFailedMessage,
-  onPressMediaMessage,
-  currentUserId,
-  renderNewMessagesButton,
-  renderScrollToBottomButton,
-  renderMessage,
-  messages,
-  newMessages,
-  enableMessageGrouping,
-  onScrolledAwayFromBottom,
-  scrolledAwayFromBottom,
-  onBottomReached,
-  onTopReached,
-  flatListProps,
-  onPressImageMessage,
-}: ChannelMessageListProps<T>) => {
+const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel>(
+  {
+    hasNext,
+    channel,
+    onEditMessage,
+    onDeleteMessage,
+    onResendFailedMessage,
+    onPressMediaMessage,
+    currentUserId,
+    renderNewMessagesButton,
+    renderScrollToBottomButton,
+    renderMessage,
+    messages,
+    newMessages,
+    enableMessageGrouping,
+    onScrolledAwayFromBottom,
+    scrolledAwayFromBottom,
+    onBottomReached,
+    onTopReached,
+    flatListProps,
+    onPressNewMessagesButton,
+    onPressScrollToBottomButton,
+    onPressImageMessage,
+  }: ChannelMessageListProps<T>,
+  ref: React.ForwardedRef<FlatList<SendbirdMessage>>,
+) => {
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
   const { left, right } = useSafeAreaInsets();
-  const scrollRef = useRef<ChatFlatListRef>(null);
   const getMessagePressActions = useGetMessagePressActions({
     channel,
     currentUserId,
@@ -133,15 +145,14 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
   return (
     <View style={[{ flex: 1, backgroundColor: colors.background }, safeAreaLayout]}>
       {channel.isFrozen && (
-        <ChannelFrozenBanner style={styles.frozenBanner} text={STRINGS.GROUP_CHANNEL.LIST_BANNER_FROZEN} />
+        <ChannelFrozenBanner style={styles.frozenBanner} text={STRINGS.LABELS.CHANNEL_MESSAGE_LIST_FROZEN} />
       )}
       <ChatFlatList
+        {...flatListProps}
         onTopReached={onTopReached}
         onBottomReached={onBottomReached}
         onScrolledAwayFromBottom={onScrolledAwayFromBottom}
-        currentUserId={currentUserId}
-        {...flatListProps}
-        ref={scrollRef}
+        ref={ref}
         data={messages}
         renderItem={renderItem}
         keyExtractor={messageKeyExtractor}
@@ -154,8 +165,8 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
       {renderNewMessagesButton && (
         <View style={[styles.newMsgButton, safeAreaLayout]}>
           {renderNewMessagesButton({
-            visible: scrolledAwayFromBottom,
-            onPress: () => scrollRef.current?.scrollToBottom(false),
+            visible: !hasNext() && scrolledAwayFromBottom,
+            onPress: () => onPressNewMessagesButton(),
             newMessages,
           })}
         </View>
@@ -163,8 +174,8 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
       {renderScrollToBottomButton && (
         <View pointerEvents={scrolledAwayFromBottom ? 'auto' : 'none'} style={[styles.scrollButton, safeAreaLayout]}>
           {renderScrollToBottomButton({
-            visible: scrolledAwayFromBottom,
-            onPress: () => scrollRef.current?.scrollToBottom(false),
+            visible: !hasNext() && scrolledAwayFromBottom,
+            onPress: () => onPressScrollToBottomButton(),
           })}
         </View>
       )}
@@ -239,7 +250,7 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
     }
 
     const sheetItems: BottomSheetItem['sheetItems'] = [];
-    const response: { onPress?: () => void; onLongPress?: () => void } = {
+    const response: PressActions = {
       onPress: undefined,
       onLongPress: undefined,
     };
@@ -373,4 +384,5 @@ const styles = createStyleSheet({
   },
 });
 
-export default ChannelMessageList;
+// NOTE: Due to Generic inference is not working on forwardRef, we need to cast it as typeof ChannelMessageList and implicit `ref` prop
+export default React.forwardRef(ChannelMessageList) as typeof ChannelMessageList;

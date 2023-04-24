@@ -1,17 +1,31 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { SendbirdError } from '@sendbird/chat';
 import { useOpenChannelMessages } from '@sendbird/uikit-chat-hooks';
 import { useToast } from '@sendbird/uikit-react-native-foundation';
-import { NOOP, PASS, SBErrorCode, messageComparator, useFreshCallback } from '@sendbird/uikit-utils';
+import {
+  NOOP,
+  PASS,
+  SBErrorCode,
+  SendbirdFileMessage,
+  SendbirdUserMessage,
+  messageComparator,
+  useFreshCallback,
+} from '@sendbird/uikit-utils';
 
 import OpenChannelMessageRenderer from '../components/OpenChannelMessageRenderer';
 import ScrollToBottomButton from '../components/ScrollToBottomButton';
 import StatusComposition from '../components/StatusComposition';
 import { UNKNOWN_USER_ID } from '../constants';
 import { createOpenChannelModule } from '../domain/openChannel';
-import type { OpenChannelFragment, OpenChannelModule, OpenChannelProps } from '../domain/openChannel/types';
+import type {
+  OpenChannelFragment,
+  OpenChannelModule,
+  OpenChannelProps,
+  OpenChannelPubSubContextPayload,
+} from '../domain/openChannel/types';
 import { useLocalization, useSendbirdChat, useUserProfile } from '../hooks/useContext';
+import pubsub from '../utils/pubsub';
 
 const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): OpenChannelFragment => {
   const OpenChannelModule = createOpenChannelModule(initModule);
@@ -45,11 +59,14 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
     const { show: showToast } = useToast();
     const { show: showUserProfile } = useUserProfile();
 
+    const [openChannelPubSub] = useState(() => pubsub<OpenChannelPubSubContextPayload>());
+
     const {
       messages,
       nextMessages,
       next,
       prev,
+      hasNext,
       sendFileMessage,
       sendUserMessage,
       updateFileMessage,
@@ -73,6 +90,9 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
 
         showToast(STRINGS.TOAST.UNKNOWN_ERROR, 'error');
       },
+      onMessagesReceived(messages) {
+        openChannelPubSub.publish({ type: 'MESSAGES_RECEIVED', data: { messages } });
+      },
     });
 
     const isOperator = channel.isOperator(currentUser?.userId ?? UNKNOWN_USER_ID);
@@ -91,16 +111,20 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
       [loading, flatListProps],
     );
 
+    const onPending = (message: SendbirdFileMessage | SendbirdUserMessage) => {
+      openChannelPubSub.publish({ type: 'MESSAGE_SENT_PENDING', data: { message } });
+    };
+
     const onPressSendUserMessage: OpenChannelProps['Input']['onPressSendUserMessage'] = useFreshCallback(
       async (params) => {
         const processedParams = await onBeforeSendUserMessage(params);
-        await sendUserMessage(processedParams);
+        await sendUserMessage(processedParams, onPending);
       },
     );
     const onPressSendFileMessage: OpenChannelProps['Input']['onPressSendFileMessage'] = useFreshCallback(
       async (params) => {
         const processedParams = await onBeforeSendFileMessage(params);
-        await sendFileMessage(processedParams);
+        await sendFileMessage(processedParams, onPending);
       },
     );
     const onPressUpdateUserMessage: OpenChannelProps['Input']['onPressUpdateUserMessage'] = useFreshCallback(
@@ -117,7 +141,11 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
     );
 
     return (
-      <OpenChannelModule.Provider channel={channel} keyboardAvoidOffset={keyboardAvoidOffset}>
+      <OpenChannelModule.Provider
+        openChannelPubSub={openChannelPubSub}
+        channel={channel}
+        keyboardAvoidOffset={keyboardAvoidOffset}
+      >
         <OpenChannelModule.Header
           onPressHeaderLeft={onPressHeaderLeft}
           rightIconName={isOperator ? 'info' : 'members'}
@@ -126,6 +154,7 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
         <StatusComposition loading={loading} LoadingComponent={<OpenChannelModule.StatusLoading />}>
           <OpenChannelModule.MessageList
             channel={channel}
+            hasNext={hasNext}
             enableMessageGrouping={enableMessageGrouping}
             currentUserId={currentUser?.userId}
             renderMessage={_renderMessage}

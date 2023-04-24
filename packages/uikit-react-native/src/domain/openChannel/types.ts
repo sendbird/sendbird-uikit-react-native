@@ -7,6 +7,7 @@ import type {
   SendbirdFileMessage,
   SendbirdFileMessageCreateParams,
   SendbirdFileMessageUpdateParams,
+  SendbirdMessage,
   SendbirdOpenChannel,
   SendbirdUserMessage,
   SendbirdUserMessageCreateParams,
@@ -16,6 +17,8 @@ import type {
 import type { ChannelInputProps } from '../../components/ChannelInput';
 import type { ChannelMessageListProps } from '../../components/ChannelMessageList';
 import type { CommonComponent } from '../../types';
+import type { PubSub } from '../../utils/pubsub';
+import type { GroupChannelPubSubContextPayload } from '../groupChannel/types';
 
 export type OpenChannelProps = {
   Fragment: {
@@ -67,6 +70,7 @@ export type OpenChannelProps = {
     | 'renderScrollToBottomButton'
     | 'flatListProps'
     | 'onPressImageMessage'
+    | 'hasNext'
   >;
   Input: Pick<
     ChannelInputProps,
@@ -80,6 +84,7 @@ export type OpenChannelProps = {
   Provider: {
     channel: SendbirdOpenChannel;
     keyboardAvoidOffset?: number;
+    openChannelPubSub: PubSub<OpenChannelPubSubContextPayload>;
   };
 };
 
@@ -96,6 +101,7 @@ export type OpenChannelContextsType = {
     setMessageToEdit: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
     keyboardAvoidOffset?: number;
   }>;
+  PubSub: React.Context<PubSub<GroupChannelPubSubContextPayload>>;
 };
 export interface OpenChannelModule {
   Provider: CommonComponent<OpenChannelProps['Provider']>;
@@ -107,3 +113,17 @@ export interface OpenChannelModule {
 }
 
 export type OpenChannelFragment = CommonComponent<OpenChannelProps['Fragment']>;
+
+export type OpenChannelPubSubContextPayload =
+  | {
+      type: 'MESSAGE_SENT_PENDING';
+      data: {
+        message: SendbirdUserMessage | SendbirdFileMessage;
+      };
+    }
+  | {
+      type: 'MESSAGES_RECEIVED';
+      data: {
+        messages: SendbirdMessage[];
+      };
+    };

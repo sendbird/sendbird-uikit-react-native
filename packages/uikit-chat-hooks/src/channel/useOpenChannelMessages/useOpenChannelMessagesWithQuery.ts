@@ -73,6 +73,9 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
         if (options?.shouldCountNewMessages?.()) {
           updateNewMessages([message], false, sdk.currentUser.userId);
         }
+        if (options?.onMessagesReceived) {
+          options.onMessagesReceived([message]);
+        }
       },
       onMessageUpdated(eventChannel, message) {
         if (isDifferentChannel(channel, eventChannel)) return;
