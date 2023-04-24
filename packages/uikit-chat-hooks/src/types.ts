@@ -74,7 +74,7 @@ export type UseGroupChannelListOptions = {
 /**
  * @interface UseGroupChannelMessages
  * @description interface for group channel messages hook
- * - Receive new messages from other users -> append to state(newMessages)
+ * - Receive new messages from other users & should count new messages -> append to state(newMessages)
  * - onTopReached -> prev() -> fetch prev messages and append to state(messages)
  * - onBottomReached -> next() -> nextMessages append to state(messages)
  * */
@@ -111,10 +111,22 @@ export interface UseGroupChannelMessages {
     prev: () => Promise<void>;
 
     /**
+     * Check if there are more prev messages to fetch
+     * @return {boolean}
+     * */
+    hasPrev: () => boolean;
+
+    /**
      * Fetch next messages to state
      * @return {Promise<void>}
      * */
     next: () => Promise<void>;
+
+    /**
+     * Check if there are more next messages to fetch
+     * @return {boolean}
+     * */
+    hasNext: () => boolean;
 
     /**
      * A new message means a message that meets the below conditions
@@ -191,10 +203,11 @@ export interface UseGroupChannelMessages {
 export type UseGroupChannelMessagesOptions = {
   sortComparator?: (a: SendbirdMessage, b: SendbirdMessage) => number;
   queryCreator?: () => SendbirdPreviousMessageListQuery;
-  collectionCreator?: () => SendbirdMessageCollection;
+  collectionCreator?: (options?: Pick<UseGroupChannelMessagesOptions, 'startingPoint'>) => SendbirdMessageCollection;
   enableCollectionWithoutLocalCache?: boolean;
   onChannelDeleted?: () => void;
   shouldCountNewMessages?: () => boolean;
+  startingPoint?: number;
 };
 
 /**
@@ -243,7 +256,7 @@ export type UseOpenChannelListOptions = {
 /**
  * @interface UseOpenChannelMessages
  * @description interface for open channel messages hook
- * - Receive new messages from other users -> append to state(newMessages)
+ * - Receive new messages from other users & should count new messages -> append to state(newMessages)
  * - onTopReached -> prev() -> fetch prev messages and append to state(messages)
  * - onBottomReached -> next() -> nextMessages append to state(messages)
  * */
@@ -280,6 +293,12 @@ export interface UseOpenChannelMessages {
     prev: () => Promise<void>;
 
     /**
+     * Check if there are more prev messages to fetch
+     * @return {boolean}
+     * */
+    hasPrev: () => boolean;
+
+    /**
      * A new message means a message that meets the below conditions
      * - Not admin message
      * - Not updated message
@@ -297,6 +316,12 @@ export interface UseOpenChannelMessages {
      * @return {Promise<void>}
      * */
     next: () => Promise<void>;
+
+    /**
+     * Check if there are more next messages to fetch
+     * @return {boolean}
+     * */
+    hasNext: () => boolean;
 
     /**
      * Send file message

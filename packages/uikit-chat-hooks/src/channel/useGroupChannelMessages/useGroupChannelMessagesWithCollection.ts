@@ -16,13 +16,10 @@ import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';
 import { useChannelMessagesReducer } from '../useChannelMessagesReducer';
 
-const createMessageCollection = (
-  channel: SendbirdGroupChannel,
-  creator?: UseGroupChannelMessagesOptions['collectionCreator'],
-) => {
-  if (creator) return creator();
+const createMessageCollection = (channel: SendbirdGroupChannel, options?: UseGroupChannelMessagesOptions) => {
+  if (options?.collectionCreator) return options?.collectionCreator({ startingPoint: options?.startingPoint });
   const filter = new MessageFilter();
-  return channel.createMessageCollection({ filter, limit: 100 });
+  return channel.createMessageCollection({ filter, limit: 100, startingPoint: options?.startingPoint });
 };
 
 function isNotEmpty(arr?: unknown[]): arr is unknown[] {
@@ -76,7 +73,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
       channelMarkAsRead();
       updateNewMessages([], true, sdk.currentUser.userId);
 
-      collectionRef.current = createMessageCollection(channel, options?.collectionCreator);
+      collectionRef.current = createMessageCollection(channel, options);
       collectionRef.current?.setMessageCollectionHandler({
         onMessagesAdded: (_, __, messages) => {
           channelMarkAsRead(_.source);
@@ -179,6 +176,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
   });
 
   const prev: ReturnType<UseGroupChannelMessages>['prev'] = useFreshCallback(async () => {
+    console.log('call next', collectionRef.current?.hasNext);
     if (collectionRef.current && collectionRef.current?.hasPrevious) {
       try {
         const list = await collectionRef.current?.loadPrevious();
@@ -187,7 +185,12 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     }
   });
 
+  const hasPrev: ReturnType<UseGroupChannelMessages>['hasPrev'] = useFreshCallback(
+    () => collectionRef.current?.hasPrevious ?? false,
+  );
+
   const next: ReturnType<UseGroupChannelMessages>['next'] = useFreshCallback(async () => {
+    console.log('call next', collectionRef.current?.hasNext);
     if (collectionRef.current && collectionRef.current?.hasNext) {
       try {
         const fetchedList = await collectionRef.current?.loadNext();
@@ -195,6 +198,10 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
       } catch {}
     }
   });
+
+  const hasNext: ReturnType<UseGroupChannelMessages>['hasNext'] = useFreshCallback(
+    () => collectionRef.current?.hasNext ?? false,
+  );
 
   const sendUserMessage: ReturnType<UseGroupChannelMessages>['sendUserMessage'] = useFreshCallback(
     (params, onPending) => {
@@ -291,7 +298,9 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     refresh,
     messages,
     next,
+    hasNext,
     prev,
+    hasPrev,
     newMessages,
     resetNewMessages,
     sendUserMessage,

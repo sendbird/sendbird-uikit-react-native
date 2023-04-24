@@ -152,8 +152,12 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
       updateMessages(list, false, sdk.currentUser.userId);
     }
   });
+  const hasPrev: ReturnType<UseGroupChannelMessages>['hasPrev'] = useFreshCallback(
+    () => queryRef.current?.hasNext ?? false,
+  );
 
   const next: ReturnType<UseGroupChannelMessages>['next'] = useFreshCallback(ASYNC_NOOP);
+  const hasNext: ReturnType<UseGroupChannelMessages>['hasNext'] = useFreshCallback(() => false);
 
   const sendUserMessage: ReturnType<UseGroupChannelMessages>['sendUserMessage'] = useFreshCallback(
     (params, onPending) => {
@@ -248,7 +252,9 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
     newMessages,
     resetNewMessages,
     next,
+    hasNext,
     prev,
+    hasPrev,
     sendUserMessage,
     sendFileMessage,
     updateUserMessage,

@@ -146,8 +146,12 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
       updateMessages(list, false, sdk.currentUser.userId);
     }
   });
+  const hasPrev: ReturnType<UseOpenChannelMessages>['hasPrev'] = useFreshCallback(
+    () => queryRef.current?.hasNext ?? false,
+  );
 
   const next: ReturnType<UseOpenChannelMessages>['next'] = useFreshCallback(ASYNC_NOOP);
+  const hasNext: ReturnType<UseOpenChannelMessages>['hasNext'] = useFreshCallback(() => false);
 
   const sendUserMessage: ReturnType<UseOpenChannelMessages>['sendUserMessage'] = useFreshCallback(
     (params, onPending) => {
@@ -241,7 +245,9 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
     messages,
     newMessages,
     next,
+    hasNext,
     prev,
+    hasPrev,
     sendUserMessage,
     sendFileMessage,
     updateUserMessage,
