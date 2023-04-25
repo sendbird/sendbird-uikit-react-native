@@ -7,7 +7,6 @@ import { AppState } from 'react-native';
 import { SendbirdUIKitContainer, useSendbirdChat } from '@sendbird/uikit-react-native';
 import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
-import LogView from './components/LogView';
 // import LogView from './components/LogView';
 import { APP_ID } from './env';
 import {
@@ -124,7 +123,7 @@ const Navigations = () => {
 
   return (
     <NavigationContainer ref={navigationRef} theme={isLightTheme ? DefaultTheme : DarkTheme}>
-      <LogView />
+      {/*<LogView />*/}
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
         {!currentUser ? (
           <RootStack.Screen name={Routes.SignIn} component={SignInScreen} />
