@@ -6,6 +6,9 @@ import {
   getGroupChannelLastMessage,
   getGroupChannelPreviewTime,
   getGroupChannelTitle,
+  getMessagePreviewBody,
+  getMessagePreviewTime,
+  getMessagePreviewTitle,
   getMessageTimeFormat,
   getOpenChannelParticipants,
   getOpenChannelTitle,
@@ -166,6 +169,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       HEADER_RIGHT: 'Edit',
       MENU_MODERATION: 'Moderation',
       MENU_MEMBERS: 'Members',
+      MENU_SEARCH: 'Search in channel',
       MENU_LEAVE_CHANNEL: 'Leave channel',
       MENU_NOTIFICATION: 'Notifications',
       MENU_NOTIFICATION_LABEL_ON: 'On',
@@ -265,6 +269,15 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
         return `Invite (${len})`;
       },
       ...overrides?.GROUP_CHANNEL_INVITE,
+    },
+    MESSAGE_SEARCH: {
+      HEADER_INPUT_PLACEHOLDER: 'Search',
+      HEADER_RIGHT: 'Search',
+      MESSAGE_PREVIEW_TITLE: (message) => getMessagePreviewTitle(message),
+      MESSAGE_PREVIEW_BODY: (message) => getMessagePreviewBody(message),
+      MESSAGE_PREVIEW_TITLE_CAPTION: (message, locale) => {
+        return getMessagePreviewTime(message.createdAt, locale ?? dateLocale);
+      },
     },
     LABELS: {
       PERMISSION_APP_NAME: 'Application',

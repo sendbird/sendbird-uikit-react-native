@@ -29,6 +29,10 @@ const GroupChannelSettingsScreen = () => {
         // Navigate to group channel members
         navigation.push(Routes.GroupChannelMembers, params);
       }}
+      onPressMenuSearchInChannel={() => {
+        // Navigate to group channel search
+        navigation.push(Routes.MessageSearch, params);
+      }}
       onPressMenuLeaveChannel={() => {
         // Navigate to group channel list
         navigation.navigate(Routes.GroupChannelList);

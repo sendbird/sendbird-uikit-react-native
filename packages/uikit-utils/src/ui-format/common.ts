@@ -1,5 +1,7 @@
 import type { Locale } from 'date-fns';
-import { format, isThisYear } from 'date-fns';
+import { format, isThisYear, isToday, isYesterday } from 'date-fns';
+
+import type { SendbirdBaseMessage } from '../types';
 
 type TruncateMode = 'head' | 'mid' | 'tail';
 type TruncateOption = { mode: TruncateMode; maxLen: number; separator: string };
@@ -72,4 +74,54 @@ export const getDateSeparatorFormat = (date: Date, locale?: Locale): string => {
  * */
 export const getMessageTimeFormat = (date: Date, locale?: Locale): string => {
   return format(date, 'p', { locale });
+};
+
+/**
+ * Message preview title text
+ * */
+export const getMessagePreviewTitle = (message: SendbirdBaseMessage, EMPTY_USERNAME = '(No name)') => {
+  if (message.isFileMessage() || message.isUserMessage()) {
+    return message.sender.nickname || EMPTY_USERNAME;
+  }
+  if (message.isAdminMessage()) {
+    return 'Admin';
+  }
+  return EMPTY_USERNAME;
+};
+
+/**
+ * Message preview body text
+ * */
+export const getMessagePreviewBody = (message: SendbirdBaseMessage, EMPTY_MESSAGE = '', MAX_LEN = 15) => {
+  if (message.isFileMessage()) {
+    const extIdx = message.name.lastIndexOf('.');
+    if (extIdx > -1) {
+      const file = message.name.slice(0, extIdx);
+      const ext = message.name.slice(extIdx);
+      return truncate(file, { maxLen: MAX_LEN }) + ext;
+    }
+
+    return truncate(message.name, { maxLen: MAX_LEN });
+  }
+
+  if (message.isUserMessage()) {
+    return message.message ?? EMPTY_MESSAGE;
+  }
+
+  if (message.isAdminMessage()) {
+    return message.message ?? EMPTY_MESSAGE;
+  }
+
+  return EMPTY_MESSAGE;
+};
+
+/**
+ * Message preview time format
+ * */
+export const getMessagePreviewTime = (timestamp: number, locale?: Locale) => {
+  if (isToday(timestamp)) return format(timestamp, 'p', { locale });
+  if (isYesterday(timestamp)) return 'Yesterday';
+  if (isThisYear(timestamp)) return format(timestamp, 'MMM dd', { locale });
+
+  return format(timestamp, 'yyyy/MM/dd', { locale });
 };

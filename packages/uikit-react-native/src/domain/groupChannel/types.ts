@@ -44,12 +44,14 @@ export interface GroupChannelProps {
     sortComparator?: UseGroupChannelMessagesOptions['sortComparator'];
     collectionCreator?: UseGroupChannelMessagesOptions['collectionCreator'];
     queryCreator?: UseGroupChannelMessagesOptions['queryCreator'];
-    startingPoint?: UseGroupChannelMessagesOptions['startingPoint'];
+
+    searchItem?: { startingPoint: number };
 
     /** @deprecated Please use `onPressMediaMessage` instead **/
     onPressImageMessage?: GroupChannelProps['MessageList']['onPressImageMessage'];
   };
   Header: {
+    shouldHideRight: () => boolean;
     onPressHeaderLeft: () => void;
     onPressHeaderRight: () => void;
   };
@@ -74,6 +76,8 @@ export interface GroupChannelProps {
     | 'onPressImageMessage'
     | 'hasNext'
   > & {
+    onResetMessageList: (callback?: () => void) => void;
+
     /** @deprecated Please use `newMessages` instead */
     newMessagesFromMembers: SendbirdMessage[];
     /** @deprecated Please use `newMessages` instead */

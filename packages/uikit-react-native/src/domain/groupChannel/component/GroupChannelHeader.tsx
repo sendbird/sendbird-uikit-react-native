@@ -8,12 +8,18 @@ import { useLocalization } from '../../../hooks/useContext';
 import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
 
-const GroupChannelHeader = ({ onPressHeaderLeft, onPressHeaderRight }: GroupChannelProps['Header']) => {
+const GroupChannelHeader = ({
+  shouldHideRight,
+  onPressHeaderLeft,
+  onPressHeaderRight,
+}: GroupChannelProps['Header']) => {
   const { headerTitle, channel } = useContext(GroupChannelContexts.Fragment);
   const { typingUsers } = useContext(GroupChannelContexts.TypingIndicator);
   const { STRINGS } = useLocalization();
   const { HeaderComponent } = useHeaderStyle();
   const subtitle = STRINGS.LABELS.TYPING_INDICATOR_TYPINGS(typingUsers);
+
+  const isHidden = shouldHideRight();
 
   return (
     <HeaderComponent
@@ -29,8 +35,8 @@ const GroupChannelHeader = ({ onPressHeaderLeft, onPressHeaderRight }: GroupChan
       }
       left={<Icon icon={'arrow-left'} />}
       onPressLeft={onPressHeaderLeft}
-      right={<Icon icon={'info'} />}
-      onPressRight={onPressHeaderRight}
+      right={isHidden ? null : <Icon icon={'info'} />}
+      onPressRight={isHidden ? undefined : onPressHeaderRight}
     />
   );
 };

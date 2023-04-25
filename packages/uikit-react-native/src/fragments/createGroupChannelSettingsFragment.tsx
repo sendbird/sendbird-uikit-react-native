@@ -18,6 +18,7 @@ const createGroupChannelSettingsFragment = (
     channel,
     onPressMenuModeration,
     onPressMenuMembers,
+    onPressMenuSearchInChannel,
     onPressMenuLeaveChannel,
     onPressMenuNotification,
     menuItemsCreator,
@@ -40,6 +41,7 @@ const createGroupChannelSettingsFragment = (
             menuItemsCreator={menuItemsCreator}
             onPressMenuModeration={onPressMenuModeration}
             onPressMenuMembers={onPressMenuMembers}
+            onPressMenuSearchInChannel={onPressMenuSearchInChannel}
             onPressMenuLeaveChannel={onPressMenuLeaveChannel}
             onPressMenuNotification={onPressMenuNotification}
           />

@@ -18,15 +18,21 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   const id = useUniqHandlerId('GroupChannelMessageList');
   const ref = useRef<FlatList<SendbirdMessage>>(null);
 
+  // FIXME: Workaround, should run after data has been applied to UI.
+  const lazyScrollToBottom = (animated = false, timeout = 0) => {
+    setTimeout(() => {
+      ref.current?.scrollToOffset({ offset: 0, animated });
+    }, timeout);
+  };
+
   const scrollToBottom = useFreshCallback((animated = false) => {
     if (props.hasNext()) {
-      // TODO: Add startingPoint reset logic
-      // props.onChangeStartingPoint?.();
+      props.onResetMessageList(() => {
+        lazyScrollToBottom(animated);
+        props.onScrolledAwayFromBottom(false);
+      });
     } else {
-      // FIXME: Workaround, should run after data has been applied to UI.
-      setTimeout(() => {
-        ref.current?.scrollToOffset({ offset: 0, animated });
-      }, 0);
+      lazyScrollToBottom(animated);
     }
   });
 
@@ -37,19 +43,18 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
       const isRecentMessage = recentMessage && recentMessage.messageId === event.messageId;
       const scrollReachedBottomAndCanScroll = !props.scrolledAwayFromBottom && !props.hasNext();
       if (isRecentMessage && scrollReachedBottomAndCanScroll) {
-        // FIXME: Workaround, should run after data has been applied to UI.
-        setTimeout(() => {
-          ref.current?.scrollToOffset({ offset: 0, animated: true });
-        }, 250);
+        lazyScrollToBottom(true, 250);
       }
     },
   });
 
   useEffect(() => {
-    subscribe(({ type }) => {
+    return subscribe(({ type }) => {
       switch (type) {
         case 'MESSAGES_RECEIVED': {
-          scrollToBottom(true);
+          if (!props.scrolledAwayFromBottom) {
+            scrollToBottom(true);
+          }
           break;
         }
         case 'MESSAGE_SENT_PENDING': {
@@ -58,7 +63,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
         }
       }
     });
-  }, []);
+  }, [props.scrolledAwayFromBottom]);
 
   return (
     <ChannelMessageList

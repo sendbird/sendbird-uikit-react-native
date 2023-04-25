@@ -278,6 +278,9 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
     updateFileMessage,
     resendMessage,
     deleteMessage,
+    resetWithStartingPoint() {
+      Logger.warn('resetWithStartingPoint is not supported in Query, please use Collection instead.');
+    },
 
     nextMessages: newMessages,
     newMessagesFromMembers: newMessages,

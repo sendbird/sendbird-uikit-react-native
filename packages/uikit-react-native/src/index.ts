@@ -32,6 +32,7 @@ export { default as createGroupChannelRegisterOperatorFragment } from './fragmen
 export { default as createGroupChannelMutedMembersFragment } from './fragments/createGroupChannelMutedMembersFragment';
 export { default as createGroupChannelBannedUsersFragment } from './fragments/createGroupChannelBannedUsersFragment';
 export { default as createGroupChannelNotificationsFragment } from './fragments/createGroupChannelNotificationsFragment';
+export { default as createMessageSearchFragment } from './fragments/createMessageSearchFragment';
 
 /** Fragments - open channels **/
 export { default as createOpenChannelFragment } from './fragments/createOpenChannelFragment';

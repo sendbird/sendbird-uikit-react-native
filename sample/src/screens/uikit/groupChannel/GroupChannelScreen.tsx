@@ -77,6 +77,7 @@ const GroupChannelScreen = () => {
   return (
     <GroupChannelFragment
       channel={channel}
+      searchItem={params.searchItem}
       onPressMediaMessage={(fileMessage, deleteMessage) => {
         // Navigate to media viewer
         navigation.navigate(Routes.FileViewer, {

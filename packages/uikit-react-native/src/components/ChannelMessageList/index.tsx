@@ -165,7 +165,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
       {renderNewMessagesButton && (
         <View style={[styles.newMsgButton, safeAreaLayout]}>
           {renderNewMessagesButton({
-            visible: !hasNext() && scrolledAwayFromBottom,
+            visible: newMessages.length > 0 && (hasNext() || scrolledAwayFromBottom),
             onPress: () => onPressNewMessagesButton(),
             newMessages,
           })}
@@ -174,7 +174,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
       {renderScrollToBottomButton && (
         <View pointerEvents={scrolledAwayFromBottom ? 'auto' : 'none'} style={[styles.scrollButton, safeAreaLayout]}>
           {renderScrollToBottomButton({
-            visible: !hasNext() && scrolledAwayFromBottom,
+            visible: hasNext() || scrolledAwayFromBottom,
             onPress: () => onPressScrollToBottomButton(),
           })}
         </View>

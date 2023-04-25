@@ -1,6 +1,7 @@
 import type { Locale } from 'date-fns';
 
 import type {
+  SendbirdBaseMessage,
   SendbirdFileMessage,
   SendbirdGroupChannel,
   SendbirdMember,
@@ -173,6 +174,7 @@ export interface StringSet {
     /** GroupChannelSettings > Menu */
     MENU_MODERATION: string;
     MENU_MEMBERS: string;
+    MENU_SEARCH: string;
     MENU_LEAVE_CHANNEL: string;
     MENU_NOTIFICATION: string;
     MENU_NOTIFICATION_LABEL_ON: string;
@@ -266,6 +268,16 @@ export interface StringSet {
     /** GroupChannelCreate > Header */
     HEADER_TITLE: string;
     HEADER_RIGHT: <T>(params: { selectedUsers: Array<T> }) => string;
+  };
+  MESSAGE_SEARCH: {
+    /** MessageSearch > Header */
+    HEADER_INPUT_PLACEHOLDER: string;
+    HEADER_RIGHT: string;
+
+    /** MessageSearch > Message preview */
+    MESSAGE_PREVIEW_TITLE: (message: SendbirdBaseMessage) => string;
+    MESSAGE_PREVIEW_TITLE_CAPTION: (message: SendbirdBaseMessage, locale?: Locale) => string;
+    MESSAGE_PREVIEW_BODY: (message: SendbirdBaseMessage) => string;
   };
   // UI
   LABELS: {

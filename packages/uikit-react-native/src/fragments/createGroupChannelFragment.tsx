@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
 import {
@@ -30,6 +30,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
   const GroupChannelModule = createGroupChannelModule(initModule);
 
   return ({
+    searchItem,
     renderNewMessagesButton = (props) => <NewMessagesButton {...props} />,
     renderScrollToBottomButton = (props) => <ScrollToBottomButton {...props} />,
     renderMessage,
@@ -71,6 +72,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       updateUserMessage,
       resendMessage,
       deleteMessage,
+      resetWithStartingPoint,
     } = useGroupChannelMessages(sdk, channel, currentUser?.userId, {
       collectionCreator,
       queryCreator,
@@ -81,7 +83,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       onMessagesReceived(messages) {
         groupChannelPubSub.publish({ type: 'MESSAGES_RECEIVED', data: { messages } });
       },
-      // startingPoint: 1681828275410, //1681828362945
+      startingPoint: searchItem?.startingPoint,
     });
 
     const _renderMessage: GroupChannelProps['MessageList']['renderMessage'] = useFreshCallback((props) => {
@@ -96,6 +98,11 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
         ...flatListProps,
       }),
       [flatListProps],
+    );
+
+    const onResetMessageList = useCallback(
+      (callback?: () => void) => resetWithStartingPoint(Number.MAX_SAFE_INTEGER, callback),
+      [],
     );
 
     const onPending = (message: SendbirdFileMessage | SendbirdUserMessage) => {
@@ -175,10 +182,15 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
         enableTypingIndicator={enableTypingIndicator}
         keyboardAvoidOffset={keyboardAvoidOffset}
       >
-        <GroupChannelModule.Header onPressHeaderLeft={onPressHeaderLeft} onPressHeaderRight={onPressHeaderRight} />
+        <GroupChannelModule.Header
+          shouldHideRight={() => Boolean(searchItem)}
+          onPressHeaderLeft={onPressHeaderLeft}
+          onPressHeaderRight={onPressHeaderRight}
+        />
         <StatusComposition loading={loading} LoadingComponent={<GroupChannelModule.StatusLoading />}>
           <GroupChannelModule.MessageList
             channel={channel}
+            onResetMessageList={onResetMessageList}
             enableMessageGrouping={enableMessageGrouping}
             currentUserId={currentUser?.userId}
             renderMessage={_renderMessage}

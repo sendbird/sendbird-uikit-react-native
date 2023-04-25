@@ -36,6 +36,7 @@ import {
   GroupChannelSettingsScreen,
   GroupChannelTabs,
   HomeScreen,
+  MessageSearchScreen,
   OpenChannelBannedUsersScreen,
   OpenChannelCreateScreen,
   OpenChannelLiveStreamScreen,
@@ -149,6 +150,7 @@ const Navigations = () => {
               </RootStack.Group>
               <RootStack.Screen name={Routes.GroupChannelCreate} component={GroupChannelCreateScreen} />
               <RootStack.Screen name={Routes.GroupChannelInvite} component={GroupChannelInviteScreen} />
+              <RootStack.Screen name={Routes.MessageSearch} component={MessageSearchScreen} />
             </RootStack.Group>
 
             {/** Open channels **/}

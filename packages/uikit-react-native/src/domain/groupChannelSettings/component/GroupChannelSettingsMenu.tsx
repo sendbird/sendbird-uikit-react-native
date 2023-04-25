@@ -15,6 +15,7 @@ let WARN_onPressMenuNotification = false;
 const GroupChannelSettingsMenu = ({
   onPressMenuModeration,
   onPressMenuMembers,
+  onPressMenuSearchInChannel,
   onPressMenuLeaveChannel,
   onPressMenuNotification,
   menuItemsCreator = (menu) => menu,
@@ -87,6 +88,11 @@ const GroupChannelSettingsMenu = ({
       onPress: () => onPressMenuMembers(),
       actionLabel: String(channel.memberCount),
       actionItem: <Icon icon={'chevron-right'} color={colors.onBackground01} />,
+    },
+    {
+      icon: 'search',
+      name: STRINGS.GROUP_CHANNEL_SETTINGS.MENU_SEARCH,
+      onPress: () => onPressMenuSearchInChannel(),
     },
     {
       icon: 'leave',

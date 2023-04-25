@@ -22,7 +22,7 @@ const OpenChannelMessageList = (props: OpenChannelProps['MessageList']) => {
   });
 
   useEffect(() => {
-    subscribe(({ type }) => {
+    return subscribe(({ type }) => {
       switch (type) {
         case 'MESSAGES_RECEIVED': {
           scrollToBottom(false);

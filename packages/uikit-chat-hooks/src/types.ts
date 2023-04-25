@@ -137,6 +137,11 @@ export interface UseGroupChannelMessages {
     newMessages: SendbirdMessage[];
 
     /**
+     * reset message list with starting point
+     * */
+    resetWithStartingPoint: (startingPoint: number, callback?: () => void) => void;
+
+    /**
      * Reset new messages
      * */
     resetNewMessages: () => void;
