@@ -3,9 +3,10 @@ import type { FlatList } from 'react-native';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
-import { isDifferentChannel, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
+import { isDifferentChannel, useFreshCallback, useIsFirstMount, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import ChannelMessageList from '../../../components/ChannelMessageList';
+import { MESSAGE_SEARCH_SAFE_SCROLL_DELAY } from '../../../constants';
 import { useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
@@ -24,6 +25,27 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
       ref.current?.scrollToOffset({ offset: 0, animated });
     }, timeout);
   };
+
+  // FIXME: Workaround, should run after data has been applied to UI.
+  const lazyScrollToIndex = (index = 0, animated = false, timeout = 0) => {
+    setTimeout(() => {
+      ref.current?.scrollToIndex({ index, animated, viewPosition: 0.5 });
+    }, timeout);
+  };
+
+  const isFirstMount = useIsFirstMount();
+
+  useEffect(() => {
+    if (isFirstMount && props.searchItem) {
+      const createdAt = props.searchItem.startingPoint;
+      const index = props.messages.findIndex((it) => it.createdAt === createdAt);
+      if (index > -1) {
+        lazyScrollToIndex(index, false, 0);
+        lazyScrollToIndex(index, false, 100);
+        lazyScrollToIndex(index, true, MESSAGE_SEARCH_SAFE_SCROLL_DELAY);
+      }
+    }
+  }, [isFirstMount, props.searchItem]);
 
   const scrollToBottom = useFreshCallback((animated = false) => {
     if (props.hasNext()) {

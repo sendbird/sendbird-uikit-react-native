@@ -45,7 +45,7 @@ export interface GroupChannelProps {
     collectionCreator?: UseGroupChannelMessagesOptions['collectionCreator'];
     queryCreator?: UseGroupChannelMessagesOptions['queryCreator'];
 
-    searchItem?: { startingPoint: number };
+    searchItem?: GroupChannelProps['MessageList']['searchItem'];
 
     /** @deprecated Please use `onPressMediaMessage` instead **/
     onPressImageMessage?: GroupChannelProps['MessageList']['onPressImageMessage'];
@@ -75,6 +75,7 @@ export interface GroupChannelProps {
     | 'flatListProps'
     | 'onPressImageMessage'
     | 'hasNext'
+    | 'searchItem'
   > & {
     onResetMessageList: (callback?: () => void) => void;
 

@@ -1,4 +1,5 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Animated, Easing } from 'react-native';
 
 import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
 import {
@@ -16,6 +17,7 @@ import MessageRenderer from '../components/MessageRenderer';
 import NewMessagesButton from '../components/NewMessagesButton';
 import ScrollToBottomButton from '../components/ScrollToBottomButton';
 import StatusComposition from '../components/StatusComposition';
+import { MESSAGE_FOCUS_ANIMATION_DELAY, MESSAGE_SEARCH_SAFE_SCROLL_DELAY } from '../constants';
 import createGroupChannelModule from '../domain/groupChannel/module/createGroupChannelModule';
 import type {
   GroupChannelFragment,
@@ -86,9 +88,13 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       startingPoint: searchItem?.startingPoint,
     });
 
+    const MessageComponent: GroupChannelProps['MessageList']['renderMessage'] = useCallback(
+      withFocusingAnimation(renderMessage ? (props) => <>{renderMessage(props)}</> : MessageRenderer),
+      [renderMessage],
+    );
+
     const _renderMessage: GroupChannelProps['MessageList']['renderMessage'] = useFreshCallback((props) => {
-      if (renderMessage) return renderMessage(props);
-      return <MessageRenderer {...props} />;
+      return <MessageComponent {...props} />;
     });
 
     const memoizedFlatListProps = useMemo(
@@ -190,6 +196,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
         <StatusComposition loading={loading} LoadingComponent={<GroupChannelModule.StatusLoading />}>
           <GroupChannelModule.MessageList
             channel={channel}
+            searchItem={searchItem}
             onResetMessageList={onResetMessageList}
             enableMessageGrouping={enableMessageGrouping}
             currentUserId={currentUser?.userId}
@@ -235,6 +242,35 @@ function shouldRenderInput(channel: SendbirdGroupChannel) {
   }
 
   return true;
+}
+
+function withFocusingAnimation<P extends unknown & { focused: boolean }>(Component: React.ComponentType<P>) {
+  return React.memo<P>((props) => {
+    const translateY = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+      if (props.focused) {
+        setTimeout(() => {
+          Animated.sequence(
+            [
+              { toValue: -10, duration: 500 },
+              { toValue: 0, duration: 100 },
+              { toValue: -10, duration: 200 },
+              { toValue: 0, duration: 100 },
+            ].map((value) =>
+              Animated.timing(translateY, { ...value, useNativeDriver: true, easing: Easing.inOut(Easing.ease) }),
+            ),
+          ).start();
+        }, MESSAGE_SEARCH_SAFE_SCROLL_DELAY + MESSAGE_FOCUS_ANIMATION_DELAY);
+      }
+    }, [props.focused]);
+
+    return (
+      <Animated.View style={{ transform: [{ translateY }] }}>
+        <Component {...props} />
+      </Animated.View>
+    );
+  });
 }
 
 export default createGroupChannelFragment;

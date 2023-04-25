@@ -3,7 +3,7 @@ import { FlatListProps, Platform, FlatList as RNFlatList, StyleSheet } from 'rea
 
 import { FlatList } from '@sendbird/react-native-scrollview-enhancer';
 import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { SendbirdMessage, getMessageUniqId } from '@sendbird/uikit-utils';
+import { NOOP, SendbirdMessage, getMessageUniqId } from '@sendbird/uikit-utils';
 
 let ANDROID_BUG_ALERT_SHOWED = Platform.OS !== 'android';
 const BOTTOM_DETECT_THRESHOLD = 25;
@@ -69,6 +69,7 @@ const ChatFlatList = forwardRef<RNFlatList<SendbirdMessage>, Props>(function Cus
       inverted={Boolean(props.data?.length)}
       ref={ref}
       onEndReached={onTopReached}
+      onScrollToIndexFailed={NOOP}
       onStartReached={onBottomReached}
       scrollEventThrottle={16}
       onScroll={_onScroll}

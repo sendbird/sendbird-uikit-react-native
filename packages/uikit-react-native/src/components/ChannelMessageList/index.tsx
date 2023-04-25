@@ -44,6 +44,7 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
   channel: T;
   messages: SendbirdMessage[];
   newMessages: SendbirdMessage[];
+  searchItem?: { startingPoint: number };
 
   scrolledAwayFromBottom: boolean;
   onScrolledAwayFromBottom: (value: boolean) => void;
@@ -60,6 +61,7 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
   onPressMediaMessage?: (message: SendbirdFileMessage, deleteMessage: () => Promise<void>, uri: string) => void;
 
   renderMessage: (props: {
+    focused: boolean;
     message: SendbirdMessage;
     prevMessage?: SendbirdMessage;
     nextMessage?: SendbirdMessage;
@@ -89,6 +91,7 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
 
 const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel>(
   {
+    searchItem,
     hasNext,
     channel,
     onEditMessage,
@@ -139,6 +142,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
       enableMessageGrouping,
       channel,
       currentUserId,
+      focused: (searchItem?.startingPoint ?? -1) === item.createdAt,
     });
   });
 
