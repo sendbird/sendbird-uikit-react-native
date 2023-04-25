@@ -105,6 +105,20 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
       deleteMessages([messageId], []);
       deleteNewMessages([messageId], []);
     },
+    async onReactionUpdated(eventChannel, reactionEvent) {
+      if (isDifferentChannel(channel, eventChannel)) return;
+
+      const message = await sdk.message.getMessage({
+        messageId: reactionEvent.messageId,
+        includeReactions: true,
+        includeParentMessageInfo: true,
+        includeThreadInfo: true,
+        includeMetaArray: true,
+        channelUrl: channel.url,
+        channelType: channel.channelType,
+      });
+      updateMessages([message], false, sdk.currentUser.userId);
+    },
     // Channels
     onChannelChanged: channelUpdater,
     onChannelFrozen: channelUpdater,

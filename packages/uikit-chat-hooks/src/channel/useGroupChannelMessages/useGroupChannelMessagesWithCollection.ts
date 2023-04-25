@@ -78,7 +78,17 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
         onMessagesAdded: (_, __, messages) => {
           channelMarkAsRead(_.source);
 
-          const incomingMessages = messages.filter((it) => !isMyMessage(it, sdk.currentUser.userId));
+          const incomingMessages = messages.filter((it) => {
+            switch (_.source) {
+              case MessageEventSource.EVENT_MESSAGE_SENT_PENDING:
+              case MessageEventSource.EVENT_MESSAGE_SENT_SUCCESS:
+              case MessageEventSource.EVENT_MESSAGE_SENT_FAILED:
+                return !isMyMessage(it, sdk.currentUser.userId);
+              default:
+                return true;
+            }
+          });
+
           if (incomingMessages.length > 0) {
             updateMessages(incomingMessages, false, sdk.currentUser.userId);
 
@@ -97,7 +107,15 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
         onMessagesUpdated: (_, __, messages) => {
           channelMarkAsRead(_.source);
 
-          const incomingMessages = messages.filter((it) => !isMyMessage(it, sdk.currentUser.userId));
+          const incomingMessages = messages.filter((it) => {
+            switch (_.source) {
+              case MessageEventSource.EVENT_MESSAGE_UPDATED:
+                return !isMyMessage(it, sdk.currentUser.userId);
+              default:
+                return true;
+            }
+          });
+
           if (incomingMessages.length > 0) {
             // NOTE: admin message is not added via onMessagesAdded handler, not checked yet is this a bug.
             updateMessages(messages, false, sdk.currentUser.userId);
@@ -225,8 +243,8 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
               resolve(sentMessage);
             }
           })
-          .onFailed((err, _failedMessage) => {
-            // updateMessages([failedMessage], false, sdk.currentUser.userId);
+          .onFailed((err, failedMessage) => {
+            updateMessages([failedMessage], false, sdk.currentUser.userId);
             reject(err);
           });
       });
@@ -249,8 +267,8 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
               resolve(sentMessage as SendbirdFileMessage);
             }
           })
-          .onFailed((err, _failedMessage) => {
-            // updateMessages([failedMessage], false, sdk.currentUser.userId);
+          .onFailed((err, failedMessage) => {
+            updateMessages([failedMessage], false, sdk.currentUser.userId);
             reject(err);
           });
       });
