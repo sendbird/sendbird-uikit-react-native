@@ -40,8 +40,8 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
       const createdAt = props.searchItem.startingPoint;
       const index = props.messages.findIndex((it) => it.createdAt === createdAt);
       if (index > -1) {
-        lazyScrollToIndex(index, false, 0);
-        lazyScrollToIndex(index, false, 100);
+        // lazyScrollToIndex(index, false, 0);
+        // lazyScrollToIndex(index, false, 100);
         lazyScrollToIndex(index, true, MESSAGE_SEARCH_SAFE_SCROLL_DELAY);
       }
     }

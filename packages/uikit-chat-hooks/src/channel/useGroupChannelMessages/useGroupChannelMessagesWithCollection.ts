@@ -16,10 +16,19 @@ import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';
 import { useChannelMessagesReducer } from '../useChannelMessagesReducer';
 
-const createMessageCollection = (channel: SendbirdGroupChannel, options?: UseGroupChannelMessagesOptions) => {
+const MESSAGE_LIMIT = {
+  DEFAULT: 50,
+  SEARCH: 20,
+};
+
+const createMessageCollection = (
+  channel: SendbirdGroupChannel,
+  limit: number,
+  options?: UseGroupChannelMessagesOptions,
+) => {
   if (options?.collectionCreator) return options?.collectionCreator({ startingPoint: options?.startingPoint });
   const filter = new MessageFilter();
-  return channel.createMessageCollection({ filter, limit: 30, startingPoint: options?.startingPoint });
+  return channel.createMessageCollection({ filter, limit, startingPoint: options?.startingPoint });
 };
 
 function isNotEmpty(arr?: unknown[]): arr is unknown[] {
@@ -29,6 +38,7 @@ function isNotEmpty(arr?: unknown[]): arr is unknown[] {
 
 export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (sdk, channel, userId, options) => {
   const initialStartingPoint = options?.startingPoint ?? Number.MAX_SAFE_INTEGER;
+  const initialLimit = typeof options?.startingPoint === 'number' ? MESSAGE_LIMIT.SEARCH : MESSAGE_LIMIT.DEFAULT;
 
   const forceUpdate = useForceUpdate();
   const collectionRef = useRef<SendbirdMessageCollection>();
@@ -68,13 +78,13 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     if (isNotEmpty(failedMessages)) updateMessages(failedMessages, false, sdk.currentUser.userId);
   };
 
-  const init = useFreshCallback(async (startingPoint: number, callback?: () => void) => {
+  const init = useFreshCallback(async (startingPoint: number, limit: number, callback?: () => void) => {
     if (collectionRef.current) collectionRef.current?.dispose();
 
     channelMarkAsRead();
     updateNewMessages([], true, sdk.currentUser.userId);
 
-    collectionRef.current = createMessageCollection(channel, {
+    collectionRef.current = createMessageCollection(channel, limit, {
       collectionCreator: options?.collectionCreator,
       startingPoint,
     });
@@ -145,7 +155,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
         }
       },
       onHugeGapDetected: () => {
-        init(Number.MAX_SAFE_INTEGER);
+        init(Number.MAX_SAFE_INTEGER, MESSAGE_LIMIT.DEFAULT);
       },
     });
 
@@ -167,6 +177,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
           Logger.debug('[useGroupChannelMessagesWithCollection/onApiResult]', 'message length:', messages.length);
 
           updateMessages(messages, true, sdk.currentUser.userId);
+          if (!options?.startingPoint) options?.onMessagesReceived?.(messages);
           if (sdk.isCacheEnabled) updateUnsendMessages();
         }
         callback?.();
@@ -189,7 +200,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     // NOTE: Cache read is heavy task, and it prevents smooth ui transition
     setTimeout(async () => {
       updateLoading(true);
-      init(initialStartingPoint, () => updateLoading(false));
+      init(initialStartingPoint, initialLimit, () => updateLoading(false));
     }, 0);
   }, [channel.url, userId]);
 
@@ -201,7 +212,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
 
   const refresh: ReturnType<UseGroupChannelMessages>['refresh'] = useFreshCallback(async () => {
     updateRefreshing(true);
-    init(Number.MAX_SAFE_INTEGER, () => updateRefreshing(false));
+    init(Number.MAX_SAFE_INTEGER, MESSAGE_LIMIT.DEFAULT, () => updateRefreshing(false));
   });
 
   const prev: ReturnType<UseGroupChannelMessages>['prev'] = useFreshCallback(async () => {
@@ -322,7 +333,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     (startingPoint, callback) => {
       updateLoading(true);
       updateMessages([], true, sdk.currentUser.userId);
-      init(startingPoint, () => {
+      init(startingPoint, MESSAGE_LIMIT.DEFAULT, () => {
         updateLoading(false);
         callback?.();
       });
