@@ -249,5 +249,5 @@ export const runAfterAppReady = (callback: (sdk: SendbirdChatSDK, actions: typeo
         callback(sdk, navigationActions);
       }
     }
-  }, 250);
+  }, 1500);
 };
