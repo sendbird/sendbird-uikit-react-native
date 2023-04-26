@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
-import type { MessageSearchOrder } from '@sendbird/chat/message';
+import { MessageSearchOrder } from '@sendbird/chat/message';
 import {
+  Logger,
   NOOP,
   SendbirdBaseMessage,
   SendbirdChatSDK,
   SendbirdMessageSearchQuery,
-  getDefaultMessageSearchQueryParams,
   useFreshCallback,
   useSafeAreaPadding,
 } from '@sendbird/uikit-utils';
@@ -28,7 +28,7 @@ type SearchQueryOptions = DefaultMessageSearchQueryParams & {
   queryCreator?: (params: DefaultMessageSearchQueryParams) => SendbirdMessageSearchQuery;
 };
 
-function createMessageSearchQuery(sdk: SendbirdChatSDK, options: SearchQueryOptions) {
+function getMessageSearchQuery(sdk: SendbirdChatSDK, options: SearchQueryOptions) {
   if (options.queryCreator) return options.queryCreator(options);
   return sdk.createMessageSearchQuery(options);
 }
@@ -46,13 +46,15 @@ const createMessageSearchFragment = (initModule?: Partial<MessageSearchModule>):
     const [error, setError] = useState<unknown>(null);
     const [searchResults, setSearchResults] = useState<SendbirdBaseMessage[]>([]);
 
-    const buildQuery = () => {
-      const params = getDefaultMessageSearchQueryParams(channel, keyword);
-      return createMessageSearchQuery(sdk, { ...params, queryCreator });
-    };
-
     const search = useFreshCallback(async () => {
-      const query = buildQuery();
+      const query = getMessageSearchQuery(sdk, {
+        keyword,
+        channelUrl: channel.url,
+        messageTimestampFrom: Math.max(channel.joinedAt, channel.invitedAt),
+        order: MessageSearchOrder.TIMESTAMP,
+        queryCreator,
+      });
+
       setQuery(query);
       setLoading(true);
       setError(null);
@@ -61,6 +63,7 @@ const createMessageSearchFragment = (initModule?: Partial<MessageSearchModule>):
         const result = await query.next();
         setSearchResults(result);
       } catch (err) {
+        Logger.debug('[MessageSearchFragment] search failure', err);
         setError(err);
       } finally {
         setLoading(false);
@@ -73,6 +76,7 @@ const createMessageSearchFragment = (initModule?: Partial<MessageSearchModule>):
           const result = await query.next();
           setSearchResults((prev) => [...prev, ...result]);
         } catch (err) {
+          Logger.debug('[MessageSearchFragment] next failure', err);
           setError(err);
         }
       }
