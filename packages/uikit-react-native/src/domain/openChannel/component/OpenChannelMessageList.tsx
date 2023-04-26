@@ -28,6 +28,7 @@ const OpenChannelMessageList = (props: OpenChannelProps['MessageList']) => {
           scrollToBottom(false);
           break;
         }
+        case 'MESSAGE_SENT_SUCCESS':
         case 'MESSAGE_SENT_PENDING': {
           scrollToBottom(false);
           break;

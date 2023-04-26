@@ -115,16 +115,22 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       groupChannelPubSub.publish({ type: 'MESSAGE_SENT_PENDING', data: { message } });
     };
 
+    const onSent = (message: SendbirdFileMessage | SendbirdUserMessage) => {
+      groupChannelPubSub.publish({ type: 'MESSAGE_SENT_SUCCESS', data: { message } });
+    };
+
     const onPressSendUserMessage: GroupChannelProps['Input']['onPressSendUserMessage'] = useFreshCallback(
       async (params) => {
         const processedParams = await onBeforeSendUserMessage(params);
-        await sendUserMessage(processedParams, onPending);
+        const message = await sendUserMessage(processedParams, onPending);
+        onSent(message);
       },
     );
     const onPressSendFileMessage: GroupChannelProps['Input']['onPressSendFileMessage'] = useFreshCallback(
       async (params) => {
         const processedParams = await onBeforeSendFileMessage(params);
-        await sendFileMessage(processedParams, onPending);
+        const message = await sendFileMessage(processedParams, onPending);
+        onSent(message);
       },
     );
     const onPressUpdateUserMessage: GroupChannelProps['Input']['onPressUpdateUserMessage'] = useFreshCallback(
@@ -147,7 +153,8 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     /** @deprecated **/
     const onSendFileMessage: GroupChannelProps['Input']['onSendFileMessage'] = useFreshCallback(async (file) => {
       const processedParams = await onBeforeSendFileMessage({ file });
-      await sendFileMessage(processedParams, onPending);
+      const message = await sendFileMessage(processedParams, onPending);
+      onSent(message);
     });
     /** @deprecated **/
     const onSendUserMessage: GroupChannelProps['Input']['onSendUserMessage'] = useFreshCallback(
@@ -158,7 +165,8 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
           mentionedMessageTemplate: mention?.messageTemplate,
           mentionType: mention?.type,
         });
-        await sendUserMessage(processedParams, onPending);
+        const message = await sendUserMessage(processedParams, onPending);
+        onSent(message);
       },
     );
     /** @deprecated **/

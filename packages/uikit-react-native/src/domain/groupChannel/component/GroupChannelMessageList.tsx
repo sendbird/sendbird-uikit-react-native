@@ -79,6 +79,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
           }
           break;
         }
+        case 'MESSAGE_SENT_SUCCESS':
         case 'MESSAGE_SENT_PENDING': {
           scrollToBottom(false);
           break;

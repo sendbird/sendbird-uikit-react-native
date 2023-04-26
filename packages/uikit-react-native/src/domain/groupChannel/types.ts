@@ -139,7 +139,7 @@ export type GroupChannelFragment = CommonComponent<GroupChannelProps['Fragment']
 
 export type GroupChannelPubSubContextPayload =
   | {
-      type: 'MESSAGE_SENT_PENDING';
+      type: 'MESSAGE_SENT_PENDING' | 'MESSAGE_SENT_SUCCESS';
       data: {
         message: SendbirdUserMessage | SendbirdFileMessage;
       };

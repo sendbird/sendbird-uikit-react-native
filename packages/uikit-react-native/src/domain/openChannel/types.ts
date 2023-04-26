@@ -116,7 +116,7 @@ export type OpenChannelFragment = CommonComponent<OpenChannelProps['Fragment']>;
 
 export type OpenChannelPubSubContextPayload =
   | {
-      type: 'MESSAGE_SENT_PENDING';
+      type: 'MESSAGE_SENT_PENDING' | 'MESSAGE_SENT_SUCCESS';
       data: {
         message: SendbirdUserMessage | SendbirdFileMessage;
       };

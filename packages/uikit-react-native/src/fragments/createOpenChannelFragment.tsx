@@ -114,17 +114,22 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
     const onPending = (message: SendbirdFileMessage | SendbirdUserMessage) => {
       openChannelPubSub.publish({ type: 'MESSAGE_SENT_PENDING', data: { message } });
     };
+    const onSent = (message: SendbirdFileMessage | SendbirdUserMessage) => {
+      openChannelPubSub.publish({ type: 'MESSAGE_SENT_SUCCESS', data: { message } });
+    };
 
     const onPressSendUserMessage: OpenChannelProps['Input']['onPressSendUserMessage'] = useFreshCallback(
       async (params) => {
         const processedParams = await onBeforeSendUserMessage(params);
-        await sendUserMessage(processedParams, onPending);
+        const message = await sendUserMessage(processedParams, onPending);
+        onSent(message);
       },
     );
     const onPressSendFileMessage: OpenChannelProps['Input']['onPressSendFileMessage'] = useFreshCallback(
       async (params) => {
         const processedParams = await onBeforeSendFileMessage(params);
-        await sendFileMessage(processedParams, onPending);
+        const message = await sendFileMessage(processedParams, onPending);
+        onSent(message);
       },
     );
     const onPressUpdateUserMessage: OpenChannelProps['Input']['onPressUpdateUserMessage'] = useFreshCallback(
