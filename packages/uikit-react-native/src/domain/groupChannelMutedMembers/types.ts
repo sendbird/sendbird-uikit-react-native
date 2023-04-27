@@ -1,5 +1,6 @@
 import type React from 'react';
 
+import type { UseUserListOptions } from '@sendbird/uikit-chat-hooks';
 import type { SendbirdGroupChannel, SendbirdRestrictedUser } from '@sendbird/uikit-utils';
 
 import type { CommonComponent } from '../../types';
@@ -9,6 +10,7 @@ export type GroupChannelMutedMembersProps = {
     channel: SendbirdGroupChannel;
     onPressHeaderLeft: GroupChannelMutedMembersProps['Header']['onPressHeaderLeft'];
     renderUser?: GroupChannelMutedMembersProps['List']['renderUser'];
+    queryCreator?: UseUserListOptions<SendbirdRestrictedUser>['queryCreator'];
   };
   Header: {
     onPressHeaderLeft: () => void;
