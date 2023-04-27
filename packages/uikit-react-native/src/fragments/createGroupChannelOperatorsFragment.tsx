@@ -15,7 +15,7 @@ const createGroupChannelOperatorsFragment = (
 ): GroupChannelOperatorsFragment => {
   const GroupChannelOperatorsModule = createGroupChannelOperatorsModule(initModule);
 
-  return ({ channel, onPressHeaderLeft, onPressHeaderRight, renderUser }) => {
+  return ({ channel, onPressHeaderLeft, onPressHeaderRight, renderUser, queryCreator }) => {
     const handlerId = useUniqHandlerId('GroupChannelOperatorsFragment');
 
     const { STRINGS } = useLocalization();
@@ -24,7 +24,7 @@ const createGroupChannelOperatorsFragment = (
     const { show } = useUserProfile();
 
     const { users, deleteUser, upsertUser, loading, refresh, next, error } = useUserList(sdk, {
-      queryCreator: () => channel.createOperatorListQuery({ limit: 20 }),
+      queryCreator: queryCreator ?? (() => channel.createOperatorListQuery({ limit: 20 })),
     });
 
     useChannelHandler(sdk, handlerId, {
