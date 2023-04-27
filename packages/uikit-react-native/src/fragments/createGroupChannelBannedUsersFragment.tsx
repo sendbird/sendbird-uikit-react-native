@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useUserList } from '@sendbird/uikit-chat-hooks';
 import { useActionMenu } from '@sendbird/uikit-react-native-foundation';
-import { NOOP, useFreshCallback } from '@sendbird/uikit-utils';
+import { useFreshCallback } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import UserActionBar from '../components/UserActionBar';
@@ -18,14 +18,17 @@ const createGroupChannelBannedUsersFragment = (
 ): GroupChannelBannedUsersFragment => {
   const GroupChannelBannedUsersModule = createGroupChannelBannedUsersModule(initModule);
 
-  return ({ onPressHeaderLeft = NOOP, channel, renderUser, queryCreator }) => {
+  return ({
+    onPressHeaderLeft,
+    channel,
+    renderUser,
+    queryCreator = () => channel.createBannedUserListQuery({ limit: 20 }),
+  }) => {
     const { STRINGS } = useLocalization();
     const { currentUser, sdk } = useSendbirdChat();
     const { openMenu } = useActionMenu();
 
-    const { users, deleteUser, loading, next, refresh, error } = useUserList(sdk, {
-      queryCreator: queryCreator ?? (() => channel.createBannedUserListQuery({ limit: 20 })),
-    });
+    const { users, deleteUser, loading, next, refresh, error } = useUserList(sdk, { queryCreator });
 
     const _renderUser: NonNullable<typeof renderUser> = useFreshCallback((props) => {
       if (renderUser) return renderUser(props);

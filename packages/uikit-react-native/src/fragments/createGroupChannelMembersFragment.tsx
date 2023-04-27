@@ -20,7 +20,14 @@ const createGroupChannelMembersFragment = (
 ): GroupChannelMembersFragment => {
   const UserListModule = createUserListModule<SendbirdMember>(initModule);
 
-  return ({ channel, onPressHeaderLeft, onPressHeaderRight, renderUser, queryCreator }) => {
+  return ({
+    channel,
+    onPressHeaderLeft,
+    onPressHeaderRight,
+    renderUser,
+    sortComparator,
+    queryCreator = () => channel.createMemberListQuery({ limit: 20 }),
+  }) => {
     const handlerId = useUniqHandlerId('GroupChannelMembersFragment');
 
     const refreshSchedule = useRef<NodeJS.Timeout>();
@@ -30,7 +37,8 @@ const createGroupChannelMembersFragment = (
     const { show } = useUserProfile();
 
     const { users, refresh, loading, next, error, upsertUser, deleteUser } = useUserList(sdk, {
-      queryCreator: queryCreator ?? (() => channel.createMemberListQuery({ limit: 20 })),
+      queryCreator,
+      sortComparator,
     });
 
     useChannelHandler(sdk, handlerId, {

@@ -20,7 +20,13 @@ const createOpenChannelParticipantsFragment = (
 ): OpenChannelParticipantsFragment => {
   const UserListModule = createUserListModule<SendbirdParticipant>(initModule);
 
-  return ({ channel, onPressHeaderLeft, renderUser, queryCreator, sortComparator }) => {
+  return ({
+    channel,
+    onPressHeaderLeft,
+    renderUser,
+    sortComparator,
+    queryCreator = () => channel.createParticipantListQuery({ limit: 20 }),
+  }) => {
     const handlerId = useUniqHandlerId('OpenChannelParticipantsFragment');
 
     const refreshSchedule = useRef<NodeJS.Timeout>();
@@ -30,7 +36,7 @@ const createOpenChannelParticipantsFragment = (
     const { show } = useUserProfile();
 
     const { users, refresh, loading, next, error, upsertUser, deleteUser } = useUserList(sdk, {
-      queryCreator: queryCreator ?? (() => channel.createParticipantListQuery({ limit: 20 })),
+      queryCreator,
       sortComparator,
     });
 

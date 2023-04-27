@@ -16,13 +16,17 @@ const createOpenChannelRegisterOperatorFragment = (
 ): OpenChannelRegisterOperatorFragment => {
   const UserListModule = createUserListModule<SendbirdParticipant>(initModule);
 
-  return ({ channel, onPressHeaderLeft, sortComparator, renderUser, onPressHeaderRight, queryCreator }) => {
+  return ({
+    channel,
+    onPressHeaderLeft,
+    sortComparator,
+    renderUser,
+    onPressHeaderRight,
+    queryCreator = () => channel.createParticipantListQuery({ limit: 20 }),
+  }) => {
     const { sdk, currentUser } = useSendbirdChat();
     const { STRINGS } = useLocalization();
-    const { users, refreshing, refresh, next, error, loading } = useUserList(sdk, {
-      queryCreator: queryCreator ?? (() => channel.createParticipantListQuery({ limit: 20 })),
-      sortComparator,
-    });
+    const { users, refreshing, refresh, next, error, loading } = useUserList(sdk, { queryCreator, sortComparator });
 
     const _renderUser: NonNullable<typeof renderUser> = useCallback(
       (user, selectedUsers, setSelectedUsers) => {
