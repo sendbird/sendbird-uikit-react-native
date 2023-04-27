@@ -53,10 +53,6 @@ export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, opt
       onChannelFrozen: updateChannel,
       onChannelUnfrozen: updateChannel,
       onChannelDeleted: (url) => deleteChannels([url]),
-      onUserBanned(channel, user) {
-        const isMe = user.userId === userId;
-        if (isMe && channel.isOpenChannel()) deleteChannels([channel.url]);
-      },
       onUserEntered: (channel, user) => {
         const isMe = user.userId === userId;
         if (isMe && channel.isOpenChannel() && !openChannels.find((it) => it.url === channel.url)) {

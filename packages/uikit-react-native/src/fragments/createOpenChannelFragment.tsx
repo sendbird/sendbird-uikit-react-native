@@ -81,8 +81,9 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
       onError(error) {
         if (error instanceof SendbirdError) {
           switch (error.code) {
-            case SBErrorCode.CHANNEL_NOT_FOUND_SDK:
-            case SBErrorCode.CHANNEL_NOT_FOUND_SERVER: {
+            case SBErrorCode.RESOURCE_NOT_FOUND:
+            case SBErrorCode.CHANNEL_NOT_FOUND:
+            case SBErrorCode.BANNED_USER_SEND_MESSAGE_NOT_ALLOWED: {
               return showToast(STRINGS.TOAST.GET_CHANNEL_ERROR, 'error');
             }
           }

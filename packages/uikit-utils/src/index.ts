@@ -29,9 +29,10 @@ export function ifThenOr(cond: boolean, then: unknown, or?: unknown) {
 }
 
 export const SBErrorCode = {
-  NON_AUTHORIZED: 400108,
-  CHANNEL_NOT_FOUND_SERVER: 400201,
-  CHANNEL_NOT_FOUND_SDK: 900500,
+  UNAUTHORIZED_REQUEST: 400108,
+  RESOURCE_NOT_FOUND: 400201,
+  BANNED_USER_SEND_MESSAGE_NOT_ALLOWED: 900100,
+  CHANNEL_NOT_FOUND: 900500,
 };
 export const SBErrorMessage = {
   ACL:
