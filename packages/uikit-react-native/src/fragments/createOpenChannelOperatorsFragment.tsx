@@ -16,7 +16,7 @@ const createOpenChannelOperatorsFragment = (
 ): OpenChannelOperatorsFragment => {
   const OpenChannelOperatorsModule = createOpenChannelOperatorsModule(initModule);
 
-  return ({ onPressHeaderLeft = NOOP, onPressHeaderRight = NOOP, channel, renderUser }) => {
+  return ({ onPressHeaderLeft = NOOP, onPressHeaderRight = NOOP, channel, renderUser, queryCreator }) => {
     const handlerId = useUniqHandlerId('OpenChannelOperatorsFragment');
 
     const { STRINGS } = useLocalization();
@@ -25,7 +25,7 @@ const createOpenChannelOperatorsFragment = (
     const { show } = useUserProfile();
 
     const { users, deleteUser, upsertUser, loading, refresh, next, error } = useUserList(sdk, {
-      queryCreator: () => channel.createOperatorListQuery({ limit: 20 }),
+      queryCreator: queryCreator ?? (() => channel.createOperatorListQuery({ limit: 20 })),
     });
 
     useChannelHandler(
