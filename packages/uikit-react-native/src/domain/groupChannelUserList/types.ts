@@ -54,15 +54,14 @@ export interface GroupChannelMembersProps {
 }
 export type GroupChannelMembersFragment = CommonComponent<GroupChannelMembersProps['Fragment']>;
 
-export interface GroupChannelRegisterOperatorProps<User extends UserStruct = SendbirdMember> {
+export interface GroupChannelRegisterOperatorProps {
   Fragment: {
     channel: SendbirdGroupChannel;
     onPressHeaderLeft: () => void;
     onPressHeaderRight: (channel: SendbirdGroupChannel) => void;
-    sortComparator?: UseUserListOptions<User>['sortComparator'];
-    renderUser?: UserListProps<User>['List']['renderUser'];
+    sortComparator?: UseUserListOptions<SendbirdMember>['sortComparator'];
+    renderUser?: UserListProps<SendbirdMember>['List']['renderUser'];
+    queryCreator?: UseUserListOptions<SendbirdMember>['queryCreator'];
   };
 }
-export type GroupChannelRegisterOperatorFragment<User extends UserStruct> = CommonComponent<
-  GroupChannelRegisterOperatorProps<User>['Fragment']
->;
+export type GroupChannelRegisterOperatorFragment = CommonComponent<GroupChannelRegisterOperatorProps['Fragment']>;
