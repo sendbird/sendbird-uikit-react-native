@@ -1,20 +1,20 @@
 import type { UseUserListOptions } from '@sendbird/uikit-chat-hooks';
-import type { SendbirdOpenChannel, SendbirdParticipant, UserStruct } from '@sendbird/uikit-utils';
+import type { SendbirdOpenChannel, SendbirdParticipant, SendbirdUser, UserStruct } from '@sendbird/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 import type { UserListProps } from '../userList/types';
 
-export interface OpenChannelParticipantsProps<User extends UserStruct> {
+export interface OpenChannelParticipantsProps {
   Fragment: {
     channel: SendbirdOpenChannel;
     onPressHeaderLeft: () => void;
-    sortComparator?: UseUserListOptions<User>['sortComparator'];
-    renderUser?: UserListProps<User>['List']['renderUser'];
+    renderUser?: UserListProps<SendbirdParticipant>['List']['renderUser'];
+    // NOTE: SDK does not migrate the response type of query to Participant from User yet due to backward compat.
+    queryCreator?: UseUserListOptions<SendbirdUser | SendbirdParticipant>['queryCreator'];
+    sortComparator?: UseUserListOptions<SendbirdUser | SendbirdParticipant>['sortComparator'];
   };
 }
-export type OpenChannelParticipantsFragment<User extends UserStruct> = CommonComponent<
-  OpenChannelParticipantsProps<User>['Fragment']
->;
+export type OpenChannelParticipantsFragment = CommonComponent<OpenChannelParticipantsProps['Fragment']>;
 
 export interface OpenChannelRegisterOperatorProps<User extends UserStruct = SendbirdParticipant> {
   Fragment: {

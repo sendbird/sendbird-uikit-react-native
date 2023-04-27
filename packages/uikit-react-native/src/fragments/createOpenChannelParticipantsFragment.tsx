@@ -17,10 +17,10 @@ import { useLocalization, useSendbirdChat, useUserProfile } from '../hooks/useCo
 const RETURN_EMPTY_STRING = () => '';
 const createOpenChannelParticipantsFragment = (
   initModule?: Partial<UserListModule<SendbirdParticipant>>,
-): OpenChannelParticipantsFragment<SendbirdParticipant> => {
+): OpenChannelParticipantsFragment => {
   const UserListModule = createUserListModule<SendbirdParticipant>(initModule);
 
-  return ({ channel, onPressHeaderLeft, renderUser }) => {
+  return ({ channel, onPressHeaderLeft, renderUser, queryCreator, sortComparator }) => {
     const handlerId = useUniqHandlerId('OpenChannelParticipantsFragment');
 
     const refreshSchedule = useRef<NodeJS.Timeout>();
@@ -30,7 +30,8 @@ const createOpenChannelParticipantsFragment = (
     const { show } = useUserProfile();
 
     const { users, refresh, loading, next, error, upsertUser, deleteUser } = useUserList(sdk, {
-      queryCreator: () => channel.createParticipantListQuery({ limit: 20 }),
+      queryCreator: queryCreator ?? (() => channel.createParticipantListQuery({ limit: 20 })),
+      sortComparator,
     });
 
     useChannelHandler(
