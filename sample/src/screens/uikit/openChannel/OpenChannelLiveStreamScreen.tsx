@@ -54,13 +54,13 @@ const StreamView = (props: { channel: SendbirdOpenChannel; height: number | stri
     <Box style={{ height: props.height, width: '100%' }} flex={isLandscape ? 1.2 : 0}>
       <Image style={StyleSheet.absoluteFill} resizeMode={'cover'} source={{ uri: streamData.live_channel_url }} />
       <Box style={StyleSheet.absoluteFill} backgroundColor={palette.overlay02} />
-      <PressBox activeOpacity={0.8} onPress={() => navigation.goBack()}>
-        <Icon
-          size={24}
-          icon={'close'}
-          color={'white'}
-          containerStyle={{ position: 'absolute', left: streamInfoPosition, top: streamInfoPosition + topInset }}
-        />
+      <PressBox
+        activeOpacity={0.8}
+        onPress={() => navigation.goBack()}
+        hitSlop={{ top: 4, left: 4, bottom: 4, right: 4 }}
+        style={{ position: 'absolute', left: streamInfoPosition, top: streamInfoPosition + topInset }}
+      >
+        <Icon size={24} icon={'close'} color={'white'} />
       </PressBox>
       <Box
         flexDirection={'row'}

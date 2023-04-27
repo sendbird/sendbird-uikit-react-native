@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import type { GestureResponderEvent, StyleProp, ViewStyle } from 'react-native';
+import type { GestureResponderEvent, StyleProp, ViewProps, ViewStyle } from 'react-native';
 import { Pressable, TouchableOpacity } from 'react-native';
 
 import { isFunction } from '@sendbird/uikit-utils';
@@ -15,6 +15,7 @@ type Props = {
   delayLongPress?: number;
   activeOpacity?: number;
   style?: StyleProp<ViewStyle> | ((state: PressBoxStateParams) => StyleProp<ViewStyle>);
+  hitSlop?: ViewProps['hitSlop'];
   children?: React.ReactNode | ((params: PressBoxStateParams) => React.ReactNode);
 };
 
