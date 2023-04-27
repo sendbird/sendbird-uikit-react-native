@@ -18,13 +18,13 @@ const createOpenChannelBannedUsersFragment = (
 ): OpenChannelBannedUsersFragment => {
   const OpenChannelBannedUsersModule = createOpenChannelBannedUsersModule(initModule);
 
-  return ({ onPressHeaderLeft = NOOP, channel, renderUser }) => {
+  return ({ onPressHeaderLeft = NOOP, channel, renderUser, queryCreator }) => {
     const { STRINGS } = useLocalization();
     const { currentUser, sdk } = useSendbirdChat();
     const { openMenu } = useActionMenu();
 
     const { users, deleteUser, loading, next, refresh, error } = useUserList(sdk, {
-      queryCreator: () => channel.createBannedUserListQuery({ limit: 20 }),
+      queryCreator: queryCreator ?? (() => channel.createBannedUserListQuery({ limit: 20 })),
     });
 
     const _renderUser: NonNullable<typeof renderUser> = useFreshCallback((props) => {
