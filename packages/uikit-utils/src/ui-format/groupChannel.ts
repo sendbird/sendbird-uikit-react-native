@@ -22,9 +22,9 @@ export const getGroupChannelPreviewTime = (channel: SendbirdGroupChannel, locale
   return getMessagePreviewTime(channel.lastMessage?.createdAt || channel.joinedAt * 1000 || channel.createdAt, locale);
 };
 
-export const getGroupChannelLastMessage = (channel: SendbirdGroupChannel, EMPTY_MESSAGE = '', MAX_LEN = 15) => {
+export const getGroupChannelLastMessage = (channel: SendbirdGroupChannel, EMPTY_MESSAGE = '') => {
   const message = channel.lastMessage;
   if (!message) return EMPTY_MESSAGE;
 
-  return getMessagePreviewBody(message, EMPTY_MESSAGE, MAX_LEN);
+  return getMessagePreviewBody(message, EMPTY_MESSAGE);
 };

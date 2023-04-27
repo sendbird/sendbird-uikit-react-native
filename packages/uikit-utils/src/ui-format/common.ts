@@ -92,16 +92,16 @@ export const getMessagePreviewTitle = (message: SendbirdBaseMessage, EMPTY_USERN
 /**
  * Message preview body text
  * */
-export const getMessagePreviewBody = (message: SendbirdBaseMessage, EMPTY_MESSAGE = '', MAX_LEN = 15) => {
+export const getMessagePreviewBody = (message: SendbirdBaseMessage, EMPTY_MESSAGE = '') => {
   if (message.isFileMessage()) {
     const extIdx = message.name.lastIndexOf('.');
     if (extIdx > -1) {
       const file = message.name.slice(0, extIdx);
       const ext = message.name.slice(extIdx);
-      return truncate(file, { maxLen: MAX_LEN }) + ext;
+      return file + ext;
     }
 
-    return truncate(message.name, { maxLen: MAX_LEN });
+    return message.name;
   }
 
   if (message.isUserMessage()) {
