@@ -18,7 +18,7 @@ const createOpenChannelMutedParticipantsFragment = (
 ): OpenChannelMutedParticipantsFragment => {
   const OpenChannelMutedParticipantsModule = createOpenChannelMutedParticipantsModule(initModule);
 
-  return ({ onPressHeaderLeft = NOOP, channel, renderUser }) => {
+  return ({ onPressHeaderLeft = NOOP, channel, renderUser, queryCreator }) => {
     const handlerId = useUniqHandlerId('OpenChannelMutedParticipants');
 
     const { STRINGS } = useLocalization();
@@ -26,7 +26,7 @@ const createOpenChannelMutedParticipantsFragment = (
     const { openMenu } = useActionMenu();
 
     const { users, deleteUser, upsertUser, loading, refresh, error, next } = useUserList(sdk, {
-      queryCreator: () => channel.createMutedUserListQuery({ limit: 20 }),
+      queryCreator: queryCreator ?? (() => channel.createMutedUserListQuery({ limit: 20 })),
     });
 
     useChannelHandler(
