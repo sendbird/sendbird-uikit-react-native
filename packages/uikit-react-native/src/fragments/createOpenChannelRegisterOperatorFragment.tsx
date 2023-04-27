@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import { CustomQueryInterface, useUserList } from '@sendbird/uikit-chat-hooks';
+import { useUserList } from '@sendbird/uikit-chat-hooks';
 import type { SendbirdParticipant } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
@@ -13,20 +13,20 @@ import { useLocalization, useSendbirdChat } from '../hooks/useContext';
 
 const createOpenChannelRegisterOperatorFragment = (
   initModule?: Partial<UserListModule<SendbirdParticipant>>,
-): OpenChannelRegisterOperatorFragment<SendbirdParticipant> => {
+): OpenChannelRegisterOperatorFragment => {
   const UserListModule = createUserListModule<SendbirdParticipant>(initModule);
 
-  return ({ channel, onPressHeaderLeft, sortComparator, renderUser, onPressHeaderRight }) => {
+  return ({
+    channel,
+    onPressHeaderLeft,
+    sortComparator,
+    renderUser,
+    onPressHeaderRight,
+    queryCreator = () => channel.createParticipantListQuery({ limit: 20 }),
+  }) => {
     const { sdk, currentUser } = useSendbirdChat();
     const { STRINGS } = useLocalization();
-    const { users, refreshing, refresh, next, error, loading } = useUserList(sdk, {
-      queryCreator: () => {
-        return channel.createParticipantListQuery({
-          limit: 20,
-        }) as unknown as CustomQueryInterface<SendbirdParticipant>;
-      },
-      sortComparator,
-    });
+    const { users, refreshing, refresh, next, error, loading } = useUserList(sdk, { queryCreator, sortComparator });
 
     const _renderUser: NonNullable<typeof renderUser> = useCallback(
       (user, selectedUsers, setSelectedUsers) => {
@@ -84,7 +84,7 @@ const createOpenChannelRegisterOperatorFragment = (
         >
           <UserListModule.List
             onLoadNext={next}
-            users={users}
+            users={users as SendbirdParticipant[]}
             renderUser={_renderUser}
             onRefresh={refresh}
             refreshing={refreshing}

@@ -13,12 +13,11 @@ const createGroupChannelNotificationsFragment = (
 ): GroupChannelNotificationsFragment => {
   const GroupChannelNotificationsModule = createGroupChannelNotificationsModule(initModule);
 
-  return ({ onPressHeaderLeft = NOOP, children, channel }) => {
+  return ({ onPressHeaderLeft = NOOP, channel }) => {
     return (
       <GroupChannelNotificationsModule.Provider channel={channel}>
         <GroupChannelNotificationsModule.Header onPressHeaderLeft={onPressHeaderLeft} />
         <GroupChannelNotificationsModule.View />
-        {children}
       </GroupChannelNotificationsModule.Provider>
     );
   };

@@ -1,5 +1,6 @@
 import type React from 'react';
 
+import type { UseUserListOptions } from '@sendbird/uikit-chat-hooks';
 import type { SendbirdOpenChannel, SendbirdUser } from '@sendbird/uikit-utils';
 
 import type { CommonComponent } from '../../types';
@@ -10,6 +11,7 @@ export type OpenChannelOperatorsProps = {
     onPressHeaderLeft: OpenChannelOperatorsProps['Header']['onPressHeaderLeft'];
     onPressHeaderRight: OpenChannelOperatorsProps['Header']['onPressHeaderRight'];
     renderUser?: OpenChannelOperatorsProps['List']['renderUser'];
+    queryCreator?: UseUserListOptions<SendbirdUser>['queryCreator'];
   };
   Header: {
     onPressHeaderLeft: () => void;

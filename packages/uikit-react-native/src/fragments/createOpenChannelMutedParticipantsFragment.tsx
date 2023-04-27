@@ -18,16 +18,19 @@ const createOpenChannelMutedParticipantsFragment = (
 ): OpenChannelMutedParticipantsFragment => {
   const OpenChannelMutedParticipantsModule = createOpenChannelMutedParticipantsModule(initModule);
 
-  return ({ onPressHeaderLeft = NOOP, channel, renderUser }) => {
+  return ({
+    onPressHeaderLeft = NOOP,
+    channel,
+    renderUser,
+    queryCreator = () => channel.createMutedUserListQuery({ limit: 20 }),
+  }) => {
     const handlerId = useUniqHandlerId('OpenChannelMutedParticipants');
 
     const { STRINGS } = useLocalization();
     const { sdk, currentUser } = useSendbirdChat();
     const { openMenu } = useActionMenu();
 
-    const { users, deleteUser, upsertUser, loading, refresh, error, next } = useUserList(sdk, {
-      queryCreator: () => channel.createMutedUserListQuery({ limit: 20 }),
-    });
+    const { users, deleteUser, upsertUser, loading, refresh, error, next } = useUserList(sdk, { queryCreator });
 
     useChannelHandler(
       sdk,

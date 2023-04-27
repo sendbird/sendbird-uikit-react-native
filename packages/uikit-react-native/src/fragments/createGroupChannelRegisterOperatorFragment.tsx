@@ -13,16 +13,20 @@ import { useLocalization, useSendbirdChat } from '../hooks/useContext';
 
 const createGroupChannelRegisterOperatorFragment = (
   initModule?: Partial<UserListModule<SendbirdMember>>,
-): GroupChannelRegisterOperatorFragment<SendbirdMember> => {
+): GroupChannelRegisterOperatorFragment => {
   const UserListModule = createUserListModule<SendbirdMember>(initModule);
 
-  return ({ channel, onPressHeaderLeft, sortComparator, renderUser, onPressHeaderRight }) => {
+  return ({
+    channel,
+    onPressHeaderLeft,
+    sortComparator,
+    renderUser,
+    onPressHeaderRight,
+    queryCreator = () => channel.createMemberListQuery({ limit: 20 }),
+  }) => {
     const { sdk, currentUser } = useSendbirdChat();
     const { STRINGS } = useLocalization();
-    const { users, refreshing, refresh, next, error, loading } = useUserList(sdk, {
-      queryCreator: () => channel.createMemberListQuery({ limit: 20 }),
-      sortComparator,
-    });
+    const { users, refreshing, refresh, next, error, loading } = useUserList(sdk, { queryCreator, sortComparator });
 
     const _renderUser: NonNullable<typeof renderUser> = useCallback(
       (user, selectedUsers, setSelectedUsers) => {

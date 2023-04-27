@@ -42,28 +42,26 @@ export type GroupChannelInviteFragment<User extends UserStruct> = CommonComponen
   GroupChannelInviteProps<User>['Fragment']
 >;
 
-export interface GroupChannelMembersProps<User extends UserStruct> {
+export interface GroupChannelMembersProps {
   Fragment: {
     channel: SendbirdGroupChannel;
     onPressHeaderLeft: () => void;
     onPressHeaderRight: () => void;
-    sortComparator?: UseUserListOptions<User>['sortComparator'];
-    renderUser?: UserListProps<User>['List']['renderUser'];
+    sortComparator?: UseUserListOptions<SendbirdMember>['sortComparator'];
+    renderUser?: UserListProps<SendbirdMember>['List']['renderUser'];
+    queryCreator?: UseUserListOptions<SendbirdMember>['queryCreator'];
   };
 }
-export type GroupChannelMembersFragment<User extends UserStruct> = CommonComponent<
-  GroupChannelMembersProps<User>['Fragment']
->;
+export type GroupChannelMembersFragment = CommonComponent<GroupChannelMembersProps['Fragment']>;
 
-export interface GroupChannelRegisterOperatorProps<User extends UserStruct = SendbirdMember> {
+export interface GroupChannelRegisterOperatorProps {
   Fragment: {
     channel: SendbirdGroupChannel;
     onPressHeaderLeft: () => void;
     onPressHeaderRight: (channel: SendbirdGroupChannel) => void;
-    sortComparator?: UseUserListOptions<User>['sortComparator'];
-    renderUser?: UserListProps<User>['List']['renderUser'];
+    sortComparator?: UseUserListOptions<SendbirdMember>['sortComparator'];
+    renderUser?: UserListProps<SendbirdMember>['List']['renderUser'];
+    queryCreator?: UseUserListOptions<SendbirdMember>['queryCreator'];
   };
 }
-export type GroupChannelRegisterOperatorFragment<User extends UserStruct> = CommonComponent<
-  GroupChannelRegisterOperatorProps<User>['Fragment']
->;
+export type GroupChannelRegisterOperatorFragment = CommonComponent<GroupChannelRegisterOperatorProps['Fragment']>;
