@@ -76,7 +76,7 @@ export type UseGroupChannelListOptions = {
  * @description interface for group channel messages hook
  * - Receive new messages from other users & should count new messages -> append to state(newMessages)
  * - onTopReached -> prev() -> fetch prev messages and append to state(messages)
- * - onBottomReached -> next() -> nextMessages append to state(messages)
+ * - onBottomReached -> next() -> fetch next messages and append to state(messages)
  * */
 export interface UseGroupChannelMessages {
   (sdk: SendbirdChatSDK, channel: SendbirdGroupChannel, userId?: string, options?: UseGroupChannelMessagesOptions): {
@@ -264,7 +264,7 @@ export type UseOpenChannelListOptions = {
  * @description interface for open channel messages hook
  * - Receive new messages from other users & should count new messages -> append to state(newMessages)
  * - onTopReached -> prev() -> fetch prev messages and append to state(messages)
- * - onBottomReached -> next() -> nextMessages append to state(messages)
+ * - onBottomReached -> noop
  * */
 export interface UseOpenChannelMessages {
   (sdk: SendbirdChatSDK, channel: SendbirdOpenChannel, userId?: string, options?: UseOpenChannelMessagesOptions): {

@@ -63,7 +63,7 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
 
     const {
       messages,
-      nextMessages,
+      newMessages,
       next,
       prev,
       hasNext,
@@ -165,7 +165,7 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
             currentUserId={currentUser?.userId}
             renderMessage={_renderMessage}
             messages={messages}
-            newMessages={nextMessages}
+            newMessages={newMessages}
             onTopReached={prev}
             onBottomReached={next}
             scrolledAwayFromBottom={false}
