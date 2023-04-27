@@ -25,7 +25,7 @@ export const MessageSearchListItem = ({ onPressMessage, channel, message }: Prop
   const { colors, select, palette } = useUIKitTheme();
   const { STRINGS } = useLocalization();
 
-  const bodyIcon = useIIFE(() => {
+  const fileIcon = useIIFE(() => {
     if (!message?.isFileMessage()) return undefined;
     return iconMapper[getFileType(message.type || getFileExtension(message.name))];
   });
@@ -51,10 +51,10 @@ export const MessageSearchListItem = ({ onPressMessage, channel, message }: Prop
 
           <Box flex={1}>
             <Box alignItems={'center'} flexDirection={'row'}>
-              {bodyIcon && (
+              {fileIcon && (
                 <Icon
                   size={18}
-                  icon={bodyIcon}
+                  icon={fileIcon}
                   color={colors.onBackground02}
                   containerStyle={[
                     styles.bodyIcon,
@@ -63,7 +63,13 @@ export const MessageSearchListItem = ({ onPressMessage, channel, message }: Prop
                 />
               )}
 
-              <Text body3 numberOfLines={1} style={{ flex: 1 }} color={colors.onBackground03}>
+              <Text
+                body3
+                numberOfLines={1}
+                ellipsizeMode={fileIcon ? 'middle' : 'tail'}
+                style={{ flex: 1 }}
+                color={colors.onBackground03}
+              >
                 {STRINGS.MESSAGE_SEARCH.MESSAGE_PREVIEW_BODY(message)}
               </Text>
             </Box>

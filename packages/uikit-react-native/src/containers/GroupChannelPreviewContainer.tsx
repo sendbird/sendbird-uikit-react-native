@@ -55,7 +55,7 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
     else return STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_BODY(channel);
   });
 
-  const bodyIcon = useIIFE(() => {
+  const fileIcon = useIIFE(() => {
     if (!channel.lastMessage?.isFileMessage()) return undefined;
     if (typingUsers.length > 0) return undefined;
     return iconMapper[getFileType(channel.lastMessage.type || getFileExtension(channel.lastMessage.name))];
@@ -98,7 +98,7 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
         titleCaptionLeft={titleCaptionIcon}
         titleCaption={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE_CAPTION(channel)}
         body={bodyText}
-        bodyIcon={bodyIcon}
+        bodyIcon={fileIcon}
         badgeCount={channel.unreadMessageCount}
         mentioned={channel.unreadMentionCount > 0}
         mentionTrigger={mentionManager.config.trigger}
