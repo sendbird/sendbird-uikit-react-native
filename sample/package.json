@@ -3,8 +3,8 @@
   "version": "2.4.2",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "android": "concurrently 'yarn start' 'react-native run-android'",
+    "ios": "concurrently 'yarn start' 'react-native run-ios'",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",

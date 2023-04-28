@@ -5,8 +5,6 @@ Sample for expo: https://github.com/sendbird/sendbird-uikit-sample-react-native-
 
 ### Installation
 
-> Every script should be run on the root of the monorepo project.
-
 **Install node modules**
 
 ```shell
@@ -16,7 +14,7 @@ yarn install
 **Linking native modules of sample app**
 
 ```shell
-yarn sample:pod-install
+npx pod-install
 ```
 
 **Running sample app**
@@ -24,13 +22,13 @@ yarn sample:pod-install
 - Android
 
 ```shell
-yarn sample:android
+yarn android
 ```
 
 - iOS
 
 ```shell
-yarn sample:ios
+yarn ios
 ```
 
 ### Sample app using your data
