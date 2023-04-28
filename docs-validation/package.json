@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "test": "tsc --project tsconfig.build.json",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "clean": "del lib"
   },
   "dependencies": {
     "@bam.tech/react-native-image-resizer": "^3.0.4",
