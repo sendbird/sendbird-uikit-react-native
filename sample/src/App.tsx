@@ -69,6 +69,7 @@ const App = () => {
         enableChannelListTypingIndicator: true,
         enableChannelListMessageReceiptStatus: true,
         enableUserMention: true,
+        enableMessageSearch: true,
       }}
       platformServices={{
         file: FileService,

@@ -89,23 +89,27 @@ const GroupChannelSettingsMenu = ({
       actionLabel: String(channel.memberCount),
       actionItem: <Icon icon={'chevron-right'} color={colors.onBackground01} />,
     },
-    {
+  ]);
+
+  if (features.messageSearchEnabled) {
+    menuItems.push({
       icon: 'search',
       name: STRINGS.GROUP_CHANNEL_SETTINGS.MENU_SEARCH,
       onPress: () => onPressMenuSearchInChannel(),
+    });
+  }
+
+  menuItems.push({
+    icon: 'leave',
+    iconColor: colors.error,
+    name: STRINGS.GROUP_CHANNEL_SETTINGS.MENU_LEAVE_CHANNEL,
+    onPress: () => {
+      channel.leave().then(() => {
+        onPressMenuLeaveChannel();
+        sdk.clearCachedMessages([channel.url]).catch();
+      });
     },
-    {
-      icon: 'leave',
-      iconColor: colors.error,
-      name: STRINGS.GROUP_CHANNEL_SETTINGS.MENU_LEAVE_CHANNEL,
-      onPress: () => {
-        channel.leave().then(() => {
-          onPressMenuLeaveChannel();
-          sdk.clearCachedMessages([channel.url]).catch();
-        });
-      },
-    },
-  ]);
+  });
 
   return (
     <View>

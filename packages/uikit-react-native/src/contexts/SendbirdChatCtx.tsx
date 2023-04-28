@@ -21,6 +21,7 @@ export interface UIKitFeaturesInSendbirdChatContext {
   enableUseUserIdForNickname: boolean;
   enableUserMention: boolean;
   enableImageCompression: boolean;
+  enableMessageSearch: boolean;
 }
 
 interface Props extends UIKitFeaturesInSendbirdChatContext, React.PropsWithChildren {
@@ -43,13 +44,16 @@ export type SendbirdChatContextType = {
   markAsDeliveredWithChannel: (channel: SendbirdGroupChannel) => void;
 
   features: {
-    // UIKit features
+    // RN UIKit features
     autoPushTokenRegistrationEnabled: boolean;
+
+    // UIKit features
     channelListTypingIndicatorEnabled: boolean;
     channelListMessageReceiptStatusEnabled: boolean;
     useUserIdForNicknameEnabled: boolean;
     userMentionEnabled: boolean;
     imageCompressionEnabled: boolean;
+    messageSearchEnabled: boolean;
 
     // Sendbird application features
     deliveryReceiptEnabled: boolean;
@@ -72,6 +76,7 @@ export const SendbirdChatProvider = ({
   enableUseUserIdForNickname,
   enableUserMention,
   enableImageCompression,
+  enableMessageSearch,
 }: Props) => {
   const [currentUser, _setCurrentUser] = useState<SendbirdUser>();
   const forceUpdate = useForceUpdate();
@@ -147,6 +152,7 @@ export const SendbirdChatProvider = ({
       useUserIdForNicknameEnabled: enableUseUserIdForNickname,
       userMentionEnabled: enableUserMention,
       imageCompressionEnabled: enableImageCompression,
+      messageSearchEnabled: enableMessageSearch,
     },
   };
 
