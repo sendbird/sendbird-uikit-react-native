@@ -29,7 +29,7 @@ const GroupChannelSuggestedMentionList = ({
 }: GroupChannelProps['SuggestedMentionList']) => {
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
   const { channel } = useContext(GroupChannelContexts.Fragment);
-  const { mentionManager } = useSendbirdChat();
+  const { sdk, mentionManager } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
   const { topInset } = useHeaderStyle();
@@ -38,6 +38,7 @@ const GroupChannelSuggestedMentionList = ({
   const keyboard = useKeyboardStatus();
 
   const { members, reset, searchStringRange, searchLimited } = useMentionSuggestion({
+    sdk,
     text,
     selection,
     channel,
