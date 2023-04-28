@@ -65,7 +65,7 @@ export const MessageSearchListItem = ({ onPressMessage, channel, message }: Prop
 
               <Text
                 body3
-                numberOfLines={1}
+                numberOfLines={2}
                 ellipsizeMode={fileIcon ? 'middle' : 'tail'}
                 style={{ flex: 1 }}
                 color={colors.onBackground03}
