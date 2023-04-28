@@ -22,6 +22,9 @@ const GroupChannelSettingsScreen = ({ route: { params } }: any) => {
   // Only required when you enabled mention.
   const navigateToGroupChannelNotificationScreen = () => {};
 
+  // Only required when you enabled message search.
+  const navigateToMessageSearchScreen = () => {};
+
   return (
     <GroupChannelSettingsFragment
       channel={channel}
@@ -30,6 +33,7 @@ const GroupChannelSettingsScreen = ({ route: { params } }: any) => {
       onPressMenuMembers={navigateToGroupChannelMembersScreen}
       onPressMenuModeration={navigateToGroupChannelModerationScreen}
       onPressMenuNotification={navigateToGroupChannelNotificationScreen}
+      onPressMenuSearchInChannel={navigateToMessageSearchScreen}
     />
   );
 };
@@ -83,6 +87,9 @@ const GroupChannelSettingsScreen2 = ({ route: { params } }: any) => {
   // Only required when you enabled mention.
   const navigateToGroupChannelNotificationScreen = () => {};
 
+  // Only required when you enabled message search.
+  const navigateToMessageSearchScreen = () => {};
+
   return (
     <GroupChannelSettingsFragment2
       channel={channel}
@@ -91,6 +98,7 @@ const GroupChannelSettingsScreen2 = ({ route: { params } }: any) => {
       onPressMenuMembers={navigateToGroupChannelMembersScreen}
       onPressMenuModeration={navigateToGroupChannelModerationScreen}
       onPressMenuNotification={navigateToGroupChannelNotificationScreen}
+      onPressMenuSearchInChannel={navigateToMessageSearchScreen}
       menuItemsCreator={(items) => {
         items.unshift({
           icon: 'channels',
