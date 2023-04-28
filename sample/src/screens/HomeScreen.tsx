@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useConnection } from '@sendbird/uikit-react-native';
@@ -11,7 +11,7 @@ import { useAppNavigation } from '../hooks/useAppNavigation';
 import { useAppAuth } from '../libs/authentication';
 import { Routes } from '../libs/navigation';
 
-const HomeItems: { title: string; desc?: string; image?: any; route?: Routes }[] = [
+const HomeItems = [
   {
     image: require('../assets/imgGroupchannel.png'),
     title: 'Group channel',
@@ -25,18 +25,24 @@ const HomeItems: { title: string; desc?: string; image?: any; route?: Routes }[]
     route: Routes.OpenChannelTabs,
   },
   {
+    image: undefined,
     title: 'Storybook',
+    desc: '',
     route: Routes.Storybook,
   },
   {
+    image: undefined,
     title: 'Palette',
+    desc: '',
     route: Routes.Palette,
   },
   {
+    image: undefined,
     title: 'Themed colors',
+    desc: '',
     route: Routes.ThemeColors,
   },
-];
+] as const;
 
 const HomeScreen = () => {
   const { top, bottom, left, right } = useSafeAreaInsets();
@@ -63,21 +69,15 @@ const HomeScreen = () => {
             <HomeListItem
               image={item.image}
               title={item.title}
-              desc={item.desc || ''}
-              onPress={() => {
-                if (!item.route) return Alert.alert('Sorry', 'Not implemented yet');
-                navigation.navigate(item.route);
-              }}
+              desc={item.desc}
+              onPress={() => navigation.navigate(item.route)}
             />
           );
         }
 
         return (
           <Pressable
-            onPress={() => {
-              if (!item.route) return Alert.alert('Sorry', 'Not implemented yet');
-              navigation.navigate(item.route);
-            }}
+            onPress={() => navigation.navigate(item.route)}
             style={[
               styles.customSampleButton,
               { backgroundColor: select({ light: colors.background, dark: colors.onBackground04 }) },

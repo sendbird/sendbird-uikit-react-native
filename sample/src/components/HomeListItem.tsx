@@ -7,7 +7,7 @@ type Props = React.PropsWithChildren<{
   onPress: () => void;
   title: string;
   desc: string;
-  image: any;
+  image: number;
 }>;
 const HomeListItem = ({ title, desc, image, onPress }: Props) => {
   const { select, colors } = useUIKitTheme();
