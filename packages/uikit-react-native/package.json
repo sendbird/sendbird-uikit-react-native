@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/uikit-react-native",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "Sendbird UIKit for React Native: A feature-rich and customizable chat UI kit with messaging, channel management, and user authentication.",
   "keywords": [
     "sendbird",
@@ -56,9 +56,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@sendbird/uikit-chat-hooks": "2.4.1",
-    "@sendbird/uikit-react-native-foundation": "2.4.1",
-    "@sendbird/uikit-utils": "2.4.1"
+    "@sendbird/uikit-chat-hooks": "2.4.2",
+    "@sendbird/uikit-react-native-foundation": "2.4.2",
+    "@sendbird/uikit-utils": "2.4.2"
   },
   "devDependencies": {
     "@bam.tech/react-native-image-resizer": "^3.0.4",

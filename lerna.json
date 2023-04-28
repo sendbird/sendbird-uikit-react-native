@@ -1,12 +1,8 @@
 {
-  "packages": [
-    "packages/*",
-    "sample",
-    "docs-validation"
-  ],
+  "packages": ["packages/*", "sample", "docs-validation"],
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "version": "2.4.1",
+  "version": "2.4.2",
   "command": {
     "publish": {
       "conventionalCommits": true,
@@ -78,9 +74,7 @@
             "hidden": true
           }
         ],
-        "issuePrefixes": [
-          "#"
-        ],
+        "issuePrefixes": ["#"],
         "issueUrlFormat": "{{host}}/{{owner}}/{{repository}}/issues/{{id}}",
         "commitUrlFormat": "{{host}}/{{owner}}/{{repository}}/commit/{{hash}}",
         "compareUrlFormat": "{{host}}/{{owner}}/{{repository}}/compare/{{previousTag}}...{{currentTag}}",
@@ -91,11 +85,5 @@
       "message": "chore(release): release packages %s"
     }
   },
-  "ignoreChanges": [
-    "**/__template__/**",
-    "**/__tests__/**",
-    "**/*.md",
-    ".circleci",
-    ".github"
-  ]
+  "ignoreChanges": ["**/__template__/**", "**/__tests__/**", "**/*.md", ".circleci", ".github"]
 }
