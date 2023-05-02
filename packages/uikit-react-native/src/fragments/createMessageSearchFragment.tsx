@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { MessageSearchOrder } from '@sendbird/chat/message';
 import {
@@ -95,10 +95,11 @@ const useMessageSearch = (
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<unknown>(null);
   const [searchResults, setSearchResults] = useState<SendbirdBaseMessage[]>([]);
+  const queryInProgress = useRef(false);
 
   const search = useFreshCallback(async () => {
     if (keyword.length <= 0) return;
-    if (loading) return;
+    if (queryInProgress.current) return;
 
     const query = getMessageSearchQuery(sdk, {
       keyword,
@@ -113,25 +114,31 @@ const useMessageSearch = (
     setError(null);
 
     try {
+      queryInProgress.current = true;
       const result = await query.next();
       setSearchResults(result);
     } catch (err) {
       Logger.warn('[MessageSearchFragment] search failure', err);
       setError(err);
     } finally {
+      queryInProgress.current = false;
       setLoading(false);
     }
   });
 
   const next = useFreshCallback(async () => {
-    if (query?.hasNext) {
-      try {
-        const result = await query.next();
-        setSearchResults((prev) => [...prev, ...result]);
-      } catch (err) {
-        Logger.warn('[MessageSearchFragment] next failure', err);
-        setError(err);
-      }
+    if (!query?.hasNext) return;
+    if (queryInProgress.current) return;
+
+    try {
+      queryInProgress.current = true;
+      const result = await query.next();
+      setSearchResults((prev) => [...prev, ...result]);
+    } catch (err) {
+      Logger.warn('[MessageSearchFragment] next failure', err);
+      setError(err);
+    } finally {
+      queryInProgress.current = false;
     }
   });
 
