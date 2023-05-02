@@ -35,12 +35,12 @@ export const MessageSearchResultItem: MessageSearchProps['List']['renderSearchRe
           <Box flexDirection={'row'} paddingTop={10}>
             <Box flex={1} marginRight={4} justifyContent={'center'}>
               <Text subtitle2 color={colors.onBackground01} numberOfLines={1} style={styles.title}>
-                {STRINGS.MESSAGE_SEARCH.MESSAGE_PREVIEW_TITLE(message)}
+                {STRINGS.MESSAGE_SEARCH.SEARCH_RESULT_ITEM_TITLE(message)}
               </Text>
             </Box>
             <Box paddingTop={2}>
               <Text caption2 color={colors.onBackground02}>
-                {STRINGS.MESSAGE_SEARCH.MESSAGE_PREVIEW_TITLE_CAPTION(message)}
+                {STRINGS.MESSAGE_SEARCH.SEARCH_RESULT_ITEM_TITLE_CAPTION(message)}
               </Text>
             </Box>
           </Box>
@@ -66,7 +66,7 @@ export const MessageSearchResultItem: MessageSearchProps['List']['renderSearchRe
                 style={{ flex: 1 }}
                 color={colors.onBackground03}
               >
-                {STRINGS.MESSAGE_SEARCH.MESSAGE_PREVIEW_BODY(message)}
+                {STRINGS.MESSAGE_SEARCH.SEARCH_RESULT_ITEM_BODY(message)}
               </Text>
             </Box>
           </Box>

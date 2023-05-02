@@ -37,7 +37,7 @@ function getMessageSearchQuery(sdk: SendbirdChatSDK, options: SearchQueryOptions
 const createMessageSearchFragment = (initModule?: Partial<MessageSearchModule>): MessageSearchFragment => {
   const MessageSearchModule = createMessageSearchModule(initModule);
 
-  return ({ onPressHeaderLeft = NOOP, channel, queryCreator, renderSearchResultItem, onPressSearchResultItem}) => {
+  return ({ onPressHeaderLeft = NOOP, channel, queryCreator, renderSearchResultItem, onPressSearchResultItem }) => {
     const padding = useSafeAreaPadding(['left', 'right', 'bottom']);
 
     const { sdk } = useSendbirdChat();

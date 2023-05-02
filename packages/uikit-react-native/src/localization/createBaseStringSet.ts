@@ -273,9 +273,9 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     MESSAGE_SEARCH: {
       HEADER_INPUT_PLACEHOLDER: 'Search',
       HEADER_RIGHT: 'Search',
-      MESSAGE_PREVIEW_TITLE: (message) => getMessagePreviewTitle(message),
-      MESSAGE_PREVIEW_BODY: (message) => getMessagePreviewBody(message),
-      MESSAGE_PREVIEW_TITLE_CAPTION: (message, locale) => {
+      SEARCH_RESULT_ITEM_TITLE: (message) => getMessagePreviewTitle(message),
+      SEARCH_RESULT_ITEM_BODY: (message) => getMessagePreviewBody(message),
+      SEARCH_RESULT_ITEM_TITLE_CAPTION: (message, locale) => {
         return getMessagePreviewTime(message.createdAt, locale ?? dateLocale);
       },
     },

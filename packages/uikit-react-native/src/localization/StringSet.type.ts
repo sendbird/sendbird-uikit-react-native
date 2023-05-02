@@ -274,10 +274,10 @@ export interface StringSet {
     HEADER_INPUT_PLACEHOLDER: string;
     HEADER_RIGHT: string;
 
-    /** MessageSearch > Message preview */
-    MESSAGE_PREVIEW_TITLE: (message: SendbirdBaseMessage) => string;
-    MESSAGE_PREVIEW_TITLE_CAPTION: (message: SendbirdBaseMessage, locale?: Locale) => string;
-    MESSAGE_PREVIEW_BODY: (message: SendbirdBaseMessage) => string;
+    /** MessageSearch > Search result item */
+    SEARCH_RESULT_ITEM_TITLE: (message: SendbirdBaseMessage) => string;
+    SEARCH_RESULT_ITEM_TITLE_CAPTION: (message: SendbirdBaseMessage, locale?: Locale) => string;
+    SEARCH_RESULT_ITEM_BODY: (message: SendbirdBaseMessage) => string;
   };
   // UI
   LABELS: {
