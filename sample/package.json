@@ -17,7 +17,7 @@
     "@faker-js/faker": "^7.6.0",
     "@notifee/react-native": "^5.3.0",
     "@react-native-async-storage/async-storage": "^1.15.17",
-    "@react-native-camera-roll/camera-roll": "^5.0.4",
+    "@react-native-camera-roll/camera-roll": "^5.4.0",
     "@react-native-clipboard/clipboard": "^1.8.5",
     "@react-native-community/datetimepicker": "^5.1.0",
     "@react-native-community/netinfo": "^9.3.0",

@@ -346,7 +346,7 @@ PODS:
   - React-jsinspector (0.67.5)
   - React-logger (0.67.5):
     - glog
-  - react-native-cameraroll (5.3.1):
+  - react-native-cameraroll (5.4.0):
     - React-Core
   - react-native-create-thumbnail (1.6.4):
     - React-Core
@@ -748,7 +748,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: e9895ccae253323ca70f693945fecbba091f0abd
   React-jsinspector: ec4fe4f65ccf9d67c8429dda955d3412db8a25ef
   React-logger: 85f4ef06b9723714b2dfa5b0e5502b673b271b58
-  react-native-cameraroll: f3050460fe1708378698c16686bfaa5f34099be2
+  react-native-cameraroll: 8ffb0af7a5e5de225fd667610e2979fc1f0c2151
   react-native-create-thumbnail: e022bcdcba8a0b4529a50d3fa1a832ec921be39d
   react-native-document-picker: 495c444c0c773c6e83a5d91165890ecb1c0a399a
   react-native-file-access: a4398950e02999b5ab97f3055feb7ee28e6615a3
