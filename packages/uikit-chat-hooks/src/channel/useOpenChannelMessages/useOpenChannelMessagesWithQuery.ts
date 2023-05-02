@@ -1,6 +1,11 @@
 import { useRef } from 'react';
 
-import type { SendbirdBaseChannel, SendbirdOpenChannel, SendbirdPreviousMessageListQuery } from '@sendbird/uikit-utils';
+import type {
+  SendbirdBaseChannel,
+  SendbirdBaseMessage,
+  SendbirdOpenChannel,
+  SendbirdPreviousMessageListQuery,
+} from '@sendbird/uikit-utils';
 import {
   ASYNC_NOOP,
   NOOP,
@@ -13,6 +18,7 @@ import {
 } from '@sendbird/uikit-utils';
 
 import { useChannelHandler } from '../../handler/useChannelHandler';
+import { useConnectionHandler } from '../../handler/useConnectionHandler';
 import type { UseOpenChannelMessages, UseOpenChannelMessagesOptions } from '../../types';
 import { useChannelMessagesReducer } from '../useChannelMessagesReducer';
 
@@ -59,6 +65,99 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
       forceUpdate();
     }
   };
+
+  useConnectionHandler(sdk, handlerId, {
+    async onReconnectSucceeded() {
+      const lastMessage = messages[0];
+      if (!lastMessage) return;
+
+      const messageContext = {
+        updatedMessages: [] as SendbirdBaseMessage[],
+        addedMessages: [] as SendbirdBaseMessage[],
+        deletedMessageIds: [] as number[],
+      };
+      const changeLogsContext = {
+        hasMore: false,
+        token: '',
+      };
+      const messageQueryContext = {
+        hasMore: false,
+        timestamp: lastMessage.createdAt,
+      };
+
+      // Updated & Deleted messages
+      const changelogsParams = {
+        replyType: queryRef.current?.replyType,
+        includeMetaArray: queryRef.current?.includeMetaArray,
+        includeReactions: queryRef.current?.includeReactions,
+        includeThreadInfo: queryRef.current?.includeThreadInfo,
+        includeParentMessageInfo: queryRef.current?.includeParentMessageInfo,
+      };
+
+      const changeLogsByTS = await channel.getMessageChangeLogsSinceTimestamp(lastMessage.createdAt);
+      changeLogsContext.token = changeLogsByTS.token;
+      changeLogsContext.hasMore = changeLogsByTS.hasMore;
+      messageContext.updatedMessages.push(...changeLogsByTS.updatedMessages);
+      messageContext.deletedMessageIds.push(...changeLogsByTS.deletedMessageIds);
+
+      while (changeLogsContext.hasMore) {
+        const changeLogsByToken = await channel.getMessageChangeLogsSinceToken(changeLogsByTS.token, changelogsParams);
+        changeLogsContext.token = changeLogsByToken.token;
+        changeLogsContext.hasMore = changeLogsByToken.hasMore;
+        messageContext.updatedMessages.push(...changeLogsByToken.updatedMessages);
+        messageContext.deletedMessageIds.push(...changeLogsByToken.deletedMessageIds);
+      }
+
+      // Added messages
+      const messageQueryParams = {
+        prevResultSize: 0,
+        nextResultSize: queryRef.current?.limit ?? 100,
+        reverse: queryRef.current?.reverse,
+        includeParentMessageInfo: queryRef.current?.includeParentMessageInfo,
+        includeThreadInfo: queryRef.current?.includeThreadInfo,
+        includeReactions: queryRef.current?.includeReactions,
+        includeMetaArray: queryRef.current?.includeMetaArray,
+        replyType: queryRef.current?.replyType,
+        customTypesFilter: queryRef.current?.customTypesFilter,
+        messageTypeFilter: queryRef.current?.messageTypeFilter,
+        senderUserIdsFilter: queryRef.current?.senderUserIdsFilter,
+        showSubchannelMessagesOnly: queryRef.current?.showSubchannelMessagesOnly,
+      };
+
+      const queriedMessages = await channel.getMessagesByTimestamp(lastMessage.createdAt, messageQueryParams);
+      messageQueryContext.hasMore = queriedMessages.length > 0;
+      if (messageQueryContext.hasMore) {
+        messageQueryContext.timestamp = queriedMessages[0].createdAt;
+        messageContext.addedMessages.unshift(...queriedMessages);
+      }
+
+      while (messageQueryContext.hasMore) {
+        const queriedMessages = await channel.getMessagesByTimestamp(messageQueryContext.timestamp, messageQueryParams);
+        messageQueryContext.hasMore = queriedMessages.length > 0;
+        if (messageQueryContext.hasMore) {
+          messageQueryContext.timestamp = queriedMessages[0].createdAt;
+          messageContext.addedMessages.unshift(...queriedMessages);
+        }
+      }
+
+      // Update to View
+      updateMessages(
+        [...messageContext.addedMessages, ...messageContext.updatedMessages],
+        false,
+        sdk.currentUser.userId,
+      );
+      deleteMessages(messageContext.deletedMessageIds, []);
+
+      if (messageContext.addedMessages.length > 0) {
+        if (options?.shouldCountNewMessages?.()) {
+          updateNewMessages(messageContext.addedMessages, false, sdk.currentUser.userId);
+        }
+        if (options?.onMessagesReceived) {
+          options.onMessagesReceived(messageContext.addedMessages);
+        }
+      }
+    },
+  });
 
   useChannelHandler(
     sdk,
