@@ -92,6 +92,8 @@ export * from './domain/groupChannelNotifications/types';
 
 export * from './domain/groupChannelUserList/types';
 
+export * from './domain/messageSearch/types';
+
 /** Feature - open channels **/
 export * from './domain/openChannel';
 export * from './domain/openChannel/types';
