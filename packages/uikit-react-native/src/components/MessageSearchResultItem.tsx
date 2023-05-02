@@ -9,19 +9,15 @@ import {
   createStyleSheet,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdBaseMessage, SendbirdGroupChannel } from '@sendbird/uikit-utils';
+import type { SendbirdBaseMessage } from '@sendbird/uikit-utils';
 import { getFileExtension, getFileType, useIIFE } from '@sendbird/uikit-utils';
 
+import type { MessageSearchProps } from '../domain/messageSearch/types';
 import { useLocalization } from '../hooks/useContext';
 
 const iconMapper = { audio: 'file-audio', image: 'photo', video: 'play', file: 'file-document' } as const;
 
-type Props = {
-  onPressMessage: (param: { channel: SendbirdGroupChannel; message: SendbirdBaseMessage }) => void;
-  channel: SendbirdGroupChannel;
-  message: SendbirdBaseMessage;
-};
-export const MessageSearchListItem = ({ onPressMessage, channel, message }: Props) => {
+export const MessageSearchResultItem: MessageSearchProps['List']['renderSearchResultItem'] = ({ onPress, message }) => {
   const { colors, select, palette } = useUIKitTheme();
   const { STRINGS } = useLocalization();
 
@@ -31,7 +27,7 @@ export const MessageSearchListItem = ({ onPressMessage, channel, message }: Prop
   });
 
   return (
-    <PressBox onPress={() => onPressMessage({ channel, message })}>
+    <PressBox onPress={onPress}>
       <Box height={76} width={'100%'} flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
         <Avatar size={56} uri={getSenderProfile(message)} containerStyle={styles.avatar} />
 

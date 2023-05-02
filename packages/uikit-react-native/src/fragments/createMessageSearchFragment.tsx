@@ -6,12 +6,13 @@ import {
   NOOP,
   SendbirdBaseMessage,
   SendbirdChatSDK,
+  SendbirdGroupChannel,
   SendbirdMessageSearchQuery,
   useFreshCallback,
   useSafeAreaPadding,
 } from '@sendbird/uikit-utils';
 
-import { MessageSearchListItem } from '../components/MessageSearchListItem';
+import { MessageSearchResultItem } from '../components/MessageSearchResultItem';
 import StatusComposition from '../components/StatusComposition';
 import { createMessageSearchModule } from '../domain/messageSearch';
 import type { MessageSearchFragment, MessageSearchModule, MessageSearchProps } from '../domain/messageSearch/types';
@@ -36,56 +37,18 @@ function getMessageSearchQuery(sdk: SendbirdChatSDK, options: SearchQueryOptions
 const createMessageSearchFragment = (initModule?: Partial<MessageSearchModule>): MessageSearchFragment => {
   const MessageSearchModule = createMessageSearchModule(initModule);
 
-  return ({ onPressHeaderLeft = NOOP, onPressMessage, channel, queryCreator }) => {
-    const { sdk } = useSendbirdChat();
+  return ({ onPressHeaderLeft = NOOP, channel, queryCreator, renderSearchResultItem, onPressSearchResultItem}) => {
     const padding = useSafeAreaPadding(['left', 'right', 'bottom']);
 
-    const [query, setQuery] = useState<SendbirdMessageSearchQuery>();
-    const [keyword, setKeyword] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<unknown>(null);
-    const [searchResults, setSearchResults] = useState<SendbirdBaseMessage[]>([]);
-
-    const search = useFreshCallback(async () => {
-      if (keyword.length <= 0) return;
-
-      const query = getMessageSearchQuery(sdk, {
-        keyword,
-        channelUrl: channel.url,
-        messageTimestampFrom: Math.max(channel.joinedAt, channel.invitedAt),
-        order: MessageSearchOrder.TIMESTAMP,
-        queryCreator,
-      });
-
-      setQuery(query);
-      setLoading(true);
-      setError(null);
-
-      try {
-        const result = await query.next();
-        setSearchResults(result);
-      } catch (err) {
-        Logger.debug('[MessageSearchFragment] search failure', err);
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
+    const { sdk } = useSendbirdChat();
+    const { keyword, setKeyword, search, searchResults, loading, next, error, query } = useMessageSearch(sdk, {
+      channel,
+      queryCreator,
     });
 
-    const next = useFreshCallback(async () => {
-      if (query?.hasNext) {
-        try {
-          const result = await query.next();
-          setSearchResults((prev) => [...prev, ...result]);
-        } catch (err) {
-          Logger.debug('[MessageSearchFragment] next failure', err);
-          setError(err);
-        }
-      }
-    });
-
-    const renderMessage: MessageSearchProps['List']['renderMessage'] = useFreshCallback(({ message }) => {
-      return <MessageSearchListItem onPressMessage={onPressMessage} channel={channel} message={message} />;
+    const renderItem: MessageSearchProps['List']['renderSearchResultItem'] = useFreshCallback((props) => {
+      if (renderSearchResultItem) return renderSearchResultItem(props);
+      return <MessageSearchResultItem {...props} />;
     });
 
     return (
@@ -104,8 +67,10 @@ const createMessageSearchFragment = (initModule?: Partial<MessageSearchModule>):
         >
           {query && (
             <MessageSearchModule.List
+              channel={channel}
+              onPressSearchResultItem={onPressSearchResultItem}
               messages={searchResults}
-              renderMessage={renderMessage}
+              renderSearchResultItem={renderItem}
               flatListProps={{
                 keyboardDismissMode: 'on-drag',
                 keyboardShouldPersistTaps: 'handled',
@@ -118,6 +83,68 @@ const createMessageSearchFragment = (initModule?: Partial<MessageSearchModule>):
         </StatusComposition>
       </MessageSearchModule.Provider>
     );
+  };
+};
+
+export const useMessageSearch = (
+  sdk: SendbirdChatSDK,
+  { channel, queryCreator }: { channel: SendbirdGroupChannel; queryCreator: SearchQueryOptions['queryCreator'] },
+) => {
+  const [query, setQuery] = useState<SendbirdMessageSearchQuery>();
+  const [keyword, setKeyword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<unknown>(null);
+  const [searchResults, setSearchResults] = useState<SendbirdBaseMessage[]>([]);
+
+  const search = useFreshCallback(async () => {
+    if (keyword.length <= 0) return;
+
+    const query = getMessageSearchQuery(sdk, {
+      keyword,
+      channelUrl: channel.url,
+      messageTimestampFrom: Math.max(channel.joinedAt, channel.invitedAt),
+      order: MessageSearchOrder.TIMESTAMP,
+      queryCreator,
+    });
+
+    setQuery(query);
+    setLoading(true);
+    setError(null);
+
+    try {
+      const result = await query.next();
+      setSearchResults(result);
+    } catch (err) {
+      Logger.debug('[MessageSearchFragment] search failure', err);
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  });
+
+  const next = useFreshCallback(async () => {
+    if (query?.hasNext) {
+      try {
+        const result = await query.next();
+        setSearchResults((prev) => [...prev, ...result]);
+      } catch (err) {
+        Logger.debug('[MessageSearchFragment] next failure', err);
+        setError(err);
+      }
+    }
+  });
+
+  return {
+    keyword,
+    setKeyword,
+
+    query,
+    loading,
+    error,
+    searchResults,
+
+    search,
+    next,
   };
 };
 

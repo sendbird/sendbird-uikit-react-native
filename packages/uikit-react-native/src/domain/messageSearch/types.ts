@@ -9,7 +9,8 @@ export type MessageSearchProps = {
   Fragment: {
     channel: SendbirdGroupChannel;
     onPressHeaderLeft: MessageSearchProps['Header']['onPressHeaderLeft'];
-    onPressMessage: (params: { channel: SendbirdGroupChannel; message: SendbirdBaseMessage }) => void;
+    onPressSearchResultItem: MessageSearchProps['List']['onPressSearchResultItem'];
+    renderSearchResultItem?: MessageSearchProps['List']['renderSearchResultItem'];
     queryCreator?: () => SendbirdMessageSearchQuery;
   };
   Header: {
@@ -19,8 +20,14 @@ export type MessageSearchProps = {
     onPressHeaderRight: () => void;
   };
   List: {
+    channel: SendbirdGroupChannel;
     messages: SendbirdBaseMessage[];
-    renderMessage: (props: { message: SendbirdBaseMessage; onPress?: () => void }) => React.ReactElement | null;
+    onPressSearchResultItem: (params: { channel: SendbirdGroupChannel; message: SendbirdBaseMessage }) => void;
+    renderSearchResultItem: (props: {
+      channel: SendbirdGroupChannel;
+      message: SendbirdBaseMessage;
+      onPress: () => void;
+    }) => React.ReactElement | null;
     flatListProps?: Partial<FlatListProps<SendbirdBaseMessage>>;
   };
   StatusError: {

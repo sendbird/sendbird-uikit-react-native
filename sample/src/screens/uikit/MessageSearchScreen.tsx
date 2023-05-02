@@ -18,7 +18,7 @@ const MessageSearchScreen = () => {
     <MessageSearchFragment
       channel={channel}
       onPressHeaderLeft={() => navigation.goBack()}
-      onPressMessage={({ message, channel }) => {
+      onPressSearchResultItem={({ message, channel }) => {
         navigation.push(Routes.GroupChannel, {
           channelUrl: channel.url,
           searchItem: { startingPoint: message.createdAt },
