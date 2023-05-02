@@ -86,7 +86,7 @@ const createMessageSearchFragment = (initModule?: Partial<MessageSearchModule>):
   };
 };
 
-export const useMessageSearch = (
+const useMessageSearch = (
   sdk: SendbirdChatSDK,
   { channel, queryCreator }: { channel: SendbirdGroupChannel; queryCreator: SearchQueryOptions['queryCreator'] },
 ) => {
@@ -98,6 +98,7 @@ export const useMessageSearch = (
 
   const search = useFreshCallback(async () => {
     if (keyword.length <= 0) return;
+    if (loading) return;
 
     const query = getMessageSearchQuery(sdk, {
       keyword,
@@ -115,7 +116,7 @@ export const useMessageSearch = (
       const result = await query.next();
       setSearchResults(result);
     } catch (err) {
-      Logger.debug('[MessageSearchFragment] search failure', err);
+      Logger.warn('[MessageSearchFragment] search failure', err);
       setError(err);
     } finally {
       setLoading(false);
@@ -128,7 +129,7 @@ export const useMessageSearch = (
         const result = await query.next();
         setSearchResults((prev) => [...prev, ...result]);
       } catch (err) {
-        Logger.debug('[MessageSearchFragment] next failure', err);
+        Logger.warn('[MessageSearchFragment] next failure', err);
         setError(err);
       }
     }
