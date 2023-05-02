@@ -49,9 +49,10 @@ const MessageSearchHeader = ({
         >
           <Icon size={24} icon={'search'} color={colors.onBackground03} containerStyle={styles.searchIcon} />
           <TextInput
+            disableFullscreenUI
+            enablesReturnKeyAutomatically
             ref={inputRef}
             returnKeyType={'search'}
-            enablesReturnKeyAutomatically
             onSubmitEditing={() => onPressHeaderRight()}
             selectionColor={colors.primary}
             placeholder={STRINGS.MESSAGE_SEARCH.HEADER_INPUT_PLACEHOLDER}
