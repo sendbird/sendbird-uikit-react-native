@@ -91,7 +91,7 @@ const styles = createStyleSheet({
     flex: 1,
     height: '100%',
     fontSize: 14,
-    marginBottom: Platform.select({ android: -2, default: 0 }),
+    padding: 0,
   },
 });
 
