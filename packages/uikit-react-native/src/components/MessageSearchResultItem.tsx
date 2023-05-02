@@ -28,13 +28,13 @@ export const MessageSearchResultItem: MessageSearchProps['List']['renderSearchRe
 
   return (
     <PressBox onPress={onPress}>
-      <Box height={76} width={'100%'} flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
-        <Avatar size={56} uri={getSenderProfile(message)} containerStyle={styles.avatar} />
+      <Box style={styles.container}>
+        <Avatar size={styles.avatarSize.width} uri={getSenderProfile(message)} containerStyle={styles.avatar} />
 
         <Box flex={1} paddingRight={16}>
-          <Box flexDirection={'row'} paddingTop={10}>
+          <Box style={styles.titleLine}>
             <Box flex={1} marginRight={4} justifyContent={'center'}>
-              <Text subtitle2 color={colors.onBackground01} numberOfLines={1} style={styles.title}>
+              <Text subtitle2 color={colors.onBackground01} numberOfLines={1}>
                 {STRINGS.MESSAGE_SEARCH.SEARCH_RESULT_ITEM_TITLE(message)}
               </Text>
             </Box>
@@ -61,9 +61,9 @@ export const MessageSearchResultItem: MessageSearchProps['List']['renderSearchRe
 
               <Text
                 body3
-                numberOfLines={2}
+                numberOfLines={fileIcon ? 1 : 2}
                 ellipsizeMode={fileIcon ? 'middle' : 'tail'}
-                style={{ flex: 1 }}
+                style={styles.bodyText}
                 color={colors.onBackground03}
               >
                 {STRINGS.MESSAGE_SEARCH.SEARCH_RESULT_ITEM_BODY(message)}
@@ -87,10 +87,22 @@ function getSenderProfile(message: SendbirdBaseMessage) {
 }
 
 const styles = createStyleSheet({
+  container: {
+    height: 76,
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   avatar: {
     marginHorizontal: 16,
   },
-  title: {
+  avatarSize: {
+    width: 56,
+  },
+  titleLine: {
+    flexDirection: 'row',
+    marginTop: 10,
     marginBottom: 4,
   },
   bodyIcon: {
@@ -98,6 +110,10 @@ const styles = createStyleSheet({
     width: 26,
     height: 26,
     marginRight: 4,
+  },
+  bodyText: {
+    flex: 1,
+    lineHeight: 16,
   },
   separator: {
     position: 'absolute',
