@@ -47,6 +47,8 @@ const createMessageSearchFragment = (initModule?: Partial<MessageSearchModule>):
     const [searchResults, setSearchResults] = useState<SendbirdBaseMessage[]>([]);
 
     const search = useFreshCallback(async () => {
+      if (keyword.length <= 0) return;
+
       const query = getMessageSearchQuery(sdk, {
         keyword,
         channelUrl: channel.url,

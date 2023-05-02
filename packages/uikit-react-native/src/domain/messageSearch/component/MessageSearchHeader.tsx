@@ -51,6 +51,7 @@ const MessageSearchHeader = ({
           <TextInput
             ref={inputRef}
             returnKeyType={'search'}
+            enablesReturnKeyAutomatically
             onSubmitEditing={() => onPressHeaderRight()}
             selectionColor={colors.primary}
             placeholder={STRINGS.MESSAGE_SEARCH.HEADER_INPUT_PLACEHOLDER}
