@@ -5,12 +5,12 @@ import { SendbirdBaseMessage, useFreshCallback } from '@sendbird/uikit-utils';
 
 import type { MessageSearchProps } from '../types';
 
-const MessageSearchList = ({ messages, renderMessage, flatlistProps }: MessageSearchProps['List']) => {
+const MessageSearchList = ({ messages, renderMessage, flatListProps }: MessageSearchProps['List']) => {
   const renderItem: ListRenderItem<SendbirdBaseMessage> = useFreshCallback(({ item }) =>
     renderMessage({ message: item }),
   );
 
-  return <FlatList data={messages} renderItem={renderItem} {...flatlistProps} />;
+  return <FlatList data={messages} renderItem={renderItem} {...flatListProps} />;
 };
 
 export default MessageSearchList;

@@ -104,7 +104,7 @@ const createMessageSearchFragment = (initModule?: Partial<MessageSearchModule>):
             <MessageSearchModule.List
               messages={searchResults}
               renderMessage={renderMessage}
-              flatlistProps={{
+              flatListProps={{
                 keyboardDismissMode: 'on-drag',
                 keyboardShouldPersistTaps: 'handled',
                 onEndReached: next,

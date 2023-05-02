@@ -21,7 +21,7 @@ export type MessageSearchProps = {
   List: {
     messages: SendbirdBaseMessage[];
     renderMessage: (props: { message: SendbirdBaseMessage; onPress?: () => void }) => React.ReactElement | null;
-    flatlistProps?: Partial<FlatListProps<SendbirdBaseMessage>>;
+    flatListProps?: Partial<FlatListProps<SendbirdBaseMessage>>;
   };
   StatusError: {
     onPressRetry: () => void;
