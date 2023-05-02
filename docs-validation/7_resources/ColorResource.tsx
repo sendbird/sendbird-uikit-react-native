@@ -80,7 +80,10 @@ function uikitColors(_: UIKitColors) {
     onBackgroundReverse02,
     onBackgroundReverse03,
     onBackgroundReverse04,
-    ui: { header, button, message, dialog, dateSeparator, input, groupChannelPreview, placeholder, badge },
+    ui: {
+      header, input, button, dialog, dateSeparator, placeholder, badge, reaction, profileCard,
+      groupChannelPreview, groupChannelMessage, openChannelPreview, openChannelMessage
+    },
   } = _;
 }
 
