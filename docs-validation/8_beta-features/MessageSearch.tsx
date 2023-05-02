@@ -1,9 +1,24 @@
 import React from 'react';
 
-import { createMessageSearchFragment, StringSet } from "@sendbird/uikit-react-native";
+import { createMessageSearchFragment, SendbirdUIKitContainer, StringSet } from "@sendbird/uikit-react-native";
 import { Icon } from "@sendbird/uikit-react-native-foundation";
 
 const MySearchResultItem = (_: object) => <React.Fragment />;
+
+/**
+ * Message search
+ * */
+const App = () => {
+  return (
+    //@ts-ignore
+    <SendbirdUIKitContainer
+      chatOptions={{
+        enableMessageSearch: true
+      }}
+    />
+  );
+};
+/** ------------------ **/
 
 /**
  * Customize the UI for message search
