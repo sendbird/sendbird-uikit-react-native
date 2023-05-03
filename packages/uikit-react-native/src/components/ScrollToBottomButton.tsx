@@ -9,6 +9,8 @@ type Props = {
 };
 const ScrollToBottomButton = ({ visible, onPress }: Props) => {
   const { palette, select } = useUIKitTheme();
+  if (!visible) return null;
+
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -16,10 +18,7 @@ const ScrollToBottomButton = ({ visible, onPress }: Props) => {
       disabled={!visible}
       style={[
         styles.container,
-        {
-          opacity: visible ? 1 : 0,
-          backgroundColor: select({ dark: palette.background400, light: palette.background50 }),
-        },
+        { backgroundColor: select({ dark: palette.background400, light: palette.background50 }) },
       ]}
     >
       <Icon icon={'chevron-down'} size={22} />

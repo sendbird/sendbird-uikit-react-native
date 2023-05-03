@@ -176,7 +176,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
         </View>
       )}
       {renderScrollToBottomButton && (
-        <View pointerEvents={scrolledAwayFromBottom ? 'auto' : 'none'} style={[styles.scrollButton, safeAreaLayout]}>
+        <View style={[styles.scrollButton, safeAreaLayout]}>
           {renderScrollToBottomButton({
             visible: hasNext() || scrolledAwayFromBottom,
             onPress: () => onPressScrollToBottomButton(),
