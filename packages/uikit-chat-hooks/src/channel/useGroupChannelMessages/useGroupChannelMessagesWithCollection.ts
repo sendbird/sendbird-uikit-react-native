@@ -42,6 +42,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
 
   const forceUpdate = useForceUpdate();
   const collectionRef = useRef<SendbirdMessageCollection>();
+  const collectionInitializedRef = useRef(false);
   const handlerId = useUniqHandlerId('useGroupChannelMessagesWithCollection');
 
   const {
@@ -84,6 +85,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     channelMarkAsRead();
     updateNewMessages([], true, sdk.currentUser.userId);
 
+    collectionInitializedRef.current = false;
     collectionRef.current = createMessageCollection(channel, limit, {
       collectionCreator: options?.collectionCreator,
       startingPoint,
@@ -169,6 +171,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
           updateMessages(messages, true, sdk.currentUser.userId);
           updateUnsendMessages();
         }
+
         callback?.();
       })
       .onApiResult((err, messages) => {
@@ -180,6 +183,8 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
           if (!options?.startingPoint) options?.onMessagesReceived?.(messages);
           if (sdk.isCacheEnabled) updateUnsendMessages();
         }
+
+        collectionInitializedRef.current = true;
         callback?.();
       });
   });
@@ -224,9 +229,13 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     }
   });
 
-  const hasPrev: ReturnType<UseGroupChannelMessages>['hasPrev'] = useFreshCallback(
-    () => collectionRef.current?.hasPrevious ?? false,
-  );
+  const hasPrev: ReturnType<UseGroupChannelMessages>['hasPrev'] = useFreshCallback(() => {
+    if (collectionInitializedRef.current && collectionRef.current) {
+      return collectionRef.current.hasPrevious;
+    } else {
+      return false;
+    }
+  });
 
   const next: ReturnType<UseGroupChannelMessages>['next'] = useFreshCallback(async () => {
     if (collectionRef.current && collectionRef.current?.hasNext) {
@@ -237,9 +246,13 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     }
   });
 
-  const hasNext: ReturnType<UseGroupChannelMessages>['hasNext'] = useFreshCallback(
-    () => collectionRef.current?.hasNext ?? false,
-  );
+  const hasNext: ReturnType<UseGroupChannelMessages>['hasNext'] = useFreshCallback(() => {
+    if (collectionInitializedRef.current && collectionRef.current) {
+      return collectionRef.current.hasNext;
+    } else {
+      return false;
+    }
+  });
 
   const sendUserMessage: ReturnType<UseGroupChannelMessages>['sendUserMessage'] = useFreshCallback(
     (params, onPending) => {
