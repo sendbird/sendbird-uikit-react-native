@@ -3,7 +3,7 @@ import type { FlatList } from 'react-native';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
-import { isDifferentChannel, useFreshCallback, useIsFirstMount, useUniqHandlerId } from '@sendbird/uikit-utils';
+import { isDifferentChannel, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import ChannelMessageList from '../../../components/ChannelMessageList';
 import { MESSAGE_SEARCH_SAFE_SCROLL_DELAY } from '../../../constants';
@@ -33,19 +33,16 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
     }, timeout);
   };
 
-  const isFirstMount = useIsFirstMount();
-
   useEffect(() => {
-    if (isFirstMount && props.searchItem) {
+    if (props.searchItem) {
       const createdAt = props.searchItem.startingPoint;
-      const index = props.messages.findIndex((it) => it.createdAt === createdAt);
-      if (index > -1) {
-        // lazyScrollToIndex(index, false, 0);
-        // lazyScrollToIndex(index, false, 100);
-        lazyScrollToIndex(index, true, MESSAGE_SEARCH_SAFE_SCROLL_DELAY);
+      const foundMessageIndex = props.messages.findIndex((it) => it.createdAt === createdAt);
+      const isIncludedInList = foundMessageIndex > -1;
+      if (isIncludedInList) {
+        lazyScrollToIndex(foundMessageIndex, true, MESSAGE_SEARCH_SAFE_SCROLL_DELAY);
       }
     }
-  }, [isFirstMount, props.searchItem]);
+  }, [props.searchItem]);
 
   const scrollToBottom = useFreshCallback((animated = false) => {
     if (props.hasNext()) {
