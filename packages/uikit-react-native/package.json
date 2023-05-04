@@ -28,6 +28,7 @@
   "files": [
     "src",
     "lib",
+    "src/version.ts",
     "!**/__tests__",
     "!**/__template__"
   ],
@@ -102,8 +103,8 @@
     "@react-native-clipboard/clipboard": ">=1.8.5",
     "@react-native-community/netinfo": ">=9.3.0",
     "@react-native-firebase/messaging": ">=14.4.0",
-    "@sendbird/react-native-scrollview-enhancer": "*",
     "@sendbird/chat": "^4.3.0",
+    "@sendbird/react-native-scrollview-enhancer": "*",
     "date-fns": ">=2.28.0",
     "expo-av": ">=12.0.4",
     "expo-clipboard": ">=2.1.1",
