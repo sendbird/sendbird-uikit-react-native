@@ -1,9 +1,9 @@
-import React, { forwardRef, useCallback, useRef } from 'react';
+import React, { forwardRef, useRef } from 'react';
 import { FlatListProps, Platform, FlatList as RNFlatList, StyleSheet } from 'react-native';
 
 import { FlatList } from '@sendbird/react-native-scrollview-enhancer';
 import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { NOOP, SendbirdMessage, getMessageUniqId } from '@sendbird/uikit-utils';
+import { NOOP, SendbirdMessage, getMessageUniqId, useFreshCallback } from '@sendbird/uikit-utils';
 
 let ANDROID_BUG_ALERT_SHOWED = Platform.OS !== 'android';
 const BOTTOM_DETECT_THRESHOLD = 25;
@@ -27,27 +27,24 @@ const ChatFlatList = forwardRef<RNFlatList<SendbirdMessage>, Props>(function Cus
   const { select } = useUIKitTheme();
   const contentOffsetY = useRef(0);
 
-  const _onScroll = useCallback<NonNullable<Props['onScroll']>>(
-    (event) => {
-      onScroll?.(event);
+  const _onScroll = useFreshCallback<NonNullable<Props['onScroll']>>((event) => {
+    onScroll?.(event);
 
-      const { contentOffset } = event.nativeEvent;
+    const { contentOffset } = event.nativeEvent;
 
-      const prevOffsetY = contentOffsetY.current;
-      const currOffsetY = contentOffset.y;
+    const prevOffsetY = contentOffsetY.current;
+    const currOffsetY = contentOffset.y;
 
-      if (BOTTOM_DETECT_THRESHOLD < prevOffsetY && currOffsetY <= BOTTOM_DETECT_THRESHOLD) {
-        onScrolledAwayFromBottom(false);
-        onLeaveScrollBottom?.(false);
-      } else if (BOTTOM_DETECT_THRESHOLD < currOffsetY && prevOffsetY <= BOTTOM_DETECT_THRESHOLD) {
-        onScrolledAwayFromBottom(true);
-        onLeaveScrollBottom?.(true);
-      }
+    if (BOTTOM_DETECT_THRESHOLD < prevOffsetY && currOffsetY <= BOTTOM_DETECT_THRESHOLD) {
+      onScrolledAwayFromBottom(false);
+      onLeaveScrollBottom?.(false);
+    } else if (BOTTOM_DETECT_THRESHOLD < currOffsetY && prevOffsetY <= BOTTOM_DETECT_THRESHOLD) {
+      onScrolledAwayFromBottom(true);
+      onLeaveScrollBottom?.(true);
+    }
 
-      contentOffsetY.current = contentOffset.y;
-    },
-    [onScroll],
-  );
+    contentOffsetY.current = contentOffset.y;
+  });
 
   if (__DEV__ && !ANDROID_BUG_ALERT_SHOWED) {
     ANDROID_BUG_ALERT_SHOWED = true;
