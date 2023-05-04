@@ -21,8 +21,6 @@ import {
   MutedMemberFilter,
   MutedState,
   OperatorFilter,
-  PinnedMessageListQuery,
-  PinnedMessageListQueryParams,
   ReadStatus,
 } from '@sendbird/chat/groupChannel';
 import type { BaseListQueryParams } from '@sendbird/chat/lib/__definition';
@@ -605,10 +603,6 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
   }
 
   get messageCollectionLastAccessedAt(): number {
-    throw new Error('Method not implemented.');
-  }
-
-  createPinnedMessageListQuery(_params: PinnedMessageListQueryParams | undefined): PinnedMessageListQuery {
     throw new Error('Method not implemented.');
   }
 }
