@@ -114,7 +114,13 @@ const GroupChannelPreview = ({
                   ]}
                 />
               )}
-              <Text body3 numberOfLines={1} style={styles.bodyText} color={color.default.none.textBody}>
+              <Text
+                body3
+                numberOfLines={1}
+                ellipsizeMode={bodyIcon ? 'middle' : 'tail'}
+                style={styles.bodyText}
+                color={color.default.none.textBody}
+              >
                 {body}
               </Text>
             </View>

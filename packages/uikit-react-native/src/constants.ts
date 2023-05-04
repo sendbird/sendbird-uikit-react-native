@@ -1,6 +1,8 @@
 export const DEFAULT_LONG_PRESS_DELAY = 350;
+export const MESSAGE_SEARCH_SAFE_SCROLL_DELAY = 500;
+export const MESSAGE_FOCUS_ANIMATION_DELAY = 250;
 export const DEPRECATION_WARNING = {
-  GROUP_CHANNEL: {
+  CHANNEL: {
     ON_PRESS_IMAGE_MESSAGE: '`onPressImageMessage` is deprecated, please use `onPressMediaMessage` instead',
   },
 } as const;

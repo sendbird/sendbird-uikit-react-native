@@ -60,6 +60,7 @@ export const SendbirdUIKit = Object.freeze({
     USE_USER_ID_FOR_NICKNAME: false,
     USER_MENTION: false,
     IMAGE_COMPRESSION: true,
+    MESSAGE_SEARCH: false,
   },
 });
 
@@ -206,6 +207,7 @@ const SendbirdUIKitContainer = ({
         }
         enableUserMention={chatOptions?.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION}
         enableImageCompression={chatOptions?.enableImageCompression ?? SendbirdUIKit.DEFAULT.IMAGE_COMPRESSION}
+        enableMessageSearch={chatOptions?.enableMessageSearch ?? SendbirdUIKit.DEFAULT.MESSAGE_SEARCH}
       >
         <LocalizationProvider stringSet={defaultStringSet}>
           <PlatformServiceProvider

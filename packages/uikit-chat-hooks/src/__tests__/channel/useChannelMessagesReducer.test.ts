@@ -3,9 +3,9 @@ import { act, renderHook } from '@testing-library/react-native';
 import { MessageType, SendingStatus } from '@sendbird/chat/message';
 import { createMockMessage, createMockUser } from '@sendbird/uikit-testing-tools';
 
-import { useOpenChannelMessagesReducer } from '../../../channel/useOpenChannelMessages/reducer';
+import { useChannelMessagesReducer } from '../../channel/useChannelMessagesReducer';
 
-describe('useOpenChannelMessagesReducer', () => {
+describe('useChannelMessagesReducer', () => {
   const messages = [
     createMockMessage({ messageId: 1, message: 'Hello', sendingStatus: SendingStatus.SUCCEEDED }),
     createMockMessage({ messageId: 2, message: 'World', sendingStatus: SendingStatus.SUCCEEDED }),
@@ -16,7 +16,7 @@ describe('useOpenChannelMessagesReducer', () => {
   ];
 
   test('should update loading state', () => {
-    const { result } = renderHook(() => useOpenChannelMessagesReducer());
+    const { result } = renderHook(() => useChannelMessagesReducer());
     expect(result.current.loading).toBe(true);
 
     act(() => {
@@ -27,7 +27,7 @@ describe('useOpenChannelMessagesReducer', () => {
   });
 
   test('should update refreshing state', () => {
-    const { result } = renderHook(() => useOpenChannelMessagesReducer());
+    const { result } = renderHook(() => useChannelMessagesReducer());
     expect(result.current.refreshing).toBe(false);
 
     act(() => {
@@ -38,7 +38,7 @@ describe('useOpenChannelMessagesReducer', () => {
   });
 
   test('should update messages state', async () => {
-    const { result } = renderHook(() => useOpenChannelMessagesReducer());
+    const { result } = renderHook(() => useChannelMessagesReducer());
 
     expect(result.current.messages).toHaveLength(0);
 
@@ -50,7 +50,7 @@ describe('useOpenChannelMessagesReducer', () => {
   });
 
   test('should delete messages state', () => {
-    const { result } = renderHook(() => useOpenChannelMessagesReducer());
+    const { result } = renderHook(() => useChannelMessagesReducer());
     const messages = [
       createMockMessage({ messageId: 1, message: 'message1', sendingStatus: SendingStatus.SUCCEEDED }),
       createMockMessage({ messageId: 2, message: 'message2', sendingStatus: SendingStatus.SUCCEEDED }),
@@ -65,37 +65,91 @@ describe('useOpenChannelMessagesReducer', () => {
     expect(result.current.messages).toEqual([messages[0], messages[2]]);
   });
 
-  test('should update next messages state', () => {
-    const { result } = renderHook(() => useOpenChannelMessagesReducer());
-
-    expect(result.current.nextMessages).toHaveLength(0);
-
-    act(() => result.current.updateNextMessages(messages, true));
-    expect(result.current.nextMessages).toEqual(messages);
-
-    act(() => result.current.updateNextMessages(messagesToAppend, false));
-    expect(result.current.nextMessages).toEqual([...messages, ...messagesToAppend]);
-  });
-
-  test('should delete next messages state', () => {
-    const { result } = renderHook(() => useOpenChannelMessagesReducer());
-    const nextMessages = [
-      createMockMessage({ messageId: 1, message: 'message1', sendingStatus: SendingStatus.SUCCEEDED }),
-      createMockMessage({ messageId: 2, message: 'message2', sendingStatus: SendingStatus.SUCCEEDED }),
-      createMockMessage({ messageId: 3, message: 'message3', sendingStatus: SendingStatus.SUCCEEDED }),
+  test('should update new messages state', () => {
+    const userId = 'other-user-id';
+    const newMessages = [
+      createMockMessage({
+        messageId: 1,
+        message: 'message1',
+        sender: createMockUser({ userId }).asSender(),
+        sendingStatus: SendingStatus.SUCCEEDED,
+        updatedAt: 0,
+      }),
+      createMockMessage({
+        messageId: 2,
+        message: 'message1',
+        sender: createMockUser({ userId }).asSender(),
+        sendingStatus: SendingStatus.SUCCEEDED,
+        updatedAt: 0,
+      }),
+    ];
+    const updatedMessage = createMockMessage({
+      messageId: 3,
+      message: 'message3',
+      sender: createMockUser({ userId }).asSender(),
+      sendingStatus: SendingStatus.SUCCEEDED,
+      updatedAt: Date.now(),
+    });
+    const newMessagesToAppend = [
+      createMockMessage({
+        messageId: 4,
+        message: 'message4',
+        sender: createMockUser({ userId }).asSender(),
+        sendingStatus: SendingStatus.SUCCEEDED,
+        updatedAt: 0,
+      }),
     ];
 
+    const { result } = renderHook(() => useChannelMessagesReducer());
+
+    expect(result.current.newMessages).toHaveLength(0);
+
+    act(() => result.current.updateNewMessages([...newMessages, updatedMessage], true));
+    expect(result.current.newMessages).toEqual(newMessages);
+
+    act(() => result.current.updateNewMessages(newMessagesToAppend, false));
+    expect(result.current.newMessages).toEqual([...newMessages, ...newMessagesToAppend]);
+  });
+
+  test('should delete new messages state', () => {
+    const userId = 'other-user-id';
+    const newMessages = [
+      createMockMessage({
+        messageId: 1,
+        message: 'message1',
+        sender: createMockUser({ userId }).asSender(),
+        sendingStatus: SendingStatus.SUCCEEDED,
+        updatedAt: 0,
+      }),
+      createMockMessage({
+        messageId: 2,
+        message: 'message2',
+        sender: createMockUser({ userId }).asSender(),
+        sendingStatus: SendingStatus.SUCCEEDED,
+        updatedAt: 0,
+      }),
+      createMockMessage({
+        messageId: 3,
+        message: 'message3',
+        sender: createMockUser({ userId }).asSender(),
+        sendingStatus: SendingStatus.SUCCEEDED,
+        updatedAt: 0,
+      }),
+    ];
+
+    const { result } = renderHook(() => useChannelMessagesReducer());
+
     act(() => {
-      result.current.updateNextMessages(nextMessages, true);
-      result.current.deleteNextMessages([nextMessages[1].messageId], []);
+      result.current.updateNewMessages(newMessages, true, 'my-user-id');
+      result.current.deleteNewMessages([newMessages[1].messageId], []);
     });
 
-    expect(result.current.nextMessages).toEqual([nextMessages[0], nextMessages[2]]);
+    expect(result.current.newMessages).toEqual([newMessages[0], newMessages[2]]);
   });
 
   test('should update messages sorted by sortComparator', () => {
     const comparator = jest.fn((a, b) => b.createdAt - a.createdAt);
-    const { result } = renderHook(() => useOpenChannelMessagesReducer('user-id', comparator));
+    const { result } = renderHook(() => useChannelMessagesReducer(comparator));
     const messages = [
       createMockMessage({ messageId: 1, message: 'Hello', sendingStatus: SendingStatus.SUCCEEDED }),
       createMockMessage({ messageId: 2, message: 'World', sendingStatus: SendingStatus.SUCCEEDED }),
@@ -142,12 +196,12 @@ describe('useOpenChannelMessagesReducer', () => {
         updatedAt: 0,
       }),
     ];
-    const { result } = renderHook(() => useOpenChannelMessagesReducer(MY_USER_ID));
+    const { result } = renderHook(() => useChannelMessagesReducer());
 
-    act(() => result.current.updateNextMessages(messages, true, MY_USER_ID));
+    act(() => result.current.updateNewMessages(messages, true, MY_USER_ID));
 
-    expect(result.current.newMessagesFromMembers).toHaveLength(1);
-    expect(result.current.newMessagesFromMembers[0]).toEqual(messages[messages.length - 1]);
+    expect(result.current.newMessages).toHaveLength(1);
+    expect(result.current.newMessages[0]).toEqual(messages[messages.length - 1]);
   });
 
   test('should replace pending messages to succeeded messages', () => {
@@ -191,7 +245,7 @@ describe('useOpenChannelMessagesReducer', () => {
       }),
     ];
 
-    const { result } = renderHook(() => useOpenChannelMessagesReducer(me.userId));
+    const { result } = renderHook(() => useChannelMessagesReducer());
 
     act(() => {
       result.current.updateMessages([initMessage], true, me.userId);

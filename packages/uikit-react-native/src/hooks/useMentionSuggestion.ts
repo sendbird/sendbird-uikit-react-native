@@ -1,7 +1,8 @@
 import { useCallback, useRef, useState } from 'react';
 
-import type { SendbirdGroupChannel, SendbirdMember, SendbirdUser } from '@sendbird/uikit-utils';
-import { useAsyncEffect, useDebounceEffect } from '@sendbird/uikit-utils';
+import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
+import type { SendbirdChatSDK, SendbirdGroupChannel, SendbirdMember, SendbirdUser } from '@sendbird/uikit-utils';
+import { isDifferentChannel, useAsyncEffect, useDebounceEffect, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import { useSendbirdChat } from '../hooks/useContext';
 import type { Range } from '../types';
@@ -9,8 +10,9 @@ import type { Range } from '../types';
 const useMentionSuggestion = (params: {
   text: string;
   selection: Range;
-  channel: SendbirdGroupChannel;
   mentionedUsers: { user: SendbirdUser; range: Range }[];
+  sdk: SendbirdChatSDK;
+  channel: SendbirdGroupChannel;
 }) => {
   const { text, selection, channel, mentionedUsers } = params;
 
@@ -19,6 +21,24 @@ const useMentionSuggestion = (params: {
   useAsyncEffect(async () => {
     setFreshChannel(await channel.refresh());
   }, [channel.url]);
+
+  const id = useUniqHandlerId('useMentionSuggestion');
+
+  useChannelHandler(params.sdk, id, {
+    onUserJoined(eventChannel) {
+      if (isDifferentChannel(eventChannel, channel)) return;
+      setFreshChannel(eventChannel);
+    },
+    onUserLeft(eventChannel) {
+      if (isDifferentChannel(eventChannel, channel)) return;
+      setFreshChannel(eventChannel);
+    },
+    onUserBanned(eventChannel) {
+      if (isDifferentChannel(eventChannel, channel)) return;
+      if (!eventChannel.isGroupChannel()) return;
+      setFreshChannel(eventChannel);
+    },
+  });
 
   const { mentionManager, currentUser } = useSendbirdChat();
   const [members, setMembers] = useState<SendbirdMember[]>([]);

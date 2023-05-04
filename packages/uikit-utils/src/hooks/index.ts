@@ -102,3 +102,13 @@ export const useDebounceEffect = (action: () => void, delay: number, deps: Depen
 export const usePartialState = <S>(initialState: S) => {
   return useReducer((prev: S, state: Partial<S>) => ({ ...prev, ...state }), initialState);
 };
+
+export const useRefTracker = <T>(target: T) => {
+  const ref = useRef(target);
+
+  useLayoutEffect(() => {
+    ref.current = target;
+  });
+
+  return ref;
+};

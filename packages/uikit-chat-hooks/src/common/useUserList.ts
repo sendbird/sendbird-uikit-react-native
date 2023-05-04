@@ -85,7 +85,7 @@ export const useUserList = <
     if (query.current?.hasNext) {
       const users = await query.current?.next().catch((e) => {
         Logger.error(e);
-        if (e.code === SBErrorCode.NON_AUTHORIZED) Logger.warn(SBErrorMessage.ACL);
+        if (e.code === SBErrorCode.UNAUTHORIZED_REQUEST) Logger.warn(SBErrorMessage.ACL);
         throw e;
       });
       updateUsers(users, true);
@@ -122,7 +122,7 @@ export const useUserList = <
     if (query.current && query.current?.hasNext) {
       const nextUsers = await query.current.next().catch((e) => {
         Logger.error(e);
-        if (e.code === SBErrorCode.NON_AUTHORIZED) Logger.warn(SBErrorMessage.ACL);
+        if (e.code === SBErrorCode.UNAUTHORIZED_REQUEST) Logger.warn(SBErrorMessage.ACL);
         throw e;
       });
       updateUsers(nextUsers, false);

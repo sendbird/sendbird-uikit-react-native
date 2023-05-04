@@ -29,9 +29,10 @@ export function ifThenOr(cond: boolean, then: unknown, or?: unknown) {
 }
 
 export const SBErrorCode = {
-  NON_AUTHORIZED: 400108,
-  CHANNEL_NOT_FOUND_SERVER: 400201,
-  CHANNEL_NOT_FOUND_SDK: 900500,
+  UNAUTHORIZED_REQUEST: 400108,
+  RESOURCE_NOT_FOUND: 400201,
+  BANNED_USER_SEND_MESSAGE_NOT_ALLOWED: 900100,
+  CHANNEL_NOT_FOUND: 900500,
 };
 export const SBErrorMessage = {
   ACL:
@@ -41,52 +42,4 @@ export const SBErrorMessage = {
     'To manage your access control settings, you can turn on or off each setting on Sendbird Dashboard.',
 };
 
-export type {
-  UserStruct,
-  FilterByValueType,
-  UnionToIntersection,
-  OmittedValues,
-  PartialDeep,
-  Optional,
-  ContextValue,
-  OnBeforeHandler,
-  SendbirdMessage,
-  SendbirdChatSDK,
-  SendbirdChannel,
-  SendbirdBaseChannel,
-  SendbirdGroupChannel,
-  SendbirdOpenChannel,
-  SendbirdUser,
-  SendbirdMember,
-  SendbirdBaseMessage,
-  SendbirdUserMessage,
-  SendbirdFileMessage,
-  SendbirdAdminMessage,
-  SendbirdGroupChannelCreateParams,
-  SendbirdFileMessageCreateParams,
-  SendbirdUserMessageCreateParams,
-  SendbirdError,
-  SendbirdMessageCollection,
-  SendbirdGroupChannelCollection,
-  NotificationFiles,
-  NotificationMentionedUsers,
-  NotificationTranslations,
-  PartialNullable,
-  SendbirdDataPayload,
-  SendbirdPreviousMessageListQuery,
-  SendbirdSendableMessage,
-  SendbirdOpenChannelListQuery,
-  SendbirdGroupChannelListQuery,
-  SendbirdGroupChannelUpdateParams,
-  SendbirdUserMessageUpdateParams,
-  SendbirdFileMessageUpdateParams,
-  SendbirdUserUpdateParams,
-  SendbirdRestrictedUser,
-  SendbirdReaction,
-  SendbirdEmojiContainer,
-  SendbirdEmoji,
-  SendbirdEmojiCategory,
-  SendbirdOpenChannelUpdateParams,
-  SendbirdOpenChannelCreateParams,
-  SendbirdParticipant,
-} from './types';
+export * from './types';

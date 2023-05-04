@@ -1,6 +1,7 @@
 import type { Locale } from 'date-fns';
 
 import type {
+  SendbirdBaseMessage,
   SendbirdFileMessage,
   SendbirdGroupChannel,
   SendbirdMember,
@@ -21,7 +22,6 @@ export interface StringSet {
     HEADER_SUBTITLE: (channel: SendbirdOpenChannel) => string;
 
     /** OpenChannel > List */
-    LIST_BANNER_FROZEN: string;
     LIST_DATE_SEPARATOR: (date: Date, locale?: Locale) => string;
 
     /** OpenChannel > Message bubble */
@@ -30,6 +30,9 @@ export interface StringSet {
     MESSAGE_BUBBLE_EDITED_POSTFIX: string;
     MESSAGE_BUBBLE_UNKNOWN_TITLE: (message: SendbirdMessage) => string;
     MESSAGE_BUBBLE_UNKNOWN_DESC: (message: SendbirdMessage) => string;
+
+    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_LIST_FROZEN **/
+    LIST_BANNER_FROZEN: string;
   };
   OPEN_CHANNEL_PARTICIPANTS: {
     /** OpenChannelParticipants > Header */
@@ -113,7 +116,6 @@ export interface StringSet {
     HEADER_TITLE: (currentUserId: string, channel: SendbirdGroupChannel) => string;
 
     /** GroupChannel > List */
-    LIST_BANNER_FROZEN: string;
     LIST_DATE_SEPARATOR: (date: Date, locale?: Locale) => string;
     LIST_BUTTON_NEW_MSG: (newMessages: SendbirdMessage[]) => string;
 
@@ -127,6 +129,8 @@ export interface StringSet {
     /** GroupChannel > Suggested mention list */
     MENTION_LIMITED: (mentionLimit: number) => string;
 
+    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_LIST_FROZEN **/
+    LIST_BANNER_FROZEN: string;
     /** @deprecated Please use LABELS.CHANNEL_MESSAGE_COPY **/
     DIALOG_MESSAGE_COPY: string;
     /** @deprecated Please use LABELS.CHANNEL_MESSAGE_EDIT **/
@@ -170,6 +174,7 @@ export interface StringSet {
     /** GroupChannelSettings > Menu */
     MENU_MODERATION: string;
     MENU_MEMBERS: string;
+    MENU_SEARCH: string;
     MENU_LEAVE_CHANNEL: string;
     MENU_NOTIFICATION: string;
     MENU_NOTIFICATION_LABEL_ON: string;
@@ -264,6 +269,16 @@ export interface StringSet {
     HEADER_TITLE: string;
     HEADER_RIGHT: <T>(params: { selectedUsers: Array<T> }) => string;
   };
+  MESSAGE_SEARCH: {
+    /** MessageSearch > Header */
+    HEADER_INPUT_PLACEHOLDER: string;
+    HEADER_RIGHT: string;
+
+    /** MessageSearch > Search result item */
+    SEARCH_RESULT_ITEM_TITLE: (message: SendbirdBaseMessage) => string;
+    SEARCH_RESULT_ITEM_TITLE_CAPTION: (message: SendbirdBaseMessage, locale?: Locale) => string;
+    SEARCH_RESULT_ITEM_BODY: (message: SendbirdBaseMessage) => string;
+  };
   // UI
   LABELS: {
     PERMISSION_APP_NAME: string;
@@ -283,6 +298,9 @@ export interface StringSet {
     UNMUTE: string;
     BAN: string;
     UNBAN: string;
+
+    /** ChannelMessageList **/
+    CHANNEL_MESSAGE_LIST_FROZEN: string;
 
     /** ChannelInput **/
     CHANNEL_INPUT_PLACEHOLDER_ACTIVE: string;

@@ -1,9 +1,12 @@
+import { MessageSearchOrder } from '@sendbird/chat/message';
+
 import { getFileExtension, getFileType } from '../shared/file';
 import type {
   SendbirdBaseChannel,
   SendbirdBaseMessage,
   SendbirdDataPayload,
   SendbirdFileMessage,
+  SendbirdGroupChannel,
   SendbirdMessage,
   SendbirdReaction,
   SendbirdSendableMessage,
@@ -172,4 +175,13 @@ export function getMessageType(message: SendbirdMessage): MessageType {
   }
 
   return 'unknown';
+}
+
+export function getDefaultMessageSearchQueryParams(channel: SendbirdGroupChannel, keyword: string) {
+  return {
+    keyword,
+    channelUrl: channel.url,
+    messageTimestampFrom: Math.max(channel.joinedAt, channel.invitedAt),
+    order: MessageSearchOrder.TIMESTAMP,
+  };
 }

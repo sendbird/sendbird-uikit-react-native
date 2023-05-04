@@ -5,7 +5,8 @@ import { NOOP, SendbirdFileMessage, SendbirdUserMessage } from '@sendbird/uikit-
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization } from '../../../hooks/useContext';
-import type { OpenChannelContextsType, OpenChannelModule } from '../types';
+import type { PubSub } from '../../../utils/pubsub';
+import type { OpenChannelContextsType, OpenChannelModule, OpenChannelPubSubContextPayload } from '../types';
 
 export const OpenChannelContexts: OpenChannelContextsType = {
   Fragment: createContext({
@@ -13,12 +14,17 @@ export const OpenChannelContexts: OpenChannelContextsType = {
     channel: {} as SendbirdOpenChannel,
     setMessageToEdit: NOOP,
   }),
+  PubSub: createContext({
+    publish: NOOP,
+    subscribe: () => NOOP,
+  } as PubSub<OpenChannelPubSubContextPayload>),
 };
 
 export const OpenChannelContextsProvider: OpenChannelModule['Provider'] = ({
   children,
   channel,
   keyboardAvoidOffset,
+  openChannelPubSub,
 }) => {
   const { STRINGS } = useLocalization();
   const [messageToEdit, setMessageToEdit] = useState<SendbirdUserMessage | SendbirdFileMessage>();
@@ -34,7 +40,7 @@ export const OpenChannelContextsProvider: OpenChannelModule['Provider'] = ({
           setMessageToEdit,
         }}
       >
-        {children}
+        <OpenChannelContexts.PubSub.Provider value={openChannelPubSub}>{children}</OpenChannelContexts.PubSub.Provider>
       </OpenChannelContexts.Fragment.Provider>
     </ProviderLayout>
   );

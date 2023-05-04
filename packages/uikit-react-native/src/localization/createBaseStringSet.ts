@@ -6,6 +6,9 @@ import {
   getGroupChannelLastMessage,
   getGroupChannelPreviewTime,
   getGroupChannelTitle,
+  getMessagePreviewBody,
+  getMessagePreviewTime,
+  getMessagePreviewTitle,
   getMessageTimeFormat,
   getOpenChannelParticipants,
   getOpenChannelTitle,
@@ -32,13 +35,15 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     OPEN_CHANNEL: {
       HEADER_TITLE: (channel) => getOpenChannelTitle(channel),
       HEADER_SUBTITLE: (channel) => getOpenChannelParticipants(channel),
-      LIST_BANNER_FROZEN: 'Channel is frozen',
       LIST_DATE_SEPARATOR: (date, locale) => getDateSeparatorFormat(date, locale ?? dateLocale),
       MESSAGE_BUBBLE_TIME: (message, locale) => getMessageTimeFormat(new Date(message.createdAt), locale ?? dateLocale),
       MESSAGE_BUBBLE_FILE_TITLE: (message) => message.name,
       MESSAGE_BUBBLE_EDITED_POSTFIX: ' (edited)',
       MESSAGE_BUBBLE_UNKNOWN_TITLE: () => '(Unknown message type)',
       MESSAGE_BUBBLE_UNKNOWN_DESC: () => 'Cannot read this message.',
+
+      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_LIST_FROZEN **/
+      LIST_BANNER_FROZEN: 'Channel is frozen',
       ...overrides?.OPEN_CHANNEL,
     },
     OPEN_CHANNEL_PARTICIPANTS: {
@@ -110,7 +115,6 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     },
     GROUP_CHANNEL: {
       HEADER_TITLE: (uid, channel) => getGroupChannelTitle(uid, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
-      LIST_BANNER_FROZEN: 'Channel is frozen',
       LIST_DATE_SEPARATOR: (date, locale) => getDateSeparatorFormat(date, locale ?? dateLocale),
       LIST_BUTTON_NEW_MSG: (newMessages) => `${newMessages.length} new messages`,
 
@@ -122,6 +126,8 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
 
       MENTION_LIMITED: (mentionLimit) => `You can have up to ${mentionLimit} mentions per message.`,
 
+      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_LIST_FROZEN **/
+      LIST_BANNER_FROZEN: 'Channel is frozen',
       /** @deprecated Please use LABELS.CHANNEL_MESSAGE_COPY **/
       DIALOG_MESSAGE_COPY: 'Copy',
       /** @deprecated Please use LABELS.CHANNEL_MESSAGE_EDIT **/
@@ -163,6 +169,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       HEADER_RIGHT: 'Edit',
       MENU_MODERATION: 'Moderation',
       MENU_MEMBERS: 'Members',
+      MENU_SEARCH: 'Search in channel',
       MENU_LEAVE_CHANNEL: 'Leave channel',
       MENU_NOTIFICATION: 'Notifications',
       MENU_NOTIFICATION_LABEL_ON: 'On',
@@ -263,6 +270,15 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       },
       ...overrides?.GROUP_CHANNEL_INVITE,
     },
+    MESSAGE_SEARCH: {
+      HEADER_INPUT_PLACEHOLDER: 'Search',
+      HEADER_RIGHT: 'Search',
+      SEARCH_RESULT_ITEM_TITLE: (message) => getMessagePreviewTitle(message),
+      SEARCH_RESULT_ITEM_BODY: (message) => getMessagePreviewBody(message),
+      SEARCH_RESULT_ITEM_TITLE_CAPTION: (message, locale) => {
+        return getMessagePreviewTime(message.createdAt, locale ?? dateLocale);
+      },
+    },
     LABELS: {
       PERMISSION_APP_NAME: 'Application',
       PERMISSION_CAMERA: 'camera',
@@ -286,6 +302,10 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       UNBAN: 'Unban',
 
       // Deprecation backward
+      CHANNEL_MESSAGE_LIST_FROZEN:
+        overrides?.GROUP_CHANNEL?.LIST_BANNER_FROZEN ??
+        overrides?.OPEN_CHANNEL?.LIST_BANNER_FROZEN ??
+        'Channel is frozen',
       CHANNEL_MESSAGE_COPY: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_COPY ?? 'Copy',
       CHANNEL_MESSAGE_EDIT: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_EDIT ?? 'Edit',
       CHANNEL_MESSAGE_SAVE: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_SAVE ?? 'Save',

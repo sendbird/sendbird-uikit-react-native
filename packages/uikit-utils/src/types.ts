@@ -37,6 +37,7 @@ import type {
   FileMessage,
   FileMessageCreateParams,
   FileMessageUpdateParams,
+  MessageSearchQuery,
   PreviousMessageListQuery,
   Reaction,
   UserMessage,
@@ -115,6 +116,7 @@ export type SendbirdGroupChannelListQuery = GroupChannelListQuery;
 export type SendbirdOpenChannelListQuery = OpenChannelListQuery;
 export type SendbirdMessageCollection = MessageCollection;
 export type SendbirdPreviousMessageListQuery = PreviousMessageListQuery;
+export type SendbirdMessageSearchQuery = MessageSearchQuery;
 
 export type SendbirdError = SBError;
 

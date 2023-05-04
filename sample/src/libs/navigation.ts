@@ -45,6 +45,7 @@ export enum Routes {
   GroupChannelInvite = 'GroupChannelInvite',
   Settings = 'Settings',
   FileViewer = 'FileViewer',
+  MessageSearch = 'MessageSearch',
 }
 
 type ChannelUrlParams = {
@@ -99,7 +100,10 @@ export type RouteParamsUnion =
     }
   | {
       route: Routes.GroupChannel;
-      params: ChannelUrlParams;
+      params: {
+        channelUrl: string;
+        searchItem?: { startingPoint: number };
+      };
     }
   | {
       route: Routes.GroupChannelSettings;
@@ -135,6 +139,10 @@ export type RouteParamsUnion =
     }
   | {
       route: Routes.GroupChannelInvite;
+      params: ChannelUrlParams;
+    }
+  | {
+      route: Routes.MessageSearch;
       params: ChannelUrlParams;
     }
   /** OpenChannel screens **/
@@ -215,6 +223,7 @@ export const navigationActions = {
         // navigationRef.setParams(params);
         navigationRef.dispatch(StackActions.replace(name, params));
       } else {
+        // @ts-ignore
         navigationRef.navigate<Routes>(name, params);
       }
     }
@@ -240,5 +249,5 @@ export const runAfterAppReady = (callback: (sdk: SendbirdChatSDK, actions: typeo
         callback(sdk, navigationActions);
       }
     }
-  }, 250);
+  }, 1500);
 };

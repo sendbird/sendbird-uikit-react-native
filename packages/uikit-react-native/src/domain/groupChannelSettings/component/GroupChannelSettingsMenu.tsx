@@ -11,10 +11,12 @@ import { GroupChannelSettingsContexts } from '../module/moduleContext';
 import type { GroupChannelSettingsProps } from '../types';
 
 let WARN_onPressMenuNotification = false;
+let WARN_onPressMenuSearchInChannel = false;
 
 const GroupChannelSettingsMenu = ({
   onPressMenuModeration,
   onPressMenuMembers,
+  onPressMenuSearchInChannel,
   onPressMenuLeaveChannel,
   onPressMenuNotification,
   menuItemsCreator = (menu) => menu,
@@ -24,9 +26,14 @@ const GroupChannelSettingsMenu = ({
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
 
-  if (__DEV__ && !WARN_onPressMenuNotification && !onPressMenuNotification) {
-    Logger.warn('You should pass `onPressMenuNotification` prop if using mention');
+  if (__DEV__ && !WARN_onPressMenuNotification && !onPressMenuNotification && features.userMentionEnabled) {
+    Logger.warn('If you are using mention, make sure to pass the `onPressMenuNotification` prop');
     WARN_onPressMenuNotification = true;
+  }
+
+  if (__DEV__ && !WARN_onPressMenuSearchInChannel && !onPressMenuSearchInChannel && features.messageSearchEnabled) {
+    Logger.warn('If you are using message search, make sure to pass the `onPressMenuSearchInChannel` prop');
+    WARN_onPressMenuSearchInChannel = true;
   }
 
   const toggleNotification = async () => {
@@ -88,18 +95,27 @@ const GroupChannelSettingsMenu = ({
       actionLabel: String(channel.memberCount),
       actionItem: <Icon icon={'chevron-right'} color={colors.onBackground01} />,
     },
-    {
-      icon: 'leave',
-      iconColor: colors.error,
-      name: STRINGS.GROUP_CHANNEL_SETTINGS.MENU_LEAVE_CHANNEL,
-      onPress: () => {
-        channel.leave().then(() => {
-          onPressMenuLeaveChannel();
-          sdk.clearCachedMessages([channel.url]).catch();
-        });
-      },
-    },
   ]);
+
+  if (features.messageSearchEnabled) {
+    menuItems.push({
+      icon: 'search',
+      name: STRINGS.GROUP_CHANNEL_SETTINGS.MENU_SEARCH,
+      onPress: () => onPressMenuSearchInChannel?.(),
+    });
+  }
+
+  menuItems.push({
+    icon: 'leave',
+    iconColor: colors.error,
+    name: STRINGS.GROUP_CHANNEL_SETTINGS.MENU_LEAVE_CHANNEL,
+    onPress: () => {
+      channel.leave().then(() => {
+        onPressMenuLeaveChannel();
+        sdk.clearCachedMessages([channel.url]).catch();
+      });
+    },
+  });
 
   return (
     <View>

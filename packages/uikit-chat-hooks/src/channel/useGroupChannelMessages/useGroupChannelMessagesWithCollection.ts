@@ -1,16 +1,12 @@
 import { useEffect, useRef } from 'react';
 
 import { MessageCollectionInitPolicy, MessageEventSource, MessageFilter } from '@sendbird/chat/groupChannel';
-import type {
-  SendbirdBaseMessage,
-  SendbirdFileMessage,
-  SendbirdGroupChannel,
-  SendbirdMessageCollection,
-} from '@sendbird/uikit-utils';
+import type { SendbirdFileMessage, SendbirdGroupChannel, SendbirdMessageCollection } from '@sendbird/uikit-utils';
 import {
   Logger,
   confirmAndMarkAsRead,
   isDifferentChannel,
+  isMyMessage,
   useForceUpdate,
   useFreshCallback,
   useUniqHandlerId,
@@ -18,35 +14,49 @@ import {
 
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';
-import { useGroupChannelMessagesReducer } from './reducer';
+import { useChannelMessagesReducer } from '../useChannelMessagesReducer';
+
+const MESSAGE_LIMIT = {
+  DEFAULT: 50,
+  SEARCH: 20,
+};
 
 const createMessageCollection = (
   channel: SendbirdGroupChannel,
-  creator?: UseGroupChannelMessagesOptions['collectionCreator'],
+  limit: number,
+  options?: UseGroupChannelMessagesOptions,
 ) => {
-  if (creator) return creator();
+  if (options?.collectionCreator) return options?.collectionCreator({ startingPoint: options?.startingPoint });
   const filter = new MessageFilter();
-  return channel.createMessageCollection({ filter, limit: 100 });
+  return channel.createMessageCollection({ filter, limit, startingPoint: options?.startingPoint });
 };
 
+function isNotEmpty(arr?: unknown[]): arr is unknown[] {
+  if (!arr) return false;
+  return arr.length !== 0;
+}
+
 export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (sdk, channel, userId, options) => {
+  const initialStartingPoint = options?.startingPoint ?? Number.MAX_SAFE_INTEGER;
+  const initialLimit = typeof options?.startingPoint === 'number' ? MESSAGE_LIMIT.SEARCH : MESSAGE_LIMIT.DEFAULT;
+
   const forceUpdate = useForceUpdate();
   const collectionRef = useRef<SendbirdMessageCollection>();
+  const collectionInitializedRef = useRef(false);
   const handlerId = useUniqHandlerId('useGroupChannelMessagesWithCollection');
 
   const {
     loading,
     refreshing,
     messages,
-    nextMessages,
-    newMessagesFromMembers,
+    newMessages,
     updateMessages,
-    updateNextMessages,
-    deleteNextMessages,
+    updateNewMessages,
+    deleteNewMessages,
     deleteMessages,
     updateLoading,
     updateRefreshing,
-  } = useGroupChannelMessagesReducer(userId, options?.sortComparator);
+  } = useChannelMessagesReducer(options?.sortComparator);
 
   const channelMarkAsRead = async (source?: MessageEventSource) => {
     try {
@@ -63,81 +73,120 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     }
   };
 
-  const init = useFreshCallback(async (uid?: string, callback?: () => void) => {
+  const updateUnsendMessages = () => {
+    const { pendingMessages, failedMessages } = collectionRef.current ?? {};
+    if (isNotEmpty(pendingMessages)) updateMessages(pendingMessages, false, sdk.currentUser.userId);
+    if (isNotEmpty(failedMessages)) updateMessages(failedMessages, false, sdk.currentUser.userId);
+  };
+
+  const init = useFreshCallback(async (startingPoint: number, limit: number, callback?: () => void) => {
     if (collectionRef.current) collectionRef.current?.dispose();
 
-    if (uid) {
-      collectionRef.current = createMessageCollection(channel, options?.collectionCreator);
-      updateNextMessages([], true, sdk.currentUser.userId);
-      channelMarkAsRead();
+    channelMarkAsRead();
+    updateNewMessages([], true, sdk.currentUser.userId);
 
-      collectionRef.current?.setMessageCollectionHandler({
-        onMessagesAdded: (_, __, messages) => {
-          channelMarkAsRead(_.source);
-          updateNextMessages(messages, false, sdk.currentUser.userId);
-        },
-        onMessagesUpdated: (_, __, messages) => {
-          channelMarkAsRead(_.source);
+    collectionInitializedRef.current = false;
+    collectionRef.current = createMessageCollection(channel, limit, {
+      collectionCreator: options?.collectionCreator,
+      startingPoint,
+    });
 
-          // NOTE: admin message is not added via onMessagesAdded handler, not checked yet is this a bug.
-          if (_.source === MessageEventSource.EVENT_MESSAGE_RECEIVED) {
-            const nextMessageIds = nextMessages.map((it) => it.messageId);
-            const nonAddedMessagesFromReceivedEvent = messages.filter(
-              (it) => nextMessageIds.indexOf(it.messageId) === -1,
-            );
-            updateNextMessages(nonAddedMessagesFromReceivedEvent, false, sdk.currentUser.userId);
+    collectionRef.current?.setMessageCollectionHandler({
+      onMessagesAdded: (_, __, messages) => {
+        channelMarkAsRead(_.source);
+
+        const incomingMessages = messages.filter((it) => {
+          switch (_.source) {
+            case MessageEventSource.EVENT_MESSAGE_SENT_PENDING:
+            case MessageEventSource.EVENT_MESSAGE_SENT_SUCCESS:
+            case MessageEventSource.EVENT_MESSAGE_SENT_FAILED:
+              return !isMyMessage(it, sdk.currentUser.userId);
+            default:
+              return true;
+          }
+        });
+
+        if (incomingMessages.length > 0) {
+          updateMessages(incomingMessages, false, sdk.currentUser.userId);
+
+          if (options?.shouldCountNewMessages?.()) {
+            updateNewMessages(incomingMessages, false, sdk.currentUser.userId);
           }
 
-          // NOTE: v4 MESSAGE_RECEIVED is called twice from onMessagesAdded and onMessagesUpdated when receiving new message.
-          //  This is not intended behavior but not bugs.
-          if (_.source !== MessageEventSource.EVENT_MESSAGE_RECEIVED) {
-            updateMessages(messages, false, sdk.currentUser.userId);
-          }
-        },
-        onMessagesDeleted: (_, __, messageIds) => {
-          deleteMessages(messageIds, []);
-          deleteNextMessages(messageIds, []);
-        },
-        onChannelDeleted: () => {
-          options?.onChannelDeleted?.();
-        },
-        onChannelUpdated: (_, eventChannel) => {
-          if (eventChannel.isGroupChannel() && !isDifferentChannel(eventChannel, channel)) {
-            forceUpdate();
-          }
-        },
-        onHugeGapDetected: () => {
-          init(uid);
-        },
-      });
-
-      collectionRef.current
-        .initialize(MessageCollectionInitPolicy.CACHE_AND_REPLACE_BY_API)
-        .onCacheResult((err, messages) => {
-          if (err) sdk.isCacheEnabled && Logger.error('[useGroupChannelMessagesWithCollection/onCacheResult]', err);
-          else {
-            Logger.debug('[useGroupChannelMessagesWithCollection/onCacheResult]', 'message length:', messages.length);
-
-            updateMessages(messages, true, sdk.currentUser.userId);
-            updateMessages(collectionRef.current?.pendingMessages ?? [], false, sdk.currentUser.userId);
-            updateMessages(collectionRef.current?.failedMessages ?? [], false, sdk.currentUser.userId);
-          }
-          callback?.();
-        })
-        .onApiResult((err, messages) => {
-          if (err) Logger.warn('[useGroupChannelMessagesWithCollection/onApiResult]', err);
-          else {
-            Logger.debug('[useGroupChannelMessagesWithCollection/onApiResult]', 'message length:', messages.length);
-
-            updateMessages(messages, true, sdk.currentUser.userId);
-            if (sdk.isCacheEnabled) {
-              updateMessages(collectionRef.current?.pendingMessages ?? [], false, sdk.currentUser.userId);
-              updateMessages(collectionRef.current?.failedMessages ?? [], false, sdk.currentUser.userId);
+          switch (_.source) {
+            case MessageEventSource.EVENT_MESSAGE_RECEIVED:
+            case MessageEventSource.SYNC_MESSAGE_FILL: {
+              options?.onMessagesReceived?.(incomingMessages);
             }
           }
-          callback?.();
+        }
+      },
+      onMessagesUpdated: (_, __, messages) => {
+        channelMarkAsRead(_.source);
+
+        const incomingMessages = messages.filter((it) => {
+          switch (_.source) {
+            case MessageEventSource.EVENT_MESSAGE_UPDATED:
+              return !isMyMessage(it, sdk.currentUser.userId);
+            default:
+              return true;
+          }
         });
-    }
+
+        if (incomingMessages.length > 0) {
+          // NOTE: admin message is not added via onMessagesAdded handler, not checked yet is this a bug.
+          updateMessages(messages, false, sdk.currentUser.userId);
+
+          if (options?.shouldCountNewMessages?.()) {
+            if (_.source === MessageEventSource.EVENT_MESSAGE_RECEIVED) {
+              updateNewMessages(messages, false, sdk.currentUser.userId);
+            }
+          }
+        }
+      },
+      onMessagesDeleted: (_, __, messageIds) => {
+        deleteMessages(messageIds, []);
+        deleteNewMessages(messageIds, []);
+      },
+      onChannelDeleted: () => {
+        options?.onChannelDeleted?.();
+      },
+      onChannelUpdated: (_, eventChannel) => {
+        if (eventChannel.isGroupChannel() && !isDifferentChannel(eventChannel, channel)) {
+          forceUpdate();
+        }
+      },
+      onHugeGapDetected: () => {
+        init(Number.MAX_SAFE_INTEGER, MESSAGE_LIMIT.DEFAULT);
+      },
+    });
+
+    collectionRef.current
+      .initialize(MessageCollectionInitPolicy.CACHE_AND_REPLACE_BY_API)
+      .onCacheResult((err, messages) => {
+        if (err) sdk.isCacheEnabled && Logger.error('[useGroupChannelMessagesWithCollection/onCacheResult]', err);
+        else {
+          Logger.debug('[useGroupChannelMessagesWithCollection/onCacheResult]', 'message length:', messages.length);
+
+          updateMessages(messages, true, sdk.currentUser.userId);
+          updateUnsendMessages();
+        }
+
+        callback?.();
+      })
+      .onApiResult((err, messages) => {
+        if (err) Logger.warn('[useGroupChannelMessagesWithCollection/onApiResult]', err);
+        else {
+          Logger.debug('[useGroupChannelMessagesWithCollection/onApiResult]', 'message length:', messages.length);
+
+          updateMessages(messages, true, sdk.currentUser.userId);
+          if (!options?.startingPoint) options?.onMessagesReceived?.(messages);
+          if (sdk.isCacheEnabled) updateUnsendMessages();
+        }
+
+        collectionInitializedRef.current = true;
+        callback?.();
+      });
   });
 
   useChannelHandler(sdk, handlerId, {
@@ -156,7 +205,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     // NOTE: Cache read is heavy task, and it prevents smooth ui transition
     setTimeout(async () => {
       updateLoading(true);
-      init(userId, () => updateLoading(false));
+      init(initialStartingPoint, initialLimit, () => updateLoading(false));
     }, 0);
   }, [channel.url, userId]);
 
@@ -168,7 +217,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
 
   const refresh: ReturnType<UseGroupChannelMessages>['refresh'] = useFreshCallback(async () => {
     updateRefreshing(true);
-    init(userId, () => updateRefreshing(false));
+    init(Number.MAX_SAFE_INTEGER, MESSAGE_LIMIT.DEFAULT, () => updateRefreshing(false));
   });
 
   const prev: ReturnType<UseGroupChannelMessages>['prev'] = useFreshCallback(async () => {
@@ -180,23 +229,28 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     }
   });
 
-  const next: ReturnType<UseGroupChannelMessages>['next'] = useFreshCallback(async () => {
-    const messageCandidates: SendbirdBaseMessage[] = [];
+  const hasPrev: ReturnType<UseGroupChannelMessages>['hasPrev'] = useFreshCallback(() => {
+    if (collectionInitializedRef.current && collectionRef.current) {
+      return collectionRef.current.hasPrevious;
+    } else {
+      return false;
+    }
+  });
 
+  const next: ReturnType<UseGroupChannelMessages>['next'] = useFreshCallback(async () => {
     if (collectionRef.current && collectionRef.current?.hasNext) {
       try {
         const fetchedList = await collectionRef.current?.loadNext();
-        messageCandidates.push(...fetchedList);
+        updateMessages(fetchedList, false, sdk.currentUser.userId);
       } catch {}
     }
+  });
 
-    if (nextMessages.length > 0) {
-      messageCandidates.push(...nextMessages);
-    }
-
-    if (messageCandidates.length > 0) {
-      updateMessages(messageCandidates, false, sdk.currentUser.userId);
-      updateNextMessages([], true, sdk.currentUser.userId);
+  const hasNext: ReturnType<UseGroupChannelMessages>['hasNext'] = useFreshCallback(() => {
+    if (collectionInitializedRef.current && collectionRef.current) {
+      return collectionRef.current.hasNext;
+    } else {
+      return false;
     }
   });
 
@@ -217,8 +271,8 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
               resolve(sentMessage);
             }
           })
-          .onFailed((err, _failedMessage) => {
-            // updateMessages([failedMessage], false, sdk.currentUser.userId);
+          .onFailed((err, failedMessage) => {
+            updateMessages([failedMessage], false, sdk.currentUser.userId);
             reject(err);
           });
       });
@@ -241,8 +295,8 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
               resolve(sentMessage as SendbirdFileMessage);
             }
           })
-          .onFailed((err, _failedMessage) => {
-            // updateMessages([failedMessage], false, sdk.currentUser.userId);
+          .onFailed((err, failedMessage) => {
+            updateMessages([failedMessage], false, sdk.currentUser.userId);
             reject(err);
           });
       });
@@ -285,21 +339,39 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
       }
     }
   });
+  const resetNewMessages: ReturnType<UseGroupChannelMessages>['resetNewMessages'] = useFreshCallback(() => {
+    updateNewMessages([], true, sdk.currentUser.userId);
+  });
+  const resetWithStartingPoint: ReturnType<UseGroupChannelMessages>['resetWithStartingPoint'] = useFreshCallback(
+    (startingPoint, callback) => {
+      updateLoading(true);
+      updateMessages([], true, sdk.currentUser.userId);
+      init(startingPoint, MESSAGE_LIMIT.DEFAULT, () => {
+        updateLoading(false);
+        callback?.();
+      });
+    },
+  );
 
   return {
     loading,
     refreshing,
     refresh,
     messages,
-    nextMessages,
-    newMessagesFromMembers,
     next,
+    hasNext,
     prev,
+    hasPrev,
+    newMessages,
+    resetNewMessages,
     sendUserMessage,
     sendFileMessage,
     updateUserMessage,
     updateFileMessage,
     resendMessage,
     deleteMessage,
+    resetWithStartingPoint,
+    nextMessages: newMessages,
+    newMessagesFromMembers: newMessages,
   };
 };
