@@ -1,7 +1,7 @@
 import React from 'react';
 import { FlatList, ListRenderItem } from 'react-native';
 
-import { SendbirdBaseMessage, useFreshCallback } from '@sendbird/uikit-utils';
+import { SendbirdBaseMessage, getMessageUniqId, useFreshCallback } from '@sendbird/uikit-utils';
 
 import type { MessageSearchProps } from '../types';
 
@@ -20,7 +20,7 @@ const MessageSearchList = ({
     });
   });
 
-  return <FlatList {...flatListProps} data={messages} renderItem={renderItem} />;
+  return <FlatList {...flatListProps} data={messages} renderItem={renderItem} keyExtractor={getMessageUniqId} />;
 };
 
 export default MessageSearchList;

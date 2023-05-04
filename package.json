@@ -16,7 +16,7 @@
     "reset": "find . -type dir -name node_modules | xargs rm -rf",
     "clean": "lerna run clean",
     "build": "lerna run build",
-    "docs": "yarn build && typedoc --out docs --entryPointStrategy packages 'packages/*' && yarn clean",
+    "docs": "yarn build && typedoc --out docs --entryPointStrategy packages 'packages/*' --exclude 'packages/uikit-testing-tools' && yarn clean",
     "test": "jest --verbose",
     "test:build": "yarn build --stream && yarn clean --stream",
     "test:docs-validation": "yarn build && yarn workspace @sendbird/docs-validation run test && yarn clean",

@@ -49,6 +49,7 @@ UIKit for React-Native can be installed through either `yarn` or `npm`
 ```sh
 npm install @sendbird/uikit-react-native \
             @sendbird/chat \
+            @sendbird/react-native-scrollview-enhancer \
             date-fns \
             react-native-safe-area-context \
             @react-native-community/netinfo \
