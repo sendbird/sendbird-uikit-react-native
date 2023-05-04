@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.4.2...v2.5.0) (2023-05-04)
+
+### Features
+
+- added message search fragment ([a6342c0](https://github.com/sendbird/sendbird-uikit-react-native/commit/a6342c09c2007ac2372f4a630499382aae34d6de))
+- implemented scroll-view enhancer ([1dca4a0](https://github.com/sendbird/sendbird-uikit-react-native/commit/1dca4a062b45bffc781beec88c311cb6d83463fe))
+
+### Bug Fixes
+
+- **uikit:** do not handle onUserBanned in open channel list ([8ba9daa](https://github.com/sendbird/sendbird-uikit-react-native/commit/8ba9daaa2f56076d00761f684c890292d5ced03e))
+
 ## [2.4.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.4.1...v2.4.2) (2023-04-28)
 
 **Note:** Version bump only for package @sendbird/uikit-utils
