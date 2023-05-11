@@ -73,7 +73,7 @@ const GroupChannelSettingsMenu = ({
     };
   });
 
-  const menuItems: MenuBarProps[] = menuItemsCreator([
+  const defaultMenuItems: MenuBarProps[] = [
     {
       icon: 'moderation',
       visible: channel.myRole === 'operator',
@@ -95,17 +95,17 @@ const GroupChannelSettingsMenu = ({
       actionLabel: String(channel.memberCount),
       actionItem: <Icon icon={'chevron-right'} color={colors.onBackground01} />,
     },
-  ]);
+  ];
 
   if (features.messageSearchEnabled) {
-    menuItems.push({
+    defaultMenuItems.push({
       icon: 'search',
       name: STRINGS.GROUP_CHANNEL_SETTINGS.MENU_SEARCH,
       onPress: () => onPressMenuSearchInChannel?.(),
     });
   }
 
-  menuItems.push({
+  defaultMenuItems.push({
     icon: 'leave',
     iconColor: colors.error,
     name: STRINGS.GROUP_CHANNEL_SETTINGS.MENU_LEAVE_CHANNEL,
@@ -116,6 +116,8 @@ const GroupChannelSettingsMenu = ({
       });
     },
   });
+
+  const menuItems = menuItemsCreator(defaultMenuItems);
 
   return (
     <View>
