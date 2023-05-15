@@ -62,7 +62,7 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
   });
 
   const titleCaptionIcon = useIIFE(() => {
-    if (!channel.lastMessage) return undefined;
+    if (!channel.lastMessage || channel.isEphemeral) return undefined;
     if (!features.channelListMessageReceiptStatusEnabled) return undefined;
     if (!isMyMessage(channel.lastMessage, currentUser?.userId)) return undefined;
 
@@ -89,6 +89,8 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
     return undefined;
   });
 
+  const unreadMessageCount = useIIFE(() => (channel.isEphemeral ? 0 : channel.unreadMessageCount));
+
   return (
     <Pressable delayLongPress={DEFAULT_LONG_PRESS_DELAY} onPress={onPress} onLongPress={onLongPress}>
       <GroupChannelPreview
@@ -99,7 +101,7 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
         titleCaption={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE_CAPTION(channel)}
         body={bodyText}
         bodyIcon={fileIcon}
-        badgeCount={channel.unreadMessageCount}
+        badgeCount={unreadMessageCount}
         mentioned={channel.unreadMentionCount > 0}
         mentionTrigger={mentionManager.config.trigger}
         memberCount={channel.memberCount > 2 ? channel.memberCount : undefined}
