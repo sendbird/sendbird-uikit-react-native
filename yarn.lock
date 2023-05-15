@@ -3288,6 +3288,11 @@
   resolved "https://registry.yarnpkg.com/@sendbird/react-native-scrollview-enhancer/-/react-native-scrollview-enhancer-0.1.0-beta.3.tgz#ae6bc715d1e6a57eab4ea15f42a0ee41557f88d8"
   integrity sha512-XotIm6SQr3q22TvHj5HAunckuyAUfqp4aaJEpOMe9lNvFA8sqw0fTN5GsvjxojXKLhFmOpe9S8aIznutox1Ylg==
 
+"@sendbird/react-native-scrollview-enhancer@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@sendbird/react-native-scrollview-enhancer/-/react-native-scrollview-enhancer-0.2.0.tgz#facd5df1da8296868ecca20623919cbc897c4322"
+  integrity sha512-Ia8Eab/9zNEMzUFcz9856LjKVNdjqxnJmjQ/f/ItqM2b7XeRh4svvWzWs4z2v6+yCpbhQrscUJh5jz5jHVcygg==
+
 "@sideway/address@^4.1.3":
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/@sideway/address/-/address-4.1.4.tgz#03dccebc6ea47fdc226f7d3d1ad512955d4783f0"
