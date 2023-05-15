@@ -269,19 +269,21 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
         },
       });
 
-      if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
-        sheetItems.push(
-          {
-            icon: 'edit',
-            title: STRINGS.LABELS.CHANNEL_MESSAGE_EDIT,
-            onPress: () => onEditMessage(msg),
-          },
-          {
-            icon: 'delete',
-            title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
-            onPress: () => confirmDelete(msg),
-          },
-        );
+      if (!channel.isEphemeral) {
+        if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
+          sheetItems.push(
+            {
+              icon: 'edit',
+              title: STRINGS.LABELS.CHANNEL_MESSAGE_EDIT,
+              onPress: () => onEditMessage(msg),
+            },
+            {
+              icon: 'delete',
+              title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
+              onPress: () => confirmDelete(msg),
+            },
+          );
+        }
       }
     }
 
@@ -307,12 +309,14 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
         },
       });
 
-      if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
-        sheetItems.push({
-          icon: 'delete',
-          title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
-          onPress: () => confirmDelete(msg),
-        });
+      if (!channel.isEphemeral) {
+        if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
+          sheetItems.push({
+            icon: 'delete',
+            title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
+            onPress: () => confirmDelete(msg),
+          });
+        }
       }
 
       const fileType = getFileType(msg.type || getFileExtension(msg.name));

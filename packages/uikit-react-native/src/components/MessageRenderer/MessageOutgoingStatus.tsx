@@ -11,6 +11,7 @@ const SIZE = 16;
 type Props = { channel: SendbirdGroupChannel; message: SendbirdMessage };
 const MessageOutgoingStatus = ({ channel, message }: Props) => {
   if (!message.isUserMessage() && !message.isFileMessage()) return null;
+  if (channel.isEphemeral) return null;
 
   const { sdk } = useSendbirdChat();
   const { colors } = useUIKitTheme();

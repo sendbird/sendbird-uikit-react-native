@@ -97,7 +97,7 @@ const GroupChannelSettingsMenu = ({
     },
   ];
 
-  if (features.messageSearchEnabled) {
+  if (features.messageSearchEnabled && !channel.isEphemeral) {
     defaultMenuItems.push({
       icon: 'search',
       name: STRINGS.GROUP_CHANNEL_SETTINGS.MENU_SEARCH,
