@@ -61,6 +61,8 @@ export const SendbirdUIKit = Object.freeze({
     USER_MENTION: false,
     IMAGE_COMPRESSION: true,
     MESSAGE_SEARCH: false,
+    GROUP_CHANNEL_OG_TAG: true,
+    OPEN_CHANNEL_OG_TAG: true,
   },
 });
 
@@ -208,6 +210,8 @@ const SendbirdUIKitContainer = ({
         enableUserMention={chatOptions?.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION}
         enableImageCompression={chatOptions?.enableImageCompression ?? SendbirdUIKit.DEFAULT.IMAGE_COMPRESSION}
         enableMessageSearch={chatOptions?.enableMessageSearch ?? SendbirdUIKit.DEFAULT.MESSAGE_SEARCH}
+        enableGroupChannelOGTag={chatOptions?.enableGroupChannelOGTag ?? SendbirdUIKit.DEFAULT.GROUP_CHANNEL_OG_TAG}
+        enableOpenChannelOGTag={chatOptions?.enableOpenChannelOGTag ?? SendbirdUIKit.DEFAULT.OPEN_CHANNEL_OG_TAG}
       >
         <LocalizationProvider stringSet={defaultStringSet}>
           <PlatformServiceProvider

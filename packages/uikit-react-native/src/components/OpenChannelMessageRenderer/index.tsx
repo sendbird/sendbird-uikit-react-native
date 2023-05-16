@@ -12,7 +12,7 @@ import {
 } from '@sendbird/uikit-utils';
 
 import type { OpenChannelProps } from '../../domain/openChannel/types';
-import { useLocalization, usePlatformService } from '../../hooks/useContext';
+import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 import SBUUtils from '../../libs/SBUUtils';
 import OpenChannelMessageDateSeparator from './OpenChannelMessageDateSeparator';
 
@@ -26,6 +26,7 @@ const OpenChannelMessageRenderer: OpenChannelProps['Fragment']['renderMessage'] 
   prevMessage,
   nextMessage,
 }) => {
+  const { features } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { mediaService } = usePlatformService();
   const { groupWithPrev } = calcMessageGrouping(Boolean(enableMessageGrouping), message, prevMessage, nextMessage);
@@ -55,7 +56,11 @@ const OpenChannelMessageRenderer: OpenChannelProps['Fragment']['renderMessage'] 
         return <OpenChannelMessage.User message={message as SendbirdUserMessage} {...messageProps} />;
       }
       case 'user.opengraph': {
-        return <OpenChannelMessage.OpenGraphUser message={message as SendbirdUserMessage} {...messageProps} />;
+        if (features.openChannelOGTagEnabled) {
+          return <OpenChannelMessage.OpenGraphUser message={message as SendbirdUserMessage} {...messageProps} />;
+        } else {
+          return <OpenChannelMessage.User message={message as SendbirdUserMessage} {...messageProps} />;
+        }
       }
       case 'file':
       case 'file.audio': {
