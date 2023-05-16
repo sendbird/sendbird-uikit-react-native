@@ -24,6 +24,7 @@ export interface UIKitFeaturesInSendbirdChatContext {
   enableMessageSearch: boolean;
   enableGroupChannelOGTag: boolean;
   enableOpenChannelOGTag: boolean;
+  enableUsingDefaultUserProfile: boolean;
 }
 
 interface Props extends UIKitFeaturesInSendbirdChatContext, React.PropsWithChildren {
@@ -58,6 +59,7 @@ export type SendbirdChatContextType = {
     messageSearchEnabled: boolean;
     groupChannelOGTagEnabled: boolean;
     openChannelOGTagEnabled: boolean;
+    usingDefaultUserProfileEnabled: boolean;
 
     // Sendbird application features
     deliveryReceiptEnabled: boolean;
@@ -83,6 +85,7 @@ export const SendbirdChatProvider = ({
   enableMessageSearch,
   enableGroupChannelOGTag,
   enableOpenChannelOGTag,
+  enableUsingDefaultUserProfile,
 }: Props) => {
   const [currentUser, _setCurrentUser] = useState<SendbirdUser>();
   const forceUpdate = useForceUpdate();
@@ -161,6 +164,7 @@ export const SendbirdChatProvider = ({
       messageSearchEnabled: enableMessageSearch,
       groupChannelOGTagEnabled: enableGroupChannelOGTag,
       openChannelOGTagEnabled: enableOpenChannelOGTag,
+      usingDefaultUserProfileEnabled: enableUsingDefaultUserProfile,
     },
   };
 

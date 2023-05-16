@@ -63,6 +63,7 @@ export const SendbirdUIKit = Object.freeze({
     MESSAGE_SEARCH: false,
     GROUP_CHANNEL_OG_TAG: true,
     OPEN_CHANNEL_OG_TAG: true,
+    USING_DEFAULT_USER_PROFILE: false,
   },
 });
 
@@ -212,6 +213,9 @@ const SendbirdUIKitContainer = ({
         enableMessageSearch={chatOptions?.enableMessageSearch ?? SendbirdUIKit.DEFAULT.MESSAGE_SEARCH}
         enableGroupChannelOGTag={chatOptions?.enableGroupChannelOGTag ?? SendbirdUIKit.DEFAULT.GROUP_CHANNEL_OG_TAG}
         enableOpenChannelOGTag={chatOptions?.enableOpenChannelOGTag ?? SendbirdUIKit.DEFAULT.OPEN_CHANNEL_OG_TAG}
+        enableUsingDefaultUserProfile={
+          chatOptions?.enableUsingDefaultUserProfile ?? SendbirdUIKit.DEFAULT.USING_DEFAULT_USER_PROFILE
+        }
       >
         <LocalizationProvider stringSet={defaultStringSet}>
           <PlatformServiceProvider
