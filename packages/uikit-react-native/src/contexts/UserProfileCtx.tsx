@@ -62,11 +62,16 @@ export const UserProfileProvider = ({
   const [visible, setVisible] = useState(false);
   const [hideMessageButton, setHideMessageButton] = useState(false);
 
-  const show: UserProfileContextType['show'] = useCallback((user, options) => {
-    setUser(user);
-    setVisible(true);
-    setHideMessageButton(Boolean(options?.hideMessageButton));
-  }, []);
+  const show: UserProfileContextType['show'] = useCallback(
+    (user, options) => {
+      if (chatContext.features.usingDefaultUserProfileEnabled) {
+        setUser(user);
+        setVisible(true);
+        setHideMessageButton(Boolean(options?.hideMessageButton));
+      }
+    },
+    [chatContext.features.usingDefaultUserProfileEnabled],
+  );
 
   const hide: UserProfileContextType['hide'] = useCallback(() => {
     setVisible(false);

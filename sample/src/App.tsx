@@ -70,6 +70,7 @@ const App = () => {
         enableChannelListMessageReceiptStatus: true,
         enableUserMention: true,
         enableMessageSearch: true,
+        enableUsingDefaultUserProfile: true,
       }}
       platformServices={{
         file: FileService,

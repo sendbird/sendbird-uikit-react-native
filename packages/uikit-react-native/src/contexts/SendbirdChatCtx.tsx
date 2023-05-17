@@ -22,6 +22,9 @@ export interface UIKitFeaturesInSendbirdChatContext {
   enableUserMention: boolean;
   enableImageCompression: boolean;
   enableMessageSearch: boolean;
+  enableGroupChannelOGTag: boolean;
+  enableOpenChannelOGTag: boolean;
+  enableUsingDefaultUserProfile: boolean;
 }
 
 interface Props extends UIKitFeaturesInSendbirdChatContext, React.PropsWithChildren {
@@ -54,6 +57,9 @@ export type SendbirdChatContextType = {
     userMentionEnabled: boolean;
     imageCompressionEnabled: boolean;
     messageSearchEnabled: boolean;
+    groupChannelOGTagEnabled: boolean;
+    openChannelOGTagEnabled: boolean;
+    usingDefaultUserProfileEnabled: boolean;
 
     // Sendbird application features
     deliveryReceiptEnabled: boolean;
@@ -77,6 +83,9 @@ export const SendbirdChatProvider = ({
   enableUserMention,
   enableImageCompression,
   enableMessageSearch,
+  enableGroupChannelOGTag,
+  enableOpenChannelOGTag,
+  enableUsingDefaultUserProfile,
 }: Props) => {
   const [currentUser, _setCurrentUser] = useState<SendbirdUser>();
   const forceUpdate = useForceUpdate();
@@ -153,6 +162,9 @@ export const SendbirdChatProvider = ({
       userMentionEnabled: enableUserMention,
       imageCompressionEnabled: enableImageCompression,
       messageSearchEnabled: enableMessageSearch,
+      groupChannelOGTagEnabled: enableGroupChannelOGTag,
+      openChannelOGTagEnabled: enableOpenChannelOGTag,
+      usingDefaultUserProfileEnabled: enableUsingDefaultUserProfile,
     },
   };
 
