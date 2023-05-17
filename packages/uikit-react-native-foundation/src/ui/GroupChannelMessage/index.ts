@@ -13,6 +13,7 @@ import OpenGraphUser from './Message.user.og';
 export type GroupChannelMessageProps<T extends SendbirdMessage, AdditionalProps = unknown> = {
   channel: SendbirdGroupChannel;
   message: T;
+  variant?: 'outgoing' | 'incoming';
   strings?: {
     senderName?: string;
     sentDate?: string;

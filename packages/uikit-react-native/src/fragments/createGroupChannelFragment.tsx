@@ -13,7 +13,7 @@ import {
   useRefTracker,
 } from '@sendbird/uikit-utils';
 
-import MessageRenderer from '../components/MessageRenderer';
+import GroupChannelMessageRenderer from '../components/GroupChannelMessageRenderer';
 import NewMessagesButton from '../components/NewMessagesButton';
 import ScrollToBottomButton from '../components/ScrollToBottomButton';
 import StatusComposition from '../components/StatusComposition';
@@ -92,7 +92,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     });
 
     const MessageComponent: GroupChannelProps['MessageList']['renderMessage'] = useCallback(
-      withFocusingAnimation(renderMessage ? (props) => <>{renderMessage(props)}</> : MessageRenderer),
+      withFocusingAnimation(renderMessage ? (props) => <>{renderMessage(props)}</> : GroupChannelMessageRenderer),
       [renderMessage],
     );
 

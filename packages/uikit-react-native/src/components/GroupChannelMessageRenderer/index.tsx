@@ -50,7 +50,11 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   const renderMessage = () => {
     switch (getMessageType(message)) {
       case 'admin': {
-        return <GroupChannelMessage.Admin message={message as SendbirdAdminMessage} {...messageProps} />;
+        return (
+          <Box marginBottom={nextMessage?.isAdminMessage() ? 8 : 16}>
+            <GroupChannelMessage.Admin message={message as SendbirdAdminMessage} {...messageProps} />
+          </Box>
+        );
       }
       case 'user': {
         return <GroupChannelMessage.User message={message as SendbirdUserMessage} {...messageProps} />;
