@@ -38,6 +38,7 @@ export type MessageRendererInterface<T = SendbirdMessage, AdditionalProps = unkn
   children?: React.ReactElement | null;
 } & AdditionalProps;
 
+/** @deprecated Please use `GroupChannelMessageRenderer` instead */
 const MessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
   currentUserId,
   channel,
