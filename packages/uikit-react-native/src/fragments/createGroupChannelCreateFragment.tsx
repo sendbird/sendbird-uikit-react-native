@@ -40,7 +40,7 @@ const createGroupChannelCreateFragment = <UserType extends UserStruct>(
 
     const _renderUser: NonNullable<typeof renderUser> = useFreshCallback((user, selectedUsers, setSelectedUsers) => {
       if (queryCreator && !renderUser) {
-        const hasRequiredKey = Object.hasOwn(user, 'profileUrl') && Object.hasOwn(user, 'nickname');
+        const hasRequiredKey = 'profileUrl' in user && 'nickname' in user;
         if (!hasRequiredKey) throw new Error('You should provide "renderUser" when providing "queryCreator"');
       }
 
