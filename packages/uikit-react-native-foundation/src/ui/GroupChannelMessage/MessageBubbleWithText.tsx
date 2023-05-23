@@ -18,7 +18,7 @@ type Props = GroupChannelMessageProps<
   }
 >;
 
-const MessageBubble = ({
+const MessageBubbleWithText = ({
   backgroundColor,
   message,
   onPressURL,
@@ -77,4 +77,4 @@ const styles = createStyleSheet({
     textDecorationLine: 'underline',
   },
 });
-export default MessageBubble;
+export default MessageBubbleWithText;

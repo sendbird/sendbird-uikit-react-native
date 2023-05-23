@@ -7,7 +7,7 @@ import PressBox from '../../components/PressBox';
 import type { RegexTextPattern } from '../../components/RegexText';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
-import MessageBubble from './MessageBubble';
+import MessageBubbleWithText from './MessageBubbleWithText';
 import MessageContainer from './MessageContainer';
 import type { GroupChannelMessageProps } from './index';
 
@@ -30,7 +30,7 @@ const UserMessage = (props: Props) => {
       <PressBox onPress={props.onPress} onLongPress={props.onLongPress}>
         {({ pressed }) => (
           <Box backgroundColor={pressed ? color.pressed.background : color.enabled.background} style={styles.container}>
-            <MessageBubble {...props} />
+            <MessageBubbleWithText {...props} />
             {props.children}
           </Box>
         )}

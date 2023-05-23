@@ -7,7 +7,7 @@ import PressBox from '../../components/PressBox';
 import type { RegexTextPattern } from '../../components/RegexText';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
-import MessageBubble from './MessageBubble';
+import MessageBubbleWithText from './MessageBubbleWithText';
 import MessageContainer from './MessageContainer';
 import MessageOpenGraph from './MessageOpenGraph';
 import type { GroupChannelMessageProps } from './index';
@@ -32,7 +32,10 @@ const OpenGraphUserMessage = (props: Props) => {
       <PressBox onPress={props.onPress} onLongPress={props.onLongPress}>
         {({ pressed }) => (
           <Box backgroundColor={containerBackgroundColor} style={styles.container}>
-            <MessageBubble backgroundColor={pressed ? color.pressed.background : color.enabled.background} {...props} />
+            <MessageBubbleWithText
+              backgroundColor={pressed ? color.pressed.background : color.enabled.background}
+              {...props}
+            />
             {props.message.ogMetaData && (
               <MessageOpenGraph
                 variant={variant}
