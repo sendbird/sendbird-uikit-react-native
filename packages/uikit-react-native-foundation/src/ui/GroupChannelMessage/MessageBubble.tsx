@@ -84,10 +84,6 @@ const styles = createStyleSheet({
     paddingHorizontal: 12,
     paddingVertical: 6,
   },
-  containerRadius: {
-    overflow: 'hidden',
-    borderRadius: 16,
-  },
   urlText: {
     textDecorationLine: 'underline',
   },
