@@ -17,31 +17,12 @@ type Props = GroupChannelMessageProps<
     renderRegexTextChildren?: (message: SendbirdUserMessage) => string;
   }
 >;
+
 const UserMessage = (props: Props) => {
-  if (props.variant === 'incoming') {
-    return <UserMessage.Incoming {...props} />;
-  } else {
-    return <UserMessage.Outgoing {...props} />;
-  }
-};
+  const { variant = 'incoming' } = props;
 
-UserMessage.Incoming = function UserMessageIncoming(props: Props) {
   const { colors } = useUIKitTheme();
-  const color = colors.ui.groupChannelMessage.incoming;
-
-  return (
-    <MessageContainer {...props}>
-      <Box backgroundColor={color.enabled.background} style={styles.container}>
-        <MessageBubble {...props} />
-        {props.children}
-      </Box>
-    </MessageContainer>
-  );
-};
-
-UserMessage.Outgoing = function UserMessageOutgoing(props: Props) {
-  const { colors } = useUIKitTheme();
-  const color = colors.ui.groupChannelMessage.outgoing;
+  const color = colors.ui.groupChannelMessage[variant];
 
   return (
     <MessageContainer {...props}>

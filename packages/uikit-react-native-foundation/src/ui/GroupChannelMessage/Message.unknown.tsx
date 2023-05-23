@@ -11,10 +11,12 @@ import MessageContainer from './MessageContainer';
 import type { GroupChannelMessageProps } from './index';
 
 const UnknownMessage = (props: GroupChannelMessageProps<SendbirdMessage>) => {
+  const { variant = 'incoming' } = props;
+
   const { colors } = useUIKitTheme();
-  const color = colors.ui.groupChannelMessage[props.variant ?? 'incoming'];
-  const titleColor = props.variant === 'incoming' ? colors.onBackground01 : colors.onBackgroundReverse01;
-  const descColor = props.variant === 'incoming' ? colors.onBackground02 : colors.onBackgroundReverse02;
+  const color = colors.ui.groupChannelMessage['incoming'];
+  const titleColor = variant === 'incoming' ? colors.onBackground01 : colors.onBackgroundReverse01;
+  const descColor = variant === 'incoming' ? colors.onBackground02 : colors.onBackgroundReverse02;
 
   return (
     <MessageContainer {...props}>
