@@ -13,7 +13,7 @@ import type { GroupChannelMessageProps } from './index';
 
 const iconMapper = { audio: 'file-audio', image: 'photo', video: 'play', file: 'file-document' } as const;
 
-type Props = GroupChannelMessageProps<SendbirdFileMessage, {}>;
+type Props = GroupChannelMessageProps<SendbirdFileMessage>;
 
 const FileMessage = (props: Props) => {
   const { variant = 'incoming' } = props;

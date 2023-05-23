@@ -11,7 +11,7 @@ import useUIKitTheme from '../../theme/useUIKitTheme';
 import Avatar from '../Avatar';
 import type { GroupChannelMessageProps } from './index';
 
-type Props = GroupChannelMessageProps<SendbirdMessage, {}>;
+type Props = GroupChannelMessageProps<SendbirdMessage>;
 
 const MessageContainer = (props: Props) => {
   if (props.variant === 'incoming') {
