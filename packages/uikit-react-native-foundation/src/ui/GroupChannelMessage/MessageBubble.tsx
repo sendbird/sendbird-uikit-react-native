@@ -56,8 +56,7 @@ const MessageBubble = ({
                         key={`${keyPrefix}-${index}`}
                         onPress={onPressURL}
                         onLongPress={onLongPress}
-                        color={colors.primary}
-                        style={parentProps?.style}
+                        style={[parentProps?.style, styles.urlText]}
                       >
                         {match}
                       </Text>
@@ -88,6 +87,9 @@ const styles = createStyleSheet({
   containerRadius: {
     overflow: 'hidden',
     borderRadius: 16,
+  },
+  urlText: {
+    textDecorationLine: 'underline',
   },
 });
 export default MessageBubble;
