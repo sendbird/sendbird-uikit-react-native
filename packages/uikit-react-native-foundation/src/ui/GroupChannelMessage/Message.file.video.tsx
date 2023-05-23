@@ -12,23 +12,28 @@ import useUIKitTheme from '../../theme/useUIKitTheme';
 import MessageContainer from './MessageContainer';
 import type { GroupChannelMessageProps } from './index';
 
-type Props = {
-  fetchThumbnailFromVideoSource: (uri: string) => Promise<{ path: string } | null>;
-};
-const VideoFileMessage = (props: GroupChannelMessageProps<SendbirdFileMessage, Props>) => {
+type Props = GroupChannelMessageProps<
+  SendbirdFileMessage,
+  {
+    fetchThumbnailFromVideoSource: (uri: string) => Promise<{ path: string } | null>;
+  }
+>;
+
+const VideoFileMessage = (props: Props) => {
+  const { onPress, onLongPress, variant = 'incoming' } = props;
+
   const { colors, palette } = useUIKitTheme();
-  const { onPress, onLongPress, ...rest } = props;
   const uri = getAvailableUriFromFileMessage(props.message);
   const { thumbnail, loading } = useRetry(() => props.fetchThumbnailFromVideoSource(uri));
 
   return (
-    <MessageContainer {...rest}>
-      <PressBox style={styles.container} activeOpacity={0.8} onPress={onPress} onLongPress={onLongPress}>
-        <Box borderRadius={8} overflow={'hidden'} style={styles.container}>
+    <MessageContainer {...props}>
+      <Box style={styles.container} backgroundColor={colors.ui.groupChannelMessage[variant].enabled.background}>
+        <PressBox activeOpacity={0.8} onPress={onPress} onLongPress={onLongPress}>
           {loading ? (
-            <Box backgroundColor={colors.onBackground04} style={{ width: '100%', height: '100%' }} />
+            <Box backgroundColor={colors.onBackground04} style={styles.image} />
           ) : (
-            <ImageWithPlaceholder source={{ uri: thumbnail ?? 'invalid-image' }} width={'100%'} height={'100%'} />
+            <ImageWithPlaceholder source={{ uri: thumbnail ?? 'invalid-image' }} style={styles.image} />
           )}
 
           {(loading || thumbnail !== null) && (
@@ -41,11 +46,13 @@ const VideoFileMessage = (props: GroupChannelMessageProps<SendbirdFileMessage, P
               />
             </Box>
           )}
-        </Box>
-      </PressBox>
+        </PressBox>
+        {props.children}
+      </Box>
     </MessageContainer>
   );
 };
+
 const useRetry = (fetch: () => Promise<{ path: string } | null>, retryCount = 5) => {
   const [state, setState] = useState({ thumbnail: null as null | string, loading: true });
   const retryCountRef = useRef(0);
@@ -77,8 +84,15 @@ const useRetry = (fetch: () => Promise<{ path: string } | null>, retryCount = 5)
 };
 const styles = createStyleSheet({
   container: {
-    maxWidth: 296,
-    height: 196,
+    borderRadius: 16,
+    overflow: 'hidden',
+  },
+  image: {
+    maxWidth: 240,
+    width: 240,
+    height: 160,
+    borderRadius: 16,
+    overflow: 'hidden',
   },
   iconContainer: {
     position: 'absolute',
