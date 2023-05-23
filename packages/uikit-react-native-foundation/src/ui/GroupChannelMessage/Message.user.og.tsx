@@ -1,119 +1,79 @@
 import React from 'react';
 
 import type { SendbirdUserMessage } from '@sendbird/uikit-utils';
-import { urlRegexRough } from '@sendbird/uikit-utils';
 
 import Box from '../../components/Box';
-import ImageWithPlaceholder from '../../components/ImageWithPlaceholder';
-import PressBox from '../../components/PressBox';
-import RegexText from '../../components/RegexText';
-import Text from '../../components/Text';
+import type { RegexTextPattern } from '../../components/RegexText';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
+import MessageBubble from './MessageBubble';
 import MessageContainer from './MessageContainer';
+import MessageOpenGraph from './MessageOpenGraph';
 import type { GroupChannelMessageProps } from './index';
 
-type Props = {};
-const OpenGraphUserMessage = (props: GroupChannelMessageProps<SendbirdUserMessage, Props>) => {
-  const { colors } = useUIKitTheme();
-  const { onPress, onLongPress, onPressURL, ...rest } = props;
-  const color = colors.ui.openChannelMessage.default;
+type Props = GroupChannelMessageProps<
+  SendbirdUserMessage,
+  {
+    regexTextPatterns?: RegexTextPattern[];
+    renderRegexTextChildren?: (message: SendbirdUserMessage) => string;
+  }
+>;
+const OpenGraphUserMessage = (props: Props) => {
+  if (props.variant === 'incoming') {
+    return <OpenGraphUserMessage.Incoming {...props} />;
+  } else {
+    return <OpenGraphUserMessage.Outgoing {...props} />;
+  }
+};
+
+OpenGraphUserMessage.Incoming = function OpenGraphUserMessageIncoming(props: Props) {
+  const { palette, select } = useUIKitTheme();
+  const containerBackground = select({ dark: palette.background400, light: palette.background100 });
 
   return (
-    <Box>
-      <PressBox onPress={onPress} onLongPress={onLongPress}>
-        {({ pressed }) => (
-          <MessageContainer pressed={pressed} {...rest}>
-            <Text body3 color={color.enabled.textMsg}>
-              <RegexText
-                body3
-                color={color.enabled.textMsg}
-                patterns={[
-                  {
-                    regex: urlRegexRough,
-                    replacer({ match, parentProps, keyPrefix, index }) {
-                      return (
-                        <Text
-                          {...parentProps}
-                          key={`${keyPrefix}-${index}`}
-                          onPress={onPressURL}
-                          onLongPress={onLongPress}
-                          color={colors.primary}
-                          style={parentProps?.style}
-                        >
-                          {match}
-                        </Text>
-                      );
-                    },
-                  },
-                ]}
-              >
-                {props.message.message}
-              </RegexText>
-              {Boolean(props.message.updatedAt) && (
-                <Text body3 color={color.enabled.textMsgPostfix}>
-                  {props.strings?.edited ?? ' (edited)'}
-                </Text>
-              )}
-            </Text>
-          </MessageContainer>
+    <MessageContainer {...props}>
+      <Box backgroundColor={containerBackground} style={styles.container}>
+        <MessageBubble {...props} />
+        {props.message.ogMetaData && (
+          <MessageOpenGraph
+            variant={'incoming'}
+            ogMetaData={props.message.ogMetaData}
+            onLongPress={props.onLongPress}
+            onPressURL={props.onPressURL}
+          />
         )}
-      </PressBox>
-      {props.message.ogMetaData && (
-        <MessageContainer {...rest} grouped>
-          <PressBox style={styles.ogContainer} onPress={onPressURL} onLongPress={onLongPress}>
-            {({ pressed }) =>
-              props.message.ogMetaData && (
-                <Box
-                  padding={8}
-                  borderRadius={8}
-                  style={styles.ogContainer}
-                  backgroundColor={pressed ? color.pressed.bubbleBackground : color.enabled.bubbleBackground}
-                >
-                  <Text numberOfLines={1} caption2 color={colors.onBackground02} style={styles.ogUrl}>
-                    {props.message.ogMetaData.url}
-                  </Text>
+        {props.children}
+      </Box>
+    </MessageContainer>
+  );
+};
 
-                  <Text numberOfLines={2} body2 color={colors.primary} style={styles.ogTitle}>
-                    {props.message.ogMetaData.title}
-                  </Text>
+OpenGraphUserMessage.Outgoing = function OpenGraphUserMessageOutgoing(props: Props) {
+  const { palette, select } = useUIKitTheme();
+  const containerBackground = select({ dark: palette.background400, light: palette.background100 });
 
-                  {Boolean(props.message.ogMetaData.description) && (
-                    <Text numberOfLines={2} caption2 color={colors.onBackground01}>
-                      {props.message.ogMetaData.description}
-                    </Text>
-                  )}
-
-                  {Boolean(props.message.ogMetaData.defaultImage) && (
-                    <ImageWithPlaceholder
-                      style={styles.ogImage}
-                      source={{ uri: props.message.ogMetaData.defaultImage.url }}
-                    />
-                  )}
-                </Box>
-              )
-            }
-          </PressBox>
-        </MessageContainer>
-      )}
-    </Box>
+  return (
+    <MessageContainer {...props}>
+      <Box backgroundColor={containerBackground} style={styles.container}>
+        <MessageBubble {...props} />
+        {props.message.ogMetaData && (
+          <MessageOpenGraph
+            variant={'outgoing'}
+            ogMetaData={props.message.ogMetaData}
+            onLongPress={props.onLongPress}
+            onPressURL={props.onPressURL}
+          />
+        )}
+        {props.children}
+      </Box>
+    </MessageContainer>
   );
 };
 
 const styles = createStyleSheet({
-  ogContainer: {
-    maxWidth: 296,
-  },
-  ogUrl: {
-    marginBottom: 4,
-  },
-  ogTitle: {
-    marginBottom: 8,
-  },
-  ogImage: {
-    width: '100%',
-    height: 156,
-    marginTop: 12,
+  container: {
+    borderRadius: 16,
+    overflow: 'hidden',
   },
 });
 

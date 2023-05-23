@@ -1,7 +1,7 @@
 import React from 'react';
 
-import type { GroupChannelMessageProps } from '@sendbird/uikit-react-native-foundation';
-import { Box, GroupChannelMessage } from '@sendbird/uikit-react-native-foundation';
+import type { GroupChannelMessageProps, RegexTextPattern } from '@sendbird/uikit-react-native-foundation';
+import { Box, GroupChannelMessage, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import {
   SendbirdAdminMessage,
   SendbirdFileMessage,
@@ -9,35 +9,60 @@ import {
   SendbirdUserMessage,
   calcMessageGrouping,
   getMessageType,
+  isMyMessage,
+  shouldRenderReaction,
+  useIIFE,
 } from '@sendbird/uikit-utils';
 
 import type { GroupChannelProps } from '../../domain/groupChannel/types';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 import SBUUtils from '../../libs/SBUUtils';
+import { ReactionAddons } from '../ReactionAddons';
 import GroupChannelMessageDateSeparator from './GroupChannelMessageDateSeparator';
+import GroupChannelMessageOutgoingStatus from './GroupChannelMessageOutgoingStatus';
 
 const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
   channel,
   message,
   onPress,
   onLongPress,
-  onPressAvatar,
+  onShowUserProfile,
   enableMessageGrouping,
   prevMessage,
   nextMessage,
 }) => {
-  const { features } = useSendbirdChat();
+  const { palette } = useUIKitTheme();
+  const { features, currentUser, mentionManager } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { mediaService } = usePlatformService();
-  const { groupWithPrev } = calcMessageGrouping(Boolean(enableMessageGrouping), message, prevMessage, nextMessage);
+  const { groupWithPrev, groupWithNext } = calcMessageGrouping(
+    Boolean(enableMessageGrouping),
+    message,
+    prevMessage,
+    nextMessage,
+  );
+
+  const reactionChildren = useIIFE(() => {
+    if (shouldRenderReaction(channel, features.reactionEnabled) && message.reactions && message.reactions.length > 0) {
+      return <ReactionAddons.Message channel={channel} message={message} />;
+    }
+    return null;
+  });
 
   const messageProps: Omit<GroupChannelMessageProps<SendbirdMessage>, 'message'> = {
     channel,
+    variant: isMyMessage(message, currentUser?.userId) ? 'outgoing' : 'incoming',
     onPress,
     onLongPress,
     onPressURL: () => message.ogMetaData?.url && SBUUtils.openURL(message.ogMetaData?.url),
-    onPressAvatar: () => 'sender' in message && onPressAvatar?.(message.sender, { hideMessageButton: true }),
-    grouped: groupWithPrev,
+    onPressAvatar: () => 'sender' in message && onShowUserProfile?.(message.sender),
+    onPressMentionedUser: () => 'sender' in message && onShowUserProfile?.(message.sender),
+    groupedWithPrev: groupWithPrev,
+    groupedWithNext: groupWithNext,
+    children: reactionChildren,
+    sendingStatus: isMyMessage(message, currentUser?.userId) ? (
+      <GroupChannelMessageOutgoingStatus channel={channel} message={message} />
+    ) : null,
     strings: {
       edited: STRINGS.GROUP_CHANNEL.MESSAGE_BUBBLE_EDITED_POSTFIX,
       senderName: ('sender' in message && message.sender.nickname) || STRINGS.LABELS.USER_NO_NAME,
@@ -47,23 +72,72 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
       unknownDescription: STRINGS.GROUP_CHANNEL.MESSAGE_BUBBLE_UNKNOWN_DESC(message),
     },
   };
+
+  const userMessageProps: {
+    renderRegexTextChildren: (message: SendbirdUserMessage) => string;
+    regexTextPatterns: RegexTextPattern[];
+  } = {
+    renderRegexTextChildren: (message) => {
+      if (mentionManager.shouldUseMentionedMessageTemplate(message)) return message.mentionedMessageTemplate;
+      else return message.message;
+    },
+    regexTextPatterns: [
+      {
+        regex: mentionManager.templateRegex,
+        replacer({ match, groups, parentProps, index, keyPrefix }) {
+          const user = message.mentionedUsers?.find((it) => it.userId === groups[2]);
+          if (user) {
+            const mentionColor =
+              !isMyMessage(message, currentUser?.userId) && user.userId === currentUser?.userId
+                ? palette.onBackgroundLight01
+                : parentProps?.color;
+
+            return (
+              <Text
+                {...parentProps}
+                key={`${keyPrefix}-${index}`}
+                color={mentionColor}
+                onPress={messageProps.onPressMentionedUser}
+                onLongPress={messageProps.onLongPress}
+                style={[
+                  parentProps?.style,
+                  { fontWeight: '700' },
+                  user.userId === currentUser?.userId && { backgroundColor: palette.highlight },
+                ]}
+              >
+                {`${mentionManager.asMentionedMessageText(user)}`}
+              </Text>
+            );
+          }
+          return match;
+        },
+      },
+    ],
+  };
+
   const renderMessage = () => {
     switch (getMessageType(message)) {
       case 'admin': {
-        return (
-          <Box marginBottom={nextMessage?.isAdminMessage() ? 8 : 16}>
-            <GroupChannelMessage.Admin message={message as SendbirdAdminMessage} {...messageProps} />
-          </Box>
-        );
+        return <GroupChannelMessage.Admin message={message as SendbirdAdminMessage} {...messageProps} />;
       }
-      case 'user': {
-        return <GroupChannelMessage.User message={message as SendbirdUserMessage} {...messageProps} />;
-      }
+      case 'user':
       case 'user.opengraph': {
-        if (features.groupChannelOGTagEnabled) {
-          return <GroupChannelMessage.OpenGraphUser message={message as SendbirdUserMessage} {...messageProps} />;
+        if (message.ogMetaData && features.groupChannelOGTagEnabled) {
+          return (
+            <GroupChannelMessage.OpenGraphUser
+              message={message as SendbirdUserMessage}
+              {...userMessageProps}
+              {...messageProps}
+            />
+          );
         } else {
-          return <GroupChannelMessage.User message={message as SendbirdUserMessage} {...messageProps} />;
+          return (
+            <GroupChannelMessage.User
+              message={message as SendbirdUserMessage}
+              {...userMessageProps}
+              {...messageProps}
+            />
+          );
         }
       }
       case 'file':
@@ -89,11 +163,27 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     }
   };
 
+  const messageGap = useIIFE(() => {
+    if (message.isAdminMessage()) {
+      if (nextMessage?.isAdminMessage()) {
+        return 8;
+      } else {
+        return 16;
+      }
+    } else if (groupWithNext) {
+      return 2;
+    } else {
+      return 16;
+    }
+  });
+
   return (
-    <Box>
+    <>
       <GroupChannelMessageDateSeparator message={message} prevMessage={prevMessage} />
-      {renderMessage()}
-    </Box>
+      <Box paddingHorizontal={16} marginBottom={messageGap}>
+        {renderMessage()}
+      </Box>
+    </>
   );
 };
 

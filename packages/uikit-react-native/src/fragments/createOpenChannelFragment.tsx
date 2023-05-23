@@ -24,7 +24,7 @@ import type {
   OpenChannelProps,
   OpenChannelPubSubContextPayload,
 } from '../domain/openChannel/types';
-import { useLocalization, useSendbirdChat, useUserProfile } from '../hooks/useContext';
+import { useLocalization, useSendbirdChat } from '../hooks/useContext';
 import pubsub from '../utils/pubsub';
 
 const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): OpenChannelFragment => {
@@ -57,7 +57,6 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
 
     const { STRINGS } = useLocalization();
     const { show: showToast } = useToast();
-    const { show: showUserProfile } = useUserProfile();
 
     const [openChannelPubSub] = useState(() => pubsub<OpenChannelPubSubContextPayload>());
 
@@ -100,7 +99,7 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
 
     const _renderMessage: OpenChannelProps['MessageList']['renderMessage'] = useFreshCallback((props) => {
       if (renderMessage) return renderMessage(props);
-      return <OpenChannelMessageRenderer {...props} onPressAvatar={showUserProfile} />;
+      return <OpenChannelMessageRenderer {...props} />;
     });
 
     const memoizedFlatListProps = useMemo(

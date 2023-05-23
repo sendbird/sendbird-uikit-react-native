@@ -10,6 +10,7 @@ export { default as ImageWithPlaceholder } from './components/ImageWithPlacehold
 export { default as Modal } from './components/Modal';
 export { default as PressBox } from './components/PressBox';
 export { default as RegexText } from './components/RegexText';
+export type { RegexTextPattern } from './components/RegexText';
 export { default as Switch } from './components/Switch';
 export { default as Text } from './components/Text';
 export { default as TextInput } from './components/TextInput';

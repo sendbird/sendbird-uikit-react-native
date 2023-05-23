@@ -22,12 +22,17 @@ export type GroupChannelMessageProps<T extends SendbirdMessage, AdditionalProps 
     unknownTitle?: string;
     unknownDescription?: string;
   };
+
   children?: React.ReactNode;
-  grouped?: boolean;
+  sendingStatus?: React.ReactNode;
+
+  groupedWithPrev: boolean;
+  groupedWithNext: boolean;
   onPress?: () => void;
   onLongPress?: () => void;
   onPressAvatar?: () => void;
   onPressURL?: () => void;
+  onPressMentionedUser?: () => void;
 } & AdditionalProps;
 
 const GroupChannelMessage = {

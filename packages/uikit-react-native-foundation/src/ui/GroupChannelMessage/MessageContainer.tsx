@@ -1,116 +1,105 @@
 import React from 'react';
+import { Pressable } from 'react-native';
 
-import { SendingStatus } from '@sendbird/chat/message';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
 import { getMessageTimeFormat } from '@sendbird/uikit-utils';
 
 import Box from '../../components/Box';
-import Icon from '../../components/Icon';
-import PressBox from '../../components/PressBox';
 import Text from '../../components/Text';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import Avatar from '../Avatar';
-import LoadingSpinner from '../LoadingSpinner';
 import type { GroupChannelMessageProps } from './index';
 
-type Props = {
-  pressed?: boolean;
+type Props = GroupChannelMessageProps<SendbirdMessage, {}>;
+
+const MessageContainer = (props: Props) => {
+  if (props.variant === 'incoming') {
+    return <MessageContainer.Incoming {...props} />;
+  } else {
+    return <MessageContainer.Outgoing {...props} />;
+  }
 };
 
-const MessageContainer = ({
+MessageContainer.Incoming = function MessageContainerIncoming({
   children,
-  channel,
-  grouped,
-  pressed,
-  ...props
-}: GroupChannelMessageProps<SendbirdMessage, Props>) => {
+  groupedWithNext,
+  groupedWithPrev,
+  message,
+  onPressAvatar,
+  strings,
+}: Props) {
   const { colors } = useUIKitTheme();
-  const color = colors.ui.openChannelMessage.default;
-
-  const renderSendingStatus = () => {
-    if (!('sendingStatus' in props.message)) return null;
-
-    switch (props.message.sendingStatus) {
-      case SendingStatus.PENDING: {
-        return (
-          <SendingStatusContainer>
-            <LoadingSpinner color={colors.primary} size={16} />
-          </SendingStatusContainer>
-        );
-      }
-      case SendingStatus.FAILED: {
-        return (
-          <SendingStatusContainer>
-            <Icon icon={'error'} color={colors.error} size={16} />
-          </SendingStatusContainer>
-        );
-      }
-      default: {
-        return null;
-      }
-    }
-  };
+  const color = colors.ui.groupChannelMessage.incoming;
 
   return (
-    <Box
-      flexDirection={'row'}
-      paddingVertical={grouped ? 5 : 6}
-      paddingLeft={12}
-      paddingRight={12}
-      backgroundColor={pressed ? color.pressed.background : color.enabled.background}
-    >
-      <Box marginRight={12}>
-        {!grouped && 'sender' in props.message ? (
-          <PressBox onPress={props.onPressAvatar}>
-            <Avatar size={styles.avatar.width} uri={props.message.sender.profileUrl} />
-          </PressBox>
-        ) : (
-          <Box style={styles.avatar} />
+    <Box flexDirection={'row'} justifyContent={'flex-start'} alignItems={'flex-end'}>
+      <Box width={26} marginRight={12}>
+        {(message.isFileMessage() || message.isUserMessage()) && !groupedWithNext && (
+          <Pressable onPress={onPressAvatar}>
+            <Avatar size={26} uri={message.sender?.profileUrl} />
+          </Pressable>
         )}
       </Box>
-      <Box flexShrink={1} flex={1} flexDirection={'column'} alignItems={'flex-start'}>
-        {!grouped && 'sender' in props.message && (
-          <Box flexDirection={'row'} alignItems={'center'} marginBottom={2}>
-            <Box marginRight={4} flexShrink={1}>
-              <Text
-                caption1
-                ellipsizeMode={'middle'}
-                numberOfLines={1}
-                color={channel.myRole === 'operator' ? color.enabled.textOperator : color.enabled.textSenderName}
-              >
-                {props.strings?.senderName ?? props.message.sender.nickname}
+      <Box flexShrink={1}>
+        {!groupedWithPrev && (
+          <Box marginLeft={12} marginBottom={4}>
+            {(message.isFileMessage() || message.isUserMessage()) && (
+              <Text caption1 color={color.enabled.textSenderName} numberOfLines={1}>
+                {strings?.senderName ?? message.sender.nickname}
               </Text>
-            </Box>
-            <Box>
-              <Text caption4 color={color.enabled.textTime}>
-                {props.strings?.sentDate ?? getMessageTimeFormat(new Date(props.message.createdAt))}
-              </Text>
-            </Box>
+            )}
           </Box>
         )}
-        <Box style={styles.message}>{children}</Box>
 
-        {renderSendingStatus()}
+        <Box flexDirection={'row'} alignItems={'flex-end'}>
+          <Box style={styles.bubble}>{children}</Box>
+          {!groupedWithNext && (
+            <Box marginLeft={4}>
+              <Text caption4 color={color.enabled.textTime}>
+                {strings?.sentDate ?? getMessageTimeFormat(new Date(message.createdAt))}
+              </Text>
+            </Box>
+          )}
+        </Box>
       </Box>
     </Box>
   );
 };
 
-const SendingStatusContainer = ({ children }: { children: React.ReactElement }) => {
+MessageContainer.Outgoing = function MessageContainerOutgoing({
+  children,
+  message,
+  groupedWithNext,
+  strings,
+  sendingStatus,
+}: Props) {
+  const { colors } = useUIKitTheme();
+  const color = colors.ui.groupChannelMessage.outgoing;
+
   return (
-    <Box flexDirection={'row'}>
-      <Box marginTop={2}>{children}</Box>
+    <Box flexDirection={'row'} justifyContent={'flex-end'} alignItems={'flex-end'}>
+      <Box flexDirection={'row'} alignItems={'flex-end'} justifyContent={'center'}>
+        {sendingStatus && <Box marginRight={4}>{sendingStatus}</Box>}
+
+        {!groupedWithNext && (
+          <Box marginRight={4}>
+            <Text caption4 color={color.enabled.textTime}>
+              {strings?.sentDate ?? getMessageTimeFormat(new Date(message.createdAt))}
+            </Text>
+          </Box>
+        )}
+      </Box>
+      <Box style={styles.bubble}>{children}</Box>
     </Box>
   );
 };
 
 const styles = createStyleSheet({
-  avatar: {
-    width: 28,
-  },
-  message: {
-    width: '100%',
+  bubble: {
+    maxWidth: 240,
+    overflow: 'hidden',
+    flexShrink: 1,
   },
 });
 
