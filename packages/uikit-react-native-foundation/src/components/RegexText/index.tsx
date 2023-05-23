@@ -4,7 +4,7 @@ import { replaceWithRegex } from '@sendbird/uikit-utils';
 
 import Text, { TextProps } from '../Text';
 
-interface Pattern {
+export interface RegexTextPattern {
   regex: RegExp;
   replacer(params: {
     match: string;
@@ -15,7 +15,7 @@ interface Pattern {
   }): string | JSX.Element;
 }
 
-type Props = { patterns: Pattern[] } & TextProps;
+type Props = { patterns: RegexTextPattern[] } & TextProps;
 
 const RegexText = ({ children, patterns, ...props }: Props) => {
   if (patterns.length === 0 || typeof children !== 'string') return <>{children}</>;

@@ -21,7 +21,7 @@ const OpenChannelMessageRenderer: OpenChannelProps['Fragment']['renderMessage'] 
   message,
   onPress,
   onLongPress,
-  onPressAvatar,
+  onShowUserProfile,
   enableMessageGrouping,
   prevMessage,
   nextMessage,
@@ -36,7 +36,7 @@ const OpenChannelMessageRenderer: OpenChannelProps['Fragment']['renderMessage'] 
     onPress,
     onLongPress,
     onPressURL: () => message.ogMetaData?.url && SBUUtils.openURL(message.ogMetaData?.url),
-    onPressAvatar: () => 'sender' in message && onPressAvatar?.(message.sender, { hideMessageButton: true }),
+    onPressAvatar: () => 'sender' in message && onShowUserProfile?.(message.sender, { hideMessageButton: true }),
     grouped: groupWithPrev,
     strings: {
       edited: STRINGS.OPEN_CHANNEL.MESSAGE_BUBBLE_EDITED_POSTFIX,

@@ -234,7 +234,7 @@ type RequiredSpecific<T, K extends keyof T> = T & {
 };
 
 const styles = createStyleSheet({
-  mentionedText: { fontWeight: 'bold' },
+  mentionedText: { fontWeight: '700' },
 });
 
 export default MentionManager;

@@ -30,7 +30,7 @@ import {
 
 import { DEPRECATION_WARNING } from '../../constants';
 import type { UserProfileContextType } from '../../contexts/UserProfileCtx';
-import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
+import { useLocalization, usePlatformService, useSendbirdChat, useUserProfile } from '../../hooks/useContext';
 import SBUUtils from '../../libs/SBUUtils';
 import type { CommonComponent } from '../../types';
 import ChatFlatList from '../ChatFlatList';
@@ -67,10 +67,12 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
     nextMessage?: SendbirdMessage;
     onPress?: () => void;
     onLongPress?: () => void;
-    onPressAvatar?: UserProfileContextType['show'];
+    onShowUserProfile?: UserProfileContextType['show'];
     channel: T;
     currentUserId?: ChannelMessageListProps<T>['currentUserId'];
     enableMessageGrouping: ChannelMessageListProps<T>['enableMessageGrouping'];
+    /** @deprecated Please use `onShowUserProfile` **/
+    onPressAvatar?: UserProfileContextType['show'];
   }) => React.ReactElement | null;
   renderNewMessagesButton: null | CommonComponent<{
     visible: boolean;
@@ -118,6 +120,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
 ) => {
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
+  const { show } = useUserProfile();
   const { left, right } = useSafeAreaInsets();
   const getMessagePressActions = useGetMessagePressActions({
     channel,
@@ -139,6 +142,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
       nextMessage: messages[index - 1],
       onPress,
       onLongPress,
+      onShowUserProfile: show,
       enableMessageGrouping,
       channel,
       currentUserId,

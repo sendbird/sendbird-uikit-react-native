@@ -10,6 +10,7 @@ export { default as ImageWithPlaceholder } from './components/ImageWithPlacehold
 export { default as Modal } from './components/Modal';
 export { default as PressBox } from './components/PressBox';
 export { default as RegexText } from './components/RegexText';
+export type { RegexTextPattern } from './components/RegexText';
 export { default as Switch } from './components/Switch';
 export { default as Text } from './components/Text';
 export { default as TextInput } from './components/TextInput';
@@ -24,11 +25,14 @@ export { default as BottomSheet } from './ui/BottomSheet';
 export { default as Button } from './ui/Button';
 export { default as ChannelFrozenBanner } from './ui/ChannelFrozenBanner';
 export { DialogProvider, useActionMenu, useAlert, usePrompt, useBottomSheet } from './ui/Dialog';
-export { default as GroupChannelPreview } from './ui/GroupChannelPreview';
 export { default as Header } from './ui/Header';
 export { default as LoadingSpinner } from './ui/LoadingSpinner';
 export { default as MenuBar } from './ui/MenuBar';
 export type { MenuBarProps } from './ui/MenuBar';
+export { default as GroupChannelMessage } from './ui/GroupChannelMessage';
+export type { GroupChannelMessageProps } from './ui/GroupChannelMessage';
+export { default as GroupChannelPreview } from './ui/GroupChannelPreview';
+
 export { default as OpenChannelMessage } from './ui/OpenChannelMessage';
 export type { OpenChannelMessageProps } from './ui/OpenChannelMessage';
 export { default as OpenChannelPreview } from './ui/OpenChannelPreview';

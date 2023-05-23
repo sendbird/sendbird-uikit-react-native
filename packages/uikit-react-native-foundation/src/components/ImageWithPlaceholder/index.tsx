@@ -10,6 +10,7 @@ import Icon from '../Icon';
 import Image from '../Image';
 
 const useRetry = (hasError: boolean, retryCount = 5) => {
+  // NOTE: Glide(fast-image) will retry automatically on Android
   if (Platform.OS === 'android') return '';
 
   const forceUpdate = useForceUpdate();
@@ -44,14 +45,14 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 const ImageWithPlaceholder = (props: Props) => {
-  const { colors } = useUIKitTheme();
+  const { palette, select, colors } = useUIKitTheme();
   const [imageNotFound, setImageNotFound] = useState(false);
 
   const key = useRetry(imageNotFound);
   return (
     <Box
       style={[{ overflow: 'hidden', width: props.width, height: props.height }, props.style]}
-      backgroundColor={colors.onBackground04}
+      backgroundColor={select({ dark: palette.background400, light: palette.background100 })}
     >
       <Image
         key={key}

@@ -44,7 +44,7 @@ const BaseUserMessage = ({
                         onLongPress={onLongPressMentionedUser}
                         style={[
                           parentProps?.style,
-                          { fontWeight: 'bold' },
+                          { fontWeight: '700' },
                           user.userId === currentUser?.userId && { backgroundColor: palette.highlight },
                         ]}
                       >
