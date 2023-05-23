@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SendbirdFileMessage, getFileTypeFromMessage } from '@sendbird/uikit-utils';
+import { SendbirdFileMessage, getFileExtension, getFileType } from '@sendbird/uikit-utils';
 
 import Box from '../../components/Box';
 import Icon from '../../components/Icon';
@@ -13,44 +13,39 @@ import type { GroupChannelMessageProps } from './index';
 
 const iconMapper = { audio: 'file-audio', image: 'photo', video: 'play', file: 'file-document' } as const;
 
-type Props = {};
-const FileMessage = (props: GroupChannelMessageProps<SendbirdFileMessage, Props>) => {
+type Props = GroupChannelMessageProps<SendbirdFileMessage, {}>;
+
+const FileMessage = (props: Props) => {
+  const { variant = 'incoming' } = props;
   const { colors } = useUIKitTheme();
-  const { onPress, onLongPress, ...rest } = props;
-  const type = getFileTypeFromMessage(props.message);
-  const color = colors.ui.openChannelMessage.default;
+
+  const fileType = getFileType(props.message.type || getFileExtension(props.message.name));
+  const color = colors.ui.groupChannelMessage[variant];
 
   return (
-    <MessageContainer {...rest}>
-      <PressBox onPress={onPress} onLongPress={onLongPress}>
+    <MessageContainer {...props}>
+      <PressBox onPress={props.onPress} onLongPress={props.onLongPress}>
         {({ pressed }) => {
+          const backgroundColor = pressed ? color.pressed.background : color.enabled.background;
           return (
-            <Box
-              padding={8}
-              borderRadius={8}
-              flexDirection={'row'}
-              alignItems={'center'}
-              justifyContent={'flex-start'}
-              style={{ backgroundColor: pressed ? color.pressed.bubbleBackground : color.enabled.bubbleBackground }}
-            >
-              <Box
-                padding={4}
-                marginRight={8}
-                borderRadius={8}
-                alignItems={'flex-start'}
-                backgroundColor={colors.background}
-              >
-                <Icon icon={iconMapper[type]} size={32} />
+            <Box backgroundColor={backgroundColor} style={styles.container}>
+              <Box style={styles.bubble}>
+                <Icon
+                  icon={iconMapper[fileType]}
+                  size={24}
+                  containerStyle={{ backgroundColor: colors.background, padding: 2, borderRadius: 8, marginRight: 8 }}
+                />
+                <Text
+                  body3
+                  ellipsizeMode={'middle'}
+                  numberOfLines={1}
+                  color={pressed ? color.pressed.textMsg : color.enabled.textMsg}
+                  style={styles.name}
+                >
+                  {props.strings?.fileName || props.message.name}
+                </Text>
               </Box>
-              <Text
-                body3
-                numberOfLines={1}
-                ellipsizeMode={'middle'}
-                color={color.enabled.textMsg}
-                style={styles.fileName}
-              >
-                {props.strings?.fileName || props.message.name}
-              </Text>
+              {props.children}
             </Box>
           );
         }}
@@ -60,8 +55,19 @@ const FileMessage = (props: GroupChannelMessageProps<SendbirdFileMessage, Props>
 };
 
 const styles = createStyleSheet({
-  fileName: {
+  container: {
+    overflow: 'hidden',
+    borderRadius: 16,
+  },
+  bubble: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  name: {
     flexShrink: 1,
   },
 });
+
 export default FileMessage;
