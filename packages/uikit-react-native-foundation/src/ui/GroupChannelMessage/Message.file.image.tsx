@@ -7,18 +7,22 @@ import Box from '../../components/Box';
 import ImageWithPlaceholder from '../../components/ImageWithPlaceholder';
 import PressBox from '../../components/PressBox';
 import createStyleSheet from '../../styles/createStyleSheet';
+import useUIKitTheme from '../../theme/useUIKitTheme';
 import MessageContainer from './MessageContainer';
 import type { GroupChannelMessageProps } from './index';
 
 const ImageFileMessage = (props: GroupChannelMessageProps<SendbirdFileMessage>) => {
-  const { onPress, onLongPress, ...rest } = props;
-  const uri = getAvailableUriFromFileMessage(props.message);
+  const { onPress, onLongPress, variant = 'incoming' } = props;
+
+  const { colors } = useUIKitTheme();
+
   return (
-    <MessageContainer {...rest}>
-      <Box borderRadius={8} overflow={'hidden'} style={styles.container}>
-        <PressBox style={styles.container} activeOpacity={0.8} onPress={onPress} onLongPress={onLongPress}>
-          <ImageWithPlaceholder source={{ uri }} width={'100%'} height={'100%'} />
+    <MessageContainer {...props}>
+      <Box style={styles.container} backgroundColor={colors.ui.groupChannelMessage[variant].enabled.background}>
+        <PressBox activeOpacity={0.8} onPress={onPress} onLongPress={onLongPress}>
+          <ImageWithPlaceholder source={{ uri: getAvailableUriFromFileMessage(props.message) }} style={styles.image} />
         </PressBox>
+        {props.children}
       </Box>
     </MessageContainer>
   );
@@ -26,8 +30,15 @@ const ImageFileMessage = (props: GroupChannelMessageProps<SendbirdFileMessage>) 
 
 const styles = createStyleSheet({
   container: {
-    maxWidth: 296,
-    height: 196,
+    borderRadius: 16,
+    overflow: 'hidden',
+  },
+  image: {
+    maxWidth: 240,
+    width: 240,
+    height: 160,
+    borderRadius: 16,
+    overflow: 'hidden',
   },
 });
 

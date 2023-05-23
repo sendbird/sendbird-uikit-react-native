@@ -10,6 +10,7 @@ import Icon from '../Icon';
 import Image from '../Image';
 
 const useRetry = (hasError: boolean, retryCount = 5) => {
+  // NOTE: Glide(fast-image) will retry automatically on Android
   if (Platform.OS === 'android') return '';
 
   const forceUpdate = useForceUpdate();
