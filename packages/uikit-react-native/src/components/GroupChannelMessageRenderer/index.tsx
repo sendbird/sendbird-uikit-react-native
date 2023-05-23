@@ -19,6 +19,7 @@ import { useLocalization, usePlatformService, useSendbirdChat } from '../../hook
 import SBUUtils from '../../libs/SBUUtils';
 import { ReactionAddons } from '../ReactionAddons';
 import GroupChannelMessageDateSeparator from './GroupChannelMessageDateSeparator';
+import GroupChannelMessageFocusAnimation from './GroupChannelMessageFocusAnimation';
 import GroupChannelMessageOutgoingStatus from './GroupChannelMessageOutgoingStatus';
 
 const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
@@ -28,6 +29,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   onLongPress,
   onShowUserProfile,
   enableMessageGrouping,
+  focused,
   prevMessage,
   nextMessage,
 }) => {
@@ -181,7 +183,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     <>
       <GroupChannelMessageDateSeparator message={message} prevMessage={prevMessage} />
       <Box paddingHorizontal={16} marginBottom={messageGap}>
-        {renderMessage()}
+        <GroupChannelMessageFocusAnimation focused={focused}>{renderMessage()}</GroupChannelMessageFocusAnimation>
       </Box>
     </>
   );
