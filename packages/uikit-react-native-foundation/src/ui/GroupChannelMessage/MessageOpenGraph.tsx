@@ -61,7 +61,8 @@ const styles = createStyleSheet({
     paddingBottom: 12,
   },
   ogImage: {
-    width: '100%',
+    maxWidth: 240,
+    width: 240,
     height: 136,
   },
   ogUrl: {
