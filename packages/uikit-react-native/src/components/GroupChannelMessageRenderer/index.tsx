@@ -3,6 +3,7 @@ import React from 'react';
 import type { GroupChannelMessageProps, RegexTextPattern } from '@sendbird/uikit-react-native-foundation';
 import { Box, GroupChannelMessage, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import {
+  Logger,
   SendbirdAdminMessage,
   SendbirdFileMessage,
   SendbirdMessage,
@@ -22,12 +23,14 @@ import GroupChannelMessageDateSeparator from './GroupChannelMessageDateSeparator
 import GroupChannelMessageFocusAnimation from './GroupChannelMessageFocusAnimation';
 import GroupChannelMessageOutgoingStatus from './GroupChannelMessageOutgoingStatus';
 
+let WARN_onPressAvatar = false;
 const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
   channel,
   message,
   onPress,
   onLongPress,
   onShowUserProfile,
+  onPressAvatar,
   enableMessageGrouping,
   focused,
   prevMessage,
@@ -44,6 +47,11 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     nextMessage,
   );
 
+  if (__DEV__ && !WARN_onPressAvatar && onPressAvatar) {
+    WARN_onPressAvatar = true;
+    Logger.warn('`onPressAvatar` is deprecated, please use `onShowUserProfile`');
+  }
+
   const reactionChildren = useIIFE(() => {
     if (shouldRenderReaction(channel, features.reactionEnabled) && message.reactions && message.reactions.length > 0) {
       return <ReactionAddons.Message channel={channel} message={message} />;
@@ -57,8 +65,24 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     onPress,
     onLongPress,
     onPressURL: () => message.ogMetaData?.url && SBUUtils.openURL(message.ogMetaData?.url),
-    onPressAvatar: () => 'sender' in message && onShowUserProfile?.(message.sender),
-    onPressMentionedUser: () => 'sender' in message && onShowUserProfile?.(message.sender),
+    onPressAvatar: () => {
+      if ('sender' in message) {
+        if (onPressAvatar) {
+          onPressAvatar(message.sender);
+        } else if (onShowUserProfile) {
+          onShowUserProfile(message.sender);
+        }
+      }
+    },
+    onPressMentionedUser: () => {
+      if ('sender' in message) {
+        if (onPressAvatar) {
+          onPressAvatar(message.sender);
+        } else if (onShowUserProfile) {
+          onShowUserProfile(message.sender);
+        }
+      }
+    },
     groupedWithPrev: groupWithPrev,
     groupedWithNext: groupWithNext,
     children: reactionChildren,
@@ -180,12 +204,10 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   });
 
   return (
-    <>
+    <Box paddingHorizontal={16} marginBottom={messageGap}>
       <GroupChannelMessageDateSeparator message={message} prevMessage={prevMessage} />
-      <Box paddingHorizontal={16} marginBottom={messageGap}>
-        <GroupChannelMessageFocusAnimation focused={focused}>{renderMessage()}</GroupChannelMessageFocusAnimation>
-      </Box>
-    </>
+      <GroupChannelMessageFocusAnimation focused={focused}>{renderMessage()}</GroupChannelMessageFocusAnimation>
+    </Box>
   );
 };
 
