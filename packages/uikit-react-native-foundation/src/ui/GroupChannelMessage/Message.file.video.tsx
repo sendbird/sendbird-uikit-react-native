@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { StyleSheet } from 'react-native';
 
 import type { SendbirdFileMessage } from '@sendbird/uikit-utils';
 import { getAvailableUriFromFileMessage } from '@sendbird/uikit-utils';
@@ -29,15 +30,15 @@ const VideoFileMessage = (props: Props) => {
   return (
     <MessageContainer {...props}>
       <Box style={styles.container} backgroundColor={colors.ui.groupChannelMessage[variant].enabled.background}>
-        <PressBox activeOpacity={0.8} onPress={onPress} onLongPress={onLongPress}>
+        <PressBox activeOpacity={0.8} onPress={onPress} onLongPress={onLongPress} style={styles.image}>
           {loading ? (
-            <Box backgroundColor={colors.onBackground04} style={styles.image} />
+            <Box backgroundColor={colors.onBackground04} style={StyleSheet.absoluteFill} />
           ) : (
-            <ImageWithPlaceholder source={{ uri: thumbnail ?? 'invalid-image' }} style={styles.image} />
+            <ImageWithPlaceholder source={{ uri: thumbnail ?? 'invalid-image' }} style={StyleSheet.absoluteFill} />
           )}
 
           {(loading || thumbnail !== null) && (
-            <Box style={styles.iconContainer} alignItems={'center'} justifyContent={'center'}>
+            <Box style={StyleSheet.absoluteFill} alignItems={'center'} justifyContent={'center'}>
               <Icon
                 icon={'play'}
                 size={28}
@@ -93,11 +94,6 @@ const styles = createStyleSheet({
     height: 160,
     borderRadius: 16,
     overflow: 'hidden',
-  },
-  iconContainer: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
   },
   playIcon: {
     padding: 10,
