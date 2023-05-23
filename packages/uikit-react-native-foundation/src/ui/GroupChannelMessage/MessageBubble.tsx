@@ -3,7 +3,6 @@ import React from 'react';
 import { SendbirdUserMessage, urlRegexStrict } from '@sendbird/uikit-utils';
 
 import Box from '../../components/Box';
-import PressBox from '../../components/PressBox';
 import RegexText, { RegexTextPattern } from '../../components/RegexText';
 import Text from '../../components/Text';
 import createStyleSheet from '../../styles/createStyleSheet';
@@ -13,14 +12,15 @@ import type { GroupChannelMessageProps } from './index';
 type Props = GroupChannelMessageProps<
   SendbirdUserMessage,
   {
+    backgroundColor?: string;
     regexTextPatterns?: RegexTextPattern[];
     renderRegexTextChildren?: (message: SendbirdUserMessage) => string;
   }
 >;
 
 const MessageBubble = ({
+  backgroundColor,
   message,
-  onPress,
   onPressURL,
   onLongPress,
   strings,
@@ -31,51 +31,40 @@ const MessageBubble = ({
   const { colors } = useUIKitTheme();
   const color = colors.ui.groupChannelMessage[variant];
   return (
-    <PressBox onPress={onPress} onLongPress={onLongPress}>
-      {({ pressed }) => (
-        <Box
-          style={[
-            styles.bubble,
+    <Box backgroundColor={backgroundColor} style={styles.bubble}>
+      <Text body3 color={color.enabled.textMsg} suppressHighlighting>
+        <RegexText
+          body3
+          color={color.enabled.textMsg}
+          patterns={[
+            ...regexTextPatterns,
             {
-              backgroundColor: pressed ? color.pressed.background : color.enabled.background,
+              regex: urlRegexStrict,
+              replacer({ match, parentProps, keyPrefix, index }) {
+                return (
+                  <Text
+                    {...parentProps}
+                    key={`${keyPrefix}-${index}`}
+                    onPress={onPressURL}
+                    onLongPress={onLongPress}
+                    style={[parentProps?.style, styles.urlText]}
+                  >
+                    {match}
+                  </Text>
+                );
+              },
             },
           ]}
         >
-          <Text body3 color={color.enabled.textMsg} suppressHighlighting>
-            <RegexText
-              body3
-              color={color.enabled.textMsg}
-              patterns={[
-                ...regexTextPatterns,
-                {
-                  regex: urlRegexStrict,
-                  replacer({ match, parentProps, keyPrefix, index }) {
-                    return (
-                      <Text
-                        {...parentProps}
-                        key={`${keyPrefix}-${index}`}
-                        onPress={onPressURL}
-                        onLongPress={onLongPress}
-                        style={[parentProps?.style, styles.urlText]}
-                      >
-                        {match}
-                      </Text>
-                    );
-                  },
-                },
-              ]}
-            >
-              {renderRegexTextChildren(message)}
-            </RegexText>
-            {Boolean(message.updatedAt) && (
-              <Text body3 color={color.enabled.textEdited}>
-                {strings?.edited ?? ' (edited)'}
-              </Text>
-            )}
+          {renderRegexTextChildren(message)}
+        </RegexText>
+        {Boolean(message.updatedAt) && (
+          <Text body3 color={color.enabled.textEdited}>
+            {strings?.edited ?? ' (edited)'}
           </Text>
-        </Box>
-      )}
-    </PressBox>
+        )}
+      </Text>
+    </Box>
   );
 };
 

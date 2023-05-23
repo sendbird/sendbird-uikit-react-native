@@ -3,6 +3,7 @@ import React from 'react';
 import type { SendbirdUserMessage } from '@sendbird/uikit-utils';
 
 import Box from '../../components/Box';
+import PressBox from '../../components/PressBox';
 import type { RegexTextPattern } from '../../components/RegexText';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
@@ -26,10 +27,17 @@ const UserMessage = (props: Props) => {
 
   return (
     <MessageContainer {...props}>
-      <Box backgroundColor={color.enabled.background} style={styles.container}>
-        <MessageBubble {...props} />
-        {props.children}
-      </Box>
+      <PressBox onPress={props.onPress} onLongPress={props.onLongPress}>
+        {({ pressed }) => {
+          const backgroundColor = pressed ? color.pressed.background : color.enabled.background;
+          return (
+            <Box backgroundColor={backgroundColor} style={styles.container}>
+              <MessageBubble {...props} />
+              {props.children}
+            </Box>
+          );
+        }}
+      </PressBox>
     </MessageContainer>
   );
 };
