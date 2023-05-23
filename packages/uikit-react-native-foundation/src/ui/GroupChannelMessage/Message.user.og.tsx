@@ -25,30 +25,25 @@ const OpenGraphUserMessage = (props: Props) => {
 
   const { palette, select, colors } = useUIKitTheme();
   const color = colors.ui.groupChannelMessage[variant];
+  const containerBackgroundColor = select({ dark: palette.background400, light: palette.background100 });
 
   return (
     <MessageContainer {...props}>
       <PressBox onPress={props.onPress} onLongPress={props.onLongPress}>
-        {({ pressed }) => {
-          const containerBackgroundColor = select({ dark: palette.background400, light: palette.background100 });
-          return (
-            <Box backgroundColor={containerBackgroundColor} style={styles.container}>
-              <MessageBubble
-                backgroundColor={pressed ? color.pressed.background : color.enabled.background}
-                {...props}
+        {({ pressed }) => (
+          <Box backgroundColor={containerBackgroundColor} style={styles.container}>
+            <MessageBubble backgroundColor={pressed ? color.pressed.background : color.enabled.background} {...props} />
+            {props.message.ogMetaData && (
+              <MessageOpenGraph
+                variant={variant}
+                ogMetaData={props.message.ogMetaData}
+                onLongPress={props.onLongPress}
+                onPressURL={props.onPressURL}
               />
-              {props.message.ogMetaData && (
-                <MessageOpenGraph
-                  variant={variant}
-                  ogMetaData={props.message.ogMetaData}
-                  onLongPress={props.onLongPress}
-                  onPressURL={props.onPressURL}
-                />
-              )}
-              {props.children}
-            </Box>
-          );
-        }}
+            )}
+            {props.children}
+          </Box>
+        )}
       </PressBox>
     </MessageContainer>
   );

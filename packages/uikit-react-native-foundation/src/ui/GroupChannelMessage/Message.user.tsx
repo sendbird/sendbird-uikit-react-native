@@ -28,15 +28,12 @@ const UserMessage = (props: Props) => {
   return (
     <MessageContainer {...props}>
       <PressBox onPress={props.onPress} onLongPress={props.onLongPress}>
-        {({ pressed }) => {
-          const backgroundColor = pressed ? color.pressed.background : color.enabled.background;
-          return (
-            <Box backgroundColor={backgroundColor} style={styles.container}>
-              <MessageBubble {...props} />
-              {props.children}
-            </Box>
-          );
-        }}
+        {({ pressed }) => (
+          <Box backgroundColor={pressed ? color.pressed.background : color.enabled.background} style={styles.container}>
+            <MessageBubble {...props} />
+            {props.children}
+          </Box>
+        )}
       </PressBox>
     </MessageContainer>
   );
