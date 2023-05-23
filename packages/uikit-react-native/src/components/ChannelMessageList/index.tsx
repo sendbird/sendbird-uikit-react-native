@@ -71,6 +71,8 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
     channel: T;
     currentUserId?: ChannelMessageListProps<T>['currentUserId'];
     enableMessageGrouping: ChannelMessageListProps<T>['enableMessageGrouping'];
+    /** @deprecated Please use `onShowUserProfile` **/
+    onPressAvatar?: UserProfileContextType['show'];
   }) => React.ReactElement | null;
   renderNewMessagesButton: null | CommonComponent<{
     visible: boolean;
