@@ -28,7 +28,6 @@ import {
   useFreshCallback,
 } from '@sendbird/uikit-utils';
 
-import { DEPRECATION_WARNING } from '../../constants';
 import type { UserProfileContextType } from '../../contexts/UserProfileCtx';
 import { useLocalization, usePlatformService, useSendbirdChat, useUserProfile } from '../../hooks/useContext';
 import SBUUtils from '../../libs/SBUUtils';
@@ -71,8 +70,6 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
     channel: T;
     currentUserId?: ChannelMessageListProps<T>['currentUserId'];
     enableMessageGrouping: ChannelMessageListProps<T>['enableMessageGrouping'];
-    /** @deprecated Please use `onShowUserProfile` **/
-    onPressAvatar?: UserProfileContextType['show'];
   }) => React.ReactElement | null;
   renderNewMessagesButton: null | CommonComponent<{
     visible: boolean;
@@ -84,9 +81,6 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
     onPress: () => void;
   }>;
   flatListProps?: Omit<FlatListProps<SendbirdMessage>, 'data' | 'renderItem'>;
-
-  /** @deprecated Please use `onPressMediaMessage` instead **/
-  onPressImageMessage?: (message: SendbirdFileMessage, uri: string) => void;
 } & {
   ref?: Ref<FlatList<SendbirdMessage>> | undefined;
 };
@@ -114,7 +108,6 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
     flatListProps,
     onPressNewMessagesButton,
     onPressScrollToBottomButton,
-    onPressImageMessage,
   }: ChannelMessageListProps<T>,
   ref: React.ForwardedRef<FlatList<SendbirdMessage>>,
 ) => {
@@ -128,7 +121,6 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
     onEditMessage,
     onDeleteMessage,
     onResendFailedMessage,
-    onPressImageMessage,
     onPressMediaMessage,
   });
 
@@ -197,17 +189,10 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
   onResendFailedMessage,
   onEditMessage,
   onDeleteMessage,
-  onPressImageMessage,
   onPressMediaMessage,
 }: Pick<
   ChannelMessageListProps<T>,
-  | 'channel'
-  | 'currentUserId'
-  | 'onEditMessage'
-  | 'onDeleteMessage'
-  | 'onResendFailedMessage'
-  | 'onPressImageMessage'
-  | 'onPressMediaMessage'
+  'channel' | 'currentUserId' | 'onEditMessage' | 'onDeleteMessage' | 'onResendFailedMessage' | 'onPressMediaMessage'
 >) => {
   const { colors } = useUIKitTheme();
   const { STRINGS } = useLocalization();
@@ -329,10 +314,6 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
         case 'video':
         case 'audio': {
           response.onPress = () => {
-            if (onPressImageMessage && fileType === 'image') {
-              Logger.warn(DEPRECATION_WARNING.CHANNEL.ON_PRESS_IMAGE_MESSAGE);
-              onPressImageMessage(msg, getAvailableUriFromFileMessage(msg));
-            }
             onPressMediaMessage?.(msg, () => onDeleteMessage(msg), getAvailableUriFromFileMessage(msg));
           };
           break;

@@ -13,13 +13,10 @@ type Props = Omit<FlatListProps<SendbirdMessage>, 'onEndReached'> & {
   onBottomReached: () => void;
   onTopReached: () => void;
   onScrolledAwayFromBottom: (value: boolean) => void;
-
-  /** @deprecated Please use `onScrolledAwayFromBottom` **/
-  onLeaveScrollBottom?: (value: boolean) => void;
 };
 // FIXME: Inverted FlatList performance issue on Android {@link https://github.com/facebook/react-native/issues/30034}
 const ChatFlatList = forwardRef<RNFlatList<SendbirdMessage>, Props>(function CustomFlatList(
-  { onTopReached, onBottomReached, onScrolledAwayFromBottom, onLeaveScrollBottom, onScroll, ...props },
+  { onTopReached, onBottomReached, onScrolledAwayFromBottom, onScroll, ...props },
   ref,
 ) {
   const { select } = useUIKitTheme();
@@ -35,10 +32,8 @@ const ChatFlatList = forwardRef<RNFlatList<SendbirdMessage>, Props>(function Cus
 
     if (BOTTOM_DETECT_THRESHOLD < prevOffsetY && currOffsetY <= BOTTOM_DETECT_THRESHOLD) {
       onScrolledAwayFromBottom(false);
-      onLeaveScrollBottom?.(false);
     } else if (BOTTOM_DETECT_THRESHOLD < currOffsetY && prevOffsetY <= BOTTOM_DETECT_THRESHOLD) {
       onScrolledAwayFromBottom(true);
-      onLeaveScrollBottom?.(true);
     }
 
     contentOffsetY.current = contentOffset.y;

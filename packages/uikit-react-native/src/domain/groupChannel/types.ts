@@ -46,9 +46,6 @@ export interface GroupChannelProps {
     queryCreator?: UseGroupChannelMessagesOptions['queryCreator'];
 
     searchItem?: GroupChannelProps['MessageList']['searchItem'];
-
-    /** @deprecated Please use `onPressMediaMessage` instead **/
-    onPressImageMessage?: GroupChannelProps['MessageList']['onPressImageMessage'];
   };
   Header: {
     shouldHideRight: () => boolean;
@@ -73,7 +70,6 @@ export interface GroupChannelProps {
     | 'renderNewMessagesButton'
     | 'renderScrollToBottomButton'
     | 'flatListProps'
-    | 'onPressImageMessage'
     | 'hasNext'
     | 'searchItem'
   > & {
