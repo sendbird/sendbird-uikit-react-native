@@ -146,45 +146,6 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       setScrolledAwayFromBottom(value);
     });
 
-    /** @deprecated **/
-    const onSendFileMessage: GroupChannelProps['Input']['onSendFileMessage'] = useFreshCallback(async (file) => {
-      const processedParams = await onBeforeSendFileMessage({ file });
-      const message = await sendFileMessage(processedParams, onPending);
-      onSent(message);
-    });
-    /** @deprecated **/
-    const onSendUserMessage: GroupChannelProps['Input']['onSendUserMessage'] = useFreshCallback(
-      async (text, mention) => {
-        const processedParams = await onBeforeSendUserMessage({
-          message: text,
-          mentionedUserIds: mention?.userIds,
-          mentionedMessageTemplate: mention?.messageTemplate,
-          mentionType: mention?.type,
-        });
-        const message = await sendUserMessage(processedParams, onPending);
-        onSent(message);
-      },
-    );
-    /** @deprecated **/
-    const onUpdateFileMessage: GroupChannelProps['Input']['onUpdateFileMessage'] = useFreshCallback(
-      async (editedFile, message) => {
-        const processedParams = await onBeforeSendFileMessage({ file: editedFile });
-        await updateFileMessage(message.messageId, processedParams);
-      },
-    );
-    /** @deprecated **/
-    const onUpdateUserMessage: GroupChannelProps['Input']['onUpdateUserMessage'] = useFreshCallback(
-      async (editedText, message, mention) => {
-        const processedParams = await onBeforeSendUserMessage({
-          message: editedText,
-          mentionedUserIds: mention?.userIds,
-          mentionedMessageTemplate: mention?.messageTemplate,
-          mentionType: mention?.type,
-        });
-        await updateUserMessage(message.messageId, processedParams);
-      },
-    );
-
     return (
       <GroupChannelModule.Provider
         channel={channel}
@@ -226,10 +187,6 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             onPressSendFileMessage={onPressSendFileMessage}
             onPressUpdateUserMessage={onPressUpdateUserMessage}
             onPressUpdateFileMessage={onPressUpdateFileMessage}
-            onSendFileMessage={onSendFileMessage}
-            onSendUserMessage={onSendUserMessage}
-            onUpdateFileMessage={onUpdateFileMessage}
-            onUpdateUserMessage={onUpdateUserMessage}
           />
         </StatusComposition>
       </GroupChannelModule.Provider>

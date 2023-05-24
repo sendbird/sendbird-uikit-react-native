@@ -32,7 +32,6 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
     messageToEdit,
     setMessageToEdit,
     onPressUpdateUserMessage,
-    onUpdateUserMessage,
     onSelectionChange,
     autoFocus,
     mentionedUsers,
@@ -55,20 +54,12 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
       const mentionedUserIds = mentionedUsers.map((it) => it.user.userId);
       const mentionedMessageTemplate = mentionManager.textToMentionedMessageTemplate(text, mentionedUsers);
 
-      if (onPressUpdateUserMessage) {
-        onPressUpdateUserMessage(messageToEdit, {
-          message: text,
-          mentionType,
-          mentionedUserIds,
-          mentionedMessageTemplate,
-        }).catch(onFailureToUpdate);
-      } else if (onUpdateUserMessage) {
-        onUpdateUserMessage(text, messageToEdit, {
-          type: MentionType.USERS,
-          userIds: mentionedUserIds,
-          messageTemplate: mentionedMessageTemplate,
-        }).catch(onFailureToUpdate);
-      }
+      onPressUpdateUserMessage(messageToEdit, {
+        message: text,
+        mentionType,
+        mentionedUserIds,
+        mentionedMessageTemplate,
+      }).catch(onFailureToUpdate);
     }
     setMessageToEdit();
     onChangeText('');

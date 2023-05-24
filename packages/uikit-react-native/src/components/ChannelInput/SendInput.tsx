@@ -38,8 +38,6 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   {
     onPressSendUserMessage,
     onPressSendFileMessage,
-    onSendUserMessage,
-    onSendFileMessage,
     text,
     onChangeText,
     onSelectionChange,
@@ -63,30 +61,18 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     const mentionedUserIds = mentionedUsers.map((it) => it.user.userId);
     const mentionedMessageTemplate = mentionManager.textToMentionedMessageTemplate(text, mentionedUsers);
 
-    if (onPressSendUserMessage) {
-      onPressSendUserMessage({
-        message: text,
-        mentionType,
-        mentionedUserIds,
-        mentionedMessageTemplate,
-      }).catch(onFailureToSend);
-    } else if (onSendUserMessage) {
-      onSendUserMessage(text, {
-        type: mentionType,
-        userIds: mentionedUserIds,
-        messageTemplate: mentionedMessageTemplate,
-      }).catch(onFailureToSend);
-    }
+    onPressSendUserMessage({
+      message: text,
+      mentionType,
+      mentionedUserIds,
+      mentionedMessageTemplate,
+    }).catch(onFailureToSend);
 
     onChangeText('');
   };
 
   const sendFileMessage = (file: FileType) => {
-    if (onPressSendFileMessage) {
-      onPressSendFileMessage({ file }).catch(onFailureToSend);
-    } else if (onSendFileMessage) {
-      onSendFileMessage(file).catch(onFailureToSend);
-    }
+    onPressSendFileMessage({ file }).catch(onFailureToSend);
   };
 
   const onFailureToSend = () => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error');

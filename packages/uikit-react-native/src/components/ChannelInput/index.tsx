@@ -19,16 +19,9 @@ import {
 
 import { useSendbirdChat } from '../../hooks/useContext';
 import useMentionTextInput from '../../hooks/useMentionTextInput';
-import type { FileType } from '../../platform/types';
 import type { MentionedUser, Range } from '../../types';
 import EditInput from './EditInput';
 import SendInput from './SendInput';
-
-type UserMessageMentionParams = Required<{
-  messageTemplate: SendbirdUserMessageCreateParams['mentionedMessageTemplate'];
-  userIds: SendbirdUserMessageCreateParams['mentionedUserIds'];
-  type: SendbirdUserMessageCreateParams['mentionType'];
-}>;
 
 export type SuggestedMentionListProps = {
   text: string;
@@ -63,19 +56,6 @@ export type ChannelInputProps = {
 
   // mention
   SuggestedMentionList?: (props: SuggestedMentionListProps) => JSX.Element | null;
-
-  /** @deprecated Please use `onPressSendUserMessage` **/
-  onSendFileMessage?: (file: FileType) => Promise<void>;
-  /** @deprecated Please use `onPressSendFileMessage` **/
-  onSendUserMessage?: (text: string, mention?: UserMessageMentionParams) => Promise<void>;
-  /** @deprecated Please use `onPressUpdateUserMessage` **/
-  onUpdateFileMessage?: (editedFile: FileType, message: SendbirdFileMessage) => Promise<void>;
-  /** @deprecated Please use `onPressUpdateFileMessage` **/
-  onUpdateUserMessage?: (
-    editedText: string,
-    message: SendbirdUserMessage,
-    mention?: UserMessageMentionParams,
-  ) => Promise<void>;
 };
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
