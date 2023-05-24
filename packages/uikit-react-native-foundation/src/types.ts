@@ -43,8 +43,7 @@ export type Component =
   | 'ProfileCard'
   | 'Reaction'
   | 'OpenChannelMessage'
-  | 'OpenChannelPreview'
-  | 'Message';
+  | 'OpenChannelPreview';
 
 export type GetColorTree<
   Tree extends {
@@ -75,8 +74,6 @@ export type ComponentColorTree = GetColorTree<{
     Reaction: 'default' | 'rounded';
     OpenChannelMessage: 'default';
     OpenChannelPreview: 'default';
-    /** @deprecated **/
-    Message: 'incoming' | 'outgoing';
   };
   State: {
     Header: 'none';
@@ -92,8 +89,6 @@ export type ComponentColorTree = GetColorTree<{
     Reaction: 'enabled' | 'selected';
     OpenChannelMessage: 'enabled' | 'pressed';
     OpenChannelPreview: 'none';
-    /** @deprecated **/
-    Message: 'enabled' | 'pressed';
   };
   ColorPart: {
     Header: 'background' | 'borderBottom';
@@ -133,9 +128,6 @@ export type ComponentColorTree = GetColorTree<{
       | 'background'
       | 'coverBackground'
       | 'separator';
-
-    /** @deprecated **/
-    Message: 'textMsg' | 'textEdited' | 'textSenderName' | 'textTime' | 'background';
   };
 }>;
 export type ComponentColors<T extends Component> = {
@@ -183,8 +175,6 @@ export interface UIKitColors {
     reaction: ComponentColors<'Reaction'>;
     openChannelMessage: ComponentColors<'OpenChannelMessage'>;
     openChannelPreview: ComponentColors<'OpenChannelPreview'>;
-    /** @deprecated Please use `colors.ui.groupChannelMessage` **/
-    message: ComponentColors<'Message'>;
   };
 }
 
