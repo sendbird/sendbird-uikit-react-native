@@ -371,7 +371,5 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     resendMessage,
     deleteMessage,
     resetWithStartingPoint,
-    nextMessages: newMessages,
-    newMessagesFromMembers: newMessages,
   };
 };

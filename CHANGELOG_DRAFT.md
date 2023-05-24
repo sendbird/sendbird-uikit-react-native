@@ -62,4 +62,9 @@
 - `GROUP_CHANNEL_MEMBERS.USER_BAR_ME_POSTFIX` is replaced to `LABELS.USER_BAR_ME_POSTFIX`
 - `GROUP_CHANNEL_MEMBERS.USER_BAR_OPERATOR` is replaced to `LABELS.USER_BAR_OPERATOR`
 
+### @sendbird/uikit-chat-hooks
+
+- `useGroupChannelMessages`, `useOpenChannelMessages`
+  - `nextMessages` and `newMessagesFromMembers` is replaced to `newMessages`
+
 ## Migrations

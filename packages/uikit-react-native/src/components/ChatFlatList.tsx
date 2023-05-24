@@ -16,8 +16,6 @@ type Props = Omit<FlatListProps<SendbirdMessage>, 'onEndReached'> & {
 
   /** @deprecated Please use `onScrolledAwayFromBottom` **/
   onLeaveScrollBottom?: (value: boolean) => void;
-  /** @deprecated Not used anymore **/
-  nextMessages?: unknown;
 };
 // FIXME: Inverted FlatList performance issue on Android {@link https://github.com/facebook/react-native/issues/30034}
 const ChatFlatList = forwardRef<RNFlatList<SendbirdMessage>, Props>(function CustomFlatList(
