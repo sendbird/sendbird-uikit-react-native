@@ -197,11 +197,6 @@ export interface UseGroupChannelMessages {
      * @return {Promise<void>}
      * */
     deleteMessage: (message: SendbirdFileMessage | SendbirdUserMessage) => Promise<void>;
-
-    /** @deprecated Please use `newMessages` instead **/
-    newMessagesFromMembers: SendbirdMessage[];
-    /** @deprecated Please use `newMessages` instead **/
-    nextMessages: SendbirdMessage[];
   };
 }
 
@@ -380,11 +375,6 @@ export interface UseOpenChannelMessages {
      * @return {Promise<void>}
      * */
     deleteMessage: (message: SendbirdFileMessage | SendbirdUserMessage) => Promise<void>;
-
-    /** @deprecated Please use `newMessages` instead **/
-    newMessagesFromMembers: SendbirdMessage[];
-    /** @deprecated Please use `newMessages` instead **/
-    nextMessages: SendbirdMessage[];
   };
 }
 

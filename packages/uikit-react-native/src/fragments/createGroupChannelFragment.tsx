@@ -219,8 +219,6 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             onDeleteMessage={deleteMessage}
             onPressMediaMessage={onPressMediaMessage}
             flatListProps={memoizedFlatListProps}
-            nextMessages={newMessages}
-            newMessagesFromMembers={newMessages}
             onPressImageMessage={onPressImageMessage}
           />
           <GroupChannelModule.Input

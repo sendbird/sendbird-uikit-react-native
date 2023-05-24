@@ -78,11 +78,6 @@ export interface GroupChannelProps {
     | 'searchItem'
   > & {
     onResetMessageList: (callback?: () => void) => void;
-
-    /** @deprecated Please use `newMessages` instead */
-    newMessagesFromMembers: SendbirdMessage[];
-    /** @deprecated Please use `newMessages` instead */
-    nextMessages: SendbirdMessage[];
   };
   Input: Pick<
     ChannelInputProps,
