@@ -75,8 +75,8 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
     clipboard: ClipboardServiceInterface;
     media: MediaServiceInterface;
   };
-  chatOptions?: {
-    localCacheStorage?: LocalCacheStorage;
+  chatOptions: {
+    localCacheStorage: LocalCacheStorage;
     onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
   } & Partial<UIKitFeaturesInSendbirdChatContext>;
   localization?: {
@@ -121,17 +121,18 @@ const SendbirdUIKitContainer = ({
   userMention,
   imageCompression,
 }: SendbirdUIKitContainerProps) => {
+  if (!chatOptions.localCacheStorage) {
+    throw new Error('SendbirdUIKitContainer: chatOptions.localCacheStorage is required');
+  }
+
   const defaultStringSet = localization?.stringSet ?? StringSetEn;
 
   const isFirstMount = useIsFirstMount();
   const unsubscribes = useRef<Array<() => void>>([]);
-  const internalStorage = useMemo(
-    () => (chatOptions?.localCacheStorage ? new InternalLocalCacheStorage(chatOptions.localCacheStorage) : undefined),
-    [chatOptions?.localCacheStorage],
-  );
 
+  const [internalStorage] = useState(() => new InternalLocalCacheStorage(chatOptions.localCacheStorage));
   const [sdkInstance, setSdkInstance] = useState<SendbirdChatSDK>(() => {
-    const sendbird = initializeSendbird(appId, internalStorage, chatOptions?.onInitialized);
+    const sendbird = initializeSendbird(appId, internalStorage, chatOptions.onInitialized);
     unsubscribes.current = sendbird.unsubscribes;
     return sendbird.chatSDK;
   });
@@ -146,9 +147,9 @@ const SendbirdUIKitContainer = ({
       delimiter: MentionConfig.DEFAULT.DELIMITER,
       trigger: MentionConfig.DEFAULT.TRIGGER,
     });
-    return new MentionManager(config, chatOptions?.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION);
+    return new MentionManager(config, chatOptions.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION);
   }, [
-    chatOptions?.enableUserMention,
+    chatOptions.enableUserMention,
     userMention?.mentionLimit,
     userMention?.suggestionLimit,
     userMention?.debounceMills,
@@ -164,7 +165,7 @@ const SendbirdUIKitContainer = ({
 
   useLayoutEffect(() => {
     if (!isFirstMount) {
-      const sendbird = initializeSendbird(appId, internalStorage, chatOptions?.onInitialized);
+      const sendbird = initializeSendbird(appId, internalStorage, chatOptions.onInitialized);
       setSdkInstance(sendbird.chatSDK);
       unsubscribes.current = sendbird.unsubscribes;
     }
@@ -196,25 +197,24 @@ const SendbirdUIKitContainer = ({
         mentionManager={mentionManager}
         imageCompressionConfig={imageCompressionConfig}
         enableAutoPushTokenRegistration={
-          chatOptions?.enableAutoPushTokenRegistration ?? SendbirdUIKit.DEFAULT.AUTO_PUSH_TOKEN_REGISTRATION
+          chatOptions.enableAutoPushTokenRegistration ?? SendbirdUIKit.DEFAULT.AUTO_PUSH_TOKEN_REGISTRATION
         }
         enableChannelListTypingIndicator={
-          chatOptions?.enableChannelListTypingIndicator ?? SendbirdUIKit.DEFAULT.CHANNEL_LIST_TYPING_INDICATOR
+          chatOptions.enableChannelListTypingIndicator ?? SendbirdUIKit.DEFAULT.CHANNEL_LIST_TYPING_INDICATOR
         }
         enableChannelListMessageReceiptStatus={
-          chatOptions?.enableChannelListMessageReceiptStatus ??
-          SendbirdUIKit.DEFAULT.CHANNEL_LIST_MESSAGE_RECEIPT_STATUS
+          chatOptions.enableChannelListMessageReceiptStatus ?? SendbirdUIKit.DEFAULT.CHANNEL_LIST_MESSAGE_RECEIPT_STATUS
         }
         enableUseUserIdForNickname={
-          chatOptions?.enableUseUserIdForNickname ?? SendbirdUIKit.DEFAULT.USE_USER_ID_FOR_NICKNAME
+          chatOptions.enableUseUserIdForNickname ?? SendbirdUIKit.DEFAULT.USE_USER_ID_FOR_NICKNAME
         }
-        enableUserMention={chatOptions?.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION}
-        enableImageCompression={chatOptions?.enableImageCompression ?? SendbirdUIKit.DEFAULT.IMAGE_COMPRESSION}
-        enableMessageSearch={chatOptions?.enableMessageSearch ?? SendbirdUIKit.DEFAULT.MESSAGE_SEARCH}
-        enableGroupChannelOGTag={chatOptions?.enableGroupChannelOGTag ?? SendbirdUIKit.DEFAULT.GROUP_CHANNEL_OG_TAG}
-        enableOpenChannelOGTag={chatOptions?.enableOpenChannelOGTag ?? SendbirdUIKit.DEFAULT.OPEN_CHANNEL_OG_TAG}
+        enableUserMention={chatOptions.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION}
+        enableImageCompression={chatOptions.enableImageCompression ?? SendbirdUIKit.DEFAULT.IMAGE_COMPRESSION}
+        enableMessageSearch={chatOptions.enableMessageSearch ?? SendbirdUIKit.DEFAULT.MESSAGE_SEARCH}
+        enableGroupChannelOGTag={chatOptions.enableGroupChannelOGTag ?? SendbirdUIKit.DEFAULT.GROUP_CHANNEL_OG_TAG}
+        enableOpenChannelOGTag={chatOptions.enableOpenChannelOGTag ?? SendbirdUIKit.DEFAULT.OPEN_CHANNEL_OG_TAG}
         enableUsingDefaultUserProfile={
-          chatOptions?.enableUsingDefaultUserProfile ?? SendbirdUIKit.DEFAULT.USING_DEFAULT_USER_PROFILE
+          chatOptions.enableUsingDefaultUserProfile ?? SendbirdUIKit.DEFAULT.USING_DEFAULT_USER_PROFILE
         }
       >
         <LocalizationProvider stringSet={defaultStringSet}>
