@@ -50,7 +50,6 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     collectionCreator,
     sortComparator = messageComparator,
     flatListProps,
-    onPressImageMessage,
   }) => {
     const { sdk, currentUser } = useSendbirdChat();
 
@@ -219,7 +218,6 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             onDeleteMessage={deleteMessage}
             onPressMediaMessage={onPressMediaMessage}
             flatListProps={memoizedFlatListProps}
-            onPressImageMessage={onPressImageMessage}
           />
           <GroupChannelModule.Input
             SuggestedMentionList={GroupChannelModule.SuggestedMentionList}

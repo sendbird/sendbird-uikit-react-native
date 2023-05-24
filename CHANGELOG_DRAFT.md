@@ -62,9 +62,16 @@
 - `GROUP_CHANNEL_MEMBERS.USER_BAR_ME_POSTFIX` is replaced to `LABELS.USER_BAR_ME_POSTFIX`
 - `GROUP_CHANNEL_MEMBERS.USER_BAR_OPERATOR` is replaced to `LABELS.USER_BAR_OPERATOR`
 
+### @sendbird/uikit-react-native
+
+- `ChannelMessageList` (`GroupChannelProps`, `OpenChannelProps`)
+  - `onPressImageMessage` prop is replaced to `onPressMediaMessage`
+  - `onLeaveScrollBottom` prop is replaced to `onScrolledAwayFromBottom`
+  - `onPressAvatar` prop is replaced to `onShowUserProfile`
+
 ### @sendbird/uikit-chat-hooks
 
 - `useGroupChannelMessages`, `useOpenChannelMessages`
-  - `nextMessages` and `newMessagesFromMembers` is replaced to `newMessages`
+  - `nextMessages` and `newMessagesFromMembers` property is replaced to `newMessages`
 
 ## Migrations
