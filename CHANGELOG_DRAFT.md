@@ -36,7 +36,7 @@
 <SendbirdUIKitContainer chatOptions={{ localCacheStorage: AsyncStorage }} />
 ```
 
-## Removed - deprecated item removal
+## Migrations & Removed(deprecated item removal)
 
 ### StringSet
 
@@ -65,13 +65,14 @@
 ### @sendbird/uikit-react-native
 
 - `ChannelMessageList` (`GroupChannelProps`, `OpenChannelProps`)
+
   - `onPressImageMessage` prop is replaced to `onPressMediaMessage`
   - `onLeaveScrollBottom` prop is replaced to `onScrolledAwayFromBottom`
   - `onPressAvatar` prop is replaced to `onShowUserProfile`
+
+- `MessageRenderer` component is replaced to `GroupChannelMessageRenderer`
 
 ### @sendbird/uikit-chat-hooks
 
 - `useGroupChannelMessages`, `useOpenChannelMessages`
   - `nextMessages` and `newMessagesFromMembers` property is replaced to `newMessages`
-
-## Migrations
