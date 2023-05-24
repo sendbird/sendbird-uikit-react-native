@@ -31,10 +31,6 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
       onPressUpdateUserMessage={props.onPressUpdateUserMessage}
       onPressUpdateFileMessage={props.onPressUpdateFileMessage}
       SuggestedMentionList={props.SuggestedMentionList}
-      onSendFileMessage={props.onSendFileMessage}
-      onSendUserMessage={props.onSendUserMessage}
-      onUpdateFileMessage={props.onUpdateFileMessage}
-      onUpdateUserMessage={props.onUpdateUserMessage}
     />
   );
 };

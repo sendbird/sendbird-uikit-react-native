@@ -72,6 +72,12 @@
 
 - `MessageRenderer` component is replaced to `GroupChannelMessageRenderer`
 
+- `ChannelInput` (`GroupChannelProps`, `OpenChannelProps`)
+  - `onSendFileMessage` prop is replaced to `onPressSendUserMessage`
+  - `onSendUserMessage` prop is replaced to `onPressSendUserMessage`
+  - `onUpdateFileMessage` prop is replaced to `onPressUpdateUserMessage`
+  - `onUpdateUserMessage` prop is replaced to `onPressUpdateFileMessage`
+
 ### @sendbird/uikit-chat-hooks
 
 - `useGroupChannelMessages`, `useOpenChannelMessages`

@@ -83,10 +83,6 @@ export interface GroupChannelProps {
     | 'onPressUpdateUserMessage'
     | 'onPressUpdateFileMessage'
     | 'SuggestedMentionList'
-    | 'onSendFileMessage'
-    | 'onSendUserMessage'
-    | 'onUpdateFileMessage'
-    | 'onUpdateUserMessage'
   >;
 
   SuggestedMentionList: SuggestedMentionListProps;
