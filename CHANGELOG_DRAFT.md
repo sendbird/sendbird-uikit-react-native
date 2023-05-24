@@ -36,49 +36,54 @@
 <SendbirdUIKitContainer chatOptions={{ localCacheStorage: AsyncStorage }} />
 ```
 
-## Migrations & Removed(deprecated item removal)
-
-### StringSet
-
-- `OPEN_CHANNEL.LIST_BANNER_FROZEN` is replaced to `LABELS.CHANNEL_MESSAGE_LIST_FROZEN`
-- `GROUP_CHANNEL.LIST_BANNER_FROZEN` is replaced to `LABELS.CHANNEL_MESSAGE_LIST_FROZEN`
-- `GROUP_CHANNEL.DIALOG_MESSAGE_COPY` is replaced to `LABELS.CHANNEL_MESSAGE_COPY`
-- `GROUP_CHANNEL.DIALOG_MESSAGE_EDIT` is replaced to `LABELS.CHANNEL_MESSAGE_EDIT`
-- `GROUP_CHANNEL.DIALOG_MESSAGE_SAVE` is replaced to `LABELS.CHANNEL_MESSAGE_SAVE`
-- `GROUP_CHANNEL.DIALOG_MESSAGE_DELETE` is replaced to `LABELS.CHANNEL_MESSAGE_DELETE`
-- `GROUP_CHANNEL.DIALOG_MESSAGE_DELETE_CONFIRM_TITLE` is replaced to `LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE`
-- `GROUP_CHANNEL.DIALOG_MESSAGE_DELETE_CONFIRM_OK` is replaced to `LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_OK`
-- `GROUP_CHANNEL.DIALOG_MESSAGE_DELETE_CONFIRM_CANCEL` is replaced to `LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_CANCEL`
-- `GROUP_CHANNEL.DIALOG_MESSAGE_FAILED_RETRY` is replaced to `LABELS.CHANNEL_MESSAGE_FAILED_RETRY`
-- `GROUP_CHANNEL.DIALOG_MESSAGE_FAILED_REMOVE` is replaced to `LABELS.CHANNEL_MESSAGE_FAILED_REMOVE`
-- `GROUP_CHANNEL.DIALOG_ATTACHMENT_CAMERA` is replaced to `LABELS.CHANNEL_INPUT_ATTACHMENT_CAMERA`
-- `GROUP_CHANNEL.DIALOG_ATTACHMENT_PHOTO_LIBRARY` is replaced to `LABELS.CHANNEL_INPUT_ATTACHMENT_PHOTO_LIBRARY`
-- `GROUP_CHANNEL.DIALOG_ATTACHMENT_FILES` is replaced to `LABELS.CHANNEL_INPUT_ATTACHMENT_FILES`
-- `GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE` is replaced to `LABELS.CHANNEL_INPUT_PLACEHOLDER_ACTIVE`
-- `GROUP_CHANNEL.INPUT_PLACEHOLDER_DISABLED` is replaced to `LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED`
-- `GROUP_CHANNEL.INPUT_PLACEHOLDER_MUTED` is replaced to `LABELS.CHANNEL_INPUT_PLACEHOLDER_MUTED`
-- `GROUP_CHANNEL.INPUT_EDIT_OK` is replaced to `LABELS.CHANNEL_INPUT_EDIT_OK`
-- `GROUP_CHANNEL.INPUT_EDIT_CANCEL` is replaced to `LABELS.CHANNEL_INPUT_EDIT_CANCEL`
-- `GROUP_CHANNEL_MEMBERS.USER_BAR_ME_POSTFIX` is replaced to `LABELS.USER_BAR_ME_POSTFIX`
-- `GROUP_CHANNEL_MEMBERS.USER_BAR_OPERATOR` is replaced to `LABELS.USER_BAR_OPERATOR`
+## Migrations & Removed (deprecated item removal)
 
 ### @sendbird/uikit-react-native
 
+- StringSet
+
+  - `OPEN_CHANNEL.LIST_BANNER_FROZEN` is replaced with `LABELS.CHANNEL_MESSAGE_LIST_FROZEN`
+  - `GROUP_CHANNEL.LIST_BANNER_FROZEN` is replaced with `LABELS.CHANNEL_MESSAGE_LIST_FROZEN`
+  - `GROUP_CHANNEL.DIALOG_MESSAGE_COPY` is replaced with `LABELS.CHANNEL_MESSAGE_COPY`
+  - `GROUP_CHANNEL.DIALOG_MESSAGE_EDIT` is replaced with `LABELS.CHANNEL_MESSAGE_EDIT`
+  - `GROUP_CHANNEL.DIALOG_MESSAGE_SAVE` is replaced with `LABELS.CHANNEL_MESSAGE_SAVE`
+  - `GROUP_CHANNEL.DIALOG_MESSAGE_DELETE` is replaced with `LABELS.CHANNEL_MESSAGE_DELETE`
+  - `GROUP_CHANNEL.DIALOG_MESSAGE_DELETE_CONFIRM_TITLE` is replaced with `LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE`
+  - `GROUP_CHANNEL.DIALOG_MESSAGE_DELETE_CONFIRM_OK` is replaced with `LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_OK`
+  - `GROUP_CHANNEL.DIALOG_MESSAGE_DELETE_CONFIRM_CANCEL` is replaced with `LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_CANCEL`
+  - `GROUP_CHANNEL.DIALOG_MESSAGE_FAILED_RETRY` is replaced with `LABELS.CHANNEL_MESSAGE_FAILED_RETRY`
+  - `GROUP_CHANNEL.DIALOG_MESSAGE_FAILED_REMOVE` is replaced with `LABELS.CHANNEL_MESSAGE_FAILED_REMOVE`
+  - `GROUP_CHANNEL.DIALOG_ATTACHMENT_CAMERA` is replaced with `LABELS.CHANNEL_INPUT_ATTACHMENT_CAMERA`
+  - `GROUP_CHANNEL.DIALOG_ATTACHMENT_PHOTO_LIBRARY` is replaced with `LABELS.CHANNEL_INPUT_ATTACHMENT_PHOTO_LIBRARY`
+  - `GROUP_CHANNEL.DIALOG_ATTACHMENT_FILES` is replaced with `LABELS.CHANNEL_INPUT_ATTACHMENT_FILES`
+  - `GROUP_CHANNEL.INPUT_PLACEHOLDER_ACTIVE` is replaced with `LABELS.CHANNEL_INPUT_PLACEHOLDER_ACTIVE`
+  - `GROUP_CHANNEL.INPUT_PLACEHOLDER_DISABLED` is replaced with `LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED`
+  - `GROUP_CHANNEL.INPUT_PLACEHOLDER_MUTED` is replaced with `LABELS.CHANNEL_INPUT_PLACEHOLDER_MUTED`
+  - `GROUP_CHANNEL.INPUT_EDIT_OK` is replaced with `LABELS.CHANNEL_INPUT_EDIT_OK`
+  - `GROUP_CHANNEL.INPUT_EDIT_CANCEL` is replaced with `LABELS.CHANNEL_INPUT_EDIT_CANCEL`
+  - `GROUP_CHANNEL_MEMBERS.USER_BAR_ME_POSTFIX` is replaced with `LABELS.USER_BAR_ME_POSTFIX`
+  - `GROUP_CHANNEL_MEMBERS.USER_BAR_OPERATOR` is replaced with `LABELS.USER_BAR_OPERATOR`
+
 - `ChannelMessageList` (`GroupChannelProps`, `OpenChannelProps`)
 
-  - `onPressImageMessage` prop is replaced to `onPressMediaMessage`
-  - `onLeaveScrollBottom` prop is replaced to `onScrolledAwayFromBottom`
-  - `onPressAvatar` prop is replaced to `onShowUserProfile`
+  - `onPressImageMessage` prop is replaced with `onPressMediaMessage`
+  - `onLeaveScrollBottom` prop is replaced with `onScrolledAwayFromBottom`
+  - `onPressAvatar` prop is replaced with `onShowUserProfile`
 
-- `MessageRenderer` component is replaced to `GroupChannelMessageRenderer`
+- `MessageRenderer` component is replaced with `GroupChannelMessageRenderer`
 
 - `ChannelInput` (`GroupChannelProps`, `OpenChannelProps`)
-  - `onSendFileMessage` prop is replaced to `onPressSendUserMessage`
-  - `onSendUserMessage` prop is replaced to `onPressSendUserMessage`
-  - `onUpdateFileMessage` prop is replaced to `onPressUpdateUserMessage`
-  - `onUpdateUserMessage` prop is replaced to `onPressUpdateFileMessage`
+  - `onSendFileMessage` prop is replaced with `onPressSendUserMessage`
+  - `onSendUserMessage` prop is replaced with `onPressSendUserMessage`
+  - `onUpdateFileMessage` prop is replaced with `onPressUpdateUserMessage`
+  - `onUpdateUserMessage` prop is replaced with `onPressUpdateFileMessage`
 
 ### @sendbird/uikit-chat-hooks
 
 - `useGroupChannelMessages`, `useOpenChannelMessages`
-  - `nextMessages` and `newMessagesFromMembers` property is replaced to `newMessages`
+  - `nextMessages` and `newMessagesFromMembers` properties are replaced with `newMessages`
+
+### @sendbird/uikit-react-native-foundation
+
+- Theme
+  - `Messsage` in colors is replaced with `GroupChannelMessage` (`colors.ui.message` -> `colors.ui.groupChannelMessage`)
