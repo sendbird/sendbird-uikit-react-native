@@ -20,7 +20,7 @@ import {
 } from './factory';
 import useAppearance from './hooks/useAppearance';
 import { Routes, navigationActions, navigationRef } from './libs/navigation';
-import { onForegroundAndroid, onForegroundIOS } from './libs/notification';
+import { notificationHandler } from './libs/notification';
 import {
   ErrorInfoScreen,
   GroupChannelBannedUsersScreen,
@@ -109,10 +109,10 @@ const Navigations = () => {
   const isLightTheme = scheme === 'light';
 
   useEffect(() => {
-    const unsubscribes = [onForegroundAndroid(), onForegroundIOS()];
-    return () => {
-      unsubscribes.forEach((fn) => fn());
-    };
+    notificationHandler.startOnAppOpened();
+    const unsubscribe = notificationHandler.startOnForeground();
+
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {
