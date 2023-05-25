@@ -1,9 +1,10 @@
-/** Components **/
 import { Platform } from 'react-native';
 
 import { Logger } from '@sendbird/uikit-utils';
 
+/** Components **/
 export { default as ChannelInput } from './components/ChannelInput';
+export { default as ChannelMessageList } from './components/ChannelMessageList';
 export { default as GroupChannelMessageRenderer } from './components/GroupChannelMessageRenderer';
 export { default as OpenChannelMessageRenderer } from './components/OpenChannelMessageRenderer';
 export { ReactionAddons } from './components/ReactionAddons';
@@ -11,6 +12,7 @@ export { ReactionBottomSheets } from './components/ReactionBottomSheets';
 export { default as ChannelCover } from './components/ChannelCover';
 export { default as ChatFlatList } from './components/ChatFlatList';
 export { default as FileViewer } from './components/FileViewer';
+export { default as MessageSearchResultItem } from './components/MessageSearchResultItem';
 export { default as NewMessagesButton } from './components/NewMessagesButton';
 export { default as ProviderLayout } from './components/ProviderLayout';
 export { default as ScrollToBottomButton } from './components/ScrollToBottomButton';
