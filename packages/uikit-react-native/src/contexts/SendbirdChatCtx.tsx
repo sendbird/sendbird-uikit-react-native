@@ -156,11 +156,13 @@ export const SendbirdChatProvider = ({
     features: {
       ...appFeatures,
       autoPushTokenRegistrationEnabled: enableAutoPushTokenRegistration,
+      useUserIdForNicknameEnabled: enableUseUserIdForNickname,
+      imageCompressionEnabled: enableImageCompression,
+
+      // TODO: Replace with UIKitConfigProvider
       channelListTypingIndicatorEnabled: enableChannelListTypingIndicator,
       channelListMessageReceiptStatusEnabled: enableChannelListMessageReceiptStatus,
-      useUserIdForNicknameEnabled: enableUseUserIdForNickname,
       userMentionEnabled: enableUserMention,
-      imageCompressionEnabled: enableImageCompression,
       messageSearchEnabled: enableMessageSearch,
       groupChannelOGTagEnabled: enableGroupChannelOGTag,
       openChannelOGTagEnabled: enableOpenChannelOGTag,
