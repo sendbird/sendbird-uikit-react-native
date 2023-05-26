@@ -2,6 +2,10 @@
 
 ## Breaking changes
 
+### The minimum @sendbird/chat version has been increased from 4.3.0 to 4.8.5
+
+- Supports feature configurations.
+
 ### The minimum React-Native version has been increased from 0.63.3 to 0.65.0.
 
 - Supports stable Metro bundler version.
