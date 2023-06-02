@@ -56,7 +56,7 @@
 
 ## Breaking changes
 
-### The minimum @sendbird/chat version has been increased from 4.3.0 to 4.8.5
+### The minimum @sendbird/chat version has been increased from 4.3.0 to 4.9.0.
 
 - Supports feature configurations.
 
