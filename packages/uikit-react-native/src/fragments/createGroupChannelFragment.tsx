@@ -35,7 +35,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     renderScrollToBottomButton = (props) => <ScrollToBottomButton {...props} />,
     renderMessage,
     enableMessageGrouping = true,
-    enableTypingIndicator = true,
+    enableTypingIndicator,
     onPressHeaderLeft = NOOP,
     onPressHeaderRight = NOOP,
     onPressMediaMessage = NOOP,
@@ -51,7 +51,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     sortComparator = messageComparator,
     flatListProps,
   }) => {
-    const { sdk, currentUser } = useSendbirdChat();
+    const { sdk, currentUser, features } = useSendbirdChat();
 
     const [internalSearchItem, setInternalSearchItem] = useState(searchItem);
     const navigateFromMessageSearch = useCallback(() => Boolean(searchItem), []);
@@ -150,7 +150,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       <GroupChannelModule.Provider
         channel={channel}
         groupChannelPubSub={groupChannelPubSub}
-        enableTypingIndicator={enableTypingIndicator}
+        enableTypingIndicator={enableTypingIndicator ?? features.configs.groupChannel.channel.enableTypingIndicator}
         keyboardAvoidOffset={keyboardAvoidOffset}
       >
         <GroupChannelModule.Header
