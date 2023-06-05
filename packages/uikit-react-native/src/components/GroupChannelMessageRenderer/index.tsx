@@ -45,7 +45,11 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   );
 
   const reactionChildren = useIIFE(() => {
-    if (shouldRenderReaction(channel, features.reactionEnabled) && message.reactions && message.reactions.length > 0) {
+    if (
+      shouldRenderReaction(channel, features.configs.groupChannel.channel.enableReactions) &&
+      message.reactions &&
+      message.reactions.length > 0
+    ) {
       return <ReactionAddons.Message channel={channel} message={message} />;
     }
     return null;
@@ -128,7 +132,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
       }
       case 'user':
       case 'user.opengraph': {
-        if (message.ogMetaData && features.groupChannelOGTagEnabled) {
+        if (message.ogMetaData && features.configs.groupChannel.channel.enableOgtag) {
           return (
             <GroupChannelMessage.OpenGraphUser
               message={message as SendbirdUserMessage}

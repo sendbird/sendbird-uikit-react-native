@@ -83,7 +83,8 @@ const ChannelInput = (props: ChannelInputProps) => {
     return 'edit';
   });
 
-  const mentionAvailable = features.userMentionEnabled && channel.isGroupChannel() && !channel.isBroadcast;
+  const mentionAvailable =
+    features.configs.groupChannel.channel.enableMention && channel.isGroupChannel() && !channel.isBroadcast;
   const inputKeyToRemount = GET_INPUT_KEY(mentionAvailable ? mentionedUsers.length === 0 : false);
 
   const [inputHeight, setInputHeight] = useState(styles.inputDefault.height);

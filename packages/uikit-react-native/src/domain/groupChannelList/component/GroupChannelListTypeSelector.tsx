@@ -50,11 +50,11 @@ const GroupChannelListTypeSelector = ({ skipTypeSelection, onSelectType }: Group
       >
         <View style={styles.buttonArea}>
           {TYPES.map((type) => {
-            if (type === 'SUPER_GROUP' && !features.superGroupChannelEnabled) {
+            if (type === 'SUPER_GROUP' && !features.appInfo.superGroupChannelEnabled) {
               return null;
             }
 
-            if (type === 'BROADCAST' && !features.broadcastChannelEnabled) {
+            if (type === 'BROADCAST' && !features.appInfo.broadcastChannelEnabled) {
               return null;
             }
 

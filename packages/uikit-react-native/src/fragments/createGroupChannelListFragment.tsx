@@ -32,7 +32,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
       enableCollectionWithoutLocalCache: !queryCreator,
     });
 
-    if (features.deliveryReceiptEnabled) {
+    if (features.appInfo.deliveryReceiptEnabled) {
       useAppState('change', (status) => {
         if (status === 'active') groupChannels.forEach(markAsDeliveredWithChannel);
       });
@@ -51,7 +51,8 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
       },
     );
 
-    const isChannelTypeAvailable = features.broadcastChannelEnabled || features.superGroupChannelEnabled;
+    const isChannelTypeAvailable =
+      features.appInfo.broadcastChannelEnabled || features.appInfo.superGroupChannelEnabled;
 
     return (
       <GroupChannelListModule.Provider>
