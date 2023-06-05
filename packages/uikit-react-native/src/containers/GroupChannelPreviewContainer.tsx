@@ -38,7 +38,7 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
 
   const [typingUsers, setTypingUsers] = useState<SendbirdUser[]>([]);
 
-  if (features.channelListTypingIndicatorEnabled) {
+  if (features.configs.groupChannel.channelList.enableTypingIndicator) {
     const handlerId = useUniqHandlerId('GroupChannelPreviewContainer_TypingIndicator');
     useChannelHandler(sdk, handlerId, {
       onTypingStatusUpdated(eventChannel) {
@@ -63,7 +63,7 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
 
   const titleCaptionIcon = useIIFE(() => {
     if (!channel.lastMessage || channel.isEphemeral) return undefined;
-    if (!features.channelListMessageReceiptStatusEnabled) return undefined;
+    if (!features.configs.groupChannel.channelList.enableMessageReceiptStatus) return undefined;
     if (!isMyMessage(channel.lastMessage, currentUser?.userId)) return undefined;
 
     if (outgoingStatus === 'PENDING') {

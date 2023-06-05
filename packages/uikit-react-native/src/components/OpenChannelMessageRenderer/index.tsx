@@ -56,7 +56,7 @@ const OpenChannelMessageRenderer: OpenChannelProps['Fragment']['renderMessage'] 
         return <OpenChannelMessage.User message={message as SendbirdUserMessage} {...messageProps} />;
       }
       case 'user.opengraph': {
-        if (features.openChannelOGTagEnabled) {
+        if (features.configs.openChannel.channel.enableOgtag) {
           return <OpenChannelMessage.OpenGraphUser message={message as SendbirdUserMessage} {...messageProps} />;
         } else {
           return <OpenChannelMessage.User message={message as SendbirdUserMessage} {...messageProps} />;
