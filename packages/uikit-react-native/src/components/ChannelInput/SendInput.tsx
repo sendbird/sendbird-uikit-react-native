@@ -150,8 +150,7 @@ const useChannelInputItems = (channel: SendbirdChannel, sendFileMessage: (file: 
 
   if (input.camera.enablePhoto) {
     sheetItems.push({
-      // TODO: Update label and icon
-      title: STRINGS.LABELS.CHANNEL_INPUT_ATTACHMENT_CAMERA,
+      title: STRINGS.LABELS.CHANNEL_INPUT_ATTACHMENT_CAMERA_PHOTO,
       icon: 'camera',
       onPress: async () => {
         const mediaFile = await fileService.openCamera({
@@ -201,8 +200,7 @@ const useChannelInputItems = (channel: SendbirdChannel, sendFileMessage: (file: 
 
   if (input.camera.enableVideo) {
     sheetItems.push({
-      // TODO: Update label and icon
-      title: STRINGS.LABELS.CHANNEL_INPUT_ATTACHMENT_CAMERA,
+      title: STRINGS.LABELS.CHANNEL_INPUT_ATTACHMENT_CAMERA_VIDEO,
       icon: 'camera',
       onPress: async () => {
         const mediaFile = await fileService.openCamera({
