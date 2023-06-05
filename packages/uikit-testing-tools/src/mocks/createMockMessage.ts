@@ -4,6 +4,7 @@ import type {
   SendbirdAdminMessage,
   SendbirdBaseMessage,
   SendbirdFileMessage,
+  SendbirdMultipleFilesMessage,
   SendbirdSendableMessage,
   SendbirdUserMessage,
 } from '@sendbird/uikit-utils';
@@ -48,7 +49,11 @@ class MockMessage implements GetMockProps<Params, SendbirdBaseMessage> {
   messageType = MessageType.BASE;
 
   isFileMessage(): this is SendbirdFileMessage {
-    return this.messageType === MessageType.FILE;
+    return this.messageType === MessageType.FILE && !Object.prototype.hasOwnProperty.call(this, 'fileInfoList');
+  }
+
+  isMultipleFilesMessage(): this is SendbirdMultipleFilesMessage {
+    return this.messageType === MessageType.FILE && Object.prototype.hasOwnProperty.call(this, 'fileInfoList');
   }
   isUserMessage(): this is SendbirdUserMessage {
     return this.messageType === MessageType.USER;
