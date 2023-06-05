@@ -12,7 +12,7 @@ const IconMeta: ComponentMeta<typeof IconComponent> = {
       options: Object.keys(IconComponent.Assets),
       control: { type: 'select' },
     },
-    sizes: {
+    size: {
       name: 'Size',
       control: { type: 'number' },
     },
