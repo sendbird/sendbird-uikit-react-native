@@ -51,7 +51,7 @@ import VERSION from '../version';
 import InternalErrorBoundaryContainer from './InternalErrorBoundaryContainer';
 
 const NetInfo = SBUDynamicModule.get('@react-native-community/netinfo', 'warn');
-
+type UnimplementedFeatures = 'enableVoiceMessage' | 'threadReplySelectType' | 'replyType';
 export const SendbirdUIKit = Object.freeze({
   VERSION,
   PLATFORM: Platform.OS.toLowerCase(),
@@ -76,7 +76,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   } & Partial<UIKitFeaturesInSendbirdChatContext>;
   uikitConfigs?: PartialDeep<{
     common: SBUConfig['common'];
-    groupChannel: SBUConfig['groupChannel']['channel'];
+    groupChannel: Omit<SBUConfig['groupChannel']['channel'], UnimplementedFeatures>;
     groupChannelList: SBUConfig['groupChannel']['channelList'];
     groupChannelSettings: SBUConfig['groupChannel']['setting'];
     openChannel: SBUConfig['openChannel']['channel'];
