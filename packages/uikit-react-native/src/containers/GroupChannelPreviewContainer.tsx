@@ -38,15 +38,14 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
 
   const [typingUsers, setTypingUsers] = useState<SendbirdUser[]>([]);
 
-  if (features.configs.groupChannel.channelList.enableTypingIndicator) {
-    const handlerId = useUniqHandlerId('GroupChannelPreviewContainer_TypingIndicator');
-    useChannelHandler(sdk, handlerId, {
-      onTypingStatusUpdated(eventChannel) {
-        if (isDifferentChannel(channel, eventChannel)) return;
-        setTypingUsers(eventChannel.getTypingUsers());
-      },
-    });
-  }
+  const handlerId = useUniqHandlerId('GroupChannelPreviewContainer_TypingIndicator');
+  useChannelHandler(sdk, handlerId, {
+    onTypingStatusUpdated(eventChannel) {
+      if (isDifferentChannel(channel, eventChannel)) return;
+      if (!features.configs.groupChannel.channelList.enableTypingIndicator) return;
+      setTypingUsers(eventChannel.getTypingUsers());
+    },
+  });
 
   const outgoingStatus = useMessageOutgoingStatus(sdk, channel, channel.lastMessage);
 
