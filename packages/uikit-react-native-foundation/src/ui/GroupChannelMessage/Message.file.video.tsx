@@ -23,7 +23,7 @@ type Props = GroupChannelMessageProps<
 const VideoFileMessage = (props: Props) => {
   const { onPress, onLongPress, variant = 'incoming' } = props;
 
-  const { colors, palette } = useUIKitTheme();
+  const { colors, palette, select } = useUIKitTheme();
   const uri = getAvailableUriFromFileMessage(props.message);
   const { thumbnail, loading } = useRetry(() => props.fetchThumbnailFromVideoSource(uri));
 
@@ -32,7 +32,10 @@ const VideoFileMessage = (props: Props) => {
       <Box style={styles.container} backgroundColor={colors.ui.groupChannelMessage[variant].enabled.background}>
         <PressBox activeOpacity={0.8} onPress={onPress} onLongPress={onLongPress} style={styles.image}>
           {loading ? (
-            <Box backgroundColor={colors.onBackground04} style={StyleSheet.absoluteFill} />
+            <Box
+              style={StyleSheet.absoluteFill}
+              backgroundColor={select({ dark: palette.background400, light: palette.background100 })}
+            />
           ) : (
             <ImageWithPlaceholder source={{ uri: thumbnail ?? 'invalid-image' }} style={StyleSheet.absoluteFill} />
           )}
