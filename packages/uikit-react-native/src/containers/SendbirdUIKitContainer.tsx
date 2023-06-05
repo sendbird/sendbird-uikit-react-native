@@ -14,7 +14,9 @@ import {
   ToastProvider,
   UIKitThemeProvider,
 } from '@sendbird/uikit-react-native-foundation';
+import { SBUConfig, UIKitConfigProvider, initialConfig } from '@sendbird/uikit-tools';
 import type {
+  PartialDeep,
   SendbirdChatSDK,
   SendbirdGroupChannel,
   SendbirdGroupChannelCreateParams,
@@ -55,15 +57,8 @@ export const SendbirdUIKit = Object.freeze({
   PLATFORM: Platform.OS.toLowerCase(),
   DEFAULT: {
     AUTO_PUSH_TOKEN_REGISTRATION: true,
-    CHANNEL_LIST_TYPING_INDICATOR: false,
-    CHANNEL_LIST_MESSAGE_RECEIPT_STATUS: false,
     USE_USER_ID_FOR_NICKNAME: false,
-    USER_MENTION: false,
     IMAGE_COMPRESSION: true,
-    MESSAGE_SEARCH: false,
-    GROUP_CHANNEL_OG_TAG: true,
-    OPEN_CHANNEL_OG_TAG: true,
-    USING_DEFAULT_USER_PROFILE: false,
   },
 });
 
@@ -79,6 +74,13 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
     localCacheStorage: LocalCacheStorage;
     onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
   } & Partial<UIKitFeaturesInSendbirdChatContext>;
+  uikitConfigs?: PartialDeep<{
+    common: SBUConfig['common'];
+    groupChannel: SBUConfig['groupChannel']['channel'];
+    groupChannelList: SBUConfig['groupChannel']['channelList'];
+    groupChannelSettings: SBUConfig['groupChannel']['setting'];
+    openChannel: SBUConfig['openChannel']['channel'];
+  }>;
   localization?: {
     stringSet?: StringSet;
   };
@@ -112,6 +114,7 @@ const SendbirdUIKitContainer = ({
   children,
   appId,
   chatOptions,
+  uikitConfigs,
   platformServices,
   localization,
   styles,
@@ -147,12 +150,15 @@ const SendbirdUIKitContainer = ({
       delimiter: MentionConfig.DEFAULT.DELIMITER,
       trigger: MentionConfig.DEFAULT.TRIGGER,
     });
-    return new MentionManager(config, chatOptions.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION);
+    return new MentionManager(
+      config,
+      uikitConfigs?.groupChannel?.enableMention ?? initialConfig.groupChannel.channel.enableMention,
+    );
   }, [
-    chatOptions.enableUserMention,
     userMention?.mentionLimit,
     userMention?.suggestionLimit,
     userMention?.debounceMills,
+    uikitConfigs?.groupChannel?.enableMention,
   ]);
 
   const imageCompressionConfig = useMemo(() => {
@@ -191,79 +197,81 @@ const SendbirdUIKitContainer = ({
 
   return (
     <SafeAreaProvider>
-      <SendbirdChatProvider
-        sdkInstance={sdkInstance}
-        emojiManager={emojiManager}
-        mentionManager={mentionManager}
-        imageCompressionConfig={imageCompressionConfig}
-        enableAutoPushTokenRegistration={
-          chatOptions.enableAutoPushTokenRegistration ?? SendbirdUIKit.DEFAULT.AUTO_PUSH_TOKEN_REGISTRATION
-        }
-        enableChannelListTypingIndicator={
-          chatOptions.enableChannelListTypingIndicator ?? SendbirdUIKit.DEFAULT.CHANNEL_LIST_TYPING_INDICATOR
-        }
-        enableChannelListMessageReceiptStatus={
-          chatOptions.enableChannelListMessageReceiptStatus ?? SendbirdUIKit.DEFAULT.CHANNEL_LIST_MESSAGE_RECEIPT_STATUS
-        }
-        enableUseUserIdForNickname={
-          chatOptions.enableUseUserIdForNickname ?? SendbirdUIKit.DEFAULT.USE_USER_ID_FOR_NICKNAME
-        }
-        enableUserMention={chatOptions.enableUserMention ?? SendbirdUIKit.DEFAULT.USER_MENTION}
-        enableImageCompression={chatOptions.enableImageCompression ?? SendbirdUIKit.DEFAULT.IMAGE_COMPRESSION}
-        enableMessageSearch={chatOptions.enableMessageSearch ?? SendbirdUIKit.DEFAULT.MESSAGE_SEARCH}
-        enableGroupChannelOGTag={chatOptions.enableGroupChannelOGTag ?? SendbirdUIKit.DEFAULT.GROUP_CHANNEL_OG_TAG}
-        enableOpenChannelOGTag={chatOptions.enableOpenChannelOGTag ?? SendbirdUIKit.DEFAULT.OPEN_CHANNEL_OG_TAG}
-        enableUsingDefaultUserProfile={
-          chatOptions.enableUsingDefaultUserProfile ?? SendbirdUIKit.DEFAULT.USING_DEFAULT_USER_PROFILE
-        }
+      <UIKitConfigProvider
+        storage={internalStorage}
+        localConfigs={{
+          common: uikitConfigs?.common,
+          groupChannel: {
+            channel: uikitConfigs?.groupChannel,
+            channelList: uikitConfigs?.groupChannelList,
+            setting: uikitConfigs?.groupChannelSettings,
+          },
+          openChannel: {
+            channel: uikitConfigs?.openChannel,
+          },
+        }}
       >
-        <LocalizationProvider stringSet={defaultStringSet}>
-          <PlatformServiceProvider
-            fileService={platformServices.file}
-            notificationService={platformServices.notification}
-            clipboardService={platformServices.clipboard}
-            mediaService={platformServices.media}
-          >
-            <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
-              <HeaderStyleProvider
-                HeaderComponent={styles?.HeaderComponent ?? Header}
-                defaultTitleAlign={styles?.defaultHeaderTitleAlign ?? 'left'}
-                statusBarTranslucent={styles?.statusBarTranslucent ?? true}
-              >
-                <ToastProvider dismissTimeout={toast?.dismissTimeout}>
-                  <UserProfileProvider
-                    onCreateChannel={userProfile?.onCreateChannel}
-                    onBeforeCreateChannel={userProfile?.onBeforeCreateChannel}
-                    statusBarTranslucent={styles?.statusBarTranslucent ?? true}
-                  >
-                    <ReactionProvider>
-                      <LocalizationContext.Consumer>
-                        {(value) => {
-                          const STRINGS = value?.STRINGS || defaultStringSet;
-                          return (
-                            <DialogProvider
-                              defaultLabels={{
-                                alert: { ok: STRINGS.DIALOG.ALERT_DEFAULT_OK },
-                                prompt: {
-                                  ok: STRINGS.DIALOG.PROMPT_DEFAULT_OK,
-                                  cancel: STRINGS.DIALOG.PROMPT_DEFAULT_CANCEL,
-                                  placeholder: STRINGS.DIALOG.PROMPT_DEFAULT_PLACEHOLDER,
-                                },
-                              }}
-                            >
-                              {renderChildren()}
-                            </DialogProvider>
-                          );
-                        }}
-                      </LocalizationContext.Consumer>
-                    </ReactionProvider>
-                  </UserProfileProvider>
-                </ToastProvider>
-              </HeaderStyleProvider>
-            </UIKitThemeProvider>
-          </PlatformServiceProvider>
-        </LocalizationProvider>
-      </SendbirdChatProvider>
+        <SendbirdChatProvider
+          sdkInstance={sdkInstance}
+          emojiManager={emojiManager}
+          mentionManager={mentionManager}
+          imageCompressionConfig={imageCompressionConfig}
+          enableAutoPushTokenRegistration={
+            chatOptions.enableAutoPushTokenRegistration ?? SendbirdUIKit.DEFAULT.AUTO_PUSH_TOKEN_REGISTRATION
+          }
+          enableUseUserIdForNickname={
+            chatOptions.enableUseUserIdForNickname ?? SendbirdUIKit.DEFAULT.USE_USER_ID_FOR_NICKNAME
+          }
+          enableImageCompression={chatOptions.enableImageCompression ?? SendbirdUIKit.DEFAULT.IMAGE_COMPRESSION}
+        >
+          <LocalizationProvider stringSet={defaultStringSet}>
+            <PlatformServiceProvider
+              fileService={platformServices.file}
+              notificationService={platformServices.notification}
+              clipboardService={platformServices.clipboard}
+              mediaService={platformServices.media}
+            >
+              <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
+                <HeaderStyleProvider
+                  HeaderComponent={styles?.HeaderComponent ?? Header}
+                  defaultTitleAlign={styles?.defaultHeaderTitleAlign ?? 'left'}
+                  statusBarTranslucent={styles?.statusBarTranslucent ?? true}
+                >
+                  <ToastProvider dismissTimeout={toast?.dismissTimeout}>
+                    <UserProfileProvider
+                      onCreateChannel={userProfile?.onCreateChannel}
+                      onBeforeCreateChannel={userProfile?.onBeforeCreateChannel}
+                      statusBarTranslucent={styles?.statusBarTranslucent ?? true}
+                    >
+                      <ReactionProvider>
+                        <LocalizationContext.Consumer>
+                          {(value) => {
+                            const STRINGS = value?.STRINGS || defaultStringSet;
+                            return (
+                              <DialogProvider
+                                defaultLabels={{
+                                  alert: { ok: STRINGS.DIALOG.ALERT_DEFAULT_OK },
+                                  prompt: {
+                                    ok: STRINGS.DIALOG.PROMPT_DEFAULT_OK,
+                                    cancel: STRINGS.DIALOG.PROMPT_DEFAULT_CANCEL,
+                                    placeholder: STRINGS.DIALOG.PROMPT_DEFAULT_PLACEHOLDER,
+                                  },
+                                }}
+                              >
+                                {renderChildren()}
+                              </DialogProvider>
+                            );
+                          }}
+                        </LocalizationContext.Consumer>
+                      </ReactionProvider>
+                    </UserProfileProvider>
+                  </ToastProvider>
+                </HeaderStyleProvider>
+              </UIKitThemeProvider>
+            </PlatformServiceProvider>
+          </LocalizationProvider>
+        </SendbirdChatProvider>
+      </UIKitConfigProvider>
     </SafeAreaProvider>
   );
 };

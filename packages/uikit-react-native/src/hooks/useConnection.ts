@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 
+import { useUIKitConfig } from '@sendbird/uikit-tools';
 import { Logger, SendbirdChatSDK, SendbirdError, SendbirdUser } from '@sendbird/uikit-utils';
 
 import type EmojiManager from '../libs/EmojiManager';
@@ -24,6 +25,7 @@ async function initEmoji(sdk: SendbirdChatSDK, emojiManager: EmojiManager) {
 }
 
 const useConnection = () => {
+  const { initDashboardConfigs } = useUIKitConfig();
   const { sdk, emojiManager, setCurrentUser, features } = useSendbirdChat();
   const { registerPushTokenForCurrentUser, unregisterPushTokenForCurrentUser } = usePushTokenRegistration();
 
@@ -50,7 +52,7 @@ const useConnection = () => {
           });
         }
 
-        await initEmoji(sdk, emojiManager);
+        await Promise.allSettled([initEmoji(sdk, emojiManager), initDashboardConfigs(sdk)]);
 
         Logger.debug('[useConnection]', 'connected! (online)');
         setCurrentUser(user);

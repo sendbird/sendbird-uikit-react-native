@@ -62,15 +62,25 @@ const App = () => {
   return (
     <SendbirdUIKitContainer
       appId={APP_ID}
+      uikitConfigs={{
+        common: {
+          enableUsingDefaultUserProfile: true,
+        },
+        groupChannel: {
+          enableMention: true,
+        },
+        groupChannelList: {
+          enableTypingIndicator: true,
+          enableMessageReceiptStatus: true,
+        },
+        groupChannelSettings: {
+          enableMessageSearch: true,
+        },
+      }}
       chatOptions={{
         localCacheStorage: AsyncStorage,
         onInitialized: SetSendbirdSDK,
         enableAutoPushTokenRegistration: true,
-        enableChannelListTypingIndicator: true,
-        enableChannelListMessageReceiptStatus: true,
-        enableUserMention: true,
-        enableMessageSearch: true,
-        enableUsingDefaultUserProfile: true,
       }}
       platformServices={{
         file: FileService,

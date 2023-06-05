@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
 import { useAppFeatures } from '@sendbird/uikit-chat-hooks';
+import { SBUConfig, useUIKitConfig } from '@sendbird/uikit-tools';
 import type {
   SendbirdChatSDK,
   SendbirdGroupChannel,
@@ -16,15 +17,8 @@ import type { FileType } from '../platform/types';
 
 export interface UIKitFeaturesInSendbirdChatContext {
   enableAutoPushTokenRegistration: boolean;
-  enableChannelListTypingIndicator: boolean;
-  enableChannelListMessageReceiptStatus: boolean;
   enableUseUserIdForNickname: boolean;
-  enableUserMention: boolean;
   enableImageCompression: boolean;
-  enableMessageSearch: boolean;
-  enableGroupChannelOGTag: boolean;
-  enableOpenChannelOGTag: boolean;
-  enableUsingDefaultUserProfile: boolean;
 }
 
 interface Props extends UIKitFeaturesInSendbirdChatContext, React.PropsWithChildren {
@@ -47,25 +41,21 @@ export type SendbirdChatContextType = {
   markAsDeliveredWithChannel: (channel: SendbirdGroupChannel) => void;
 
   features: {
-    // RN UIKit features
-    autoPushTokenRegistrationEnabled: boolean;
-
-    // UIKit features
-    channelListTypingIndicatorEnabled: boolean;
-    channelListMessageReceiptStatusEnabled: boolean;
-    useUserIdForNicknameEnabled: boolean;
-    userMentionEnabled: boolean;
-    imageCompressionEnabled: boolean;
-    messageSearchEnabled: boolean;
-    groupChannelOGTagEnabled: boolean;
-    openChannelOGTagEnabled: boolean;
-    usingDefaultUserProfileEnabled: boolean;
+    // UIKit configs
+    configs: SBUConfig;
 
     // Sendbird application features
-    deliveryReceiptEnabled: boolean;
-    broadcastChannelEnabled: boolean;
-    superGroupChannelEnabled: boolean;
-    reactionEnabled: boolean;
+    appInfo: {
+      deliveryReceiptEnabled: boolean;
+      broadcastChannelEnabled: boolean;
+      superGroupChannelEnabled: boolean;
+      reactionEnabled: boolean;
+    };
+
+    // UIKit features
+    imageCompressionEnabled: boolean;
+    useUserIdForNicknameEnabled: boolean;
+    autoPushTokenRegistrationEnabled: boolean; // RN only
   };
 };
 
@@ -77,19 +67,13 @@ export const SendbirdChatProvider = ({
   mentionManager,
   imageCompressionConfig,
   enableAutoPushTokenRegistration,
-  enableChannelListMessageReceiptStatus,
-  enableChannelListTypingIndicator,
   enableUseUserIdForNickname,
-  enableUserMention,
   enableImageCompression,
-  enableMessageSearch,
-  enableGroupChannelOGTag,
-  enableOpenChannelOGTag,
-  enableUsingDefaultUserProfile,
 }: Props) => {
   const [currentUser, _setCurrentUser] = useState<SendbirdUser>();
   const forceUpdate = useForceUpdate();
   const appFeatures = useAppFeatures(sdkInstance);
+  const { configs } = useUIKitConfig();
 
   const setCurrentUser: SendbirdChatContextType['setCurrentUser'] = useCallback((user) => {
     // NOTE: Sendbird SDK handle User object is always same object, so force update after setCurrentUser
@@ -154,19 +138,11 @@ export const SendbirdChatProvider = ({
     markAsDeliveredWithChannel,
 
     features: {
-      ...appFeatures,
+      appInfo: appFeatures,
       autoPushTokenRegistrationEnabled: enableAutoPushTokenRegistration,
       useUserIdForNicknameEnabled: enableUseUserIdForNickname,
       imageCompressionEnabled: enableImageCompression,
-
-      // TODO: Replace with UIKitConfigProvider
-      channelListTypingIndicatorEnabled: enableChannelListTypingIndicator,
-      channelListMessageReceiptStatusEnabled: enableChannelListMessageReceiptStatus,
-      userMentionEnabled: enableUserMention,
-      messageSearchEnabled: enableMessageSearch,
-      groupChannelOGTagEnabled: enableGroupChannelOGTag,
-      openChannelOGTagEnabled: enableOpenChannelOGTag,
-      usingDefaultUserProfileEnabled: enableUsingDefaultUserProfile,
+      configs,
     },
   };
 
