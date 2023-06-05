@@ -39,17 +39,8 @@ export const useAppState = (type: AppStateEvent, listener: AppStateListener) => 
     const eventListener = (state: AppStateStatus) => callbackRef.current(state);
     const subscriber = AppState.addEventListener(type, eventListener);
 
-    // TODO: Remove AppState.removeEventListener, dropped under 0.65
     return () => {
-      // @ts-ignore
-      if (subscriber?.remove) {
-        subscriber.remove();
-      }
-      // @ts-ignore
-      else if (AppState.removeEventListener) {
-        // @ts-ignore
-        AppState.removeEventListener(type, eventListener);
-      }
+      if (subscriber?.remove) subscriber.remove();
     };
   }, []);
 };
