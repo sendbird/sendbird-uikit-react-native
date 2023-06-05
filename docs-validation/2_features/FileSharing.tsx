@@ -11,7 +11,7 @@ const isImageFile = (x: string) => x;
  * Customize the UI for file sharing
  * {@link https://sendbird.com/docs/uikit/v3/react-native/features/file-sharing#2-customize-the-ui-for-file-sharing}
  * */
-import { createGroupChannelFragment, MessageRenderer } from '@sendbird/uikit-react-native';
+import { createGroupChannelFragment, GroupChannelMessageRenderer } from '@sendbird/uikit-react-native';
 
 const GroupChannelFragment = createGroupChannelFragment();
 
@@ -23,7 +23,7 @@ const GroupChannelScreen = () => {
         if (props.message.isFileMessage()) {
           return <CustomFileMessage {...props} />;
         }
-        return <MessageRenderer {...props} />;
+        return <GroupChannelMessageRenderer {...props} />;
       }}
     />
   );
@@ -92,6 +92,7 @@ const App = () => {
       appId={'APP_ID'}
       // @ts-ignore
       platformServices={{}}
+      // @ts-ignore
       chatOptions={{
         enableImageCompression: true
       }}
