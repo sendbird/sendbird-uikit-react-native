@@ -126,7 +126,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
 });
 
 const useChannelInputItems = (channel: SendbirdChannel, sendFileMessage: (file: FileType) => void) => {
-  const { features, imageCompressionConfig } = useSendbirdChat();
+  const { sbOptions, imageCompressionConfig } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { fileService, mediaService } = usePlatformService();
   const { alert } = useAlert();
@@ -136,9 +136,9 @@ const useChannelInputItems = (channel: SendbirdChannel, sendFileMessage: (file: 
   const input = useIIFE(() => {
     switch (true) {
       case channel.isOpenChannel():
-        return features.configs.openChannel.channel.input;
+        return sbOptions.uikit.openChannel.channel.input;
       case channel.isGroupChannel():
-        return features.configs.groupChannel.channel.input;
+        return sbOptions.uikit.groupChannel.channel.input;
       default:
         return {
           enableDocument: true,
@@ -175,7 +175,7 @@ const useChannelInputItems = (channel: SendbirdChannel, sendFileMessage: (file: 
           // Image compression
           if (
             isImage(mediaFile.uri, mediaFile.type) &&
-            shouldCompressImage(mediaFile.type, features.imageCompressionEnabled)
+            shouldCompressImage(mediaFile.type, sbOptions.chat.imageCompressionEnabled)
           ) {
             await SBUUtils.safeRun(async () => {
               const compressed = await mediaService.compressImage({
@@ -271,7 +271,7 @@ const useChannelInputItems = (channel: SendbirdChannel, sendFileMessage: (file: 
           // Image compression
           if (
             isImage(mediaFile.uri, mediaFile.type) &&
-            shouldCompressImage(mediaFile.type, features.imageCompressionEnabled)
+            shouldCompressImage(mediaFile.type, sbOptions.chat.imageCompressionEnabled)
           ) {
             await SBUUtils.safeRun(async () => {
               const compressed = await mediaService.compressImage({
@@ -307,7 +307,7 @@ const useChannelInputItems = (channel: SendbirdChannel, sendFileMessage: (file: 
           // Image compression
           if (
             isImage(documentFile.uri, documentFile.type) &&
-            shouldCompressImage(documentFile.type, features.imageCompressionEnabled)
+            shouldCompressImage(documentFile.type, sbOptions.chat.imageCompressionEnabled)
           ) {
             await SBUUtils.safeRun(async () => {
               const compressed = await mediaService.compressImage({

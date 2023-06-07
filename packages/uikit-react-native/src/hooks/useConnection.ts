@@ -26,7 +26,7 @@ async function initEmoji(sdk: SendbirdChatSDK, emojiManager: EmojiManager) {
 
 const useConnection = () => {
   const { initDashboardConfigs } = useUIKitConfig();
-  const { sdk, emojiManager, setCurrentUser, features } = useSendbirdChat();
+  const { sdk, emojiManager, setCurrentUser, sbOptions } = useSendbirdChat();
   const { registerPushTokenForCurrentUser, unregisterPushTokenForCurrentUser } = usePushTokenRegistration();
 
   const connect = useCallback(
@@ -41,11 +41,11 @@ const useConnection = () => {
             .updateCurrentUserInfo({ nickname: opts.nickname })
             .then((updatedUser) => (user = updatedUser))
             .catch((e) => Logger.warn('[useConnection]', 'nickname-sync failure', e));
-        } else if (features.useUserIdForNicknameEnabled) {
+        } else if (sbOptions.chat.useUserIdForNicknameEnabled) {
           await sdk.updateCurrentUserInfo({ nickname: userId }).then((updatedUser) => (user = updatedUser));
         }
 
-        if (features.autoPushTokenRegistrationEnabled) {
+        if (sbOptions.chat.autoPushTokenRegistrationEnabled) {
           Logger.debug('[useConnection]', 'autoPushTokenRegistration enabled, register for current user');
           await registerPushTokenForCurrentUser().catch((e) => {
             Logger.warn('[useConnection]', 'autoPushToken Registration failure', e);
@@ -79,13 +79,13 @@ const useConnection = () => {
         throw error;
       }
     },
-    [sdk, registerPushTokenForCurrentUser, features.autoPushTokenRegistrationEnabled],
+    [sdk, registerPushTokenForCurrentUser, sbOptions.chat.autoPushTokenRegistrationEnabled],
   );
 
   const disconnect = useCallback(async () => {
     Logger.debug('[useConnection]', 'disconnect start');
 
-    if (features.autoPushTokenRegistrationEnabled) {
+    if (sbOptions.chat.autoPushTokenRegistrationEnabled) {
       Logger.debug('[useConnection]', 'autoPushTokenRegistration enabled, unregister for current user');
       await unregisterPushTokenForCurrentUser().catch((e) => {
         Logger.warn('[useConnection]', 'autoPushToken unregister failure', e);
@@ -94,7 +94,7 @@ const useConnection = () => {
 
     await sdk.disconnect().then(() => setCurrentUser(undefined));
     Logger.debug('[useConnection]', 'disconnected!');
-  }, [sdk, unregisterPushTokenForCurrentUser, features.autoPushTokenRegistrationEnabled]);
+  }, [sdk, unregisterPushTokenForCurrentUser, sbOptions.chat.autoPushTokenRegistrationEnabled]);
 
   return { connect, disconnect, reconnect: () => sdk.reconnect() };
 };

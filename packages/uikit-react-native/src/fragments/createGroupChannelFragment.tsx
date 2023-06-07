@@ -51,7 +51,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     sortComparator = messageComparator,
     flatListProps,
   }) => {
-    const { sdk, currentUser, features } = useSendbirdChat();
+    const { sdk, currentUser, sbOptions } = useSendbirdChat();
 
     const [internalSearchItem, setInternalSearchItem] = useState(searchItem);
     const navigateFromMessageSearch = useCallback(() => Boolean(searchItem), []);
@@ -150,7 +150,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       <GroupChannelModule.Provider
         channel={channel}
         groupChannelPubSub={groupChannelPubSub}
-        enableTypingIndicator={enableTypingIndicator ?? features.configs.groupChannel.channel.enableTypingIndicator}
+        enableTypingIndicator={enableTypingIndicator ?? sbOptions.uikit.groupChannel.channel.enableTypingIndicator}
         keyboardAvoidOffset={keyboardAvoidOffset}
       >
         <GroupChannelModule.Header

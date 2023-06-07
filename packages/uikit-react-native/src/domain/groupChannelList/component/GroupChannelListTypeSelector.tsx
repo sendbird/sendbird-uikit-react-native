@@ -25,7 +25,7 @@ const STATUS_BAR_TOP_INSET_AS: 'margin' | 'padding' = Platform.select({ android:
 const GroupChannelListTypeSelector = ({ skipTypeSelection, onSelectType }: GroupChannelListProps['TypeSelector']) => {
   const { statusBarTranslucent, HeaderComponent } = useHeaderStyle();
   const { colors } = useUIKitTheme();
-  const { features } = useSendbirdChat();
+  const { sbOptions } = useSendbirdChat();
   const typeSelector = useContext(GroupChannelListContexts.TypeSelector);
   const { visible, hide } = typeSelector;
 
@@ -50,11 +50,11 @@ const GroupChannelListTypeSelector = ({ skipTypeSelection, onSelectType }: Group
       >
         <View style={styles.buttonArea}>
           {TYPES.map((type) => {
-            if (type === 'SUPER_GROUP' && !features.appInfo.superGroupChannelEnabled) {
+            if (type === 'SUPER_GROUP' && !sbOptions.appInfo.superGroupChannelEnabled) {
               return null;
             }
 
-            if (type === 'BROADCAST' && !features.appInfo.broadcastChannelEnabled) {
+            if (type === 'BROADCAST' && !sbOptions.appInfo.broadcastChannelEnabled) {
               return null;
             }
 

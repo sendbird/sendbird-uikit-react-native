@@ -40,22 +40,24 @@ export type SendbirdChatContextType = {
   updateCurrentUserInfo: (nickname?: string, profile?: string | FileType) => Promise<SendbirdUser>;
   markAsDeliveredWithChannel: (channel: SendbirdGroupChannel) => void;
 
-  features: {
-    // UIKit configs
-    configs: SBUConfig;
+  sbOptions: {
+    // UIKit options
+    uikit: SBUConfig;
 
-    // Sendbird application features
+    // Chat related options in UIKit
+    chat: {
+      imageCompressionEnabled: boolean;
+      useUserIdForNicknameEnabled: boolean;
+      autoPushTokenRegistrationEnabled: boolean; // RN only
+    };
+
+    // Sendbird application options
     appInfo: {
       deliveryReceiptEnabled: boolean;
       broadcastChannelEnabled: boolean;
       superGroupChannelEnabled: boolean;
       reactionEnabled: boolean;
     };
-
-    // UIKit features
-    imageCompressionEnabled: boolean;
-    useUserIdForNicknameEnabled: boolean;
-    autoPushTokenRegistrationEnabled: boolean; // RN only
   };
 };
 
@@ -137,12 +139,16 @@ export const SendbirdChatProvider = ({
     updateCurrentUserInfo,
     markAsDeliveredWithChannel,
 
-    features: {
+    // TODO: Options should be moved to the common area at the higher level to be passed to the context of each product.
+    //  For example, common -> chat context, common -> calls context
+    sbOptions: {
       appInfo: appFeatures,
-      autoPushTokenRegistrationEnabled: enableAutoPushTokenRegistration,
-      useUserIdForNicknameEnabled: enableUseUserIdForNickname,
-      imageCompressionEnabled: enableImageCompression,
-      configs,
+      uikit: configs,
+      chat: {
+        autoPushTokenRegistrationEnabled: enableAutoPushTokenRegistration,
+        useUserIdForNicknameEnabled: enableUseUserIdForNickname,
+        imageCompressionEnabled: enableImageCompression,
+      },
     },
   };
 

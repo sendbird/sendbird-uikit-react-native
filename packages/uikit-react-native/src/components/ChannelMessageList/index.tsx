@@ -200,7 +200,7 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
   const { openSheet } = useBottomSheet();
   const { alert } = useAlert();
   const { clipboardService, fileService } = usePlatformService();
-  const { features } = useSendbirdChat();
+  const { sbOptions } = useSendbirdChat();
 
   const handleFailedMessage = (message: HandleableMessage) => {
     openSheet({
@@ -329,7 +329,7 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
       response.onLongPress = () => {
         openSheet({
           sheetItems,
-          HeaderComponent: shouldRenderReaction(channel, features.configs.groupChannel.channel.enableReactions)
+          HeaderComponent: shouldRenderReaction(channel, sbOptions.uikit.groupChannel.channel.enableReactions)
             ? ({ onClose }) => <ReactionAddons.BottomSheet message={msg} channel={channel} onClose={onClose} />
             : undefined,
         });

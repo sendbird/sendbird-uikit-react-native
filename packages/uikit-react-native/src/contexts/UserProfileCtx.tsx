@@ -64,13 +64,13 @@ export const UserProfileProvider = ({
 
   const show: UserProfileContextType['show'] = useCallback(
     (user, options) => {
-      if (chatContext.features.configs.common.enableUsingDefaultUserProfile) {
+      if (chatContext.sbOptions.uikit.common.enableUsingDefaultUserProfile) {
         setUser(user);
         setVisible(true);
         setHideMessageButton(Boolean(options?.hideMessageButton));
       }
     },
-    [chatContext.features.configs.common.enableUsingDefaultUserProfile],
+    [chatContext.sbOptions.uikit.common.enableUsingDefaultUserProfile],
   );
 
   const hide: UserProfileContextType['hide'] = useCallback(() => {
