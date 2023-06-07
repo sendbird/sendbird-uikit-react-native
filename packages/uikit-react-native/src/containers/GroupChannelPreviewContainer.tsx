@@ -32,7 +32,7 @@ type Props = {
   onLongPress: () => void;
 };
 const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) => {
-  const { currentUser, sdk, features, mentionManager } = useSendbirdChat();
+  const { currentUser, sdk, sbOptions, mentionManager } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
 
@@ -42,7 +42,7 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
   useChannelHandler(sdk, handlerId, {
     onTypingStatusUpdated(eventChannel) {
       if (isDifferentChannel(channel, eventChannel)) return;
-      if (!features.configs.groupChannel.channelList.enableTypingIndicator) return;
+      if (!sbOptions.uikit.groupChannel.channelList.enableTypingIndicator) return;
       setTypingUsers(eventChannel.getTypingUsers());
     },
   });
@@ -62,7 +62,7 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
 
   const titleCaptionIcon = useIIFE(() => {
     if (!channel.lastMessage || channel.isEphemeral) return undefined;
-    if (!features.configs.groupChannel.channelList.enableMessageReceiptStatus) return undefined;
+    if (!sbOptions.uikit.groupChannel.channelList.enableMessageReceiptStatus) return undefined;
     if (!isMyMessage(channel.lastMessage, currentUser?.userId)) return undefined;
 
     if (outgoingStatus === 'PENDING') {

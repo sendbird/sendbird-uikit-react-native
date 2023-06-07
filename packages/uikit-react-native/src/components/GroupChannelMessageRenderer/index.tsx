@@ -34,7 +34,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   nextMessage,
 }) => {
   const { palette } = useUIKitTheme();
-  const { features, currentUser, mentionManager } = useSendbirdChat();
+  const { sbOptions, currentUser, mentionManager } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { mediaService } = usePlatformService();
   const { groupWithPrev, groupWithNext } = calcMessageGrouping(
@@ -46,7 +46,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
 
   const reactionChildren = useIIFE(() => {
     if (
-      shouldRenderReaction(channel, features.configs.groupChannel.channel.enableReactions) &&
+      shouldRenderReaction(channel, sbOptions.uikit.groupChannel.channel.enableReactions) &&
       message.reactions &&
       message.reactions.length > 0
     ) {
@@ -132,7 +132,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
       }
       case 'user':
       case 'user.opengraph': {
-        if (message.ogMetaData && features.configs.groupChannel.channel.enableOgtag) {
+        if (message.ogMetaData && sbOptions.uikit.groupChannel.channel.enableOgtag) {
           return (
             <GroupChannelMessage.OpenGraphUser
               message={message as SendbirdUserMessage}

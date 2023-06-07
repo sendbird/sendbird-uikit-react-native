@@ -72,7 +72,7 @@ const ChannelInput = (props: ChannelInputProps) => {
 
   const { top, left, right, bottom } = useSafeAreaInsets();
   const { colors } = useUIKitTheme();
-  const { features, mentionManager } = useSendbirdChat();
+  const { sbOptions, mentionManager } = useSendbirdChat();
 
   const { selection, onSelectionChange, textInputRef, text, onChangeText, mentionedUsers } = useMentionTextInput({
     messageToEdit,
@@ -84,7 +84,7 @@ const ChannelInput = (props: ChannelInputProps) => {
   });
 
   const mentionAvailable =
-    features.configs.groupChannel.channel.enableMention && channel.isGroupChannel() && !channel.isBroadcast;
+    sbOptions.uikit.groupChannel.channel.enableMention && channel.isGroupChannel() && !channel.isBroadcast;
   const inputKeyToRemount = GET_INPUT_KEY(mentionAvailable ? mentionedUsers.length === 0 : false);
 
   const [inputHeight, setInputHeight] = useState(styles.inputDefault.height);
