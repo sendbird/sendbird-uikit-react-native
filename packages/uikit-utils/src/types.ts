@@ -38,6 +38,7 @@ import type {
   FileMessageCreateParams,
   FileMessageUpdateParams,
   MessageSearchQuery,
+  MultipleFilesMessage,
   PreviousMessageListQuery,
   Reaction,
   UserMessage,
@@ -83,6 +84,7 @@ export type SendbirdMessage = BaseMessage | FileMessage | UserMessage | AdminMes
 export type SendbirdChannel = BaseChannel | GroupChannel | OpenChannel;
 export type SendbirdUserMessage = UserMessage;
 export type SendbirdFileMessage = FileMessage;
+export type SendbirdMultipleFilesMessage = MultipleFilesMessage;
 export type SendbirdAdminMessage = AdminMessage;
 export type SendbirdBaseMessage = BaseMessage;
 export type SendbirdSendableMessage = SendableMessage;

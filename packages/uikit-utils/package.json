@@ -55,10 +55,14 @@
   },
   "peerDependencies": {
     "@sendbird/chat": "^4.9.0",
-    "react": ">=16.13.1"
+    "react": ">=17.0.2",
+    "react-native": ">=0.65.0"
   },
   "peerDependenciesMeta": {
     "@sendbird/chat": {
+      "optional": true
+    },
+    "react-native": {
       "optional": true
     }
   },

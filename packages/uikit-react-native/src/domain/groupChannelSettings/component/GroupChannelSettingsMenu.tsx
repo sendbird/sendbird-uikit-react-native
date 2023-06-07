@@ -21,17 +21,27 @@ const GroupChannelSettingsMenu = ({
   onPressMenuNotification,
   menuItemsCreator = (menu) => menu,
 }: GroupChannelSettingsProps['Menu']) => {
-  const { sdk, features } = useSendbirdChat();
+  const { sdk, sbOptions } = useSendbirdChat();
   const { channel } = useContext(GroupChannelSettingsContexts.Fragment);
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
 
-  if (__DEV__ && !WARN_onPressMenuNotification && !onPressMenuNotification && features.userMentionEnabled) {
+  if (
+    __DEV__ &&
+    !WARN_onPressMenuNotification &&
+    !onPressMenuNotification &&
+    sbOptions.uikit.groupChannel.channel.enableMention
+  ) {
     Logger.warn('If you are using mention, make sure to pass the `onPressMenuNotification` prop');
     WARN_onPressMenuNotification = true;
   }
 
-  if (__DEV__ && !WARN_onPressMenuSearchInChannel && !onPressMenuSearchInChannel && features.messageSearchEnabled) {
+  if (
+    __DEV__ &&
+    !WARN_onPressMenuSearchInChannel &&
+    !onPressMenuSearchInChannel &&
+    sbOptions.uikit.groupChannel.setting.enableMessageSearch
+  ) {
     Logger.warn('If you are using message search, make sure to pass the `onPressMenuSearchInChannel` prop');
     WARN_onPressMenuSearchInChannel = true;
   }
@@ -60,14 +70,14 @@ const GroupChannelSettingsMenu = ({
     return {
       actionLabelNotificationMenu: getNotificationsLabel(),
       actionItemNotificationMenu: conditionChaining(
-        [features.userMentionEnabled],
+        [sbOptions.uikit.groupChannel.channel.enableMention],
         [
           <Icon icon={'chevron-right'} color={colors.onBackground01} />,
           <Switch value={channel.myPushTriggerOption !== 'off'} onChangeValue={toggleNotification} />,
         ],
       ),
       onPressNotificationMenu: () => {
-        if (features.userMentionEnabled) onPressMenuNotification?.();
+        if (sbOptions.uikit.groupChannel.channel.enableMention) onPressMenuNotification?.();
         else toggleNotification();
       },
     };
@@ -97,7 +107,7 @@ const GroupChannelSettingsMenu = ({
     },
   ];
 
-  if (features.messageSearchEnabled && !channel.isEphemeral) {
+  if (sbOptions.uikit.groupChannel.setting.enableMessageSearch && !channel.isEphemeral) {
     defaultMenuItems.push({
       icon: 'search',
       name: STRINGS.GROUP_CHANNEL_SETTINGS.MENU_SEARCH,

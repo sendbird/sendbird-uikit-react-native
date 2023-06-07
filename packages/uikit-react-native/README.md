@@ -113,6 +113,9 @@ const App = () => {
   return (
     <SendbirdUIKitContainer
       appId={'APP_ID'}
+      chatOptions={{
+        localCacheStorage: AsyncStorage,
+      }}
       platformServices={{
         file: FileService,
         notification: NotificationService,
@@ -225,7 +228,7 @@ const ExpoMediaService = createExpoMediaService({
 });
 ```
 
-### Local caching (optional)
+### Local caching (required)
 
 You can implement Local caching easily.
 

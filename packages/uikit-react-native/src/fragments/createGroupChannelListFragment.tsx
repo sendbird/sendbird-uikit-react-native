@@ -25,14 +25,14 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     flatListProps = {},
     menuItemCreator = PASS,
   }) => {
-    const { sdk, currentUser, features, markAsDeliveredWithChannel } = useSendbirdChat();
+    const { sdk, currentUser, sbOptions, markAsDeliveredWithChannel } = useSendbirdChat();
     const { groupChannels, next, loading } = useGroupChannelList(sdk, currentUser?.userId, {
       queryCreator,
       collectionCreator,
       enableCollectionWithoutLocalCache: !queryCreator,
     });
 
-    if (features.deliveryReceiptEnabled) {
+    if (sbOptions.appInfo.deliveryReceiptEnabled) {
       useAppState('change', (status) => {
         if (status === 'active') groupChannels.forEach(markAsDeliveredWithChannel);
       });
@@ -51,7 +51,8 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
       },
     );
 
-    const isChannelTypeAvailable = features.broadcastChannelEnabled || features.superGroupChannelEnabled;
+    const isChannelTypeAvailable =
+      sbOptions.appInfo.broadcastChannelEnabled || sbOptions.appInfo.superGroupChannelEnabled;
 
     return (
       <GroupChannelListModule.Provider>
