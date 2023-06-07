@@ -4,11 +4,11 @@
 
 ### Feature configurations
 
-- You can now configure the features of UIKit through the `uikitConfigs` prop of `SendbirdUIKitContainer`.
+- You can now configure the features of UIKit through the `uikitOptions` prop of `SendbirdUIKitContainer`.
 
 ```tsx
 <SendbirdUIKitContainer
-  uikitConfigs={{
+  uikitOptions={{
     common: {
       enableUsingDefaultUserProfile: true,
     },
@@ -79,15 +79,15 @@
 
 ### Feature configurations
 
-- The feature configuration options that were previously present in the `chatOptions` prop of `SendbirdUIKitContainer` have been moved to `uikitConfigs` prop.
+- The feature configuration options that were previously present in the `chatOptions` prop of `SendbirdUIKitContainer` have been moved to `uikitOptions` prop.
 
-  - `chatOptions.enableUserMention` is replaced with `uikitConfigs.groupChannel.enableMention`
-  - `chatOptions.enableGroupChannelOGTag` is replaced with `uikitConfigs.groupChannel.enableOgtag`
-  - `chatOptions.enableChannelListTypingIndicator` replaced with `uikitConfigs.groupChannelList.enableTypingIndicator`
-  - `chatOptions.enableChannelListMessageReceiptStatus` is replaced with `uikitConfigs.groupChannelList.enableMessageReceiptStatus`
-  - `chatOptions.enableMessageSearch` is replaced with `uikitConfigs.groupChannelSettings.enableMessageSearch`
-  - `chatOptions.enableOpenChannelOGTag` is replaced with `uikitConfigs.openChannel.enableOgtag`
-  - `chatOptions.enableUsingDefaultUserProfile` is replaced with `uikitConfigs.common.enableUsingDefaultUserProfile`
+  - `chatOptions.enableUserMention` is replaced with `uikitOptions.groupChannel.enableMention`
+  - `chatOptions.enableGroupChannelOGTag` is replaced with `uikitOptions.groupChannel.enableOgtag`
+  - `chatOptions.enableChannelListTypingIndicator` replaced with `uikitOptions.groupChannelList.enableTypingIndicator`
+  - `chatOptions.enableChannelListMessageReceiptStatus` is replaced with `uikitOptions.groupChannelList.enableMessageReceiptStatus`
+  - `chatOptions.enableMessageSearch` is replaced with `uikitOptions.groupChannelSettings.enableMessageSearch`
+  - `chatOptions.enableOpenChannelOGTag` is replaced with `uikitOptions.openChannel.enableOgtag`
+  - `chatOptions.enableUsingDefaultUserProfile` is replaced with `uikitOptions.common.enableUsingDefaultUserProfile`
 
 ### @sendbird/uikit-react-native
 
