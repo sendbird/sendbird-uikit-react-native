@@ -15,13 +15,13 @@ import type ImageCompressionConfig from '../libs/ImageCompressionConfig';
 import type MentionManager from '../libs/MentionManager';
 import type { FileType } from '../platform/types';
 
-export interface UIKitFeaturesInSendbirdChatContext {
+export interface ChatRelatedFeaturesInUIKit {
   enableAutoPushTokenRegistration: boolean;
   enableUseUserIdForNickname: boolean;
   enableImageCompression: boolean;
 }
 
-interface Props extends UIKitFeaturesInSendbirdChatContext, React.PropsWithChildren {
+interface Props extends ChatRelatedFeaturesInUIKit, React.PropsWithChildren {
   sdkInstance: SendbirdChatSDK;
   emojiManager: EmojiManager;
   mentionManager: MentionManager;

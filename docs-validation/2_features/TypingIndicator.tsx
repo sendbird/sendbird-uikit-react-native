@@ -7,7 +7,7 @@ import type { StringSet } from '@sendbird/uikit-react-native';
 import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
 const App = () => {
   // @ts-ignore
-  return <SendbirdUIKitContainer uikitConfigs={{ groupChannelList: { enableTypingIndicator: true } }} />;
+  return <SendbirdUIKitContainer uikitOptions={{ groupChannelList: { enableTypingIndicator: true } }} />;
 };
 /** ------------------ **/
 

@@ -62,7 +62,7 @@ const App = () => {
   return (
     <SendbirdUIKitContainer
       appId={APP_ID}
-      uikitConfigs={{
+      uikitOptions={{
         common: {
           enableUsingDefaultUserProfile: true,
         },

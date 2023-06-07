@@ -12,7 +12,7 @@ const App = () => {
   return (
     //@ts-ignore
     <SendbirdUIKitContainer
-      uikitConfigs={{
+      uikitOptions={{
         groupChannelSettings: {
           enableMessageSearch: true
         }

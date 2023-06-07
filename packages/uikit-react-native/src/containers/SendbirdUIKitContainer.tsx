@@ -28,7 +28,7 @@ import { NOOP, useIsFirstMount } from '@sendbird/uikit-utils';
 import { LocalizationContext, LocalizationProvider } from '../contexts/LocalizationCtx';
 import { PlatformServiceProvider } from '../contexts/PlatformServiceCtx';
 import { ReactionProvider } from '../contexts/ReactionCtx';
-import type { UIKitFeaturesInSendbirdChatContext } from '../contexts/SendbirdChatCtx';
+import type { ChatRelatedFeaturesInUIKit } from '../contexts/SendbirdChatCtx';
 import { SendbirdChatProvider } from '../contexts/SendbirdChatCtx';
 import { UserProfileProvider } from '../contexts/UserProfileCtx';
 import EmojiManager from '../libs/EmojiManager';
@@ -73,8 +73,8 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   chatOptions: {
     localCacheStorage: LocalCacheStorage;
     onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
-  } & Partial<UIKitFeaturesInSendbirdChatContext>;
-  uikitConfigs?: PartialDeep<{
+  } & Partial<ChatRelatedFeaturesInUIKit>;
+  uikitOptions?: PartialDeep<{
     common: SBUConfig['common'];
     groupChannel: Omit<SBUConfig['groupChannel']['channel'], UnimplementedFeatures>;
     groupChannelList: SBUConfig['groupChannel']['channelList'];
@@ -114,7 +114,7 @@ const SendbirdUIKitContainer = ({
   children,
   appId,
   chatOptions,
-  uikitConfigs,
+  uikitOptions,
   platformServices,
   localization,
   styles,
@@ -152,13 +152,13 @@ const SendbirdUIKitContainer = ({
     });
     return new MentionManager(
       config,
-      uikitConfigs?.groupChannel?.enableMention ?? initialConfig.groupChannel.channel.enableMention,
+      uikitOptions?.groupChannel?.enableMention ?? initialConfig.groupChannel.channel.enableMention,
     );
   }, [
     userMention?.mentionLimit,
     userMention?.suggestionLimit,
     userMention?.debounceMills,
-    uikitConfigs?.groupChannel?.enableMention,
+    uikitOptions?.groupChannel?.enableMention,
   ]);
 
   const imageCompressionConfig = useMemo(() => {
@@ -200,14 +200,14 @@ const SendbirdUIKitContainer = ({
       <UIKitConfigProvider
         storage={internalStorage}
         localConfigs={{
-          common: uikitConfigs?.common,
+          common: uikitOptions?.common,
           groupChannel: {
-            channel: uikitConfigs?.groupChannel,
-            channelList: uikitConfigs?.groupChannelList,
-            setting: uikitConfigs?.groupChannelSettings,
+            channel: uikitOptions?.groupChannel,
+            channelList: uikitOptions?.groupChannelList,
+            setting: uikitOptions?.groupChannelSettings,
           },
           openChannel: {
-            channel: uikitConfigs?.openChannel,
+            channel: uikitOptions?.openChannel,
           },
         }}
       >
