@@ -230,10 +230,16 @@ const useChannelInputItems = (channel: SendbirdChannel, sendFileMessage: (file: 
 
   if (input.gallery.enablePhoto || input.gallery.enableVideo) {
     const mediaType = (() => {
-      if (input.gallery.enablePhoto && input.gallery.enableVideo) return 'all';
-      else if (input.gallery.enablePhoto && !input.gallery.enableVideo) return 'photo';
-      else if (!input.gallery.enablePhoto && input.gallery.enableVideo) return 'video';
-      else return 'all';
+      switch (true) {
+        case input.gallery.enablePhoto && input.gallery.enableVideo:
+          return 'all';
+        case input.gallery.enablePhoto && !input.gallery.enableVideo:
+          return 'photo';
+        case !input.gallery.enablePhoto && input.gallery.enableVideo:
+          return 'video';
+        default:
+          return 'all';
+      }
     })();
 
     sheetItems.push({
