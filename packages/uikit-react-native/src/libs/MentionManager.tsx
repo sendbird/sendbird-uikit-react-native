@@ -11,7 +11,7 @@ class MentionManager {
   private _invalidStartsKeywords: string[];
   private _templateRegex: RegExp;
 
-  constructor(public config: MentionConfigInterface, public mentionEnabled: boolean) {
+  constructor(public config: MentionConfigInterface) {
     this._invalidStartsKeywords = [this.config.trigger, this.config.delimiter];
     this._templateRegex = createMentionTemplateRegex(this.config.trigger);
   }
@@ -120,8 +120,8 @@ class MentionManager {
   /**
    * @description Bold @user.nickname
    * */
-  public textToMentionedComponents = (text: string, mentionedUsers: MentionedUser[]) => {
-    if (!this.mentionEnabled || mentionedUsers.length === 0) return text;
+  public textToMentionedComponents = (text: string, mentionedUsers: MentionedUser[], mentionEnabled: boolean) => {
+    if (!mentionEnabled || mentionedUsers.length === 0) return text;
 
     const { leftText, components } = mentionedUsers
       .sort((a, b) => b.range.start - a.range.start)
@@ -148,8 +148,8 @@ class MentionManager {
     return [leftText, ...components];
   };
 
-  public textToMentionedMessageTemplate = (text: string, mentionedUsers: MentionedUser[]) => {
-    if (!this.mentionEnabled) return text;
+  public textToMentionedMessageTemplate = (text: string, mentionedUsers: MentionedUser[], mentionEnabled: boolean) => {
+    if (!mentionEnabled) return text;
 
     const { leftText, strings } = mentionedUsers
       .sort((a, b) => b.range.start - a.range.start)
@@ -216,12 +216,13 @@ class MentionManager {
 
   public shouldUseMentionedMessageTemplate = (
     message?: SendbirdUserMessage | SendbirdFileMessage,
+    mentionEnabled?: boolean,
   ): message is RequiredSpecific<
     SendbirdUserMessage | SendbirdFileMessage,
     'mentionedMessageTemplate' | 'mentionedUsers' | 'mentionedUserIds' | 'mentionType'
   > => {
     return Boolean(
-      this.mentionEnabled &&
+      mentionEnabled &&
         message?.mentionedMessageTemplate &&
         message?.mentionedUsers &&
         message?.mentionedUsers.length > 0,

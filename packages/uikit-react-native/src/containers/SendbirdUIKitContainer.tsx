@@ -14,7 +14,7 @@ import {
   ToastProvider,
   UIKitThemeProvider,
 } from '@sendbird/uikit-react-native-foundation';
-import { SBUConfig, UIKitConfigProvider, initialConfig } from '@sendbird/uikit-tools';
+import { SBUConfig, UIKitConfigProvider } from '@sendbird/uikit-tools';
 import type {
   PartialDeep,
   SendbirdChatSDK,
@@ -150,16 +150,8 @@ const SendbirdUIKitContainer = ({
       delimiter: MentionConfig.DEFAULT.DELIMITER,
       trigger: MentionConfig.DEFAULT.TRIGGER,
     });
-    return new MentionManager(
-      config,
-      uikitOptions?.groupChannel?.enableMention ?? initialConfig.groupChannel.channel.enableMention,
-    );
-  }, [
-    userMention?.mentionLimit,
-    userMention?.suggestionLimit,
-    userMention?.debounceMills,
-    uikitOptions?.groupChannel?.enableMention,
-  ]);
+    return new MentionManager(config);
+  }, [userMention?.mentionLimit, userMention?.suggestionLimit, userMention?.debounceMills]);
 
   const imageCompressionConfig = useMemo(() => {
     return new ImageCompressionConfig({
