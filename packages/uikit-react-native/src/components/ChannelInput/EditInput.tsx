@@ -39,7 +39,7 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
   },
   ref,
 ) {
-  const { mentionManager } = useSendbirdChat();
+  const { mentionManager, sbOptions } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const toast = useToast();
 
@@ -52,7 +52,11 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
     if (messageToEdit.isUserMessage()) {
       const mentionType = MentionType.USERS;
       const mentionedUserIds = mentionedUsers.map((it) => it.user.userId);
-      const mentionedMessageTemplate = mentionManager.textToMentionedMessageTemplate(text, mentionedUsers);
+      const mentionedMessageTemplate = mentionManager.textToMentionedMessageTemplate(
+        text,
+        mentionedUsers,
+        sbOptions.uikit.groupChannel.channel.enableMention,
+      );
 
       onPressUpdateUserMessage(messageToEdit, {
         message: text,
@@ -81,7 +85,11 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
           placeholder={STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_ACTIVE}
           onSelectionChange={onSelectionChange}
         >
-          {mentionManager.textToMentionedComponents(text, mentionedUsers)}
+          {mentionManager.textToMentionedComponents(
+            text,
+            mentionedUsers,
+            sbOptions.uikit.groupChannel.channel.enableMention,
+          )}
         </TextInput>
       </View>
       <View style={{ marginTop: 8, flexDirection: 'row' }}>

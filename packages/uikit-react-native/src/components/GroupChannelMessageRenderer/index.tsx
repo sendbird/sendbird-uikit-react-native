@@ -88,8 +88,13 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     regexTextPatterns: RegexTextPattern[];
   } = {
     renderRegexTextChildren: (message) => {
-      if (mentionManager.shouldUseMentionedMessageTemplate(message)) return message.mentionedMessageTemplate;
-      else return message.message;
+      if (
+        mentionManager.shouldUseMentionedMessageTemplate(message, sbOptions.uikit.groupChannel.channel.enableMention)
+      ) {
+        return message.mentionedMessageTemplate;
+      } else {
+        return message.message;
+      }
     },
     regexTextPatterns: [
       {

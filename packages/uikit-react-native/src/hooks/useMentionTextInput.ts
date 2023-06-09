@@ -8,7 +8,7 @@ import type { MentionedUser } from '../types';
 import { useSendbirdChat } from './useContext';
 
 const useMentionTextInput = (params: { messageToEdit?: SendbirdUserMessage | SendbirdFileMessage }) => {
-  const { mentionManager } = useSendbirdChat();
+  const { mentionManager, sbOptions } = useSendbirdChat();
 
   const mentionedUsersRef = useRef<MentionedUser[]>([]);
   const textInputRef = useRef<TextInput>();
@@ -18,7 +18,12 @@ const useMentionTextInput = (params: { messageToEdit?: SendbirdUserMessage | Sen
 
   // TODO: Refactor text edit logic more clearly
   useEffect(() => {
-    if (mentionManager.shouldUseMentionedMessageTemplate(params.messageToEdit)) {
+    if (
+      mentionManager.shouldUseMentionedMessageTemplate(
+        params.messageToEdit,
+        sbOptions.uikit.groupChannel.channel.enableMention,
+      )
+    ) {
       const result = mentionManager.templateToTextAndMentionedUsers(
         params.messageToEdit.mentionedMessageTemplate,
         params.messageToEdit.mentionedUsers,

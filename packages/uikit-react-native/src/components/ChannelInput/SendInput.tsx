@@ -50,7 +50,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   },
   ref,
 ) {
-  const { mentionManager } = useSendbirdChat();
+  const { mentionManager, sbOptions } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
   const { openSheet } = useBottomSheet();
@@ -61,7 +61,11 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   const sendUserMessage = () => {
     const mentionType = MentionType.USERS;
     const mentionedUserIds = mentionedUsers.map((it) => it.user.userId);
-    const mentionedMessageTemplate = mentionManager.textToMentionedMessageTemplate(text, mentionedUsers);
+    const mentionedMessageTemplate = mentionManager.textToMentionedMessageTemplate(
+      text,
+      mentionedUsers,
+      sbOptions.uikit.groupChannel.channel.enableMention,
+    );
 
     onPressSendUserMessage({
       message: text,
@@ -106,7 +110,11 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
         style={styles.input}
         placeholder={getPlaceholder()}
       >
-        {mentionManager.textToMentionedComponents(text, mentionedUsers)}
+        {mentionManager.textToMentionedComponents(
+          text,
+          mentionedUsers,
+          sbOptions.uikit.groupChannel.channel.enableMention,
+        )}
       </TextInput>
 
       {Boolean(text.trim()) && (
