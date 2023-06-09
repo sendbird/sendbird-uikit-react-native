@@ -40,7 +40,7 @@ const GroupChannelSettingsMenu = ({
     __DEV__ &&
     !WARN_onPressMenuSearchInChannel &&
     !onPressMenuSearchInChannel &&
-    sbOptions.uikit.groupChannel.setting.enableMessageSearch
+    sbOptions.uikitWithAppInfo.groupChannel.setting.enableMessageSearch
   ) {
     Logger.warn('If you are using message search, make sure to pass the `onPressMenuSearchInChannel` prop');
     WARN_onPressMenuSearchInChannel = true;
@@ -107,7 +107,7 @@ const GroupChannelSettingsMenu = ({
     },
   ];
 
-  if (sbOptions.uikit.groupChannel.setting.enableMessageSearch && !channel.isEphemeral) {
+  if (sbOptions.uikitWithAppInfo.groupChannel.setting.enableMessageSearch && !channel.isEphemeral) {
     defaultMenuItems.push({
       icon: 'search',
       name: STRINGS.GROUP_CHANNEL_SETTINGS.MENU_SEARCH,
