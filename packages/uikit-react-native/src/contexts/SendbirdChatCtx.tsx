@@ -43,6 +43,22 @@ export type SendbirdChatContextType = {
   sbOptions: {
     // UIKit options
     uikit: SBUConfig;
+    uikitWithAppInfo: {
+      groupChannel: {
+        channel: {
+          enableReactions: boolean;
+          enableOgtag: boolean;
+        };
+        setting: {
+          enableMessageSearch: boolean;
+        };
+      };
+      openChannel: {
+        channel: {
+          enableOgtag: boolean;
+        };
+      };
+    };
 
     // Chat related options in UIKit
     chat: {
@@ -75,7 +91,7 @@ export const SendbirdChatProvider = ({
   const [currentUser, _setCurrentUser] = useState<SendbirdUser>();
   const forceUpdate = useForceUpdate();
   const appFeatures = useAppFeatures(sdkInstance);
-  const { configs } = useUIKitConfig();
+  const { configs, configsWithAppAttr } = useUIKitConfig();
 
   const setCurrentUser: SendbirdChatContextType['setCurrentUser'] = useCallback((user) => {
     // NOTE: Sendbird SDK handle User object is always same object, so force update after setCurrentUser
@@ -144,6 +160,7 @@ export const SendbirdChatProvider = ({
     sbOptions: {
       appInfo: appFeatures,
       uikit: configs,
+      uikitWithAppInfo: configsWithAppAttr(sdkInstance),
       chat: {
         autoPushTokenRegistrationEnabled: enableAutoPushTokenRegistration,
         useUserIdForNicknameEnabled: enableUseUserIdForNickname,

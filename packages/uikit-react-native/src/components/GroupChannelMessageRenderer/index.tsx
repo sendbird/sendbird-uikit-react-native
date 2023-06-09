@@ -46,7 +46,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
 
   const reactionChildren = useIIFE(() => {
     if (
-      shouldRenderReaction(channel, sbOptions.uikit.groupChannel.channel.enableReactions) &&
+      shouldRenderReaction(channel, sbOptions.uikitWithAppInfo.groupChannel.channel.enableReactions) &&
       message.reactions &&
       message.reactions.length > 0
     ) {
@@ -132,7 +132,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
       }
       case 'user':
       case 'user.opengraph': {
-        if (message.ogMetaData && sbOptions.uikit.groupChannel.channel.enableOgtag) {
+        if (message.ogMetaData && sbOptions.uikitWithAppInfo.groupChannel.channel.enableOgtag) {
           return (
             <GroupChannelMessage.OpenGraphUser
               message={message as SendbirdUserMessage}

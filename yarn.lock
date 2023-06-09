@@ -3278,7 +3278,7 @@
   dependencies:
     nanoid "^3.1.23"
 
-"@sendbird/chat@4.9.1", "@sendbird/chat@^4.9.0", "@sendbird/chat@^4.9.1":
+"@sendbird/chat@^4.9.0", "@sendbird/chat@^4.9.1":
   version "4.9.1"
   resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.9.1.tgz#4c17d388b835de1b0bb42ffea41cbf17e4405033"
   integrity sha512-OQTj5tSEyKKBjPEB3wZUrtW8GJot9jyq/7odNiWQ6mk0HidM7TkepEpykhDEGeyv6Wo1OM6/viftxjf1W0L27A==
@@ -3293,10 +3293,10 @@
   resolved "https://registry.yarnpkg.com/@sendbird/react-native-scrollview-enhancer/-/react-native-scrollview-enhancer-0.2.0.tgz#facd5df1da8296868ecca20623919cbc897c4322"
   integrity sha512-Ia8Eab/9zNEMzUFcz9856LjKVNdjqxnJmjQ/f/ItqM2b7XeRh4svvWzWs4z2v6+yCpbhQrscUJh5jz5jHVcygg==
 
-"@sendbird/uikit-tools@^0.0.1-alpha.35":
-  version "0.0.1-alpha.35"
-  resolved "https://registry.yarnpkg.com/@sendbird/uikit-tools/-/uikit-tools-0.0.1-alpha.35.tgz#a9db8ec92e679820c4521be5f998fc1b745a7116"
-  integrity sha512-HPfeuStCHD8tpUNEnbEEjLYjHlQvZHJt4gRMMuh6hgnK1mPhAeLCDYjKOOUOSsPVf/1FChkLaTh/U3ZGGcsflw==
+"@sendbird/uikit-tools@^0.0.1-alpha.37":
+  version "0.0.1-alpha.37"
+  resolved "https://registry.yarnpkg.com/@sendbird/uikit-tools/-/uikit-tools-0.0.1-alpha.37.tgz#afee2768d58913e99d1e14e07448222824a010b3"
+  integrity sha512-E+ZpVgLYl83+BbxtTQYJ9isQye4/bx4KmFODFG9ZGglejnVer4yLWoPsL81/OhHRdqSkmWgvcPa+QST1Zbqb5A==
 
 "@sideway/address@^4.1.3":
   version "4.1.4"

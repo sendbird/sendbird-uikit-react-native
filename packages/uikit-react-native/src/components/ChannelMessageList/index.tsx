@@ -329,7 +329,10 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
       response.onLongPress = () => {
         openSheet({
           sheetItems,
-          HeaderComponent: shouldRenderReaction(channel, sbOptions.uikit.groupChannel.channel.enableReactions)
+          HeaderComponent: shouldRenderReaction(
+            channel,
+            sbOptions.uikitWithAppInfo.groupChannel.channel.enableReactions,
+          )
             ? ({ onClose }) => <ReactionAddons.BottomSheet message={msg} channel={channel} onClose={onClose} />
             : undefined,
         });
