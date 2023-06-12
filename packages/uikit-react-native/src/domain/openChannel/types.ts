@@ -78,6 +78,7 @@ export type OpenChannelProps = {
     | 'onPressSendFileMessage'
     | 'onPressUpdateUserMessage'
     | 'onPressUpdateFileMessage'
+    | 'AttachmentsButton'
   >;
 
   Provider: {

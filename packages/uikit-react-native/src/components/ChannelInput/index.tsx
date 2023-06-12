@@ -20,6 +20,8 @@ import {
 import { useSendbirdChat } from '../../hooks/useContext';
 import useMentionTextInput from '../../hooks/useMentionTextInput';
 import type { MentionedUser, Range } from '../../types';
+import type { AttachmentsButtonProps } from './AttachmentsButton';
+import AttachmentsButton from './AttachmentsButton';
 import EditInput from './EditInput';
 import SendInput from './SendInput';
 
@@ -56,6 +58,9 @@ export type ChannelInputProps = {
 
   // mention
   SuggestedMentionList?: (props: SuggestedMentionListProps) => JSX.Element | null;
+
+  // sub-components
+  AttachmentsButton?: (props: AttachmentsButtonProps) => JSX.Element | null;
 };
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
@@ -121,6 +126,7 @@ const ChannelInput = (props: ChannelInputProps) => {
                 onChangeText={onChangeText}
                 onSelectionChange={onSelectionChange}
                 mentionedUsers={mentionedUsers}
+                AttachmentsButton={props.AttachmentsButton ?? AttachmentsButton}
               />
             )}
             {inputMode === 'edit' && messageToEdit && (

@@ -82,6 +82,7 @@ export interface GroupChannelProps {
     | 'onPressUpdateUserMessage'
     | 'onPressUpdateFileMessage'
     | 'SuggestedMentionList'
+    | 'AttachmentsButton'
   >;
 
   SuggestedMentionList: SuggestedMentionListProps;

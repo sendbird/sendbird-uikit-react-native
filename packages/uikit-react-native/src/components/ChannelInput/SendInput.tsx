@@ -37,6 +37,7 @@ interface SendInputProps extends ChannelInputProps {
 
 const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   {
+    AttachmentsButton,
     onPressSendUserMessage,
     onPressSendFileMessage,
     text,
@@ -92,14 +93,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
 
   return (
     <View style={styles.sendInputContainer}>
-      <TouchableOpacity onPress={onPressAttachment} disabled={inputDisabled}>
-        <Icon
-          color={inputDisabled ? colors.ui.input.default.disabled.highlight : colors.ui.input.default.active.highlight}
-          icon={'add'}
-          size={24}
-          containerStyle={styles.iconAttach}
-        />
-      </TouchableOpacity>
+      {AttachmentsButton && <AttachmentsButton onPress={onPressAttachment} disabled={inputDisabled} />}
       <TextInput
         ref={ref}
         multiline
@@ -354,10 +348,6 @@ const styles = createStyleSheet({
     minHeight: 36,
     maxHeight: 36 * Platform.select({ ios: 2.5, default: 2 }),
     borderRadius: 20,
-  },
-  iconAttach: {
-    marginRight: 8,
-    padding: 4,
   },
   iconSend: {
     marginLeft: 4,
