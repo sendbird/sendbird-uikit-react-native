@@ -46,7 +46,6 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     onBeforeUpdateFileMessage = PASS,
     channel,
     keyboardAvoidOffset,
-    queryCreator,
     collectionCreator,
     sortComparator = messageComparator,
     flatListProps,
@@ -76,16 +75,15 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       deleteMessage,
       resetWithStartingPoint,
     } = useGroupChannelMessages(sdk, channel, currentUser?.userId, {
-      collectionCreator,
-      queryCreator,
-      sortComparator,
-      onChannelDeleted,
-      enableCollectionWithoutLocalCache: !queryCreator,
       shouldCountNewMessages: () => scrolledAwayFromBottomRef.current,
       onMessagesReceived(messages) {
         groupChannelPubSub.publish({ type: 'MESSAGES_RECEIVED', data: { messages } });
       },
+      collectionCreator,
+      sortComparator,
+      onChannelDeleted,
       startingPoint: internalSearchItem?.startingPoint,
+      enableCollectionWithoutLocalCache: true,
     });
 
     const renderItem: GroupChannelProps['MessageList']['renderMessage'] = useFreshCallback((props) => {

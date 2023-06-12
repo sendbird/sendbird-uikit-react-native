@@ -87,7 +87,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
 
     collectionInitializedRef.current = false;
     collectionRef.current = createMessageCollection(channel, limit, {
-      collectionCreator: options?.collectionCreator,
+      ...options,
       startingPoint,
     });
 
