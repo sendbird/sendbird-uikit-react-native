@@ -6,9 +6,16 @@ import { useGroupChannelMessagesWithQuery } from './useGroupChannelMessagesWithQ
 
 export const useGroupChannelMessages: UseGroupChannelMessages = (sdk, channel, userId, options) => {
   if (sdk.isCacheEnabled || options?.enableCollectionWithoutLocalCache) {
-    if (options?.queryCreator) Logger.warn('`queryCreator` is ignored, please use `collectionCreator` instead.');
+    if (options?.queryCreator) printIgnoredWarning();
     return useGroupChannelMessagesWithCollection(sdk, channel, userId, options);
   } else {
     return useGroupChannelMessagesWithQuery(sdk, channel, userId, options);
   }
+};
+
+const printIgnoredWarning = () => {
+  Logger.warn(
+    'If sdk.isCacheEnabled or enableCollectionWithoutLocalCache is turned on, queryCreator is ignored' +
+      'Please use collectionCreator instead.',
+  );
 };
