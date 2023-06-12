@@ -140,7 +140,7 @@
 - `GroupChannelListFragment`(`GroupChannelListProps`)
 
   - In order to specify the local cache as mandatory, the `queryCreator` prop has been removed.
-  - `renderGroupChannelPreview` has been changed from `(channel: SendbirdGroupChannel, onLongPressChannel: () => void) => React.ReactElement | null` to `renderGroupChannelPreview: (props: { channel: SendbirdGroupChannel; onPress: () => void; onLongPress: () => void; }) => React.ReactElement | null`.
+  - `renderGroupChannelPreview` has been changed from `(channel: SendbirdGroupChannel, onLongPressChannel: () => void) => React.ReactElement | null` to `(props: { channel: SendbirdGroupChannel; onPress: () => void; onLongPress: () => void; }) => React.ReactElement | null`.
 
 - `MessageRenderer` component is replaced with `GroupChannelMessageRenderer`
 
