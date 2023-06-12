@@ -65,6 +65,7 @@
 - Supports stable React-Native APIs (e.g. EventSubscription).
 - Minimum iOS version for deployment has been changed to 11. ([link](https://developer.apple.com/documentation/xcode-release-notes/xcode-14-release-notes#Deprecations))
 - An increase in the minimum Gradle version is required for stable operation.
+- https://react-native-community.github.io/upgrade-helper/?from=0.63.5&to=0.65.3
 
 #### Local cache is now a mandatory requirement.
 
