@@ -37,15 +37,9 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     }
 
     const _renderGroupChannelPreview: GroupChannelListProps['List']['renderGroupChannelPreview'] = useFreshCallback(
-      (channel, onLongPressChannel) => {
-        if (renderGroupChannelPreview) return renderGroupChannelPreview(channel, onLongPressChannel);
-        return (
-          <GroupChannelPreviewContainer
-            channel={channel}
-            onPress={() => onPressChannel(channel)}
-            onLongPress={() => onLongPressChannel()}
-          />
-        );
+      (props) => {
+        if (renderGroupChannelPreview) return renderGroupChannelPreview(props);
+        return <GroupChannelPreviewContainer {...props} />;
       },
     );
 
@@ -57,6 +51,7 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
         <GroupChannelListModule.Header />
         <StatusComposition loading={loading} LoadingComponent={<GroupChannelListModule.StatusLoading />}>
           <GroupChannelListModule.List
+            onPressChannel={onPressChannel}
             menuItemCreator={menuItemCreator}
             renderGroupChannelPreview={_renderGroupChannelPreview}
             groupChannels={groupChannels}

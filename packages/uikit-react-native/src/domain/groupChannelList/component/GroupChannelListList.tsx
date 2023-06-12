@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { FlatList, ListRenderItem } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -10,6 +10,7 @@ import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import type { GroupChannelListProps } from '../types';
 
 const GroupChannelListList = ({
+  onPressChannel,
   renderGroupChannelPreview,
   groupChannels,
   onLoadNext,
@@ -55,9 +56,12 @@ const GroupChannelListList = ({
     openMenu(menuItem);
   });
 
-  const renderItem: ListRenderItem<SendbirdGroupChannel> = useCallback(
-    ({ item }) => renderGroupChannelPreview?.(item, () => onLongPress(item)),
-    [renderGroupChannelPreview, onLongPress],
+  const renderItem: ListRenderItem<SendbirdGroupChannel> = useFreshCallback(({ item }) =>
+    renderGroupChannelPreview?.({
+      channel: item,
+      onPress: () => onPressChannel(item),
+      onLongPress: () => onLongPress(item),
+    }),
   );
 
   const { left, right } = useSafeAreaInsets();
