@@ -7,6 +7,7 @@ import { SendbirdOpenChannel, getChannelUniqId, useFreshCallback } from '@sendbi
 import type { OpenChannelListProps } from '../types';
 
 const OpenChanelListList = ({
+  onPressChannel,
   openChannels,
   onLoadNext,
   flatListProps,
@@ -15,7 +16,7 @@ const OpenChanelListList = ({
   onRefresh,
 }: OpenChannelListProps['List']) => {
   const renderItem: ListRenderItem<SendbirdOpenChannel> = useFreshCallback(({ item }) =>
-    renderOpenChannelPreview?.({ channel: item }),
+    renderOpenChannelPreview?.({ channel: item, onPress: () => onPressChannel(item) }),
   );
 
   const { left, right } = useSafeAreaInsets();
