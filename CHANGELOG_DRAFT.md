@@ -4,6 +4,7 @@
 
 ### Feature configurations
 
+- The minimum @sendbird/chat version has been increased from 4.3.0 to 4.9.0.
 - You can now configure the features of UIKit through the `uikitOptions` prop of `SendbirdUIKitContainer`.
 
 ```tsx
@@ -56,18 +57,16 @@
 
 ## Breaking changes
 
-### The minimum @sendbird/chat version has been increased from 4.3.0 to 4.9.0.
+### Project configurations
 
-- Supports feature configurations.
-
-### The minimum React-Native version has been increased from 0.63.3 to 0.65.0.
+#### The minimum React-Native version has been increased from 0.63.3 to 0.65.0.
 
 - Supports stable Metro bundler version.
 - Supports stable React-Native APIs (e.g. EventSubscription).
 - Minimum iOS version for deployment has been changed to 11. ([link](https://developer.apple.com/documentation/xcode-release-notes/xcode-14-release-notes#Deprecations))
 - An increase in the minimum Gradle version is required for stable operation.
 
-### Local cache is now a mandatory requirement.
+#### Local cache is now a mandatory requirement.
 
 - You must inject localCacheStorage into SendbirdUIKitContainer.
 
@@ -75,9 +74,9 @@
 <SendbirdUIKitContainer chatOptions={{ localCacheStorage: AsyncStorage }} />
 ```
 
-## Migrations & Removed (deprecated item removal)
+### Code migrations and removal of deprecated items
 
-### Feature configurations
+#### Feature configurations
 
 - The feature configuration options that were previously present in the `chatOptions` prop of `SendbirdUIKitContainer` have been moved to `uikitOptions` prop.
 
@@ -89,7 +88,7 @@
   - `chatOptions.enableOpenChannelOGTag` is replaced with `uikitOptions.openChannel.enableOgtag`
   - `chatOptions.enableUsingDefaultUserProfile` is replaced with `uikitOptions.common.enableUsingDefaultUserProfile`
 
-### Resources
+#### Resources
 
 - StringSet
 
@@ -118,7 +117,7 @@
 - Theme
   - `Messsage` in colors is replaced with `GroupChannelMessage` (`colors.ui.message` -> `colors.ui.groupChannelMessage`)
 
-### Components
+#### Components
 
 - `GroupChannelFragment`(`GroupChannelProps`),
 
@@ -144,7 +143,7 @@
 
 - `MessageRenderer` component is replaced with `GroupChannelMessageRenderer`
 
-### Hooks
+#### Hooks
 
 - `useGroupChannelMessages`, `useOpenChannelMessages`
   - `nextMessages` and `newMessagesFromMembers` properties are replaced with `newMessages`
