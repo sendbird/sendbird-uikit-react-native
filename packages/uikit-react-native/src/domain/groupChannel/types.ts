@@ -43,7 +43,6 @@ export interface GroupChannelProps {
     flatListProps?: GroupChannelProps['MessageList']['flatListProps'];
     sortComparator?: UseGroupChannelMessagesOptions['sortComparator'];
     collectionCreator?: UseGroupChannelMessagesOptions['collectionCreator'];
-    queryCreator?: UseGroupChannelMessagesOptions['queryCreator'];
 
     searchItem?: GroupChannelProps['MessageList']['searchItem'];
   };

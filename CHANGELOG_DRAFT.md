@@ -89,7 +89,7 @@
   - `chatOptions.enableOpenChannelOGTag` is replaced with `uikitOptions.openChannel.enableOgtag`
   - `chatOptions.enableUsingDefaultUserProfile` is replaced with `uikitOptions.common.enableUsingDefaultUserProfile`
 
-### @sendbird/uikit-react-native
+### Resources
 
 - StringSet
 
@@ -115,26 +115,36 @@
   - `GROUP_CHANNEL_MEMBERS.USER_BAR_ME_POSTFIX` is replaced with `LABELS.USER_BAR_ME_POSTFIX`
   - `GROUP_CHANNEL_MEMBERS.USER_BAR_OPERATOR` is replaced with `LABELS.USER_BAR_OPERATOR`
 
+- Theme
+  - `Messsage` in colors is replaced with `GroupChannelMessage` (`colors.ui.message` -> `colors.ui.groupChannelMessage`)
+
+### Components
+
+- `GroupChannelFragment`(`GroupChannelProps`),
+
+  - In order to specify the local cache as mandatory, the `queryCreator` prop has been removed.
+
 - `ChannelMessageList` (`GroupChannelProps`, `OpenChannelProps`)
 
   - `onPressImageMessage` prop is replaced with `onPressMediaMessage`
   - `onLeaveScrollBottom` prop is replaced with `onScrolledAwayFromBottom`
   - `onPressAvatar` prop is replaced with `onShowUserProfile`
 
-- `MessageRenderer` component is replaced with `GroupChannelMessageRenderer`
-
 - `ChannelInput` (`GroupChannelProps`, `OpenChannelProps`)
+
   - `onSendFileMessage` prop is replaced with `onPressSendUserMessage`
   - `onSendUserMessage` prop is replaced with `onPressSendUserMessage`
   - `onUpdateFileMessage` prop is replaced with `onPressUpdateUserMessage`
   - `onUpdateUserMessage` prop is replaced with `onPressUpdateFileMessage`
 
-### @sendbird/uikit-chat-hooks
+- `GroupChannelListFragment`(`GroupChannelListProps`)
+
+  - In order to specify the local cache as mandatory, the `queryCreator` prop has been removed.
+  - `renderGroupChannelPreview` has been changed from `(channel: SendbirdGroupChannel, onLongPressChannel: () => void) => React.ReactElement | null` to `(props: { channel: SendbirdGroupChannel; onPress: () => void; onLongPress: () => void; }) => React.ReactElement | null`.
+
+- `MessageRenderer` component is replaced with `GroupChannelMessageRenderer`
+
+### Hooks
 
 - `useGroupChannelMessages`, `useOpenChannelMessages`
   - `nextMessages` and `newMessagesFromMembers` properties are replaced with `newMessages`
-
-### @sendbird/uikit-react-native-foundation
-
-- Theme
-  - `Messsage` in colors is replaced with `GroupChannelMessage` (`colors.ui.message` -> `colors.ui.groupChannelMessage`)
