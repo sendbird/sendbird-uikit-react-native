@@ -6,7 +6,7 @@ aliases:
     key: v{{ .Environment.CACHE_VERSION }}-yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
   - &install_node_modules
     name: Install node_modules
-    command: yarn install --frozen-lockfiles
+    command: yarn install --immutable
   - &save_node_modules_base
     key: v{{ .Environment.CACHE_VERSION }}-yarn-base-{{ arch }}-{{ checksum "yarn.lock" }}
     paths:
