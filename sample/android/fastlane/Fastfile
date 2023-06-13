@@ -2,6 +2,12 @@ PACKAGE_JSON=read_json(json_path: "#{Dir.pwd}/../../package.json")
 VERSION=PACKAGE_JSON[:version]
 DATE=Time.new.strftime("%Y.%m%d.%H%M")
 
+before_all do |lane, options|
+  if options[:version] != ""
+    VERSION=options[:version]
+  end
+end
+
 default_platform(:android)
 platform :android do
   desc "Deploy a new build to Firebase distribution"

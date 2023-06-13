@@ -38,12 +38,17 @@ parameters:
     type: enum
     default: 'Noop'
     enum: ['All', 'iOS', 'Android', 'Noop']
+  version:
+    type: string
+    default: ''
 
 jobs:
   deploy-ios:
     macos:
       xcode: 14.1.0
     resource_class: macos.x86.medium.gen2
+    environment:
+      APP_VERSION: << pipeline.parameters.version >>
     steps:
       - checkout
       - macos/switch-ruby:
@@ -80,12 +85,14 @@ jobs:
             echo "export FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=$FASTLANE_IOS_APPLE_APPLICATION_SPECIFIC_PASSWORD" >> $BASH_ENV
       - run:
           name: Run fastlane
-          command: yarn deploy:ios
+          command: yarn deploy:ios version:$APP_VERSION
 
   deploy-android:
     docker:
       - image: cimg/android:2022.03-node
     resource_class: xlarge
+    environment:
+      APP_VERSION: << pipeline.parameters.version >>
     steps:
       - checkout
       - ruby/install:
@@ -109,7 +116,7 @@ jobs:
             echo "export FIREBASEAPPDISTRO_APP=$FASTLANE_ANDROID_APP_ID" >> $BASH_ENV
       - run:
           name: Run fastlane
-          command: yarn deploy:android
+          command: yarn deploy:android version:$APP_VERSION
 
 workflows:
   run-ios:
