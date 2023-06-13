@@ -11,6 +11,11 @@ on:
           - All
           - Android
           - iOS
+      version:
+        description: 'version (optional)'
+        required: false
+        type: string
+        default: ''
 
 jobs:
   execute:
@@ -24,7 +29,7 @@ jobs:
           user-token: ${{ secrets.CIRCLECI_PERSONAL_API_TOKEN }}
           project-slug: sendbird/sendbird-uikit-react-native
           branch: ${{ env.BRANCH_NAME }}
-          payload: '{"platform": "${{ github.event.inputs.platform }}" }'
+          payload: '{"platform": "${{ github.event.inputs.platform }}", "version": "${{ github.event.inputs.version }}" }'
 
 #env:
 #  CACHE_NODE_MODULES_PATH: |
