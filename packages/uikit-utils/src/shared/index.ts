@@ -37,3 +37,17 @@ export function pick<T extends { [key: string]: unknown }, Keys extends keyof T>
     return pickedObj;
   }, {} as { [key in Keys]: T[key] });
 }
+
+export function mergeObjectArrays<T>(A: T[], B: T[], key: keyof T): T[] {
+  const uniqueValues = new Set(A.map((obj) => obj[key]));
+  const newArr = [...A];
+
+  for (let i = 0; i < B.length; i++) {
+    if (!uniqueValues.has(B[i][key])) {
+      newArr.push(B[i]);
+      uniqueValues.add(B[i][key]);
+    }
+  }
+
+  return newArr;
+}

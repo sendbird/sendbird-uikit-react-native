@@ -12,7 +12,7 @@ describe('useGroupChannelListReducer', () => {
     expect(result.current.groupChannels).toEqual([]);
     expect(result.current.loading).toEqual(true);
     expect(result.current.refreshing).toEqual(false);
-    expect(result.current.setChannels).toBeInstanceOf(Function);
+    expect(result.current.appendChannels).toBeInstanceOf(Function);
     expect(result.current.deleteChannels).toBeInstanceOf(Function);
     expect(result.current.updateOrder).toBeInstanceOf(Function);
     expect(result.current.updateChannels).toBeInstanceOf(Function);
@@ -48,27 +48,30 @@ describe('useGroupChannelListReducer', () => {
     });
   });
 
-  it('should return the correct state after setChannels without clearBeforeAction', async () => {
+  it('should return the correct state after appendChannels without clearBeforeAction', async () => {
     const { result } = renderHook(() => useGroupChannelListReducer());
 
     const channels = [
       createMockChannel({ channelType: ChannelType.GROUP, url: 'channel_url_1' }),
       createMockChannel({ channelType: ChannelType.GROUP, url: 'channel_url_2' }),
     ];
-    const appendedChannel = createMockChannel({ channelType: ChannelType.GROUP, url: 'channel_url_3' });
+    const appendedChannels = [
+      createMockChannel({ channelType: ChannelType.GROUP, url: 'channel_url_1' }),
+      createMockChannel({ channelType: ChannelType.GROUP, url: 'channel_url_3' }),
+    ];
 
     act(() => {
-      result.current.setChannels(channels, true);
+      result.current.appendChannels(channels, true);
     });
     await waitFor(() => {
       expect(result.current.groupChannels).toEqual(channels);
     });
 
     act(() => {
-      result.current.setChannels([appendedChannel], false);
+      result.current.appendChannels(appendedChannels, false);
     });
     await waitFor(() => {
-      expect(result.current.groupChannels).toEqual([...channels, appendedChannel]);
+      expect(result.current.groupChannels).toEqual([channels[0], channels[1], appendedChannels[1]]);
     });
   });
 
@@ -82,14 +85,14 @@ describe('useGroupChannelListReducer', () => {
     const appendedChannel = createMockChannel({ channelType: ChannelType.GROUP, url: 'channel_url_3' });
 
     act(() => {
-      result.current.setChannels(channels, true);
+      result.current.appendChannels(channels, true);
     });
     await waitFor(() => {
       expect(result.current.groupChannels).toEqual(channels);
     });
 
     act(() => {
-      result.current.setChannels([appendedChannel], true);
+      result.current.appendChannels([appendedChannel], true);
     });
     await waitFor(() => {
       expect(result.current.groupChannels).toEqual([appendedChannel]);
@@ -113,7 +116,7 @@ describe('useGroupChannelListReducer', () => {
     ];
 
     act(() => {
-      result.current.setChannels(channels, true);
+      result.current.appendChannels(channels, true);
     });
     await waitFor(() => {
       expect(result.current.groupChannels).toEqual(channels);
@@ -137,7 +140,7 @@ describe('useGroupChannelListReducer', () => {
     const validDeletedChannelIds = [channels[0].url];
 
     act(() => {
-      result.current.setChannels(channels, true);
+      result.current.appendChannels(channels, true);
     });
     await waitFor(() => {
       expect(result.current.groupChannels).toEqual(channels);
@@ -186,7 +189,7 @@ describe('useGroupChannelListReducer', () => {
     ];
 
     act(() => {
-      result.current.setChannels(channels, true);
+      result.current.appendChannels(channels, true);
     });
     await waitFor(() => {
       expect(result.current.groupChannels).toEqual(channels);
