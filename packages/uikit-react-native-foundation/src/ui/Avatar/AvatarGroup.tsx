@@ -71,7 +71,7 @@ const getWidthPoint = (idx: number, total: number) => {
   return 0.5;
 };
 const getTopPoint = (idx: number, total: number) => {
-  if (total === 2) return -0.025;
+  if (total === 2) return 0;
   if (total === 3 && idx === 0) return -0.025;
   if (total === 3 && idx !== 0) return 0.525;
   if (idx === 0 || idx === 1) return -0.025;
