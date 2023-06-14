@@ -4,7 +4,7 @@
 
 ### Feature configurations
 
-- The minimum @sendbird/chat version has been increased from 4.3.0 to 4.9.0.
+- The minimum @sendbird/chat version has been increased from 4.3.0 to 4.9.2.
 - You can now configure the features of UIKit through the `uikitOptions` prop of `SendbirdUIKitContainer`.
 
 ```tsx
