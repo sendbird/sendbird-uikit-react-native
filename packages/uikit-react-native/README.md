@@ -46,6 +46,8 @@ UIKit for React-Native can be installed through either `yarn` or `npm`
 
 **Install dependencies**
 
+> Note: If you are using `react-native` version `0.72` or higher, you don't need to install `@sendbird/react-native-scrollview-enhancer`.
+
 ```sh
 npm install @sendbird/uikit-react-native \
             @sendbird/chat \

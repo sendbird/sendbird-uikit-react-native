@@ -138,6 +138,9 @@
     "@react-native-firebase/messaging": {
       "optional": true
     },
+    "@sendbird/react-native-scrollview-enhancer": {
+      "optional": true
+    },
     "expo-av": {
       "optional": true
     },

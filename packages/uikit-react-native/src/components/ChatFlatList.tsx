@@ -1,7 +1,6 @@
-import React, { forwardRef, useRef } from 'react';
-import { FlatListProps, Platform, FlatList as RNFlatList, StyleSheet } from 'react-native';
+import React, { ForwardedRef, forwardRef, useRef } from 'react';
+import { FlatListProps, Platform, FlatList as RNFlatList, ScrollViewProps, StyleSheet } from 'react-native';
 
-import { FlatList } from '@sendbird/react-native-scrollview-enhancer';
 import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { NOOP, SendbirdMessage, getMessageUniqId, useFreshCallback } from '@sendbird/uikit-utils';
 
@@ -9,13 +8,46 @@ let ANDROID_BUG_ALERT_SHOWED = Platform.OS !== 'android';
 const BOTTOM_DETECT_THRESHOLD = 25;
 const UNREACHABLE_THRESHOLD = Number.MIN_SAFE_INTEGER;
 
+type FlatListBidirectional<T = SendbirdMessage> = (
+  props: FlatListProps<T> & BidirectionalProps<T>,
+) => React.ReactElement;
+type BidirectionalProps<T> = {
+  onStartReached?: ((info: { distanceFromStart: number }) => void) | null | undefined;
+  onStartReachedThreshold?: number | null | undefined;
+  onEndReached?: ((info: { distanceFromEnd: number }) => void) | null | undefined;
+  onEndReachedThreshold?: number | null | undefined;
+  maintainVisibleContentPosition?: ScrollViewProps['maintainVisibleContentPosition'];
+  ref: ForwardedRef<RNFlatList<T>>;
+};
+
+function shouldUseScrollViewEnhancer() {
+  if (Platform.constants.reactNativeVersion.major < 1) {
+    if (Platform.constants.reactNativeVersion.minor < 72) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function getFlatList(): FlatListBidirectional {
+  try {
+    return !shouldUseScrollViewEnhancer()
+      ? require('@sendbird/react-native-scrollview-enhancer').FlatList
+      : require('react-native').FlatList;
+  } catch {
+    return require('react-native').FlatList;
+  }
+}
+
+const FlatList = getFlatList();
+
 type Props = Omit<FlatListProps<SendbirdMessage>, 'onEndReached'> & {
   onBottomReached: () => void;
   onTopReached: () => void;
   onScrolledAwayFromBottom: (value: boolean) => void;
 };
 // FIXME: Inverted FlatList performance issue on Android {@link https://github.com/facebook/react-native/issues/30034}
-const ChatFlatList = forwardRef<RNFlatList<SendbirdMessage>, Props>(function CustomFlatList(
+const ChatFlatList = forwardRef<RNFlatList, Props>(function CustomFlatList(
   { onTopReached, onBottomReached, onScrolledAwayFromBottom, onScroll, ...props },
   ref,
 ) {
@@ -43,7 +75,8 @@ const ChatFlatList = forwardRef<RNFlatList<SendbirdMessage>, Props>(function Cus
     ANDROID_BUG_ALERT_SHOWED = true;
     // eslint-disable-next-line no-console
     console.warn(
-      'UIKit Warning: Inverted FlatList has a performance issue on Android, Maybe this is a bug please refer link\nhttps://github.com/facebook/react-native/issues/30034',
+      'UIKit Warning: The inverted FlatList has a performance issue on Android. Maybe this is a bug.\n' +
+        'Please refer to the link: https://github.com/facebook/react-native/issues/30034',
     );
   }
 
