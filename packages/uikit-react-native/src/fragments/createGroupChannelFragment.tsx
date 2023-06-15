@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
+import { ReplyType } from '@sendbird/chat/message';
 import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
 import {
   NOOP,
@@ -9,6 +10,7 @@ import {
   SendbirdUserMessage,
   messageComparator,
   useFreshCallback,
+  useIIFE,
   useRefTracker,
 } from '@sendbird/uikit-utils';
 
@@ -59,6 +61,11 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     const [scrolledAwayFromBottom, setScrolledAwayFromBottom] = useState(false);
     const scrolledAwayFromBottomRef = useRefTracker(scrolledAwayFromBottom);
 
+    const replyType = useIIFE(() => {
+      if (sbOptions.uikit.groupChannel.channel.replyType === 'none') return ReplyType.NONE;
+      else return ReplyType.ONLY_REPLY_TO_CHANNEL;
+    });
+
     const {
       loading,
       messages,
@@ -82,6 +89,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       collectionCreator,
       sortComparator,
       onChannelDeleted,
+      replyType,
       startingPoint: internalSearchItem?.startingPoint,
       enableCollectionWithoutLocalCache: true,
     });

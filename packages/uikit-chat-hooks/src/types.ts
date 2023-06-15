@@ -1,3 +1,4 @@
+import type { ReplyType } from '@sendbird/chat/message';
 import type {
   SendbirdChatSDK,
   SendbirdError,
@@ -201,6 +202,7 @@ export interface UseGroupChannelMessages {
 }
 
 export type UseGroupChannelMessagesOptions = {
+  replyType?: ReplyType;
   sortComparator?: (a: SendbirdMessage, b: SendbirdMessage) => number;
   queryCreator?: () => SendbirdPreviousMessageListQuery;
   collectionCreator?: (options?: Pick<UseGroupChannelMessagesOptions, 'startingPoint'>) => SendbirdMessageCollection;

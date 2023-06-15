@@ -24,10 +24,13 @@ const MESSAGE_LIMIT = {
 const createMessageCollection = (
   channel: SendbirdGroupChannel,
   limit: number,
-  options?: UseGroupChannelMessagesOptions,
+  options: UseGroupChannelMessagesOptions,
 ) => {
   if (options?.collectionCreator) return options?.collectionCreator({ startingPoint: options?.startingPoint });
+
   const filter = new MessageFilter();
+  if (options.replyType) filter.replyType = options.replyType;
+
   return channel.createMessageCollection({ filter, limit, startingPoint: options?.startingPoint });
 };
 
