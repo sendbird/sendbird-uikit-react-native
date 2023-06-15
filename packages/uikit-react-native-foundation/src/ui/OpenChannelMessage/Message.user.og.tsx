@@ -36,7 +36,7 @@ const OpenGraphUserMessage = (props: OpenChannelMessageProps<SendbirdUserMessage
                         <Text
                           {...parentProps}
                           key={`${keyPrefix}-${index}`}
-                          onPress={onPressURL}
+                          onPress={() => onPressURL?.(match)}
                           onLongPress={onLongPress}
                           color={colors.primary}
                           style={parentProps?.style}
@@ -61,7 +61,11 @@ const OpenGraphUserMessage = (props: OpenChannelMessageProps<SendbirdUserMessage
       </PressBox>
       {props.message.ogMetaData && (
         <MessageContainer {...rest} grouped>
-          <PressBox style={styles.ogContainer} onPress={onPressURL} onLongPress={onLongPress}>
+          <PressBox
+            style={styles.ogContainer}
+            onPress={() => props.message.ogMetaData?.url && onPressURL?.(props.message.ogMetaData.url)}
+            onLongPress={onLongPress}
+          >
             {({ pressed }) =>
               props.message.ogMetaData && (
                 <Box

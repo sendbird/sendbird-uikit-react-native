@@ -60,12 +60,12 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     variant: isMyMessage(message, currentUser?.userId) ? 'outgoing' : 'incoming',
     onPress,
     onLongPress,
-    onPressURL: () => message.ogMetaData?.url && SBUUtils.openURL(message.ogMetaData?.url),
+    onPressURL: (url) => SBUUtils.openURL(url),
     onPressAvatar: () => {
       if ('sender' in message) onShowUserProfile?.(message.sender);
     },
-    onPressMentionedUser: () => {
-      if ('sender' in message) onShowUserProfile?.(message.sender);
+    onPressMentionedUser: (mentionedUser) => {
+      if (mentionedUser) onShowUserProfile?.(mentionedUser);
     },
     groupedWithPrev: groupWithPrev,
     groupedWithNext: groupWithNext,
@@ -112,7 +112,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
                 {...parentProps}
                 key={`${keyPrefix}-${index}`}
                 color={mentionColor}
-                onPress={messageProps.onPressMentionedUser}
+                onPress={() => messageProps.onPressMentionedUser?.(user)}
                 onLongPress={messageProps.onLongPress}
                 style={[
                   parentProps?.style,

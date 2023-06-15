@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import type { SendbirdGroupChannel, SendbirdMessage } from '@sendbird/uikit-utils';
+import type { SendbirdGroupChannel, SendbirdMessage, SendbirdUser } from '@sendbird/uikit-utils';
 
 import AdminMessage from './Message.admin';
 import FileMessage from './Message.file';
@@ -31,8 +31,8 @@ export type GroupChannelMessageProps<T extends SendbirdMessage, AdditionalProps 
   onPress?: () => void;
   onLongPress?: () => void;
   onPressAvatar?: () => void;
-  onPressURL?: () => void;
-  onPressMentionedUser?: () => void;
+  onPressURL?: (url: string) => void;
+  onPressMentionedUser?: (mentionedUser?: SendbirdUser) => void;
 } & AdditionalProps;
 
 const GroupChannelMessage = {

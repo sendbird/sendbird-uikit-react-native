@@ -45,7 +45,7 @@ const MessageBubbleWithText = ({
                   <Text
                     {...parentProps}
                     key={`${keyPrefix}-${index}`}
-                    onPress={onPressURL}
+                    onPress={() => onPressURL?.(match)}
                     onLongPress={onLongPress}
                     style={[parentProps?.style, styles.urlText]}
                   >

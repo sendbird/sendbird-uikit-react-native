@@ -35,7 +35,7 @@ const OpenChannelMessageRenderer: OpenChannelProps['Fragment']['renderMessage'] 
     channel,
     onPress,
     onLongPress,
-    onPressURL: () => message.ogMetaData?.url && SBUUtils.openURL(message.ogMetaData?.url),
+    onPressURL: (url) => SBUUtils.openURL(url),
     onPressAvatar: () => 'sender' in message && onShowUserProfile?.(message.sender, { hideMessageButton: true }),
     grouped: groupWithPrev,
     strings: {

@@ -17,14 +17,18 @@ const MessageOpenGraph = ({
 }: {
   ogMetaData: Required<SendbirdUserMessage>['ogMetaData'];
   variant: 'outgoing' | 'incoming';
-  onPressURL?: () => void;
+  onPressURL?: (url: string) => void;
   onLongPress?: () => void;
 }) => {
   const { palette, select, colors } = useUIKitTheme();
   const color = colors.ui.groupChannelMessage[variant];
 
   return (
-    <PressBox activeOpacity={0.85} onPress={onPressURL} onLongPress={onLongPress}>
+    <PressBox
+      activeOpacity={0.85}
+      onPress={() => typeof ogMetaData?.url === 'string' && onPressURL?.(ogMetaData.url)}
+      onLongPress={onLongPress}
+    >
       {({ pressed }) => (
         <Box backgroundColor={pressed ? color.pressed.background : color.enabled.background}>
           {Boolean(ogMetaData.defaultImage) && (

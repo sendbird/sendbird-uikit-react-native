@@ -1,7 +1,7 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
 import React from 'react';
 
-import { Text as TextComponent, URLParsedText } from '@sendbird/uikit-react-native-foundation';
+import { Text as TextComponent } from '@sendbird/uikit-react-native-foundation';
 
 const TextMeta: ComponentMeta<typeof TextComponent> = {
   title: 'Text',
@@ -44,9 +44,3 @@ export const Default: TextStory = (args) => (
     })}
   </>
 );
-
-export const URLParse: TextStory = (args) => {
-  return (
-    <URLParsedText>{`${args.children}https://www.sendbird.com/path/123/param?=abcd ${args.children}`}</URLParsedText>
-  );
-};

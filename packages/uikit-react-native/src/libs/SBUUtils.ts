@@ -9,9 +9,13 @@ export default class SBUUtils {
     });
   }
 
-  static openURL(url: string) {
-    const targetUrl = url.startsWith('http') ? url : 'https://' + url;
-    Linking.openURL(targetUrl).catch((err) => Logger.warn('Cannot open url', err));
+  static async openURL(url: string) {
+    try {
+      const targetUrl = url.startsWith('http') ? url : 'https://' + url;
+      await Linking.openURL(targetUrl);
+    } catch (e) {
+      Logger.warn('Cannot open url', e);
+    }
   }
 
   static getImageSize(uri: string): Promise<{ width: number; height: number }> {
