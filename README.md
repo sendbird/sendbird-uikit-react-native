@@ -86,6 +86,15 @@ If you would like to try the sample app specifically fit to your usage, you can 
 > **Note** Update Chat SDK version of sample app <br/>
 > Edit `package.json` and change the version of `resolutions > @sendbird/chat` to the version you want to use.
 
+### Trouble shooting
+
+- Could not connect to development server on Android device
+  - Run `adb reverse tcp:8081 tcp:8081`.
+- Unable to resolve module `../version` from `packages/uikit-react-native/src/containers/SendbirdUIKitContainer.tsx`
+  - Run `yarn workspace @sendbird/uikit-react-native generate-version` on the root of the project.
+- `concurrently 'yarn start' 'react-native run-android'` does not working expected
+  - Run `yarn start` and `npx react-native run-android` separately on the `sample` directory.
+
 ## Development
 
 We tried development on macOS / Linux systems. You might encounter problems in running sample or scripts like `yarn build` in Windows machines.
