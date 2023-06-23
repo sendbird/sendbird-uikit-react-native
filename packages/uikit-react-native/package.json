@@ -38,6 +38,7 @@
     "test": "jest",
     "build": "yarn generate-version && bob build",
     "clean": "del lib",
+    "publish:next": "npm publish --tag next",
     "generate-version": "node scripts/generate-version.js ./src/version.ts",
     "create-domain": "node scripts/create-core-domain"
   },

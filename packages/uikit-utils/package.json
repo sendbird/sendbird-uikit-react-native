@@ -24,7 +24,8 @@
   "scripts": {
     "test": "jest",
     "build": "bob build",
-    "clean": "del lib"
+    "clean": "del lib",
+    "publish:next": "npm publish --tag next"
   },
   "repository": {
     "type": "git",
