@@ -1,45 +1,14 @@
-import React, { ForwardedRef, forwardRef, useRef } from 'react';
-import { FlatListProps, Platform, FlatList as RNFlatList, ScrollViewProps, StyleSheet } from 'react-native';
+import React, { forwardRef, useRef } from 'react';
+import { FlatListProps, Platform, FlatList as RNFlatList, StyleSheet } from 'react-native';
 
 import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { NOOP, SendbirdMessage, getMessageUniqId, useFreshCallback } from '@sendbird/uikit-utils';
 
+import FlatListInternal from './FlatListInternal';
+
 let ANDROID_BUG_ALERT_SHOWED = Platform.OS !== 'android';
 const BOTTOM_DETECT_THRESHOLD = 25;
 const UNREACHABLE_THRESHOLD = Number.MIN_SAFE_INTEGER;
-
-type FlatListBidirectional<T = SendbirdMessage> = (
-  props: FlatListProps<T> & BidirectionalProps<T>,
-) => React.ReactElement;
-type BidirectionalProps<T> = {
-  onStartReached?: ((info: { distanceFromStart: number }) => void) | null | undefined;
-  onStartReachedThreshold?: number | null | undefined;
-  onEndReached?: ((info: { distanceFromEnd: number }) => void) | null | undefined;
-  onEndReachedThreshold?: number | null | undefined;
-  maintainVisibleContentPosition?: ScrollViewProps['maintainVisibleContentPosition'];
-  ref: ForwardedRef<RNFlatList<T>>;
-};
-
-function shouldUseScrollViewEnhancer() {
-  if (Platform.constants.reactNativeVersion.major < 1) {
-    if (Platform.constants.reactNativeVersion.minor < 72) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function getFlatList(): FlatListBidirectional {
-  try {
-    return !shouldUseScrollViewEnhancer()
-      ? require('@sendbird/react-native-scrollview-enhancer').FlatList
-      : require('react-native').FlatList;
-  } catch {
-    return require('react-native').FlatList;
-  }
-}
-
-const FlatList = getFlatList();
 
 type Props = Omit<FlatListProps<SendbirdMessage>, 'onEndReached'> & {
   onBottomReached: () => void;
@@ -81,7 +50,7 @@ const ChatFlatList = forwardRef<RNFlatList, Props>(function CustomFlatList(
   }
 
   return (
-    <FlatList
+    <FlatListInternal
       bounces={false}
       removeClippedSubviews
       keyboardDismissMode={'on-drag'}
