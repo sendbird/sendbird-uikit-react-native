@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import Sendbird from '@sendbird/chat';
+import Sendbird, { DeviceOsPlatform, SendbirdPlatform, SendbirdProduct } from '@sendbird/chat';
 import { GroupChannelModule } from '@sendbird/chat/groupChannel';
 import { OpenChannelModule } from '@sendbird/chat/openChannel';
 import type { HeaderStyleContextType, UIKitTheme } from '@sendbird/uikit-react-native-foundation';
@@ -288,7 +288,17 @@ const initializeSendbird = (
     chatSDK = onInitialized(chatSDK);
   }
 
-  if (SendbirdUIKit.VERSION) {
+  const platform = getDeviceOSPlatform();
+  if (SendbirdUIKit.VERSION && platform) {
+    const deviceOSInfo = { platform, version: String(Platform.Version) };
+    const customData = { platform_version: getReactNativeVersion() };
+    const uikitExtension = {
+      product: SendbirdProduct.UIKIT_CHAT,
+      version: SendbirdUIKit.VERSION,
+      platform: SendbirdPlatform.REACT_NATIVE,
+    };
+
+    chatSDK.addSendbirdExtensions([uikitExtension], deviceOSInfo, customData);
     chatSDK.addExtension('sb_uikit', SendbirdUIKit.VERSION);
   }
 
@@ -330,5 +340,25 @@ const initializeSendbird = (
   }
   return { chatSDK, unsubscribes };
 };
+
+function getDeviceOSPlatform() {
+  switch (Platform.OS) {
+    case 'android':
+      return DeviceOsPlatform.ANDROID;
+    case 'ios':
+      return DeviceOsPlatform.IOS;
+    case 'web':
+      return DeviceOsPlatform.WEB;
+    case 'windows':
+      return DeviceOsPlatform.WINDOWS;
+    default:
+      return undefined;
+  }
+}
+
+function getReactNativeVersion() {
+  const { major, minor, patch } = Platform.constants.reactNativeVersion;
+  return `${major}.${minor}.${patch}`;
+}
 
 export default SendbirdUIKitContainer;
