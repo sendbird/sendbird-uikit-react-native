@@ -1,3 +1,4 @@
+import type { ReplyType } from '@sendbird/chat/message';
 import type {
   SendbirdChatSDK,
   SendbirdError,
@@ -197,15 +198,11 @@ export interface UseGroupChannelMessages {
      * @return {Promise<void>}
      * */
     deleteMessage: (message: SendbirdFileMessage | SendbirdUserMessage) => Promise<void>;
-
-    /** @deprecated Please use `newMessages` instead **/
-    newMessagesFromMembers: SendbirdMessage[];
-    /** @deprecated Please use `newMessages` instead **/
-    nextMessages: SendbirdMessage[];
   };
 }
 
 export type UseGroupChannelMessagesOptions = {
+  replyType?: ReplyType;
   sortComparator?: (a: SendbirdMessage, b: SendbirdMessage) => number;
   queryCreator?: () => SendbirdPreviousMessageListQuery;
   collectionCreator?: (options?: Pick<UseGroupChannelMessagesOptions, 'startingPoint'>) => SendbirdMessageCollection;
@@ -380,11 +377,6 @@ export interface UseOpenChannelMessages {
      * @return {Promise<void>}
      * */
     deleteMessage: (message: SendbirdFileMessage | SendbirdUserMessage) => Promise<void>;
-
-    /** @deprecated Please use `newMessages` instead **/
-    newMessagesFromMembers: SendbirdMessage[];
-    /** @deprecated Please use `newMessages` instead **/
-    nextMessages: SendbirdMessage[];
   };
 }
 

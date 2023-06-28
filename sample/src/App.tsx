@@ -20,7 +20,7 @@ import {
 } from './factory';
 import useAppearance from './hooks/useAppearance';
 import { Routes, navigationActions, navigationRef } from './libs/navigation';
-import { onForegroundAndroid, onForegroundIOS } from './libs/notification';
+import { notificationHandler } from './libs/notification';
 import {
   ErrorInfoScreen,
   GroupChannelBannedUsersScreen,
@@ -62,15 +62,25 @@ const App = () => {
   return (
     <SendbirdUIKitContainer
       appId={APP_ID}
+      uikitOptions={{
+        common: {
+          enableUsingDefaultUserProfile: true,
+        },
+        groupChannel: {
+          enableMention: true,
+        },
+        groupChannelList: {
+          enableTypingIndicator: true,
+          enableMessageReceiptStatus: true,
+        },
+        groupChannelSettings: {
+          enableMessageSearch: true,
+        },
+      }}
       chatOptions={{
         localCacheStorage: AsyncStorage,
         onInitialized: SetSendbirdSDK,
         enableAutoPushTokenRegistration: true,
-        enableChannelListTypingIndicator: true,
-        enableChannelListMessageReceiptStatus: true,
-        enableUserMention: true,
-        enableMessageSearch: true,
-        enableUsingDefaultUserProfile: true,
       }}
       platformServices={{
         file: FileService,
@@ -109,10 +119,10 @@ const Navigations = () => {
   const isLightTheme = scheme === 'light';
 
   useEffect(() => {
-    const unsubscribes = [onForegroundAndroid(), onForegroundIOS()];
-    return () => {
-      unsubscribes.forEach((fn) => fn());
-    };
+    notificationHandler.startOnAppOpened();
+    const unsubscribe = notificationHandler.startOnForeground();
+
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {

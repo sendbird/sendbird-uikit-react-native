@@ -12,7 +12,7 @@ import {
   useSafeAreaPadding,
 } from '@sendbird/uikit-utils';
 
-import { MessageSearchResultItem } from '../components/MessageSearchResultItem';
+import MessageSearchResultItem from '../components/MessageSearchResultItem';
 import StatusComposition from '../components/StatusComposition';
 import { createMessageSearchModule } from '../domain/messageSearch';
 import type { MessageSearchFragment, MessageSearchModule, MessageSearchProps } from '../domain/messageSearch/types';

@@ -32,21 +32,20 @@ type Props = {
   onLongPress: () => void;
 };
 const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) => {
-  const { currentUser, sdk, features, mentionManager } = useSendbirdChat();
+  const { currentUser, sdk, sbOptions, mentionManager } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
 
   const [typingUsers, setTypingUsers] = useState<SendbirdUser[]>([]);
 
-  if (features.channelListTypingIndicatorEnabled) {
-    const handlerId = useUniqHandlerId('GroupChannelPreviewContainer_TypingIndicator');
-    useChannelHandler(sdk, handlerId, {
-      onTypingStatusUpdated(eventChannel) {
-        if (isDifferentChannel(channel, eventChannel)) return;
-        setTypingUsers(eventChannel.getTypingUsers());
-      },
-    });
-  }
+  const handlerId = useUniqHandlerId('GroupChannelPreviewContainer_TypingIndicator');
+  useChannelHandler(sdk, handlerId, {
+    onTypingStatusUpdated(eventChannel) {
+      if (isDifferentChannel(channel, eventChannel)) return;
+      if (!sbOptions.uikit.groupChannel.channelList.enableTypingIndicator) return;
+      setTypingUsers(eventChannel.getTypingUsers());
+    },
+  });
 
   const outgoingStatus = useMessageOutgoingStatus(sdk, channel, channel.lastMessage);
 
@@ -63,7 +62,7 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
 
   const titleCaptionIcon = useIIFE(() => {
     if (!channel.lastMessage || channel.isEphemeral) return undefined;
-    if (!features.channelListMessageReceiptStatusEnabled) return undefined;
+    if (!sbOptions.uikit.groupChannel.channelList.enableMessageReceiptStatus) return undefined;
     if (!isMyMessage(channel.lastMessage, currentUser?.userId)) return undefined;
 
     if (outgoingStatus === 'PENDING') {

@@ -17,7 +17,7 @@ import { useLocalization } from '../hooks/useContext';
 
 const iconMapper = { audio: 'file-audio', image: 'photo', video: 'play', file: 'file-document' } as const;
 
-export const MessageSearchResultItem: MessageSearchProps['List']['renderSearchResultItem'] = ({ onPress, message }) => {
+const MessageSearchResultItem: MessageSearchProps['List']['renderSearchResultItem'] = ({ onPress, message }) => {
   const { colors, select, palette } = useUIKitTheme();
   const { STRINGS } = useLocalization();
 
@@ -123,3 +123,5 @@ const styles = createStyleSheet({
     height: 1,
   },
 });
+
+export default MessageSearchResultItem;

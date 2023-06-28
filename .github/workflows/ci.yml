@@ -38,7 +38,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.check_cache.outputs.cache-hit == ''
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
     outputs:
       cache_node_modules_key: ${{ steps.lockfile_hash.outputs.hash }}
 

@@ -26,7 +26,7 @@ const createOpenChannelListFragment = (initModule?: Partial<OpenChannelListModul
     const _renderOpenChannelPreview: OpenChannelListProps['List']['renderOpenChannelPreview'] = (props) => {
       if (renderOpenChannelPreview) return renderOpenChannelPreview(props);
       return (
-        <PressBox activeOpacity={0.8} onPress={() => onPressChannel(props.channel)}>
+        <PressBox activeOpacity={0.8} onPress={props.onPress}>
           <OpenChannelPreview
             coverUrl={props.channel.coverUrl}
             title={STRINGS.OPEN_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE(props.channel)}
@@ -47,6 +47,7 @@ const createOpenChannelListFragment = (initModule?: Partial<OpenChannelListModul
           ErrorComponent={<OpenChannelListModule.StatusError onPressRetry={refresh} />}
         >
           <OpenChannelListModule.List
+            onPressChannel={onPressChannel}
             renderOpenChannelPreview={_renderOpenChannelPreview}
             openChannels={openChannels}
             onLoadNext={next}

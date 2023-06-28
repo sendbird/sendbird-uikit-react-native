@@ -8,32 +8,25 @@ import type { CommonComponent } from '../../types';
 
 export type OpenChannelListProps = {
   Fragment: {
-    /** Handler for navigating to OpenChannelFragment **/
-    onPressChannel: (channel: SendbirdOpenChannel) => void;
-    /** Handler for navigating to OpenChannelCreateFragment **/
+    onPressChannel: OpenChannelListProps['List']['onPressChannel'];
     onPressCreateChannel: () => void;
-    /** Method for rendering open channel preview **/
     renderOpenChannelPreview?: OpenChannelListProps['List']['renderOpenChannelPreview'];
-    /** Method for creating a custom query of open channel list **/
     queryCreator?: UseOpenChannelListOptions['queryCreator'];
-    /** Props for FlatList component, it passed to OpenChannelList.List **/
     flatListProps?: OpenChannelListProps['List']['flatListProps'];
   };
   Header: {
     onPressHeaderRight: () => void;
   };
   List: {
-    /** OpenChannels from SendbirdChat SDK **/
+    onPressChannel: (channel: SendbirdOpenChannel) => void;
     openChannels: SendbirdOpenChannel[];
-    /** Method for rendering a preview of each open channel **/
-    renderOpenChannelPreview: (props: { channel: SendbirdOpenChannel }) => React.ReactElement | null;
-    /** Handler for loading the next batch of open channels **/
+    renderOpenChannelPreview: (props: {
+      channel: SendbirdOpenChannel;
+      onPress: () => void;
+    }) => React.ReactElement | null;
     onLoadNext: () => Promise<void>;
-    /** Props for the FlatList component, passed to the OpenChannelList.List **/
     flatListProps?: Omit<FlatListProps<SendbirdOpenChannel>, 'data' | 'renderItem'>;
-    /** Props for the indicates if the FlatList is currently being refreshed  **/
     refreshing: boolean;
-    /** Handler for refreshing the list of open channels **/
     onRefresh: () => void;
   };
   StatusError: {

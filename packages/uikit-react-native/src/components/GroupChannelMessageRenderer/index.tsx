@@ -3,7 +3,6 @@ import React from 'react';
 import type { GroupChannelMessageProps, RegexTextPattern } from '@sendbird/uikit-react-native-foundation';
 import { Box, GroupChannelMessage, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import {
-  Logger,
   SendbirdAdminMessage,
   SendbirdFileMessage,
   SendbirdMessage,
@@ -23,21 +22,19 @@ import GroupChannelMessageDateSeparator from './GroupChannelMessageDateSeparator
 import GroupChannelMessageFocusAnimation from './GroupChannelMessageFocusAnimation';
 import GroupChannelMessageOutgoingStatus from './GroupChannelMessageOutgoingStatus';
 
-let WARN_onPressAvatar = false;
 const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
   channel,
   message,
   onPress,
   onLongPress,
   onShowUserProfile,
-  onPressAvatar,
   enableMessageGrouping,
   focused,
   prevMessage,
   nextMessage,
 }) => {
   const { palette } = useUIKitTheme();
-  const { features, currentUser, mentionManager } = useSendbirdChat();
+  const { sbOptions, currentUser, mentionManager } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { mediaService } = usePlatformService();
   const { groupWithPrev, groupWithNext } = calcMessageGrouping(
@@ -47,13 +44,12 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     nextMessage,
   );
 
-  if (__DEV__ && !WARN_onPressAvatar && onPressAvatar) {
-    WARN_onPressAvatar = true;
-    Logger.warn('`onPressAvatar` is deprecated, please use `onShowUserProfile`');
-  }
-
   const reactionChildren = useIIFE(() => {
-    if (shouldRenderReaction(channel, features.reactionEnabled) && message.reactions && message.reactions.length > 0) {
+    if (
+      shouldRenderReaction(channel, sbOptions.uikitWithAppInfo.groupChannel.channel.enableReactions) &&
+      message.reactions &&
+      message.reactions.length > 0
+    ) {
       return <ReactionAddons.Message channel={channel} message={message} />;
     }
     return null;
@@ -64,24 +60,12 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     variant: isMyMessage(message, currentUser?.userId) ? 'outgoing' : 'incoming',
     onPress,
     onLongPress,
-    onPressURL: () => message.ogMetaData?.url && SBUUtils.openURL(message.ogMetaData?.url),
+    onPressURL: (url) => SBUUtils.openURL(url),
     onPressAvatar: () => {
-      if ('sender' in message) {
-        if (onPressAvatar) {
-          onPressAvatar(message.sender);
-        } else if (onShowUserProfile) {
-          onShowUserProfile(message.sender);
-        }
-      }
+      if ('sender' in message) onShowUserProfile?.(message.sender);
     },
-    onPressMentionedUser: () => {
-      if ('sender' in message) {
-        if (onPressAvatar) {
-          onPressAvatar(message.sender);
-        } else if (onShowUserProfile) {
-          onShowUserProfile(message.sender);
-        }
-      }
+    onPressMentionedUser: (mentionedUser) => {
+      if (mentionedUser) onShowUserProfile?.(mentionedUser);
     },
     groupedWithPrev: groupWithPrev,
     groupedWithNext: groupWithNext,
@@ -104,8 +88,13 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     regexTextPatterns: RegexTextPattern[];
   } = {
     renderRegexTextChildren: (message) => {
-      if (mentionManager.shouldUseMentionedMessageTemplate(message)) return message.mentionedMessageTemplate;
-      else return message.message;
+      if (
+        mentionManager.shouldUseMentionedMessageTemplate(message, sbOptions.uikit.groupChannel.channel.enableMention)
+      ) {
+        return message.mentionedMessageTemplate;
+      } else {
+        return message.message;
+      }
     },
     regexTextPatterns: [
       {
@@ -123,7 +112,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
                 {...parentProps}
                 key={`${keyPrefix}-${index}`}
                 color={mentionColor}
-                onPress={messageProps.onPressMentionedUser}
+                onPress={() => messageProps.onPressMentionedUser?.(user)}
                 onLongPress={messageProps.onLongPress}
                 style={[
                   parentProps?.style,
@@ -148,7 +137,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
       }
       case 'user':
       case 'user.opengraph': {
-        if (message.ogMetaData && features.groupChannelOGTagEnabled) {
+        if (message.ogMetaData && sbOptions.uikitWithAppInfo.groupChannel.channel.enableOgtag) {
           return (
             <GroupChannelMessage.OpenGraphUser
               message={message as SendbirdUserMessage}

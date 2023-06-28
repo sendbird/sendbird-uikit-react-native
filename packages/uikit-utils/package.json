@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/uikit-utils",
-  "version": "2.5.0",
+  "version": "3.0.0",
   "description": "A collection of utility functions and constants for building chat UI components with Sendbird UIKit.",
   "keywords": [
     "sendbird",
@@ -24,7 +24,8 @@
   "scripts": {
     "test": "jest",
     "build": "bob build",
-    "clean": "del lib"
+    "clean": "del lib",
+    "publish:next": "npm publish --tag next"
   },
   "repository": {
     "type": "git",
@@ -54,11 +55,15 @@
     "typescript": "4.9.4"
   },
   "peerDependencies": {
-    "@sendbird/chat": "^4.3.0",
-    "react": ">=16.13.1"
+    "@sendbird/chat": "^4.9.2",
+    "react": ">=17.0.2",
+    "react-native": ">=0.65.0"
   },
   "peerDependenciesMeta": {
     "@sendbird/chat": {
+      "optional": true
+    },
+    "react-native": {
       "optional": true
     }
   },

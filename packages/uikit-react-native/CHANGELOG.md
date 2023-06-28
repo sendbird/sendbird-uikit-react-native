@@ -3,6 +3,57 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.5.0...v3.0.0) (2023-06-28)
+
+### ⚠ BREAKING CHANGES
+
+- update signature of channel preview prop in group channel list and open channel list
+- removed queryCreator from the group channel and group channel list
+- update minimum chat sdk version
+- bumped peer dependency version of chat sdk
+- react-native minimum version changed to 0.65.0 from 0.63.3
+- made `chatOptions.localCacheStorage` of `SendbirdUIKitContainer` required
+- deprecated item removal in ChannelInput
+- deprecated MessageRenderer removal (replaced to GroupChannelMessageRenderer)
+- deprecated item removal in ChannelMessageList
+- deprecated item removal in uikit-chat-hooks package
+- deprecated item removal in StringSet
+
+### Features
+
+- added AttachmentsButton to ChannelInput component ([687f3a0](https://github.com/sendbird/sendbird-uikit-react-native/commit/687f3a061e0d8eb234cd055f1e1a6735fb8f95e3))
+- bumped peer dependency version of chat sdk ([a57aff0](https://github.com/sendbird/sendbird-uikit-react-native/commit/a57aff007789a00474cbf16f2c4158fa0327b507))
+- deprecated item removal in ChannelInput ([6a326ca](https://github.com/sendbird/sendbird-uikit-react-native/commit/6a326ca38c5cc957b1a1fdf4b7e3aecd3171a9d1))
+- deprecated item removal in ChannelMessageList ([3a68a33](https://github.com/sendbird/sendbird-uikit-react-native/commit/3a68a33995c51b96f8966cf9aaf1f97126e3ec55))
+- deprecated item removal in StringSet ([956236b](https://github.com/sendbird/sendbird-uikit-react-native/commit/956236bf19e9774b9454dba2c823b0fe20bb920c))
+- deprecated item removal in uikit-chat-hooks package ([48fabfe](https://github.com/sendbird/sendbird-uikit-react-native/commit/48fabfe10b4844c595d4e44b4600637f7d473616))
+- deprecated MessageRenderer removal (replaced to GroupChannelMessageRenderer) ([488e0b6](https://github.com/sendbird/sendbird-uikit-react-native/commit/488e0b6d9774045e1abcba35a6fa47770156e49f))
+- hide ui elements when the channel is ephemeral ([eacc2da](https://github.com/sendbird/sendbird-uikit-react-native/commit/eacc2dad02271d17b26071c716d41bcdfead1957))
+- made `chatOptions.localCacheStorage` of `SendbirdUIKitContainer` required ([2f07d0d](https://github.com/sendbird/sendbird-uikit-react-native/commit/2f07d0db05e8c101807dd1205544242efe3a0371))
+- react-native minimum version changed to 0.65.0 from 0.63.3 ([39a9852](https://github.com/sendbird/sendbird-uikit-react-native/commit/39a9852c737dbbe5e034a895deae791b3cb1f9b8))
+- support options for default user profile(default: false) ([6671a61](https://github.com/sendbird/sendbird-uikit-react-native/commit/6671a61a293403b0becdea030326520829662ac6))
+- support options for ogtag in channel ([d80b8a0](https://github.com/sendbird/sendbird-uikit-react-native/commit/d80b8a0dc58a60e66c6ce63cc850e08face51416))
+- update minimum chat sdk version ([5330d1f](https://github.com/sendbird/sendbird-uikit-react-native/commit/5330d1fb533a614f7edb1614cc379c842768e4cf))
+- use uikitWithAppInfo internally ([a182ead](https://github.com/sendbird/sendbird-uikit-react-native/commit/a182ead2a1d59bffa7078ed5baa1be6124fce798))
+
+### Bug Fixes
+
+- ensure correct display of reply messages when replyType is configured in uikit configs ([a00b089](https://github.com/sendbird/sendbird-uikit-react-native/commit/a00b089f204ba222be1c3cdc22002655ace275b7))
+- fixed config linking in mention manager ([6e8ba6c](https://github.com/sendbird/sendbird-uikit-react-native/commit/6e8ba6cfae3f93ab53b5dfcf93c08fa8378c026c))
+- fixed menuItemsCreator timing ([279fd98](https://github.com/sendbird/sendbird-uikit-react-native/commit/279fd98867c5c2bf94b9bbe466b857ef231c1d17))
+- fixed onPress related handlers in message renderer for proper functionality ([6da20db](https://github.com/sendbird/sendbird-uikit-react-native/commit/6da20db542d524eb83637de71c737fcc2d0627ca))
+- focusing animation of message search results has been modified to apply only to the message component ([c5d22a2](https://github.com/sendbird/sendbird-uikit-react-native/commit/c5d22a2f0a743904c9559bcc6c34ab6fc010627d))
+- replaced unsupported Object.hasOwn ([f165273](https://github.com/sendbird/sendbird-uikit-react-native/commit/f165273e6fe44707a87f15d5cefde1c110abdea2))
+
+### Miscellaneous Chores
+
+- removed queryCreator from the group channel and group channel list ([ca3bc98](https://github.com/sendbird/sendbird-uikit-react-native/commit/ca3bc98c699e7c4a0e17b555fe4e249d218b922b))
+- update signature of channel preview prop in group channel list and open channel list ([d3e8afa](https://github.com/sendbird/sendbird-uikit-react-native/commit/d3e8afa475178b3b2ef9c2ae8a4172c4663c7acc))
+
+### Improvements
+
+- react-native-scrollview-enhancer handle as a optional ([d570851](https://github.com/sendbird/sendbird-uikit-react-native/commit/d57085117d4af5deaf4fc7a90bdc631ad1e2dad2))
+
 ## [2.5.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.4.2...v2.5.0) (2023-05-04)
 
 ### Features

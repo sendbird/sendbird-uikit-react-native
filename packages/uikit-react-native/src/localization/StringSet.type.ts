@@ -30,9 +30,6 @@ export interface StringSet {
     MESSAGE_BUBBLE_EDITED_POSTFIX: string;
     MESSAGE_BUBBLE_UNKNOWN_TITLE: (message: SendbirdMessage) => string;
     MESSAGE_BUBBLE_UNKNOWN_DESC: (message: SendbirdMessage) => string;
-
-    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_LIST_FROZEN **/
-    LIST_BANNER_FROZEN: string;
   };
   OPEN_CHANNEL_PARTICIPANTS: {
     /** OpenChannelParticipants > Header */
@@ -128,43 +125,6 @@ export interface StringSet {
 
     /** GroupChannel > Suggested mention list */
     MENTION_LIMITED: (mentionLimit: number) => string;
-
-    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_LIST_FROZEN **/
-    LIST_BANNER_FROZEN: string;
-    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_COPY **/
-    DIALOG_MESSAGE_COPY: string;
-    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_EDIT **/
-    DIALOG_MESSAGE_EDIT: string;
-    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_SAVE **/
-    DIALOG_MESSAGE_SAVE: string;
-    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_DELETE **/
-    DIALOG_MESSAGE_DELETE: string;
-    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE **/
-    DIALOG_MESSAGE_DELETE_CONFIRM_TITLE: string;
-    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_OK **/
-    DIALOG_MESSAGE_DELETE_CONFIRM_OK: string;
-    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_CANCEL **/
-    DIALOG_MESSAGE_DELETE_CONFIRM_CANCEL: string;
-    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_FAILED_RETRY **/
-    DIALOG_MESSAGE_FAILED_RETRY: string;
-    /** @deprecated Please use LABELS.CHANNEL_MESSAGE_FAILED_REMOVE **/
-    DIALOG_MESSAGE_FAILED_REMOVE: string;
-    /** @deprecated Please use LABELS.CHANNEL_INPUT_ATTACHMENT_CAMERA **/
-    DIALOG_ATTACHMENT_CAMERA: string;
-    /** @deprecated Please use LABELS.CHANNEL_INPUT_ATTACHMENT_PHOTO_LIBRARY **/
-    DIALOG_ATTACHMENT_PHOTO_LIBRARY: string;
-    /** @deprecated Please use LABELS.CHANNEL_INPUT_ATTACHMENT_FILES **/
-    DIALOG_ATTACHMENT_FILES: string;
-    /** @deprecated Please use LABELS.CHANNEL_INPUT_PLACEHOLDER_ACTIVE **/
-    INPUT_PLACEHOLDER_ACTIVE: string;
-    /** @deprecated Please use LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED **/
-    INPUT_PLACEHOLDER_DISABLED: string;
-    /** @deprecated Please use LABELS.CHANNEL_INPUT_PLACEHOLDER_MUTED **/
-    INPUT_PLACEHOLDER_MUTED: string;
-    /** @deprecated Please use LABELS.CHANNEL_INPUT_EDIT_OK **/
-    INPUT_EDIT_OK: string;
-    /** @deprecated Please use LABELS.CHANNEL_INPUT_EDIT_CANCEL **/
-    INPUT_EDIT_CANCEL: string;
   };
   GROUP_CHANNEL_SETTINGS: {
     /** GroupChannelSettings > Header */
@@ -253,11 +213,6 @@ export interface StringSet {
   GROUP_CHANNEL_MEMBERS: {
     /** GroupChannelMembers > Header */
     HEADER_TITLE: string;
-
-    /** @deprecated Please use LABELS.USER_BAR_ME_POSTFIX **/
-    USER_BAR_ME_POSTFIX: string;
-    /** @deprecated Please use LABELS.USER_BAR_OPERATOR **/
-    USER_BAR_OPERATOR: string;
   };
   GROUP_CHANNEL_INVITE: {
     /** GroupChannelInvite > Header */
@@ -309,7 +264,8 @@ export interface StringSet {
     CHANNEL_INPUT_EDIT_OK: string;
     CHANNEL_INPUT_EDIT_CANCEL: string;
     /** ChannelInput > Attachments **/
-    CHANNEL_INPUT_ATTACHMENT_CAMERA: string;
+    CHANNEL_INPUT_ATTACHMENT_CAMERA_PHOTO: string;
+    CHANNEL_INPUT_ATTACHMENT_CAMERA_VIDEO: string;
     CHANNEL_INPUT_ATTACHMENT_PHOTO_LIBRARY: string;
     CHANNEL_INPUT_ATTACHMENT_FILES: string;
 

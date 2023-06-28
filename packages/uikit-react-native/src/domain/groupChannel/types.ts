@@ -43,12 +43,8 @@ export interface GroupChannelProps {
     flatListProps?: GroupChannelProps['MessageList']['flatListProps'];
     sortComparator?: UseGroupChannelMessagesOptions['sortComparator'];
     collectionCreator?: UseGroupChannelMessagesOptions['collectionCreator'];
-    queryCreator?: UseGroupChannelMessagesOptions['queryCreator'];
 
     searchItem?: GroupChannelProps['MessageList']['searchItem'];
-
-    /** @deprecated Please use `onPressMediaMessage` instead **/
-    onPressImageMessage?: GroupChannelProps['MessageList']['onPressImageMessage'];
   };
   Header: {
     shouldHideRight: () => boolean;
@@ -73,16 +69,10 @@ export interface GroupChannelProps {
     | 'renderNewMessagesButton'
     | 'renderScrollToBottomButton'
     | 'flatListProps'
-    | 'onPressImageMessage'
     | 'hasNext'
     | 'searchItem'
   > & {
     onResetMessageList: (callback?: () => void) => void;
-
-    /** @deprecated Please use `newMessages` instead */
-    newMessagesFromMembers: SendbirdMessage[];
-    /** @deprecated Please use `newMessages` instead */
-    nextMessages: SendbirdMessage[];
   };
   Input: Pick<
     ChannelInputProps,
@@ -92,10 +82,7 @@ export interface GroupChannelProps {
     | 'onPressUpdateUserMessage'
     | 'onPressUpdateFileMessage'
     | 'SuggestedMentionList'
-    | 'onSendFileMessage'
-    | 'onSendUserMessage'
-    | 'onUpdateFileMessage'
-    | 'onUpdateUserMessage'
+    | 'AttachmentsButton'
   >;
 
   SuggestedMentionList: SuggestedMentionListProps;

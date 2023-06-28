@@ -1,7 +1,7 @@
 import { useReducer } from 'react';
 
 import type { SendbirdChannel } from '@sendbird/uikit-utils';
-import { SendbirdGroupChannel, getGroupChannels } from '@sendbird/uikit-utils';
+import { SendbirdGroupChannel, getGroupChannels, mergeObjectArrays } from '@sendbird/uikit-utils';
 
 type Order = 'latest_last_message' | 'chronological' | 'channel_name_alphabetical' | 'metadata_value_alphabetical';
 
@@ -19,7 +19,7 @@ type Action =
       value: { channelUrls: string[] };
     }
   | {
-      type: 'set_channels';
+      type: 'append_channels';
       value: { channels: SendbirdChannel[]; clearBeforeAction: boolean };
     }
   | {
@@ -64,11 +64,12 @@ const defaultReducer = ({ ...draft }: State, action: Action) => {
       compareByOrder && (draft.groupChannels = draft.groupChannels.sort(compareByOrder));
       break;
     }
-    case 'set_channels': {
+    case 'append_channels': {
+      const groupChannels = getGroupChannels(action.value.channels);
       if (action.value.clearBeforeAction) {
-        draft.groupChannels = getGroupChannels(action.value.channels);
+        draft.groupChannels = groupChannels;
       } else {
-        draft.groupChannels = [...draft.groupChannels, ...getGroupChannels(action.value.channels)];
+        draft.groupChannels = mergeObjectArrays(draft.groupChannels, groupChannels, 'url');
       }
 
       compareByOrder && (draft.groupChannels = draft.groupChannels.sort(compareByOrder));
@@ -98,8 +99,8 @@ export const useGroupChannelListReducer = (order?: Order) => {
   const deleteChannels = (channelUrls: string[]) => {
     dispatch({ type: 'delete_channels', value: { channelUrls } });
   };
-  const setChannels = (channels: SendbirdChannel[], clearBeforeAction: boolean) => {
-    dispatch({ type: 'set_channels', value: { channels, clearBeforeAction } });
+  const appendChannels = (channels: SendbirdChannel[], clearBeforeAction: boolean) => {
+    dispatch({ type: 'append_channels', value: { channels, clearBeforeAction } });
   };
   const updateLoading = (status: boolean) => {
     dispatch({ type: 'update_loading', value: { status } });
@@ -116,7 +117,7 @@ export const useGroupChannelListReducer = (order?: Order) => {
     updateRefreshing,
     updateChannels,
     deleteChannels,
-    setChannels,
+    appendChannels,
 
     updateOrder,
 

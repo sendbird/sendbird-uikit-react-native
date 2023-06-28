@@ -1,9 +1,10 @@
 import React, { forwardRef, useRef } from 'react';
 import { FlatListProps, Platform, FlatList as RNFlatList, StyleSheet } from 'react-native';
 
-import { FlatList } from '@sendbird/react-native-scrollview-enhancer';
 import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { NOOP, SendbirdMessage, getMessageUniqId, useFreshCallback } from '@sendbird/uikit-utils';
+
+import FlatListInternal from './FlatListInternal';
 
 let ANDROID_BUG_ALERT_SHOWED = Platform.OS !== 'android';
 const BOTTOM_DETECT_THRESHOLD = 25;
@@ -13,15 +14,10 @@ type Props = Omit<FlatListProps<SendbirdMessage>, 'onEndReached'> & {
   onBottomReached: () => void;
   onTopReached: () => void;
   onScrolledAwayFromBottom: (value: boolean) => void;
-
-  /** @deprecated Please use `onScrolledAwayFromBottom` **/
-  onLeaveScrollBottom?: (value: boolean) => void;
-  /** @deprecated Not used anymore **/
-  nextMessages?: unknown;
 };
 // FIXME: Inverted FlatList performance issue on Android {@link https://github.com/facebook/react-native/issues/30034}
-const ChatFlatList = forwardRef<RNFlatList<SendbirdMessage>, Props>(function CustomFlatList(
-  { onTopReached, onBottomReached, onScrolledAwayFromBottom, onLeaveScrollBottom, onScroll, ...props },
+const ChatFlatList = forwardRef<RNFlatList, Props>(function CustomFlatList(
+  { onTopReached, onBottomReached, onScrolledAwayFromBottom, onScroll, ...props },
   ref,
 ) {
   const { select } = useUIKitTheme();
@@ -37,10 +33,8 @@ const ChatFlatList = forwardRef<RNFlatList<SendbirdMessage>, Props>(function Cus
 
     if (BOTTOM_DETECT_THRESHOLD < prevOffsetY && currOffsetY <= BOTTOM_DETECT_THRESHOLD) {
       onScrolledAwayFromBottom(false);
-      onLeaveScrollBottom?.(false);
     } else if (BOTTOM_DETECT_THRESHOLD < currOffsetY && prevOffsetY <= BOTTOM_DETECT_THRESHOLD) {
       onScrolledAwayFromBottom(true);
-      onLeaveScrollBottom?.(true);
     }
 
     contentOffsetY.current = contentOffset.y;
@@ -50,12 +44,13 @@ const ChatFlatList = forwardRef<RNFlatList<SendbirdMessage>, Props>(function Cus
     ANDROID_BUG_ALERT_SHOWED = true;
     // eslint-disable-next-line no-console
     console.warn(
-      'UIKit Warning: Inverted FlatList has a performance issue on Android, Maybe this is a bug please refer link\nhttps://github.com/facebook/react-native/issues/30034',
+      'UIKit Warning: The inverted FlatList has a performance issue on Android. Maybe this is a bug.\n' +
+        'Please refer to the link: https://github.com/facebook/react-native/issues/30034',
     );
   }
 
   return (
-    <FlatList
+    <FlatListInternal
       bounces={false}
       removeClippedSubviews
       keyboardDismissMode={'on-drag'}

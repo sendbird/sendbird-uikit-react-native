@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.5.0...v3.0.0) (2023-06-28)
+
+### ⚠ BREAKING CHANGES
+
+- removed queryCreator from the group channel and group channel list
+- update minimum chat sdk version
+- deprecated item removal in uikit-chat-hooks package
+
+### Features
+
+- deprecated item removal in uikit-chat-hooks package ([48fabfe](https://github.com/sendbird/sendbird-uikit-react-native/commit/48fabfe10b4844c595d4e44b4600637f7d473616))
+- update minimum chat sdk version ([5330d1f](https://github.com/sendbird/sendbird-uikit-react-native/commit/5330d1fb533a614f7edb1614cc379c842768e4cf))
+
+### Bug Fixes
+
+- ensure correct display of reply messages when replyType is configured in uikit configs ([a00b089](https://github.com/sendbird/sendbird-uikit-react-native/commit/a00b089f204ba222be1c3cdc22002655ace275b7))
+
+### Miscellaneous Chores
+
+- removed queryCreator from the group channel and group channel list ([ca3bc98](https://github.com/sendbird/sendbird-uikit-react-native/commit/ca3bc98c699e7c4a0e17b555fe4e249d218b922b))
+
+### Improvements
+
+- defensively modify reducer logic to prevent duplicate objects ([bc3cfb1](https://github.com/sendbird/sendbird-uikit-react-native/commit/bc3cfb193ff6c59cbf636a05fbd1ad8cead699e1))
+- modify useGroupChannel and useOpenChannel hooks to refetch the channel when the url has changed ([5b8e105](https://github.com/sendbird/sendbird-uikit-react-native/commit/5b8e105d43019dca55bd8ec2e5b4fa039691e779))
+
 ## [2.5.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.4.2...v2.5.0) (2023-05-04)
 
 ### Features

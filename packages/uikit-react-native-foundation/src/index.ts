@@ -14,7 +14,6 @@ export type { RegexTextPattern } from './components/RegexText';
 export { default as Switch } from './components/Switch';
 export { default as Text } from './components/Text';
 export { default as TextInput } from './components/TextInput';
-export { default as URLParsedText } from './components/URLParsedText';
 
 /** UI **/
 export { default as ActionMenu } from './ui/ActionMenu';

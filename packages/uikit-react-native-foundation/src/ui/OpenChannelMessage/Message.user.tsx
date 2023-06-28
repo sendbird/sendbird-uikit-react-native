@@ -32,7 +32,7 @@ const UserMessage = (props: OpenChannelMessageProps<SendbirdUserMessage, Props>)
                       <Text
                         {...parentProps}
                         key={`${keyPrefix}-${index}`}
-                        onPress={onPressURL}
+                        onPress={() => onPressURL?.(match)}
                         onLongPress={onLongPress}
                         color={colors.primary}
                         style={parentProps?.style}

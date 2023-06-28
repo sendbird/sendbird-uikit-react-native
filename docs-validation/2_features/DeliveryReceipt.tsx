@@ -2,11 +2,11 @@
  * How to use
  * {@link https://sendbird.com/docs/uikit/v3/react-native/features/delivery-receipt#2-how-to-use}
  * */
-import { SendbirdUIKitContainer } from "@sendbird/uikit-react-native";
+import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
 
 const App = () => {
   // @ts-ignore
-  return <SendbirdUIKitContainer chatOptions={{ enableChannelListMessageReceiptStatus: true }} />;
+  return <SendbirdUIKitContainer uikitOptions={{ groupChannelList: { enableMessageReceiptStatus: true } }} />;
 };
 /** ------------------ **/
 

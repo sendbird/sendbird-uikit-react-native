@@ -5,7 +5,7 @@
 import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
 const App = () => {
   // @ts-ignore
-  return <SendbirdUIKitContainer chatOptions={{ enableChannelListMessageReceiptStatus: true }} />;
+  return <SendbirdUIKitContainer uikitOptions={{ groupChannelList: { enableMessageReceiptStatus: true } }} />;
 };
 /** ------------------ **/
 

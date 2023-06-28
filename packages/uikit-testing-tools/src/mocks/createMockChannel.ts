@@ -23,7 +23,13 @@ import {
   OperatorFilter,
   ReadStatus,
 } from '@sendbird/chat/groupChannel';
-import type { BaseListQueryParams } from '@sendbird/chat/lib/__definition';
+import type {
+  BaseListQueryParams,
+  MultipleFilesMessageCreateParams,
+  MultipleFilesMessageRequestHandler,
+  PinnedMessageListQuery,
+  PinnedMessageListQueryParams,
+} from '@sendbird/chat/lib/__definition';
 import {
   MessageChangelogs,
   MessageRequestHandler,
@@ -61,6 +67,7 @@ type Params = GetMockParams<SendbirdOpenChannel & SendbirdGroupChannel>;
 export const createMockChannel = (params: Params) => {
   return new MockChannel(params);
 };
+
 class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & SendbirdOpenChannel & SendbirdGroupChannel> {
   constructor(public params: Params) {
     tc.increaseIncrement();
@@ -603,6 +610,13 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
   }
 
   get messageCollectionLastAccessedAt(): number {
+    throw new Error('Method not implemented.');
+  }
+
+  createPinnedMessageListQuery(_params?: PinnedMessageListQueryParams | undefined): PinnedMessageListQuery {
+    throw new Error('Method not implemented.');
+  }
+  sendMultipleFilesMessage(_params: MultipleFilesMessageCreateParams): MultipleFilesMessageRequestHandler {
     throw new Error('Method not implemented.');
   }
 }

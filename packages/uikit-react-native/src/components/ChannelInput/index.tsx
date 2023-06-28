@@ -19,16 +19,11 @@ import {
 
 import { useSendbirdChat } from '../../hooks/useContext';
 import useMentionTextInput from '../../hooks/useMentionTextInput';
-import type { FileType } from '../../platform/types';
 import type { MentionedUser, Range } from '../../types';
+import type { AttachmentsButtonProps } from './AttachmentsButton';
+import AttachmentsButton from './AttachmentsButton';
 import EditInput from './EditInput';
 import SendInput from './SendInput';
-
-type UserMessageMentionParams = Required<{
-  messageTemplate: SendbirdUserMessageCreateParams['mentionedMessageTemplate'];
-  userIds: SendbirdUserMessageCreateParams['mentionedUserIds'];
-  type: SendbirdUserMessageCreateParams['mentionType'];
-}>;
 
 export type SuggestedMentionListProps = {
   text: string;
@@ -64,18 +59,8 @@ export type ChannelInputProps = {
   // mention
   SuggestedMentionList?: (props: SuggestedMentionListProps) => JSX.Element | null;
 
-  /** @deprecated Please use `onPressSendUserMessage` **/
-  onSendFileMessage?: (file: FileType) => Promise<void>;
-  /** @deprecated Please use `onPressSendFileMessage` **/
-  onSendUserMessage?: (text: string, mention?: UserMessageMentionParams) => Promise<void>;
-  /** @deprecated Please use `onPressUpdateUserMessage` **/
-  onUpdateFileMessage?: (editedFile: FileType, message: SendbirdFileMessage) => Promise<void>;
-  /** @deprecated Please use `onPressUpdateFileMessage` **/
-  onUpdateUserMessage?: (
-    editedText: string,
-    message: SendbirdUserMessage,
-    mention?: UserMessageMentionParams,
-  ) => Promise<void>;
+  // sub-components
+  AttachmentsButton?: (props: AttachmentsButtonProps) => JSX.Element | null;
 };
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
@@ -92,7 +77,7 @@ const ChannelInput = (props: ChannelInputProps) => {
 
   const { top, left, right, bottom } = useSafeAreaInsets();
   const { colors } = useUIKitTheme();
-  const { features, mentionManager } = useSendbirdChat();
+  const { sbOptions, mentionManager } = useSendbirdChat();
 
   const { selection, onSelectionChange, textInputRef, text, onChangeText, mentionedUsers } = useMentionTextInput({
     messageToEdit,
@@ -103,7 +88,8 @@ const ChannelInput = (props: ChannelInputProps) => {
     return 'edit';
   });
 
-  const mentionAvailable = features.userMentionEnabled && channel.isGroupChannel() && !channel.isBroadcast;
+  const mentionAvailable =
+    sbOptions.uikit.groupChannel.channel.enableMention && channel.isGroupChannel() && !channel.isBroadcast;
   const inputKeyToRemount = GET_INPUT_KEY(mentionAvailable ? mentionedUsers.length === 0 : false);
 
   const [inputHeight, setInputHeight] = useState(styles.inputDefault.height);
@@ -140,6 +126,7 @@ const ChannelInput = (props: ChannelInputProps) => {
                 onChangeText={onChangeText}
                 onSelectionChange={onSelectionChange}
                 mentionedUsers={mentionedUsers}
+                AttachmentsButton={props.AttachmentsButton ?? AttachmentsButton}
               />
             )}
             {inputMode === 'edit' && messageToEdit && (

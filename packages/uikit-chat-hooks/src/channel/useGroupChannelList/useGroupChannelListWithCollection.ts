@@ -32,7 +32,7 @@ export const useGroupChannelListWithCollection: UseGroupChannelList = (sdk, user
 
   const collectionRef = useRef<SendbirdGroupChannelCollection>();
 
-  const { loading, groupChannels, refreshing, setChannels, deleteChannels, updateRefreshing, updateLoading } =
+  const { loading, groupChannels, refreshing, appendChannels, deleteChannels, updateRefreshing, updateLoading } =
     useGroupChannelListReducer();
 
   const updateChannelsAndMarkAsDelivered = (
@@ -41,7 +41,7 @@ export const useGroupChannelListWithCollection: UseGroupChannelList = (sdk, user
     updatedChannels?: SendbirdBaseChannel[],
   ) => {
     const channels = collectionRef.current?.channels ?? [];
-    setChannels(channels, true);
+    appendChannels(channels, true);
     if (markAsDelivered && deliveryReceiptEnabled) {
       switch (source) {
         case GroupChannelEventSource.EVENT_MESSAGE_RECEIVED:

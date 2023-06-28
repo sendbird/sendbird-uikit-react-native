@@ -1,7 +1,7 @@
 import { useReducer } from 'react';
 
 import type { SendbirdChannel, SendbirdOpenChannel } from '@sendbird/uikit-utils';
-import { getOpenChannels } from '@sendbird/uikit-utils';
+import { getOpenChannels, mergeObjectArrays } from '@sendbird/uikit-utils';
 
 type Action =
   | {
@@ -63,7 +63,7 @@ const defaultReducer = ({ ...draft }: State, action: Action) => {
       if (action.value.clearBeforeAction) {
         draft.openChannels = openChannels;
       } else {
-        draft.openChannels = [...draft.openChannels, ...openChannels];
+        draft.openChannels = mergeObjectArrays(draft.openChannels, openChannels, 'url');
       }
       break;
     }

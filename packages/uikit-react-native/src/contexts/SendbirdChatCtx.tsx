@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
 import { useAppFeatures } from '@sendbird/uikit-chat-hooks';
+import { SBUConfig, useUIKitConfig } from '@sendbird/uikit-tools';
 import type {
   SendbirdChatSDK,
   SendbirdGroupChannel,
@@ -14,20 +15,13 @@ import type ImageCompressionConfig from '../libs/ImageCompressionConfig';
 import type MentionManager from '../libs/MentionManager';
 import type { FileType } from '../platform/types';
 
-export interface UIKitFeaturesInSendbirdChatContext {
+export interface ChatRelatedFeaturesInUIKit {
   enableAutoPushTokenRegistration: boolean;
-  enableChannelListTypingIndicator: boolean;
-  enableChannelListMessageReceiptStatus: boolean;
   enableUseUserIdForNickname: boolean;
-  enableUserMention: boolean;
   enableImageCompression: boolean;
-  enableMessageSearch: boolean;
-  enableGroupChannelOGTag: boolean;
-  enableOpenChannelOGTag: boolean;
-  enableUsingDefaultUserProfile: boolean;
 }
 
-interface Props extends UIKitFeaturesInSendbirdChatContext, React.PropsWithChildren {
+interface Props extends ChatRelatedFeaturesInUIKit, React.PropsWithChildren {
   sdkInstance: SendbirdChatSDK;
   emojiManager: EmojiManager;
   mentionManager: MentionManager;
@@ -46,26 +40,40 @@ export type SendbirdChatContextType = {
   updateCurrentUserInfo: (nickname?: string, profile?: string | FileType) => Promise<SendbirdUser>;
   markAsDeliveredWithChannel: (channel: SendbirdGroupChannel) => void;
 
-  features: {
-    // RN UIKit features
-    autoPushTokenRegistrationEnabled: boolean;
+  sbOptions: {
+    // UIKit options
+    uikit: SBUConfig;
+    uikitWithAppInfo: {
+      groupChannel: {
+        channel: {
+          enableReactions: boolean;
+          enableOgtag: boolean;
+        };
+        setting: {
+          enableMessageSearch: boolean;
+        };
+      };
+      openChannel: {
+        channel: {
+          enableOgtag: boolean;
+        };
+      };
+    };
 
-    // UIKit features
-    channelListTypingIndicatorEnabled: boolean;
-    channelListMessageReceiptStatusEnabled: boolean;
-    useUserIdForNicknameEnabled: boolean;
-    userMentionEnabled: boolean;
-    imageCompressionEnabled: boolean;
-    messageSearchEnabled: boolean;
-    groupChannelOGTagEnabled: boolean;
-    openChannelOGTagEnabled: boolean;
-    usingDefaultUserProfileEnabled: boolean;
+    // Chat related options in UIKit
+    chat: {
+      imageCompressionEnabled: boolean;
+      useUserIdForNicknameEnabled: boolean;
+      autoPushTokenRegistrationEnabled: boolean; // RN only
+    };
 
-    // Sendbird application features
-    deliveryReceiptEnabled: boolean;
-    broadcastChannelEnabled: boolean;
-    superGroupChannelEnabled: boolean;
-    reactionEnabled: boolean;
+    // Sendbird application options
+    appInfo: {
+      deliveryReceiptEnabled: boolean;
+      broadcastChannelEnabled: boolean;
+      superGroupChannelEnabled: boolean;
+      reactionEnabled: boolean;
+    };
   };
 };
 
@@ -77,19 +85,13 @@ export const SendbirdChatProvider = ({
   mentionManager,
   imageCompressionConfig,
   enableAutoPushTokenRegistration,
-  enableChannelListMessageReceiptStatus,
-  enableChannelListTypingIndicator,
   enableUseUserIdForNickname,
-  enableUserMention,
   enableImageCompression,
-  enableMessageSearch,
-  enableGroupChannelOGTag,
-  enableOpenChannelOGTag,
-  enableUsingDefaultUserProfile,
 }: Props) => {
   const [currentUser, _setCurrentUser] = useState<SendbirdUser>();
   const forceUpdate = useForceUpdate();
   const appFeatures = useAppFeatures(sdkInstance);
+  const { configs, configsWithAppAttr } = useUIKitConfig();
 
   const setCurrentUser: SendbirdChatContextType['setCurrentUser'] = useCallback((user) => {
     // NOTE: Sendbird SDK handle User object is always same object, so force update after setCurrentUser
@@ -153,18 +155,17 @@ export const SendbirdChatProvider = ({
     updateCurrentUserInfo,
     markAsDeliveredWithChannel,
 
-    features: {
-      ...appFeatures,
-      autoPushTokenRegistrationEnabled: enableAutoPushTokenRegistration,
-      channelListTypingIndicatorEnabled: enableChannelListTypingIndicator,
-      channelListMessageReceiptStatusEnabled: enableChannelListMessageReceiptStatus,
-      useUserIdForNicknameEnabled: enableUseUserIdForNickname,
-      userMentionEnabled: enableUserMention,
-      imageCompressionEnabled: enableImageCompression,
-      messageSearchEnabled: enableMessageSearch,
-      groupChannelOGTagEnabled: enableGroupChannelOGTag,
-      openChannelOGTagEnabled: enableOpenChannelOGTag,
-      usingDefaultUserProfileEnabled: enableUsingDefaultUserProfile,
+    // TODO: Options should be moved to the common area at the higher level to be passed to the context of each product.
+    //  For example, common -> chat context, common -> calls context
+    sbOptions: {
+      appInfo: appFeatures,
+      uikit: configs,
+      uikitWithAppInfo: configsWithAppAttr(sdkInstance),
+      chat: {
+        autoPushTokenRegistrationEnabled: enableAutoPushTokenRegistration,
+        useUserIdForNicknameEnabled: enableUseUserIdForNickname,
+        imageCompressionEnabled: enableImageCompression,
+      },
     },
   };
 

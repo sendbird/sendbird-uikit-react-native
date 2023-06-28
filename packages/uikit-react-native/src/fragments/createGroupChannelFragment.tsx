@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
+import { ReplyType } from '@sendbird/chat/message';
 import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
 import {
   NOOP,
@@ -9,6 +10,7 @@ import {
   SendbirdUserMessage,
   messageComparator,
   useFreshCallback,
+  useIIFE,
   useRefTracker,
 } from '@sendbird/uikit-utils';
 
@@ -35,7 +37,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     renderScrollToBottomButton = (props) => <ScrollToBottomButton {...props} />,
     renderMessage,
     enableMessageGrouping = true,
-    enableTypingIndicator = true,
+    enableTypingIndicator,
     onPressHeaderLeft = NOOP,
     onPressHeaderRight = NOOP,
     onPressMediaMessage = NOOP,
@@ -46,13 +48,11 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     onBeforeUpdateFileMessage = PASS,
     channel,
     keyboardAvoidOffset,
-    queryCreator,
     collectionCreator,
     sortComparator = messageComparator,
     flatListProps,
-    onPressImageMessage,
   }) => {
-    const { sdk, currentUser } = useSendbirdChat();
+    const { sdk, currentUser, sbOptions } = useSendbirdChat();
 
     const [internalSearchItem, setInternalSearchItem] = useState(searchItem);
     const navigateFromMessageSearch = useCallback(() => Boolean(searchItem), []);
@@ -60,6 +60,11 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     const [groupChannelPubSub] = useState(() => pubsub<GroupChannelPubSubContextPayload>());
     const [scrolledAwayFromBottom, setScrolledAwayFromBottom] = useState(false);
     const scrolledAwayFromBottomRef = useRefTracker(scrolledAwayFromBottom);
+
+    const replyType = useIIFE(() => {
+      if (sbOptions.uikit.groupChannel.channel.replyType === 'none') return ReplyType.NONE;
+      else return ReplyType.ONLY_REPLY_TO_CHANNEL;
+    });
 
     const {
       loading,
@@ -77,16 +82,16 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       deleteMessage,
       resetWithStartingPoint,
     } = useGroupChannelMessages(sdk, channel, currentUser?.userId, {
-      collectionCreator,
-      queryCreator,
-      sortComparator,
-      onChannelDeleted,
-      enableCollectionWithoutLocalCache: !queryCreator,
       shouldCountNewMessages: () => scrolledAwayFromBottomRef.current,
       onMessagesReceived(messages) {
         groupChannelPubSub.publish({ type: 'MESSAGES_RECEIVED', data: { messages } });
       },
+      collectionCreator,
+      sortComparator,
+      onChannelDeleted,
+      replyType,
       startingPoint: internalSearchItem?.startingPoint,
+      enableCollectionWithoutLocalCache: true,
     });
 
     const renderItem: GroupChannelProps['MessageList']['renderMessage'] = useFreshCallback((props) => {
@@ -147,50 +152,11 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       setScrolledAwayFromBottom(value);
     });
 
-    /** @deprecated **/
-    const onSendFileMessage: GroupChannelProps['Input']['onSendFileMessage'] = useFreshCallback(async (file) => {
-      const processedParams = await onBeforeSendFileMessage({ file });
-      const message = await sendFileMessage(processedParams, onPending);
-      onSent(message);
-    });
-    /** @deprecated **/
-    const onSendUserMessage: GroupChannelProps['Input']['onSendUserMessage'] = useFreshCallback(
-      async (text, mention) => {
-        const processedParams = await onBeforeSendUserMessage({
-          message: text,
-          mentionedUserIds: mention?.userIds,
-          mentionedMessageTemplate: mention?.messageTemplate,
-          mentionType: mention?.type,
-        });
-        const message = await sendUserMessage(processedParams, onPending);
-        onSent(message);
-      },
-    );
-    /** @deprecated **/
-    const onUpdateFileMessage: GroupChannelProps['Input']['onUpdateFileMessage'] = useFreshCallback(
-      async (editedFile, message) => {
-        const processedParams = await onBeforeSendFileMessage({ file: editedFile });
-        await updateFileMessage(message.messageId, processedParams);
-      },
-    );
-    /** @deprecated **/
-    const onUpdateUserMessage: GroupChannelProps['Input']['onUpdateUserMessage'] = useFreshCallback(
-      async (editedText, message, mention) => {
-        const processedParams = await onBeforeSendUserMessage({
-          message: editedText,
-          mentionedUserIds: mention?.userIds,
-          mentionedMessageTemplate: mention?.messageTemplate,
-          mentionType: mention?.type,
-        });
-        await updateUserMessage(message.messageId, processedParams);
-      },
-    );
-
     return (
       <GroupChannelModule.Provider
         channel={channel}
         groupChannelPubSub={groupChannelPubSub}
-        enableTypingIndicator={enableTypingIndicator}
+        enableTypingIndicator={enableTypingIndicator ?? sbOptions.uikit.groupChannel.channel.enableTypingIndicator}
         keyboardAvoidOffset={keyboardAvoidOffset}
       >
         <GroupChannelModule.Header
@@ -219,9 +185,6 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             onDeleteMessage={deleteMessage}
             onPressMediaMessage={onPressMediaMessage}
             flatListProps={memoizedFlatListProps}
-            nextMessages={newMessages}
-            newMessagesFromMembers={newMessages}
-            onPressImageMessage={onPressImageMessage}
           />
           <GroupChannelModule.Input
             SuggestedMentionList={GroupChannelModule.SuggestedMentionList}
@@ -230,10 +193,6 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             onPressSendFileMessage={onPressSendFileMessage}
             onPressUpdateUserMessage={onPressUpdateUserMessage}
             onPressUpdateFileMessage={onPressUpdateFileMessage}
-            onSendFileMessage={onSendFileMessage}
-            onSendUserMessage={onSendUserMessage}
-            onUpdateFileMessage={onUpdateFileMessage}
-            onUpdateUserMessage={onUpdateUserMessage}
           />
         </StatusComposition>
       </GroupChannelModule.Provider>

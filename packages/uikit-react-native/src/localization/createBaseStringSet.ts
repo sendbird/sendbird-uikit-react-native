@@ -41,9 +41,6 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       MESSAGE_BUBBLE_EDITED_POSTFIX: ' (edited)',
       MESSAGE_BUBBLE_UNKNOWN_TITLE: () => '(Unknown message type)',
       MESSAGE_BUBBLE_UNKNOWN_DESC: () => 'Cannot read this message.',
-
-      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_LIST_FROZEN **/
-      LIST_BANNER_FROZEN: 'Channel is frozen',
       ...overrides?.OPEN_CHANNEL,
     },
     OPEN_CHANNEL_PARTICIPANTS: {
@@ -125,43 +122,6 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       MESSAGE_BUBBLE_UNKNOWN_DESC: () => 'Cannot read this message.',
 
       MENTION_LIMITED: (mentionLimit) => `You can have up to ${mentionLimit} mentions per message.`,
-
-      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_LIST_FROZEN **/
-      LIST_BANNER_FROZEN: 'Channel is frozen',
-      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_COPY **/
-      DIALOG_MESSAGE_COPY: 'Copy',
-      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_EDIT **/
-      DIALOG_MESSAGE_EDIT: 'Edit',
-      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_SAVE **/
-      DIALOG_MESSAGE_SAVE: 'Save',
-      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_DELETE **/
-      DIALOG_MESSAGE_DELETE: 'Delete',
-      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE **/
-      DIALOG_MESSAGE_DELETE_CONFIRM_TITLE: 'Delete message?',
-      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_OK **/
-      DIALOG_MESSAGE_DELETE_CONFIRM_OK: 'Delete',
-      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_CANCEL **/
-      DIALOG_MESSAGE_DELETE_CONFIRM_CANCEL: 'Cancel',
-      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_FAILED_RETRY **/
-      DIALOG_MESSAGE_FAILED_RETRY: 'Retry',
-      /** @deprecated Please use LABELS.CHANNEL_MESSAGE_FAILED_REMOVE **/
-      DIALOG_MESSAGE_FAILED_REMOVE: 'Remove',
-      /** @deprecated Please use LABELS.CHANNEL_INPUT_ATTACHMENT_CAMERA **/
-      DIALOG_ATTACHMENT_CAMERA: 'Camera',
-      /** @deprecated Please use LABELS.CHANNEL_INPUT_ATTACHMENT_PHOTO_LIBRARY **/
-      DIALOG_ATTACHMENT_PHOTO_LIBRARY: 'Photo library',
-      /** @deprecated Please use LABELS.CHANNEL_INPUT_ATTACHMENT_FILES **/
-      DIALOG_ATTACHMENT_FILES: 'Files',
-      /** @deprecated Please use LABELS.CHANNEL_INPUT_PLACEHOLDER_ACTIVE **/
-      INPUT_PLACEHOLDER_ACTIVE: 'Enter message',
-      /** @deprecated Please use LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED **/
-      INPUT_PLACEHOLDER_DISABLED: 'Chat not available in this channel.',
-      /** @deprecated Please use LABELS.CHANNEL_INPUT_PLACEHOLDER_MUTED **/
-      INPUT_PLACEHOLDER_MUTED: "You're muted by the operator.",
-      /** @deprecated Please use LABELS.CHANNEL_INPUT_EDIT_OK **/
-      INPUT_EDIT_OK: 'Save',
-      /** @deprecated Please use LABELS.CHANNEL_INPUT_EDIT_CANCEL **/
-      INPUT_EDIT_CANCEL: 'Cancel',
       ...overrides?.GROUP_CHANNEL,
     },
     GROUP_CHANNEL_SETTINGS: {
@@ -246,10 +206,6 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     },
     GROUP_CHANNEL_MEMBERS: {
       HEADER_TITLE: 'Members',
-      /** @deprecated Please use LABELS.USER_BAR_ME_POSTFIX **/
-      USER_BAR_ME_POSTFIX: ' (You)',
-      /** @deprecated Please use LABELS.USER_BAR_OPERATOR **/
-      USER_BAR_OPERATOR: 'Operator',
       ...overrides?.GROUP_CHANNEL_MEMBERS,
     },
     GROUP_CHANNEL_CREATE: {
@@ -300,33 +256,25 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       UNMUTE: 'Unmute',
       BAN: 'Ban',
       UNBAN: 'Unban',
-
-      // Deprecation backward
-      CHANNEL_MESSAGE_LIST_FROZEN:
-        overrides?.GROUP_CHANNEL?.LIST_BANNER_FROZEN ??
-        overrides?.OPEN_CHANNEL?.LIST_BANNER_FROZEN ??
-        'Channel is frozen',
-      CHANNEL_MESSAGE_COPY: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_COPY ?? 'Copy',
-      CHANNEL_MESSAGE_EDIT: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_EDIT ?? 'Edit',
-      CHANNEL_MESSAGE_SAVE: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_SAVE ?? 'Save',
-      CHANNEL_MESSAGE_DELETE: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_DELETE ?? 'Delete',
-      CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE:
-        overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_DELETE_CONFIRM_TITLE ?? 'Delete message?',
-      CHANNEL_MESSAGE_DELETE_CONFIRM_OK: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_DELETE_CONFIRM_OK ?? 'Delete',
-      CHANNEL_MESSAGE_DELETE_CONFIRM_CANCEL: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_DELETE_CONFIRM_CANCEL ?? 'Cancel',
-      CHANNEL_MESSAGE_FAILED_RETRY: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_FAILED_RETRY ?? 'Retry',
-      CHANNEL_MESSAGE_FAILED_REMOVE: overrides?.GROUP_CHANNEL?.DIALOG_MESSAGE_FAILED_REMOVE ?? 'Remove',
-      CHANNEL_INPUT_ATTACHMENT_CAMERA: overrides?.GROUP_CHANNEL?.DIALOG_ATTACHMENT_CAMERA ?? 'Camera',
-      CHANNEL_INPUT_ATTACHMENT_PHOTO_LIBRARY:
-        overrides?.GROUP_CHANNEL?.DIALOG_ATTACHMENT_PHOTO_LIBRARY ?? 'Photo library',
-      CHANNEL_INPUT_ATTACHMENT_FILES: overrides?.GROUP_CHANNEL?.DIALOG_ATTACHMENT_FILES ?? 'Files',
-      CHANNEL_INPUT_PLACEHOLDER_ACTIVE: overrides?.GROUP_CHANNEL?.INPUT_PLACEHOLDER_ACTIVE ?? 'Enter message',
-      CHANNEL_INPUT_PLACEHOLDER_DISABLED:
-        overrides?.GROUP_CHANNEL?.INPUT_PLACEHOLDER_DISABLED ?? 'Chat not available in this channel.',
-      CHANNEL_INPUT_PLACEHOLDER_MUTED:
-        overrides?.GROUP_CHANNEL?.INPUT_PLACEHOLDER_MUTED ?? "You're muted by the operator.",
-      CHANNEL_INPUT_EDIT_OK: overrides?.GROUP_CHANNEL?.INPUT_EDIT_OK ?? 'Save',
-      CHANNEL_INPUT_EDIT_CANCEL: overrides?.GROUP_CHANNEL?.INPUT_EDIT_CANCEL ?? 'Cancel',
+      CHANNEL_MESSAGE_LIST_FROZEN: 'Channel is frozen',
+      CHANNEL_MESSAGE_COPY: 'Copy',
+      CHANNEL_MESSAGE_EDIT: 'Edit',
+      CHANNEL_MESSAGE_SAVE: 'Save',
+      CHANNEL_MESSAGE_DELETE: 'Delete',
+      CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE: 'Delete message?',
+      CHANNEL_MESSAGE_DELETE_CONFIRM_OK: 'Delete',
+      CHANNEL_MESSAGE_DELETE_CONFIRM_CANCEL: 'Cancel',
+      CHANNEL_MESSAGE_FAILED_RETRY: 'Retry',
+      CHANNEL_MESSAGE_FAILED_REMOVE: 'Remove',
+      CHANNEL_INPUT_ATTACHMENT_CAMERA_PHOTO: 'Take a photo',
+      CHANNEL_INPUT_ATTACHMENT_CAMERA_VIDEO: 'Take a video',
+      CHANNEL_INPUT_ATTACHMENT_PHOTO_LIBRARY: 'Photo library',
+      CHANNEL_INPUT_ATTACHMENT_FILES: 'Files',
+      CHANNEL_INPUT_PLACEHOLDER_ACTIVE: 'Enter message',
+      CHANNEL_INPUT_PLACEHOLDER_DISABLED: 'Chat not available in this channel.',
+      CHANNEL_INPUT_PLACEHOLDER_MUTED: "You're muted by the operator.",
+      CHANNEL_INPUT_EDIT_OK: 'Save',
+      CHANNEL_INPUT_EDIT_CANCEL: 'Cancel',
       ...overrides?.LABELS,
     },
     FILE_VIEWER: {

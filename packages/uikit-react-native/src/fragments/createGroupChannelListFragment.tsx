@@ -18,46 +18,40 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
   return ({
     onPressChannel,
     onPressCreateChannel,
-    queryCreator,
     collectionCreator,
     renderGroupChannelPreview,
     skipTypeSelection = false,
     flatListProps = {},
     menuItemCreator = PASS,
   }) => {
-    const { sdk, currentUser, features, markAsDeliveredWithChannel } = useSendbirdChat();
+    const { sdk, currentUser, sbOptions, markAsDeliveredWithChannel } = useSendbirdChat();
     const { groupChannels, next, loading } = useGroupChannelList(sdk, currentUser?.userId, {
-      queryCreator,
       collectionCreator,
-      enableCollectionWithoutLocalCache: !queryCreator,
+      enableCollectionWithoutLocalCache: true,
     });
 
-    if (features.deliveryReceiptEnabled) {
+    if (sbOptions.appInfo.deliveryReceiptEnabled) {
       useAppState('change', (status) => {
         if (status === 'active') groupChannels.forEach(markAsDeliveredWithChannel);
       });
     }
 
     const _renderGroupChannelPreview: GroupChannelListProps['List']['renderGroupChannelPreview'] = useFreshCallback(
-      (channel, onLongPressChannel) => {
-        if (renderGroupChannelPreview) return renderGroupChannelPreview(channel, onLongPressChannel);
-        return (
-          <GroupChannelPreviewContainer
-            channel={channel}
-            onPress={() => onPressChannel(channel)}
-            onLongPress={() => onLongPressChannel()}
-          />
-        );
+      (props) => {
+        if (renderGroupChannelPreview) return renderGroupChannelPreview(props);
+        return <GroupChannelPreviewContainer {...props} />;
       },
     );
 
-    const isChannelTypeAvailable = features.broadcastChannelEnabled || features.superGroupChannelEnabled;
+    const isChannelTypeAvailable =
+      sbOptions.appInfo.broadcastChannelEnabled || sbOptions.appInfo.superGroupChannelEnabled;
 
     return (
       <GroupChannelListModule.Provider>
         <GroupChannelListModule.Header />
         <StatusComposition loading={loading} LoadingComponent={<GroupChannelListModule.StatusLoading />}>
           <GroupChannelListModule.List
+            onPressChannel={onPressChannel}
             menuItemCreator={menuItemCreator}
             renderGroupChannelPreview={_renderGroupChannelPreview}
             groupChannels={groupChannels}

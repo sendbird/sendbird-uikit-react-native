@@ -19,7 +19,6 @@ describe('useGroupChannelMessagesWithQuery', () => {
       expect(result.current.refreshing).toBe(false);
       expect(result.current.messages).not.toEqual([]);
       expect(result.current.newMessages).toEqual([]);
-      expect(result.current.newMessagesFromMembers).toEqual([]);
       expect(result.current.prev).toBeInstanceOf(Function);
       expect(result.current.next).toBeInstanceOf(Function);
       expect(result.current.refresh).toBeInstanceOf(Function);

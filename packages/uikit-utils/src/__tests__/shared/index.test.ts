@@ -1,4 +1,4 @@
-import { conditionChaining, hash, pick, replace } from '../../shared';
+import { conditionChaining, hash, mergeObjectArrays, pick, replace } from '../../shared';
 
 describe('hash', () => {
   it('should return the hash of a given string', () => {
@@ -59,5 +59,40 @@ describe('pick', () => {
     const keys = ['a', 'b', 'd'] as Array<keyof typeof obj>;
     const result = pick(obj, keys);
     expect(result).toEqual({ a: 1, b: '2' });
+  });
+});
+
+describe('mergeObjectArrays', () => {
+  interface Person {
+    id: number;
+    name: string;
+  }
+
+  test('should merge arrays and remove duplicates based on the specified key', () => {
+    const A: Person[] = [
+      { id: 1, name: 'John' },
+      { id: 2, name: 'Jane' },
+    ];
+
+    const B: Person[] = [
+      { id: 2, name: 'Jane' },
+      { id: 3, name: 'Tom' },
+    ];
+
+    const mergedArray = mergeObjectArrays(A, B, 'id');
+    expect(mergedArray).toEqual([
+      { id: 1, name: 'John' },
+      { id: 2, name: 'Jane' },
+      { id: 3, name: 'Tom' },
+    ]);
+
+    expect(A).toEqual([
+      { id: 1, name: 'John' },
+      { id: 2, name: 'Jane' },
+    ]);
+    expect(B).toEqual([
+      { id: 2, name: 'Jane' },
+      { id: 3, name: 'Tom' },
+    ]);
   });
 });

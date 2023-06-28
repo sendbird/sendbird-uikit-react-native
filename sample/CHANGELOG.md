@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.5.0...v3.0.0) (2023-06-28)
+
+### ⚠ BREAKING CHANGES
+
+- update minimum chat sdk version
+
+### Features
+
+- support options for default user profile(default: false) ([6671a61](https://github.com/sendbird/sendbird-uikit-react-native/commit/6671a61a293403b0becdea030326520829662ac6))
+- update minimum chat sdk version ([5330d1f](https://github.com/sendbird/sendbird-uikit-react-native/commit/5330d1fb533a614f7edb1614cc379c842768e4cf))
+
+### Bug Fixes
+
+- fixed onPress related handlers in message renderer for proper functionality ([6da20db](https://github.com/sendbird/sendbird-uikit-react-native/commit/6da20db542d524eb83637de71c737fcc2d0627ca))
+
 ## [2.5.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.4.2...v2.5.0) (2023-05-04)
 
 ### Features

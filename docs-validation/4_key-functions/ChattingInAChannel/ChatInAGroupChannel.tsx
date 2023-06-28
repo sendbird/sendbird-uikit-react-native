@@ -82,7 +82,7 @@ import { Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/elements';
 
-import { GroupChannelContexts, GroupChannelModule, MessageRenderer } from '@sendbird/uikit-react-native';
+import { GroupChannelContexts, GroupChannelModule, GroupChannelMessageRenderer } from '@sendbird/uikit-react-native';
 import { Icon } from '@sendbird/uikit-react-native-foundation';
 
 const UseReactNavigationHeader: GroupChannelModule['Header'] = ({ onPressHeaderRight, onPressHeaderLeft }) => {
@@ -135,7 +135,7 @@ const GroupChannelScreen2 = ({ route: { params } }: any) => {
         if(props.message.customType === 'Advertise') {
           return <AdvertiseMessage {...props} />
         }
-        return <MessageRenderer {...props} />
+        return <GroupChannelMessageRenderer {...props} />
       }}
     />
   );

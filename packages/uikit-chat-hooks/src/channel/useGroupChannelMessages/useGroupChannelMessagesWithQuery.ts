@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 
+import type { PreviousMessageListQueryParams } from '@sendbird/chat/message';
 import type {
   SendbirdBaseChannel,
   SendbirdGroupChannel,
@@ -21,15 +22,13 @@ import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';
 import { useChannelMessagesReducer } from '../useChannelMessagesReducer';
 
-const createMessageQuery = (
-  channel: SendbirdGroupChannel,
-  creator?: UseGroupChannelMessagesOptions['queryCreator'],
-) => {
-  if (creator) return creator();
-  return channel.createPreviousMessageListQuery({
-    limit: 100,
-    reverse: true,
-  });
+const createMessageQuery = (channel: SendbirdGroupChannel, options?: UseGroupChannelMessagesOptions) => {
+  if (options?.queryCreator) return options.queryCreator();
+
+  const params: PreviousMessageListQueryParams = { limit: 100, reverse: true };
+  if (options?.replyType) params.replyType = options.replyType;
+
+  return channel.createPreviousMessageListQuery(params);
 };
 
 export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, channel, userId, options) => {
@@ -64,7 +63,7 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
       channelMarkAsRead();
       updateNewMessages([], true, sdk.currentUser.userId);
 
-      queryRef.current = createMessageQuery(channel, options?.queryCreator);
+      queryRef.current = createMessageQuery(channel, options);
       if (queryRef.current?.hasNext) {
         const list = await queryRef.current?.load();
         updateMessages(list, true, sdk.currentUser.userId);
@@ -281,8 +280,5 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
     resetWithStartingPoint() {
       Logger.warn('resetWithStartingPoint is not supported in Query, please use Collection instead.');
     },
-
-    nextMessages: newMessages,
-    newMessagesFromMembers: newMessages,
   };
 };

@@ -69,7 +69,6 @@ export type OpenChannelProps = {
     | 'renderNewMessagesButton'
     | 'renderScrollToBottomButton'
     | 'flatListProps'
-    | 'onPressImageMessage'
     | 'hasNext'
   >;
   Input: Pick<
@@ -79,6 +78,7 @@ export type OpenChannelProps = {
     | 'onPressSendFileMessage'
     | 'onPressUpdateUserMessage'
     | 'onPressUpdateFileMessage'
+    | 'AttachmentsButton'
   >;
 
   Provider: {

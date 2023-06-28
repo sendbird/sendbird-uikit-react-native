@@ -83,6 +83,7 @@ const App2 = () => {
   return (
     // @ts-ignore
     <SendbirdUIKitContainer
+      // @ts-ignore
       chatOptions={{ enableAutoPushTokenRegistration: false }}
     />
   );

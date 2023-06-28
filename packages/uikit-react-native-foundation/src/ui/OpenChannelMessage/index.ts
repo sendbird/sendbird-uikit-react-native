@@ -26,7 +26,7 @@ export type OpenChannelMessageProps<T extends SendbirdMessage, AdditionalProps =
   onPress?: () => void;
   onLongPress?: () => void;
   onPressAvatar?: () => void;
-  onPressURL?: () => void;
+  onPressURL?: (url: string) => void;
 } & AdditionalProps;
 
 const OpenChannelMessage = {

@@ -33,7 +33,7 @@ export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, o
     groupChannels,
     refreshing,
     updateChannels,
-    setChannels,
+    appendChannels,
     deleteChannels,
     updateRefreshing,
     updateLoading,
@@ -53,7 +53,7 @@ export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, o
       if (queryRef.current?.hasNext) {
         const channels = await queryRef.current.next();
 
-        setChannels(channels, true);
+        appendChannels(channels, true);
         if (deliveryReceiptEnabled) confirmAndMarkAsDelivered(channels);
       }
     }
@@ -96,7 +96,7 @@ export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, o
   const next = useFreshCallback(async () => {
     if (queryRef.current?.hasNext) {
       const channels = await queryRef.current.next();
-      setChannels(channels, false);
+      appendChannels(channels, false);
       if (deliveryReceiptEnabled) confirmAndMarkAsDelivered(channels);
     }
   });

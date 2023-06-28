@@ -26,7 +26,7 @@ const OpenChannelMessageRenderer: OpenChannelProps['Fragment']['renderMessage'] 
   prevMessage,
   nextMessage,
 }) => {
-  const { features } = useSendbirdChat();
+  const { sbOptions } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { mediaService } = usePlatformService();
   const { groupWithPrev } = calcMessageGrouping(Boolean(enableMessageGrouping), message, prevMessage, nextMessage);
@@ -35,7 +35,7 @@ const OpenChannelMessageRenderer: OpenChannelProps['Fragment']['renderMessage'] 
     channel,
     onPress,
     onLongPress,
-    onPressURL: () => message.ogMetaData?.url && SBUUtils.openURL(message.ogMetaData?.url),
+    onPressURL: (url) => SBUUtils.openURL(url),
     onPressAvatar: () => 'sender' in message && onShowUserProfile?.(message.sender, { hideMessageButton: true }),
     grouped: groupWithPrev,
     strings: {
@@ -56,7 +56,7 @@ const OpenChannelMessageRenderer: OpenChannelProps['Fragment']['renderMessage'] 
         return <OpenChannelMessage.User message={message as SendbirdUserMessage} {...messageProps} />;
       }
       case 'user.opengraph': {
-        if (features.openChannelOGTagEnabled) {
+        if (sbOptions.uikitWithAppInfo.openChannel.channel.enableOgtag) {
           return <OpenChannelMessage.OpenGraphUser message={message as SendbirdUserMessage} {...messageProps} />;
         } else {
           return <OpenChannelMessage.User message={message as SendbirdUserMessage} {...messageProps} />;

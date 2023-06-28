@@ -357,8 +357,5 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
     resendMessage,
     deleteMessage,
     resetNewMessages,
-
-    nextMessages: newMessages,
-    newMessagesFromMembers: newMessages,
   };
 };

@@ -25,16 +25,7 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
       inputFrozen={chatAvailableState.frozen}
       inputDisabled={chatAvailableState.disabled}
       keyboardAvoidOffset={keyboardAvoidOffset}
-      shouldRenderInput={props.shouldRenderInput}
-      onPressSendUserMessage={props.onPressSendUserMessage}
-      onPressSendFileMessage={props.onPressSendFileMessage}
-      onPressUpdateUserMessage={props.onPressUpdateUserMessage}
-      onPressUpdateFileMessage={props.onPressUpdateFileMessage}
-      SuggestedMentionList={props.SuggestedMentionList}
-      onSendFileMessage={props.onSendFileMessage}
-      onSendUserMessage={props.onSendUserMessage}
-      onUpdateFileMessage={props.onUpdateFileMessage}
-      onUpdateUserMessage={props.onUpdateUserMessage}
+      {...props}
     />
   );
 };
