@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.5.0...v3.0.0) (2023-06-28)
+
+### ⚠ BREAKING CHANGES
+
+- react-native minimum version changed to 0.65.0 from 0.63.3
+- deprecated item removal in foundation package
+
+### Features
+
+- deprecated item removal in foundation package ([96f9717](https://github.com/sendbird/sendbird-uikit-react-native/commit/96f97171c65d53d29990058e20e439cd1349c5c8))
+- react-native minimum version changed to 0.65.0 from 0.63.3 ([39a9852](https://github.com/sendbird/sendbird-uikit-react-native/commit/39a9852c737dbbe5e034a895deae791b3cb1f9b8))
+
+### Bug Fixes
+
+- fixed onPress related handlers in message renderer for proper functionality ([6da20db](https://github.com/sendbird/sendbird-uikit-react-native/commit/6da20db542d524eb83637de71c737fcc2d0627ca))
+- **foundation:** fixed slight cropping at the bottom of images in AvatarGroup ([76ccadf](https://github.com/sendbird/sendbird-uikit-react-native/commit/76ccadfa724a0ab552b60a384f63e8c82b9c5a32))
+
 ## [2.5.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v2.4.2...v2.5.0) (2023-05-04)
 
 **Note:** Version bump only for package @sendbird/uikit-react-native-foundation
