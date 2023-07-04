@@ -6,6 +6,7 @@ import type * as ExpoMediaLibrary from 'expo-media-library';
 import { getFileType } from '@sendbird/uikit-utils';
 
 import SBUError from '../libs/SBUError';
+import expoBackwardUtils from '../utils/expoBackwardUtils';
 import type { ExpoMediaLibraryPermissionResponse, ExpoPermissionResponse } from '../utils/expoPermissionGranted';
 import expoPermissionGranted from '../utils/expoPermissionGranted';
 import normalizeFile from '../utils/normalizeFile';
@@ -76,12 +77,10 @@ const createExpoFileService = ({
         })(),
       });
 
-      if (response.cancelled) return null;
+      if (expoBackwardUtils.toCanceled(response)) return null;
 
-      const { uri } = response;
-      const { size } = await fsModule.getInfoAsync(response.uri);
-
-      return normalizeFile({ uri, size });
+      const filePickerRes = await expoBackwardUtils.toFilePickerResponses(response, fsModule);
+      return filePickerRes[0];
     }
     async openMediaLibrary(options: OpenMediaLibraryOptions) {
       const hasPermission = await this.hasMediaLibraryPermission('read');
@@ -93,7 +92,9 @@ const createExpoFileService = ({
         }
       }
 
+      const selectionLimit = options?.selectionLimit || 1;
       const response = await imagePickerModule.launchImageLibraryAsync({
+        selectionLimit,
         mediaTypes: (() => {
           switch (options?.mediaType) {
             case 'photo':
@@ -107,10 +108,8 @@ const createExpoFileService = ({
           }
         })(),
       });
-      if (response.cancelled) return null;
-      const { uri } = response;
-      const { size } = await fsModule.getInfoAsync(uri);
-      return [await normalizeFile({ uri, size })];
+      if (expoBackwardUtils.toCanceled(response)) return null;
+      return expoBackwardUtils.toFilePickerResponses(response, fsModule);
     }
 
     async openDocument(options?: OpenDocumentOptions): Promise<FilePickerResponse> {

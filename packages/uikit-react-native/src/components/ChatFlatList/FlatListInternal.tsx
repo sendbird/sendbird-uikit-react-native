@@ -1,5 +1,3 @@
-/**
- * */
 import type { ForwardedRef, ReactElement } from 'react';
 import type { FlatListProps, FlatList as RNFlatList, ScrollViewProps } from 'react-native';
 import { Platform } from 'react-native';
@@ -19,8 +17,8 @@ type BidirectionalProps<T> = {
 function shouldUseScrollViewEnhancer() {
   if (Platform.OS !== 'android') return false;
 
-  if (Platform.constants.reactNativeVersion.major < 1) {
-    if (Platform.constants.reactNativeVersion.minor < 72) {
+  if (Platform.constants.reactNativeVersion?.major < 1) {
+    if (Platform.constants.reactNativeVersion?.minor < 72) {
       return true;
     }
   }

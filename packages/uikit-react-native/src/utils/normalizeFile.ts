@@ -21,12 +21,16 @@ const normalizeFile = async ({ uri, size, name, type }: PartialNullable<FileType
 
   if (extension) {
     filename = normalizeFileName(filename, extension);
-    if (!filetype) {
+    if (!filetype || !isNotMimeType(filetype)) {
       filetype = getMimeFromFileExtension(extension);
     }
   }
 
   return { uri, name: filename, type: filetype, size: size ?? 0 };
 };
+
+function isNotMimeType(str: string) {
+  return str.indexOf('/') === -1;
+}
 
 export default normalizeFile;

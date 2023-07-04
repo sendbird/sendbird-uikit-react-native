@@ -41,18 +41,28 @@ const EXTENSION_MIME_MAP = {
 export const imageExtRegex = /jpeg|jpg|png|webp|gif/i;
 export const audioExtRegex = /3gp|aac|aax|act|aiff|flac|gsm|m4a|m4b|m4p|tta|wma|mp3|webm|wav/i;
 export const videoExtRegex = /mov|vod|mp4|avi/i;
-export const getFileType = (extOrType: string) => {
-  if (extOrType.indexOf('/') > -1) {
-    const type = extOrType.split('/')[0];
+export const getFileType = (extensionOrType: string) => {
+  const lowerCased = extensionOrType.toLowerCase();
+
+  // mime type
+  if (lowerCased.indexOf('/') > -1) {
+    const type = lowerCased.split('/')[0];
     if (type === 'video') return 'video';
     if (type === 'audio') return 'audio';
     if (type === 'image') return 'image';
     return 'file';
   }
 
-  if (extOrType.match(imageExtRegex)) return 'image';
-  if (extOrType.match(audioExtRegex)) return 'audio';
-  if (extOrType.match(videoExtRegex)) return 'video';
+  // extensions
+  if (lowerCased.match(imageExtRegex)) return 'image';
+  if (lowerCased.match(audioExtRegex)) return 'audio';
+  if (lowerCased.match(videoExtRegex)) return 'video';
+
+  // others
+  if (lowerCased.startsWith('image')) return 'image';
+  if (lowerCased.startsWith('audio')) return 'audio';
+  if (lowerCased.startsWith('video')) return 'video';
+
   return 'file';
 };
 
