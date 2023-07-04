@@ -19,8 +19,8 @@ type BidirectionalProps<T> = {
 function shouldUseScrollViewEnhancer() {
   if (Platform.OS !== 'android') return false;
 
-  if (Platform.constants.reactNativeVersion.major < 1) {
-    if (Platform.constants.reactNativeVersion.minor < 72) {
+  if (Platform.constants.reactNativeVersion?.major < 1) {
+    if (Platform.constants.reactNativeVersion?.minor < 72) {
       return true;
     }
   }
