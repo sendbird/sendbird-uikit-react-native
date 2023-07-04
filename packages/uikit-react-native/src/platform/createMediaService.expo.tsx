@@ -7,6 +7,7 @@ import React from 'react';
 import { getDownscaleSize } from '@sendbird/uikit-utils';
 
 import SBUUtils from '../libs/SBUUtils';
+import expoBackwardUtils from '../utils/expoBackwardUtils';
 import type { MediaServiceInterface } from './types';
 
 type Modules = {
@@ -43,9 +44,9 @@ const createExpoMediaService = ({
       const { uri: compressedURI } = await imageManipulator.manipulateAsync(uri, [{ resize: resizingSize }], {
         compress: Math.min(Math.max(0, compressionRate), 1),
       });
-      const { size = 0 } = await fsModule.getInfoAsync(uri);
+      const fileInfo = await fsModule.getInfoAsync(uri);
 
-      return { uri: compressedURI, size };
+      return { uri: compressedURI, size: expoBackwardUtils.toFileSize(fileInfo) };
     },
   };
 };
