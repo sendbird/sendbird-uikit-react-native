@@ -21,7 +21,7 @@ const normalizeFile = async ({ uri, size, name, type }: PartialNullable<FileType
 
   if (extension) {
     filename = normalizeFileName(filename, extension);
-    if (!filetype || !isMimeType(filetype)) {
+    if (!filetype || !isNotMimeType(filetype)) {
       filetype = getMimeFromFileExtension(extension);
     }
   }
@@ -29,9 +29,8 @@ const normalizeFile = async ({ uri, size, name, type }: PartialNullable<FileType
   return { uri, name: filename, type: filetype, size: size ?? 0 };
 };
 
-function isMimeType(str: string) {
-  const mimeTypeRegex = /^[a-z]+\/[a-z0-9\-+]+$/i;
-  return mimeTypeRegex.test(str);
+function isNotMimeType(str: string) {
+  return str.indexOf('/') === -1;
 }
 
 export default normalizeFile;
