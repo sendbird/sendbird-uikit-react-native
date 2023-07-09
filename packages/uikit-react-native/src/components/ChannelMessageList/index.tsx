@@ -58,6 +58,7 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
   onReplyMessage: (message: HandleableMessage) => void;
   onDeleteMessage: (message: HandleableMessage) => Promise<void>;
   onResendFailedMessage: (failedMessage: HandleableMessage) => Promise<void>;
+  onPressParentMessage?: (parentMessage: SendbirdMessage) => void;
   onPressMediaMessage?: (message: SendbirdFileMessage, deleteMessage: () => Promise<void>, uri: string) => void;
 
   renderMessage: (props: {
@@ -67,6 +68,7 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
     nextMessage?: SendbirdMessage;
     onPress?: () => void;
     onLongPress?: () => void;
+    onPressParentMessage?: ChannelMessageListProps<T>['onPressParentMessage'];
     onShowUserProfile?: UserProfileContextType['show'];
     channel: T;
     currentUserId?: ChannelMessageListProps<T>['currentUserId'];
@@ -96,6 +98,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
     onDeleteMessage,
     onResendFailedMessage,
     onPressMediaMessage,
+    onPressParentMessage,
     currentUserId,
     renderNewMessagesButton,
     renderScrollToBottomButton,
@@ -137,6 +140,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
       nextMessage: messages[index - 1],
       onPress,
       onLongPress,
+      onPressParentMessage,
       onShowUserProfile: show,
       enableMessageGrouping,
       channel,
@@ -285,7 +289,7 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
         }
 
         if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
-          const disabled = Boolean(msg.parentMessage);
+          const disabled = Boolean(msg.parentMessageId);
           sheetItems.push({
             // TODO: Implement disabled to bottom sheet
             // disabled,
@@ -330,7 +334,7 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
         }
 
         if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
-          const disabled = Boolean(msg.parentMessage);
+          const disabled = Boolean(msg.parentMessageId);
           sheetItems.push({
             // TODO: Implement disabled to bottom sheet
             // disabled,
