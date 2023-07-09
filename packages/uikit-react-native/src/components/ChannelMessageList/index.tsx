@@ -55,7 +55,7 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
   onPressScrollToBottomButton: (animated?: boolean) => void;
 
   onEditMessage: (message: HandleableMessage) => void;
-  onReplyMessage: (message: HandleableMessage) => void;
+  onReplyMessage?: (message: HandleableMessage) => void; // only available on group channel
   onDeleteMessage: (message: HandleableMessage) => Promise<void>;
   onResendFailedMessage: (failedMessage: HandleableMessage) => Promise<void>;
   onPressParentMessage?: (parentMessage: SendbirdMessage) => void;
@@ -296,7 +296,7 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
             icon: 'reply',
             // TODO: Add reply label
             title: disabled ? 'Reply(disabled)' : 'Reply', //'STRINGS.LABELS.CHANNEL_MESSAGE_REPLY',
-            onPress: () => onReplyMessage(msg),
+            onPress: () => onReplyMessage?.(msg),
           });
         }
       }
@@ -341,7 +341,7 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
             icon: 'reply',
             // TODO: Add reply label
             title: disabled ? 'Reply(disabled)' : 'Reply', //'STRINGS.LABELS.CHANNEL_MESSAGE_REPLY',
-            onPress: () => onReplyMessage(msg),
+            onPress: () => onReplyMessage?.(msg),
           });
         }
       }

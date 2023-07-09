@@ -56,9 +56,9 @@ export type ChannelInputProps = {
   messageToEdit: undefined | SendbirdUserMessage | SendbirdFileMessage;
   setMessageToEdit: (message?: undefined | SendbirdUserMessage | SendbirdFileMessage) => void;
 
-  // reply
-  messageToReply: undefined | SendbirdUserMessage | SendbirdFileMessage;
-  setMessageToReply: (message?: undefined | SendbirdUserMessage | SendbirdFileMessage) => void;
+  // reply - only available on group channel
+  messageToReply?: undefined | SendbirdUserMessage | SendbirdFileMessage;
+  setMessageToReply?: (message?: undefined | SendbirdUserMessage | SendbirdFileMessage) => void;
 
   // mention
   SuggestedMentionList?: (props: SuggestedMentionListProps) => JSX.Element | null;

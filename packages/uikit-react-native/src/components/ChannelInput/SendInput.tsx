@@ -98,7 +98,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     }).catch(onFailureToSend);
 
     onChangeText('');
-    setMessageToReply();
+    setMessageToReply?.();
   };
 
   const sendFileMessage = (file: FileType) => {
@@ -107,7 +107,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
       ...messageReplyParams,
     }).catch(onFailureToSend);
 
-    setMessageToReply();
+    setMessageToReply?.();
   };
 
   const sheetItems = useChannelInputItems(channel, sendFileMessage);
@@ -143,7 +143,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
               <Text>{messageToReply.message}</Text>
             )}
           </View>
-          <PressBox onPress={() => setMessageToReply()} style={{ borderWidth: 1, marginLeft: 16 }}>
+          <PressBox onPress={() => setMessageToReply?.(undefined)} style={{ borderWidth: 1, marginLeft: 16 }}>
             <Icon icon={'close'} size={24} color={colors.onBackground01} />
           </PressBox>
         </View>
