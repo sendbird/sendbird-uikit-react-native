@@ -281,6 +281,8 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
               onPress: () => onEditMessage(msg),
             },
             {
+              // TODO: disabled if message has a parentMessageId
+              // disabled: Boolean(msg.parentMessageId),
               icon: 'delete',
               title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
               onPress: () => confirmDelete(msg),
@@ -327,6 +329,8 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
       if (!channel.isEphemeral) {
         if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
           sheetItems.push({
+            // TODO: disabled if message has a parentMessageId
+            // disabled: Boolean(msg.parentMessageId),
             icon: 'delete',
             title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
             onPress: () => confirmDelete(msg),
