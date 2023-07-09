@@ -55,6 +55,7 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
   onPressScrollToBottomButton: (animated?: boolean) => void;
 
   onEditMessage: (message: HandleableMessage) => void;
+  onReplyMessage: (message: HandleableMessage) => void;
   onDeleteMessage: (message: HandleableMessage) => Promise<void>;
   onResendFailedMessage: (failedMessage: HandleableMessage) => Promise<void>;
   onPressMediaMessage?: (message: SendbirdFileMessage, deleteMessage: () => Promise<void>, uri: string) => void;
@@ -91,6 +92,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
     hasNext,
     channel,
     onEditMessage,
+    onReplyMessage,
     onDeleteMessage,
     onResendFailedMessage,
     onPressMediaMessage,
@@ -119,6 +121,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
     channel,
     currentUserId,
     onEditMessage,
+    onReplyMessage,
     onDeleteMessage,
     onResendFailedMessage,
     onPressMediaMessage,
@@ -188,11 +191,18 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
   currentUserId,
   onResendFailedMessage,
   onEditMessage,
+  onReplyMessage,
   onDeleteMessage,
   onPressMediaMessage,
 }: Pick<
   ChannelMessageListProps<T>,
-  'channel' | 'currentUserId' | 'onEditMessage' | 'onDeleteMessage' | 'onResendFailedMessage' | 'onPressMediaMessage'
+  | 'channel'
+  | 'currentUserId'
+  | 'onEditMessage'
+  | 'onReplyMessage'
+  | 'onDeleteMessage'
+  | 'onResendFailedMessage'
+  | 'onPressMediaMessage'
 >) => {
   const { colors } = useUIKitTheme();
   const { STRINGS } = useLocalization();
@@ -273,6 +283,18 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
             },
           );
         }
+
+        if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
+          const disabled = Boolean(msg.parentMessage);
+          sheetItems.push({
+            // TODO: Implement disabled to bottom sheet
+            // disabled,
+            icon: 'reply',
+            // TODO: Add reply label
+            title: disabled ? 'Reply(disabled)' : 'Reply', //'STRINGS.LABELS.CHANNEL_MESSAGE_REPLY',
+            onPress: () => onReplyMessage(msg),
+          });
+        }
       }
     }
 
@@ -304,6 +326,18 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
             icon: 'delete',
             title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
             onPress: () => confirmDelete(msg),
+          });
+        }
+
+        if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
+          const disabled = Boolean(msg.parentMessage);
+          sheetItems.push({
+            // TODO: Implement disabled to bottom sheet
+            // disabled,
+            icon: 'reply',
+            // TODO: Add reply label
+            title: disabled ? 'Reply(disabled)' : 'Reply', //'STRINGS.LABELS.CHANNEL_MESSAGE_REPLY',
+            onPress: () => onReplyMessage(msg),
           });
         }
       }

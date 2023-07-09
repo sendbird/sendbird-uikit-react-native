@@ -102,10 +102,12 @@ export interface GroupChannelProps {
 export interface GroupChannelContextsType {
   Fragment: React.Context<{
     headerTitle: string;
+    keyboardAvoidOffset?: number;
     channel: SendbirdGroupChannel;
     messageToEdit?: SendbirdUserMessage | SendbirdFileMessage;
     setMessageToEdit: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
-    keyboardAvoidOffset?: number;
+    messageToReply?: SendbirdUserMessage | SendbirdFileMessage;
+    setMessageToReply: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
   }>;
   TypingIndicator: React.Context<{
     typingUsers: SendbirdUser[];

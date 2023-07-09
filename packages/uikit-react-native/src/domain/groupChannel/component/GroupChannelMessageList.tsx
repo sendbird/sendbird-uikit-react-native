@@ -13,7 +13,7 @@ import type { GroupChannelProps } from '../types';
 
 const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   const { sdk } = useSendbirdChat();
-  const { setMessageToEdit } = useContext(GroupChannelContexts.Fragment);
+  const { setMessageToEdit, setMessageToReply } = useContext(GroupChannelContexts.Fragment);
   const { subscribe } = useContext(GroupChannelContexts.PubSub);
 
   const id = useUniqHandlerId('GroupChannelMessageList');
@@ -89,6 +89,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
     <ChannelMessageList
       {...props}
       ref={ref}
+      onReplyMessage={setMessageToReply}
       onEditMessage={setMessageToEdit}
       onPressNewMessagesButton={scrollToBottom}
       onPressScrollToBottomButton={scrollToBottom}
