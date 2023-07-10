@@ -1,13 +1,5 @@
-## v3.0.1
+## v3.0.2
 
-### Update expo modules and support backward compatibility
+### Bug fix
 
-- Update `expo-av` module
-- Update `expo-clipboard` module
-- Update `expo-document-picker` module
-- Update `expo-file-system` module
-- Update `expo-image-manipulator` module
-- Update `expo-image-picker` module
-- Update `expo-media-library` module
-- Update `expo-notifications` module
-- Update `expo-video-thumbnails` module
+- revert [`ff48e36`](https://github.com/sendbird/sendbird-uikit-react-native/commit/ff48e36cf1fec3f5ede856360ac05b1523398834)

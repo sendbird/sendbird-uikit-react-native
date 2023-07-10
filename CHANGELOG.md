@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.0.1...v3.0.2) (2023-07-10)
+
+### Bug Fixes
+
+- revert "fix: do not use scrollview enhancer if the platform is not android (ff48e36)" ([907b09e](https://github.com/sendbird/sendbird-uikit-react-native/commit/907b09e3a71821b5d47e24d28e3ef429982a2f9b))
+
 ## [3.0.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.0.0...v3.0.1) (2023-07-04)
 
 ### Bug Fixes
