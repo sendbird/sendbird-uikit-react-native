@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.0.2...v3.0.3) (2023-07-11)
+
+### Bug Fixes
+
+- **utils:** wrong mime type check condition in normalizeFile ([1ca3789](https://github.com/sendbird/sendbird-uikit-react-native/commit/1ca378905d990769b836bcb4787d7da13e57a10e))
+
 ## [3.0.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.0.1...v3.0.2) (2023-07-10)
 
 ### Bug Fixes
