@@ -39,8 +39,8 @@ const EXTENSION_MIME_MAP = {
 } as Record<string, string>;
 
 export const imageExtRegex = /jpeg|jpg|png|webp|gif/i;
-export const audioExtRegex = /3gp|aac|aax|act|aiff|flac|gsm|m4a|m4b|m4p|tta|wma|mp3|webm|wav/i;
-export const videoExtRegex = /mov|vod|mp4|avi/i;
+export const audioExtRegex = /3gp|aac|aax|act|aiff|flac|gsm|m4a|m4b|m4p|tta|wma|mp3|webm|wav|ogg/i;
+export const videoExtRegex = /mov|vod|mp4|avi|mpeg|ogv/i;
 export const getFileType = (extensionOrType: string) => {
   const lowerCased = extensionOrType.toLowerCase();
 
