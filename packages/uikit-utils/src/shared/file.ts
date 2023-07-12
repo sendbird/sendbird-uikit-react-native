@@ -168,7 +168,11 @@ export function getFileExtensionFromMime(mimeType?: string | null): string {
  */
 export function getMimeFromFileExtension(ext?: string | null) {
   if (!ext) return '';
-  return EXTENSION_MIME_MAP[ext.toLowerCase()] || '';
+
+  const sliceIdx = ext.lastIndexOf('.');
+  const extWithoutDot = sliceIdx === -1 ? ext : ext.slice(sliceIdx + 1);
+
+  return EXTENSION_MIME_MAP[extWithoutDot.toLowerCase()] || '';
 }
 
 /**
