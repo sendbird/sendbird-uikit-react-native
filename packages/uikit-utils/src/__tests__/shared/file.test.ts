@@ -2,10 +2,70 @@ import {
   getDownscaleSize,
   getFileExtension,
   getFileExtensionFromMime,
+  getFileExtensionFromUri,
+  getFileType,
   getMimeFromFileExtension,
   normalizeFileName,
   parseMimeType,
 } from '../../shared/file';
+
+describe('getFileType', function () {
+  it('should return the proper file type with mime-type', () => {
+    expect(getFileType('image/jpeg')).toBe('image');
+    expect(getFileType('image/png')).toBe('image');
+    expect(getFileType('image/gif')).toBe('image');
+    expect(getFileType('video/mp4')).toBe('video');
+    expect(getFileType('video/quicktime')).toBe('video');
+    expect(getFileType('audio/mpeg')).toBe('audio');
+    expect(getFileType('audio/mp3')).toBe('audio');
+    expect(getFileType('audio/ogg')).toBe('audio');
+    expect(getFileType('application/pdf')).toBe('file');
+    expect(getFileType('application/json')).toBe('file');
+    expect(getFileType('application/zip')).toBe('file');
+    expect(getFileType('application/x-gzip')).toBe('file');
+    expect(getFileType('text/plain')).toBe('file');
+  });
+
+  it('should return the proper file type with file extension', () => {
+    expect(getFileType('.jpeg')).toBe('image');
+    expect(getFileType('jpeg')).toBe('image');
+    expect(getFileType('.jpg')).toBe('image');
+    expect(getFileType('jpg')).toBe('image');
+    expect(getFileType('.png')).toBe('image');
+    expect(getFileType('png')).toBe('image');
+    expect(getFileType('.gif')).toBe('image');
+    expect(getFileType('gif')).toBe('image');
+    expect(getFileType('.mp4')).toBe('video');
+    expect(getFileType('mp4')).toBe('video');
+    expect(getFileType('.mov')).toBe('video');
+    expect(getFileType('mov')).toBe('video');
+    expect(getFileType('.mpeg')).toBe('video');
+    expect(getFileType('mpeg')).toBe('video');
+    expect(getFileType('.mp3')).toBe('audio');
+    expect(getFileType('mp3')).toBe('audio');
+    expect(getFileType('.ogg')).toBe('audio');
+    expect(getFileType('ogg')).toBe('audio');
+    expect(getFileType('.wav')).toBe('audio');
+    expect(getFileType('wav')).toBe('audio');
+    expect(getFileType('.pdf')).toBe('file');
+    expect(getFileType('pdf')).toBe('file');
+    expect(getFileType('.json')).toBe('file');
+    expect(getFileType('json')).toBe('file');
+    expect(getFileType('.zip')).toBe('file');
+    expect(getFileType('zip')).toBe('file');
+    expect(getFileType('.gzip')).toBe('file');
+    expect(getFileType('gzip')).toBe('file');
+    expect(getFileType('.txt')).toBe('file');
+    expect(getFileType('txt')).toBe('file');
+  });
+
+  it('should return the proper file type with type', () => {
+    expect(getFileType('image')).toBe('image');
+    expect(getFileType('video')).toBe('video');
+    expect(getFileType('audio')).toBe('audio');
+    expect(getFileType('invalid-value')).toBe('file');
+  });
+});
 
 describe('getDownscaleSize', () => {
   it('should return the original size when no resizing is necessary', () => {
@@ -66,6 +126,13 @@ describe('normalizeFileName', () => {
     expect(result).toEqual(`${fileName}.${extension}`);
   });
 
+  it('should append dot+extension to filename if it does not exist', () => {
+    const fileName = 'testFile';
+    const extension = '.txt';
+    const result = normalizeFileName(fileName, extension);
+    expect(result).toEqual(`${fileName}${extension}`);
+  });
+
   it('should return filename as is if it already contains extension', () => {
     const fileName = 'testFile.txt';
     const extension = 'txt';
@@ -121,12 +188,12 @@ describe('getFileExtensionFromMime', () => {
   });
 
   it('should return correct extension for known mime type', () => {
-    expect(getFileExtensionFromMime('image/jpeg')).toMatch(/jpg|jpeg/);
-    expect(getFileExtensionFromMime('video/mp4')).toBe('mp4');
-    expect(getFileExtensionFromMime('audio/mpeg')).toBe('mp3');
-    expect(getFileExtensionFromMime('text/plain')).toBe('txt');
-    expect(getFileExtensionFromMime('application/pdf')).toBe('pdf');
-    expect(getFileExtensionFromMime('application/vnd.ms-excel')).toBe('xls');
+    expect(getFileExtensionFromMime('image/jpeg')).toMatch(/\.jpg|\.jpeg/);
+    expect(getFileExtensionFromMime('video/mp4')).toBe('.mp4');
+    expect(getFileExtensionFromMime('audio/mpeg')).toBe('.mp3');
+    expect(getFileExtensionFromMime('text/plain')).toBe('.txt');
+    expect(getFileExtensionFromMime('application/pdf')).toBe('.pdf');
+    expect(getFileExtensionFromMime('application/vnd.ms-excel')).toBe('.xls');
   });
 
   it('should return empty string for unknown mime type', () => {
@@ -139,6 +206,14 @@ describe('getMimeFromFileExtension', () => {
     expect(getMimeFromFileExtension('pdf')).toEqual('application/pdf');
     expect(getMimeFromFileExtension('jpg')).toEqual('image/jpeg');
     expect(getMimeFromFileExtension('docx')).toEqual(
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    );
+  });
+
+  it('should return the correct MIME type for a given file extension with dot', () => {
+    expect(getMimeFromFileExtension('..pdf')).toEqual('application/pdf');
+    expect(getMimeFromFileExtension('.jpg')).toEqual('image/jpeg');
+    expect(getMimeFromFileExtension('.docx')).toEqual(
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     );
   });
@@ -177,5 +252,20 @@ describe('getFileExtension', () => {
     expect(getFileExtension('/path/to/file.pdf?query=string')).toEqual('.pdf');
     expect(getFileExtension('/path/to/file.jpg?query=string;key=test123')).toEqual('.jpg');
     expect(getFileExtension('/path/to/file?query=string;key=test123')).toEqual('');
+  });
+});
+
+describe('getFileExtensionFromUri', () => {
+  it('should return the correct file extension for a given file uri', async () => {
+    await expect(
+      getFileExtensionFromUri(
+        'https://user-images.githubusercontent.com/26326015/253041267-4fd6c9f8-7bb4-4197-813c-43a45d0de95e.png',
+      ),
+    ).resolves.toEqual('.png');
+    await expect(
+      getFileExtensionFromUri(
+        'https://user-images.githubusercontent.com/26326015/253041558-3028125e-a016-402c-a9bd-d30b1831d19b.jpg',
+      ),
+    ).resolves.toEqual('.jpg');
   });
 });
