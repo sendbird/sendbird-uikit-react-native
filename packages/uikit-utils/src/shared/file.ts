@@ -157,7 +157,10 @@ export function getFileExtensionFromMime(mimeType?: string | null): string {
     acc[value] = key;
     return acc;
   }, {} as Record<string, string>);
-  return MIME_EXTENSION_MAP[mimeType.toLowerCase()] || '';
+
+  const extension = MIME_EXTENSION_MAP[mimeType.toLowerCase()];
+  if (extension) return '.' + extension;
+  return '';
 }
 
 /**
