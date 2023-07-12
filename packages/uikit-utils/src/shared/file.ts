@@ -195,8 +195,9 @@ export function getFileExtension(filePath: string) {
   else return result;
 }
 
-export function getFileExtensionFromUri(uri: string) {
-  return fetch(uri).then((response) => response.headers.get('content-type'));
+export async function getFileExtensionFromUri(uri: string) {
+  const type = await fetch(uri).then((response) => response.headers.get('content-type'));
+  return getFileExtensionFromMime(type);
 }
 
 export function isImage(filePath: string, mimeType?: string) {
