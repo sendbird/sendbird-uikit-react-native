@@ -21,7 +21,7 @@ const normalizeFile = async ({ uri, size, name, type }: PartialNullable<FileType
 
   if (extension) {
     filename = normalizeFileName(filename, extension);
-    if (!filetype || !isNotMimeType(filetype)) {
+    if (!filetype || isNotMimeType(filetype)) {
       filetype = getMimeFromFileExtension(extension);
     }
   }
