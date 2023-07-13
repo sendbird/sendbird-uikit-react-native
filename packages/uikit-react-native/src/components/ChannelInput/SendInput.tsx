@@ -13,7 +13,6 @@ import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation';
 import {
   Icon,
   Image,
-  PressBox,
   Text,
   TextInput,
   createStyleSheet,
@@ -143,9 +142,14 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
               <Text>{messageToReply.message}</Text>
             )}
           </View>
-          <PressBox onPress={() => setMessageToReply?.(undefined)} style={{ borderWidth: 1, marginLeft: 16 }}>
-            <Icon icon={'close'} size={24} color={colors.onBackground01} />
-          </PressBox>
+          <TouchableOpacity onPress={() => setMessageToReply?.(undefined)}>
+            <Icon
+              icon={'close'}
+              size={24}
+              color={colors.onBackground01}
+              containerStyle={styles.iconSend}
+            />
+          </TouchableOpacity>
         </View>
       )}
       <View style={styles.sendInputContainer}>

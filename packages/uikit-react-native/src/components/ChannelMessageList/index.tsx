@@ -271,39 +271,7 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
           toast.show(STRINGS.TOAST.COPY_OK, 'success');
         },
       });
-
-      if (!channel.isEphemeral) {
-        if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
-          sheetItems.push(
-            {
-              icon: 'edit',
-              title: STRINGS.LABELS.CHANNEL_MESSAGE_EDIT,
-              onPress: () => onEditMessage(msg),
-            },
-            {
-              // TODO: disabled if message has a parentMessageId
-              // disabled: Boolean(msg.parentMessageId),
-              icon: 'delete',
-              title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
-              onPress: () => confirmDelete(msg),
-            },
-          );
-        }
-
-        if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
-          const disabled = Boolean(msg.parentMessageId);
-          sheetItems.push({
-            // TODO: Implement disabled to bottom sheet
-            // disabled,
-            icon: 'reply',
-            // TODO: Add reply label
-            title: disabled ? 'Reply(disabled)' : 'Reply', //'STRINGS.LABELS.CHANNEL_MESSAGE_REPLY',
-            onPress: () => onReplyMessage?.(msg),
-          });
-        }
-      }
     }
-
     if (msg.isFileMessage()) {
       sheetItems.push({
         icon: 'download',
@@ -325,31 +293,38 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
             });
         },
       });
-
-      if (!channel.isEphemeral) {
-        if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
-          sheetItems.push({
-            // TODO: disabled if message has a parentMessageId
-            // disabled: Boolean(msg.parentMessageId),
+    }
+    if (!channel.isEphemeral) {
+      if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
+        if (msg.isUserMessage()) {
+          sheetItems.push(
+            {
+              icon: 'edit',
+              title: STRINGS.LABELS.CHANNEL_MESSAGE_EDIT,
+              onPress: () => onEditMessage(msg),
+            },
+          );
+        }
+        sheetItems.push(
+          {
+            disabled: Boolean(msg.parentMessageId),
             icon: 'delete',
             title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
             onPress: () => confirmDelete(msg),
-          });
-        }
-
-        if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
-          const disabled = Boolean(msg.parentMessageId);
-          sheetItems.push({
-            // TODO: Implement disabled to bottom sheet
-            // disabled,
-            icon: 'reply',
-            // TODO: Add reply label
-            title: disabled ? 'Reply(disabled)' : 'Reply', //'STRINGS.LABELS.CHANNEL_MESSAGE_REPLY',
-            onPress: () => onReplyMessage?.(msg),
-          });
-        }
+          },
+        );
       }
+      if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
+        sheetItems.push({
+          disabled: Boolean(msg.parentMessageId),
+          icon: 'reply',
+          title: STRINGS.LABELS.CHANNEL_MESSAGE_REPLY(msg.sender),
+          onPress: () => onReplyMessage?.(msg),
+        });
+      }
+    }
 
+    if (msg.isFileMessage()) {
       const fileType = getFileType(msg.type || getFileExtension(msg.name));
       switch (fileType) {
         case 'image':
