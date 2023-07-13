@@ -39,9 +39,13 @@ function isNotEmpty(arr?: unknown[]): arr is unknown[] {
   return arr.length !== 0;
 }
 
+function shouldUseSearchLimit(startingPoint: number) {
+  return startingPoint < Date.now();
+}
+
 export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (sdk, channel, userId, options) => {
   const initialStartingPoint = options?.startingPoint ?? Number.MAX_SAFE_INTEGER;
-  const initialLimit = typeof options?.startingPoint === 'number' ? MESSAGE_LIMIT.SEARCH : MESSAGE_LIMIT.DEFAULT;
+  const initialLimit = shouldUseSearchLimit(initialStartingPoint) ? MESSAGE_LIMIT.SEARCH : MESSAGE_LIMIT.DEFAULT;
 
   const forceUpdate = useForceUpdate();
   const collectionRef = useRef<SendbirdMessageCollection>();
@@ -347,9 +351,10 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
   });
   const resetWithStartingPoint: ReturnType<UseGroupChannelMessages>['resetWithStartingPoint'] = useFreshCallback(
     (startingPoint, callback) => {
+      const limit = shouldUseSearchLimit(startingPoint) ? MESSAGE_LIMIT.SEARCH : MESSAGE_LIMIT.DEFAULT;
       updateLoading(true);
       updateMessages([], true, sdk.currentUser.userId);
-      init(startingPoint, MESSAGE_LIMIT.DEFAULT, () => {
+      init(startingPoint, limit, () => {
         updateLoading(false);
         callback?.();
       });

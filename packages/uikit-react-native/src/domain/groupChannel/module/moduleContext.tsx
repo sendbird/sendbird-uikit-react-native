@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useCallback, useState } from 'react';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import {
@@ -21,6 +21,7 @@ export const GroupChannelContexts: GroupChannelContextsType = {
     headerTitle: '',
     channel: {} as SendbirdGroupChannel,
     setMessageToEdit: NOOP,
+    setMessageToReply: NOOP,
   }),
   TypingIndicator: createContext({
     typingUsers: [] as SendbirdUser[],
@@ -46,6 +47,23 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
 
   const [typingUsers, setTypingUsers] = useState<SendbirdUser[]>([]);
   const [messageToEdit, setMessageToEdit] = useState<SendbirdUserMessage | SendbirdFileMessage>();
+  const [messageToReply, setMessageToReply] = useState<SendbirdUserMessage | SendbirdFileMessage>();
+
+  const updateInputMode = (mode: 'send' | 'edit' | 'reply', message?: SendbirdUserMessage | SendbirdFileMessage) => {
+    if (mode === 'send' || !message) {
+      setMessageToEdit(undefined);
+      setMessageToReply(undefined);
+      return;
+    } else if (mode === 'edit') {
+      setMessageToEdit(message);
+      setMessageToReply(undefined);
+      return;
+    } else if (mode === 'reply') {
+      setMessageToEdit(undefined);
+      setMessageToReply(message);
+      return;
+    }
+  };
 
   useChannelHandler(sdk, handlerId, {
     onTypingStatusUpdated(eventChannel) {
@@ -61,9 +79,11 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
         value={{
           headerTitle: STRINGS.GROUP_CHANNEL.HEADER_TITLE(currentUser?.userId ?? '', channel),
           channel,
-          messageToEdit,
-          setMessageToEdit,
           keyboardAvoidOffset,
+          messageToEdit,
+          setMessageToEdit: useCallback((message) => updateInputMode('edit', message), []),
+          messageToReply,
+          setMessageToReply: useCallback((message) => updateInputMode('reply', message), []),
         }}
       >
         <GroupChannelContexts.TypingIndicator.Provider value={{ typingUsers }}>

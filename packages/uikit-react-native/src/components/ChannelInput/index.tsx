@@ -56,6 +56,10 @@ export type ChannelInputProps = {
   messageToEdit: undefined | SendbirdUserMessage | SendbirdFileMessage;
   setMessageToEdit: (message?: undefined | SendbirdUserMessage | SendbirdFileMessage) => void;
 
+  // reply - only available on group channel
+  messageToReply?: undefined | SendbirdUserMessage | SendbirdFileMessage;
+  setMessageToReply?: (message?: undefined | SendbirdUserMessage | SendbirdFileMessage) => void;
+
   // mention
   SuggestedMentionList?: (props: SuggestedMentionListProps) => JSX.Element | null;
 
@@ -83,9 +87,8 @@ const ChannelInput = (props: ChannelInputProps) => {
     messageToEdit,
   });
   const inputMode = useIIFE(() => {
-    if (!messageToEdit) return 'send';
-    if (messageToEdit.isFileMessage()) return 'send';
-    return 'edit';
+    if (messageToEdit && !messageToEdit.isFileMessage()) return 'edit';
+    else return 'send';
   });
 
   const mentionAvailable =
@@ -138,8 +141,8 @@ const ChannelInput = (props: ChannelInputProps) => {
                 onChangeText={onChangeText}
                 autoFocus={AUTO_FOCUS}
                 onSelectionChange={onSelectionChange}
-                messageToEdit={messageToEdit}
                 mentionedUsers={mentionedUsers}
+                messageToEdit={messageToEdit}
                 setMessageToEdit={setMessageToEdit}
               />
             )}

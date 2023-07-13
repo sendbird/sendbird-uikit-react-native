@@ -1,13 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, Easing } from 'react-native';
 
+import { useIsFirstMount } from '@sendbird/uikit-utils';
+
 import { MESSAGE_FOCUS_ANIMATION_DELAY, MESSAGE_SEARCH_SAFE_SCROLL_DELAY } from '../../constants';
 
 const GroupChannelMessageFocusAnimation = (props: React.PropsWithChildren<{ focused: boolean }>) => {
+  const isFirstMount = useIsFirstMount();
   const translateY = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     if (props.focused) {
+      const delay = MESSAGE_FOCUS_ANIMATION_DELAY + (isFirstMount ? MESSAGE_SEARCH_SAFE_SCROLL_DELAY : 0);
       setTimeout(() => {
         Animated.sequence(
           [
@@ -19,7 +23,7 @@ const GroupChannelMessageFocusAnimation = (props: React.PropsWithChildren<{ focu
             Animated.timing(translateY, { ...value, useNativeDriver: true, easing: Easing.inOut(Easing.ease) }),
           ),
         ).start();
-      }, MESSAGE_SEARCH_SAFE_SCROLL_DELAY + MESSAGE_FOCUS_ANIMATION_DELAY);
+      }, delay);
     }
   }, [props.focused]);
 

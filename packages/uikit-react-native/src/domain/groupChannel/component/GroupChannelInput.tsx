@@ -9,9 +9,11 @@ import type { GroupChannelProps } from '../types';
 const GroupChannelInput = (props: GroupChannelProps['Input']) => {
   const {
     channel,
+    keyboardAvoidOffset = 0,
     messageToEdit,
     setMessageToEdit,
-    keyboardAvoidOffset = 0,
+    messageToReply,
+    setMessageToReply,
   } = useContext(GroupChannelContexts.Fragment);
 
   const chatAvailableState = getGroupChannelChatAvailableState(channel);
@@ -21,6 +23,8 @@ const GroupChannelInput = (props: GroupChannelProps['Input']) => {
       channel={channel}
       messageToEdit={messageToEdit}
       setMessageToEdit={setMessageToEdit}
+      messageToReply={messageToReply}
+      setMessageToReply={setMessageToReply}
       inputMuted={chatAvailableState.muted}
       inputFrozen={chatAvailableState.frozen}
       inputDisabled={chatAvailableState.disabled}

@@ -55,8 +55,10 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
   onPressScrollToBottomButton: (animated?: boolean) => void;
 
   onEditMessage: (message: HandleableMessage) => void;
+  onReplyMessage?: (message: HandleableMessage) => void; // only available on group channel
   onDeleteMessage: (message: HandleableMessage) => Promise<void>;
   onResendFailedMessage: (failedMessage: HandleableMessage) => Promise<void>;
+  onPressParentMessage?: (parentMessage: SendbirdMessage) => void;
   onPressMediaMessage?: (message: SendbirdFileMessage, deleteMessage: () => Promise<void>, uri: string) => void;
 
   renderMessage: (props: {
@@ -66,6 +68,7 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
     nextMessage?: SendbirdMessage;
     onPress?: () => void;
     onLongPress?: () => void;
+    onPressParentMessage?: ChannelMessageListProps<T>['onPressParentMessage'];
     onShowUserProfile?: UserProfileContextType['show'];
     channel: T;
     currentUserId?: ChannelMessageListProps<T>['currentUserId'];
@@ -91,9 +94,11 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
     hasNext,
     channel,
     onEditMessage,
+    onReplyMessage,
     onDeleteMessage,
     onResendFailedMessage,
     onPressMediaMessage,
+    onPressParentMessage,
     currentUserId,
     renderNewMessagesButton,
     renderScrollToBottomButton,
@@ -119,6 +124,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
     channel,
     currentUserId,
     onEditMessage,
+    onReplyMessage,
     onDeleteMessage,
     onResendFailedMessage,
     onPressMediaMessage,
@@ -134,6 +140,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
       nextMessage: messages[index - 1],
       onPress,
       onLongPress,
+      onPressParentMessage,
       onShowUserProfile: show,
       enableMessageGrouping,
       channel,
@@ -188,11 +195,18 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
   currentUserId,
   onResendFailedMessage,
   onEditMessage,
+  onReplyMessage,
   onDeleteMessage,
   onPressMediaMessage,
 }: Pick<
   ChannelMessageListProps<T>,
-  'channel' | 'currentUserId' | 'onEditMessage' | 'onDeleteMessage' | 'onResendFailedMessage' | 'onPressMediaMessage'
+  | 'channel'
+  | 'currentUserId'
+  | 'onEditMessage'
+  | 'onReplyMessage'
+  | 'onDeleteMessage'
+  | 'onResendFailedMessage'
+  | 'onPressMediaMessage'
 >) => {
   const { colors } = useUIKitTheme();
   const { STRINGS } = useLocalization();
@@ -267,11 +281,25 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
               onPress: () => onEditMessage(msg),
             },
             {
+              // TODO: disabled if message has a parentMessageId
+              // disabled: Boolean(msg.parentMessageId),
               icon: 'delete',
               title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
               onPress: () => confirmDelete(msg),
             },
           );
+        }
+
+        if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
+          const disabled = Boolean(msg.parentMessageId);
+          sheetItems.push({
+            // TODO: Implement disabled to bottom sheet
+            // disabled,
+            icon: 'reply',
+            // TODO: Add reply label
+            title: disabled ? 'Reply(disabled)' : 'Reply', //'STRINGS.LABELS.CHANNEL_MESSAGE_REPLY',
+            onPress: () => onReplyMessage?.(msg),
+          });
         }
       }
     }
@@ -301,9 +329,23 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
       if (!channel.isEphemeral) {
         if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
           sheetItems.push({
+            // TODO: disabled if message has a parentMessageId
+            // disabled: Boolean(msg.parentMessageId),
             icon: 'delete',
             title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
             onPress: () => confirmDelete(msg),
+          });
+        }
+
+        if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
+          const disabled = Boolean(msg.parentMessageId);
+          sheetItems.push({
+            // TODO: Implement disabled to bottom sheet
+            // disabled,
+            icon: 'reply',
+            // TODO: Add reply label
+            title: disabled ? 'Reply(disabled)' : 'Reply', //'STRINGS.LABELS.CHANNEL_MESSAGE_REPLY',
+            onPress: () => onReplyMessage?.(msg),
           });
         }
       }

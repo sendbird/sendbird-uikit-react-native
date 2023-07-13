@@ -110,7 +110,17 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
 
     const onResetMessageList = useCallback((callback?: () => void) => {
       resetWithStartingPoint(Number.MAX_SAFE_INTEGER, callback);
+    }, []);
+
+    const onResetMessageListWithStartingPoint = useCallback((startingPoint: number, callback?: () => void) => {
+      resetWithStartingPoint(startingPoint, callback);
+    }, []);
+
+    // Changing the search item will trigger the focus animation on messages.
+    const onUpdateSearchItem: GroupChannelProps['MessageList']['onUpdateSearchItem'] = useCallback((searchItem) => {
+      // Clean up for animation trigger with useEffect
       setInternalSearchItem(undefined);
+      setInternalSearchItem(searchItem);
     }, []);
 
     const onPending = (message: SendbirdFileMessage | SendbirdUserMessage) => {
@@ -169,6 +179,8 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             channel={channel}
             searchItem={internalSearchItem}
             onResetMessageList={onResetMessageList}
+            onResetMessageListWithStartingPoint={onResetMessageListWithStartingPoint}
+            onUpdateSearchItem={onUpdateSearchItem}
             enableMessageGrouping={enableMessageGrouping}
             currentUserId={currentUser?.userId}
             renderMessage={renderItem}
