@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.0.3...v3.0.4) (2023-07-13)
+
+### Features
+
+- update expo-document-picker and support backward compatibility ([364f805](https://github.com/sendbird/sendbird-uikit-react-native/commit/364f805aa9c060d62eae8805121e29a5bddc3bec))
+
 ## [3.0.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.0.2...v3.0.3) (2023-07-11)
 
 ### Bug Fixes

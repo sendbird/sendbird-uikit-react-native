@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.0.3...v3.0.4) (2023-07-13)
+
+### Bug Fixes
+
+- **utils:** extension should not contain dot in getMimeFromFileExtension ([7be3d0c](https://github.com/sendbird/sendbird-uikit-react-native/commit/7be3d0cdddff6fbfca7f2442eba9bfed8bf80357))
+- **utils:** getFileExtensionFromUri should return extension not a mime-type ([e2df878](https://github.com/sendbird/sendbird-uikit-react-native/commit/e2df878d5dc0946cdd0003af4e77e1aeca60ba72))
+- **utils:** return extension of getFileExtensionFromMime should contain dot ([85b6d18](https://github.com/sendbird/sendbird-uikit-react-native/commit/85b6d18be278e25491f9274352c12a6118ffff02))
+
 ## [3.0.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.0.2...v3.0.3) (2023-07-11)
 
 **Note:** Version bump only for package @sendbird/uikit-utils
