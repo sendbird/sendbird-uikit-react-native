@@ -39,8 +39,8 @@ const EXTENSION_MIME_MAP = {
 } as Record<string, string>;
 
 export const imageExtRegex = /jpeg|jpg|png|webp|gif/i;
-export const audioExtRegex = /3gp|aac|aax|act|aiff|flac|gsm|m4a|m4b|m4p|tta|wma|mp3|webm|wav/i;
-export const videoExtRegex = /mov|vod|mp4|avi/i;
+export const audioExtRegex = /3gp|aac|aax|act|aiff|flac|gsm|m4a|m4b|m4p|tta|wma|mp3|webm|wav|ogg/i;
+export const videoExtRegex = /mov|vod|mp4|avi|mpeg|ogv/i;
 export const getFileType = (extensionOrType: string) => {
   const lowerCased = extensionOrType.toLowerCase();
 
@@ -157,7 +157,10 @@ export function getFileExtensionFromMime(mimeType?: string | null): string {
     acc[value] = key;
     return acc;
   }, {} as Record<string, string>);
-  return MIME_EXTENSION_MAP[mimeType.toLowerCase()] || '';
+
+  const extension = MIME_EXTENSION_MAP[mimeType.toLowerCase()];
+  if (extension) return '.' + extension;
+  return '';
 }
 
 /**
@@ -168,7 +171,11 @@ export function getFileExtensionFromMime(mimeType?: string | null): string {
  */
 export function getMimeFromFileExtension(ext?: string | null) {
   if (!ext) return '';
-  return EXTENSION_MIME_MAP[ext.toLowerCase()] || '';
+
+  const sliceIdx = ext.lastIndexOf('.');
+  const extWithoutDot = sliceIdx === -1 ? ext : ext.slice(sliceIdx + 1);
+
+  return EXTENSION_MIME_MAP[extWithoutDot.toLowerCase()] || '';
 }
 
 /**
@@ -188,8 +195,9 @@ export function getFileExtension(filePath: string) {
   else return result;
 }
 
-export function getFileExtensionFromUri(uri: string) {
-  return fetch(uri).then((response) => response.headers.get('content-type'));
+export async function getFileExtensionFromUri(uri: string) {
+  const type = await fetch(uri).then((response) => response.headers.get('content-type'));
+  return getFileExtensionFromMime(type);
 }
 
 export function isImage(filePath: string, mimeType?: string) {
