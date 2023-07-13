@@ -2,4 +2,4 @@
 
 ### Bug fix
 
-- Fix file messages mime-type in Expo environment
+- Fix send file messages in Expo environment
