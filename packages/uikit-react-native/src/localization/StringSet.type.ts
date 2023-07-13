@@ -244,6 +244,7 @@ export interface StringSet {
     CHANNEL_NO_MEMBERS: string;
     TYPING_INDICATOR_TYPINGS: (users: SendbirdUser[]) => string | undefined;
     REPLY_TO_SENDER: (user: SendbirdUser) => string;
+    REPLY_FROM_SENDER_TO_RECEIVER: (sender: SendbirdUser, receiver: SendbirdUser) => string;
 
     USER_BAR_ME_POSTFIX: string;
     USER_BAR_OPERATOR: string;
