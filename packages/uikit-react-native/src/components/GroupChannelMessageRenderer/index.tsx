@@ -256,24 +256,25 @@ const ParentMessage = (props: {
     }
   }
   return <View>
-    <View style={{
+    <PressBox style={{
       flex: 1,
       flexDirection: 'row',
       justifyContent: isMyMessage(childMessage, currentUser?.userId) ? 'flex-end' : 'flex-start',
-    }}>
+    }} onPress={() => onPress?.(props.message)}>
       <Icon
         icon={'reply-filled'}
         size={13}
+        color='#999'
         containerStyle={{ marginRight: 4 }}
       />
       <Text style={{ color: '#999', fontSize: 13, fontWeight: '800' }}>{STRINGS.LABELS.REPLY_FROM_SENDER_TO_RECEIVER(childMessage.sender, message.sender)}</Text>
-    </View>
-    <PressBox style={{
+    </PressBox>
+    <View style={{
       flexDirection: 'row',
       justifyContent: isMyMessage(childMessage, currentUser?.userId) ? 'flex-end' : 'flex-start',
-    }} onPress={() => onPress?.(props.message)}>
+    }}>
       {parentMessageComponent}
-    </PressBox>
+    </View>
   </View>
 };
 
