@@ -243,6 +243,7 @@ export interface StringSet {
     USER_NO_NAME: string;
     CHANNEL_NO_MEMBERS: string;
     TYPING_INDICATOR_TYPINGS: (users: SendbirdUser[]) => string | undefined;
+    REPLY_TO_SENDER: (user: SendbirdUser) => string;
 
     USER_BAR_ME_POSTFIX: string;
     USER_BAR_OPERATOR: string;
@@ -274,6 +275,7 @@ export interface StringSet {
     CHANNEL_MESSAGE_EDIT: string;
     CHANNEL_MESSAGE_SAVE: string;
     CHANNEL_MESSAGE_DELETE: string;
+    CHANNEL_MESSAGE_REPLY: (user: SendbirdUser | undefined) => string;
     /** Channel > Message > Delete confirm **/
     CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE: string;
     CHANNEL_MESSAGE_DELETE_CONFIRM_OK: string;
