@@ -9,7 +9,6 @@ import SBUError from '../libs/SBUError';
 import expoBackwardUtils from '../utils/expoBackwardUtils';
 import type { ExpoMediaLibraryPermissionResponse, ExpoPermissionResponse } from '../utils/expoPermissionGranted';
 import expoPermissionGranted from '../utils/expoPermissionGranted';
-import normalizeFile from '../utils/normalizeFile';
 import type {
   FilePickerResponse,
   FileServiceInterface,
@@ -77,10 +76,10 @@ const createExpoFileService = ({
         })(),
       });
 
-      if (expoBackwardUtils.toCanceled(response)) return null;
+      if (expoBackwardUtils.imagePicker.isCanceled(response)) return null;
 
-      const filePickerRes = await expoBackwardUtils.toFilePickerResponses(response, fsModule);
-      return filePickerRes[0];
+      const [file] = await expoBackwardUtils.imagePicker.toFilePickerResponses(response, fsModule);
+      return file;
     }
     async openMediaLibrary(options: OpenMediaLibraryOptions) {
       const hasPermission = await this.hasMediaLibraryPermission('read');
@@ -108,16 +107,17 @@ const createExpoFileService = ({
           }
         })(),
       });
-      if (expoBackwardUtils.toCanceled(response)) return null;
-      return expoBackwardUtils.toFilePickerResponses(response, fsModule);
+      if (expoBackwardUtils.imagePicker.isCanceled(response)) return null;
+      return expoBackwardUtils.imagePicker.toFilePickerResponses(response, fsModule);
     }
 
     async openDocument(options?: OpenDocumentOptions): Promise<FilePickerResponse> {
       try {
         const response = await documentPickerModule.getDocumentAsync({ type: '*/*' });
-        if (response.type === 'cancel') return null;
-        const { mimeType, uri, size, name } = response;
-        return normalizeFile({ uri, size, name, type: mimeType });
+        if (expoBackwardUtils.documentPicker.isCanceled(response)) return null;
+
+        const [file] = await expoBackwardUtils.documentPicker.toFilePickerResponses(response);
+        return file;
       } catch (e) {
         options?.onOpenFailure?.(SBUError.UNKNOWN, e);
         return null;
