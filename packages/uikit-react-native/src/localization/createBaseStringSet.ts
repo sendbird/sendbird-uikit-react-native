@@ -249,6 +249,8 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
         return 'Several people are typing...';
       },
       REPLY_TO_SENDER: (user) => `Reply to ${user.nickname}`,
+      REPLY_FROM_SENDER_TO_RECEIVER: (sender, receiver) => `${sender.nickname} replied to ${receiver.nickname}`,
+
       USER_BAR_ME_POSTFIX: ' (You)',
       USER_BAR_OPERATOR: 'Operator',
       REGISTER_AS_OPERATOR: 'Register as operator',

@@ -4,6 +4,7 @@ import type { GroupChannelMessageProps, RegexTextPattern } from '@sendbird/uikit
 import {
   Box,
   GroupChannelMessage,
+  Icon,
   Image,
   PressBox,
   Text,
@@ -11,7 +12,6 @@ import {
 } from '@sendbird/uikit-react-native-foundation';
 import {
   SendbirdAdminMessage,
-  SendbirdBaseMessage,
   SendbirdFileMessage,
   SendbirdMessage,
   SendbirdUserMessage,
@@ -29,6 +29,7 @@ import { ReactionAddons } from '../ReactionAddons';
 import GroupChannelMessageDateSeparator from './GroupChannelMessageDateSeparator';
 import GroupChannelMessageFocusAnimation from './GroupChannelMessageFocusAnimation';
 import GroupChannelMessageOutgoingStatus from './GroupChannelMessageOutgoingStatus';
+import { View } from 'react-native';
 
 const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
   channel,
@@ -204,51 +205,76 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   return (
     <Box paddingHorizontal={16} marginBottom={messageGap}>
       <GroupChannelMessageDateSeparator message={message} prevMessage={prevMessage} />
-      {message.parentMessage && <ParentMessage message={message.parentMessage} onPress={onPressParentMessage} />}
+      {
+        message.parentMessage &&
+        (message.isUserMessage() || message.isFileMessage()) &&
+        (message.parentMessage.isUserMessage() || message.parentMessage.isFileMessage()) &&
+        <ParentMessage message={message.parentMessage} childMessage={message} onPress={onPressParentMessage} />
+      }
       <GroupChannelMessageFocusAnimation focused={focused}>{renderMessage()}</GroupChannelMessageFocusAnimation>
     </Box>
   );
 };
 
-// TODO: Implement parent message component
-const ParentMessage = (props: { message: SendbirdBaseMessage; onPress?: (message: SendbirdMessage) => void }) => {
-  const { message, onPress } = props;
+const ParentMessage = (props: {
+  message: SendbirdUserMessage | SendbirdFileMessage;
+  childMessage: SendbirdUserMessage | SendbirdFileMessage;
+  onPress?: (message: SendbirdMessage) => void;
+}) => {
+  const { message, childMessage, onPress } = props;
+  const { currentUser } = useSendbirdChat();
+  const { STRINGS } = useLocalization();
   const type = getMessageType(message);
 
+  let parentMessageComponent = null;
   switch (type) {
     case 'user':
     case 'user.opengraph': {
-      return (
-        <PressBox style={{ borderWidth: 1 }} onPress={() => onPress?.(props.message)}>
-          <Text>{(message as SendbirdUserMessage).message}</Text>
-        </PressBox>
+      parentMessageComponent = (
+        <Text>{(message as SendbirdUserMessage).message}</Text>
       );
+      break;
     }
 
     case 'file':
     case 'file.video':
     case 'file.audio': {
-      return (
-        <PressBox style={{ borderWidth: 1 }} onPress={() => onPress?.(props.message)}>
-          <Text>{`File: ${(message as SendbirdFileMessage).name}`}</Text>
-        </PressBox>
+      parentMessageComponent = (
+        <Text>{`File: ${(message as SendbirdFileMessage).name}`}</Text>
       );
+      break;
     }
 
     case 'file.image': {
-      return (
-        <PressBox style={{ borderWidth: 1 }} onPress={() => onPress?.(props.message)}>
-          <Image
-            style={{ opacity: 0.5, width: 180, height: 80 }}
-            source={{ uri: (message as SendbirdFileMessage).url }}
-          />
-        </PressBox>
+      parentMessageComponent = (
+        <Image
+          style={{ opacity: 0.5, width: 180, height: 80 }}
+          source={{ uri: (message as SendbirdFileMessage).url }}
+        />
       );
+      break;
     }
-
-    default:
-      return null;
   }
+  return <View>
+    <View style={{
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: isMyMessage(childMessage, currentUser?.userId) ? 'flex-end' : 'flex-start',
+    }}>
+      <Icon
+        icon={'reply-filled'}
+        size={13}
+        containerStyle={{ marginRight: 4 }}
+      />
+      <Text style={{ color: '#999', fontSize: 13, fontWeight: '800' }}>{STRINGS.LABELS.REPLY_FROM_SENDER_TO_RECEIVER(childMessage.sender, message.sender)}</Text>
+    </View>
+    <PressBox style={{
+      flexDirection: 'row',
+      justifyContent: isMyMessage(childMessage, currentUser?.userId) ? 'flex-end' : 'flex-start',
+    }} onPress={() => onPress?.(props.message)}>
+      {parentMessageComponent}
+    </PressBox>
+  </View>
 };
 
 export default React.memo(GroupChannelMessageRenderer);
