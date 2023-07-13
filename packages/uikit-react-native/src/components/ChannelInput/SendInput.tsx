@@ -11,8 +11,10 @@ import {
 import { MentionType } from '@sendbird/chat/message';
 import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation';
 import {
+  Box,
   Icon,
   Image,
+  ImageWithPlaceholder,
   Text,
   TextInput,
   createStyleSheet,
@@ -21,7 +23,7 @@ import {
   useToast,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import { Logger, SendbirdChannel, isImage, shouldCompressImage, useIIFE } from '@sendbird/uikit-utils';
+import { Logger, SendbirdChannel, getAvailableUriFromFileMessage, getMessageType, isImage, shouldCompressImage, useIIFE } from '@sendbird/uikit-utils';
 
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 import SBUError from '../../libs/SBUError';
@@ -129,18 +131,40 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
             flexDirection: 'row',
             paddingLeft: 18,
             paddingRight: 16,
-            paddingVertical: 12,
+            paddingTop: 10,
+            paddingBottom: 8,
             alignItems: 'center',
             borderTopWidth: 1,
             borderColor: colors.onBackground04,
           }}
         >
-          <View style={{ borderWidth: 1, flex: 1, height: 32 }}>
+          <View style={{ flex: 1, flexDirection: 'row' }}>
             {messageToReply.isFileMessage() ? (
-              <Image style={{ width: 30, height: 30 }} source={{ uri: messageToReply.url }} />
-            ) : (
-              <Text>{messageToReply.message}</Text>
-            )}
+              getMessageType(messageToReply) === 'file.image' ?
+                <ImageWithPlaceholder
+                  source={{ uri: getAvailableUriFromFileMessage(messageToReply) }}
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 8,
+                    marginTop: 2,
+                    marginRight: 10,
+                    overflow: 'hidden',
+                  }} /> :
+                <Icon
+                  icon={'file-document'} // FIXME: maybe it could standardize the icon by file type
+                  size={36}
+                  containerStyle={{ backgroundColor: colors.background, padding: 2, borderRadius: 8, marginRight: 8 }}
+                />
+            ) : null}
+            <View style={{ flex: 1, flexDirection: 'column' }}>
+              <Text numberOfLines={1} style={{ fontSize: 13, fontWeight: '900', marginBottom: 6 }}>{STRINGS.LABELS.REPLY_TO_SENDER(messageToReply.sender)}</Text>
+              <Text numberOfLines={1} style={{ fontSize: 13, color: '#999' }}>{
+                messageToReply.isUserMessage() ?
+                  messageToReply.message :
+                  messageToReply.name
+              }</Text>
+            </View>
           </View>
           <TouchableOpacity onPress={() => setMessageToReply?.(undefined)}>
             <Icon
