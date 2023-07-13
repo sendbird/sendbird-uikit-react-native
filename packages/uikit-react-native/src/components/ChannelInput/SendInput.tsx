@@ -9,8 +9,12 @@ import {
 } from 'react-native';
 
 import { MentionType } from '@sendbird/chat/message';
+import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation';
 import {
   Icon,
+  Image,
+  PressBox,
+  Text,
   TextInput,
   createStyleSheet,
   useAlert,
@@ -18,8 +22,7 @@ import {
   useToast,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation';
-import { SendbirdChannel, isImage, shouldCompressImage, useIIFE } from '@sendbird/uikit-utils';
+import { Logger, SendbirdChannel, isImage, shouldCompressImage, useIIFE } from '@sendbird/uikit-utils';
 
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 import SBUError from '../../libs/SBUError';
@@ -48,6 +51,8 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     inputFrozen,
     inputMuted,
     channel,
+    messageToReply,
+    setMessageToReply,
   },
   ref,
 ) {
@@ -57,30 +62,55 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   const { openSheet } = useBottomSheet();
   const toast = useToast();
 
-  const onFailureToSend = () => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error');
+  const messageReplyParams = useIIFE(() => {
+    const { groupChannel } = sbOptions.uikit;
+    if (!channel.isGroupChannel() || groupChannel.channel.replyType === 'none' || !messageToReply) return {};
+    return {
+      parentMessageId: messageToReply.messageId,
+      isReplyToChannel: true,
+    };
+  });
+
+  const messageMentionParams = useIIFE(() => {
+    const { groupChannel } = sbOptions.uikit;
+    if (!channel.isGroupChannel() || !groupChannel.channel.enableMention) return {};
+    return {
+      mentionType: MentionType.USERS,
+      mentionedUserIds: mentionedUsers.map((it) => it.user.userId),
+      mentionedMessageTemplate: mentionManager.textToMentionedMessageTemplate(
+        text,
+        mentionedUsers,
+        groupChannel.channel.enableMention,
+      ),
+    };
+  });
+
+  const onFailureToSend = (error: Error) => {
+    toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error');
+    Logger.error(STRINGS.TOAST.SEND_MSG_ERROR, error);
+  };
 
   const sendUserMessage = () => {
-    const mentionType = MentionType.USERS;
-    const mentionedUserIds = mentionedUsers.map((it) => it.user.userId);
-    const mentionedMessageTemplate = mentionManager.textToMentionedMessageTemplate(
-      text,
-      mentionedUsers,
-      sbOptions.uikit.groupChannel.channel.enableMention,
-    );
-
     onPressSendUserMessage({
       message: text,
-      mentionType,
-      mentionedUserIds,
-      mentionedMessageTemplate,
+      ...messageMentionParams,
+      ...messageReplyParams,
     }).catch(onFailureToSend);
 
     onChangeText('');
+    setMessageToReply?.();
   };
 
-  const sheetItems = useChannelInputItems(channel, (file) => {
-    onPressSendFileMessage({ file }).catch(onFailureToSend);
-  });
+  const sendFileMessage = (file: FileType) => {
+    onPressSendFileMessage({
+      file,
+      ...messageReplyParams,
+    }).catch(onFailureToSend);
+
+    setMessageToReply?.();
+  };
+
+  const sheetItems = useChannelInputItems(channel, sendFileMessage);
   const onPressAttachment = () => openSheet({ sheetItems });
 
   const getPlaceholder = () => {
@@ -92,37 +122,64 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   };
 
   return (
-    <View style={styles.sendInputContainer}>
-      {AttachmentsButton && <AttachmentsButton onPress={onPressAttachment} disabled={inputDisabled} />}
-      <TextInput
-        ref={ref}
-        multiline
-        disableFullscreenUI
-        onSelectionChange={onSelectionChange}
-        editable={!inputDisabled}
-        onChangeText={onChangeText}
-        style={styles.input}
-        placeholder={getPlaceholder()}
-      >
-        {mentionManager.textToMentionedComponents(
-          text,
-          mentionedUsers,
-          sbOptions.uikit.groupChannel.channel.enableMention,
-        )}
-      </TextInput>
-
-      {Boolean(text.trim()) && (
-        <TouchableOpacity onPress={sendUserMessage} disabled={inputDisabled}>
-          <Icon
-            color={
-              inputDisabled ? colors.ui.input.default.disabled.highlight : colors.ui.input.default.active.highlight
-            }
-            icon={'send'}
-            size={24}
-            containerStyle={styles.iconSend}
-          />
-        </TouchableOpacity>
+    <View>
+      {/** TODO: Reply message component */}
+      {messageToReply && (
+        <View
+          style={{
+            flexDirection: 'row',
+            paddingLeft: 18,
+            paddingRight: 16,
+            paddingVertical: 12,
+            alignItems: 'center',
+            borderTopWidth: 1,
+            borderColor: colors.onBackground04,
+          }}
+        >
+          <View style={{ borderWidth: 1, flex: 1, height: 32 }}>
+            {messageToReply.isFileMessage() ? (
+              <Image style={{ width: 30, height: 30 }} source={{ uri: messageToReply.url }} />
+            ) : (
+              <Text>{messageToReply.message}</Text>
+            )}
+          </View>
+          <PressBox onPress={() => setMessageToReply?.(undefined)} style={{ borderWidth: 1, marginLeft: 16 }}>
+            <Icon icon={'close'} size={24} color={colors.onBackground01} />
+          </PressBox>
+        </View>
       )}
+      <View style={styles.sendInputContainer}>
+        {AttachmentsButton && <AttachmentsButton onPress={onPressAttachment} disabled={inputDisabled} />}
+        <TextInput
+          ref={ref}
+          multiline
+          disableFullscreenUI
+          onSelectionChange={onSelectionChange}
+          editable={!inputDisabled}
+          onChangeText={onChangeText}
+          style={styles.input}
+          placeholder={getPlaceholder()}
+        >
+          {mentionManager.textToMentionedComponents(
+            text,
+            mentionedUsers,
+            sbOptions.uikit.groupChannel.channel.enableMention,
+          )}
+        </TextInput>
+
+        {Boolean(text.trim()) && (
+          <TouchableOpacity onPress={sendUserMessage} disabled={inputDisabled}>
+            <Icon
+              color={
+                inputDisabled ? colors.ui.input.default.disabled.highlight : colors.ui.input.default.active.highlight
+              }
+              icon={'send'}
+              size={24}
+              containerStyle={styles.iconSend}
+            />
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 });

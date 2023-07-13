@@ -1,9 +1,17 @@
 import React from 'react';
 
 import type { GroupChannelMessageProps, RegexTextPattern } from '@sendbird/uikit-react-native-foundation';
-import { Box, GroupChannelMessage, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import {
+  Box,
+  GroupChannelMessage,
+  Image,
+  PressBox,
+  Text,
+  useUIKitTheme,
+} from '@sendbird/uikit-react-native-foundation';
 import {
   SendbirdAdminMessage,
+  SendbirdBaseMessage,
   SendbirdFileMessage,
   SendbirdMessage,
   SendbirdUserMessage,
@@ -27,6 +35,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   message,
   onPress,
   onLongPress,
+  onPressParentMessage,
   onShowUserProfile,
   enableMessageGrouping,
   focused,
@@ -195,9 +204,51 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   return (
     <Box paddingHorizontal={16} marginBottom={messageGap}>
       <GroupChannelMessageDateSeparator message={message} prevMessage={prevMessage} />
+      {message.parentMessage && <ParentMessage message={message.parentMessage} onPress={onPressParentMessage} />}
       <GroupChannelMessageFocusAnimation focused={focused}>{renderMessage()}</GroupChannelMessageFocusAnimation>
     </Box>
   );
+};
+
+// TODO: Implement parent message component
+const ParentMessage = (props: { message: SendbirdBaseMessage; onPress?: (message: SendbirdMessage) => void }) => {
+  const { message, onPress } = props;
+  const type = getMessageType(message);
+
+  switch (type) {
+    case 'user':
+    case 'user.opengraph': {
+      return (
+        <PressBox style={{ borderWidth: 1 }} onPress={() => onPress?.(props.message)}>
+          <Text>{(message as SendbirdUserMessage).message}</Text>
+        </PressBox>
+      );
+    }
+
+    case 'file':
+    case 'file.video':
+    case 'file.audio': {
+      return (
+        <PressBox style={{ borderWidth: 1 }} onPress={() => onPress?.(props.message)}>
+          <Text>{`File: ${(message as SendbirdFileMessage).name}`}</Text>
+        </PressBox>
+      );
+    }
+
+    case 'file.image': {
+      return (
+        <PressBox style={{ borderWidth: 1 }} onPress={() => onPress?.(props.message)}>
+          <Image
+            style={{ opacity: 0.5, width: 180, height: 80 }}
+            source={{ uri: (message as SendbirdFileMessage).url }}
+          />
+        </PressBox>
+      );
+    }
+
+    default:
+      return null;
+  }
 };
 
 export default React.memo(GroupChannelMessageRenderer);

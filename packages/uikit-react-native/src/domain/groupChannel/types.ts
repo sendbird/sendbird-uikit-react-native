@@ -73,6 +73,10 @@ export interface GroupChannelProps {
     | 'searchItem'
   > & {
     onResetMessageList: (callback?: () => void) => void;
+    onResetMessageListWithStartingPoint: (startingPoint: number, callback?: () => void) => void;
+
+    // Changing the search item will trigger the focus animation on messages.
+    onUpdateSearchItem: (searchItem?: GroupChannelProps['MessageList']['searchItem']) => void;
   };
   Input: Pick<
     ChannelInputProps,
@@ -102,10 +106,12 @@ export interface GroupChannelProps {
 export interface GroupChannelContextsType {
   Fragment: React.Context<{
     headerTitle: string;
+    keyboardAvoidOffset?: number;
     channel: SendbirdGroupChannel;
     messageToEdit?: SendbirdUserMessage | SendbirdFileMessage;
     setMessageToEdit: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
-    keyboardAvoidOffset?: number;
+    messageToReply?: SendbirdUserMessage | SendbirdFileMessage;
+    setMessageToReply: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
   }>;
   TypingIndicator: React.Context<{
     typingUsers: SendbirdUser[];
