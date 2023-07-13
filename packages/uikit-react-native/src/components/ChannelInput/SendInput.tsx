@@ -11,9 +11,7 @@ import {
 import { MentionType } from '@sendbird/chat/message';
 import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation';
 import {
-  Box,
   Icon,
-  Image,
   ImageWithPlaceholder,
   Text,
   TextInput,
@@ -124,7 +122,6 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
 
   return (
     <View>
-      {/** TODO: Reply message component */}
       {messageToReply && (
         <View
           style={{
