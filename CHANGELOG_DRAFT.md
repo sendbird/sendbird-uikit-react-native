@@ -1,5 +1,5 @@
-## v3.0.3
+## v3.0.4
 
 ### Bug fix
 
-- Fix to send the file messages normally.
+- Fix file messages mime-type in Expo environment
