@@ -21,7 +21,16 @@ import {
   useToast,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import { Logger, SendbirdBaseMessage, SendbirdChannel, getAvailableUriFromFileMessage, getMessageType, isImage, shouldCompressImage, useIIFE } from '@sendbird/uikit-utils';
+import {
+  Logger,
+  SendbirdBaseMessage,
+  SendbirdChannel,
+  getAvailableUriFromFileMessage,
+  getMessageType,
+  isImage,
+  shouldCompressImage,
+  useIIFE,
+} from '@sendbird/uikit-utils';
 
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 import SBUError from '../../libs/SBUError';
@@ -123,31 +132,35 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   const getFileIcon = (messageToReply: SendbirdBaseMessage) => {
     if (messageToReply?.isFileMessage()) {
       if (getMessageType(messageToReply) === 'file.image') {
-        return <ImageWithPlaceholder
-          source={{ uri: getAvailableUriFromFileMessage(messageToReply) }}
-          style={{
-            width: 36,
-            height: 36,
-            borderRadius: 10,
-            marginTop: 2,
-            marginRight: 10,
-            overflow: 'hidden',
-          }}
-        />;
+        return (
+          <ImageWithPlaceholder
+            source={{ uri: getAvailableUriFromFileMessage(messageToReply) }}
+            style={{
+              width: 36,
+              height: 36,
+              borderRadius: 10,
+              marginTop: 2,
+              marginRight: 10,
+              overflow: 'hidden',
+            }}
+          />
+        );
       } else {
-        return <Icon
-          icon={'file-document'} // FIXME: maybe it could standardize the icon by file type
-          size={20}
-          color={'#666'}
-          containerStyle={{
-            backgroundColor: '#ddd',
-            width: 36,
-            height: 36,
-            borderRadius: 10,
-            marginRight: 10,
-            marginTop: 2,
-          }}
-        />;
+        return (
+          <Icon
+            icon={'file-document'} // FIXME: maybe it could standardize the icon by file type
+            size={20}
+            color={'#666'}
+            containerStyle={{
+              backgroundColor: '#ddd',
+              width: 36,
+              height: 36,
+              borderRadius: 10,
+              marginRight: 10,
+              marginTop: 2,
+            }}
+          />
+        );
       }
     }
     return null;
@@ -171,21 +184,16 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
           <View style={{ flex: 1, flexDirection: 'row' }}>
             {getFileIcon(messageToReply)}
             <View style={{ flex: 1, flexDirection: 'column' }}>
-              <Text numberOfLines={1} style={{ fontSize: 13, fontWeight: '900', marginBottom: 4 }}>{STRINGS.LABELS.REPLY_TO_SENDER(messageToReply.sender)}</Text>
-              <Text numberOfLines={1} style={{ fontSize: 13, color: '#999' }}>{
-                messageToReply.isUserMessage() ?
-                  messageToReply.message :
-                  messageToReply.name
-              }</Text>
+              <Text numberOfLines={1} style={{ fontSize: 13, fontWeight: '900', marginBottom: 4 }}>
+                {STRINGS.LABELS.REPLY_TO_SENDER(messageToReply.sender)}
+              </Text>
+              <Text numberOfLines={1} style={{ fontSize: 13, color: '#999' }}>
+                {messageToReply.isUserMessage() ? messageToReply.message : messageToReply.name}
+              </Text>
             </View>
           </View>
           <TouchableOpacity onPress={() => setMessageToReply?.(undefined)}>
-            <Icon
-              icon={'close'}
-              size={24}
-              color={colors.onBackground01}
-              containerStyle={styles.iconSend}
-            />
+            <Icon icon={'close'} size={24} color={colors.onBackground01} containerStyle={styles.iconSend} />
           </TouchableOpacity>
         </View>
       )}

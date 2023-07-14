@@ -264,7 +264,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       CHANNEL_MESSAGE_EDIT: 'Edit',
       CHANNEL_MESSAGE_SAVE: 'Save',
       CHANNEL_MESSAGE_DELETE: 'Delete',
-      CHANNEL_MESSAGE_REPLY: (user) => user ? `Reply to ${user.nickname}` : 'Reply',
+      CHANNEL_MESSAGE_REPLY: (user) => (user ? `Reply to ${user.nickname}` : 'Reply'),
       CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE: 'Delete message?',
       CHANNEL_MESSAGE_DELETE_CONFIRM_OK: 'Delete',
       CHANNEL_MESSAGE_DELETE_CONFIRM_CANCEL: 'Cancel',
