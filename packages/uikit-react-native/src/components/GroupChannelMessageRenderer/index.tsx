@@ -226,29 +226,56 @@ const ParentMessage = (props: {
   const { STRINGS } = useLocalization();
   const type = getMessageType(message);
 
+  // FIXME: apply theme later
   let parentMessageComponent = null;
   switch (type) {
     case 'user':
     case 'user.opengraph': {
       parentMessageComponent = (
-        <Text>{(message as SendbirdUserMessage).message}</Text>
+        <Box backgroundColor={'#eee'} style={{
+          paddingHorizontal: 12,
+          paddingVertical: 6,
+          borderRadius: 16,
+        }}>
+          <Text body3 color={'#999'} suppressHighlighting numberOfLines={1} ellipsizeMode='middle'>
+            {(message as SendbirdUserMessage).message}
+          </Text>
+        </Box>
       );
       break;
     }
-
     case 'file':
     case 'file.video':
     case 'file.audio': {
-      parentMessageComponent = (
-        <Text>{`File: ${(message as SendbirdFileMessage).name}`}</Text>
-      );
+      parentMessageComponent = <Box backgroundColor={'#eee'} style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 16,
+      }}>
+        <Icon
+          icon={'file-document'} // FIXME: maybe it could standardize the icon by file type
+          size={16}
+          color={'#666'}
+          containerStyle={{
+            width: 16,
+            height: 16,
+            borderRadius: 10,
+            marginRight: 4,
+            marginTop: 2,
+          }}
+        />
+        <Text body3 color={'#999'} suppressHighlighting numberOfLines={1} ellipsizeMode='middle'>
+          {(message as SendbirdFileMessage).name}
+        </Text>
+      </Box>
       break;
     }
-
     case 'file.image': {
       parentMessageComponent = (
         <Image
-          style={{ opacity: 0.5, width: 180, height: 80 }}
+          style={{ opacity: 0.5, width: 180, height: 120, borderRadius: 16 }}
           source={{ uri: (message as SendbirdFileMessage).url }}
         />
       );
@@ -260,6 +287,7 @@ const ParentMessage = (props: {
       flex: 1,
       flexDirection: 'row',
       justifyContent: isMyMessage(childMessage, currentUser?.userId) ? 'flex-end' : 'flex-start',
+      paddingRight: 12,
     }} onPress={() => onPress?.(props.message)}>
       <Icon
         icon={'reply-filled'}
@@ -272,6 +300,8 @@ const ParentMessage = (props: {
     <View style={{
       flexDirection: 'row',
       justifyContent: isMyMessage(childMessage, currentUser?.userId) ? 'flex-end' : 'flex-start',
+      marginTop: 2,
+      marginBottom: -6,
     }}>
       {parentMessageComponent}
     </View>
