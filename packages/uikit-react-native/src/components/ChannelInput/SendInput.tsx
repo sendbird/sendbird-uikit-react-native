@@ -147,7 +147,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
             marginRight: 10,
             marginTop: 2,
           }}
-        />
+        />;
       }
     }
     return null;
