@@ -279,7 +279,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       CHANNEL_INPUT_EDIT_OK: 'Save',
       CHANNEL_INPUT_EDIT_CANCEL: 'Cancel',
       CHANNEL_INPUT_REPLY_PREVIEW_TITLE: (user) => `Reply to ${user.nickname}`,
-      CHANNEL_INPUT_REPLY_PREVIEW_BODY: (message) => message.isUserMessage() ? message.message : message.name,
+      CHANNEL_INPUT_REPLY_PREVIEW_BODY: (message) => (message.isUserMessage() ? message.message : message.name),
       ...overrides?.LABELS,
     },
     FILE_VIEWER: {
