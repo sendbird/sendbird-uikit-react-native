@@ -9,6 +9,7 @@ import type {
   SendbirdOpenChannel,
   SendbirdParticipant,
   SendbirdUser,
+  SendbirdUserMessage,
 } from '@sendbird/uikit-utils';
 
 /**
@@ -243,7 +244,6 @@ export interface StringSet {
     USER_NO_NAME: string;
     CHANNEL_NO_MEMBERS: string;
     TYPING_INDICATOR_TYPINGS: (users: SendbirdUser[]) => string | undefined;
-    REPLY_TO_SENDER: (user: SendbirdUser) => string;
     REPLY_FROM_SENDER_TO_RECEIVER: (sender: SendbirdUser, receiver: SendbirdUser) => string;
 
     USER_BAR_ME_POSTFIX: string;
@@ -270,6 +270,8 @@ export interface StringSet {
     CHANNEL_INPUT_ATTACHMENT_CAMERA_VIDEO: string;
     CHANNEL_INPUT_ATTACHMENT_PHOTO_LIBRARY: string;
     CHANNEL_INPUT_ATTACHMENT_FILES: string;
+    CHANNEL_INPUT_REPLY_PREVIEW_TITLE: (user: SendbirdUser) => string;
+    CHANNEL_INPUT_REPLY_PREVIEW_BODY: (message: SendbirdUserMessage | SendbirdFileMessage) => string;
 
     /** Channel > Message **/
     CHANNEL_MESSAGE_COPY: string;

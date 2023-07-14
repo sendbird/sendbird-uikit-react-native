@@ -248,7 +248,6 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
         if (users.length === 2) return `${userNames.join(' and ')} are typing...`;
         return 'Several people are typing...';
       },
-      REPLY_TO_SENDER: (user) => `Reply to ${user.nickname}`,
       REPLY_FROM_SENDER_TO_RECEIVER: (sender, receiver) => `${sender.nickname} replied to ${receiver.nickname}`,
 
       USER_BAR_ME_POSTFIX: ' (You)',
@@ -279,6 +278,8 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       CHANNEL_INPUT_PLACEHOLDER_MUTED: "You're muted by the operator.",
       CHANNEL_INPUT_EDIT_OK: 'Save',
       CHANNEL_INPUT_EDIT_CANCEL: 'Cancel',
+      CHANNEL_INPUT_REPLY_PREVIEW_TITLE: (user) => `Reply to ${user.nickname}`,
+      CHANNEL_INPUT_REPLY_PREVIEW_BODY: (message) => message.isUserMessage() ? message.message : message.name,
       ...overrides?.LABELS,
     },
     FILE_VIEWER: {

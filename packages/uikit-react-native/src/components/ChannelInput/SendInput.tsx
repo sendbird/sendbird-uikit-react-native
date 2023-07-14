@@ -185,7 +185,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
             {getFileIcon(messageToReply)}
             <View style={{ flex: 1, flexDirection: 'column' }}>
               <Text numberOfLines={1} style={{ fontSize: 13, fontWeight: '900', marginBottom: 4 }}>
-                {STRINGS.LABELS.REPLY_TO_SENDER(messageToReply.sender)}
+                {STRINGS.LABELS.CHANNEL_INPUT_REPLY_PREVIEW_TITLE(messageToReply.sender)}
               </Text>
               <Text numberOfLines={1} style={{ fontSize: 13, color: '#999' }}>
                 {messageToReply.isUserMessage() ? messageToReply.message : messageToReply.name}

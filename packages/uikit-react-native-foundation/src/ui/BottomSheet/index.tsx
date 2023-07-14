@@ -21,12 +21,11 @@ export type BottomSheetItem = {
 };
 type Props = {
   visible: boolean;
-  disabled?: boolean;
   onHide: () => Promise<void>;
   onError?: (error: unknown) => void;
   onDismiss?: () => void;
 } & BottomSheetItem;
-const BottomSheet = ({ onDismiss, onHide, disabled = false, visible, sheetItems, HeaderComponent }: Props) => {
+const BottomSheet = ({ onDismiss, onHide, visible, sheetItems, HeaderComponent }: Props) => {
   const { statusBarTranslucent } = useHeaderStyle();
   const { width } = useWindowDimensions();
   const { bottom, left, right } = useSafeAreaInsets();
@@ -46,11 +45,11 @@ const BottomSheet = ({ onDismiss, onHide, disabled = false, visible, sheetItems,
             activeOpacity={0.75}
             key={props.title + idx}
             style={{
-              opacity: disabled ? 0.5 : 1,
+              opacity: props.disabled ? 0.5 : 1,
               paddingLeft: left,
               paddingRight: right,
             }}
-            disabled={disabled}
+            disabled={props.disabled}
             onPress={async () => {
               await onHide();
               try {
