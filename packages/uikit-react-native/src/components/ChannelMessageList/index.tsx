@@ -297,22 +297,18 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
     if (!channel.isEphemeral) {
       if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
         if (msg.isUserMessage()) {
-          sheetItems.push(
-            {
-              icon: 'edit',
-              title: STRINGS.LABELS.CHANNEL_MESSAGE_EDIT,
-              onPress: () => onEditMessage(msg),
-            },
-          );
+          sheetItems.push({
+            icon: 'edit',
+            title: STRINGS.LABELS.CHANNEL_MESSAGE_EDIT,
+            onPress: () => onEditMessage(msg),
+          });
         }
-        sheetItems.push(
-          {
-            disabled: Boolean(msg.parentMessageId),
-            icon: 'delete',
-            title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
-            onPress: () => confirmDelete(msg),
-          },
-        );
+        sheetItems.push({
+          disabled: Boolean(msg.parentMessageId),
+          icon: 'delete',
+          title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
+          onPress: () => confirmDelete(msg),
+        });
       }
       if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
         sheetItems.push({

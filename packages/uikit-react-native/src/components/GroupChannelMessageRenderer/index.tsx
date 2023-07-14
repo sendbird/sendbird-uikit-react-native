@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 
 import type { GroupChannelMessageProps, RegexTextPattern } from '@sendbird/uikit-react-native-foundation';
 import {
@@ -29,7 +30,6 @@ import { ReactionAddons } from '../ReactionAddons';
 import GroupChannelMessageDateSeparator from './GroupChannelMessageDateSeparator';
 import GroupChannelMessageFocusAnimation from './GroupChannelMessageFocusAnimation';
 import GroupChannelMessageOutgoingStatus from './GroupChannelMessageOutgoingStatus';
-import { View } from 'react-native';
 
 const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
   channel,
@@ -205,12 +205,11 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   return (
     <Box paddingHorizontal={16} marginBottom={messageGap}>
       <GroupChannelMessageDateSeparator message={message} prevMessage={prevMessage} />
-      {
-        message.parentMessage &&
+      {message.parentMessage &&
         (message.isUserMessage() || message.isFileMessage()) &&
-        (message.parentMessage.isUserMessage() || message.parentMessage.isFileMessage()) &&
-        <ParentMessage message={message.parentMessage} childMessage={message} onPress={onPressParentMessage} />
-      }
+        (message.parentMessage.isUserMessage() || message.parentMessage.isFileMessage()) && (
+          <ParentMessage message={message.parentMessage} childMessage={message} onPress={onPressParentMessage} />
+        )}
       <GroupChannelMessageFocusAnimation focused={focused}>{renderMessage()}</GroupChannelMessageFocusAnimation>
     </Box>
   );
@@ -232,12 +231,15 @@ const ParentMessage = (props: {
     case 'user':
     case 'user.opengraph': {
       parentMessageComponent = (
-        <Box backgroundColor={'#eee'} style={{
-          paddingHorizontal: 12,
-          paddingVertical: 6,
-          borderRadius: 16,
-        }}>
-          <Text body3 color={'#999'} suppressHighlighting numberOfLines={1} ellipsizeMode='middle'>
+        <Box
+          backgroundColor={'#eee'}
+          style={{
+            paddingHorizontal: 12,
+            paddingVertical: 6,
+            borderRadius: 16,
+          }}
+        >
+          <Text body3 color={'#999'} suppressHighlighting numberOfLines={1} ellipsizeMode="middle">
             {(message as SendbirdUserMessage).message}
           </Text>
         </Box>
@@ -247,29 +249,34 @@ const ParentMessage = (props: {
     case 'file':
     case 'file.video':
     case 'file.audio': {
-      parentMessageComponent = <Box backgroundColor={'#eee'} style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 16,
-      }}>
-        <Icon
-          icon={'file-document'} // FIXME: maybe it could standardize the icon by file type
-          size={16}
-          color={'#666'}
-          containerStyle={{
-            width: 16,
-            height: 16,
-            borderRadius: 10,
-            marginRight: 4,
-            marginTop: 2,
+      parentMessageComponent = (
+        <Box
+          backgroundColor={'#eee'}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingHorizontal: 12,
+            paddingVertical: 6,
+            borderRadius: 16,
           }}
-        />
-        <Text body3 color={'#999'} suppressHighlighting numberOfLines={1} ellipsizeMode='middle'>
-          {(message as SendbirdFileMessage).name}
-        </Text>
-      </Box>;
+        >
+          <Icon
+            icon={'file-document'} // FIXME: maybe it could standardize the icon by file type
+            size={16}
+            color={'#666'}
+            containerStyle={{
+              width: 16,
+              height: 16,
+              borderRadius: 10,
+              marginRight: 4,
+              marginTop: 2,
+            }}
+          />
+          <Text body3 color={'#999'} suppressHighlighting numberOfLines={1} ellipsizeMode="middle">
+            {(message as SendbirdFileMessage).name}
+          </Text>
+        </Box>
+      );
       break;
     }
     case 'file.image': {
@@ -282,30 +289,34 @@ const ParentMessage = (props: {
       break;
     }
   }
-  return <View>
-    <PressBox style={{
-      flex: 1,
-      flexDirection: 'row',
-      justifyContent: isMyMessage(childMessage, currentUser?.userId) ? 'flex-end' : 'flex-start',
-      paddingRight: 12,
-    }} onPress={() => onPress?.(props.message)}>
-      <Icon
-        icon={'reply-filled'}
-        size={13}
-        color='#999'
-        containerStyle={{ marginRight: 4 }}
-      />
-      <Text style={{ color: '#999', fontSize: 13, fontWeight: '800' }}>{STRINGS.LABELS.REPLY_FROM_SENDER_TO_RECEIVER(childMessage.sender, message.sender)}</Text>
-    </PressBox>
-    <View style={{
-      flexDirection: 'row',
-      justifyContent: isMyMessage(childMessage, currentUser?.userId) ? 'flex-end' : 'flex-start',
-      marginTop: 2,
-      marginBottom: -6,
-    }}>
-      {parentMessageComponent}
+  return (
+    <View>
+      <PressBox
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: isMyMessage(childMessage, currentUser?.userId) ? 'flex-end' : 'flex-start',
+          paddingRight: 12,
+        }}
+        onPress={() => onPress?.(props.message)}
+      >
+        <Icon icon={'reply-filled'} size={13} color="#999" containerStyle={{ marginRight: 4 }} />
+        <Text style={{ color: '#999', fontSize: 13, fontWeight: '800' }}>
+          {STRINGS.LABELS.REPLY_FROM_SENDER_TO_RECEIVER(childMessage.sender, message.sender)}
+        </Text>
+      </PressBox>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: isMyMessage(childMessage, currentUser?.userId) ? 'flex-end' : 'flex-start',
+          marginTop: 2,
+          marginBottom: -6,
+        }}
+      >
+        {parentMessageComponent}
+      </View>
     </View>
-  </View>;
+  );
 };
 
 export default React.memo(GroupChannelMessageRenderer);
