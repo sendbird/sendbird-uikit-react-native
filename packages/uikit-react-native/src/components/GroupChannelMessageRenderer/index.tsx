@@ -255,10 +255,10 @@ const ParentMessage = (props: {
     case 'file.audio': {
       parentMessageComponent = (
         <Box
-        backgroundColor={select({
-          light: palette.background100,
-          dark: palette.background400,
-        })}
+          backgroundColor={select({
+            light: palette.background100,
+            dark: palette.background400,
+          })}
           style={{
             flexDirection: 'row',
             alignItems: 'center',
