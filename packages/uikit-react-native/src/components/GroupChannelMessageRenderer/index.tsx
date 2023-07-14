@@ -269,7 +269,7 @@ const ParentMessage = (props: {
         <Text body3 color={'#999'} suppressHighlighting numberOfLines={1} ellipsizeMode='middle'>
           {(message as SendbirdFileMessage).name}
         </Text>
-      </Box>
+      </Box>;
       break;
     }
     case 'file.image': {
@@ -305,7 +305,7 @@ const ParentMessage = (props: {
     }}>
       {parentMessageComponent}
     </View>
-  </View>
+  </View>;
 };
 
 export default React.memo(GroupChannelMessageRenderer);

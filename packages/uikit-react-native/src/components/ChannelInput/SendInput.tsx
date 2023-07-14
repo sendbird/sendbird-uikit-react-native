@@ -21,7 +21,7 @@ import {
   useToast,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import { Logger, SendbirdChannel, getAvailableUriFromFileMessage, getMessageType, isImage, shouldCompressImage, useIIFE } from '@sendbird/uikit-utils';
+import { Logger, SendbirdBaseMessage, SendbirdChannel, getAvailableUriFromFileMessage, getMessageType, isImage, shouldCompressImage, useIIFE } from '@sendbird/uikit-utils';
 
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 import SBUError from '../../libs/SBUError';
@@ -120,6 +120,39 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED;
   };
 
+  const getFileIcon = (messageToReply: SendbirdBaseMessage) => {
+    if (messageToReply?.isFileMessage()) {
+      if (getMessageType(messageToReply) === 'file.image') {
+        return <ImageWithPlaceholder
+          source={{ uri: getAvailableUriFromFileMessage(messageToReply) }}
+          style={{
+            width: 36,
+            height: 36,
+            borderRadius: 10,
+            marginTop: 2,
+            marginRight: 10,
+            overflow: 'hidden',
+          }}
+        />;
+      } else {
+        return <Icon
+          icon={'file-document'} // FIXME: maybe it could standardize the icon by file type
+          size={20}
+          color={'#666'}
+          containerStyle={{
+            backgroundColor: '#ddd',
+            width: 36,
+            height: 36,
+            borderRadius: 10,
+            marginRight: 10,
+            marginTop: 2,
+          }}
+        />
+      }
+    }
+    return null;
+  };
+
   return (
     <View>
       {messageToReply && (
@@ -136,32 +169,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
           }}
         >
           <View style={{ flex: 1, flexDirection: 'row' }}>
-            {messageToReply.isFileMessage() ? (
-              getMessageType(messageToReply) === 'file.image' ?
-                <ImageWithPlaceholder
-                  source={{ uri: getAvailableUriFromFileMessage(messageToReply) }}
-                  style={{
-                    width: 36,
-                    height: 36,
-                    borderRadius: 10,
-                    marginTop: 2,
-                    marginRight: 10,
-                    overflow: 'hidden',
-                  }} /> :
-                <Icon
-                  icon={'file-document'} // FIXME: maybe it could standardize the icon by file type
-                  size={20}
-                  color={'#666'}
-                  containerStyle={{
-                    backgroundColor: '#ddd',
-                    width: 36,
-                    height: 36,
-                    borderRadius: 10,
-                    marginRight: 10,
-                    marginTop: 2,
-                  }}
-                />
-            ) : null}
+            {getFileIcon(messageToReply)}
             <View style={{ flex: 1, flexDirection: 'column' }}>
               <Text numberOfLines={1} style={{ fontSize: 13, fontWeight: '900', marginBottom: 4 }}>{STRINGS.LABELS.REPLY_TO_SENDER(messageToReply.sender)}</Text>
               <Text numberOfLines={1} style={{ fontSize: 13, color: '#999' }}>{
