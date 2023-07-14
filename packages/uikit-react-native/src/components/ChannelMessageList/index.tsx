@@ -304,7 +304,7 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
           });
         }
         sheetItems.push({
-          disabled: Boolean(msg.parentMessageId),
+          disabled: msg.threadInfo && msg.threadInfo.replyCount > 0,
           icon: 'delete',
           title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
           onPress: () => confirmDelete(msg),
