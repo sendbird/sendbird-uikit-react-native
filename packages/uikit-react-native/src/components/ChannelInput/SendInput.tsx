@@ -65,8 +65,8 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   ref,
 ) {
   const { mentionManager, sbOptions } = useSendbirdChat();
-  const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
+  const { STRINGS } = useLocalization();
   const { openSheet } = useBottomSheet();
   const toast = useToast();
 
@@ -130,6 +130,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   };
 
   const getFileIcon = (messageToReply: SendbirdBaseMessage) => {
+    const { select, colors, palette } = useUIKitTheme();
     if (messageToReply?.isFileMessage()) {
       if (getMessageType(messageToReply) === 'file.image') {
         return (
@@ -150,9 +151,12 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
           <Icon
             icon={'file-document'} // FIXME: maybe it could standardize the icon by file type
             size={20}
-            color={'#666'}
+            color={colors.onBackground02}
             containerStyle={{
-              backgroundColor: '#ddd',
+              backgroundColor: select({
+                light: palette.background100,
+                dark: palette.background500,
+              }),
               width: 36,
               height: 36,
               borderRadius: 10,
@@ -187,7 +191,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
               <Text numberOfLines={1} style={{ fontSize: 13, fontWeight: '900', marginBottom: 4 }}>
                 {STRINGS.LABELS.CHANNEL_INPUT_REPLY_PREVIEW_TITLE(messageToReply.sender)}
               </Text>
-              <Text numberOfLines={1} style={{ fontSize: 13, color: '#999' }}>
+              <Text numberOfLines={1} style={{ fontSize: 13, color: colors.onBackground03 }}>
                 {messageToReply.isUserMessage() ? messageToReply.message : messageToReply.name}
               </Text>
             </View>
