@@ -222,6 +222,7 @@ const ParentMessage = (props: {
 }) => {
   const { message, childMessage, onPress } = props;
   const { currentUser } = useSendbirdChat();
+  const { select, colors, palette } = useUIKitTheme();
   const { STRINGS } = useLocalization();
   const type = getMessageType(message);
 
@@ -232,14 +233,17 @@ const ParentMessage = (props: {
     case 'user.opengraph': {
       parentMessageComponent = (
         <Box
-          backgroundColor={'#eee'}
+          backgroundColor={select({
+            light: palette.background100,
+            dark: palette.background400,
+          })}
           style={{
             paddingHorizontal: 12,
             paddingVertical: 6,
             borderRadius: 16,
           }}
         >
-          <Text body3 color={'#999'} suppressHighlighting numberOfLines={1} ellipsizeMode="middle">
+          <Text body3 color={colors.onBackground03} suppressHighlighting numberOfLines={1} ellipsizeMode="middle">
             {(message as SendbirdUserMessage).message}
           </Text>
         </Box>
@@ -251,7 +255,10 @@ const ParentMessage = (props: {
     case 'file.audio': {
       parentMessageComponent = (
         <Box
-          backgroundColor={'#eee'}
+        backgroundColor={select({
+          light: palette.background100,
+          dark: palette.background400,
+        })}
           style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -263,7 +270,7 @@ const ParentMessage = (props: {
           <Icon
             icon={'file-document'} // FIXME: maybe it could standardize the icon by file type
             size={16}
-            color={'#666'}
+            color={colors.onBackground03}
             containerStyle={{
               width: 16,
               height: 16,
@@ -272,7 +279,7 @@ const ParentMessage = (props: {
               marginTop: 2,
             }}
           />
-          <Text body3 color={'#999'} suppressHighlighting numberOfLines={1} ellipsizeMode="middle">
+          <Text body3 color={colors.onBackground03} suppressHighlighting numberOfLines={1} ellipsizeMode="middle">
             {(message as SendbirdFileMessage).name}
           </Text>
         </Box>
@@ -282,7 +289,7 @@ const ParentMessage = (props: {
     case 'file.image': {
       parentMessageComponent = (
         <Image
-          style={{ opacity: 0.5, width: 180, height: 120, borderRadius: 16 }}
+          style={{ width: 180, height: 120, borderRadius: 16 }}
           source={{ uri: (message as SendbirdFileMessage).url }}
         />
       );
@@ -300,8 +307,8 @@ const ParentMessage = (props: {
         }}
         onPress={() => onPress?.(props.message)}
       >
-        <Icon icon={'reply-filled'} size={13} color="#999" containerStyle={{ marginRight: 4 }} />
-        <Text style={{ color: '#999', fontSize: 13, fontWeight: '800' }}>
+        <Icon icon={'reply-filled'} size={13} color={colors.onBackground03} containerStyle={{ marginRight: 4 }} />
+        <Text style={{ color: colors.onBackground03, fontSize: 13, fontWeight: '800' }}>
           {STRINGS.LABELS.REPLY_FROM_SENDER_TO_RECEIVER(childMessage.sender, message.sender)}
         </Text>
       </PressBox>
@@ -309,6 +316,7 @@ const ParentMessage = (props: {
         style={{
           flexDirection: 'row',
           justifyContent: isMyMessage(childMessage, currentUser?.userId) ? 'flex-end' : 'flex-start',
+          opacity: 0.5,
           marginTop: 2,
           marginBottom: -6,
         }}
