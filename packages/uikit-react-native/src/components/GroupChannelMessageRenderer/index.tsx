@@ -301,7 +301,8 @@ const ParentMessage = (props: {
       style={{
         [isMyMessage(childMessage, currentUser?.userId) ? 'paddingRight' : 'paddingLeft']: 12,
       }}
-      onPress={() => onPress?.(props.message)}>
+      onPress={() => onPress?.(props.message)}
+    >
       <View
         style={{
           flex: 1,
