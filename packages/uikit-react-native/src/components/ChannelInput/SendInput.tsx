@@ -65,7 +65,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   ref,
 ) {
   const { mentionManager, sbOptions } = useSendbirdChat();
-  const { colors } = useUIKitTheme();
+  const { select, colors, palette } = useUIKitTheme();
   const { STRINGS } = useLocalization();
   const { openSheet } = useBottomSheet();
   const toast = useToast();
@@ -130,7 +130,6 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   };
 
   const getFileIcon = (messageToReply: SendbirdBaseMessage) => {
-    const { select, colors, palette } = useUIKitTheme();
     if (messageToReply?.isFileMessage()) {
       if (getMessageType(messageToReply) === 'file.image') {
         return (
@@ -192,7 +191,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
                 {STRINGS.LABELS.CHANNEL_INPUT_REPLY_PREVIEW_TITLE(messageToReply.sender)}
               </Text>
               <Text numberOfLines={1} style={{ fontSize: 13, color: colors.onBackground03 }}>
-                {messageToReply.isUserMessage() ? messageToReply.message : messageToReply.name}
+                {STRINGS.LABELS.CHANNEL_INPUT_REPLY_PREVIEW_BODY(messageToReply)}
               </Text>
             </View>
           </View>

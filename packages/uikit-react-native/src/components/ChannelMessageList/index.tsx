@@ -314,7 +314,7 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
         sheetItems.push({
           disabled: Boolean(msg.parentMessageId),
           icon: 'reply',
-          title: STRINGS.LABELS.CHANNEL_MESSAGE_REPLY(msg.sender),
+          title: STRINGS.LABELS.CHANNEL_MESSAGE_REPLY,
           onPress: () => onReplyMessage?.(msg),
         });
       }
