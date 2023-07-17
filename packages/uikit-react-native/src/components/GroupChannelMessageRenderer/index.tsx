@@ -297,21 +297,23 @@ const ParentMessage = (props: {
     }
   }
   return (
-    <View>
-      <PressBox
+    <PressBox
+      style={{
+        [isMyMessage(childMessage, currentUser?.userId) ? 'paddingRight' : 'paddingLeft']: 12,
+      }}
+      onPress={() => onPress?.(props.message)}>
+      <View
         style={{
           flex: 1,
           flexDirection: 'row',
           justifyContent: isMyMessage(childMessage, currentUser?.userId) ? 'flex-end' : 'flex-start',
-          paddingRight: 12,
         }}
-        onPress={() => onPress?.(props.message)}
       >
         <Icon icon={'reply-filled'} size={13} color={colors.onBackground03} containerStyle={{ marginRight: 4 }} />
         <Text style={{ color: colors.onBackground03, fontSize: 13, fontWeight: '800' }}>
           {STRINGS.LABELS.REPLY_FROM_SENDER_TO_RECEIVER(childMessage.sender, message.sender)}
         </Text>
-      </PressBox>
+      </View>
       <View
         style={{
           flexDirection: 'row',
@@ -323,7 +325,7 @@ const ParentMessage = (props: {
       >
         {parentMessageComponent}
       </View>
-    </View>
+    </PressBox>
   );
 };
 
