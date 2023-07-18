@@ -11,6 +11,7 @@ import {
 import { MentionType } from '@sendbird/chat/message';
 import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation';
 import {
+  FileIcon,
   Icon,
   ImageWithPlaceholder,
   Text,
@@ -38,6 +39,7 @@ import SBUUtils from '../../libs/SBUUtils';
 import type { FileType } from '../../platform/types';
 import type { MentionedUser } from '../../types';
 import type { ChannelInputProps } from './index';
+import { FileIconType } from 'packages/uikit-react-native-foundation/src/components/FileIcon';
 
 interface SendInputProps extends ChannelInputProps {
   text: string;
@@ -131,7 +133,8 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
 
   const getFileIcon = (messageToReply: SendbirdBaseMessage) => {
     if (messageToReply?.isFileMessage()) {
-      if (getMessageType(messageToReply) === 'file.image') {
+      const fileType = getMessageType(messageToReply);
+      if (fileType === 'file.image') {
         return (
           <ImageWithPlaceholder
             source={{ uri: getAvailableUriFromFileMessage(messageToReply) }}
@@ -147,8 +150,8 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
         );
       } else {
         return (
-          <Icon
-            icon={'file-document'} // FIXME: maybe it could standardize the icon by file type
+          <FileIcon
+            fileType={fileType as FileIconType}
             size={20}
             color={colors.onBackground02}
             containerStyle={{
