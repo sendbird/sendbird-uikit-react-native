@@ -1,16 +1,7 @@
 import React from 'react';
-import { View } from 'react-native';
 
 import type { GroupChannelMessageProps, RegexTextPattern } from '@sendbird/uikit-react-native-foundation';
-import {
-  Box,
-  GroupChannelMessage,
-  Icon,
-  Image,
-  PressBox,
-  Text,
-  useUIKitTheme,
-} from '@sendbird/uikit-react-native-foundation';
+import { Box, GroupChannelMessage, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import {
   SendbirdAdminMessage,
   SendbirdFileMessage,
@@ -19,6 +10,7 @@ import {
   calcMessageGrouping,
   getMessageType,
   isMyMessage,
+  shouldRenderParentMessage,
   shouldRenderReaction,
   useIIFE,
 } from '@sendbird/uikit-utils';
@@ -30,6 +22,7 @@ import { ReactionAddons } from '../ReactionAddons';
 import GroupChannelMessageDateSeparator from './GroupChannelMessageDateSeparator';
 import GroupChannelMessageFocusAnimation from './GroupChannelMessageFocusAnimation';
 import GroupChannelMessageOutgoingStatus from './GroupChannelMessageOutgoingStatus';
+import GroupChannelMessageParentMessage from './GroupChannelMessageParentMessage';
 
 const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
   channel,
@@ -65,9 +58,11 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     return null;
   });
 
+  const variant = isMyMessage(message, currentUser?.userId) ? 'outgoing' : 'incoming';
+
   const messageProps: Omit<GroupChannelMessageProps<SendbirdMessage>, 'message'> = {
     channel,
-    variant: isMyMessage(message, currentUser?.userId) ? 'outgoing' : 'incoming',
+    variant,
     onPress,
     onLongPress,
     onPressURL: (url) => SBUUtils.openURL(url),
@@ -82,6 +77,14 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     children: reactionChildren,
     sendingStatus: isMyMessage(message, currentUser?.userId) ? (
       <GroupChannelMessageOutgoingStatus channel={channel} message={message} />
+    ) : null,
+    parentMessage: shouldRenderParentMessage(message) ? (
+      <GroupChannelMessageParentMessage
+        variant={variant}
+        childMessage={message}
+        message={message.parentMessage}
+        onPress={onPressParentMessage}
+      />
     ) : null,
     strings: {
       edited: STRINGS.GROUP_CHANNEL.MESSAGE_BUBBLE_EDITED_POSTFIX,
@@ -195,6 +198,8 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
       } else {
         return 16;
       }
+    } else if (nextMessage && shouldRenderParentMessage(nextMessage)) {
+      return 16;
     } else if (groupWithNext) {
       return 2;
     } else {
@@ -205,128 +210,8 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   return (
     <Box paddingHorizontal={16} marginBottom={messageGap}>
       <GroupChannelMessageDateSeparator message={message} prevMessage={prevMessage} />
-      {message.parentMessage &&
-        (message.isUserMessage() || message.isFileMessage()) &&
-        (message.parentMessage.isUserMessage() || message.parentMessage.isFileMessage()) && (
-          <ParentMessage message={message.parentMessage} childMessage={message} onPress={onPressParentMessage} />
-        )}
       <GroupChannelMessageFocusAnimation focused={focused}>{renderMessage()}</GroupChannelMessageFocusAnimation>
     </Box>
-  );
-};
-
-const ParentMessage = (props: {
-  message: SendbirdUserMessage | SendbirdFileMessage;
-  childMessage: SendbirdUserMessage | SendbirdFileMessage;
-  onPress?: (message: SendbirdMessage) => void;
-}) => {
-  const { message, childMessage, onPress } = props;
-  const { currentUser } = useSendbirdChat();
-  const { select, colors, palette } = useUIKitTheme();
-  const { STRINGS } = useLocalization();
-  const type = getMessageType(message);
-
-  // FIXME: apply theme later
-  let parentMessageComponent = null;
-  switch (type) {
-    case 'user':
-    case 'user.opengraph': {
-      parentMessageComponent = (
-        <Box
-          backgroundColor={select({
-            light: palette.background100,
-            dark: palette.background400,
-          })}
-          style={{
-            paddingHorizontal: 12,
-            paddingVertical: 6,
-            borderRadius: 16,
-          }}
-        >
-          <Text body3 color={colors.onBackground03} suppressHighlighting numberOfLines={1} ellipsizeMode="middle">
-            {(message as SendbirdUserMessage).message}
-          </Text>
-        </Box>
-      );
-      break;
-    }
-    case 'file':
-    case 'file.video':
-    case 'file.audio': {
-      parentMessageComponent = (
-        <Box
-          backgroundColor={select({
-            light: palette.background100,
-            dark: palette.background400,
-          })}
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingHorizontal: 12,
-            paddingVertical: 6,
-            borderRadius: 16,
-          }}
-        >
-          <Icon
-            icon={'file-document'} // FIXME: maybe it could standardize the icon by file type
-            size={16}
-            color={colors.onBackground03}
-            containerStyle={{
-              width: 16,
-              height: 16,
-              borderRadius: 10,
-              marginRight: 4,
-              marginTop: 2,
-            }}
-          />
-          <Text body3 color={colors.onBackground03} suppressHighlighting numberOfLines={1} ellipsizeMode="middle">
-            {(message as SendbirdFileMessage).name}
-          </Text>
-        </Box>
-      );
-      break;
-    }
-    case 'file.image': {
-      parentMessageComponent = (
-        <Image
-          style={{ width: 180, height: 120, borderRadius: 16 }}
-          source={{ uri: (message as SendbirdFileMessage).url }}
-        />
-      );
-      break;
-    }
-  }
-  return (
-    <PressBox
-      style={{
-        [isMyMessage(childMessage, currentUser?.userId) ? 'paddingRight' : 'paddingLeft']: 12,
-      }}
-      onPress={() => onPress?.(props.message)}
-    >
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          justifyContent: isMyMessage(childMessage, currentUser?.userId) ? 'flex-end' : 'flex-start',
-        }}
-      >
-        <Icon icon={'reply-filled'} size={13} color={colors.onBackground03} containerStyle={{ marginRight: 4 }} />
-        <Text style={{ color: colors.onBackground03, fontSize: 13, fontWeight: '800' }}>
-          {STRINGS.LABELS.REPLY_FROM_SENDER_TO_RECEIVER(childMessage.sender, message.sender)}
-        </Text>
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: isMyMessage(childMessage, currentUser?.userId) ? 'flex-end' : 'flex-start',
-          opacity: 0.5,
-          marginTop: 2,
-          marginBottom: -6,
-        }}
-      >
-        {parentMessageComponent}
-      </View>
-    </PressBox>
   );
 };
 
