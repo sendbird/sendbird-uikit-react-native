@@ -2,16 +2,19 @@ import React, { useContext, useEffect, useRef } from 'react';
 import type { FlatList } from 'react-native';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
+import { useToast } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
 import { isDifferentChannel, useFreshCallback, useIsFirstMount, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import ChannelMessageList from '../../../components/ChannelMessageList';
 import { MESSAGE_FOCUS_ANIMATION_DELAY, MESSAGE_SEARCH_SAFE_SCROLL_DELAY } from '../../../constants';
-import { useSendbirdChat } from '../../../hooks/useContext';
+import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
 
 const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
+  const toast = useToast();
+  const { STRINGS } = useLocalization();
   const { sdk } = useSendbirdChat();
   const { setMessageToEdit, setMessageToReply } = useContext(GroupChannelContexts.Fragment);
   const { subscribe } = useContext(GroupChannelContexts.PubSub);
@@ -34,7 +37,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
     }, timeout);
   };
 
-  const scrollToMessage = useFreshCallback((createdAt: number, focusAnimated = false) => {
+  const scrollToMessage = useFreshCallback((createdAt: number, focusAnimated = false): boolean => {
     const foundMessageIndex = props.messages.findIndex((it) => it.createdAt === createdAt);
     const isIncludedInList = foundMessageIndex > -1;
 
@@ -44,11 +47,15 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
       }
       lazyScrollToIndex(foundMessageIndex, true, isFirstMount ? MESSAGE_SEARCH_SAFE_SCROLL_DELAY : 0);
     } else {
-      if (focusAnimated) {
-        props.onUpdateSearchItem({ startingPoint: createdAt });
+      if (props.channel.messageOffsetTimestamp <= createdAt) {
+        if (focusAnimated) props.onUpdateSearchItem({ startingPoint: createdAt });
+        props.onResetMessageListWithStartingPoint(createdAt);
+      } else {
+        return false;
       }
-      props.onResetMessageListWithStartingPoint(createdAt);
     }
+
+    return true;
   });
 
   const scrollToBottom = useFreshCallback((animated = false) => {
@@ -105,7 +112,8 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   }, [isFirstMount]);
 
   const onPressParentMessage = useFreshCallback((message: SendbirdMessage) => {
-    scrollToMessage(message.createdAt, true);
+    const canScrollToParent = scrollToMessage(message.createdAt, true);
+    if (!canScrollToParent) toast.show(STRINGS.TOAST.FIND_PARENT_MSG_ERROR, 'error');
   });
 
   return (
