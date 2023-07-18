@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import { MentionType } from '@sendbird/chat/message';
-import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation';
+import type { BottomSheetItem, FileIconType } from '@sendbird/uikit-react-native-foundation';
 import {
   FileIcon,
   Icon,
@@ -39,7 +39,6 @@ import SBUUtils from '../../libs/SBUUtils';
 import type { FileType } from '../../platform/types';
 import type { MentionedUser } from '../../types';
 import type { ChannelInputProps } from './index';
-import { FileIconType } from 'packages/uikit-react-native-foundation/src/components/FileIcon';
 
 interface SendInputProps extends ChannelInputProps {
   text: string;

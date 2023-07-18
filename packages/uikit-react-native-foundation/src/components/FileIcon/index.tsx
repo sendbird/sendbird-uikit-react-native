@@ -7,10 +7,12 @@ const fileIconMapper = {
   audio: 'file-audio',
   image: 'photo',
   video: 'play',
-  file: 'file-document'
+  file: 'file-document',
 } as const;
 
 export type FileIconType = keyof typeof fileIconMapper;
+export const convertFileIconTypeToIcon = (fileIconType?: FileIconType) =>
+  fileIconType ? fileIconMapper[fileIconType] : undefined;
 
 type Props = {
   fileType: FileIconType;
@@ -20,20 +22,10 @@ type Props = {
   containerStyle?: StyleProp<ViewStyle>;
 };
 
-const FileIcon: ((props: Props) => JSX.Element) = ({
-  fileType,
-  color,
-  size = 24,
-  containerStyle,
-  style,
-}: Props) => {
-  return <Icon
-    icon={fileIconMapper[fileType]}
-    size={size}
-    color={color}
-    style={style}
-    containerStyle={containerStyle}
-  />
+const FileIcon: (props: Props) => JSX.Element = ({ fileType, color, size = 24, containerStyle, style }: Props) => {
+  return (
+    <Icon icon={fileIconMapper[fileType]} size={size} color={color} style={style} containerStyle={containerStyle} />
+  );
 };
 
 export default FileIcon;
