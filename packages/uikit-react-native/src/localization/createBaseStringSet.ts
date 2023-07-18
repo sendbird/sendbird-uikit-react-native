@@ -248,6 +248,9 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
         if (users.length === 2) return `${userNames.join(' and ')} are typing...`;
         return 'Several people are typing...';
       },
+      REPLY_FROM_SENDER_TO_RECEIVER: (sender, receiver) =>
+        `${sender.nickname || USER_NO_NAME} replied to ${receiver.nickname || USER_NO_NAME}`,
+
       USER_BAR_ME_POSTFIX: ' (You)',
       USER_BAR_OPERATOR: 'Operator',
       REGISTER_AS_OPERATOR: 'Register as operator',
@@ -261,6 +264,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       CHANNEL_MESSAGE_EDIT: 'Edit',
       CHANNEL_MESSAGE_SAVE: 'Save',
       CHANNEL_MESSAGE_DELETE: 'Delete',
+      CHANNEL_MESSAGE_REPLY: 'Reply',
       CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE: 'Delete message?',
       CHANNEL_MESSAGE_DELETE_CONFIRM_OK: 'Delete',
       CHANNEL_MESSAGE_DELETE_CONFIRM_CANCEL: 'Cancel',
@@ -275,6 +279,8 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       CHANNEL_INPUT_PLACEHOLDER_MUTED: "You're muted by the operator.",
       CHANNEL_INPUT_EDIT_OK: 'Save',
       CHANNEL_INPUT_EDIT_CANCEL: 'Cancel',
+      CHANNEL_INPUT_REPLY_PREVIEW_TITLE: (user) => `Reply to ${user.nickname || USER_NO_NAME}`,
+      CHANNEL_INPUT_REPLY_PREVIEW_BODY: (message) => (message.isUserMessage() ? message.message : message.name),
       ...overrides?.LABELS,
     },
     FILE_VIEWER: {
@@ -325,6 +331,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       LEAVE_CHANNEL_ERROR: "Couldn't leave channel.",
       UNKNOWN_ERROR: 'Something went wrong.',
       GET_CHANNEL_ERROR: "Couldn't retrieve channel.",
+      FIND_PARENT_MSG_ERROR: "Couldn't find the original message for this reply.",
       ...overrides?.TOAST,
     },
     PROFILE_CARD: {

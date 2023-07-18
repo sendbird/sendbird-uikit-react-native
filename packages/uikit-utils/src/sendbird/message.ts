@@ -10,6 +10,7 @@ import type {
   SendbirdMessage,
   SendbirdReaction,
   SendbirdSendableMessage,
+  SendbirdUserMessage,
 } from '../types';
 import { getMessageTimeFormat } from '../ui-format/common';
 
@@ -115,6 +116,18 @@ export function isSendbirdNotification(dataPayload?: {
 
 export function parseSendbirdNotification(dataPayload: RawSendbirdDataPayload): SendbirdDataPayload {
   return typeof dataPayload.sendbird === 'string' ? JSON.parse(dataPayload.sendbird) : dataPayload.sendbird;
+}
+
+export function shouldRenderParentMessage(message: SendbirdMessage): message is (
+  | SendbirdUserMessage
+  | SendbirdFileMessage
+) & {
+  parentMessage: SendbirdUserMessage | SendbirdFileMessage;
+} {
+  return !!(
+    (message.isFileMessage() || message.isUserMessage()) &&
+    (message.parentMessage?.isFileMessage() || message.parentMessage?.isUserMessage())
+  );
 }
 
 export function shouldRenderReaction(channel: SendbirdBaseChannel, reactionEnabled: boolean) {
