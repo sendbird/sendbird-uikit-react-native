@@ -332,6 +332,7 @@ export interface StringSet {
     LEAVE_CHANNEL_ERROR: string;
     UNKNOWN_ERROR: string;
     GET_CHANNEL_ERROR: string;
+    FIND_PARENT_MSG_ERROR: string;
   };
   PROFILE_CARD: {
     BUTTON_MESSAGE: string;
