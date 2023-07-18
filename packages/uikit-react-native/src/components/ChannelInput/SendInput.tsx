@@ -12,8 +12,7 @@ import { MentionType } from '@sendbird/chat/message';
 import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation';
 import {
   Icon,
-  Image,
-  PressBox,
+  ImageWithPlaceholder,
   Text,
   TextInput,
   createStyleSheet,
@@ -22,7 +21,16 @@ import {
   useToast,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import { Logger, SendbirdChannel, isImage, shouldCompressImage, useIIFE } from '@sendbird/uikit-utils';
+import {
+  Logger,
+  SendbirdBaseMessage,
+  SendbirdChannel,
+  getAvailableUriFromFileMessage,
+  getMessageType,
+  isImage,
+  shouldCompressImage,
+  useIIFE,
+} from '@sendbird/uikit-utils';
 
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 import SBUError from '../../libs/SBUError';
@@ -57,8 +65,8 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   ref,
 ) {
   const { mentionManager, sbOptions } = useSendbirdChat();
+  const { select, colors, palette } = useUIKitTheme();
   const { STRINGS } = useLocalization();
-  const { colors } = useUIKitTheme();
   const { openSheet } = useBottomSheet();
   const toast = useToast();
 
@@ -121,31 +129,75 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED;
   };
 
+  const getFileIcon = (messageToReply: SendbirdBaseMessage) => {
+    if (messageToReply?.isFileMessage()) {
+      if (getMessageType(messageToReply) === 'file.image') {
+        return (
+          <ImageWithPlaceholder
+            source={{ uri: getAvailableUriFromFileMessage(messageToReply) }}
+            style={{
+              width: 36,
+              height: 36,
+              borderRadius: 10,
+              marginTop: 2,
+              marginRight: 10,
+              overflow: 'hidden',
+            }}
+          />
+        );
+      } else {
+        return (
+          <Icon
+            icon={'file-document'} // FIXME: maybe it could standardize the icon by file type
+            size={20}
+            color={colors.onBackground02}
+            containerStyle={{
+              backgroundColor: select({
+                light: palette.background100,
+                dark: palette.background500,
+              }),
+              width: 36,
+              height: 36,
+              borderRadius: 10,
+              marginRight: 10,
+              marginTop: 2,
+            }}
+          />
+        );
+      }
+    }
+    return null;
+  };
+
   return (
     <View>
-      {/** TODO: Reply message component */}
       {messageToReply && (
         <View
           style={{
             flexDirection: 'row',
             paddingLeft: 18,
             paddingRight: 16,
-            paddingVertical: 12,
+            paddingTop: 10,
+            paddingBottom: 8,
             alignItems: 'center',
             borderTopWidth: 1,
             borderColor: colors.onBackground04,
           }}
         >
-          <View style={{ borderWidth: 1, flex: 1, height: 32 }}>
-            {messageToReply.isFileMessage() ? (
-              <Image style={{ width: 30, height: 30 }} source={{ uri: messageToReply.url }} />
-            ) : (
-              <Text>{messageToReply.message}</Text>
-            )}
+          <View style={{ flex: 1, flexDirection: 'row' }}>
+            {getFileIcon(messageToReply)}
+            <View style={{ flex: 1, flexDirection: 'column' }}>
+              <Text numberOfLines={1} style={{ fontSize: 13, fontWeight: '900', marginBottom: 4 }}>
+                {STRINGS.LABELS.CHANNEL_INPUT_REPLY_PREVIEW_TITLE(messageToReply.sender)}
+              </Text>
+              <Text numberOfLines={1} style={{ fontSize: 13, color: colors.onBackground03 }}>
+                {STRINGS.LABELS.CHANNEL_INPUT_REPLY_PREVIEW_BODY(messageToReply)}
+              </Text>
+            </View>
           </View>
-          <PressBox onPress={() => setMessageToReply?.(undefined)} style={{ borderWidth: 1, marginLeft: 16 }}>
-            <Icon icon={'close'} size={24} color={colors.onBackground01} />
-          </PressBox>
+          <TouchableOpacity onPress={() => setMessageToReply?.(undefined)}>
+            <Icon icon={'close'} size={24} color={colors.onBackground01} containerStyle={styles.iconSend} />
+          </TouchableOpacity>
         </View>
       )}
       <View style={styles.sendInputContainer}>

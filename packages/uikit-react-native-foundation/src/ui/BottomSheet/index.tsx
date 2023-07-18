@@ -14,6 +14,7 @@ export type BottomSheetItem = {
     iconColor?: string;
     title: string;
     titleColor?: string;
+    disabled?: boolean;
     onPress: () => void;
   }[];
   HeaderComponent?: (props: HeaderProps) => JSX.Element;
@@ -43,7 +44,12 @@ const BottomSheet = ({ onDismiss, onHide, visible, sheetItems, HeaderComponent }
           <TouchableOpacity
             activeOpacity={0.75}
             key={props.title + idx}
-            style={{ paddingLeft: left, paddingRight: right }}
+            style={{
+              opacity: props.disabled ? 0.5 : 1,
+              paddingLeft: left,
+              paddingRight: right,
+            }}
+            disabled={props.disabled}
             onPress={async () => {
               await onHide();
               try {
