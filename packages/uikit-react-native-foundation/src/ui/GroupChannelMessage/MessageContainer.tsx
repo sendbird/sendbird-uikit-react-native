@@ -28,6 +28,7 @@ MessageContainer.Incoming = function MessageContainerIncoming({
   message,
   onPressAvatar,
   strings,
+  parentMessage,
 }: Props) {
   const { colors } = useUIKitTheme();
   const color = colors.ui.groupChannelMessage.incoming;
@@ -42,9 +43,10 @@ MessageContainer.Incoming = function MessageContainerIncoming({
         )}
       </Box>
       <Box flexShrink={1}>
+        {parentMessage}
         {!groupedWithPrev && (
           <Box marginLeft={12} marginBottom={4}>
-            {(message.isFileMessage() || message.isUserMessage()) && (
+            {(message.isFileMessage() || message.isUserMessage()) && !message.parentMessage && (
               <Text caption1 color={color.enabled.textSenderName} numberOfLines={1}>
                 {strings?.senderName ?? message.sender.nickname}
               </Text>
@@ -73,24 +75,27 @@ MessageContainer.Outgoing = function MessageContainerOutgoing({
   groupedWithNext,
   strings,
   sendingStatus,
+  parentMessage,
 }: Props) {
   const { colors } = useUIKitTheme();
   const color = colors.ui.groupChannelMessage.outgoing;
 
   return (
-    <Box flexDirection={'row'} justifyContent={'flex-end'} alignItems={'flex-end'}>
-      <Box flexDirection={'row'} alignItems={'flex-end'} justifyContent={'center'}>
-        {sendingStatus && <Box marginRight={4}>{sendingStatus}</Box>}
-
-        {!groupedWithNext && (
-          <Box marginRight={4}>
-            <Text caption4 color={color.enabled.textTime}>
-              {strings?.sentDate ?? getMessageTimeFormat(new Date(message.createdAt))}
-            </Text>
-          </Box>
-        )}
+    <Box>
+      {parentMessage}
+      <Box flexDirection={'row'} justifyContent={'flex-end'} alignItems={'flex-end'}>
+        <Box flexDirection={'row'} alignItems={'flex-end'} justifyContent={'center'}>
+          {sendingStatus && <Box marginRight={4}>{sendingStatus}</Box>}
+          {!groupedWithNext && (
+            <Box marginRight={4}>
+              <Text caption4 color={color.enabled.textTime}>
+                {strings?.sentDate ?? getMessageTimeFormat(new Date(message.createdAt))}
+              </Text>
+            </Box>
+          )}
+        </Box>
+        <Box style={styles.bubble}>{children}</Box>
       </Box>
-      <Box style={styles.bubble}>{children}</Box>
     </Box>
   );
 };
