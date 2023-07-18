@@ -331,6 +331,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       LEAVE_CHANNEL_ERROR: "Couldn't leave channel.",
       UNKNOWN_ERROR: 'Something went wrong.',
       GET_CHANNEL_ERROR: "Couldn't retrieve channel.",
+      FIND_PARENT_MSG_ERROR: "Couldn't find the original message for this reply.",
       ...overrides?.TOAST,
     },
     PROFILE_CARD: {
