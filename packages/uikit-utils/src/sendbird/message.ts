@@ -124,11 +124,10 @@ export function shouldRenderParentMessage(message: SendbirdMessage): message is 
 ) & {
   parentMessage: SendbirdUserMessage | SendbirdFileMessage;
 } {
-  if (message.isFileMessage() || message.isUserMessage()) {
-    if (!message.parentMessage) return false;
-    if (message.parentMessage.isFileMessage() || message.parentMessage.isUserMessage()) return true;
-  }
-  return false;
+  return !!(
+    (message.isFileMessage() || message.isUserMessage()) &&
+    (message.parentMessage?.isFileMessage() || message.parentMessage?.isUserMessage())
+  );
 }
 
 export function shouldRenderReaction(channel: SendbirdBaseChannel, reactionEnabled: boolean) {
