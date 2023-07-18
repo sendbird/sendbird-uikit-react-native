@@ -4,6 +4,7 @@ export { default as IconAssets } from './assets/icon';
 /** Component **/
 export { default as Box } from './components/Box';
 export { default as Divider } from './components/Divider';
+export { default as FileIcon } from './components/FileIcon';
 export { default as Icon } from './components/Icon';
 export { default as Image } from './components/Image';
 export { default as ImageWithPlaceholder } from './components/ImageWithPlaceholder';

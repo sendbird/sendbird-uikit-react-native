@@ -3,15 +3,13 @@ import React from 'react';
 import { SendbirdFileMessage, getFileExtension, getFileType } from '@sendbird/uikit-utils';
 
 import Box from '../../components/Box';
-import Icon from '../../components/Icon';
+import FileIcon from '../../components/FileIcon';
 import PressBox from '../../components/PressBox';
 import Text from '../../components/Text';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import MessageContainer from './MessageContainer';
 import type { GroupChannelMessageProps } from './index';
-
-const iconMapper = { audio: 'file-audio', image: 'photo', video: 'play', file: 'file-document' } as const;
 
 type Props = GroupChannelMessageProps<SendbirdFileMessage>;
 
@@ -28,8 +26,8 @@ const FileMessage = (props: Props) => {
         {({ pressed }) => (
           <Box backgroundColor={pressed ? color.pressed.background : color.enabled.background} style={styles.container}>
             <Box style={styles.bubble}>
-              <Icon
-                icon={iconMapper[fileType]}
+              <FileIcon
+                fileType={fileType}
                 size={24}
                 containerStyle={{ backgroundColor: colors.background, padding: 2, borderRadius: 8, marginRight: 8 }}
               />
