@@ -6,15 +6,15 @@ import {
   GroupChannelPreview,
   Icon,
   LoadingSpinner,
-  convertFileIconTypeToIcon,
   createStyleSheet,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
 import {
   SendbirdGroupChannel,
   SendbirdUser,
-  getFileExtension,
-  getFileType,
+  convertFileTypeToMessageType,
+  getFileIconFromMessageType,
+  getFileTypeFromMessage,
   isDifferentChannel,
   isMyMessage,
   useIIFE,
@@ -56,7 +56,7 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
   const fileType = useIIFE(() => {
     if (!channel.lastMessage?.isFileMessage()) return undefined;
     if (typingUsers.length > 0) return undefined;
-    return getFileType(channel.lastMessage.type || getFileExtension(channel.lastMessage.name));
+    return getFileTypeFromMessage(channel.lastMessage);
   });
 
   const titleCaptionIcon = useIIFE(() => {
@@ -98,7 +98,7 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
         titleCaptionLeft={titleCaptionIcon}
         titleCaption={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE_CAPTION(channel)}
         body={bodyText}
-        bodyIcon={convertFileIconTypeToIcon(fileType)}
+        bodyIcon={getFileIconFromMessageType(convertFileTypeToMessageType(fileType))}
         badgeCount={unreadMessageCount}
         mentioned={channel.unreadMentionCount > 0}
         mentionTrigger={mentionManager.config.trigger}

@@ -148,7 +148,7 @@ export function getReactionCount(reaction: SendbirdReaction) {
   return reaction.userIds.length;
 }
 
-type MessageType =
+export type MessageType =
   | 'user'
   | 'admin'
   | 'file'
@@ -156,9 +156,49 @@ type MessageType =
   | `user.${'opengraph'}`
   | `file.${'image' | 'video' | 'audio'}`;
 
-export function getFileTypeFromMessage(message: SendbirdFileMessage) {
+export type FileType =
+  | 'file'
+  | 'image'
+  | 'audio'
+  | 'video';
+
+const fileIconMapper = {
+  'audio': 'file-audio',
+  'image': 'photo',
+  'video': 'play',
+  'file': 'file-document',
+} as const;
+
+type ValueOf<T> = T[keyof T];
+type FileIcon = ValueOf<typeof fileIconMapper>;
+
+export function getFileTypeFromMessage(message: SendbirdFileMessage): FileType {
   return getFileType(message.type || getFileExtension(message.name));
 }
+export const convertFileTypeToMessageType = (fileType: FileType = 'file'): MessageType => {
+  switch (fileType) {
+    case 'audio':
+    case 'image':
+    case 'video':
+      return `file.${fileType}`;
+    case 'file':
+      return fileType;
+  }
+};
+export const getFileIconFromMessageType = (messageType: MessageType): FileIcon => {
+  switch (messageType) {
+    case 'file': return fileIconMapper['file'];
+    case 'file.image': return fileIconMapper['image'];
+    case 'file.video': return fileIconMapper['video'];
+    case 'file.audio': return fileIconMapper['audio'];
+    default: return fileIconMapper['file'];
+  }
+};
+export const getFileIconFromMessage = (message: SendbirdFileMessage): FileIcon => {
+  const fileType = getFileTypeFromMessage(message);
+  const messageType = convertFileTypeToMessageType(fileType);
+  return getFileIconFromMessageType(messageType);
+};
 
 export function getMessageType(message: SendbirdMessage): MessageType {
   if (message.isAdminMessage()) {

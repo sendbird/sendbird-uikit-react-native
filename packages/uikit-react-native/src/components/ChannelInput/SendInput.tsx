@@ -9,9 +9,8 @@ import {
 } from 'react-native';
 
 import { MentionType } from '@sendbird/chat/message';
-import type { BottomSheetItem, FileIconType } from '@sendbird/uikit-react-native-foundation';
+import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation';
 import {
-  FileIcon,
   Icon,
   ImageWithPlaceholder,
   Text,
@@ -27,6 +26,7 @@ import {
   SendbirdBaseMessage,
   SendbirdChannel,
   getAvailableUriFromFileMessage,
+  getFileIconFromMessageType,
   getMessageType,
   isImage,
   shouldCompressImage,
@@ -132,8 +132,8 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
 
   const getFileIcon = (messageToReply: SendbirdBaseMessage) => {
     if (messageToReply?.isFileMessage()) {
-      const fileType = getMessageType(messageToReply);
-      if (fileType === 'file.image') {
+      const messageType = getMessageType(messageToReply);
+      if (messageType === 'file.image') {
         return (
           <ImageWithPlaceholder
             source={{ uri: getAvailableUriFromFileMessage(messageToReply) }}
@@ -149,8 +149,8 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
         );
       } else {
         return (
-          <FileIcon
-            fileType={fileType as FileIconType}
+          <Icon
+            icon={getFileIconFromMessageType(messageType)}
             size={20}
             color={colors.onBackground02}
             containerStyle={{
