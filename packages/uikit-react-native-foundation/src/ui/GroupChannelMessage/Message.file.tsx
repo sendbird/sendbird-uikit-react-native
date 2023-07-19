@@ -3,7 +3,7 @@ import React from 'react';
 import { SendbirdFileMessage, getFileExtension, getFileType } from '@sendbird/uikit-utils';
 
 import Box from '../../components/Box';
-import FileIcon from '../../components/FileIcon';
+import Icon from '../../components/Icon';
 import PressBox from '../../components/PressBox';
 import Text from '../../components/Text';
 import createStyleSheet from '../../styles/createStyleSheet';
@@ -26,7 +26,7 @@ const FileMessage = (props: Props) => {
         {({ pressed }) => (
           <Box backgroundColor={pressed ? color.pressed.background : color.enabled.background} style={styles.container}>
             <Box style={styles.bubble}>
-              <FileIcon
+              <Icon.File
                 fileType={fileType}
                 size={24}
                 containerStyle={{ backgroundColor: colors.background, padding: 2, borderRadius: 8, marginRight: 8 }}

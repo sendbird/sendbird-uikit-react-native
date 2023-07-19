@@ -3,7 +3,7 @@ import React from 'react';
 import { SendbirdFileMessage, getFileTypeFromMessage } from '@sendbird/uikit-utils';
 
 import Box from '../../components/Box';
-import FileIcon from '../../components/FileIcon';
+import Icon from '../../components/Icon';
 import PressBox from '../../components/PressBox';
 import Text from '../../components/Text';
 import createStyleSheet from '../../styles/createStyleSheet';
@@ -38,7 +38,7 @@ const FileMessage = (props: OpenChannelMessageProps<SendbirdFileMessage, Props>)
                 alignItems={'flex-start'}
                 backgroundColor={colors.background}
               >
-                <FileIcon fileType={type} size={32} />
+                <Icon.File fileType={type} size={32} />
               </Box>
               <Text
                 body3

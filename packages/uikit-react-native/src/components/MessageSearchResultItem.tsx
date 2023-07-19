@@ -3,14 +3,14 @@ import React from 'react';
 import {
   Avatar,
   Box,
-  FileIcon,
+  Icon,
   PressBox,
   Text,
   createStyleSheet,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdBaseMessage } from '@sendbird/uikit-utils';
-import { getFileExtension, getFileType, useIIFE } from '@sendbird/uikit-utils';
+import { getFileIconFromMessage, useIIFE } from '@sendbird/uikit-utils';
 
 import type { MessageSearchProps } from '../domain/messageSearch/types';
 import { useLocalization } from '../hooks/useContext';
@@ -19,9 +19,9 @@ const MessageSearchResultItem: MessageSearchProps['List']['renderSearchResultIte
   const { colors, select, palette } = useUIKitTheme();
   const { STRINGS } = useLocalization();
 
-  const fileType = useIIFE(() => {
+  const fileIcon = useIIFE(() => {
     if (!message?.isFileMessage()) return undefined;
-    return getFileType(message.type || getFileExtension(message.name));
+    return getFileIconFromMessage(message);
   });
 
   return (
@@ -45,10 +45,10 @@ const MessageSearchResultItem: MessageSearchProps['List']['renderSearchResultIte
 
           <Box flex={1}>
             <Box alignItems={'center'} flexDirection={'row'}>
-              {fileType && (
-                <FileIcon
+              {fileIcon && (
+                <Icon
+                  icon={fileIcon}
                   size={18}
-                  fileType={fileType}
                   color={colors.onBackground02}
                   containerStyle={[
                     styles.bodyIcon,
@@ -59,8 +59,8 @@ const MessageSearchResultItem: MessageSearchProps['List']['renderSearchResultIte
 
               <Text
                 body3
-                numberOfLines={fileType ? 1 : 2}
-                ellipsizeMode={fileType ? 'middle' : 'tail'}
+                numberOfLines={fileIcon ? 1 : 2}
+                ellipsizeMode={fileIcon ? 'middle' : 'tail'}
                 style={styles.bodyText}
                 color={colors.onBackground03}
               >
