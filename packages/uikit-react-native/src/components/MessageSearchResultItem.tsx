@@ -10,12 +10,10 @@ import {
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdBaseMessage } from '@sendbird/uikit-utils';
-import { getFileExtension, getFileType, useIIFE } from '@sendbird/uikit-utils';
+import { getFileIconFromMessage, useIIFE } from '@sendbird/uikit-utils';
 
 import type { MessageSearchProps } from '../domain/messageSearch/types';
 import { useLocalization } from '../hooks/useContext';
-
-const iconMapper = { audio: 'file-audio', image: 'photo', video: 'play', file: 'file-document' } as const;
 
 const MessageSearchResultItem: MessageSearchProps['List']['renderSearchResultItem'] = ({ onPress, message }) => {
   const { colors, select, palette } = useUIKitTheme();
@@ -23,7 +21,7 @@ const MessageSearchResultItem: MessageSearchProps['List']['renderSearchResultIte
 
   const fileIcon = useIIFE(() => {
     if (!message?.isFileMessage()) return undefined;
-    return iconMapper[getFileType(message.type || getFileExtension(message.name))];
+    return getFileIconFromMessage(message);
   });
 
   return (
@@ -49,8 +47,8 @@ const MessageSearchResultItem: MessageSearchProps['List']['renderSearchResultIte
             <Box alignItems={'center'} flexDirection={'row'}>
               {fileIcon && (
                 <Icon
-                  size={18}
                   icon={fileIcon}
+                  size={18}
                   color={colors.onBackground02}
                   containerStyle={[
                     styles.bodyIcon,

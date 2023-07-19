@@ -4,6 +4,7 @@ import { Image, ImageStyle, StyleProp, StyleSheet, View, ViewStyle } from 'react
 import IconAssets from '../../assets/icon';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
+import FileIcon from './FileIcon';
 
 type IconNames = keyof typeof IconAssets;
 type SizeFactor = keyof typeof sizeStyles;
@@ -15,13 +16,10 @@ type Props = {
   style?: StyleProp<ImageStyle>;
   containerStyle?: StyleProp<ViewStyle>;
 };
-const Icon: ((props: Props) => JSX.Element) & { Assets: typeof IconAssets } = ({
-  icon,
-  color,
-  size = 24,
-  containerStyle,
-  style,
-}) => {
+const Icon: ((props: Props) => JSX.Element) & {
+  Assets: typeof IconAssets;
+  File: typeof FileIcon;
+} = ({ icon, color, size = 24, containerStyle, style }) => {
   const sizeStyle = sizeStyles[size as SizeFactor] ?? { width: size, height: size };
   const { colors } = useUIKitTheme();
   return (
@@ -66,4 +64,5 @@ const sizeStyles = createStyleSheet({
 });
 
 Icon.Assets = IconAssets;
+Icon.File = FileIcon;
 export default Icon;
