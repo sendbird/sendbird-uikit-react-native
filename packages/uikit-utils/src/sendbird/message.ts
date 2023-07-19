@@ -156,11 +156,7 @@ export type MessageType =
   | `user.${'opengraph'}`
   | `file.${'image' | 'video' | 'audio'}`;
 
-export type FileType =
-  | 'file'
-  | 'image'
-  | 'audio'
-  | 'video';
+export type FileType = 'file' | 'image' | 'audio' | 'video';
 
 const fileIconMapper = {
   'audio': 'file-audio',
@@ -187,11 +183,16 @@ export const convertFileTypeToMessageType = (fileType: FileType = 'file'): Messa
 };
 export const getFileIconFromMessageType = (messageType: MessageType): FileIcon => {
   switch (messageType) {
-    case 'file': return fileIconMapper['file'];
-    case 'file.image': return fileIconMapper['image'];
-    case 'file.video': return fileIconMapper['video'];
-    case 'file.audio': return fileIconMapper['audio'];
-    default: return fileIconMapper['file'];
+    case 'file':
+      return fileIconMapper['file'];
+    case 'file.image':
+      return fileIconMapper['image'];
+    case 'file.video':
+      return fileIconMapper['video'];
+    case 'file.audio':
+      return fileIconMapper['audio'];
+    default:
+      return fileIconMapper['file'];
   }
 };
 export const getFileIconFromMessage = (message: SendbirdFileMessage): FileIcon => {

@@ -1,8 +1,9 @@
 import React from 'react';
 import { ImageStyle, StyleProp, ViewStyle } from 'react-native';
 
-import Icon from '.';
 import { FileType, convertFileTypeToMessageType, getFileIconFromMessageType } from '@sendbird/uikit-utils';
+
+import Icon from '.';
 
 type Props = {
   fileType: FileType;
@@ -19,7 +20,8 @@ const FileIcon: (props: Props) => JSX.Element = ({ fileType, color, size = 24, c
       size={size}
       color={color}
       style={style}
-      containerStyle={containerStyle} />
+      containerStyle={containerStyle}
+    />
   );
 };
 
