@@ -17,15 +17,9 @@ type Props = {
   containerStyle?: StyleProp<ViewStyle>;
 };
 const Icon: ((props: Props) => JSX.Element) & {
-  Assets: typeof IconAssets,
-  File: typeof FileIcon,
-} = ({
-  icon,
-  color,
-  size = 24,
-  containerStyle,
-  style,
-}) => {
+  Assets: typeof IconAssets;
+  File: typeof FileIcon;
+} = ({ icon, color, size = 24, containerStyle, style }) => {
   const sizeStyle = sizeStyles[size as SizeFactor] ?? { width: size, height: size };
   const { colors } = useUIKitTheme();
   return (
