@@ -11,8 +11,6 @@ import useUIKitTheme from '../../theme/useUIKitTheme';
 import MessageContainer from './MessageContainer';
 import type { OpenChannelMessageProps } from './index';
 
-const iconMapper = { audio: 'file-audio', image: 'photo', video: 'play', file: 'file-document' } as const;
-
 type Props = {};
 const FileMessage = (props: OpenChannelMessageProps<SendbirdFileMessage, Props>) => {
   const { colors } = useUIKitTheme();
@@ -40,7 +38,7 @@ const FileMessage = (props: OpenChannelMessageProps<SendbirdFileMessage, Props>)
                 alignItems={'flex-start'}
                 backgroundColor={colors.background}
               >
-                <Icon icon={iconMapper[type]} size={32} />
+                <Icon.File fileType={type} size={32} />
               </Box>
               <Text
                 body3

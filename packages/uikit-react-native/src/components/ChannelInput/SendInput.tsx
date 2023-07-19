@@ -26,6 +26,7 @@ import {
   SendbirdBaseMessage,
   SendbirdChannel,
   getAvailableUriFromFileMessage,
+  getFileIconFromMessageType,
   getMessageType,
   isImage,
   shouldCompressImage,
@@ -131,7 +132,8 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
 
   const getFileIcon = (messageToReply: SendbirdBaseMessage) => {
     if (messageToReply?.isFileMessage()) {
-      if (getMessageType(messageToReply) === 'file.image') {
+      const messageType = getMessageType(messageToReply);
+      if (messageType === 'file.image') {
         return (
           <ImageWithPlaceholder
             source={{ uri: getAvailableUriFromFileMessage(messageToReply) }}
@@ -148,7 +150,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
       } else {
         return (
           <Icon
-            icon={'file-document'} // FIXME: maybe it could standardize the icon by file type
+            icon={getFileIconFromMessageType(messageType)}
             size={20}
             color={colors.onBackground02}
             containerStyle={{

@@ -12,8 +12,9 @@ import {
 import {
   SendbirdGroupChannel,
   SendbirdUser,
-  getFileExtension,
-  getFileType,
+  convertFileTypeToMessageType,
+  getFileIconFromMessageType,
+  getFileTypeFromMessage,
   isDifferentChannel,
   isMyMessage,
   useIIFE,
@@ -23,8 +24,6 @@ import {
 import ChannelCover from '../components/ChannelCover';
 import { DEFAULT_LONG_PRESS_DELAY } from '../constants';
 import { useLocalization, useSendbirdChat } from '../hooks/useContext';
-
-const iconMapper = { audio: 'file-audio', image: 'photo', video: 'play', file: 'file-document' } as const;
 
 type Props = {
   channel: SendbirdGroupChannel;
@@ -54,10 +53,10 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
     else return STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_BODY(channel);
   });
 
-  const fileIcon = useIIFE(() => {
+  const fileType = useIIFE(() => {
     if (!channel.lastMessage?.isFileMessage()) return undefined;
     if (typingUsers.length > 0) return undefined;
-    return iconMapper[getFileType(channel.lastMessage.type || getFileExtension(channel.lastMessage.name))];
+    return getFileTypeFromMessage(channel.lastMessage);
   });
 
   const titleCaptionIcon = useIIFE(() => {
@@ -99,7 +98,7 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
         titleCaptionLeft={titleCaptionIcon}
         titleCaption={STRINGS.GROUP_CHANNEL_LIST.CHANNEL_PREVIEW_TITLE_CAPTION(channel)}
         body={bodyText}
-        bodyIcon={fileIcon}
+        bodyIcon={fileType && getFileIconFromMessageType(convertFileTypeToMessageType(fileType))}
         badgeCount={unreadMessageCount}
         mentioned={channel.unreadMentionCount > 0}
         mentionTrigger={mentionManager.config.trigger}
