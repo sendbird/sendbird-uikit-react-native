@@ -18,7 +18,6 @@ import type { ChannelInputProps } from '../../components/ChannelInput';
 import type { ChannelMessageListProps } from '../../components/ChannelMessageList';
 import type { CommonComponent } from '../../types';
 import type { PubSub } from '../../utils/pubsub';
-import type { GroupChannelPubSubContextPayload } from '../groupChannel/types';
 
 export type OpenChannelProps = {
   Fragment: {
@@ -101,7 +100,7 @@ export type OpenChannelContextsType = {
     setMessageToEdit: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
     keyboardAvoidOffset?: number;
   }>;
-  PubSub: React.Context<PubSub<GroupChannelPubSubContextPayload>>;
+  PubSub: React.Context<PubSub<OpenChannelPubSubContextPayload>>;
 };
 export interface OpenChannelModule {
   Provider: CommonComponent<OpenChannelProps['Provider']>;
