@@ -150,6 +150,10 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
             }
           }
         }
+
+        if (_.source === MessageEventSource.EVENT_MESSAGE_UPDATED) {
+          options?.onMessagesUpdated?.(messages);
+        }
       },
       onMessagesDeleted: (_, __, messageIds) => {
         deleteMessages(messageIds, []);
