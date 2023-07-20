@@ -8,7 +8,9 @@ const pubsub = <T>(): PubSub<T> => {
 
   return {
     publish: (data: unknown) => {
-      subscribers.forEach((subscriber) => subscriber(data));
+      subscribers.forEach((subscriber) => {
+        setTimeout(() => subscriber(data), 0);
+      });
     },
     subscribe: (subscriber: Function) => {
       subscribers.add(subscriber);

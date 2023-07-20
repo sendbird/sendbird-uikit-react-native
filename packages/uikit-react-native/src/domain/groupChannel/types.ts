@@ -138,7 +138,7 @@ export type GroupChannelPubSubContextPayload =
       };
     }
   | {
-      type: 'MESSAGES_RECEIVED';
+      type: 'MESSAGES_RECEIVED' | 'MESSAGES_UPDATED';
       data: {
         messages: SendbirdMessage[];
       };
