@@ -13,7 +13,7 @@ import {
   SendbirdFileMessage,
   SendbirdMessage,
   SendbirdUserMessage,
-  getFileIconFromMessage,
+  getFileIconFromMessageType,
   getMessageType,
   useIIFE,
 } from '@sendbird/uikit-utils';
@@ -69,7 +69,7 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
             backgroundColor={select({ light: palette.background100, dark: palette.background400 })}
           >
             <Icon
-              icon={getFileIconFromMessage(parentMessage as SendbirdFileMessage)}
+              icon={getFileIconFromMessageType(type)}
               size={16}
               color={colors.onBackground03}
               containerStyle={styles.fileIcon}
