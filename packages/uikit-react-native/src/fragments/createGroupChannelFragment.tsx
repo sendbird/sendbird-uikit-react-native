@@ -86,6 +86,9 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       onMessagesReceived(messages) {
         groupChannelPubSub.publish({ type: 'MESSAGES_RECEIVED', data: { messages } });
       },
+      onMessagesUpdated(messages) {
+        groupChannelPubSub.publish({ type: 'MESSAGES_UPDATED', data: { messages } });
+      },
       collectionCreator,
       sortComparator,
       onChannelDeleted,

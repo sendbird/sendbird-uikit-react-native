@@ -211,6 +211,7 @@ export type UseGroupChannelMessagesOptions = {
   shouldCountNewMessages?: () => boolean;
   startingPoint?: number;
   onMessagesReceived?: (messages: SendbirdMessage[]) => void;
+  onMessagesUpdated?: (messages: SendbirdMessage[]) => void;
 };
 
 /**
