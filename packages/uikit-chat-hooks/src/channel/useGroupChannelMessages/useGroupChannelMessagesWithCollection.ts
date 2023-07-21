@@ -99,11 +99,11 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     });
 
     collectionRef.current?.setMessageCollectionHandler({
-      onMessagesAdded: (_, __, messages) => {
-        channelMarkAsRead(_.source);
+      onMessagesAdded: (ctx, __, messages) => {
+        channelMarkAsRead(ctx.source);
 
         const incomingMessages = messages.filter((it) => {
-          switch (_.source) {
+          switch (ctx.source) {
             case MessageEventSource.EVENT_MESSAGE_SENT_PENDING:
             case MessageEventSource.EVENT_MESSAGE_SENT_SUCCESS:
             case MessageEventSource.EVENT_MESSAGE_SENT_FAILED:
@@ -120,7 +120,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
             updateNewMessages(incomingMessages, false, sdk.currentUser.userId);
           }
 
-          switch (_.source) {
+          switch (ctx.source) {
             case MessageEventSource.EVENT_MESSAGE_RECEIVED:
             case MessageEventSource.SYNC_MESSAGE_FILL: {
               options?.onMessagesReceived?.(incomingMessages);
@@ -128,11 +128,11 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
           }
         }
       },
-      onMessagesUpdated: (_, __, messages) => {
-        channelMarkAsRead(_.source);
+      onMessagesUpdated: (ctx, __, messages) => {
+        channelMarkAsRead(ctx.source);
 
         const incomingMessages = messages.filter((it) => {
-          switch (_.source) {
+          switch (ctx.source) {
             case MessageEventSource.EVENT_MESSAGE_UPDATED:
               return !isMyMessage(it, sdk.currentUser.userId);
             default:
@@ -145,10 +145,14 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
           updateMessages(messages, false, sdk.currentUser.userId);
 
           if (options?.shouldCountNewMessages?.()) {
-            if (_.source === MessageEventSource.EVENT_MESSAGE_RECEIVED) {
+            if (ctx.source === MessageEventSource.EVENT_MESSAGE_RECEIVED) {
               updateNewMessages(messages, false, sdk.currentUser.userId);
             }
           }
+        }
+
+        if (ctx.source === MessageEventSource.EVENT_MESSAGE_UPDATED) {
+          options?.onMessagesUpdated?.(messages);
         }
       },
       onMessagesDeleted: (_, __, messageIds) => {

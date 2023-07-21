@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import {
   Box,
@@ -13,10 +13,12 @@ import {
   SendbirdFileMessage,
   SendbirdMessage,
   SendbirdUserMessage,
+  getFileIconFromMessageType,
   getMessageType,
   useIIFE,
 } from '@sendbird/uikit-utils';
 
+import { GroupChannelContexts } from '../../domain/groupChannel/module/moduleContext';
 import { useLocalization } from '../../hooks/useContext';
 
 type Props = {
@@ -27,11 +29,24 @@ type Props = {
 };
 
 const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPress }: Props) => {
+  const groupChannelPubSub = useContext(GroupChannelContexts.PubSub);
   const { select, colors, palette } = useUIKitTheme();
   const { STRINGS } = useLocalization();
-  const type = getMessageType(message);
 
-  // FIXME: apply theme later
+  const [parentMessage, setParentMessage] = useState(() => message);
+  const type = getMessageType(parentMessage);
+
+  useEffect(() => {
+    return groupChannelPubSub.subscribe(({ type, data }) => {
+      if (type === 'MESSAGES_UPDATED') {
+        const updatedParent = data.messages.find((it): it is SendbirdUserMessage | SendbirdFileMessage => {
+          return it.messageId === parentMessage.messageId;
+        });
+        if (updatedParent) setParentMessage(updatedParent);
+      }
+    });
+  }, []);
+
   const parentMessageComponent = useIIFE(() => {
     switch (type) {
       case 'user':
@@ -42,7 +57,7 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
             backgroundColor={select({ light: palette.background100, dark: palette.background400 })}
           >
             <Text body3 color={colors.onBackground03} suppressHighlighting numberOfLines={2} ellipsizeMode={'tail'}>
-              {(message as SendbirdUserMessage).message}
+              {(parentMessage as SendbirdUserMessage).message}
             </Text>
           </Box>
         );
@@ -56,19 +71,21 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
             backgroundColor={select({ light: palette.background100, dark: palette.background400 })}
           >
             <Icon
-              icon={'file-document'} // FIXME: maybe it could standardize the icon by file type
+              icon={getFileIconFromMessageType(type)}
               size={16}
               color={colors.onBackground03}
               containerStyle={styles.fileIcon}
             />
             <Text body3 color={colors.onBackground03} numberOfLines={1} ellipsizeMode={'middle'}>
-              {(message as SendbirdFileMessage).name}
+              {(parentMessage as SendbirdFileMessage).name}
             </Text>
           </Box>
         );
       }
       case 'file.image': {
-        return <ImageWithPlaceholder style={styles.image} source={{ uri: (message as SendbirdFileMessage).url }} />;
+        return (
+          <ImageWithPlaceholder style={styles.image} source={{ uri: (parentMessage as SendbirdFileMessage).url }} />
+        );
       }
       default: {
         return null;
@@ -77,7 +94,7 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
   });
 
   return (
-    <PressBox onPress={() => onPress?.(message)}>
+    <PressBox onPress={() => onPress?.(parentMessage)}>
       <Box
         flex={1}
         flexDirection={'row'}
@@ -87,7 +104,7 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
       >
         <Icon icon={'reply-filled'} size={13} color={colors.onBackground03} containerStyle={{ marginRight: 4 }} />
         <Text caption1 color={colors.onBackground03}>
-          {STRINGS.LABELS.REPLY_FROM_SENDER_TO_RECEIVER(childMessage.sender, message.sender)}
+          {STRINGS.LABELS.REPLY_FROM_SENDER_TO_RECEIVER(childMessage.sender, parentMessage.sender)}
         </Text>
       </Box>
       <Box
