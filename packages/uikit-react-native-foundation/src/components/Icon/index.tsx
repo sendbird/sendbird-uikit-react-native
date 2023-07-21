@@ -1,10 +1,11 @@
 import React from 'react';
 import { Image, ImageStyle, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
+import { FileType, convertFileTypeToMessageType, getFileIconFromMessageType } from '@sendbird/uikit-utils';
+
 import IconAssets from '../../assets/icon';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
-import FileIcon from './FileIcon';
 
 type IconNames = keyof typeof IconAssets;
 type SizeFactor = keyof typeof sizeStyles;
@@ -16,10 +17,8 @@ type Props = {
   style?: StyleProp<ImageStyle>;
   containerStyle?: StyleProp<ViewStyle>;
 };
-const Icon: ((props: Props) => JSX.Element) & {
-  Assets: typeof IconAssets;
-  File: typeof FileIcon;
-} = ({ icon, color, size = 24, containerStyle, style }) => {
+
+const Icon = ({ icon, color, size = 24, containerStyle, style }: Props) => {
   const sizeStyle = sizeStyles[size as SizeFactor] ?? { width: size, height: size };
   const { colors } = useUIKitTheme();
   return (
@@ -31,6 +30,10 @@ const Icon: ((props: Props) => JSX.Element) & {
       />
     </View>
   );
+};
+
+const FileIcon = ({ fileType, ...props }: Omit<Props, 'icon'> & { fileType: FileType }) => {
+  return <Icon icon={getFileIconFromMessageType(convertFileTypeToMessageType(fileType))} {...props} />;
 };
 
 const containerStyles = StyleSheet.create({
@@ -63,6 +66,7 @@ const sizeStyles = createStyleSheet({
   },
 });
 
-Icon.Assets = IconAssets;
-Icon.File = FileIcon;
-export default Icon;
+export default Object.assign(Icon, {
+  Assets: IconAssets,
+  File: FileIcon,
+});
