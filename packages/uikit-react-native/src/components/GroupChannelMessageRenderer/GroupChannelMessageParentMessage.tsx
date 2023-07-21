@@ -39,8 +39,10 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
   useEffect(() => {
     return groupChannelPubSub.subscribe(({ type, data }) => {
       if (type === 'MESSAGES_UPDATED') {
-        const updatedParent = data.messages.find((it) => it.messageId === parentMessage.messageId);
-        if (updatedParent?.isFileMessage() || updatedParent?.isUserMessage()) setParentMessage(updatedParent);
+        const updatedParent = data.messages.find((it): it is SendbirdUserMessage | SendbirdFileMessage => {
+          return it.messageId === parentMessage.messageId;
+        });
+        if (updatedParent) setParentMessage(updatedParent);
       }
     });
   }, []);
