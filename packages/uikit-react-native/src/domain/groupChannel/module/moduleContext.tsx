@@ -71,6 +71,16 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
         setMessageToReply(undefined);
       }
     },
+    onChannelFrozen(frozenChannel) {
+      if (frozenChannel.url === channel.url) {
+        setMessageToReply(undefined);
+      }
+    },
+    onUserMuted(mutedChannel, user) {
+      if (mutedChannel.url === channel.url && user.userId === sdk.currentUser?.userId) {
+        setMessageToReply(undefined);
+      }
+    },
     onTypingStatusUpdated(eventChannel) {
       if (isDifferentChannel(channel, eventChannel)) return;
       if (!enableTypingIndicator) return;
