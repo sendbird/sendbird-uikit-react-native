@@ -19,7 +19,7 @@ import {
 } from '@sendbird/uikit-utils';
 
 import { GroupChannelContexts } from '../../domain/groupChannel/module/moduleContext';
-import { useLocalization, useSendbirdChat } from '../../hooks/useContext';
+import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 
 type Props = {
   variant: 'outgoing' | 'incoming';
@@ -34,6 +34,9 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
   const { select, colors, palette } = useUIKitTheme();
   const { STRINGS } = useLocalization();
 
+  const { mediaService } = usePlatformService();
+
+  const [thumbnailInfo, setThumbnailInfo] = useState({ thumbnail: null as null | string, loading: true });
   const [parentMessage, setParentMessage] = useState(() => message);
   const type = getMessageType(parentMessage);
 
@@ -47,6 +50,30 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
       }
     });
   }, []);
+
+  const renderFileMessageAsPreview = (url: string) => {
+    return (
+      <ImageWithPlaceholder style={styles.image} source={{ uri: url }} />
+    );
+  };
+  const renderFileMessageAsDownloadable = (name: string) => {
+    return (
+      <Box
+        style={styles.bubbleContainer}
+        backgroundColor={select({ light: palette.background100, dark: palette.background400 })}
+      >
+        <Icon
+          icon={getFileIconFromMessageType(type)}
+          size={16}
+          color={colors.onBackground03}
+          containerStyle={styles.fileIcon}
+        />
+        <Text body3 color={colors.onBackground03} numberOfLines={1} ellipsizeMode={'middle'}>
+          {name}
+        </Text>
+      </Box>
+    );
+  };
 
   const parentMessageComponent = useIIFE(() => {
     switch (type) {
@@ -64,29 +91,25 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
         );
       }
       case 'file':
-      case 'file.video': // TODO: video thumbnail preview
       case 'file.audio': {
-        return (
-          <Box
-            style={styles.bubbleContainer}
-            backgroundColor={select({ light: palette.background100, dark: palette.background400 })}
-          >
-            <Icon
-              icon={getFileIconFromMessageType(type)}
-              size={16}
-              color={colors.onBackground03}
-              containerStyle={styles.fileIcon}
-            />
-            <Text body3 color={colors.onBackground03} numberOfLines={1} ellipsizeMode={'middle'}>
-              {(parentMessage as SendbirdFileMessage).name}
-            </Text>
-          </Box>
-        );
+        return renderFileMessageAsDownloadable((parentMessage as SendbirdFileMessage).name);
+      }
+      case 'file.video': {
+        if (thumbnailInfo.loading) {
+          mediaService.getVideoThumbnail({ url: (parentMessage as SendbirdFileMessage).url, timeMills: 1000 })
+            .then((thumbnail) => setThumbnailInfo({ thumbnail: thumbnail?.path ?? null, loading: false }))
+            .catch(() => setThumbnailInfo({ thumbnail: null, loading: false }));
+          return <ImageWithPlaceholder source={{ uri: 'invalid-image' }} />
+        } else {
+          if (thumbnailInfo?.thumbnail) {
+            return renderFileMessageAsPreview(thumbnailInfo.thumbnail);
+          } else {
+            return renderFileMessageAsDownloadable((parentMessage as SendbirdFileMessage).name);
+          }
+        }
       }
       case 'file.image': {
-        return (
-          <ImageWithPlaceholder style={styles.image} source={{ uri: (parentMessage as SendbirdFileMessage).url }} />
-        );
+        return renderFileMessageAsPreview((parentMessage as SendbirdFileMessage).url);
       }
       default: {
         return null;
