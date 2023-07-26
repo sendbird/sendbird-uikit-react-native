@@ -7,6 +7,7 @@ import type * as Permissions from 'react-native-permissions';
 import type { Permission } from 'react-native-permissions';
 
 import {
+  Logger,
   getFileExtension,
   getFileExtensionFromMime,
   getFileExtensionFromUri,
@@ -206,7 +207,10 @@ const createNativeFileService = ({
       if (Platform.OS === 'android') {
         const externalDirMap = { 'file': 'downloads', 'audio': 'audio', 'image': 'images', 'video': 'video' } as const;
         const externalDir = externalDirMap[file.type];
-        await fsModule.FileSystem.cpExternal(downloadedPath, file.name, externalDir);
+        await fsModule.FileSystem.cpExternal(downloadedPath, file.name, externalDir).catch(() => {
+          Logger.error('Failed to save file to external storage. Retry saving to downloads directory instead.');
+          return fsModule.FileSystem.cpExternal(downloadedPath, file.name, 'downloads');
+        });
       }
 
       return downloadedPath;

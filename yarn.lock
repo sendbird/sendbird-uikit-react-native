@@ -7438,10 +7438,10 @@ expo-constants@~14.2.0:
     "@expo/config" "~8.0.0"
     uuid "^3.3.2"
 
-expo-document-picker@^11.2.2:
-  version "11.2.2"
-  resolved "https://registry.yarnpkg.com/expo-document-picker/-/expo-document-picker-11.2.2.tgz#707ff994a1c0b38505e12b2c9fe6b67715e6f41c"
-  integrity sha512-EeonRKxkK9E20LEAh93IvlwFjNkUCJKnhBEama9PmIDYWW7RyANZ8eP9C2PupThTDbivzRDNp7Ec7dIeyDAWjw==
+expo-document-picker@^11.5.3:
+  version "11.5.3"
+  resolved "https://registry.yarnpkg.com/expo-document-picker/-/expo-document-picker-11.5.3.tgz#90f23412332ea6ec7ee42fcaaff7ede175114b8e"
+  integrity sha512-nneIdDIKGtU6DQfcF5YJPQdIF2CYug5LapOkktE/0Lc7nXs1O+ejQ8zHLzgbdm2VFymL8d6I6x86sNt8VheBXw==
 
 expo-file-system@^15.2.2:
   version "15.2.2"
@@ -11437,6 +11437,13 @@ node-fetch@2.6.7:
   version "2.6.7"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
   integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
+  dependencies:
+    whatwg-url "^5.0.0"
+
+node-fetch@2.x:
+  version "2.6.12"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.12.tgz#02eb8e22074018e3d5a83016649d04df0e348fba"
+  integrity sha512-C/fGU2E8ToujUivIO0H+tpQ6HWo4eEmchoPIoXtxCrVghxdKq+QOHqEZW7tuP3KlV3bC8FRMO5nMCC7Zm1VP6g==
   dependencies:
     whatwg-url "^5.0.0"
 

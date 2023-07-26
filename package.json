@@ -52,6 +52,7 @@
     "eslint-config-prettier": "^8.5.0",
     "jest": "^29.4.3",
     "lerna": "^5.1.6",
+    "node-fetch": "2.x",
     "patch-package": "^6.4.7",
     "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.7.1",
