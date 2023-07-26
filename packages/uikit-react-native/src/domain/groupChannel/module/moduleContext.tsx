@@ -66,6 +66,11 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
   };
 
   useChannelHandler(sdk, handlerId, {
+    onMessageDeleted(_, messageId) {
+      if (messageToReply?.messageId === messageId) {
+        setMessageToReply(undefined);
+      }
+    },
     onTypingStatusUpdated(eventChannel) {
       if (isDifferentChannel(channel, eventChannel)) return;
       if (!enableTypingIndicator) return;
