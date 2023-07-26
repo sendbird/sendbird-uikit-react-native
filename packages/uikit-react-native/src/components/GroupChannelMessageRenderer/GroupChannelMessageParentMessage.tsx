@@ -33,7 +33,6 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
   const groupChannelPubSub = useContext(GroupChannelContexts.PubSub);
   const { select, colors, palette } = useUIKitTheme();
   const { STRINGS } = useLocalization();
-
   const { mediaService } = usePlatformService();
 
   const [thumbnailInfo, setThumbnailInfo] = useState({ thumbnail: null as null | string, loading: true });
@@ -99,7 +98,7 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
           mediaService.getVideoThumbnail({ url: (parentMessage as SendbirdFileMessage).url, timeMills: 1000 })
             .then((thumbnail) => setThumbnailInfo({ thumbnail: thumbnail?.path ?? null, loading: false }))
             .catch(() => setThumbnailInfo({ thumbnail: null, loading: false }));
-          return <ImageWithPlaceholder source={{ uri: 'invalid-image' }} />
+          return renderFileMessageAsDownloadable((parentMessage as SendbirdFileMessage).name);
         } else {
           if (thumbnailInfo?.thumbnail) {
             return renderFileMessageAsPreview(thumbnailInfo.thumbnail);

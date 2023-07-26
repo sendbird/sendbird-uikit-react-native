@@ -166,7 +166,7 @@ const fileIconMapper = {
 } as const;
 
 type ValueOf<T> = T[keyof T];
-type FileIcon = ValueOf<typeof fileIconMapper>;
+export type FileIcon = ValueOf<typeof fileIconMapper>;
 
 export function getFileTypeFromMessage(message: SendbirdFileMessage): FileType {
   return getFileType(message.type || getFileExtension(message.name));

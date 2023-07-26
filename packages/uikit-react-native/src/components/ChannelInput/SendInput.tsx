@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useState } from 'react';
 import {
   NativeSyntheticEvent,
   Platform,
@@ -22,6 +22,7 @@ import {
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
 import {
+  FileIcon,
   Logger,
   SendbirdBaseMessage,
   SendbirdChannel,
@@ -70,6 +71,9 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   const { STRINGS } = useLocalization();
   const { openSheet } = useBottomSheet();
   const toast = useToast();
+  const { mediaService } = usePlatformService();
+
+  const [thumbnailInfo, setThumbnailInfo] = useState({ thumbnail: null as null | string, loading: true });
 
   const messageReplyParams = useIIFE(() => {
     const { groupChannel } = sbOptions.uikit;
@@ -130,42 +134,78 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED;
   };
 
+  const getFileIconAsImage = (url: string) => {
+    return <ImageWithPlaceholder
+      source={{ uri: url }}
+      style={{
+        width: 36,
+        height: 36,
+        borderRadius: 10,
+        marginTop: 2,
+        marginRight: 10,
+        overflow: 'hidden',
+      }}
+    />;
+  };
+  const getFileIconAsSymbol = (icon: FileIcon) => {
+    return <Icon
+      icon={icon}
+      size={20}
+      color={colors.onBackground02}
+      containerStyle={{
+        backgroundColor: select({
+          light: palette.background100,
+          dark: palette.background500,
+        }),
+        width: 36,
+        height: 36,
+        borderRadius: 10,
+        marginRight: 10,
+        marginTop: 2,
+      }}
+    />;
+  };
+
   const getFileIcon = (messageToReply: SendbirdBaseMessage) => {
     if (messageToReply?.isFileMessage()) {
       const messageType = getMessageType(messageToReply);
-      if (messageType === 'file.image') {
-        return (
-          <ImageWithPlaceholder
-            source={{ uri: getAvailableUriFromFileMessage(messageToReply) }}
-            style={{
-              width: 36,
-              height: 36,
-              borderRadius: 10,
-              marginTop: 2,
-              marginRight: 10,
-              overflow: 'hidden',
-            }}
-          />
-        );
-      } else {
-        return (
-          <Icon
-            icon={getFileIconFromMessageType(messageType)}
-            size={20}
-            color={colors.onBackground02}
-            containerStyle={{
-              backgroundColor: select({
-                light: palette.background100,
-                dark: palette.background500,
-              }),
-              width: 36,
-              height: 36,
-              borderRadius: 10,
-              marginRight: 10,
-              marginTop: 2,
-            }}
-          />
-        );
+      switch (messageType) {
+        case 'file.image':
+          return getFileIconAsImage(getAvailableUriFromFileMessage(messageToReply));
+
+        case 'file.video': {
+          if (thumbnailInfo.loading) {
+            mediaService.getVideoThumbnail({ url: messageToReply.url, timeMills: 1000 })
+              .then((thumbnail) => setThumbnailInfo({ thumbnail: thumbnail?.path ?? null, loading: false }))
+              .catch(() => setThumbnailInfo({ thumbnail: null, loading: false }));
+            return getFileIconAsSymbol(getFileIconFromMessageType(messageType));
+          } else {
+            if (thumbnailInfo?.thumbnail) {
+              return getFileIconAsImage(thumbnailInfo.thumbnail);
+            } else {
+              return getFileIconAsSymbol(getFileIconFromMessageType(messageType));
+            }
+          }
+        }
+        default:
+          return (
+            <Icon
+              icon={getFileIconFromMessageType(messageType)}
+              size={20}
+              color={colors.onBackground02}
+              containerStyle={{
+                backgroundColor: select({
+                  light: palette.background100,
+                  dark: palette.background500,
+                }),
+                width: 36,
+                height: 36,
+                borderRadius: 10,
+                marginRight: 10,
+                marginTop: 2,
+              }}
+            />
+          );
       }
     }
     return null;
