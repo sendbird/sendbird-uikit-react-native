@@ -23,15 +23,18 @@ export type SheetItemProps = {
   iconColor?: string;
   title: string;
   titleColor?: string;
+  disabled?: boolean;
 };
-const SheetItem = ({ icon, title, iconColor, titleColor }: SheetItemProps) => {
+const SheetItem = ({ icon, title, iconColor, titleColor, disabled = false }: SheetItemProps) => {
   const { colors } = useUIKitTheme();
   return (
     <View style={[styles.sheetItemContainer, { backgroundColor: colors.ui.dialog.default.none.background }]}>
       {icon && (
         <Icon
           icon={icon}
-          color={iconColor ?? colors.ui.dialog.default.none.highlight}
+          color={
+            iconColor ?? (disabled ? colors.ui.dialog.default.none.text : colors.ui.dialog.default.none.highlight)
+          }
           containerStyle={styles.sheetItemIcon}
         />
       )}
