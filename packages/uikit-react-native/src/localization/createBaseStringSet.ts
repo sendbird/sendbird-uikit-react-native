@@ -248,8 +248,11 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
         if (users.length === 2) return `${userNames.join(' and ')} are typing...`;
         return 'Several people are typing...';
       },
-      REPLY_FROM_SENDER_TO_RECEIVER: (sender, receiver) =>
-        `${sender.nickname || USER_NO_NAME} replied to ${receiver.nickname || USER_NO_NAME}`,
+      REPLY_FROM_SENDER_TO_RECEIVER: (reply, parent, currentUserId) => {
+        const senderNickname = reply.sender.nickname || USER_NO_NAME;
+        const receiverNickname = parent.sender.nickname || USER_NO_NAME;
+        return `${reply.sender.userId !== currentUserId ? senderNickname : 'You'} replied to ${receiverNickname}`;
+      },
 
       USER_BAR_ME_POSTFIX: ' (You)',
       USER_BAR_OPERATOR: 'Operator',

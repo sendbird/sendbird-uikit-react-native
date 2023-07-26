@@ -19,7 +19,7 @@ import {
 } from '@sendbird/uikit-utils';
 
 import { GroupChannelContexts } from '../../domain/groupChannel/module/moduleContext';
-import { useLocalization } from '../../hooks/useContext';
+import { useLocalization, useSendbirdChat } from '../../hooks/useContext';
 
 type Props = {
   variant: 'outgoing' | 'incoming';
@@ -29,6 +29,7 @@ type Props = {
 };
 
 const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPress }: Props) => {
+  const { sdk } = useSendbirdChat();
   const groupChannelPubSub = useContext(GroupChannelContexts.PubSub);
   const { select, colors, palette } = useUIKitTheme();
   const { STRINGS } = useLocalization();
@@ -104,7 +105,7 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
       >
         <Icon icon={'reply-filled'} size={13} color={colors.onBackground03} containerStyle={{ marginRight: 4 }} />
         <Text caption1 color={colors.onBackground03}>
-          {STRINGS.LABELS.REPLY_FROM_SENDER_TO_RECEIVER(childMessage.sender, parentMessage.sender)}
+          {STRINGS.LABELS.REPLY_FROM_SENDER_TO_RECEIVER(childMessage, parentMessage, sdk.currentUser?.userId)}
         </Text>
       </Box>
       <Box
