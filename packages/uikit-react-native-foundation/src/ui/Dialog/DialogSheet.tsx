@@ -32,9 +32,7 @@ const SheetItem = ({ icon, title, iconColor, titleColor, disabled = false }: She
       {icon && (
         <Icon
           icon={icon}
-          color={
-            iconColor ?? (disabled ? colors.ui.dialog.default.none.text : colors.ui.dialog.default.none.highlight)
-          }
+          color={iconColor ?? (disabled ? colors.ui.dialog.default.none.text : colors.ui.dialog.default.none.highlight)}
           containerStyle={styles.sheetItemIcon}
         />
       )}

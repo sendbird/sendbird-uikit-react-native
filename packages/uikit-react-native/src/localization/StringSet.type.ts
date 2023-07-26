@@ -244,7 +244,11 @@ export interface StringSet {
     USER_NO_NAME: string;
     CHANNEL_NO_MEMBERS: string;
     TYPING_INDICATOR_TYPINGS: (users: SendbirdUser[]) => string | undefined;
-    REPLY_FROM_SENDER_TO_RECEIVER: (replyMessage: SendbirdUserMessage | SendbirdFileMessage, parentMessage: SendbirdUserMessage | SendbirdFileMessage, currentUserId: string) => string;
+    REPLY_FROM_SENDER_TO_RECEIVER: (
+      replyMessage: SendbirdUserMessage | SendbirdFileMessage,
+      parentMessage: SendbirdUserMessage | SendbirdFileMessage,
+      currentUserId: string,
+    ) => string;
 
     USER_BAR_ME_POSTFIX: string;
     USER_BAR_OPERATOR: string;

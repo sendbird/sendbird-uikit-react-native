@@ -135,35 +135,39 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   };
 
   const getFileIconAsImage = (url: string) => {
-    return <ImageWithPlaceholder
-      source={{ uri: url }}
-      style={{
-        width: 36,
-        height: 36,
-        borderRadius: 10,
-        marginTop: 2,
-        marginRight: 10,
-        overflow: 'hidden',
-      }}
-    />;
+    return (
+      <ImageWithPlaceholder
+        source={{ uri: url }}
+        style={{
+          width: 36,
+          height: 36,
+          borderRadius: 10,
+          marginTop: 2,
+          marginRight: 10,
+          overflow: 'hidden',
+        }}
+      />
+    );
   };
   const getFileIconAsSymbol = (icon: FileIcon) => {
-    return <Icon
-      icon={icon}
-      size={20}
-      color={colors.onBackground02}
-      containerStyle={{
-        backgroundColor: select({
-          light: palette.background100,
-          dark: palette.background500,
-        }),
-        width: 36,
-        height: 36,
-        borderRadius: 10,
-        marginRight: 10,
-        marginTop: 2,
-      }}
-    />;
+    return (
+      <Icon
+        icon={icon}
+        size={20}
+        color={colors.onBackground02}
+        containerStyle={{
+          backgroundColor: select({
+            light: palette.background100,
+            dark: palette.background500,
+          }),
+          width: 36,
+          height: 36,
+          borderRadius: 10,
+          marginRight: 10,
+          marginTop: 2,
+        }}
+      />
+    );
   };
 
   const getFileIcon = (messageToReply: SendbirdBaseMessage) => {
@@ -175,7 +179,8 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
 
         case 'file.video': {
           if (thumbnailInfo.loading) {
-            mediaService.getVideoThumbnail({ url: messageToReply.url, timeMills: 1000 })
+            mediaService
+              .getVideoThumbnail({ url: messageToReply.url, timeMills: 1000 })
               .then((thumbnail) => setThumbnailInfo({ thumbnail: thumbnail?.path ?? null, loading: false }))
               .catch(() => setThumbnailInfo({ thumbnail: null, loading: false }));
             return getFileIconAsSymbol(getFileIconFromMessageType(messageType));

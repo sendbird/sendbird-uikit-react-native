@@ -288,10 +288,14 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
         if (message.isFileMessage()) {
           const fileType = getFileTypeFromMessage(message);
           switch (fileType) {
-            case 'image': return 'Photo';
-            case 'video': return 'Video';
-            case 'audio': return 'Audio';
-            default: return message.name;
+            case 'image':
+              return 'Photo';
+            case 'video':
+              return 'Video';
+            case 'audio':
+              return 'Audio';
+            default:
+              return message.name;
           }
         } else if (message.isUserMessage()) {
           return message.message;
