@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef } from 'react';
 import {
   NativeSyntheticEvent,
   Platform,
@@ -15,6 +15,7 @@ import {
   ImageWithPlaceholder,
   Text,
   TextInput,
+  VideoThumbnail,
   createStyleSheet,
   useAlert,
   useBottomSheet,
@@ -72,8 +73,6 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   const { openSheet } = useBottomSheet();
   const toast = useToast();
   const { mediaService } = usePlatformService();
-
-  const [thumbnailInfo, setThumbnailInfo] = useState({ thumbnail: null as null | string, loading: true });
 
   const messageReplyParams = useIIFE(() => {
     const { groupChannel } = sbOptions.uikit;
@@ -135,20 +134,20 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   };
 
   const getFileIconAsImage = (url: string) => {
+    return <ImageWithPlaceholder source={{ uri: url }} style={styles.previewImage} />;
+  };
+
+  const getFileIconAsVideoThumbnail = (url: string) => {
     return (
-      <ImageWithPlaceholder
-        source={{ uri: url }}
-        style={{
-          width: 36,
-          height: 36,
-          borderRadius: 10,
-          marginTop: 2,
-          marginRight: 10,
-          overflow: 'hidden',
-        }}
+      <VideoThumbnail
+        style={styles.previewImage}
+        iconSize={0}
+        videoSource={url}
+        fetchThumbnailFromVideoSource={(uri) => mediaService.getVideoThumbnail({ url: uri, timeMills: 1000 })}
       />
     );
   };
+
   const getFileIconAsSymbol = (icon: FileIcon) => {
     return (
       <Icon
@@ -176,41 +175,10 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
       switch (messageType) {
         case 'file.image':
           return getFileIconAsImage(getAvailableUriFromFileMessage(messageToReply));
-
-        case 'file.video': {
-          if (thumbnailInfo.loading) {
-            mediaService
-              .getVideoThumbnail({ url: messageToReply.url, timeMills: 1000 })
-              .then((thumbnail) => setThumbnailInfo({ thumbnail: thumbnail?.path ?? null, loading: false }))
-              .catch(() => setThumbnailInfo({ thumbnail: null, loading: false }));
-            return getFileIconAsSymbol(getFileIconFromMessageType(messageType));
-          } else {
-            if (thumbnailInfo?.thumbnail) {
-              return getFileIconAsImage(thumbnailInfo.thumbnail);
-            } else {
-              return getFileIconAsSymbol(getFileIconFromMessageType(messageType));
-            }
-          }
-        }
+        case 'file.video':
+          return getFileIconAsVideoThumbnail(getAvailableUriFromFileMessage(messageToReply));
         default:
-          return (
-            <Icon
-              icon={getFileIconFromMessageType(messageType)}
-              size={20}
-              color={colors.onBackground02}
-              containerStyle={{
-                backgroundColor: select({
-                  light: palette.background100,
-                  dark: palette.background500,
-                }),
-                width: 36,
-                height: 36,
-                borderRadius: 10,
-                marginRight: 10,
-                marginTop: 2,
-              }}
-            />
-          );
+          return getFileIconAsSymbol(getFileIconFromMessageType(messageType));
       }
     }
     return null;
@@ -508,6 +476,14 @@ const styles = createStyleSheet({
   iconSend: {
     marginLeft: 4,
     padding: 4,
+  },
+  previewImage: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    marginTop: 2,
+    marginRight: 10,
+    overflow: 'hidden',
   },
 });
 

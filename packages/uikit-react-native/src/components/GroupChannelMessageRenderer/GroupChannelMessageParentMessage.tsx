@@ -6,6 +6,7 @@ import {
   ImageWithPlaceholder,
   PressBox,
   Text,
+  VideoThumbnail,
   createStyleSheet,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
@@ -13,6 +14,7 @@ import {
   SendbirdFileMessage,
   SendbirdMessage,
   SendbirdUserMessage,
+  getAvailableUriFromFileMessage,
   getFileIconFromMessageType,
   getMessageType,
   useIIFE,
@@ -35,7 +37,6 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
   const { STRINGS } = useLocalization();
   const { mediaService } = usePlatformService();
 
-  const [thumbnailInfo, setThumbnailInfo] = useState({ thumbnail: null as null | string, loading: true });
   const [parentMessage, setParentMessage] = useState(() => message);
   const type = getMessageType(parentMessage);
 
@@ -50,6 +51,16 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
     });
   }, []);
 
+  const renderFileMessageAsVideoThumbnail = (url: string) => {
+    return (
+      <VideoThumbnail
+        style={styles.image}
+        iconSize={18}
+        videoSource={url}
+        fetchThumbnailFromVideoSource={(uri) => mediaService.getVideoThumbnail({ url: uri, timeMills: 1000 })}
+      />
+    );
+  };
   const renderFileMessageAsPreview = (url: string) => {
     return <ImageWithPlaceholder style={styles.image} source={{ uri: url }} />;
   };
@@ -92,22 +103,10 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
         return renderFileMessageAsDownloadable((parentMessage as SendbirdFileMessage).name);
       }
       case 'file.video': {
-        if (thumbnailInfo.loading) {
-          mediaService
-            .getVideoThumbnail({ url: (parentMessage as SendbirdFileMessage).url, timeMills: 1000 })
-            .then((thumbnail) => setThumbnailInfo({ thumbnail: thumbnail?.path ?? null, loading: false }))
-            .catch(() => setThumbnailInfo({ thumbnail: null, loading: false }));
-          return renderFileMessageAsDownloadable((parentMessage as SendbirdFileMessage).name);
-        } else {
-          if (thumbnailInfo?.thumbnail) {
-            return renderFileMessageAsPreview(thumbnailInfo.thumbnail);
-          } else {
-            return renderFileMessageAsDownloadable((parentMessage as SendbirdFileMessage).name);
-          }
-        }
+        return renderFileMessageAsVideoThumbnail(getAvailableUriFromFileMessage(parentMessage as SendbirdFileMessage));
       }
       case 'file.image': {
-        return renderFileMessageAsPreview((parentMessage as SendbirdFileMessage).url);
+        return renderFileMessageAsPreview(getAvailableUriFromFileMessage(parentMessage as SendbirdFileMessage));
       }
       default: {
         return null;
@@ -160,6 +159,7 @@ const styles = createStyleSheet({
     width: 156,
     height: 104,
     borderRadius: 16,
+    overflow: 'hidden',
   },
   fileIcon: {
     width: 16,
