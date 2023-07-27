@@ -44,11 +44,7 @@ const BottomSheet = ({ onDismiss, onHide, visible, sheetItems, HeaderComponent }
           <TouchableOpacity
             activeOpacity={0.75}
             key={props.title + idx}
-            style={{
-              opacity: props.disabled ? 0.5 : 1,
-              paddingLeft: left,
-              paddingRight: right,
-            }}
+            style={{ paddingLeft: left, paddingRight: right }}
             disabled={props.disabled}
             onPress={async () => {
               await onHide();
