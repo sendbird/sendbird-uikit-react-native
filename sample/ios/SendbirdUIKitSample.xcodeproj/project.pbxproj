@@ -564,6 +564,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2022.0403.1912;
 				DEVELOPMENT_TEAM = RM4A5PXTUX;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = RM4A5PXTUX;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SendbirdUIKitSample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -578,6 +579,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sendbird.uikit.reactnative.sample;
 				PRODUCT_NAME = SendbirdUIKitSample;
 				PROVISIONING_PROFILE_SPECIFIER = "match Development com.sendbird.uikit.reactnative.sample";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.sendbird.uikit.reactnative.sample";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
