@@ -15,6 +15,7 @@ import {
   ImageWithPlaceholder,
   Text,
   TextInput,
+  VideoThumbnail,
   createStyleSheet,
   useAlert,
   useBottomSheet,
@@ -22,6 +23,7 @@ import {
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
 import {
+  FileIcon,
   Logger,
   SendbirdBaseMessage,
   SendbirdChannel,
@@ -70,6 +72,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   const { STRINGS } = useLocalization();
   const { openSheet } = useBottomSheet();
   const toast = useToast();
+  const { mediaService } = usePlatformService();
 
   const messageReplyParams = useIIFE(() => {
     const { groupChannel } = sbOptions.uikit;
@@ -130,42 +133,52 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED;
   };
 
+  const getFileIconAsImage = (url: string) => {
+    return <ImageWithPlaceholder source={{ uri: url }} style={styles.previewImage} />;
+  };
+
+  const getFileIconAsVideoThumbnail = (url: string) => {
+    return (
+      <VideoThumbnail
+        style={styles.previewImage}
+        iconSize={0}
+        videoSource={url}
+        fetchThumbnailFromVideoSource={(uri) => mediaService.getVideoThumbnail({ url: uri, timeMills: 1000 })}
+      />
+    );
+  };
+
+  const getFileIconAsSymbol = (icon: FileIcon) => {
+    return (
+      <Icon
+        icon={icon}
+        size={20}
+        color={colors.onBackground02}
+        containerStyle={{
+          backgroundColor: select({
+            light: palette.background100,
+            dark: palette.background500,
+          }),
+          width: 36,
+          height: 36,
+          borderRadius: 10,
+          marginRight: 10,
+          marginTop: 2,
+        }}
+      />
+    );
+  };
+
   const getFileIcon = (messageToReply: SendbirdBaseMessage) => {
     if (messageToReply?.isFileMessage()) {
       const messageType = getMessageType(messageToReply);
-      if (messageType === 'file.image') {
-        return (
-          <ImageWithPlaceholder
-            source={{ uri: getAvailableUriFromFileMessage(messageToReply) }}
-            style={{
-              width: 36,
-              height: 36,
-              borderRadius: 10,
-              marginTop: 2,
-              marginRight: 10,
-              overflow: 'hidden',
-            }}
-          />
-        );
-      } else {
-        return (
-          <Icon
-            icon={getFileIconFromMessageType(messageType)}
-            size={20}
-            color={colors.onBackground02}
-            containerStyle={{
-              backgroundColor: select({
-                light: palette.background100,
-                dark: palette.background500,
-              }),
-              width: 36,
-              height: 36,
-              borderRadius: 10,
-              marginRight: 10,
-              marginTop: 2,
-            }}
-          />
-        );
+      switch (messageType) {
+        case 'file.image':
+          return getFileIconAsImage(getAvailableUriFromFileMessage(messageToReply));
+        case 'file.video':
+          return getFileIconAsVideoThumbnail(getAvailableUriFromFileMessage(messageToReply));
+        default:
+          return getFileIconAsSymbol(getFileIconFromMessageType(messageType));
       }
     }
     return null;
@@ -463,6 +476,14 @@ const styles = createStyleSheet({
   iconSend: {
     marginLeft: 4,
     padding: 4,
+  },
+  previewImage: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    marginTop: 2,
+    marginRight: 10,
+    overflow: 'hidden',
   },
 });
 

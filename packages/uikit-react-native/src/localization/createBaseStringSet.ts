@@ -3,6 +3,7 @@ import type { Locale } from 'date-fns';
 import type { PartialDeep } from '@sendbird/uikit-utils';
 import {
   getDateSeparatorFormat,
+  getFileTypeFromMessage,
   getGroupChannelLastMessage,
   getGroupChannelPreviewTime,
   getGroupChannelTitle,
@@ -248,8 +249,11 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
         if (users.length === 2) return `${userNames.join(' and ')} are typing...`;
         return 'Several people are typing...';
       },
-      REPLY_FROM_SENDER_TO_RECEIVER: (sender, receiver) =>
-        `${sender.nickname || USER_NO_NAME} replied to ${receiver.nickname || USER_NO_NAME}`,
+      REPLY_FROM_SENDER_TO_RECEIVER: (reply, parent, currentUserId) => {
+        const senderNickname = reply.sender.nickname || USER_NO_NAME;
+        const receiverNickname = parent.sender.nickname || USER_NO_NAME;
+        return `${reply.sender.userId !== currentUserId ? senderNickname : 'You'} replied to ${receiverNickname}`;
+      },
 
       USER_BAR_ME_POSTFIX: ' (You)',
       USER_BAR_OPERATOR: 'Operator',
@@ -280,7 +284,24 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       CHANNEL_INPUT_EDIT_OK: 'Save',
       CHANNEL_INPUT_EDIT_CANCEL: 'Cancel',
       CHANNEL_INPUT_REPLY_PREVIEW_TITLE: (user) => `Reply to ${user.nickname || USER_NO_NAME}`,
-      CHANNEL_INPUT_REPLY_PREVIEW_BODY: (message) => (message.isUserMessage() ? message.message : message.name),
+      CHANNEL_INPUT_REPLY_PREVIEW_BODY: (message) => {
+        if (message.isFileMessage()) {
+          const fileType = getFileTypeFromMessage(message);
+          switch (fileType) {
+            case 'image':
+              return 'Photo';
+            case 'video':
+              return 'Video';
+            case 'audio':
+              return 'Audio';
+            default:
+              return message.name;
+          }
+        } else if (message.isUserMessage()) {
+          return message.message;
+        }
+        return 'Unknown message type.';
+      },
       ...overrides?.LABELS,
     },
     FILE_VIEWER: {

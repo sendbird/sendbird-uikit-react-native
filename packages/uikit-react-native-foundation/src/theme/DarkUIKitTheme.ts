@@ -99,6 +99,7 @@ const DarkUIKitTheme = createTheme({
               message: palette.onBackgroundDark02,
               highlight: palette.primary200,
               destructive: palette.error300,
+              blurred: palette.onBackgroundDark04,
             },
           },
         },

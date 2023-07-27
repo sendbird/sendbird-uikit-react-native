@@ -6,6 +6,7 @@ import {
   ImageWithPlaceholder,
   PressBox,
   Text,
+  VideoThumbnail,
   createStyleSheet,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
@@ -13,13 +14,14 @@ import {
   SendbirdFileMessage,
   SendbirdMessage,
   SendbirdUserMessage,
+  getAvailableUriFromFileMessage,
   getFileIconFromMessageType,
   getMessageType,
   useIIFE,
 } from '@sendbird/uikit-utils';
 
 import { GroupChannelContexts } from '../../domain/groupChannel/module/moduleContext';
-import { useLocalization } from '../../hooks/useContext';
+import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 
 type Props = {
   variant: 'outgoing' | 'incoming';
@@ -29,9 +31,11 @@ type Props = {
 };
 
 const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPress }: Props) => {
+  const { sdk } = useSendbirdChat();
   const groupChannelPubSub = useContext(GroupChannelContexts.PubSub);
   const { select, colors, palette } = useUIKitTheme();
   const { STRINGS } = useLocalization();
+  const { mediaService } = usePlatformService();
 
   const [parentMessage, setParentMessage] = useState(() => message);
   const type = getMessageType(parentMessage);
@@ -46,6 +50,38 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
       }
     });
   }, []);
+
+  const renderFileMessageAsVideoThumbnail = (url: string) => {
+    return (
+      <VideoThumbnail
+        style={styles.image}
+        iconSize={18}
+        videoSource={url}
+        fetchThumbnailFromVideoSource={(uri) => mediaService.getVideoThumbnail({ url: uri, timeMills: 1000 })}
+      />
+    );
+  };
+  const renderFileMessageAsPreview = (url: string) => {
+    return <ImageWithPlaceholder style={styles.image} source={{ uri: url }} />;
+  };
+  const renderFileMessageAsDownloadable = (name: string) => {
+    return (
+      <Box
+        style={styles.bubbleContainer}
+        backgroundColor={select({ light: palette.background100, dark: palette.background400 })}
+      >
+        <Icon
+          icon={getFileIconFromMessageType(type)}
+          size={16}
+          color={colors.onBackground03}
+          containerStyle={styles.fileIcon}
+        />
+        <Text body3 color={colors.onBackground03} numberOfLines={1} ellipsizeMode={'middle'}>
+          {name}
+        </Text>
+      </Box>
+    );
+  };
 
   const parentMessageComponent = useIIFE(() => {
     switch (type) {
@@ -63,29 +99,14 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
         );
       }
       case 'file':
-      case 'file.video': // TODO: video thumbnail preview
       case 'file.audio': {
-        return (
-          <Box
-            style={styles.bubbleContainer}
-            backgroundColor={select({ light: palette.background100, dark: palette.background400 })}
-          >
-            <Icon
-              icon={getFileIconFromMessageType(type)}
-              size={16}
-              color={colors.onBackground03}
-              containerStyle={styles.fileIcon}
-            />
-            <Text body3 color={colors.onBackground03} numberOfLines={1} ellipsizeMode={'middle'}>
-              {(parentMessage as SendbirdFileMessage).name}
-            </Text>
-          </Box>
-        );
+        return renderFileMessageAsDownloadable((parentMessage as SendbirdFileMessage).name);
+      }
+      case 'file.video': {
+        return renderFileMessageAsVideoThumbnail(getAvailableUriFromFileMessage(parentMessage as SendbirdFileMessage));
       }
       case 'file.image': {
-        return (
-          <ImageWithPlaceholder style={styles.image} source={{ uri: (parentMessage as SendbirdFileMessage).url }} />
-        );
+        return renderFileMessageAsPreview(getAvailableUriFromFileMessage(parentMessage as SendbirdFileMessage));
       }
       default: {
         return null;
@@ -104,7 +125,7 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
       >
         <Icon icon={'reply-filled'} size={13} color={colors.onBackground03} containerStyle={{ marginRight: 4 }} />
         <Text caption1 color={colors.onBackground03}>
-          {STRINGS.LABELS.REPLY_FROM_SENDER_TO_RECEIVER(childMessage.sender, parentMessage.sender)}
+          {STRINGS.LABELS.REPLY_FROM_SENDER_TO_RECEIVER(childMessage, parentMessage, sdk.currentUser?.userId)}
         </Text>
       </Box>
       <Box
@@ -138,6 +159,7 @@ const styles = createStyleSheet({
     width: 156,
     height: 104,
     borderRadius: 16,
+    overflow: 'hidden',
   },
   fileIcon: {
     width: 16,
