@@ -31,7 +31,7 @@ type Props = {
 };
 
 const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPress }: Props) => {
-  const { sdk } = useSendbirdChat();
+  const { currentUser } = useSendbirdChat();
   const groupChannelPubSub = useContext(GroupChannelContexts.PubSub);
   const { select, colors, palette } = useUIKitTheme();
   const { STRINGS } = useLocalization();
@@ -125,7 +125,7 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
       >
         <Icon icon={'reply-filled'} size={13} color={colors.onBackground03} containerStyle={{ marginRight: 4 }} />
         <Text caption1 color={colors.onBackground03}>
-          {STRINGS.LABELS.REPLY_FROM_SENDER_TO_RECEIVER(childMessage, parentMessage, sdk.currentUser?.userId)}
+          {STRINGS.LABELS.REPLY_FROM_SENDER_TO_RECEIVER(childMessage, parentMessage, currentUser?.userId)}
         </Text>
       </Box>
       <Box

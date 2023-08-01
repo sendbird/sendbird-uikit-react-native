@@ -247,7 +247,7 @@ export interface StringSet {
     REPLY_FROM_SENDER_TO_RECEIVER: (
       replyMessage: SendbirdUserMessage | SendbirdFileMessage,
       parentMessage: SendbirdUserMessage | SendbirdFileMessage,
-      currentUserId: string,
+      currentUserId?: string,
     ) => string;
 
     USER_BAR_ME_POSTFIX: string;
@@ -267,6 +267,7 @@ export interface StringSet {
     CHANNEL_INPUT_PLACEHOLDER_ACTIVE: string;
     CHANNEL_INPUT_PLACEHOLDER_DISABLED: string;
     CHANNEL_INPUT_PLACEHOLDER_MUTED: string;
+    CHANNEL_INPUT_PLACEHOLDER_REPLY: string;
     CHANNEL_INPUT_EDIT_OK: string;
     CHANNEL_INPUT_EDIT_CANCEL: string;
     /** ChannelInput > Attachments **/
