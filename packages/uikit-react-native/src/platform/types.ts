@@ -61,18 +61,20 @@ export interface FileSystemServiceInterface {
 }
 
 // ---------- MediaService ---------- //
-interface VideoProps {
+export type VideoProps = {
   source: { uri: string } | number;
   resizeMode?: 'cover' | 'contain' | 'stretch';
   onLoad?: () => void;
-}
-interface GetVideoThumbnailOptions {
+};
+
+export type GetVideoThumbnailOptions = {
   url: string;
   timeMills?: number;
   quality?: number;
-}
+};
+export type GetVideoThumbnailResult = Promise<{ path: string } | null>;
 
-interface CompressImageOptions {
+export type CompressImageOptions = {
   /**
    * A uri of image file to compress
    * */
@@ -93,10 +95,8 @@ interface CompressImageOptions {
    * 1 means highest quality and 0 the lowest quality.
    * */
   compressionRate?: number;
-}
-
-type GetVideoThumbnailResult = Promise<{ path: string } | null>;
-type CompressImageResult = Promise<{ uri: string; size: number } | null>;
+};
+export type CompressImageResult = Promise<{ uri: string; size: number } | null>;
 
 export interface MediaServiceInterface {
   VideoComponent<Props = {}>(props: VideoProps & Props): JSX.Element;
