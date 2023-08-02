@@ -25,14 +25,12 @@ export function isSendableMessage(msg?: SendbirdMessage | null): msg is Sendbird
   return msg !== undefined && msg !== null && 'sendingStatus' in msg;
 }
 
-export function isMyMessage(msg?: SendbirdMessage | null, currentUserId = '##__USER_ID_IS_NOT_PROVIDED__##') {
+export function isMyMessage(
+  msg?: SendbirdMessage | null,
+  currentUserId = '##__USER_ID_IS_NOT_PROVIDED__##',
+): msg is SendbirdSendableMessage {
   if (!isSendableMessage(msg)) return false;
-  return (
-    ('sender' in msg && msg.sender?.userId === currentUserId) ||
-    msg.sendingStatus === 'pending' ||
-    msg.sendingStatus === 'failed' ||
-    msg.sendingStatus === 'canceled'
-  );
+  return msg.sender?.userId === currentUserId;
 }
 
 export function messageKeyExtractor(message: SendbirdMessage): string {
@@ -100,7 +98,7 @@ export function getMessageUniqId(msg: SendbirdBaseMessage) {
 }
 
 export function getAvailableUriFromFileMessage(message: SendbirdFileMessage) {
-  if (!message.url && message.messageParams.file && 'uri' in message.messageParams.file) {
+  if (!message.url && message.messageParams?.file && 'uri' in message.messageParams.file) {
     return message.messageParams.file.uri;
   }
   return message.url;
