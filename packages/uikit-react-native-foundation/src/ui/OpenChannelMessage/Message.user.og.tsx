@@ -88,7 +88,7 @@ const OpenGraphUserMessage = (props: OpenChannelMessageProps<SendbirdUserMessage
                     </Text>
                   )}
 
-                  {Boolean(props.message.ogMetaData.defaultImage) && (
+                  {!!props.message.ogMetaData.defaultImage && (
                     <ImageWithPlaceholder
                       style={styles.ogImage}
                       source={{ uri: props.message.ogMetaData.defaultImage.url }}

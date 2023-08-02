@@ -16,7 +16,7 @@ function isCacheRestrictedError(error: SendbirdError) {
 
 async function initEmoji(sdk: SendbirdChatSDK, emojiManager: EmojiManager) {
   await emojiManager.init();
-  if (sdk.appInfo.emojiHash !== emojiManager.emojiHash) {
+  if (sdk.appInfo?.emojiHash !== emojiManager.emojiHash) {
     try {
       const container = await sdk.getAllEmoji();
       await emojiManager.init(container);

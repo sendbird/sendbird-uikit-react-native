@@ -9,7 +9,7 @@ describe('useGroupChannelMessagesWithCollection', () => {
     const sdk = createMockSendbirdChat();
     const channel = await sdk.groupChannel.getChannel('channel-1');
 
-    const { result } = renderHook(() => useGroupChannelMessagesWithCollection(sdk, channel, sdk.currentUser.userId));
+    const { result } = renderHook(() => useGroupChannelMessagesWithCollection(sdk, channel, sdk.currentUser?.userId));
 
     expect(result.current.loading).toBe(true);
     expect(result.current.refreshing).toBe(false);
@@ -32,7 +32,7 @@ describe('useGroupChannelMessagesWithCollection', () => {
       collectionCreator: jest.fn(() => channel.createMessageCollection(collectionParams)),
     };
 
-    renderHook(() => useGroupChannelMessagesWithCollection(sdk, channel, sdk.currentUser.userId, options));
+    renderHook(() => useGroupChannelMessagesWithCollection(sdk, channel, sdk.currentUser?.userId, options));
 
     await waitFor(() => {
       expect(options.collectionCreator).toHaveBeenCalled();
@@ -48,7 +48,7 @@ describe('useGroupChannelMessagesWithCollection', () => {
     const collectionCreator = jest.fn(() => collection.asMessageCollection());
 
     const { result } = renderHook(() =>
-      useGroupChannelMessagesWithCollection(sdk, groupChannel, sdk.currentUser.userId, { collectionCreator }),
+      useGroupChannelMessagesWithCollection(sdk, groupChannel, sdk.currentUser?.userId, { collectionCreator }),
     );
 
     await waitFor(() => {
@@ -76,7 +76,7 @@ describe('useGroupChannelMessagesWithCollection', () => {
     const collectionCreator = jest.fn(() => collection);
 
     const { unmount } = renderHook(() =>
-      useGroupChannelMessagesWithCollection(sdk, channel, sdk.currentUser.userId, { collectionCreator }),
+      useGroupChannelMessagesWithCollection(sdk, channel, sdk.currentUser?.userId, { collectionCreator }),
     );
 
     await waitFor(() => {
@@ -103,7 +103,7 @@ describe('useGroupChannelMessagesWithCollection', () => {
     const fetchableCollection = createMockMessageCollection({ sdk, groupChannel, limit: 10 });
 
     const { result } = renderHook(() =>
-      useGroupChannelMessagesWithCollection(sdk, groupChannel, sdk.currentUser.userId, {
+      useGroupChannelMessagesWithCollection(sdk, groupChannel, sdk.currentUser?.userId, {
         collectionCreator: () => fetchableCollection.asMessageCollection(),
       }),
     );
@@ -128,7 +128,7 @@ describe('useGroupChannelMessagesWithCollection', () => {
     const unFetchableCollection = createMockMessageCollection({ sdk, groupChannel, limit: 10, dataLength: 10 });
 
     const { result } = renderHook(() =>
-      useGroupChannelMessagesWithCollection(sdk, groupChannel, sdk.currentUser.userId, {
+      useGroupChannelMessagesWithCollection(sdk, groupChannel, sdk.currentUser?.userId, {
         collectionCreator: () => unFetchableCollection.asMessageCollection(),
       }),
     );

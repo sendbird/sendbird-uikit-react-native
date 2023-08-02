@@ -32,7 +32,7 @@ describe('useGroupChannelMessages', () => {
     const channel = await sdk.groupChannel.getChannel('test-channel');
     const options = { collectionCreator: jest.fn() };
 
-    renderHook(() => useGroupChannelMessages(sdk, channel, sdk.currentUser.userId, options));
+    renderHook(() => useGroupChannelMessages(sdk, channel, sdk.currentUser?.userId, options));
 
     await waitFor(() => {
       expect(useGroupChannelMessagesWithCollection).toHaveBeenCalledTimes(1);
@@ -44,7 +44,7 @@ describe('useGroupChannelMessages', () => {
     const channel = await sdk.groupChannel.getChannel('test-channel');
     const options = { collectionCreator: jest.fn(), enableCollectionWithoutLocalCache: true };
 
-    renderHook(() => useGroupChannelMessages(sdk, channel, sdk.currentUser.userId, options));
+    renderHook(() => useGroupChannelMessages(sdk, channel, sdk.currentUser?.userId, options));
 
     await waitFor(() => {
       expect(useGroupChannelMessagesWithCollection).toHaveBeenCalledTimes(1);
@@ -56,11 +56,11 @@ describe('useGroupChannelMessages', () => {
     const channel = await sdk.groupChannel.getChannel('test-channel');
     const options = { collectionCreator: jest.fn() };
 
-    renderHook(() => useGroupChannelMessages(sdk, channel, sdk.currentUser.userId, options));
+    renderHook(() => useGroupChannelMessages(sdk, channel, sdk.currentUser?.userId, options));
 
     await waitFor(() => {
       expect(useGroupChannelMessagesWithCollection).toHaveBeenCalledTimes(1);
-      expect(useGroupChannelMessagesWithCollection).toHaveBeenCalledWith(sdk, channel, sdk.currentUser.userId, options);
+      expect(useGroupChannelMessagesWithCollection).toHaveBeenCalledWith(sdk, channel, sdk.currentUser?.userId, options);
     });
   });
 
@@ -69,11 +69,11 @@ describe('useGroupChannelMessages', () => {
     const channel = await sdk.groupChannel.getChannel('test-channel');
     const options = { queryCreator: jest.fn() };
 
-    renderHook(() => useGroupChannelMessages(sdk, channel, sdk.currentUser.userId, options));
+    renderHook(() => useGroupChannelMessages(sdk, channel, sdk.currentUser?.userId, options));
 
     await waitFor(() => {
       expect(useGroupChannelMessagesWithQuery).toHaveBeenCalledTimes(1);
-      expect(useGroupChannelMessagesWithQuery).toHaveBeenCalledWith(sdk, channel, sdk.currentUser.userId, options);
+      expect(useGroupChannelMessagesWithQuery).toHaveBeenCalledWith(sdk, channel, sdk.currentUser?.userId, options);
     });
   });
 });

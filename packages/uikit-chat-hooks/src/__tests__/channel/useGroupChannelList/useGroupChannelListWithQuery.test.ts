@@ -9,7 +9,7 @@ describe('useGroupChannelListWithQuery', () => {
   it('should initialize and return default value', async () => {
     const sdk = createMockSendbirdChat();
 
-    const { result } = renderHook(() => useGroupChannelListWithQuery(sdk, sdk.currentUser.userId));
+    const { result } = renderHook(() => useGroupChannelListWithQuery(sdk, sdk.currentUser?.userId));
 
     expect(result.current.loading).toBe(true);
     expect(result.current.refreshing).toBe(false);
@@ -30,7 +30,7 @@ describe('useGroupChannelListWithQuery', () => {
       queryCreator: jest.fn(() => sdk.groupChannel.createMyGroupChannelListQuery(queryParams)),
     };
 
-    renderHook(() => useGroupChannelListWithQuery(sdk, sdk.currentUser.userId, options));
+    renderHook(() => useGroupChannelListWithQuery(sdk, sdk.currentUser?.userId, options));
 
     await waitFor(() => {
       expect(options.queryCreator).toHaveBeenCalled();
@@ -49,7 +49,7 @@ describe('useGroupChannelListWithQuery', () => {
     }) as unknown as GroupChannelListQuery;
     const queryCreator = jest.fn(() => query);
 
-    const { result } = renderHook(() => useGroupChannelListWithQuery(sdk, sdk.currentUser.userId, { queryCreator }));
+    const { result } = renderHook(() => useGroupChannelListWithQuery(sdk, sdk.currentUser?.userId, { queryCreator }));
     expect(result.current.refreshing).toBe(false);
     expect(queryCreator).toHaveBeenCalledTimes(1);
 
@@ -74,7 +74,7 @@ describe('useGroupChannelListWithQuery', () => {
     }) as unknown as GroupChannelListQuery;
 
     const { result } = renderHook(() =>
-      useGroupChannelListWithQuery(sdk, sdk.currentUser.userId, { queryCreator: () => fetchableQuery }),
+      useGroupChannelListWithQuery(sdk, sdk.currentUser?.userId, { queryCreator: () => fetchableQuery }),
     );
 
     await waitFor(() => {
@@ -102,7 +102,7 @@ describe('useGroupChannelListWithQuery', () => {
     }) as unknown as GroupChannelListQuery;
 
     const { result } = renderHook(() =>
-      useGroupChannelListWithQuery(sdk, sdk.currentUser.userId, { queryCreator: () => unFetchableQuery }),
+      useGroupChannelListWithQuery(sdk, sdk.currentUser?.userId, { queryCreator: () => unFetchableQuery }),
     );
 
     await waitFor(() => {

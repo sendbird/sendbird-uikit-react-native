@@ -15,7 +15,7 @@ const MessageOpenGraph = ({
   ogMetaData,
   variant,
 }: {
-  ogMetaData: Required<SendbirdUserMessage>['ogMetaData'];
+  ogMetaData: NonNullable<SendbirdUserMessage['ogMetaData']>;
   variant: 'outgoing' | 'incoming';
   onPressURL?: (url: string) => void;
   onLongPress?: () => void;
@@ -31,7 +31,7 @@ const MessageOpenGraph = ({
     >
       {({ pressed }) => (
         <Box backgroundColor={pressed ? color.pressed.background : color.enabled.background}>
-          {Boolean(ogMetaData.defaultImage) && (
+          {!!ogMetaData.defaultImage && (
             <ImageWithPlaceholder style={styles.ogImage} source={{ uri: ogMetaData.defaultImage.url }} />
           )}
 
@@ -42,7 +42,7 @@ const MessageOpenGraph = ({
             <Text numberOfLines={3} body2 color={colors.onBackground01} style={styles.ogTitle}>
               {ogMetaData.title}
             </Text>
-            {Boolean(ogMetaData.description) && (
+            {!!ogMetaData.description && (
               <Text numberOfLines={1} caption2 color={colors.onBackground01} style={styles.ogDesc}>
                 {ogMetaData.description}
               </Text>

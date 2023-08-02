@@ -10,7 +10,7 @@ describe('useGroupChannelMessagesWithQuery', () => {
   it('should initialize messages when entering channel', async () => {
     const channel = await sdk.groupChannel.getChannel('channel-1');
     const { result } = renderHook(() =>
-      useGroupChannelMessagesWithQuery(sdk, channel, sdk.currentUser.userId, { onChannelDeleted: jest.fn() }),
+      useGroupChannelMessagesWithQuery(sdk, channel, sdk.currentUser?.userId, { onChannelDeleted: jest.fn() }),
     );
 
     await waitFor(() => {
@@ -37,7 +37,7 @@ describe('useGroupChannelMessagesWithQuery', () => {
     const options = { queryCreator: jest.fn(() => channel.createPreviousMessageListQuery(queryParams)) };
 
     const { result } = renderHook(() =>
-      useGroupChannelMessagesWithQuery(sdk, channel, sdk.currentUser.userId, options),
+      useGroupChannelMessagesWithQuery(sdk, channel, sdk.currentUser?.userId, options),
     );
 
     await waitFor(() => {
@@ -52,7 +52,7 @@ describe('useGroupChannelMessagesWithQuery', () => {
     const channel = await sdk.groupChannel.getChannel('channel-4');
     const options = { onChannelDeleted: jest.fn() };
 
-    renderHook(() => useGroupChannelMessagesWithQuery(sdk, channel, sdk.currentUser.userId, options));
+    renderHook(() => useGroupChannelMessagesWithQuery(sdk, channel, sdk.currentUser?.userId, options));
 
     sdk.__emit('channel', 'group_onChannelDeleted', channel.url, 'group');
 

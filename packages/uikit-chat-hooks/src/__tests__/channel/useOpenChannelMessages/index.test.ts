@@ -24,10 +24,10 @@ describe('useOpenChannelMessages', () => {
     const channel = await sdk.openChannel.getChannel('channel-1');
     const options = { onChannelDeleted: jest.fn() };
 
-    renderHook(() => useOpenChannelMessages(sdk, channel, sdk.currentUser.userId, options));
+    renderHook(() => useOpenChannelMessages(sdk, channel, sdk.currentUser?.userId, options));
 
     await waitFor(() => {
-      expect(useOpenChannelMessagesWithQuery).toHaveBeenCalledWith(sdk, channel, sdk.currentUser.userId, options);
+      expect(useOpenChannelMessagesWithQuery).toHaveBeenCalledWith(sdk, channel, sdk.currentUser?.userId, options);
     });
   });
 });

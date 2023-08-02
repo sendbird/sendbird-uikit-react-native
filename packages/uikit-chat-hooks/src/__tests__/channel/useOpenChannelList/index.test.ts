@@ -23,10 +23,10 @@ describe('useOpenChannelList', () => {
   it('should call useOpenChannelListWithQuery with the correct arguments', async () => {
     const options = { queryCreator: jest.fn() };
 
-    renderHook(() => useOpenChannelList(sdk, sdk.currentUser.userId, options));
+    renderHook(() => useOpenChannelList(sdk, sdk.currentUser?.userId, options));
 
     await waitFor(() => {
-      expect(useOpenChannelListWithQuery).toHaveBeenCalledWith(sdk, sdk.currentUser.userId, options);
+      expect(useOpenChannelListWithQuery).toHaveBeenCalledWith(sdk, sdk.currentUser?.userId, options);
     });
   });
 });

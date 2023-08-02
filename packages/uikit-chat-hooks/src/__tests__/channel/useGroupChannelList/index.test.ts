@@ -31,7 +31,7 @@ describe('useGroupChannelList', () => {
     const sdk = createMockSendbirdChat({ localCacheEnabled: true });
     const options = { collectionCreator: jest.fn() };
 
-    renderHook(() => useGroupChannelList(sdk, sdk.currentUser.userId, options));
+    renderHook(() => useGroupChannelList(sdk, sdk.currentUser?.userId, options));
 
     await waitFor(() => {
       expect(useGroupChannelListWithCollection).toHaveBeenCalledTimes(1);
@@ -42,7 +42,7 @@ describe('useGroupChannelList', () => {
     const sdk = createMockSendbirdChat({ localCacheEnabled: false });
     const options = { collectionCreator: jest.fn(), enableCollectionWithoutLocalCache: true };
 
-    renderHook(() => useGroupChannelList(sdk, sdk.currentUser.userId, options));
+    renderHook(() => useGroupChannelList(sdk, sdk.currentUser?.userId, options));
 
     await waitFor(() => {
       expect(useGroupChannelListWithCollection).toHaveBeenCalledTimes(1);
@@ -53,11 +53,11 @@ describe('useGroupChannelList', () => {
     const sdk = createMockSendbirdChat({ localCacheEnabled: true });
     const options = { collectionCreator: jest.fn() };
 
-    renderHook(() => useGroupChannelList(sdk, sdk.currentUser.userId, options));
+    renderHook(() => useGroupChannelList(sdk, sdk.currentUser?.userId, options));
 
     await waitFor(() => {
       expect(useGroupChannelListWithCollection).toHaveBeenCalledTimes(1);
-      expect(useGroupChannelListWithCollection).toHaveBeenCalledWith(sdk, sdk.currentUser.userId, options);
+      expect(useGroupChannelListWithCollection).toHaveBeenCalledWith(sdk, sdk.currentUser?.userId, options);
     });
   });
 
@@ -65,11 +65,11 @@ describe('useGroupChannelList', () => {
     const sdk = createMockSendbirdChat({ localCacheEnabled: false });
     const options = { queryCreator: jest.fn() };
 
-    renderHook(() => useGroupChannelList(sdk, sdk.currentUser.userId, options));
+    renderHook(() => useGroupChannelList(sdk, sdk.currentUser?.userId, options));
 
     await waitFor(() => {
       expect(useGroupChannelListWithQuery).toHaveBeenCalledTimes(1);
-      expect(useGroupChannelListWithQuery).toHaveBeenCalledWith(sdk, sdk.currentUser.userId, options);
+      expect(useGroupChannelListWithQuery).toHaveBeenCalledWith(sdk, sdk.currentUser?.userId, options);
     });
   });
 });

@@ -9,7 +9,7 @@ describe('useGroupChannelListWithCollection', () => {
   it('should initialize and return default value', async () => {
     const sdk = createMockSendbirdChat();
 
-    const { result } = renderHook(() => useGroupChannelListWithCollection(sdk, sdk.currentUser.userId));
+    const { result } = renderHook(() => useGroupChannelListWithCollection(sdk, sdk.currentUser?.userId));
 
     expect(result.current.loading).toBe(true);
     expect(result.current.refreshing).toBe(false);
@@ -30,7 +30,7 @@ describe('useGroupChannelListWithCollection', () => {
       collectionCreator: jest.fn(() => sdk.groupChannel.createGroupChannelCollection(collectionParams)),
     };
 
-    renderHook(() => useGroupChannelListWithCollection(sdk, sdk.currentUser.userId, options));
+    renderHook(() => useGroupChannelListWithCollection(sdk, sdk.currentUser?.userId, options));
 
     await waitFor(() => {
       expect(options.collectionCreator).toHaveBeenCalled();
@@ -45,7 +45,7 @@ describe('useGroupChannelListWithCollection', () => {
     const collectionCreator = jest.fn(() => collection);
 
     const { result } = renderHook(() =>
-      useGroupChannelListWithCollection(sdk, sdk.currentUser.userId, { collectionCreator }),
+      useGroupChannelListWithCollection(sdk, sdk.currentUser?.userId, { collectionCreator }),
     );
     expect(result.current.refreshing).toBe(false);
     expect(collectionCreator).toHaveBeenCalledTimes(1);
@@ -69,7 +69,7 @@ describe('useGroupChannelListWithCollection', () => {
     const collectionCreator = jest.fn(() => collection);
 
     const { unmount } = renderHook(() =>
-      useGroupChannelListWithCollection(sdk, sdk.currentUser.userId, { collectionCreator }),
+      useGroupChannelListWithCollection(sdk, sdk.currentUser?.userId, { collectionCreator }),
     );
 
     unmount();
@@ -85,7 +85,7 @@ describe('useGroupChannelListWithCollection', () => {
     const fetchableCollection = createMockGroupChannelCollection({ sdk, limit: 10, hasMore: true });
 
     const { result } = renderHook(() =>
-      useGroupChannelListWithCollection(sdk, sdk.currentUser.userId, { collectionCreator: () => fetchableCollection }),
+      useGroupChannelListWithCollection(sdk, sdk.currentUser?.userId, { collectionCreator: () => fetchableCollection }),
     );
 
     await waitFor(() => {
@@ -109,7 +109,7 @@ describe('useGroupChannelListWithCollection', () => {
     const unFetchableCollection = createMockGroupChannelCollection({ sdk, limit: 10, hasMore: false });
 
     const { result } = renderHook(() =>
-      useGroupChannelListWithCollection(sdk, sdk.currentUser.userId, {
+      useGroupChannelListWithCollection(sdk, sdk.currentUser?.userId, {
         collectionCreator: () => unFetchableCollection,
       }),
     );
