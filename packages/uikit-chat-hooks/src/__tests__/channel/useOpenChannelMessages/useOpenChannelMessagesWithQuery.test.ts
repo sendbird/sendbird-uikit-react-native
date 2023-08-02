@@ -37,7 +37,9 @@ describe('useOpenChannelMessagesWithQuery', () => {
     const queryParams = { limit: 20 };
     const options = { queryCreator: jest.fn(() => channel.createPreviousMessageListQuery(queryParams)) };
 
-    const { result } = renderHook(() => useOpenChannelMessagesWithQuery(sdk, channel, sdk.currentUser?.userId, options));
+    const { result } = renderHook(() =>
+      useOpenChannelMessagesWithQuery(sdk, channel, sdk.currentUser?.userId, options),
+    );
 
     await waitFor(() => {
       expect(options.queryCreator).toHaveBeenCalled();

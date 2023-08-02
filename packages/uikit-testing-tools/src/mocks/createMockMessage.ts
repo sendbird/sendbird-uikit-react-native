@@ -1,11 +1,5 @@
-import { ChannelType, User } from "@sendbird/chat";
-import {
-  AppleCriticalAlertOptions, BaseMessage,
-  MentionType,
-  MessageMetaArray,
-  MessageType, OGMetaData, Reaction, ScheduledInfo,
-  SendingStatus, ThreadInfo
-} from "@sendbird/chat/message";
+import { ChannelType } from '@sendbird/chat';
+import { MessageType, SendingStatus } from '@sendbird/chat/message';
 import type {
   SendbirdAdminMessage,
   SendbirdBaseMessage,
@@ -110,23 +104,4 @@ class MockMessage implements GetMockProps<Params, SendbirdBaseMessage> {
   asBaseMessage(): SendbirdBaseMessage {
     return this as unknown as SendbirdBaseMessage;
   }
-
-  appleCriticalAlertOptions: AppleCriticalAlertOptions | null;
-  customType: string;
-  data: string;
-  extendedMessage: object;
-  isOperatorMessage: boolean;
-  mentionType: MentionType | null;
-  mentionedMessageTemplate: string;
-  mentionedUserIds: string[] | null;
-  mentionedUsers: User[] | null;
-  metaArrays: MessageMetaArray[];
-  ogMetaData: OGMetaData | null;
-  parentMessage: BaseMessage | null;
-  parentMessageId: number;
-  reactions: Reaction[];
-  scheduledInfo: ScheduledInfo | null;
-  silent: boolean;
-  threadInfo: ThreadInfo | null;
-  updatedAt: number;
 }

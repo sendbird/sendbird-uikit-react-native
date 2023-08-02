@@ -60,7 +60,12 @@ describe('useGroupChannelMessages', () => {
 
     await waitFor(() => {
       expect(useGroupChannelMessagesWithCollection).toHaveBeenCalledTimes(1);
-      expect(useGroupChannelMessagesWithCollection).toHaveBeenCalledWith(sdk, channel, sdk.currentUser?.userId, options);
+      expect(useGroupChannelMessagesWithCollection).toHaveBeenCalledWith(
+        sdk,
+        channel,
+        sdk.currentUser?.userId,
+        options,
+      );
     });
   });
 
