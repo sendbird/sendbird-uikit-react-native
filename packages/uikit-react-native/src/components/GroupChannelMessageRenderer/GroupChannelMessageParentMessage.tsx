@@ -17,6 +17,7 @@ import {
   getAvailableUriFromFileMessage,
   getFileIconFromMessageType,
   getMessageType,
+  truncate,
   useIIFE,
 } from '@sendbird/uikit-utils';
 
@@ -77,7 +78,7 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
           containerStyle={styles.fileIcon}
         />
         <Text body3 color={colors.onBackground03} numberOfLines={1} ellipsizeMode={'middle'}>
-          {name}
+          {truncate(name, { mode: 'mid', maxLen: 20 })}
         </Text>
       </Box>
     );
