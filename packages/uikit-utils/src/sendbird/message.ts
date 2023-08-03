@@ -49,8 +49,8 @@ export function messageComparator(a: SendbirdMessage, b: SendbirdMessage) {
   let aStatusOffset = 0;
   let bStatusOffset = 0;
 
-  if (isSendableMessage(a) && a.sendingStatus !== 'succeeded') aStatusOffset = 999999;
-  if (isSendableMessage(b) && b.sendingStatus !== 'succeeded') bStatusOffset = 999999;
+  if (isSendableMessage(a) && a.sendingStatus !== 'succeeded') aStatusOffset = Number.MAX_SAFE_INTEGER;
+  if (isSendableMessage(b) && b.sendingStatus !== 'succeeded') bStatusOffset = Number.MAX_SAFE_INTEGER;
 
   return b.createdAt + bStatusOffset - (a.createdAt + aStatusOffset);
 }
