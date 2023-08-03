@@ -98,7 +98,10 @@ const defaultReducer = ({ ...draft }: State, action: Action) => {
 };
 
 const shouldTransitionSendingStatus = (prev: SendableMessage, next: SendableMessage) => {
-  if (prev.sendingStatus === SendingStatus.SUCCEEDED) return false;
+  // message data update
+  if (prev.sendingStatus === SendingStatus.SUCCEEDED) return next.sendingStatus === SendingStatus.SUCCEEDED;
+
+  // message sending status update
   return prev.sendingStatus !== next.sendingStatus;
 };
 
