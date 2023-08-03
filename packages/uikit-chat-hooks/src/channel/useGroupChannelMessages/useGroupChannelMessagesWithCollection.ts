@@ -9,6 +9,7 @@ import {
   confirmAndMarkAsRead,
   isDifferentChannel,
   isMyMessage,
+  isSendableMessage,
   useForceUpdate,
   useFreshCallback,
   useUniqHandlerId,
@@ -130,9 +131,11 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
           options?.onMessagesUpdated?.(messages);
         }
       },
-      onMessagesDeleted: (_, __, messageIds) => {
-        deleteMessages(messageIds, []);
-        deleteNewMessages(messageIds, []);
+      onMessagesDeleted: (_, __, ___, messages) => {
+        const msgIds = messages.map((it) => it.messageId);
+        const reqIds = messages.filter(isSendableMessage).map((it) => it.reqId);
+        deleteMessages(msgIds, reqIds);
+        deleteNewMessages(msgIds, reqIds);
       },
       onChannelDeleted: () => {
         options?.onChannelDeleted?.();
