@@ -7,7 +7,7 @@ import { useOpenChannelListWithQuery } from '../../../channel/useOpenChannelList
 describe('useOpenChannelListWithQuery', () => {
   it('should initialize and return open channels', async () => {
     const sdk = createMockSendbirdChat({ testType: 'success', userId: 'test' });
-    const { result } = renderHook(() => useOpenChannelListWithQuery(sdk, sdk.currentUser.userId));
+    const { result } = renderHook(() => useOpenChannelListWithQuery(sdk, sdk.currentUser?.userId));
 
     expect(result.current.loading).toBe(true);
     expect(result.current.openChannels).toHaveLength(0);
@@ -21,7 +21,7 @@ describe('useOpenChannelListWithQuery', () => {
 
   it('should refresh open channels', async () => {
     const sdk = createMockSendbirdChat({ testType: 'success', userId: 'test' });
-    const { result } = renderHook(() => useOpenChannelListWithQuery(sdk, sdk.currentUser.userId));
+    const { result } = renderHook(() => useOpenChannelListWithQuery(sdk, sdk.currentUser?.userId));
 
     await waitFor(() => {
       expect(sdk.openChannel.createOpenChannelListQuery).toHaveBeenCalledTimes(1);
@@ -41,7 +41,7 @@ describe('useOpenChannelListWithQuery', () => {
 
   it('should fetch next open channels', async () => {
     const sdk = createMockSendbirdChat({ testType: 'success', userId: 'test' });
-    const { result } = renderHook(() => useOpenChannelListWithQuery(sdk, sdk.currentUser.userId));
+    const { result } = renderHook(() => useOpenChannelListWithQuery(sdk, sdk.currentUser?.userId));
 
     let limit = 0;
 
@@ -64,7 +64,7 @@ describe('useOpenChannelListWithQuery', () => {
     const queryParams = { limit: 5 };
     const options = { queryCreator: jest.fn(() => sdk.openChannel.createOpenChannelListQuery(queryParams)) };
 
-    const { result } = renderHook(() => useOpenChannelListWithQuery(sdk, sdk.currentUser.userId, options));
+    const { result } = renderHook(() => useOpenChannelListWithQuery(sdk, sdk.currentUser?.userId, options));
 
     await waitFor(() => {
       expect(options.queryCreator).toHaveBeenCalledTimes(1);
@@ -86,7 +86,7 @@ describe('useOpenChannelListWithQuery', () => {
       }),
     };
 
-    const { result } = renderHook(() => useOpenChannelListWithQuery(sdk, sdk.currentUser.userId, options));
+    const { result } = renderHook(() => useOpenChannelListWithQuery(sdk, sdk.currentUser?.userId, options));
     expect(result.current.error).toEqual(null);
 
     await waitFor(() => {

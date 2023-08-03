@@ -10,7 +10,7 @@ describe('useOpenChannelMessagesWithQuery', () => {
   it('should initialize messages when entering channel', async () => {
     const channel = await sdk.openChannel.getChannel('channel-1');
     const { result } = renderHook(() =>
-      useOpenChannelMessagesWithQuery(sdk, channel, sdk.currentUser.userId, { onChannelDeleted: jest.fn() }),
+      useOpenChannelMessagesWithQuery(sdk, channel, sdk.currentUser?.userId, { onChannelDeleted: jest.fn() }),
     );
 
     await waitFor(() => {
@@ -37,7 +37,9 @@ describe('useOpenChannelMessagesWithQuery', () => {
     const queryParams = { limit: 20 };
     const options = { queryCreator: jest.fn(() => channel.createPreviousMessageListQuery(queryParams)) };
 
-    const { result } = renderHook(() => useOpenChannelMessagesWithQuery(sdk, channel, sdk.currentUser.userId, options));
+    const { result } = renderHook(() =>
+      useOpenChannelMessagesWithQuery(sdk, channel, sdk.currentUser?.userId, options),
+    );
 
     await waitFor(() => {
       expect(options.queryCreator).toHaveBeenCalled();
@@ -53,7 +55,7 @@ describe('useOpenChannelMessagesWithQuery', () => {
     const options = { onChannelDeleted: jest.fn(), onError: jest.fn() };
     channel.enter = jest.fn().mockRejectedValue(new Error('test-error'));
 
-    renderHook(() => useOpenChannelMessagesWithQuery(sdk, channel, sdk.currentUser.userId, options));
+    renderHook(() => useOpenChannelMessagesWithQuery(sdk, channel, sdk.currentUser?.userId, options));
 
     await waitFor(() => {
       expect(channel.enter).toHaveBeenCalledTimes(1);
@@ -66,7 +68,7 @@ describe('useOpenChannelMessagesWithQuery', () => {
     const channel = await sdk.openChannel.getChannel('channel-4');
     const options = { onChannelDeleted: jest.fn(), onError: jest.fn() };
 
-    renderHook(() => useOpenChannelMessagesWithQuery(sdk, channel, sdk.currentUser.userId, options));
+    renderHook(() => useOpenChannelMessagesWithQuery(sdk, channel, sdk.currentUser?.userId, options));
 
     sdk.__emit('channel', 'open_onChannelDeleted', channel.url, 'open');
 

@@ -217,10 +217,7 @@ class MentionManager {
   public shouldUseMentionedMessageTemplate = (
     message?: SendbirdUserMessage | SendbirdFileMessage,
     mentionEnabled?: boolean,
-  ): message is RequiredSpecific<
-    SendbirdUserMessage | SendbirdFileMessage,
-    'mentionedMessageTemplate' | 'mentionedUsers' | 'mentionedUserIds' | 'mentionType'
-  > => {
+  ): boolean => {
     return Boolean(
       mentionEnabled &&
         message?.mentionedMessageTemplate &&
@@ -229,10 +226,6 @@ class MentionManager {
     );
   };
 }
-
-type RequiredSpecific<T, K extends keyof T> = T & {
-  [P in K]-?: T[P];
-};
 
 const styles = createStyleSheet({
   mentionedText: { fontWeight: '700' },

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SendbirdFileMessage, getFileExtension, getFileType } from '@sendbird/uikit-utils';
+import { SendbirdFileMessage, getFileExtension, getFileType, truncate } from '@sendbird/uikit-utils';
 
 import Box from '../../components/Box';
 import Icon from '../../components/Icon';
@@ -38,7 +38,7 @@ const FileMessage = (props: Props) => {
                 color={pressed ? color.pressed.textMsg : color.enabled.textMsg}
                 style={styles.name}
               >
-                {props.strings?.fileName || props.message.name}
+                {truncate(props.strings?.fileName || props.message.name, { mode: 'mid', maxLen: 20 })}
               </Text>
             </Box>
             {props.children}

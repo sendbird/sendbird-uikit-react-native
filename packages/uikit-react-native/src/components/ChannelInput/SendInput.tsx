@@ -126,11 +126,12 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   const onPressAttachment = () => openSheet({ sheetItems });
 
   const getPlaceholder = () => {
-    if (!inputDisabled) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_ACTIVE;
-    if (inputFrozen) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED;
     if (inputMuted) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_MUTED;
+    if (inputFrozen) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED;
+    if (inputDisabled) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED;
+    if (messageToReply) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_REPLY;
 
-    return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED;
+    return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_ACTIVE;
   };
 
   const getFileIconAsImage = (url: string) => {

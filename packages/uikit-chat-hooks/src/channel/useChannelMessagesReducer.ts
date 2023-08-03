@@ -1,14 +1,9 @@
 import { useReducer } from 'react';
 
+import { SendableMessage } from '@sendbird/chat/lib/__definition';
+import { SendingStatus } from '@sendbird/chat/message';
 import type { SendbirdBaseMessage } from '@sendbird/uikit-utils';
-import {
-  SendbirdMessage,
-  arrayToMapWithGetter,
-  getMessageUniqId,
-  isNewMessage,
-  isSendableMessage,
-  useIIFE,
-} from '@sendbird/uikit-utils';
+import { SendbirdMessage, arrayToMapWithGetter, isMyMessage, isNewMessage, useIIFE } from '@sendbird/uikit-utils';
 
 type Options = {
   sortComparator?: (a: SendbirdMessage, b: SendbirdMessage) => number;
@@ -46,28 +41,37 @@ const defaultReducer = ({ ...draft }: State, action: Action) => {
       return draft;
     }
     case 'update_messages': {
+      const userId = action.value.currentUserId;
+
       if (action.value.clearBeforeAction) {
-        draft['messageMap'] = arrayToMapWithGetter(action.value.messages, getMessageUniqId);
+        draft['messageMap'] = arrayToMapWithGetter(action.value.messages, (it) => getMessageId(it, userId));
       } else {
+        // Filtering meaningless message updates
+        const nextMessages = action.value.messages.filter((next) => {
+          if (isMyMessage(next, userId)) {
+            const prev = draft['messageMap'][getMessageId(next, userId)];
+            if (isMyMessage(prev, userId)) return shouldUpdateMessage(prev, next);
+          }
+          return true;
+        });
+
         // Remove existing messages before update for prevent duplicate display
-        const messageKeys = action.value.messages
-          .map((it) => (isSendableMessage(it) ? [it.messageId, it.reqId] : [it.messageId]))
-          .flat();
-        messageKeys.forEach((key) => delete draft['messageMap'][key]);
+        nextMessages.map((it) => getMessageId(it, userId)).forEach((key) => delete draft['messageMap'][key]);
 
         draft['messageMap'] = {
           ...draft['messageMap'],
-          ...arrayToMapWithGetter(action.value.messages, getMessageUniqId),
+          ...arrayToMapWithGetter(nextMessages, (it) => getMessageId(it, userId)),
         };
       }
 
       return draft;
     }
     case 'update_new_messages': {
-      const newMessages = action.value.messages.filter((it) => isNewMessage(it, action.value.currentUserId));
+      const userId = action.value.currentUserId;
+      const newMessages = action.value.messages.filter((it) => isNewMessage(it, userId));
 
       if (action.value.clearBeforeAction) {
-        draft['newMessageMap'] = arrayToMapWithGetter(newMessages, getMessageUniqId);
+        draft['newMessageMap'] = arrayToMapWithGetter(newMessages, (it) => getMessageId(it, userId));
       } else {
         // Remove existing messages before update for prevent duplicate display
         const messageKeys = newMessages.map((it) => it.messageId);
@@ -75,7 +79,7 @@ const defaultReducer = ({ ...draft }: State, action: Action) => {
 
         draft['newMessageMap'] = {
           ...draft['newMessageMap'],
-          ...arrayToMapWithGetter(newMessages, getMessageUniqId),
+          ...arrayToMapWithGetter(newMessages, (it) => getMessageId(it, userId)),
         };
       }
 
@@ -91,6 +95,21 @@ const defaultReducer = ({ ...draft }: State, action: Action) => {
       return draft;
     }
   }
+};
+
+const shouldUpdateMessage = (prev: SendableMessage, next: SendableMessage) => {
+  // message data update (e.g. reactions)
+  if (prev.sendingStatus === SendingStatus.SUCCEEDED) return next.sendingStatus === SendingStatus.SUCCEEDED;
+
+  // message sending status update
+  return prev.sendingStatus !== next.sendingStatus;
+};
+
+const getMessageId = (message: SendbirdBaseMessage, userId?: string) => {
+  if (isMyMessage(message, userId) && message.reqId) {
+    return message.reqId;
+  }
+  return String(message.messageId);
 };
 
 export const useChannelMessagesReducer = (sortComparator?: Options['sortComparator']) => {

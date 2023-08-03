@@ -15,6 +15,7 @@ import {
   getOpenChannelTitle,
 } from '@sendbird/uikit-utils';
 
+import { UNKNOWN_USER_ID } from '../constants';
 import type { StringSet } from './StringSet.type';
 
 type StringSetCreateOptions = {
@@ -249,7 +250,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
         if (users.length === 2) return `${userNames.join(' and ')} are typing...`;
         return 'Several people are typing...';
       },
-      REPLY_FROM_SENDER_TO_RECEIVER: (reply, parent, currentUserId) => {
+      REPLY_FROM_SENDER_TO_RECEIVER: (reply, parent, currentUserId = UNKNOWN_USER_ID) => {
         const senderNickname = reply.sender.nickname || USER_NO_NAME;
         const receiverNickname = parent.sender.nickname || USER_NO_NAME;
         return `${reply.sender.userId !== currentUserId ? senderNickname : 'You'} replied to ${receiverNickname}`;
@@ -281,6 +282,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       CHANNEL_INPUT_PLACEHOLDER_ACTIVE: 'Enter message',
       CHANNEL_INPUT_PLACEHOLDER_DISABLED: 'Chat not available in this channel.',
       CHANNEL_INPUT_PLACEHOLDER_MUTED: "You're muted by the operator.",
+      CHANNEL_INPUT_PLACEHOLDER_REPLY: 'Reply to message',
       CHANNEL_INPUT_EDIT_OK: 'Save',
       CHANNEL_INPUT_EDIT_CANCEL: 'Cancel',
       CHANNEL_INPUT_REPLY_PREVIEW_TITLE: (user) => `Reply to ${user.nickname || USER_NO_NAME}`,

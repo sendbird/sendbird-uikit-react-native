@@ -20,7 +20,6 @@
   "sideEffects": false,
   "scripts": {
     "test": "jest",
-    "build": "bob build",
     "clean": "del lib"
   },
   "repository": {
