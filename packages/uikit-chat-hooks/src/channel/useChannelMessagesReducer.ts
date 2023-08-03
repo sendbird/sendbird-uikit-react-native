@@ -46,11 +46,11 @@ const defaultReducer = ({ ...draft }: State, action: Action) => {
       if (action.value.clearBeforeAction) {
         draft['messageMap'] = arrayToMapWithGetter(action.value.messages, (it) => getMessageId(it, userId));
       } else {
-        // Filtering meaningless sendingStatus transition
+        // Filtering meaningless message updates
         const nextMessages = action.value.messages.filter((next) => {
           if (isMyMessage(next, userId)) {
             const prev = draft['messageMap'][getMessageId(next, userId)];
-            if (isMyMessage(prev, userId)) return shouldTransitionSendingStatus(prev, next);
+            if (isMyMessage(prev, userId)) return shouldUpdateMessage(prev, next);
           }
           return true;
         });
@@ -97,8 +97,8 @@ const defaultReducer = ({ ...draft }: State, action: Action) => {
   }
 };
 
-const shouldTransitionSendingStatus = (prev: SendableMessage, next: SendableMessage) => {
-  // message data update
+const shouldUpdateMessage = (prev: SendableMessage, next: SendableMessage) => {
+  // message data update (e.g. reactions)
   if (prev.sendingStatus === SendingStatus.SUCCEEDED) return next.sendingStatus === SendingStatus.SUCCEEDED;
 
   // message sending status update
