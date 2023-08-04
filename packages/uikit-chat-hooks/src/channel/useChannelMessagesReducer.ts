@@ -57,7 +57,7 @@ const defaultReducer = ({ ...draft }: State, action: Action) => {
         // Filtering meaningless message updates
         const nextMessages = action.value.messages.filter((next) => {
           if (isMyMessage(next, userId)) {
-            const prev = draft['messageMap'][next.reqId] || draft['messageMap'][next.messageId];
+            const prev = draft['messageMap'][next.reqId] ?? draft['messageMap'][next.messageId];
             if (isMyMessage(prev, userId)) {
               const shouldUpdate = shouldUpdateMessage(prev, next);
               if (shouldUpdate) {
