@@ -22,31 +22,49 @@ const tc = createTestContext();
 class MockMessage implements GetMockProps<Params, SendbirdBaseMessage> {
   constructor(public params: Params) {
     tc.increaseIncrement();
-    this.__updateIdsBySendingStatus();
+    this.__updateIdsBySendingStatus(params);
     Object.assign(this, params);
   }
 
-  __updateIdsBySendingStatus() {
-    if (!this.params.sendingStatus) return;
+  __updateIdsBySendingStatus(params: Params) {
+    if (!params.sendingStatus) return;
 
     const self = this.asSendableMessage();
-    const notSent = [SendingStatus.PENDING, SendingStatus.FAILED, SendingStatus.CANCELED].some(
-      (it) => this.params.sendingStatus === it,
+    self.reqId = String(Date.now()) + tc.increment;
+
+    const unsent = [SendingStatus.PENDING, SendingStatus.FAILED, SendingStatus.CANCELED].some(
+      (it) => params.sendingStatus === it,
     );
-    if (notSent) {
+    if (unsent) {
       self.messageId = 0;
-      self.reqId = String(Date.now()) + tc.increment;
     } else {
       self.messageId = tc.getRandom();
-      self.reqId = '';
     }
   }
 
-  channelType: ChannelType = ChannelType.BASE;
-  channelUrl: string = 'channel_url_' + tc.getHash();
-  createdAt: number = tc.date + tc.increment;
-  messageId: number = tc.getRandom();
+  channelType = ChannelType.BASE;
+  channelUrl = 'channel_url_' + tc.getHash();
+  createdAt = tc.date + tc.increment;
+  updatedAt = 0;
+  messageId = tc.getRandom();
   messageType = MessageType.BASE;
+  parentMessageId = 0;
+  parentMessage = null;
+  silent = false;
+  isOperatorMessage = false;
+  data = '';
+  customType = '';
+  mentionType = null;
+  mentionedUsers = null;
+  mentionedUserIds = null;
+  mentionedMessageTemplate = '';
+  threadInfo = null;
+  reactions = [];
+  metaArrays = [];
+  ogMetaData = null;
+  appleCriticalAlertOptions = null;
+  scheduledInfo = null;
+  extendedMessage = {};
 
   isFileMessage(): this is SendbirdFileMessage {
     return this.messageType === MessageType.FILE && !Object.prototype.hasOwnProperty.call(this, 'fileInfoList');

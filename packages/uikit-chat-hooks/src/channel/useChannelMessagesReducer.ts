@@ -3,7 +3,15 @@ import { useReducer } from 'react';
 import { SendableMessage } from '@sendbird/chat/lib/__definition';
 import { SendingStatus } from '@sendbird/chat/message';
 import type { SendbirdBaseMessage } from '@sendbird/uikit-utils';
-import { SendbirdMessage, arrayToMapWithGetter, isMyMessage, isNewMessage, useIIFE } from '@sendbird/uikit-utils';
+import {
+  SendbirdMessage,
+  arrayToMapWithGetter,
+  getMessageUniqId,
+  isMyMessage,
+  isNewMessage,
+  isSendableMessage,
+  useIIFE,
+} from '@sendbird/uikit-utils';
 
 type Options = {
   sortComparator?: (a: SendbirdMessage, b: SendbirdMessage) => number;
@@ -44,24 +52,27 @@ const defaultReducer = ({ ...draft }: State, action: Action) => {
       const userId = action.value.currentUserId;
 
       if (action.value.clearBeforeAction) {
-        draft['messageMap'] = arrayToMapWithGetter(action.value.messages, (it) => getMessageId(it, userId));
+        draft['messageMap'] = messagesToObject(action.value.messages);
       } else {
         // Filtering meaningless message updates
         const nextMessages = action.value.messages.filter((next) => {
           if (isMyMessage(next, userId)) {
-            const prev = draft['messageMap'][getMessageId(next, userId)];
-            if (isMyMessage(prev, userId)) return shouldUpdateMessage(prev, next);
+            const prev = draft['messageMap'][next.reqId] ?? draft['messageMap'][next.messageId];
+            if (isMyMessage(prev, userId)) {
+              const shouldUpdate = shouldUpdateMessage(prev, next);
+              if (shouldUpdate) {
+                // Remove existing messages before update to prevent duplicate display
+                delete draft['messageMap'][prev.reqId];
+                delete draft['messageMap'][prev.messageId];
+              }
+              return shouldUpdate;
+            }
           }
           return true;
         });
 
-        // Remove existing messages before update for prevent duplicate display
-        nextMessages.map((it) => getMessageId(it, userId)).forEach((key) => delete draft['messageMap'][key]);
-
-        draft['messageMap'] = {
-          ...draft['messageMap'],
-          ...arrayToMapWithGetter(nextMessages, (it) => getMessageId(it, userId)),
-        };
+        const obj = messagesToObject(nextMessages);
+        draft['messageMap'] = { ...draft['messageMap'], ...obj };
       }
 
       return draft;
@@ -71,15 +82,15 @@ const defaultReducer = ({ ...draft }: State, action: Action) => {
       const newMessages = action.value.messages.filter((it) => isNewMessage(it, userId));
 
       if (action.value.clearBeforeAction) {
-        draft['newMessageMap'] = arrayToMapWithGetter(newMessages, (it) => getMessageId(it, userId));
+        draft['newMessageMap'] = arrayToMapWithGetter(newMessages, getMessageUniqId);
       } else {
-        // Remove existing messages before update for prevent duplicate display
+        // Remove existing messages before update to prevent duplicate display
         const messageKeys = newMessages.map((it) => it.messageId);
         messageKeys.forEach((key) => delete draft['newMessageMap'][key]);
 
         draft['newMessageMap'] = {
           ...draft['newMessageMap'],
-          ...arrayToMapWithGetter(newMessages, (it) => getMessageId(it, userId)),
+          ...arrayToMapWithGetter(newMessages, getMessageUniqId),
         };
       }
 
@@ -89,12 +100,38 @@ const defaultReducer = ({ ...draft }: State, action: Action) => {
     case 'delete_new_messages': {
       const key = action.type === 'delete_messages' ? 'messageMap' : 'newMessageMap';
       draft[key] = { ...draft[key] };
-      action.value.messageIds.forEach((msgId) => delete draft[key][msgId]);
-      action.value.reqIds.forEach((reqId) => delete draft[key][reqId]);
+      action.value.messageIds.forEach((msgId) => {
+        const message = draft[key][msgId];
+        if (message) {
+          if (isSendableMessage(message)) delete draft[key][message.reqId];
+          delete draft[key][message.messageId];
+        }
+      });
+      action.value.reqIds.forEach((reqId) => {
+        const message = draft[key][reqId];
+        if (message) {
+          if (isSendableMessage(message)) delete draft[key][message.reqId];
+          delete draft[key][message.messageId];
+        }
+      });
 
       return draft;
     }
   }
+};
+
+const messagesToObject = (messages: SendbirdBaseMessage[]) => {
+  return messages.reduce((accum, curr) => {
+    if (isSendableMessage(curr)) {
+      accum[curr.reqId] = curr;
+      if (curr.sendingStatus === SendingStatus.SUCCEEDED) {
+        accum[curr.messageId] = curr;
+      }
+    } else {
+      accum[curr.messageId] = curr;
+    }
+    return accum;
+  }, {} as Record<string, SendbirdBaseMessage>);
 };
 
 const shouldUpdateMessage = (prev: SendableMessage, next: SendableMessage) => {
@@ -103,13 +140,6 @@ const shouldUpdateMessage = (prev: SendableMessage, next: SendableMessage) => {
 
   // message sending status update
   return prev.sendingStatus !== next.sendingStatus;
-};
-
-const getMessageId = (message: SendbirdBaseMessage, userId?: string) => {
-  if (isMyMessage(message, userId) && message.reqId) {
-    return message.reqId;
-  }
-  return String(message.messageId);
 };
 
 export const useChannelMessagesReducer = (sortComparator?: Options['sortComparator']) => {
@@ -140,8 +170,8 @@ export const useChannelMessagesReducer = (sortComparator?: Options['sortComparat
   };
 
   const messages = useIIFE(() => {
-    if (sortComparator) return Object.values(messageMap).sort(sortComparator);
-    return Object.values(messageMap);
+    if (sortComparator) return Array.from(new Set(Object.values(messageMap))).sort(sortComparator);
+    return Array.from(new Set(Object.values(messageMap)));
   });
   const newMessages = Object.values(newMessageMap);
 
