@@ -31,6 +31,7 @@ import type {
   OpenChannelUpdateParams,
   SendableMessage,
 } from '@sendbird/chat/lib/__definition';
+import { FeedChannel } from '@sendbird/chat/lib/__definition';
 import type {
   AdminMessage,
   BaseMessage,
@@ -107,6 +108,7 @@ export type SendbirdParticipant = Participant;
 export type SendbirdGroupChannel = GroupChannel;
 export type SendbirdBaseChannel = BaseChannel;
 export type SendbirdOpenChannel = OpenChannel;
+export type SendbirdFeedChannel = FeedChannel;
 
 export type SendbirdReaction = Reaction;
 export type SendbirdEmoji = Emoji;
