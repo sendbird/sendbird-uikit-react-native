@@ -15,6 +15,7 @@ import type {
   User,
   UserUpdateParams,
 } from '@sendbird/chat';
+import type { FeedChannel } from '@sendbird/chat/feedChannel';
 import type {
   GroupChannel,
   GroupChannelCollection,
@@ -31,7 +32,6 @@ import type {
   OpenChannelUpdateParams,
   SendableMessage,
 } from '@sendbird/chat/lib/__definition';
-import { FeedChannel } from '@sendbird/chat/lib/__definition';
 import type {
   AdminMessage,
   BaseMessage,
