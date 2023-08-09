@@ -44,6 +44,7 @@ import type { Poll, PollChangelogs, PollListQuery, PollVoteEvent, PollVoterListQ
 import type {
   SendbirdBaseChannel,
   SendbirdBaseMessage,
+  SendbirdFeedChannel,
   SendbirdFileMessage,
   SendbirdGroupChannel,
   SendbirdMember,
@@ -83,7 +84,6 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
   customType = '';
   data = '';
   creator = createMockUser({ userId: 'creator-user-id' });
-
   createdAt: number = tc.date + tc.increment;
   participantCount = 0;
   operators = [];
@@ -98,6 +98,7 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
   readonly isPublic = true;
   readonly isSuper = false;
   readonly isPushEnabled = true;
+  readonly isChatNotification = false;
   joinedAt = Date.now();
   joinedMemberCount = 0;
   lastMessage = createMockMessage({});
@@ -421,7 +422,9 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
   isGroupChannel(): this is SendbirdGroupChannel {
     return this.channelType === ChannelType.GROUP;
   }
-
+  isFeedChannel(): this is SendbirdFeedChannel {
+    return this.channelType === ChannelType.FEED;
+  }
   asOpenChannel(): SendbirdOpenChannel {
     return this as unknown as SendbirdOpenChannel;
   }

@@ -40,7 +40,7 @@ class MockGroupChannelCollection implements GetMockProps<Params, SendbirdGroupCh
   loadMore = jest.fn(async () => {
     const channels = Array(this.params.limit ?? 20)
       .fill(null)
-      .map(() => createMockChannel({ sdk: this.params.sdk, channelType: ChannelType.GROUP }));
+      .map(() => createMockChannel({ sdk: this.params.sdk, channelType: ChannelType.GROUP }).asGroupChannel());
 
     this.channels = [...this.channels, ...channels];
     return channels;

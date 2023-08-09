@@ -216,13 +216,18 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
   const { clipboardService, fileService } = usePlatformService();
   const { sbOptions } = useSendbirdChat();
 
+  const onFailureToReSend = (error: Error) => {
+    toast.show(STRINGS.TOAST.RESEND_MSG_ERROR, 'error');
+    Logger.error(STRINGS.TOAST.RESEND_MSG_ERROR, error);
+  };
+
   const handleFailedMessage = (message: HandleableMessage) => {
     openSheet({
       sheetItems: [
         {
           title: STRINGS.LABELS.CHANNEL_MESSAGE_FAILED_RETRY,
           onPress: () => {
-            onResendFailedMessage(message).catch(() => toast.show(STRINGS.TOAST.RESEND_MSG_ERROR, 'error'));
+            onResendFailedMessage(message).catch(onFailureToReSend);
           },
         },
         {
@@ -355,7 +360,7 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
     if (msg.sendingStatus === 'failed') {
       response.onLongPress = () => handleFailedMessage(msg);
       response.onPress = () => {
-        onResendFailedMessage(msg).catch(() => toast.show(STRINGS.TOAST.RESEND_MSG_ERROR, 'error'));
+        onResendFailedMessage(msg).catch(onFailureToReSend);
       };
     }
 

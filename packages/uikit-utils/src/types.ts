@@ -15,6 +15,7 @@ import type {
   User,
   UserUpdateParams,
 } from '@sendbird/chat';
+import type { FeedChannel } from '@sendbird/chat/feedChannel';
 import type {
   GroupChannel,
   GroupChannelCollection,
@@ -107,6 +108,7 @@ export type SendbirdParticipant = Participant;
 export type SendbirdGroupChannel = GroupChannel;
 export type SendbirdBaseChannel = BaseChannel;
 export type SendbirdOpenChannel = OpenChannel;
+export type SendbirdFeedChannel = FeedChannel;
 
 export type SendbirdReaction = Reaction;
 export type SendbirdEmoji = Emoji;

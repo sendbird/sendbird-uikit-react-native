@@ -47,27 +47,37 @@ export const VideoThumbnail = ({ fetchThumbnailFromVideoSource, style, videoSour
 const useRetry = (fetch: () => Promise<{ path: string } | null>, retryCount = 5) => {
   const [state, setState] = useState({ thumbnail: null as null | string, loading: true });
   const retryCountRef = useRef(0);
-  const retryTimeoutRef = useRef<NodeJS.Timeout>();
   const fetchThumbnail = useRef(fetch);
   fetchThumbnail.current = fetch;
 
   useEffect(() => {
     if (!state.thumbnail) {
-      const reloadReservation = () => {
+      const tryFetchThumbnail = (timeout: number) => {
+        const retry = () => {
+          retryCountRef.current++;
+          tryFetchThumbnail(timeout + 5000);
+        };
+
+        const finish = (path: string | null) => {
+          setState({ loading: false, thumbnail: path });
+        };
+
         if (retryCountRef.current < retryCount) {
-          retryTimeoutRef.current = setTimeout(() => {
-            retryCountRef.current++;
-            reloadReservation();
-            fetchThumbnail.current().then((result) => {
-              setState({ loading: false, thumbnail: result?.path ?? null });
-            });
-          }, retryCountRef.current * 5000);
+          setTimeout(() => {
+            fetchThumbnail
+              .current()
+              .then((result) => {
+                if (result === null) retry();
+                else finish(result.path);
+              })
+              .catch(() => retry());
+          }, timeout);
+        } else {
+          finish(null);
         }
       };
 
-      return reloadReservation();
-    } else {
-      return clearTimeout(retryTimeoutRef.current);
+      tryFetchThumbnail(0);
     }
   }, [state.thumbnail]);
 

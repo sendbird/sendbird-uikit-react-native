@@ -29,7 +29,7 @@ const createNativeMediaService = ({
           url,
           format: 'jpeg',
           timeStamp: timeMills,
-          cacheName: hash(url),
+          cacheName: hash(url.split('?')[0]),
         });
         return { path };
       } catch {

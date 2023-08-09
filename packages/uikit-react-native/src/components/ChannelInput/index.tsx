@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
+import React, { MutableRefObject, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -98,7 +98,7 @@ const ChannelInput = (props: ChannelInputProps) => {
   const [inputHeight, setInputHeight] = useState(styles.inputDefault.height);
 
   useTypingTrigger(text, channel);
-  useTextPersistenceOnDisabled(text, onChangeText, props.inputDisabled);
+  useTextClearOnDisabled(onChangeText, props.inputDisabled);
   useAutoFocusOnEditMode(textInputRef, messageToEdit);
 
   const onPressToMention = (user: SendbirdMember, searchStringRange: Range) => {
@@ -174,16 +174,9 @@ const useTypingTrigger = (text: string, channel: SendbirdBaseChannel) => {
   }
 };
 
-const useTextPersistenceOnDisabled = (text: string, setText: (val: string) => void, chatDisabled: boolean) => {
-  const textTmpRef = useRef('');
-
+const useTextClearOnDisabled = (setText: (val: string) => void, chatDisabled: boolean) => {
   useEffect(() => {
-    if (chatDisabled) {
-      textTmpRef.current = text;
-      setText('');
-    } else {
-      setText(textTmpRef.current);
-    }
+    if (chatDisabled) setText('');
   }, [chatDisabled]);
 };
 

@@ -291,7 +291,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
           const fileType = getFileTypeFromMessage(message);
           switch (fileType) {
             case 'image':
-              return 'Photo';
+              return message.type.toLowerCase().includes('gif') ? 'GIF' : 'Photo';
             case 'video':
               return 'Video';
             case 'audio':
