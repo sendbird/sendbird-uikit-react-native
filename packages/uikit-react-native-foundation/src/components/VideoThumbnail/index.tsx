@@ -51,6 +51,9 @@ const useRetry = (fetch: () => Promise<{ path: string } | null>, retryCount = 5)
   fetchThumbnail.current = fetch;
 
   useEffect(() => {
+    let _timeout: NodeJS.Timeout;
+    let _cancelled = false;
+
     if (!state.thumbnail) {
       const tryFetchThumbnail = (timeout: number) => {
         const retry = () => {
@@ -59,11 +62,11 @@ const useRetry = (fetch: () => Promise<{ path: string } | null>, retryCount = 5)
         };
 
         const finish = (path: string | null) => {
-          setState({ loading: false, thumbnail: path });
+          if (!_cancelled) setState({ loading: false, thumbnail: path });
         };
 
         if (retryCountRef.current < retryCount) {
-          setTimeout(() => {
+          _timeout = setTimeout(() => {
             fetchThumbnail
               .current()
               .then((result) => {
@@ -79,6 +82,11 @@ const useRetry = (fetch: () => Promise<{ path: string } | null>, retryCount = 5)
 
       tryFetchThumbnail(0);
     }
+
+    return () => {
+      _cancelled = true;
+      clearTimeout(_timeout);
+    };
   }, [state.thumbnail]);
 
   return state;
