@@ -61,7 +61,7 @@ export const useAppAuth = (onAutonomousSignIn?: (cred: SimpleCredential) => Prom
     await authManager
       .getAuthentication()
       .then(async (response) => {
-        if (response) await onAutonomousSignIn?.(response);
+        if (response) onAutonomousSignIn?.(response);
       })
       .finally(() => setLoading(false));
   }, []);
