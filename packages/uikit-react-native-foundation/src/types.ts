@@ -93,7 +93,7 @@ export type ComponentColorTree = GetColorTree<{
   ColorPart: {
     Header: 'background' | 'borderBottom';
     Button: 'background' | 'content';
-    Dialog: 'background' | 'text' | 'message' | 'highlight' | 'destructive';
+    Dialog: 'background' | 'text' | 'message' | 'highlight' | 'destructive' | 'blurred';
     Input: 'text' | 'placeholder' | 'background' | 'highlight';
     Badge: 'text' | 'background';
     Placeholder: 'content' | 'highlight';

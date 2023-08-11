@@ -55,8 +55,10 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
   onPressScrollToBottomButton: (animated?: boolean) => void;
 
   onEditMessage: (message: HandleableMessage) => void;
+  onReplyMessage?: (message: HandleableMessage) => void; // only available on group channel
   onDeleteMessage: (message: HandleableMessage) => Promise<void>;
   onResendFailedMessage: (failedMessage: HandleableMessage) => Promise<void>;
+  onPressParentMessage?: (parentMessage: SendbirdMessage) => void;
   onPressMediaMessage?: (message: SendbirdFileMessage, deleteMessage: () => Promise<void>, uri: string) => void;
 
   renderMessage: (props: {
@@ -66,6 +68,7 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
     nextMessage?: SendbirdMessage;
     onPress?: () => void;
     onLongPress?: () => void;
+    onPressParentMessage?: ChannelMessageListProps<T>['onPressParentMessage'];
     onShowUserProfile?: UserProfileContextType['show'];
     channel: T;
     currentUserId?: ChannelMessageListProps<T>['currentUserId'];
@@ -91,9 +94,11 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
     hasNext,
     channel,
     onEditMessage,
+    onReplyMessage,
     onDeleteMessage,
     onResendFailedMessage,
     onPressMediaMessage,
+    onPressParentMessage,
     currentUserId,
     renderNewMessagesButton,
     renderScrollToBottomButton,
@@ -119,6 +124,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
     channel,
     currentUserId,
     onEditMessage,
+    onReplyMessage,
     onDeleteMessage,
     onResendFailedMessage,
     onPressMediaMessage,
@@ -134,6 +140,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
       nextMessage: messages[index - 1],
       onPress,
       onLongPress,
+      onPressParentMessage,
       onShowUserProfile: show,
       enableMessageGrouping,
       channel,
@@ -188,11 +195,18 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
   currentUserId,
   onResendFailedMessage,
   onEditMessage,
+  onReplyMessage,
   onDeleteMessage,
   onPressMediaMessage,
 }: Pick<
   ChannelMessageListProps<T>,
-  'channel' | 'currentUserId' | 'onEditMessage' | 'onDeleteMessage' | 'onResendFailedMessage' | 'onPressMediaMessage'
+  | 'channel'
+  | 'currentUserId'
+  | 'onEditMessage'
+  | 'onReplyMessage'
+  | 'onDeleteMessage'
+  | 'onResendFailedMessage'
+  | 'onPressMediaMessage'
 >) => {
   const { colors } = useUIKitTheme();
   const { STRINGS } = useLocalization();
@@ -202,13 +216,18 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
   const { clipboardService, fileService } = usePlatformService();
   const { sbOptions } = useSendbirdChat();
 
+  const onFailureToReSend = (error: Error) => {
+    toast.show(STRINGS.TOAST.RESEND_MSG_ERROR, 'error');
+    Logger.error(STRINGS.TOAST.RESEND_MSG_ERROR, error);
+  };
+
   const handleFailedMessage = (message: HandleableMessage) => {
     openSheet({
       sheetItems: [
         {
           title: STRINGS.LABELS.CHANNEL_MESSAGE_FAILED_RETRY,
           onPress: () => {
-            onResendFailedMessage(message).catch(() => toast.show(STRINGS.TOAST.RESEND_MSG_ERROR, 'error'));
+            onResendFailedMessage(message).catch(onFailureToReSend);
           },
         },
         {
@@ -257,25 +276,7 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
           toast.show(STRINGS.TOAST.COPY_OK, 'success');
         },
       });
-
-      if (!channel.isEphemeral) {
-        if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
-          sheetItems.push(
-            {
-              icon: 'edit',
-              title: STRINGS.LABELS.CHANNEL_MESSAGE_EDIT,
-              onPress: () => onEditMessage(msg),
-            },
-            {
-              icon: 'delete',
-              title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
-              onPress: () => confirmDelete(msg),
-            },
-          );
-        }
-      }
     }
-
     if (msg.isFileMessage()) {
       sheetItems.push({
         icon: 'download',
@@ -297,17 +298,34 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
             });
         },
       });
-
-      if (!channel.isEphemeral) {
-        if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
+    }
+    if (!channel.isEphemeral) {
+      if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
+        if (msg.isUserMessage()) {
           sheetItems.push({
-            icon: 'delete',
-            title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
-            onPress: () => confirmDelete(msg),
+            icon: 'edit',
+            title: STRINGS.LABELS.CHANNEL_MESSAGE_EDIT,
+            onPress: () => onEditMessage(msg),
           });
         }
+        sheetItems.push({
+          disabled: msg.threadInfo ? msg.threadInfo.replyCount > 0 : undefined,
+          icon: 'delete',
+          title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
+          onPress: () => confirmDelete(msg),
+        });
       }
+      if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
+        sheetItems.push({
+          disabled: Boolean(msg.parentMessageId),
+          icon: 'reply',
+          title: STRINGS.LABELS.CHANNEL_MESSAGE_REPLY,
+          onPress: () => onReplyMessage?.(msg),
+        });
+      }
+    }
 
+    if (msg.isFileMessage()) {
       const fileType = getFileType(msg.type || getFileExtension(msg.name));
       switch (fileType) {
         case 'image':
@@ -342,7 +360,7 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
     if (msg.sendingStatus === 'failed') {
       response.onLongPress = () => handleFailedMessage(msg);
       response.onPress = () => {
-        onResendFailedMessage(msg).catch(() => toast.show(STRINGS.TOAST.RESEND_MSG_ERROR, 'error'));
+        onResendFailedMessage(msg).catch(onFailureToReSend);
       };
     }
 

@@ -10,6 +10,7 @@ import {
   calcMessageGrouping,
   getMessageType,
   isMyMessage,
+  shouldRenderParentMessage,
   shouldRenderReaction,
   useIIFE,
 } from '@sendbird/uikit-utils';
@@ -21,12 +22,14 @@ import { ReactionAddons } from '../ReactionAddons';
 import GroupChannelMessageDateSeparator from './GroupChannelMessageDateSeparator';
 import GroupChannelMessageFocusAnimation from './GroupChannelMessageFocusAnimation';
 import GroupChannelMessageOutgoingStatus from './GroupChannelMessageOutgoingStatus';
+import GroupChannelMessageParentMessage from './GroupChannelMessageParentMessage';
 
 const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
   channel,
   message,
   onPress,
   onLongPress,
+  onPressParentMessage,
   onShowUserProfile,
   enableMessageGrouping,
   focused,
@@ -55,9 +58,11 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     return null;
   });
 
+  const variant = isMyMessage(message, currentUser?.userId) ? 'outgoing' : 'incoming';
+
   const messageProps: Omit<GroupChannelMessageProps<SendbirdMessage>, 'message'> = {
     channel,
-    variant: isMyMessage(message, currentUser?.userId) ? 'outgoing' : 'incoming',
+    variant,
     onPress,
     onLongPress,
     onPressURL: (url) => SBUUtils.openURL(url),
@@ -72,6 +77,14 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     children: reactionChildren,
     sendingStatus: isMyMessage(message, currentUser?.userId) ? (
       <GroupChannelMessageOutgoingStatus channel={channel} message={message} />
+    ) : null,
+    parentMessage: shouldRenderParentMessage(message) ? (
+      <GroupChannelMessageParentMessage
+        variant={variant}
+        childMessage={message}
+        message={message.parentMessage}
+        onPress={onPressParentMessage}
+      />
     ) : null,
     strings: {
       edited: STRINGS.GROUP_CHANNEL.MESSAGE_BUBBLE_EDITED_POSTFIX,
@@ -185,6 +198,8 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
       } else {
         return 16;
       }
+    } else if (nextMessage && shouldRenderParentMessage(nextMessage)) {
+      return 16;
     } else if (groupWithNext) {
       return 2;
     } else {

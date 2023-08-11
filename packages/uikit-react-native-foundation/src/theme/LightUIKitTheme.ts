@@ -99,6 +99,7 @@ const LightUIKitTheme = createTheme({
               message: palette.onBackgroundLight02,
               highlight: palette.primary300,
               destructive: palette.error300,
+              blurred: palette.onBackgroundLight04,
             },
           },
         },

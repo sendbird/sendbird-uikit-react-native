@@ -85,7 +85,8 @@ const useMentionSuggestion = (params: {
           limit: mentionManager.config.suggestionLimit + 1,
         })
         .next()
-        .then((members) => members.filter((member) => member.userId !== currentUser?.userId));
+        .then((members) => members.filter((member) => member.userId !== currentUser?.userId))
+        .then((members) => members.slice(0, mentionManager.config.suggestionLimit));
     } else {
       return freshChannel.members
         .sort((a, b) => a.nickname?.localeCompare(b.nickname))

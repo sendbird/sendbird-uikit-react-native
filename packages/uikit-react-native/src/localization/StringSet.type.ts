@@ -9,6 +9,7 @@ import type {
   SendbirdOpenChannel,
   SendbirdParticipant,
   SendbirdUser,
+  SendbirdUserMessage,
 } from '@sendbird/uikit-utils';
 
 /**
@@ -243,6 +244,11 @@ export interface StringSet {
     USER_NO_NAME: string;
     CHANNEL_NO_MEMBERS: string;
     TYPING_INDICATOR_TYPINGS: (users: SendbirdUser[]) => string | undefined;
+    REPLY_FROM_SENDER_TO_RECEIVER: (
+      replyMessage: SendbirdUserMessage | SendbirdFileMessage,
+      parentMessage: SendbirdUserMessage | SendbirdFileMessage,
+      currentUserId?: string,
+    ) => string;
 
     USER_BAR_ME_POSTFIX: string;
     USER_BAR_OPERATOR: string;
@@ -261,6 +267,7 @@ export interface StringSet {
     CHANNEL_INPUT_PLACEHOLDER_ACTIVE: string;
     CHANNEL_INPUT_PLACEHOLDER_DISABLED: string;
     CHANNEL_INPUT_PLACEHOLDER_MUTED: string;
+    CHANNEL_INPUT_PLACEHOLDER_REPLY: string;
     CHANNEL_INPUT_EDIT_OK: string;
     CHANNEL_INPUT_EDIT_CANCEL: string;
     /** ChannelInput > Attachments **/
@@ -268,12 +275,15 @@ export interface StringSet {
     CHANNEL_INPUT_ATTACHMENT_CAMERA_VIDEO: string;
     CHANNEL_INPUT_ATTACHMENT_PHOTO_LIBRARY: string;
     CHANNEL_INPUT_ATTACHMENT_FILES: string;
+    CHANNEL_INPUT_REPLY_PREVIEW_TITLE: (user: SendbirdUser) => string;
+    CHANNEL_INPUT_REPLY_PREVIEW_BODY: (message: SendbirdUserMessage | SendbirdFileMessage) => string;
 
     /** Channel > Message **/
     CHANNEL_MESSAGE_COPY: string;
     CHANNEL_MESSAGE_EDIT: string;
     CHANNEL_MESSAGE_SAVE: string;
     CHANNEL_MESSAGE_DELETE: string;
+    CHANNEL_MESSAGE_REPLY: string;
     /** Channel > Message > Delete confirm **/
     CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE: string;
     CHANNEL_MESSAGE_DELETE_CONFIRM_OK: string;
@@ -327,6 +337,7 @@ export interface StringSet {
     LEAVE_CHANNEL_ERROR: string;
     UNKNOWN_ERROR: string;
     GET_CHANNEL_ERROR: string;
+    FIND_PARENT_MSG_ERROR: string;
   };
   PROFILE_CARD: {
     BUTTON_MESSAGE: string;

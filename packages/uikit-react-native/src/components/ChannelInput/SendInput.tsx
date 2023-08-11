@@ -9,17 +9,31 @@ import {
 } from 'react-native';
 
 import { MentionType } from '@sendbird/chat/message';
+import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation';
 import {
   Icon,
+  ImageWithPlaceholder,
+  Text,
   TextInput,
+  VideoThumbnail,
   createStyleSheet,
   useAlert,
   useBottomSheet,
   useToast,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation';
-import { SendbirdChannel, isImage, shouldCompressImage, useIIFE } from '@sendbird/uikit-utils';
+import {
+  FileIcon,
+  Logger,
+  SendbirdBaseMessage,
+  SendbirdChannel,
+  getAvailableUriFromFileMessage,
+  getFileIconFromMessageType,
+  getMessageType,
+  isImage,
+  shouldCompressImage,
+  useIIFE,
+} from '@sendbird/uikit-utils';
 
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 import SBUError from '../../libs/SBUError';
@@ -48,81 +62,192 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     inputFrozen,
     inputMuted,
     channel,
+    messageToReply,
+    setMessageToReply,
   },
   ref,
 ) {
   const { mentionManager, sbOptions } = useSendbirdChat();
+  const { select, colors, palette } = useUIKitTheme();
   const { STRINGS } = useLocalization();
-  const { colors } = useUIKitTheme();
   const { openSheet } = useBottomSheet();
   const toast = useToast();
+  const { mediaService } = usePlatformService();
 
-  const onFailureToSend = () => toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error');
+  const messageReplyParams = useIIFE(() => {
+    const { groupChannel } = sbOptions.uikit;
+    if (!channel.isGroupChannel() || groupChannel.channel.replyType === 'none' || !messageToReply) return {};
+    return {
+      parentMessageId: messageToReply.messageId,
+      isReplyToChannel: true,
+    };
+  });
+
+  const messageMentionParams = useIIFE(() => {
+    const { groupChannel } = sbOptions.uikit;
+    if (!channel.isGroupChannel() || !groupChannel.channel.enableMention) return {};
+    return {
+      mentionType: MentionType.USERS,
+      mentionedUserIds: mentionedUsers.map((it) => it.user.userId),
+      mentionedMessageTemplate: mentionManager.textToMentionedMessageTemplate(
+        text,
+        mentionedUsers,
+        groupChannel.channel.enableMention,
+      ),
+    };
+  });
+
+  const onFailureToSend = (error: Error) => {
+    toast.show(STRINGS.TOAST.SEND_MSG_ERROR, 'error');
+    Logger.error(STRINGS.TOAST.SEND_MSG_ERROR, error);
+  };
 
   const sendUserMessage = () => {
-    const mentionType = MentionType.USERS;
-    const mentionedUserIds = mentionedUsers.map((it) => it.user.userId);
-    const mentionedMessageTemplate = mentionManager.textToMentionedMessageTemplate(
-      text,
-      mentionedUsers,
-      sbOptions.uikit.groupChannel.channel.enableMention,
-    );
-
     onPressSendUserMessage({
       message: text,
-      mentionType,
-      mentionedUserIds,
-      mentionedMessageTemplate,
+      ...messageMentionParams,
+      ...messageReplyParams,
     }).catch(onFailureToSend);
 
     onChangeText('');
+    setMessageToReply?.();
   };
 
-  const sheetItems = useChannelInputItems(channel, (file) => {
-    onPressSendFileMessage({ file }).catch(onFailureToSend);
-  });
+  const sendFileMessage = (file: FileType) => {
+    onPressSendFileMessage({
+      file,
+      ...messageReplyParams,
+    }).catch(onFailureToSend);
+
+    setMessageToReply?.();
+  };
+
+  const sheetItems = useChannelInputItems(channel, sendFileMessage);
   const onPressAttachment = () => openSheet({ sheetItems });
 
   const getPlaceholder = () => {
-    if (!inputDisabled) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_ACTIVE;
-    if (inputFrozen) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED;
     if (inputMuted) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_MUTED;
+    if (inputFrozen) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED;
+    if (inputDisabled) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED;
+    if (messageToReply) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_REPLY;
 
-    return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED;
+    return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_ACTIVE;
+  };
+
+  const getFileIconAsImage = (url: string) => {
+    return <ImageWithPlaceholder source={{ uri: url }} style={styles.previewImage} />;
+  };
+
+  const getFileIconAsVideoThumbnail = (url: string) => {
+    return (
+      <VideoThumbnail
+        style={styles.previewImage}
+        iconSize={0}
+        videoSource={url}
+        fetchThumbnailFromVideoSource={(uri) => mediaService.getVideoThumbnail({ url: uri, timeMills: 1000 })}
+      />
+    );
+  };
+
+  const getFileIconAsSymbol = (icon: FileIcon) => {
+    return (
+      <Icon
+        icon={icon}
+        size={20}
+        color={colors.onBackground02}
+        containerStyle={{
+          backgroundColor: select({
+            light: palette.background100,
+            dark: palette.background500,
+          }),
+          width: 36,
+          height: 36,
+          borderRadius: 10,
+          marginRight: 10,
+          marginTop: 2,
+        }}
+      />
+    );
+  };
+
+  const getFileIcon = (messageToReply: SendbirdBaseMessage) => {
+    if (messageToReply?.isFileMessage()) {
+      const messageType = getMessageType(messageToReply);
+      switch (messageType) {
+        case 'file.image':
+          return getFileIconAsImage(getAvailableUriFromFileMessage(messageToReply));
+        case 'file.video':
+          return getFileIconAsVideoThumbnail(getAvailableUriFromFileMessage(messageToReply));
+        default:
+          return getFileIconAsSymbol(getFileIconFromMessageType(messageType));
+      }
+    }
+    return null;
   };
 
   return (
-    <View style={styles.sendInputContainer}>
-      {AttachmentsButton && <AttachmentsButton onPress={onPressAttachment} disabled={inputDisabled} />}
-      <TextInput
-        ref={ref}
-        multiline
-        disableFullscreenUI
-        onSelectionChange={onSelectionChange}
-        editable={!inputDisabled}
-        onChangeText={onChangeText}
-        style={styles.input}
-        placeholder={getPlaceholder()}
-      >
-        {mentionManager.textToMentionedComponents(
-          text,
-          mentionedUsers,
-          sbOptions.uikit.groupChannel.channel.enableMention,
-        )}
-      </TextInput>
-
-      {Boolean(text.trim()) && (
-        <TouchableOpacity onPress={sendUserMessage} disabled={inputDisabled}>
-          <Icon
-            color={
-              inputDisabled ? colors.ui.input.default.disabled.highlight : colors.ui.input.default.active.highlight
-            }
-            icon={'send'}
-            size={24}
-            containerStyle={styles.iconSend}
-          />
-        </TouchableOpacity>
+    <View>
+      {messageToReply && (
+        <View
+          style={{
+            flexDirection: 'row',
+            paddingLeft: 18,
+            paddingRight: 16,
+            paddingTop: 10,
+            paddingBottom: 8,
+            alignItems: 'center',
+            borderTopWidth: 1,
+            borderColor: colors.onBackground04,
+          }}
+        >
+          <View style={{ flex: 1, flexDirection: 'row' }}>
+            {getFileIcon(messageToReply)}
+            <View style={{ flex: 1, flexDirection: 'column' }}>
+              <Text numberOfLines={1} style={{ fontSize: 13, fontWeight: '900', marginBottom: 4 }}>
+                {STRINGS.LABELS.CHANNEL_INPUT_REPLY_PREVIEW_TITLE(messageToReply.sender)}
+              </Text>
+              <Text numberOfLines={1} style={{ fontSize: 13, color: colors.onBackground03 }}>
+                {STRINGS.LABELS.CHANNEL_INPUT_REPLY_PREVIEW_BODY(messageToReply)}
+              </Text>
+            </View>
+          </View>
+          <TouchableOpacity onPress={() => setMessageToReply?.(undefined)}>
+            <Icon icon={'close'} size={24} color={colors.onBackground01} containerStyle={styles.iconSend} />
+          </TouchableOpacity>
+        </View>
       )}
+      <View style={styles.sendInputContainer}>
+        {AttachmentsButton && <AttachmentsButton onPress={onPressAttachment} disabled={inputDisabled} />}
+        <TextInput
+          ref={ref}
+          multiline
+          disableFullscreenUI
+          onSelectionChange={onSelectionChange}
+          editable={!inputDisabled}
+          onChangeText={onChangeText}
+          style={styles.input}
+          placeholder={getPlaceholder()}
+        >
+          {mentionManager.textToMentionedComponents(
+            text,
+            mentionedUsers,
+            sbOptions.uikit.groupChannel.channel.enableMention,
+          )}
+        </TextInput>
+
+        {Boolean(text.trim()) && (
+          <TouchableOpacity onPress={sendUserMessage} disabled={inputDisabled}>
+            <Icon
+              color={
+                inputDisabled ? colors.ui.input.default.disabled.highlight : colors.ui.input.default.active.highlight
+              }
+              icon={'send'}
+              size={24}
+              containerStyle={styles.iconSend}
+            />
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 });
@@ -352,6 +477,14 @@ const styles = createStyleSheet({
   iconSend: {
     marginLeft: 4,
     padding: 4,
+  },
+  previewImage: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    marginTop: 2,
+    marginRight: 10,
+    overflow: 'hidden',
   },
 });
 

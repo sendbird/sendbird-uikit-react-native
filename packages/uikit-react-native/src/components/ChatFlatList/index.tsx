@@ -7,7 +7,7 @@ import { NOOP, SendbirdMessage, getMessageUniqId, useFreshCallback } from '@send
 import FlatListInternal from './FlatListInternal';
 
 let ANDROID_BUG_ALERT_SHOWED = Platform.OS !== 'android';
-const BOTTOM_DETECT_THRESHOLD = 25;
+const BOTTOM_DETECT_THRESHOLD = 50;
 const UNREACHABLE_THRESHOLD = Number.MIN_SAFE_INTEGER;
 
 type Props = Omit<FlatListProps<SendbirdMessage>, 'onEndReached'> & {

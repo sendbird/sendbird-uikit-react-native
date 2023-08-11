@@ -207,6 +207,7 @@ describe('useChannelMessagesReducer', () => {
   test('should replace pending messages to succeeded messages', () => {
     const me = createMockUser({ userId: 'sender1' }).asSender();
     const initMessage = createMockMessage({
+      reqId: 'req-id-1',
       messageId: 3,
       message: 'World',
       sendingStatus: SendingStatus.SUCCEEDED,
@@ -215,12 +216,14 @@ describe('useChannelMessagesReducer', () => {
 
     const pendingMessages = [
       createMockMessage({
+        reqId: 'req-id-2',
         sender: me,
         message: 'Hello',
         sendingStatus: SendingStatus.PENDING,
         messageType: MessageType.USER,
       }),
       createMockMessage({
+        reqId: 'req-id-3',
         sender: me,
         message: 'World',
         sendingStatus: SendingStatus.PENDING,
@@ -230,22 +233,16 @@ describe('useChannelMessagesReducer', () => {
 
     const sentMessages = [
       createMockMessage({
-        reqId: pendingMessages[0].asUserMessage().reqId,
-        sender: pendingMessages[0].asUserMessage().sender,
-        message: pendingMessages[0].asUserMessage().message,
+        ...pendingMessages[0],
         sendingStatus: SendingStatus.SUCCEEDED,
-        messageType: pendingMessages[0].asUserMessage().messageType,
       }),
       createMockMessage({
-        reqId: pendingMessages[1].asUserMessage().reqId,
-        sender: pendingMessages[1].asUserMessage().sender,
-        message: pendingMessages[1].asUserMessage().message,
+        ...pendingMessages[1],
         sendingStatus: SendingStatus.SUCCEEDED,
-        messageType: pendingMessages[1].asUserMessage().messageType,
       }),
     ];
 
-    const { result } = renderHook(() => useChannelMessagesReducer());
+    const { result } = renderHook(() => useChannelMessagesReducer((a, b) => a.createdAt - b.createdAt));
 
     act(() => {
       result.current.updateMessages([initMessage], true, me.userId);
@@ -263,5 +260,135 @@ describe('useChannelMessagesReducer', () => {
     });
     expect(result.current.messages).toHaveLength(3);
     expect(result.current.messages).toEqual([initMessage, ...sentMessages]);
+  });
+
+  test('should update succeeded messages with reactions updated', () => {
+    const me = createMockUser({ userId: 'sender1' }).asSender();
+
+    const sentMessages = [
+      createMockMessage({
+        sender: me,
+        message: 'Hello',
+        sendingStatus: SendingStatus.SUCCEEDED,
+        messageType: MessageType.USER,
+        createdAt: 1000,
+      }),
+      createMockMessage({
+        sender: me,
+        message: 'World',
+        sendingStatus: SendingStatus.SUCCEEDED,
+        messageType: MessageType.USER,
+        createdAt: 1200,
+      }),
+    ];
+
+    const updatedMessages = [
+      createMockMessage({
+        ...sentMessages[0],
+        reactions: [{ key: 'string', userIds: [], updatedAt: Date.now(), isEmpty: false, applyEvent: jest.fn() }],
+      }),
+    ];
+
+    const { result } = renderHook(() => useChannelMessagesReducer((a, b) => a.createdAt - b.createdAt));
+
+    act(() => {
+      result.current.updateMessages(sentMessages, true, me.userId);
+    });
+    expect(result.current.messages).toHaveLength(2);
+    expect(result.current.messages).toEqual(sentMessages);
+
+    act(() => {
+      result.current.updateMessages(updatedMessages, false, me.userId);
+    });
+    expect(result.current.messages).toHaveLength(2);
+    expect(result.current.messages).toEqual([updatedMessages[0], sentMessages[1]]);
+  });
+
+  test('should update succeeded messages with message updated', () => {
+    const me = createMockUser({ userId: 'sender1' }).asSender();
+
+    const sentMessages = [
+      createMockMessage({
+        sender: me,
+        message: 'Hello',
+        sendingStatus: SendingStatus.SUCCEEDED,
+        messageType: MessageType.USER,
+        createdAt: 1000,
+      }),
+      createMockMessage({
+        sender: me,
+        message: 'World',
+        sendingStatus: SendingStatus.SUCCEEDED,
+        messageType: MessageType.USER,
+        createdAt: 1200,
+      }),
+    ];
+
+    const updatedMessages = [
+      createMockMessage({
+        ...sentMessages[0],
+        reqId: 'edited-req-id',
+        message: 'Hello (edited)',
+        updatedAt: Date.now(),
+      }),
+    ];
+
+    const { result } = renderHook(() => useChannelMessagesReducer((a, b) => a.createdAt - b.createdAt));
+
+    act(() => {
+      result.current.updateMessages(sentMessages, true, me.userId);
+    });
+    expect(result.current.messages).toHaveLength(2);
+    expect(result.current.messages).toEqual(sentMessages);
+
+    act(() => {
+      result.current.updateMessages(updatedMessages, false, me.userId);
+    });
+    expect(result.current.messages).toHaveLength(2);
+    expect(result.current.messages).toEqual([updatedMessages[0], sentMessages[1]]);
+  });
+
+  test('should not update when receiving pending messages that have already been inserted as succeeded', () => {
+    const me = createMockUser({ userId: 'sender1' }).asSender();
+    const { result } = renderHook(() => useChannelMessagesReducer((a, b) => a.createdAt - b.createdAt));
+
+    const pending = createMockMessage({
+      reqId: 'req-id-1',
+      message: 'Hello',
+      sender: me,
+      messageType: MessageType.USER,
+      sendingStatus: SendingStatus.PENDING,
+    });
+    const sent = createMockMessage({
+      reqId: 'req-id-1',
+      message: 'Hello',
+      sender: me,
+      messageType: MessageType.USER,
+      sendingStatus: SendingStatus.SUCCEEDED,
+    });
+
+    act(() => {
+      result.current.updateMessages([pending], true, me.userId);
+    });
+    expect(result.current.messages).toHaveLength(1);
+    expect(result.current.messages).toEqual([pending]);
+
+    act(() => {
+      result.current.updateMessages([sent], false, me.userId);
+    });
+    expect(result.current.messages).toHaveLength(1);
+    expect(result.current.messages).toEqual([sent]);
+
+    act(() => {
+      result.current.updateMessages([pending], false, me.userId);
+    });
+    expect(result.current.messages).toHaveLength(1);
+    expect(result.current.messages).toEqual([sent]);
+
+    act(() => {
+      result.current.updateMessages([sent], false, me.userId);
+    });
+    expect(result.current.messages).toHaveLength(1);
+    expect(result.current.messages).toEqual([sent]);
   });
 });

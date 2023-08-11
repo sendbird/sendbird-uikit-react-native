@@ -24,14 +24,13 @@ const BottomSheetReactionAddon = ({ onClose, message, channel }: Props) => {
   useChannelHandler(sdk, handlerId, {
     async onReactionUpdated(eventChannel, event) {
       if (channel?.url === eventChannel.url && event.messageId === message?.messageId) {
-        updateReactionFocusedItem({
-          message: await sdk.message.getMessage({
-            includeReactions: true,
-            messageId: message.messageId,
-            channelUrl: message.channelUrl,
-            channelType: message.channelType,
-          }),
+        const msg = await sdk.message.getMessage({
+          includeReactions: true,
+          messageId: message.messageId,
+          channelUrl: message.channelUrl,
+          channelType: message.channelType,
         });
+        if (msg) updateReactionFocusedItem({ message: msg });
       }
     },
   });

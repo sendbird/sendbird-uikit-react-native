@@ -10,6 +10,7 @@ import type {
   SendbirdMessage,
   SendbirdReaction,
   SendbirdSendableMessage,
+  SendbirdUserMessage,
 } from '../types';
 import { getMessageTimeFormat } from '../ui-format/common';
 
@@ -24,14 +25,12 @@ export function isSendableMessage(msg?: SendbirdMessage | null): msg is Sendbird
   return msg !== undefined && msg !== null && 'sendingStatus' in msg;
 }
 
-export function isMyMessage(msg?: SendbirdMessage | null, currentUserId = '##__USER_ID_IS_NOT_PROVIDED__##') {
+export function isMyMessage(
+  msg?: SendbirdMessage | null,
+  currentUserId = '##__USER_ID_IS_NOT_PROVIDED__##',
+): msg is SendbirdSendableMessage {
   if (!isSendableMessage(msg)) return false;
-  return (
-    ('sender' in msg && msg.sender?.userId === currentUserId) ||
-    msg.sendingStatus === 'pending' ||
-    msg.sendingStatus === 'failed' ||
-    msg.sendingStatus === 'canceled'
-  );
+  return msg.sender?.userId === currentUserId;
 }
 
 export function messageKeyExtractor(message: SendbirdMessage): string {
@@ -50,8 +49,8 @@ export function messageComparator(a: SendbirdMessage, b: SendbirdMessage) {
   let aStatusOffset = 0;
   let bStatusOffset = 0;
 
-  if (isSendableMessage(a) && a.sendingStatus !== 'succeeded') aStatusOffset = 999999;
-  if (isSendableMessage(b) && b.sendingStatus !== 'succeeded') bStatusOffset = 999999;
+  if (isSendableMessage(a) && a.sendingStatus !== 'succeeded') aStatusOffset = Number.MAX_SAFE_INTEGER;
+  if (isSendableMessage(b) && b.sendingStatus !== 'succeeded') bStatusOffset = Number.MAX_SAFE_INTEGER;
 
   return b.createdAt + bStatusOffset - (a.createdAt + aStatusOffset);
 }
@@ -99,7 +98,7 @@ export function getMessageUniqId(msg: SendbirdBaseMessage) {
 }
 
 export function getAvailableUriFromFileMessage(message: SendbirdFileMessage) {
-  if (!message.url && message.messageParams.file && 'uri' in message.messageParams.file) {
+  if (!message.url && message.messageParams?.file && 'uri' in message.messageParams.file) {
     return message.messageParams.file.uri;
   }
   return message.url;
@@ -115,6 +114,18 @@ export function isSendbirdNotification(dataPayload?: {
 
 export function parseSendbirdNotification(dataPayload: RawSendbirdDataPayload): SendbirdDataPayload {
   return typeof dataPayload.sendbird === 'string' ? JSON.parse(dataPayload.sendbird) : dataPayload.sendbird;
+}
+
+export function shouldRenderParentMessage(message: SendbirdMessage): message is (
+  | SendbirdUserMessage
+  | SendbirdFileMessage
+) & {
+  parentMessage: SendbirdUserMessage | SendbirdFileMessage;
+} {
+  return !!(
+    (message.isFileMessage() || message.isUserMessage()) &&
+    (message.parentMessage?.isFileMessage() || message.parentMessage?.isUserMessage())
+  );
 }
 
 export function shouldRenderReaction(channel: SendbirdBaseChannel, reactionEnabled: boolean) {
@@ -135,7 +146,7 @@ export function getReactionCount(reaction: SendbirdReaction) {
   return reaction.userIds.length;
 }
 
-type MessageType =
+export type MessageType =
   | 'user'
   | 'admin'
   | 'file'
@@ -143,9 +154,50 @@ type MessageType =
   | `user.${'opengraph'}`
   | `file.${'image' | 'video' | 'audio'}`;
 
-export function getFileTypeFromMessage(message: SendbirdFileMessage) {
+export type FileType = 'file' | 'image' | 'audio' | 'video';
+
+const fileIconMapper = {
+  'audio': 'file-audio',
+  'image': 'photo',
+  'video': 'play',
+  'file': 'file-document',
+} as const;
+
+type ValueOf<T> = T[keyof T];
+export type FileIcon = ValueOf<typeof fileIconMapper>;
+
+export function getFileTypeFromMessage(message: SendbirdFileMessage): FileType {
   return getFileType(message.type || getFileExtension(message.name));
 }
+export const convertFileTypeToMessageType = (fileType: FileType = 'file'): MessageType => {
+  switch (fileType) {
+    case 'audio':
+    case 'image':
+    case 'video':
+      return `file.${fileType}`;
+    case 'file':
+      return fileType;
+  }
+};
+export const getFileIconFromMessageType = (messageType: MessageType): FileIcon => {
+  switch (messageType) {
+    case 'file':
+      return fileIconMapper['file'];
+    case 'file.image':
+      return fileIconMapper['image'];
+    case 'file.video':
+      return fileIconMapper['video'];
+    case 'file.audio':
+      return fileIconMapper['audio'];
+    default:
+      return fileIconMapper['file'];
+  }
+};
+export const getFileIconFromMessage = (message: SendbirdFileMessage): FileIcon => {
+  const fileType = getFileTypeFromMessage(message);
+  const messageType = convertFileTypeToMessageType(fileType);
+  return getFileIconFromMessageType(messageType);
+};
 
 export function getMessageType(message: SendbirdMessage): MessageType {
   if (message.isAdminMessage()) {
