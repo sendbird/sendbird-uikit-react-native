@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.0.4...v3.1.0) (2023-08-11)
+
+### Features
+
+- add video thumbnail component ([e702155](https://github.com/sendbird/sendbird-uikit-react-native/commit/e7021559b1bb08d17710c8889a467fd87a1f1395))
+- **UIKIT-4240:** implement basic quote reply logic ([#103](https://github.com/sendbird/sendbird-uikit-react-native/issues/103)) ([b4add0e](https://github.com/sendbird/sendbird-uikit-react-native/commit/b4add0eba112c3cde32f893c63812dbffd48a530))
+- **UIKIT-4240:** implement basic quote reply logic ([#103](https://github.com/sendbird/sendbird-uikit-react-native/issues/103)) ([2202e3b](https://github.com/sendbird/sendbird-uikit-react-native/commit/2202e3b0f3f034f95815d3cd3fbcfbfcd864462a))
+
+### Bug Fixes
+
+- add exception handling for unreachable parent message ([9df42be](https://github.com/sendbird/sendbird-uikit-react-native/commit/9df42be2e9e725834e31e63472bbff5f35adb75a))
+- add exception handling for unreachable parent message ([e1b5330](https://github.com/sendbird/sendbird-uikit-react-native/commit/e1b533044064f7a68545ae2f32b448e54cbc7415))
+- unsent messages should be shown first of the message list ([3a4544e](https://github.com/sendbird/sendbird-uikit-react-native/commit/3a4544e1006cd4b9ac13c62aebc63572453fb496))
+
 ## [3.0.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.0.3...v3.0.4) (2023-07-13)
 
 ### Features
