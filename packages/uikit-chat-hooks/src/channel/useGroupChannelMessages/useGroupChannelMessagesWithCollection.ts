@@ -196,7 +196,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
       updateLoading(true);
       init(initialStartingPoint, initialLimit, () => updateLoading(false));
     }, 0);
-  }, [channel.url, userId]);
+  }, [channel.url, userId, options?.replyType]);
 
   useEffect(() => {
     return () => {
