@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { useAppFeatures } from '@sendbird/uikit-chat-hooks';
 import { SBUConfig, useUIKitConfig } from '@sendbird/uikit-tools';
@@ -143,6 +143,12 @@ export const SendbirdChatProvider = ({
     if (status === 'active') sdkInstance.connectionState === 'CLOSED' && sdkInstance.setForegroundState();
     else if (status === 'background') sdkInstance.connectionState === 'OPEN' && sdkInstance.setBackgroundState();
   });
+
+  useEffect(() => {
+    return () => {
+      sdkInstance.disconnect().then(() => _setCurrentUser(undefined));
+    };
+  }, [sdkInstance]);
 
   const value: SendbirdChatContextType = {
     sdk: sdkInstance,
