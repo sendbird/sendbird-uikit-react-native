@@ -169,13 +169,11 @@ const SendbirdUIKitContainer = ({
     }
 
     return () => {
-      if (!isFirstMount) {
-        unsubscribes.current.forEach((u) => {
-          try {
-            u();
-          } catch {}
-        });
-      }
+      unsubscribes.current.forEach((u) => {
+        try {
+          u();
+        } catch {}
+      });
     };
   }, [appId, internalStorage]);
 
