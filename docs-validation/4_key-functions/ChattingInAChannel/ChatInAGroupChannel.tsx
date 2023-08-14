@@ -38,10 +38,12 @@ const GroupChannelScreen = ({ route: { params } }: any) => {
 function _context(_: GroupChannelContextsType) {
   const fragment = useContext(_.Fragment);
   fragment.headerTitle;
+  fragment.keyboardAvoidOffset;
   fragment.channel;
   fragment.messageToEdit;
   fragment.setMessageToEdit;
-  fragment.keyboardAvoidOffset;
+  fragment.messageToReply;
+  fragment.setMessageToReply;
 
   const typing = useContext(_.TypingIndicator);
   typing.typingUsers;
@@ -55,10 +57,12 @@ function _context(_: GroupChannelContextsType) {
 const Component = () => {
   const {
     headerTitle,
+    keyboardAvoidOffset,
     channel,
     messageToEdit,
     setMessageToEdit,
-    keyboardAvoidOffset,
+    messageToReply,
+    setMessageToReply,
   } = useContext(GroupChannelContexts.Fragment);
 };
 /** ------------------ **/
