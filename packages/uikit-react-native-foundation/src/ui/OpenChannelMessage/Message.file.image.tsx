@@ -1,7 +1,7 @@
 import React from 'react';
 
 import type { SendbirdFileMessage } from '@sendbird/uikit-utils';
-import { getAvailableUriFromFileMessage } from '@sendbird/uikit-utils';
+import { getThumbnailUriFromFileMessage } from '@sendbird/uikit-utils';
 
 import Box from '../../components/Box';
 import ImageWithPlaceholder from '../../components/ImageWithPlaceholder';
@@ -12,7 +12,7 @@ import type { OpenChannelMessageProps } from './index';
 
 const ImageFileMessage = (props: OpenChannelMessageProps<SendbirdFileMessage>) => {
   const { onPress, onLongPress, ...rest } = props;
-  const uri = getAvailableUriFromFileMessage(props.message);
+  const uri = getThumbnailUriFromFileMessage(props.message);
   return (
     <MessageContainer {...rest}>
       <Box borderRadius={8} overflow={'hidden'} style={styles.container}>

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import type { SendbirdFileMessage } from '@sendbird/uikit-utils';
-import { getAvailableUriFromFileMessage } from '@sendbird/uikit-utils';
+import { getThumbnailUriFromFileMessage } from '@sendbird/uikit-utils';
 
 import Box from '../../components/Box';
 import PressBox from '../../components/PressBox';
@@ -20,7 +20,7 @@ const VideoFileMessage = (props: Props) => {
   const { onPress, onLongPress, variant = 'incoming' } = props;
 
   const { colors } = useUIKitTheme();
-  const uri = getAvailableUriFromFileMessage(props.message);
+  const uri = getThumbnailUriFromFileMessage(props.message);
 
   return (
     <MessageContainer {...props}>
