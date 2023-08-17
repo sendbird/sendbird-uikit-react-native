@@ -14,9 +14,9 @@ import {
   SendbirdFileMessage,
   SendbirdMessage,
   SendbirdUserMessage,
-  getAvailableUriFromFileMessage,
   getFileIconFromMessageType,
   getMessageType,
+  getThumbnailUriFromFileMessage,
   truncate,
   useIIFE,
 } from '@sendbird/uikit-utils';
@@ -104,10 +104,10 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
         return renderFileMessageAsDownloadable((parentMessage as SendbirdFileMessage).name);
       }
       case 'file.video': {
-        return renderFileMessageAsVideoThumbnail(getAvailableUriFromFileMessage(parentMessage as SendbirdFileMessage));
+        return renderFileMessageAsVideoThumbnail(getThumbnailUriFromFileMessage(parentMessage as SendbirdFileMessage));
       }
       case 'file.image': {
-        return renderFileMessageAsPreview(getAvailableUriFromFileMessage(parentMessage as SendbirdFileMessage));
+        return renderFileMessageAsPreview(getThumbnailUriFromFileMessage(parentMessage as SendbirdFileMessage));
       }
       default: {
         return null;

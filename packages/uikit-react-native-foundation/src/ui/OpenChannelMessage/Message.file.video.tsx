@@ -1,7 +1,7 @@
 import React from 'react';
 
 import type { SendbirdFileMessage } from '@sendbird/uikit-utils';
-import { getAvailableUriFromFileMessage } from '@sendbird/uikit-utils';
+import { getThumbnailUriFromFileMessage } from '@sendbird/uikit-utils';
 
 import PressBox from '../../components/PressBox';
 import { VideoThumbnail } from '../../components/VideoThumbnail';
@@ -15,7 +15,7 @@ type Props = {
 
 const VideoFileMessage = (props: OpenChannelMessageProps<SendbirdFileMessage, Props>) => {
   const { onPress, onLongPress, ...rest } = props;
-  const uri = getAvailableUriFromFileMessage(props.message);
+  const uri = getThumbnailUriFromFileMessage(props.message);
 
   return (
     <MessageContainer {...rest}>

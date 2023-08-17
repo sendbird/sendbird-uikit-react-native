@@ -1,7 +1,7 @@
 import React from 'react';
 
 import type { SendbirdFileMessage } from '@sendbird/uikit-utils';
-import { getAvailableUriFromFileMessage } from '@sendbird/uikit-utils';
+import { getThumbnailUriFromFileMessage } from '@sendbird/uikit-utils';
 
 import Box from '../../components/Box';
 import ImageWithPlaceholder from '../../components/ImageWithPlaceholder';
@@ -20,7 +20,7 @@ const ImageFileMessage = (props: GroupChannelMessageProps<SendbirdFileMessage>) 
     <MessageContainer {...props}>
       <Box style={styles.container} backgroundColor={colors.ui.groupChannelMessage[variant].enabled.background}>
         <PressBox activeOpacity={0.8} onPress={onPress} onLongPress={onLongPress}>
-          <ImageWithPlaceholder source={{ uri: getAvailableUriFromFileMessage(props.message) }} style={styles.image} />
+          <ImageWithPlaceholder source={{ uri: getThumbnailUriFromFileMessage(props.message) }} style={styles.image} />
         </PressBox>
         {props.children}
       </Box>

@@ -27,9 +27,9 @@ import {
   Logger,
   SendbirdBaseMessage,
   SendbirdChannel,
-  getAvailableUriFromFileMessage,
   getFileIconFromMessageType,
   getMessageType,
+  getThumbnailUriFromFileMessage,
   isImage,
   shouldCompressImage,
   useIIFE,
@@ -175,9 +175,9 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
       const messageType = getMessageType(messageToReply);
       switch (messageType) {
         case 'file.image':
-          return getFileIconAsImage(getAvailableUriFromFileMessage(messageToReply));
+          return getFileIconAsImage(getThumbnailUriFromFileMessage(messageToReply));
         case 'file.video':
-          return getFileIconAsVideoThumbnail(getAvailableUriFromFileMessage(messageToReply));
+          return getFileIconAsVideoThumbnail(getThumbnailUriFromFileMessage(messageToReply));
         default:
           return getFileIconAsSymbol(getFileIconFromMessageType(messageType));
       }

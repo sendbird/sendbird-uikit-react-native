@@ -97,10 +97,19 @@ export function getMessageUniqId(msg: SendbirdBaseMessage) {
   return String(msg.messageId);
 }
 
+export function getThumbnailUriFromFileMessage(message: SendbirdFileMessage) {
+  if (message.thumbnails && message.thumbnails.length > 0) {
+    return message.thumbnails[0].url;
+  }
+
+  return getAvailableUriFromFileMessage(message);
+}
+
 export function getAvailableUriFromFileMessage(message: SendbirdFileMessage) {
   if (!message.url && message.messageParams?.file && 'uri' in message.messageParams.file) {
     return message.messageParams.file.uri;
   }
+
   return message.url;
 }
 
