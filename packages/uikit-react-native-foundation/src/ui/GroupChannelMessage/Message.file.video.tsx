@@ -28,7 +28,7 @@ const VideoFileMessage = (props: Props) => {
         <PressBox activeOpacity={0.8} onPress={onPress} onLongPress={onLongPress}>
           <VideoThumbnail
             style={styles.image}
-            videoSource={uri}
+            source={uri}
             fetchThumbnailFromVideoSource={props.fetchThumbnailFromVideoSource}
           />
         </PressBox>

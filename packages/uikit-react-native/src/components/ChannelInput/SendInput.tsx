@@ -143,7 +143,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
       <VideoThumbnail
         style={styles.previewImage}
         iconSize={0}
-        videoSource={url}
+        source={url}
         fetchThumbnailFromVideoSource={(uri) => mediaService.getVideoThumbnail({ url: uri, timeMills: 1000 })}
       />
     );

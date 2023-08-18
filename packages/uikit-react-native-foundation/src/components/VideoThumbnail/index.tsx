@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
 
+import { isImage } from '@sendbird/uikit-utils';
+
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import Box from '../Box';
@@ -8,16 +10,21 @@ import Icon from '../Icon';
 import ImageWithPlaceholder from '../ImageWithPlaceholder';
 
 type Props = {
-  videoSource: string;
+  source: string;
   fetchThumbnailFromVideoSource: (uri: string) => Promise<{ path: string } | null>;
 
   style?: StyleProp<ViewStyle>;
   iconSize?: number;
+  /** @deprecated please use `source` prop **/
+  videoSource?: string;
 };
 
-export const VideoThumbnail = ({ fetchThumbnailFromVideoSource, style, videoSource, iconSize = 28 }: Props) => {
+export const VideoThumbnail = ({ fetchThumbnailFromVideoSource, style, source, videoSource, iconSize = 28 }: Props) => {
   const { palette, select } = useUIKitTheme();
-  const { thumbnail, loading } = useRetry(() => fetchThumbnailFromVideoSource(videoSource));
+  const { thumbnail, loading } = useRetry(async () => {
+    if (isImage(source ?? videoSource)) return { path: source ?? videoSource };
+    return fetchThumbnailFromVideoSource(source ?? videoSource);
+  });
 
   return (
     <Box style={style}>
