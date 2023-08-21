@@ -105,3 +105,15 @@ export interface MediaServiceInterface {
   getVideoThumbnail(options: GetVideoThumbnailOptions): GetVideoThumbnailResult;
   compressImage(options: CompressImageOptions): CompressImageResult;
 }
+
+// ---------- PlayerService ---------- //
+export interface PlayerServiceInterface {
+  state: 'idle' | 'prepared' | 'playing' | 'paused' | 'stopped';
+  requestPermission(): Promise<boolean>;
+  play(uri: string, headers?: Record<string, string>): Promise<void>;
+  seek(time: number): Promise<void>;
+  pause(): Promise<void>;
+  stop(): Promise<void>;
+  reset(): Promise<void>;
+  addListener(callback: (currentTime: number, duration: number) => void): Unsubscribe;
+}
