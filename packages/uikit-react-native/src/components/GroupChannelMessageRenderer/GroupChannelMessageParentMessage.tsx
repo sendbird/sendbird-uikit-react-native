@@ -57,7 +57,7 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
       <VideoThumbnail
         style={styles.image}
         iconSize={18}
-        videoSource={url}
+        source={url}
         fetchThumbnailFromVideoSource={(uri) => mediaService.getVideoThumbnail({ url: uri, timeMills: 1000 })}
       />
     );

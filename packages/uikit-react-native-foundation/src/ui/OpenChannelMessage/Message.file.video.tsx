@@ -22,7 +22,7 @@ const VideoFileMessage = (props: OpenChannelMessageProps<SendbirdFileMessage, Pr
       <PressBox style={styles.container} activeOpacity={0.8} onPress={onPress} onLongPress={onLongPress}>
         <VideoThumbnail
           style={styles.container}
-          videoSource={uri}
+          source={uri}
           fetchThumbnailFromVideoSource={props.fetchThumbnailFromVideoSource}
         />
       </PressBox>
