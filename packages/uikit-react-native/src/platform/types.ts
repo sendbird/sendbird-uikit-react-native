@@ -117,3 +117,12 @@ export interface PlayerServiceInterface {
   reset(): Promise<void>;
   addListener(callback: (currentTime: number, duration: number) => void): Unsubscribe;
 }
+
+// ---------- RecorderService ---------- //
+export interface RecorderServiceInterface {
+  state: 'idle' | 'preparing' | 'recording' | 'completed';
+  requestPermission(): Promise<boolean>;
+  record(uri?: string): Promise<void>;
+  stop(): Promise<void>;
+  addListener(callback: (duration: number) => void): Unsubscribe;
+}
