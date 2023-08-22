@@ -14,7 +14,7 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
 
   class Player implements PlayerServiceInterface {
     state: PlayerServiceInterface['state'] = 'idle';
-    subscribers = new Set<(currentTime: number, duration: number) => void>();
+    private readonly subscribers = new Set<(currentTime: number, duration: number) => void>();
 
     constructor() {
       this.state = 'idle';
@@ -47,8 +47,13 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
     async play(uri: string, headers?: Record<string, string>): Promise<void> {
       if (this.state === 'playing') return;
 
-      await module.startPlayer(uri, headers);
-      this.state = 'playing';
+      try {
+        this.state = 'preparing';
+        await module.startPlayer(uri, headers);
+        this.state = 'playing';
+      } catch {
+        this.state = 'idle';
+      }
     }
 
     async seek(time: number): Promise<void> {

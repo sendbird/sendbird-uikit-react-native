@@ -106,7 +106,7 @@ export interface MediaServiceInterface {
 
 // ---------- PlayerService ---------- //
 export interface PlayerServiceInterface {
-  state: 'idle' | 'prepared' | 'playing' | 'paused' | 'stopped';
+  state: 'idle' | 'preparing' | 'playing' | 'paused' | 'stopped';
   requestPermission(): Promise<boolean>;
   play(uri: string, headers?: Record<string, string>): Promise<void>;
   seek(time: number): Promise<void>;
