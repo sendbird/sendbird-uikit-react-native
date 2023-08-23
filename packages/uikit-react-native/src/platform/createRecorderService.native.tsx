@@ -15,34 +15,51 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
 
   class Recorder implements RecorderServiceInterface {
     state: RecorderServiceInterface['state'] = 'idle';
+    options: RecorderServiceInterface['options'] = {
+      minDuration: 1,
+      maxDuration: 60,
+    };
+
     private readonly subscribers = new Set<(currentTime: number) => void>();
     private readonly audioSettings = {
       sampleRate: 11025,
       bitRate: 12000,
       audioChannels: 1,
+      // encoding: mpeg4_aac
     };
-    private readonly audioOptions = {
-      AVEncoderBitRateKeyIOS: this.audioSettings.bitRate,
-      AudioEncodingBitRateAndroid: this.audioSettings.bitRate,
-      AVNumberOfChannelsKeyIOS: this.audioSettings.audioChannels,
-      AudioChannelsAndroid: this.audioSettings.audioChannels,
-      AVSampleRateKeyIOS: this.audioSettings.sampleRate,
-      AudioSamplingRateAndroid: this.audioSettings.sampleRate,
-      AudioEncoderAndroid: audioRecorderModule.AudioEncoderAndroidType.AAC,
-      AVFormatIDKeyIOS: audioRecorderModule.AVEncodingOption.aac,
-      AudioSourceAndroid: audioRecorderModule.AudioSourceAndroidType.VOICE_RECOGNITION,
-      AVEncoderAudioQualityKeyIOS: audioRecorderModule.AVEncoderAudioQualityIOSType.high,
-      OutputFormatAndroid: audioRecorderModule.OutputFormatAndroidType.MPEG_4,
-    };
+    private readonly audioOptions = Platform.select({
+      android: {
+        AudioEncodingBitRateAndroid: this.audioSettings.bitRate,
+        AudioChannelsAndroid: this.audioSettings.audioChannels,
+        AudioSamplingRateAndroid: this.audioSettings.sampleRate,
+        AudioEncoderAndroid: audioRecorderModule.AudioEncoderAndroidType.AAC,
+        OutputFormatAndroid: audioRecorderModule.OutputFormatAndroidType.MPEG_4,
+        AudioSourceAndroid: audioRecorderModule.AudioSourceAndroidType.VOICE_RECOGNITION,
+      },
+      ios: {
+        AVEncoderBitRateKeyIOS: this.audioSettings.bitRate,
+        AVNumberOfChannelsKeyIOS: this.audioSettings.audioChannels,
+        AVSampleRateKeyIOS: this.audioSettings.sampleRate,
+        AVFormatIDKeyIOS: audioRecorderModule.AVEncodingOption.mp4, // same with aac
+        AVEncoderAudioQualityKeyIOS: audioRecorderModule.AVEncoderAudioQualityIOSType.high,
+      },
+      default: {},
+    });
 
     constructor() {
       this.state = 'idle';
 
-      module.setSubscriptionDuration(1);
+      module.setSubscriptionDuration(0.5);
       module.addRecordBackListener((data) => {
-        this.subscribers.forEach((callback) => {
-          callback(data.currentPosition);
-        });
+        if (this.state === 'recording') {
+          this.subscribers.forEach((callback) => {
+            callback(data.currentPosition);
+          });
+        }
+
+        if (data.currentPosition >= this.options.maxDuration) {
+          this.stop();
+        }
       });
     }
 
@@ -76,7 +93,9 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
 
       try {
         this.state = 'preparing';
-        await module.startRecorder(uri, this.audioOptions);
+        await module.startRecorder(uri, {
+          ...this.audioOptions,
+        });
         this.state = 'recording';
       } catch {
         this.state = 'idle';

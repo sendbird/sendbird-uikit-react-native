@@ -4,6 +4,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import RNFBMessaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Platform, StatusBar } from 'react-native';
+import * as AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import * as CreateThumbnail from 'react-native-create-thumbnail';
 import * as DocumentPicker from 'react-native-document-picker';
 import * as FileAccess from 'react-native-file-access';
@@ -12,10 +13,13 @@ import * as Permissions from 'react-native-permissions';
 import Video from 'react-native-video';
 
 import {
+  SendbirdUIKitContainerProps,
   createNativeClipboardService,
   createNativeFileService,
   createNativeMediaService,
   createNativeNotificationService,
+  createNativePlayerService,
+  createNativeRecorderService,
 } from '@sendbird/uikit-react-native';
 import { Logger, SendbirdChatSDK } from '@sendbird/uikit-utils';
 
@@ -26,23 +30,33 @@ export const GetSendbirdSDK = () => AppSendbirdSDK;
 export const SetSendbirdSDK = (sdk: SendbirdChatSDK) => (AppSendbirdSDK = sdk);
 
 export const RootStack = createNativeStackNavigator();
-export const ClipboardService = createNativeClipboardService(Clipboard);
-export const NotificationService = createNativeNotificationService({
-  messagingModule: RNFBMessaging,
-  permissionModule: Permissions,
-});
-export const FileService = createNativeFileService({
-  imagePickerModule: ImagePicker,
-  documentPickerModule: DocumentPicker,
-  permissionModule: Permissions,
-  fsModule: FileAccess,
-  mediaLibraryModule: CameraRoll,
-});
-export const MediaService = createNativeMediaService({
-  VideoComponent: Video,
-  thumbnailModule: CreateThumbnail,
-  imageResizerModule: ImageResizer,
-});
+export const platformServices: SendbirdUIKitContainerProps['platformServices'] = {
+  clipboard: createNativeClipboardService(Clipboard),
+  notification: createNativeNotificationService({
+    messagingModule: RNFBMessaging,
+    permissionModule: Permissions,
+  }),
+  file: createNativeFileService({
+    imagePickerModule: ImagePicker,
+    documentPickerModule: DocumentPicker,
+    permissionModule: Permissions,
+    fsModule: FileAccess,
+    mediaLibraryModule: CameraRoll,
+  }),
+  media: createNativeMediaService({
+    VideoComponent: Video,
+    thumbnailModule: CreateThumbnail,
+    imageResizerModule: ImageResizer,
+  }),
+  player: createNativePlayerService({
+    audioRecorderModule: AudioRecorderPlayer,
+    permissionModule: Permissions,
+  }),
+  recorder: createNativeRecorderService({
+    audioRecorderModule: AudioRecorderPlayer,
+    permissionModule: Permissions,
+  }),
+};
 
 export const GetTranslucent = (state = true) => {
   Platform.OS === 'android' && StatusBar.setTranslucent(state);
