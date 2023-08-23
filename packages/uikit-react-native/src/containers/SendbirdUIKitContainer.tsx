@@ -45,6 +45,8 @@ import type {
   FileServiceInterface,
   MediaServiceInterface,
   NotificationServiceInterface,
+  PlayerServiceInterface,
+  RecorderServiceInterface,
 } from '../platform/types';
 import type { ErrorBoundaryProps, LocalCacheStorage } from '../types';
 import VERSION from '../version';
@@ -69,6 +71,8 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
     notification: NotificationServiceInterface;
     clipboard: ClipboardServiceInterface;
     media: MediaServiceInterface;
+    player: PlayerServiceInterface;
+    recorder: RecorderServiceInterface;
   };
   chatOptions: {
     localCacheStorage: LocalCacheStorage;

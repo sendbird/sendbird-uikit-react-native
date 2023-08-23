@@ -117,7 +117,18 @@ export interface PlayerServiceInterface {
 }
 
 // ---------- RecorderService ---------- //
+export interface RecorderOptions {
+  /**
+   * Minimum recording duration (seconds)
+   * */
+  minDuration: number;
+  /**
+   * Maximum recording duration (seconds)
+   * */
+  maxDuration: number;
+}
 export interface RecorderServiceInterface {
+  options: RecorderOptions;
   state: 'idle' | 'preparing' | 'recording' | 'completed';
   requestPermission(): Promise<boolean>;
   record(uri?: string): Promise<void>;
