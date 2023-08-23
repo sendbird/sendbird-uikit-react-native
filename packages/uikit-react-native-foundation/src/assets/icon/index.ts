@@ -4,6 +4,7 @@ const IconAssets = {
   'add': require('./icon-add.png'),
   'archive': require('./icon-archive.png'),
   'arrow-left': require('./icon-arrow-left.png'),
+  'audio-on': require('./icon-audio-on.png'),
   'ban': require('./icon-ban.png'),
   'broadcast': require('./icon-broadcast.png'),
   'camera': require('./icon-camera.png'),
