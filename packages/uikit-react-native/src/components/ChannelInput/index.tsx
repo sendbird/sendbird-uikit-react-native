@@ -23,6 +23,8 @@ import type { MentionedUser, Range } from '../../types';
 import type { AttachmentsButtonProps } from './AttachmentsButton';
 import AttachmentsButton from './AttachmentsButton';
 import EditInput from './EditInput';
+import type { MessageToReplyPreviewProps } from './MessageToReplyPreview';
+import { MessageToReplyPreview } from './MessageToReplyPreview';
 import SendInput from './SendInput';
 
 export type SuggestedMentionListProps = {
@@ -65,6 +67,7 @@ export type ChannelInputProps = {
 
   // sub-components
   AttachmentsButton?: (props: AttachmentsButtonProps) => JSX.Element | null;
+  MessageToReplyPreview?: (props: MessageToReplyPreviewProps) => JSX.Element | null;
 };
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
@@ -130,6 +133,7 @@ const ChannelInput = (props: ChannelInputProps) => {
                 onSelectionChange={onSelectionChange}
                 mentionedUsers={mentionedUsers}
                 AttachmentsButton={props.AttachmentsButton ?? AttachmentsButton}
+                MessageToReplyPreview={props.MessageToReplyPreview ?? MessageToReplyPreview}
               />
             )}
             {inputMode === 'edit' && messageToEdit && (
