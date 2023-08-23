@@ -9,15 +9,7 @@ import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-fo
 
 // import LogView from './components/LogView';
 import { APP_ID } from './env';
-import {
-  ClipboardService,
-  FileService,
-  GetTranslucent,
-  MediaService,
-  NotificationService,
-  RootStack,
-  SetSendbirdSDK,
-} from './factory';
+import { GetTranslucent, RootStack, SetSendbirdSDK, platformServices } from './factory';
 import useAppearance from './hooks/useAppearance';
 import { Routes, navigationActions, navigationRef } from './libs/navigation';
 import { notificationHandler } from './libs/notification';
@@ -82,12 +74,7 @@ const App = () => {
         onInitialized: SetSendbirdSDK,
         enableAutoPushTokenRegistration: true,
       }}
-      platformServices={{
-        file: FileService,
-        notification: NotificationService,
-        clipboard: ClipboardService,
-        media: MediaService,
-      }}
+      platformServices={platformServices}
       styles={{
         defaultHeaderTitleAlign: 'left', //'center',
         theme: isLightTheme ? LightUIKitTheme : DarkUIKitTheme,
