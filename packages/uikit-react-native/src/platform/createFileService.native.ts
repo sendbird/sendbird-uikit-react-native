@@ -241,6 +241,11 @@ const createNativeFileService = ({
         } as const,
       };
     };
+
+    createRecordFilePath(extension = 'm4a'): string {
+      const filename = `record-${Date.now()}.${extension}`;
+      return `${fsModule.Dirs.CacheDir}/${filename}`;
+    }
   }
 
   return new NativeFileService();
