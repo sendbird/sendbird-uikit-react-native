@@ -6,6 +6,7 @@ import { Permission } from 'react-native-permissions/src/types';
 import nativePermissionGranted from '../utils/nativePermissionGranted';
 import type { RecorderServiceInterface, Unsubscribe } from './types';
 
+type Listener = (params: { currentTime: number; completed: boolean }) => void;
 type Modules = {
   audioRecorderModule: typeof RNAudioRecorder;
   permissionModule: typeof Permissions;
@@ -16,11 +17,12 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
   class Recorder implements RecorderServiceInterface {
     state: RecorderServiceInterface['state'] = 'idle';
     options: RecorderServiceInterface['options'] = {
-      minDuration: 1,
-      maxDuration: 60,
+      minDuration: 1000,
+      maxDuration: 60000,
+      extension: 'm4a',
     };
 
-    private readonly subscribers = new Set<(currentTime: number) => void>();
+    private readonly subscribers = new Set<Listener>();
     private readonly audioSettings = {
       sampleRate: 11025,
       bitRate: 12000,
@@ -51,14 +53,13 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
 
       module.setSubscriptionDuration(0.1);
       module.addRecordBackListener((data) => {
+        const completed = data.currentPosition >= this.options.maxDuration;
+
+        if (completed) this.stop();
         if (this.state === 'recording') {
           this.subscribers.forEach((callback) => {
-            callback(data.currentPosition);
+            callback({ currentTime: data.currentPosition, completed });
           });
-        }
-
-        if (data.currentPosition >= this.options.maxDuration) {
-          this.stop();
         }
       });
     }
@@ -88,7 +89,7 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
       }
     }
 
-    addListener(callback: (currentTime: number) => void): Unsubscribe {
+    addRecordingListener(callback: Listener): Unsubscribe {
       this.subscribers.add(callback);
       return () => {
         this.subscribers.delete(callback);
@@ -103,8 +104,9 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
             ...this.audioOptions,
           });
           this.state = 'recording';
-        } catch {
+        } catch (e) {
           this.state = 'idle';
+          throw e;
         }
       }
     }

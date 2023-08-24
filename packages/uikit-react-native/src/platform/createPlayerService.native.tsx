@@ -8,23 +8,28 @@ type Modules = {
   audioRecorderModule: typeof RNAudioRecorder;
   permissionModule: typeof Permissions;
 };
-
+type Listener = (params: { currentTime: number; duration: number; stopped: boolean }) => void;
 const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Modules): PlayerServiceInterface => {
   const module = new audioRecorderModule.default();
 
   class Player implements PlayerServiceInterface {
     uri?: string;
     state: PlayerServiceInterface['state'] = 'idle';
-    private readonly subscribers = new Set<(currentTime: number, duration: number) => void>();
+    private readonly subscribers = new Set<Listener>();
 
     constructor() {
       this.state = 'idle';
 
       module.setSubscriptionDuration(0.1);
       module.addPlayBackListener((data) => {
-        this.subscribers.forEach((callback) => {
-          callback(data.currentPosition, data.duration);
-        });
+        const stopped = data.currentPosition >= data.duration;
+
+        if (stopped) this.stop();
+        if (this.state === 'playing') {
+          this.subscribers.forEach((callback) => {
+            callback({ currentTime: data.currentPosition, duration: data.duration, stopped });
+          });
+        }
       });
     }
 
@@ -45,7 +50,7 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
       }
     }
 
-    addListener(callback: (currentTime: number, duration: number) => void): Unsubscribe {
+    addPlaybackListener(callback: Listener): Unsubscribe {
       this.subscribers.add(callback);
       return () => {
         this.subscribers.delete(callback);
@@ -59,9 +64,10 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
           this.uri = uri;
           await module.startPlayer(uri);
           this.state = 'playing';
-        } catch {
+        } catch (e) {
           this.state = 'idle';
           this.uri = undefined;
+          throw e;
         }
       } else if (this.state === 'paused' && this.uri === uri) {
         await module.resumePlayer();
