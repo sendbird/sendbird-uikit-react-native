@@ -88,7 +88,7 @@ const VoiceMessageInput = ({ onCancel, onSend }: VoiceMessageInputProps) => {
             <RecordingLight visible={state.status === 'recording'} />
             <Text
               caption1
-              style={{ lineHeight: 0, marginLeft: 6, opacity: recorderStyle.overlayTextOpacity }}
+              style={{ lineHeight: undefined, marginLeft: 6, opacity: recorderStyle.overlayTextOpacity }}
               color={recorderStyle.overlayText}
             >
               {millsToMMSS(useRecorderProgress ? state.recordingTime.currentTime : state.playingTime.currentTime)}
@@ -108,7 +108,7 @@ const VoiceMessageInput = ({ onCancel, onSend }: VoiceMessageInputProps) => {
           />
         </Box>
 
-        {/** Record / Play / Pause **/}
+        {/** Record / Stop / Play / Pause **/}
         <Box style={{ position: 'absolute' }} alignItems={'center'} justifyContent={'center'}>
           <PressBox activeOpacity={0.5} onPress={onPressVoiceMessageAction}>
             <Box
