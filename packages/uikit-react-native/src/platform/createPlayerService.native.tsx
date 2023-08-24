@@ -13,13 +13,14 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
   const module = new audioRecorderModule.default();
 
   class Player implements PlayerServiceInterface {
+    uri?: string;
     state: PlayerServiceInterface['state'] = 'idle';
     private readonly subscribers = new Set<(currentTime: number, duration: number) => void>();
 
     constructor() {
       this.state = 'idle';
 
-      module.setSubscriptionDuration(1);
+      module.setSubscriptionDuration(0.1);
       module.addPlayBackListener((data) => {
         this.subscribers.forEach((callback) => {
           callback(data.currentPosition, data.duration);
@@ -44,49 +45,55 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
       }
     }
 
-    async play(uri: string, headers?: Record<string, string>): Promise<void> {
-      if (this.state === 'playing') return;
-
-      try {
-        this.state = 'preparing';
-        await module.startPlayer(uri, headers);
-        this.state = 'playing';
-      } catch {
-        this.state = 'idle';
-      }
-    }
-
-    async seek(time: number): Promise<void> {
-      if (this.state !== 'playing') return;
-
-      await module.seekToPlayer(time);
-    }
-
-    async pause(): Promise<void> {
-      if (this.state === 'paused' || this.state === 'stopped') return;
-
-      await module.pausePlayer();
-      this.state = 'paused';
-    }
-
-    async stop(): Promise<void> {
-      if (this.state === 'stopped') return;
-
-      await module.stopPlayer();
-      this.state = 'stopped';
-    }
-
-    async reset(): Promise<void> {
-      await this.stop();
-      this.state = 'idle';
-      this.subscribers.clear();
-    }
-
     addListener(callback: (currentTime: number, duration: number) => void): Unsubscribe {
       this.subscribers.add(callback);
       return () => {
         this.subscribers.delete(callback);
       };
+    }
+
+    async play(uri: string): Promise<void> {
+      if (this.state === 'idle' || this.state === 'stopped') {
+        try {
+          this.state = 'preparing';
+          this.uri = uri;
+          await module.startPlayer(uri);
+          this.state = 'playing';
+        } catch {
+          this.state = 'idle';
+          this.uri = undefined;
+        }
+      } else if (this.state === 'paused' && this.uri === uri) {
+        await module.resumePlayer();
+        this.state = 'playing';
+      }
+    }
+
+    async pause(): Promise<void> {
+      if (this.state === 'playing') {
+        await module.pausePlayer();
+        this.state = 'paused';
+      }
+    }
+
+    async stop(): Promise<void> {
+      if (this.state === 'preparing' || this.state === 'playing' || this.state === 'paused') {
+        await module.stopPlayer();
+        this.state = 'stopped';
+      }
+    }
+
+    async reset(): Promise<void> {
+      await this.stop();
+      this.state = 'idle';
+      this.uri = undefined;
+      this.subscribers.clear();
+    }
+
+    async seek(time: number): Promise<void> {
+      if (this.state !== 'playing' && this.state !== 'paused') return;
+
+      await module.seekToPlayer(time);
     }
   }
 
