@@ -26,6 +26,7 @@ import EditInput from './EditInput';
 import type { MessageToReplyPreviewProps } from './MessageToReplyPreview';
 import { MessageToReplyPreview } from './MessageToReplyPreview';
 import SendInput from './SendInput';
+import VoiceMessageInput, { VoiceMessageInputProps } from './VoiceMessageInput';
 
 export type SuggestedMentionListProps = {
   text: string;
@@ -68,7 +69,7 @@ export type ChannelInputProps = {
   // sub-components
   AttachmentsButton?: (props: AttachmentsButtonProps) => React.ReactNode | null;
   MessageToReplyPreview?: (props: MessageToReplyPreviewProps) => React.ReactNode | null;
-  VoiceMessageRecorder?: () => React.ReactNode | null;
+  VoiceMessageInput?: (props: VoiceMessageInputProps) => React.ReactNode | null;
 };
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
@@ -134,6 +135,7 @@ const ChannelInput = (props: ChannelInputProps) => {
                 onChangeText={onChangeText}
                 onSelectionChange={onSelectionChange}
                 mentionedUsers={mentionedUsers}
+                VoiceMessageInput={props.VoiceMessageInput ?? VoiceMessageInput}
                 AttachmentsButton={props.AttachmentsButton ?? AttachmentsButton}
                 MessageToReplyPreview={props.MessageToReplyPreview ?? MessageToReplyPreview}
               />

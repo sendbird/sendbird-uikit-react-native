@@ -2,8 +2,8 @@ import { useRef, useState } from 'react';
 
 import { Logger } from '@sendbird/uikit-utils';
 
-import { usePlatformService } from '../../hooks/useContext';
-import { FileType } from '../../platform/types';
+import { FileType } from '../platform/types';
+import { usePlatformService } from './useContext';
 
 type State = {
   /**
@@ -74,6 +74,7 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
     recordingPath.current = fileService.createRecordFilePath(recorderService.options.extension);
     return recordingPath.current;
   };
+
   const clear = async () => {
     recordingPath.current = undefined;
     await playerService.reset();
@@ -162,6 +163,7 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
         if (status === 'idle') return;
 
         if (recordingPath.current) {
+          // TODO: move to utils/constants
           const voiceFile = {
             uri: recordingPath.current.uri,
             type: 'audio/m4a;sbu_type=voice',
