@@ -49,7 +49,7 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
     constructor() {
       this.state = 'idle';
 
-      module.setSubscriptionDuration(0.5);
+      module.setSubscriptionDuration(0.1);
       module.addRecordBackListener((data) => {
         if (this.state === 'recording') {
           this.subscribers.forEach((callback) => {
@@ -88,38 +88,38 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
       }
     }
 
-    async record(uri?: string): Promise<void> {
-      if (this.state === 'recording') return;
+    addListener(callback: (currentTime: number) => void): Unsubscribe {
+      this.subscribers.add(callback);
+      return () => {
+        this.subscribers.delete(callback);
+      };
+    }
 
-      try {
-        this.state = 'preparing';
-        await module.startRecorder(uri, {
-          ...this.audioOptions,
-        });
-        this.state = 'recording';
-      } catch {
-        this.state = 'idle';
+    async record(uri?: string): Promise<void> {
+      if (this.state === 'idle' || this.state === 'completed') {
+        try {
+          this.state = 'preparing';
+          await module.startRecorder(uri, {
+            ...this.audioOptions,
+          });
+          this.state = 'recording';
+        } catch {
+          this.state = 'idle';
+        }
       }
     }
 
     async stop(): Promise<void> {
-      if (this.state === 'completed') return;
-
-      await module.stopRecorder();
-      this.state = 'completed';
+      if (this.state === 'recording') {
+        await module.stopRecorder();
+        this.state = 'completed';
+      }
     }
 
     async reset(): Promise<void> {
       await this.stop();
       this.state = 'idle';
       this.subscribers.clear();
-    }
-
-    addListener(callback: (currentTime: number) => void): Unsubscribe {
-      this.subscribers.add(callback);
-      return () => {
-        this.subscribers.delete(callback);
-      };
     }
   }
 

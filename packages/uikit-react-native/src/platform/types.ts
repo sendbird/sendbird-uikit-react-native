@@ -109,31 +109,90 @@ export interface MediaServiceInterface {
 // ---------- PlayerService ---------- //
 export interface PlayerServiceInterface {
   state: 'idle' | 'preparing' | 'playing' | 'paused' | 'stopped';
+
+  /**
+   * Check and request permission for the player.
+   * */
   requestPermission(): Promise<boolean>;
-  play(uri: string, headers?: Record<string, string>): Promise<void>;
-  seek(time: number): Promise<void>;
-  pause(): Promise<void>;
-  stop(): Promise<void>;
-  reset(): Promise<void>;
+
+  /**
+   * Add a playback listener.
+   * */
   addListener(callback: (currentTime: number, duration: number) => void): Unsubscribe;
+
+  /**
+   * State transition:
+   *   [idle, stopped] to [playing] - start from the beginning
+   *   [paused] to [playing] - resume
+   * */
+  play(uri: string): Promise<void>;
+
+  /**
+   * State transition:
+   *   [playing] to [paused]
+   * */
+  pause(): Promise<void>;
+
+  /**
+   * State transition:
+   *   [preparing, playing, paused] to [stop]
+   * */
+  stop(): Promise<void>;
+
+  /**
+   * State transition:
+   *   [*] to [idle]
+   * */
+  reset(): Promise<void>;
+
+  /**
+   * Seek time, only available when the state is [playing, paused].
+   * */
+  seek(time: number): Promise<void>;
 }
 
 // ---------- RecorderService ---------- //
 export interface RecorderOptions {
   /**
-   * Minimum recording duration (seconds)
+   * Minimum recording duration (seconds).
    * */
   minDuration: number;
+
   /**
-   * Maximum recording duration (seconds)
+   * Maximum recording duration (seconds).
    * */
   maxDuration: number;
 }
+
 export interface RecorderServiceInterface {
   options: RecorderOptions;
   state: 'idle' | 'preparing' | 'recording' | 'completed';
+
+  /**
+   * Check and request permission for the recorder.
+   * */
   requestPermission(): Promise<boolean>;
-  record(uri?: string): Promise<void>;
-  stop(): Promise<void>;
+
+  /**
+   * Add recording listener.
+   * */
   addListener(callback: (duration: number) => void): Unsubscribe;
+
+  /**
+   * State transition:
+   *   [idle, completed] to [recording]
+   * */
+  record(uri?: string): Promise<void>;
+
+  /**
+   * State transition:
+   *   [recording] to [completed]
+   * */
+  stop(): Promise<void>;
+
+  /**
+   * State transition:
+   *   [*] to [idle]
+   * */
+  reset(): Promise<void>;
 }
