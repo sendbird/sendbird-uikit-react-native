@@ -32,7 +32,11 @@ const VoiceMessageInput = ({ onCancel, onSend }: VoiceMessageInputProps) => {
         actions.startRecording();
         break;
       case 'recording':
-        actions.stopRecording();
+        if (lessThanMinimumDuration) {
+          actions.cancel();
+        } else {
+          actions.stopRecording();
+        }
         break;
       case 'completed':
       case 'paused':
@@ -74,6 +78,7 @@ const VoiceMessageInput = ({ onCancel, onSend }: VoiceMessageInputProps) => {
 
   const useRecorderProgress = state.status === 'recording' || state.status === 'completed';
   const recorderStyle = state.status !== 'idle' ? recordingActiveStyle : recordingInActiveStyle;
+  const lessThanMinimumDuration = state.recordingTime.currentTime < state.recordingTime.minDuration;
 
   return (
     <Box backgroundColor={colors.background} paddingVertical={24} paddingHorizontal={16} style={styles.container}>
@@ -102,10 +107,7 @@ const VoiceMessageInput = ({ onCancel, onSend }: VoiceMessageInputProps) => {
         <Box flexDirection={'row'}>
           <CancelButton label={'Cancel'} onPress={onPressCancel} />
           <Box flex={1} />
-          <SendButton
-            disabled={state.status === 'idle' || state.recordingTime.currentTime < state.recordingTime.minDuration}
-            onPress={onPressSend}
-          />
+          <SendButton disabled={state.status === 'idle' || lessThanMinimumDuration} onPress={onPressSend} />
         </Box>
 
         {/** Record / Stop / Play / Pause **/}
