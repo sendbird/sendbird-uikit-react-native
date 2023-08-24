@@ -21,6 +21,9 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
       this.state = 'idle';
 
       module.setSubscriptionDuration(0.1);
+    }
+
+    setListener() {
       module.addPlayBackListener((data) => {
         const stopped = data.currentPosition >= data.duration;
 
@@ -31,6 +34,9 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
           });
         }
       });
+    }
+    removeListener() {
+      module.removePlayBackListener();
     }
 
     async requestPermission(): Promise<boolean> {
@@ -62,6 +68,7 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
         try {
           this.state = 'preparing';
           this.uri = uri;
+          this.setListener();
           await module.startPlayer(uri);
           this.state = 'playing';
         } catch (e) {
@@ -70,6 +77,7 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
           throw e;
         }
       } else if (this.state === 'paused' && this.uri === uri) {
+        this.setListener();
         await module.resumePlayer();
         this.state = 'playing';
       }
@@ -78,6 +86,7 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
     async pause(): Promise<void> {
       if (this.state === 'playing') {
         await module.pausePlayer();
+        this.removeListener();
         this.state = 'paused';
       }
     }
@@ -85,6 +94,7 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
     async stop(): Promise<void> {
       if (this.state === 'preparing' || this.state === 'playing' || this.state === 'paused') {
         await module.stopPlayer();
+        this.removeListener();
         this.state = 'stopped';
       }
     }

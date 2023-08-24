@@ -250,6 +250,10 @@ const createNativeFileService = ({
           uri: path,
           recordFilePath: filename,
         },
+        android: {
+          uri: path.startsWith('file://') ? path : 'file://' + path,
+          recordFilePath: path,
+        },
         default: {
           uri: path,
           recordFilePath: path,
