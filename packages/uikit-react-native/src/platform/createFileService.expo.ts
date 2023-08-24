@@ -142,6 +142,13 @@ const createExpoFileService = ({
       }
       return response.uri;
     }
+    createRecordFilePath(extension = 'm4a'): string {
+      const basePath = fsModule.cacheDirectory;
+      if (!basePath) throw new Error('Cannot determine directory');
+
+      const filename = `record-${Date.now()}.${extension}`;
+      return `${basePath}/${filename}`;
+    }
   }
 
   return new ExpoFileServiceInterface();
