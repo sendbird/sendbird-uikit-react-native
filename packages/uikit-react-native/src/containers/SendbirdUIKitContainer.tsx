@@ -226,6 +226,8 @@ const SendbirdUIKitContainer = ({
               notificationService={platformServices.notification}
               clipboardService={platformServices.clipboard}
               mediaService={platformServices.media}
+              playerService={platformServices.player}
+              recorderService={platformServices.recorder}
             >
               <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
                 <HeaderStyleProvider

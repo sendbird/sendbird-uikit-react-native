@@ -125,3 +125,17 @@ export const getMessagePreviewTime = (timestamp: number, locale?: Locale) => {
 
   return format(timestamp, 'yyyy/MM/dd', { locale });
 };
+
+/**
+ * milliseconds to 00:00 format
+ * */
+export const millsToMMSS = (mills: number) => {
+  let seconds = Math.floor(mills / 1000);
+  const minutes = Math.floor(seconds / 60);
+  seconds = seconds % 60;
+
+  const mm = String(minutes).padStart(2, '0');
+  const ss = String(seconds).padStart(2, '0');
+
+  return `${mm}:${ss}`;
+};

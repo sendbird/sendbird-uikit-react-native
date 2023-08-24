@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useState } from 'react';
 import {
   NativeSyntheticEvent,
   Platform,
@@ -8,9 +8,10 @@ import {
   View,
 } from 'react-native';
 
-import { MentionType } from '@sendbird/chat/message';
+import { MentionType, MessageMetaArray } from '@sendbird/chat/message';
 import {
   Icon,
+  Modal,
   TextInput,
   createStyleSheet,
   useBottomSheet,
@@ -22,6 +23,7 @@ import { Logger, useIIFE } from '@sendbird/uikit-utils';
 import { useLocalization, useSendbirdChat } from '../../hooks/useContext';
 import type { FileType } from '../../platform/types';
 import type { MentionedUser } from '../../types';
+import VoiceMessageRecorder from './VoiceMessageRecorder';
 import type { ChannelInputProps } from './index';
 import { useChannelInputItems } from './useChannelInputItems';
 
@@ -55,6 +57,8 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   const { STRINGS } = useLocalization();
   const { openSheet } = useBottomSheet();
   const toast = useToast();
+
+  const [voiceMessageRecorderVisible, setVoiceMessageRecorderVisible] = useState(false);
 
   const messageReplyParams = useIIFE(() => {
     const { groupChannel } = sbOptions.uikit;
@@ -104,8 +108,27 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     setMessageToReply?.();
   };
 
+  const sendVoiceMessage = (file: FileType, durationMills: number) => {
+    onPressSendFileMessage({
+      file,
+      metaArrays: [
+        new MessageMetaArray({
+          key: 'KEY_VOICE_MESSAGE_DURATION',
+          value: [String(durationMills)],
+        }),
+        new MessageMetaArray({
+          key: 'KEY_INTERNAL_MESSAGE_TYPE',
+          value: ['voice/m4a'],
+        }),
+      ],
+      ...messageReplyParams,
+    }).catch(onFailureToSend);
+
+    onChangeText('');
+    setMessageToReply?.();
+  };
+
   const sheetItems = useChannelInputItems(channel, sendFileMessage);
-  const onPressAttachment = () => openSheet({ sheetItems });
 
   const getPlaceholder = () => {
     if (inputMuted) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_MUTED;
@@ -125,7 +148,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
         <MessageToReplyPreview messageToReply={messageToReply} setMessageToReply={setMessageToReply} />
       )}
       <View style={styles.sendInputContainer}>
-        {AttachmentsButton && <AttachmentsButton onPress={onPressAttachment} disabled={inputDisabled} />}
+        {AttachmentsButton && <AttachmentsButton onPress={() => openSheet({ sheetItems })} disabled={inputDisabled} />}
         <TextInput
           ref={ref}
           multiline
@@ -144,9 +167,25 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
         </TextInput>
 
         {voiceMessageEnabled && (
-          <VoiceMessageSendButton visible={!sendButtonVisible} disabled={inputDisabled} onPress={() => {}} />
+          <VoiceMessageSendButton
+            visible={!sendButtonVisible}
+            disabled={inputDisabled}
+            onPress={() => setVoiceMessageRecorderVisible(true)}
+          />
         )}
         <MessageSendButton visible={sendButtonVisible} disabled={inputDisabled} onPress={sendUserMessage} />
+        <Modal
+          disableBackgroundClose
+          onClose={() => setVoiceMessageRecorderVisible(false)}
+          backgroundStyle={{ justifyContent: 'flex-end' }}
+          visible={voiceMessageRecorderVisible}
+          type={'slide-no-gesture'}
+        >
+          <VoiceMessageRecorder
+            onCancel={() => setVoiceMessageRecorderVisible(false)}
+            onVoiceMessageSend={({ file, duration }) => sendVoiceMessage(file, duration)}
+          />
+        </Modal>
       </View>
     </View>
   );
