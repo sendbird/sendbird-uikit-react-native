@@ -131,18 +131,19 @@ const VoiceMessageInput = ({ onCancel, onSend }: VoiceMessageInputProps) => {
 const RecordingLight = (props: { visible: boolean }) => {
   const { palette, select } = useUIKitTheme();
   const value = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    const animation = Animated.loop(
+  const animation = useRef(
+    Animated.loop(
       Animated.sequence([
         Animated.timing(value, { toValue: 1, duration: 1000, useNativeDriver: true }),
         Animated.timing(value, { toValue: 0, duration: 1000, useNativeDriver: true }),
       ]),
-    );
+    ),
+  ).current;
 
+  useEffect(() => {
     if (props.visible) animation.start();
     return () => {
-      animation.stop();
+      animation.reset();
     };
   }, [props.visible]);
 
