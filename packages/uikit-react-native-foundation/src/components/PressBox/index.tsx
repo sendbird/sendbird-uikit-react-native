@@ -10,6 +10,7 @@ type PressBoxStateParams = {
 };
 
 type Props = {
+  disabled?: boolean;
   onPress?: (event: GestureResponderEvent) => void;
   onLongPress?: (event: GestureResponderEvent) => void;
   delayLongPress?: number;

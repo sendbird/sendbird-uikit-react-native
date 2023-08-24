@@ -20,12 +20,11 @@ import {
 } from '@sendbird/uikit-react-native-foundation';
 import { Logger, useIIFE } from '@sendbird/uikit-utils';
 
+import { useChannelInputItems } from '../../hooks/useChannelInputItems';
 import { useLocalization, useSendbirdChat } from '../../hooks/useContext';
 import type { FileType } from '../../platform/types';
 import type { MentionedUser } from '../../types';
-import VoiceMessageRecorder from './VoiceMessageRecorder';
 import type { ChannelInputProps } from './index';
-import { useChannelInputItems } from './useChannelInputItems';
 
 interface SendInputProps extends ChannelInputProps {
   text: string;
@@ -36,6 +35,7 @@ interface SendInputProps extends ChannelInputProps {
 
 const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   {
+    VoiceMessageInput,
     MessageToReplyPreview,
     AttachmentsButton,
     onPressSendUserMessage,
@@ -58,7 +58,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   const { openSheet } = useBottomSheet();
   const toast = useToast();
 
-  const [voiceMessageRecorderVisible, setVoiceMessageRecorderVisible] = useState(false);
+  const [voiceMessageInputVisible, setVoiceMessageInputVisible] = useState(false);
 
   const messageReplyParams = useIIFE(() => {
     const { groupChannel } = sbOptions.uikit;
@@ -112,6 +112,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     onPressSendFileMessage({
       file,
       metaArrays: [
+        // TODO: move to utils/constants
         new MessageMetaArray({
           key: 'KEY_VOICE_MESSAGE_DURATION',
           value: [String(durationMills)],
@@ -167,32 +168,34 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
         </TextInput>
 
         {voiceMessageEnabled && (
-          <VoiceMessageSendButton
+          <VoiceMessageButton
             visible={!sendButtonVisible}
             disabled={inputDisabled}
-            onPress={() => setVoiceMessageRecorderVisible(true)}
+            onPress={() => setVoiceMessageInputVisible(true)}
           />
         )}
-        <MessageSendButton visible={sendButtonVisible} disabled={inputDisabled} onPress={sendUserMessage} />
-        <Modal
-          disableBackgroundClose
-          onClose={() => setVoiceMessageRecorderVisible(false)}
-          backgroundStyle={{ justifyContent: 'flex-end' }}
-          visible={voiceMessageRecorderVisible}
-          type={'slide-no-gesture'}
-        >
-          <VoiceMessageRecorder
-            onCancel={() => setVoiceMessageRecorderVisible(false)}
-            onVoiceMessageSend={({ file, duration }) => sendVoiceMessage(file, duration)}
-          />
-        </Modal>
+        <UserMessageSendButton visible={sendButtonVisible} disabled={inputDisabled} onPress={sendUserMessage} />
+        {voiceMessageEnabled && VoiceMessageInput && (
+          <Modal
+            disableBackgroundClose
+            onClose={() => setVoiceMessageInputVisible(false)}
+            backgroundStyle={{ justifyContent: 'flex-end' }}
+            visible={voiceMessageInputVisible}
+            type={'slide-no-gesture'}
+          >
+            <VoiceMessageInput
+              onCancel={() => setVoiceMessageInputVisible(false)}
+              onSend={({ file, duration }) => sendVoiceMessage(file, duration)}
+            />
+          </Modal>
+        )}
       </View>
     </View>
   );
 });
 
-type SendButtonProps = { visible: boolean; disabled: boolean; onPress: () => void };
-const VoiceMessageSendButton = ({ visible, disabled, onPress }: SendButtonProps) => {
+type InputButtonProps = { visible: boolean; disabled: boolean; onPress: () => void };
+const VoiceMessageButton = ({ visible, disabled, onPress }: InputButtonProps) => {
   const { colors } = useUIKitTheme();
   if (!visible) return null;
 
@@ -207,7 +210,7 @@ const VoiceMessageSendButton = ({ visible, disabled, onPress }: SendButtonProps)
     </TouchableOpacity>
   );
 };
-const MessageSendButton = ({ visible, disabled, onPress }: SendButtonProps) => {
+const UserMessageSendButton = ({ visible, disabled, onPress }: InputButtonProps) => {
   const { colors } = useUIKitTheme();
   if (!visible) return null;
   return (
