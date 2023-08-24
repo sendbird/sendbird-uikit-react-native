@@ -58,6 +58,7 @@ export interface FileSystemServiceInterface {
   // - Supports opening documents in place
   // - Application supports iTunes file sharing
   save(options?: SaveOptions): Promise<DownloadedPath | null>;
+  createRecordFilePath(extension?: string): string;
 }
 
 // ---------- MediaService ---------- //
