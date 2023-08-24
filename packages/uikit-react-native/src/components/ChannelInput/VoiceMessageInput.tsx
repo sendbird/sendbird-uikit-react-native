@@ -4,17 +4,17 @@ import { Animated, Easing, StyleSheet } from 'react-native';
 import { Box, Icon, PressBox, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { millsToMMSS } from '@sendbird/uikit-utils';
 
+import useVoiceMessageInput from '../../hooks/useVoiceMessageInput';
 import type { FileType } from '../../platform/types';
-import useVoiceMessageInput from './useVoiceMessageInput';
 
-export type VoiceMessageRecorderProps = {
+export type VoiceMessageInputProps = {
   onCancel: () => void; // stop playing, recording, hide view
-  onVoiceMessageSend: (params: { file: FileType; duration: number }) => void;
+  onSend: (params: { file: FileType; duration: number }) => void;
 };
 
-const VoiceMessageRecorder = ({ onCancel, onVoiceMessageSend }: VoiceMessageRecorderProps) => {
+const VoiceMessageInput = ({ onCancel, onSend }: VoiceMessageInputProps) => {
   const { colors, palette, select } = useUIKitTheme();
-  const { actions, state } = useVoiceMessageInput((file, duration) => onVoiceMessageSend({ file, duration }));
+  const { actions, state } = useVoiceMessageInput((file, duration) => onSend({ file, duration }));
 
   const onPressCancel = async () => {
     actions.cancel();
@@ -246,7 +246,7 @@ const SendButton = (props: { onPress: () => void; disabled: boolean }) => {
   const iconColor = props.disabled ? colors.onBackground04 : colors.onBackgroundReverse01;
 
   return (
-    <PressBox activeOpacity={0.8} onPress={props.onPress}>
+    <PressBox disabled={props.disabled} activeOpacity={0.8} onPress={props.onPress}>
       <Box backgroundColor={backgroundColor} padding={7} borderRadius={40}>
         <Icon icon={'send'} size={20} color={iconColor} />
       </Box>
@@ -261,4 +261,4 @@ const styles = createStyleSheet({
   },
 });
 
-export default VoiceMessageRecorder;
+export default VoiceMessageInput;

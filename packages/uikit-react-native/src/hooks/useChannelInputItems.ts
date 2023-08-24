@@ -1,10 +1,10 @@
 import { BottomSheetItem, useAlert, useToast } from '@sendbird/uikit-react-native-foundation';
 import { SendbirdChannel, isImage, shouldCompressImage, useIIFE } from '@sendbird/uikit-utils';
 
-import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
-import SBUError from '../../libs/SBUError';
-import SBUUtils from '../../libs/SBUUtils';
-import { FileType } from '../../platform/types';
+import SBUError from '../libs/SBUError';
+import SBUUtils from '../libs/SBUUtils';
+import { FileType } from '../platform/types';
+import { useLocalization, usePlatformService, useSendbirdChat } from './useContext';
 
 export const useChannelInputItems = (channel: SendbirdChannel, sendFileMessage: (file: FileType) => void) => {
   const { sbOptions, imageCompressionConfig } = useSendbirdChat();
