@@ -60,7 +60,7 @@ export interface FileSystemServiceInterface {
   // - Supports opening documents in place
   // - Application supports iTunes file sharing
   save(options?: SaveOptions): Promise<DownloadedPath | null>;
-  createRecordFilePath(extension?: string): string;
+  createRecordFilePath(customExtension?: string): { recordFilePath: string; uri: string };
 }
 
 // ---------- MediaService ---------- //
@@ -119,7 +119,9 @@ export interface PlayerServiceInterface {
   /**
    * Add a playback listener.
    * */
-  addListener(callback: (currentTime: number, duration: number) => void): Unsubscribe;
+  addPlaybackListener(
+    callback: (params: { currentTime: number; duration: number; stopped: boolean }) => void,
+  ): Unsubscribe;
 
   /**
    * State transition:
@@ -155,14 +157,19 @@ export interface PlayerServiceInterface {
 // ---------- RecorderService ---------- //
 export interface RecorderOptions {
   /**
-   * Minimum recording duration (seconds).
+   * Minimum recording duration (milliseconds).
    * */
   minDuration: number;
 
   /**
-   * Maximum recording duration (seconds).
+   * Maximum recording duration (milliseconds).
    * */
   maxDuration: number;
+
+  /**
+   * File extension for recorded audio file
+   * */
+  extension: string;
 }
 
 export interface RecorderServiceInterface {
@@ -177,7 +184,7 @@ export interface RecorderServiceInterface {
   /**
    * Add recording listener.
    * */
-  addListener(callback: (duration: number) => void): Unsubscribe;
+  addRecordingListener(callback: (params: { currentTime: number; completed: boolean }) => void): Unsubscribe;
 
   /**
    * State transition:

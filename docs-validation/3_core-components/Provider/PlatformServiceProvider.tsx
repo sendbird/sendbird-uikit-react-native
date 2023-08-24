@@ -113,8 +113,12 @@ class MyFileService implements FileServiceInterface {
 
     return response.path();
   }
-  createRecordFilePath(extension = 'm4a'): string {
-    return `${RNFetchBlob.cacheDir}/${Date.now()}.${extension}`;
+  createRecordFilePath(customExtension = 'm4a'): { recordFilePath: string; uri: string } {
+    const filename = `${Date.now()}.${customExtension}`;
+    return {
+      uri: `${RNFetchBlob.cacheDir}/${filename}`,
+      recordFilePath: `${RNFetchBlob.cacheDir}/${filename}`,
+    }
   }
 }
 /** ------------------ **/

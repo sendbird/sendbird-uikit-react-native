@@ -68,6 +68,7 @@ export type ChannelInputProps = {
   // sub-components
   AttachmentsButton?: (props: AttachmentsButtonProps) => React.ReactNode | null;
   MessageToReplyPreview?: (props: MessageToReplyPreviewProps) => React.ReactNode | null;
+  VoiceMessageRecorder?: () => React.ReactNode | null;
 };
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
@@ -96,6 +97,7 @@ const ChannelInput = (props: ChannelInputProps) => {
 
   const mentionAvailable =
     sbOptions.uikit.groupChannel.channel.enableMention && channel.isGroupChannel() && !channel.isBroadcast;
+
   const inputKeyToRemount = GET_INPUT_KEY(mentionAvailable ? mentionedUsers.length === 0 : false);
 
   const [inputHeight, setInputHeight] = useState(styles.inputDefault.height);
