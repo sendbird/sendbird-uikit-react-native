@@ -15,6 +15,9 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
   const module = new audioRecorderModule.default();
 
   class Recorder implements RecorderServiceInterface {
+    // NOTE: In Android, even when startRecorder() is awaited, if stop() is executed immediately afterward, an error occurs
+    lazyStopBlock?: () => Promise<void>;
+
     state: RecorderServiceInterface['state'] = 'idle';
     options: RecorderServiceInterface['options'] = {
       minDuration: 1000,
@@ -103,6 +106,13 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
           await module.startRecorder(uri, {
             ...this.audioOptions,
           });
+
+          if (Platform.OS === 'android') {
+            const timeout = 500;
+            this.lazyStopBlock = () => new Promise((resolve) => setTimeout(resolve, timeout));
+            setTimeout(() => (this.lazyStopBlock = undefined), timeout);
+          }
+
           this.state = 'recording';
         } catch (e) {
           this.state = 'idle';
@@ -113,6 +123,10 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
 
     async stop(): Promise<void> {
       if (this.state === 'recording') {
+        if (Platform.OS === 'android') {
+          await this.lazyStopBlock?.();
+        }
+
         await module.stopRecorder();
         this.state = 'completed';
       }
