@@ -120,14 +120,6 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
 
             if (completed) setStatus('completed');
           });
-          playerService.addPlaybackListener(({ currentTime, duration, stopped }) => {
-            setPlayingTime({
-              currentTime,
-              duration,
-            });
-
-            if (stopped) setStatus('paused');
-          });
 
           await recorderService.record(recordFilePath);
           setStatus('recording');
@@ -148,6 +140,14 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
         }
 
         if (status === 'completed' || status === 'paused') {
+          playerService.addPlaybackListener(({ currentTime, duration, stopped }) => {
+            setPlayingTime({
+              currentTime,
+              duration,
+            });
+
+            if (stopped) setStatus('paused');
+          });
           const { recordFilePath } = getVoiceMessageRecordingPath();
           await playerService.play(recordFilePath);
           setStatus('playing');
