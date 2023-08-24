@@ -76,7 +76,7 @@ const VoiceMessageInput = ({ onCancel, onSend }: VoiceMessageInputProps) => {
   const recorderStyle = state.status !== 'idle' ? recordingActiveStyle : recordingInActiveStyle;
 
   return (
-    <Box backgroundColor={'white'} paddingVertical={24} paddingHorizontal={16} style={styles.container}>
+    <Box backgroundColor={colors.background} paddingVertical={24} paddingHorizontal={16} style={styles.container}>
       {/** Progress bar **/}
       <ProgressBar
         current={useRecorderProgress ? state.recordingTime.currentTime : state.playingTime.currentTime}
