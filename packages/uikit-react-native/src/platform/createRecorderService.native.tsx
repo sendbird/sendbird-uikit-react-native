@@ -3,6 +3,8 @@ import * as RNAudioRecorder from 'react-native-audio-recorder-player';
 import * as Permissions from 'react-native-permissions';
 import { Permission } from 'react-native-permissions/src/types';
 
+import { sleep } from '@sendbird/uikit-utils';
+
 import nativePermissionGranted from '../utils/nativePermissionGranted';
 import type { RecorderServiceInterface, Unsubscribe } from './types';
 
@@ -16,7 +18,13 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
 
   class Recorder implements RecorderServiceInterface {
     // NOTE: In Android, even when startRecorder() is awaited, if stop() is executed immediately afterward, an error occurs
-    lazyStopBlock?: () => Promise<void>;
+    private _recordStartedAt = 0;
+    private _getRecorderStopSafeBuffer() {
+      const minWaitingTime = 500;
+      const elapsedTime = Date.now() - this._recordStartedAt;
+      if (elapsedTime > minWaitingTime) return 0;
+      else return minWaitingTime - elapsedTime;
+    }
 
     state: RecorderServiceInterface['state'] = 'idle';
     options: RecorderServiceInterface['options'] = {
@@ -108,9 +116,7 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
           });
 
           if (Platform.OS === 'android') {
-            const timeout = 500;
-            this.lazyStopBlock = () => new Promise((resolve) => setTimeout(resolve, timeout));
-            setTimeout(() => (this.lazyStopBlock = undefined), timeout);
+            this._recordStartedAt = Date.now();
           }
 
           this.state = 'recording';
@@ -124,7 +130,8 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
     async stop(): Promise<void> {
       if (this.state === 'recording') {
         if (Platform.OS === 'android') {
-          await this.lazyStopBlock?.();
+          const buffer = this._getRecorderStopSafeBuffer();
+          if (buffer > 0) await sleep(buffer);
         }
 
         await module.stopRecorder();
