@@ -3,7 +3,7 @@ import * as RNAudioRecorder from 'react-native-audio-recorder-player';
 import * as Permissions from 'react-native-permissions';
 import { Permission } from 'react-native-permissions/src/types';
 
-import { sleep } from '@sendbird/uikit-utils';
+import { matchesOneOf, sleep } from '@sendbird/uikit-utils';
 
 import nativePermissionGranted from '../utils/nativePermissionGranted';
 import type { RecorderServiceInterface, Unsubscribe } from './types';
@@ -108,7 +108,7 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
     }
 
     async record(uri?: string): Promise<void> {
-      if (this.state === 'idle' || this.state === 'completed') {
+      if (matchesOneOf(this.state, ['idle', 'completed'])) {
         try {
           this.state = 'preparing';
           await module.startRecorder(uri, {
@@ -128,7 +128,7 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
     }
 
     async stop(): Promise<void> {
-      if (this.state === 'recording') {
+      if (matchesOneOf(this.state, ['recording'])) {
         if (Platform.OS === 'android') {
           const buffer = this._getRecorderStopSafeBuffer();
           if (buffer > 0) await sleep(buffer);
