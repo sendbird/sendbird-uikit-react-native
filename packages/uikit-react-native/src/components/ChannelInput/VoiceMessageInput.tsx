@@ -8,22 +8,22 @@ import useVoiceMessageInput from '../../hooks/useVoiceMessageInput';
 import type { FileType } from '../../platform/types';
 
 export type VoiceMessageInputProps = {
-  onCancel: () => void; // stop playing, recording, hide view
+  onClose: () => void; // stop playing, recording, hide view
   onSend: (params: { file: FileType; duration: number }) => void;
 };
 
-const VoiceMessageInput = ({ onCancel, onSend }: VoiceMessageInputProps) => {
+const VoiceMessageInput = ({ onClose, onSend }: VoiceMessageInputProps) => {
   const { colors, palette, select } = useUIKitTheme();
   const { actions, state } = useVoiceMessageInput((file, duration) => onSend({ file, duration }));
 
   const onPressCancel = async () => {
     actions.cancel();
-    onCancel();
+    onClose();
   };
 
   const onPressSend = async () => {
     actions.send();
-    onCancel();
+    onClose();
   };
 
   const onPressVoiceMessageAction = () => {
