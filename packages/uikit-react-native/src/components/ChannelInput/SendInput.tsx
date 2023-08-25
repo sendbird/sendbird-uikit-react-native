@@ -184,7 +184,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
             type={'slide-no-gesture'}
           >
             <VoiceMessageInput
-              onCancel={() => setVoiceMessageInputVisible(false)}
+              onClose={() => setVoiceMessageInputVisible(false)}
               onSend={({ file, duration }) => sendVoiceMessage(file, duration)}
             />
           </Modal>
