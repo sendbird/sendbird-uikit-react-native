@@ -2,6 +2,8 @@ import { Platform } from 'react-native';
 import type * as RNAudioRecorder from 'react-native-audio-recorder-player';
 import * as Permissions from 'react-native-permissions';
 
+import { matchesOneOf } from '@sendbird/uikit-utils';
+
 import type { PlayerServiceInterface, Unsubscribe } from './types';
 
 type Modules = {
@@ -64,7 +66,7 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
     }
 
     async play(uri: string): Promise<void> {
-      if (this.state === 'idle' || this.state === 'stopped') {
+      if (matchesOneOf(this.state, ['idle', 'stopped'])) {
         try {
           this.state = 'preparing';
           this.uri = uri;
@@ -76,7 +78,7 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
           this.uri = undefined;
           throw e;
         }
-      } else if (this.state === 'paused' && this.uri === uri) {
+      } else if (matchesOneOf(this.state, ['paused']) && this.uri === uri) {
         this.setListener();
         await module.resumePlayer();
         this.state = 'playing';
@@ -84,7 +86,7 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
     }
 
     async pause(): Promise<void> {
-      if (this.state === 'playing') {
+      if (matchesOneOf(this.state, ['playing'])) {
         await module.pausePlayer();
         this.removeListener();
         this.state = 'paused';
@@ -92,7 +94,7 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
     }
 
     async stop(): Promise<void> {
-      if (this.state === 'preparing' || this.state === 'playing' || this.state === 'paused') {
+      if (matchesOneOf(this.state, ['preparing', 'playing', 'paused'])) {
         await module.stopPlayer();
         this.removeListener();
         this.state = 'stopped';
@@ -107,9 +109,9 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
     }
 
     async seek(time: number): Promise<void> {
-      if (this.state !== 'playing' && this.state !== 'paused') return;
-
-      await module.seekToPlayer(time);
+      if (matchesOneOf(this.state, ['playing', 'paused'])) {
+        await module.seekToPlayer(time);
+      }
     }
   }
 

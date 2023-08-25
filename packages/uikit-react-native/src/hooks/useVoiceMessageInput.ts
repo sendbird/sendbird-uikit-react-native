@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-import { Logger } from '@sendbird/uikit-utils';
+import { Logger, matchesOneOf } from '@sendbird/uikit-utils';
 
 import { FileType } from '../platform/types';
 import { usePlatformService } from './useContext';
@@ -109,7 +109,7 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
           return;
         }
 
-        if (status === 'idle') {
+        if (matchesOneOf(status, ['idle'])) {
           const { recordFilePath } = getVoiceMessageRecordingPath();
           recorderService.addRecordingListener(({ currentTime, completed }) => {
             setRecordingTime({
@@ -126,7 +126,7 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
         }
       },
       async stopRecording() {
-        if (status === 'recording') {
+        if (matchesOneOf(status, ['recording'])) {
           await recorderService.stop();
           setStatus('completed');
         }
@@ -139,7 +139,7 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
           return;
         }
 
-        if (status === 'completed' || status === 'paused') {
+        if (matchesOneOf(status, ['completed', 'paused'])) {
           playerService.addPlaybackListener(({ currentTime, duration, stopped }) => {
             setPlayingTime({
               currentTime,
@@ -154,15 +154,13 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
         }
       },
       async pausePlayer() {
-        if (status === 'playing') {
+        if (matchesOneOf(status, ['playing'])) {
           await playerService.pause();
           setStatus('paused');
         }
       },
       async send() {
-        if (status === 'idle') return;
-
-        if (recordingPath.current) {
+        if (matchesOneOf(status, ['recording', 'completed', 'playing', 'paused']) && recordingPath.current) {
           // TODO: move to utils/constants
           const voiceFile = {
             uri: recordingPath.current.uri,
