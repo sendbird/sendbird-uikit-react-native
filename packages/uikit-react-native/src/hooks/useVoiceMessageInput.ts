@@ -14,22 +14,22 @@ type State = {
    *   - startRecording(): recording
    * recording:
    *   - cancel(): idle
-   *   - stopRecording(): completed
-   *   - send(): completed > idle
-   * completed:
+   *   - stopRecording(): recording_completed
+   *   - send(): recording_completed > idle
+   * recording_completed:
    *   - cancel(): idle
    *   - playPlayer(): playing
    *   - send(): idle
    * playing:
    *   - cancel(): idle
-   *   - pausePlayer(): paused
+   *   - pausePlayer(): playing_paused
    *   - send(): idle
-   * paused:
+   * playing_paused:
    *   - cancel(): idle
    *   - playPlayer(): playing
    *   - send(): idle
    * */
-  status: 'idle' | 'recording' | 'completed' | 'playing' | 'paused';
+  status: 'idle' | 'recording' | 'recording_completed' | 'playing' | 'playing_paused';
   recordingTime: {
     currentTime: number;
     minDuration: number;
@@ -118,7 +118,7 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
               minDuration: recorderService.options.minDuration,
             });
 
-            if (completed) setStatus('completed');
+            if (completed) setStatus('recording_completed');
           });
 
           await recorderService.record(recordFilePath);
@@ -128,7 +128,7 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
       async stopRecording() {
         if (matchesOneOf(status, ['recording'])) {
           await recorderService.stop();
-          setStatus('completed');
+          setStatus('recording_completed');
         }
       },
       async playPlayer() {
@@ -139,14 +139,14 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
           return;
         }
 
-        if (matchesOneOf(status, ['completed', 'paused'])) {
+        if (matchesOneOf(status, ['recording_completed', 'playing_paused'])) {
           playerService.addPlaybackListener(({ currentTime, duration, stopped }) => {
             setPlayingTime({
               currentTime,
               duration,
             });
 
-            if (stopped) setStatus('paused');
+            if (stopped) setStatus('playing_paused');
           });
           const { recordFilePath } = getVoiceMessageRecordingPath();
           await playerService.play(recordFilePath);
@@ -156,11 +156,14 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
       async pausePlayer() {
         if (matchesOneOf(status, ['playing'])) {
           await playerService.pause();
-          setStatus('paused');
+          setStatus('playing_paused');
         }
       },
       async send() {
-        if (matchesOneOf(status, ['recording', 'completed', 'playing', 'paused']) && recordingPath.current) {
+        if (
+          matchesOneOf(status, ['recording', 'recording_completed', 'playing', 'playing_paused']) &&
+          recordingPath.current
+        ) {
           // TODO: move to utils/constants
           const voiceFile = {
             uri: recordingPath.current.uri,

@@ -38,8 +38,8 @@ const VoiceMessageInput = ({ onClose, onSend }: VoiceMessageInputProps) => {
           actions.stopRecording();
         }
         break;
-      case 'completed':
-      case 'paused':
+      case 'recording_completed':
+      case 'playing_paused':
         actions.playPlayer();
         break;
       case 'playing':
@@ -55,8 +55,8 @@ const VoiceMessageInput = ({ onClose, onSend }: VoiceMessageInputProps) => {
         );
       case 'recording':
         return <Icon icon={'stop'} size={20} color={colors.onBackground01} />;
-      case 'completed':
-      case 'paused':
+      case 'recording_completed':
+      case 'playing_paused':
         return <Icon icon={'play'} size={20} color={colors.onBackground01} />;
       case 'playing':
         return <Icon icon={'pause'} size={20} color={colors.onBackground01} />;
@@ -76,7 +76,7 @@ const VoiceMessageInput = ({ onClose, onSend }: VoiceMessageInputProps) => {
     overlayTextOpacity: 0.88,
   };
 
-  const useRecorderProgress = state.status === 'recording' || state.status === 'completed';
+  const useRecorderProgress = state.status === 'recording' || state.status === 'recording_completed';
   const recorderStyle = state.status !== 'idle' ? recordingActiveStyle : recordingInActiveStyle;
   const lessThanMinimumDuration = state.recordingTime.currentTime < state.recordingTime.minDuration;
 
