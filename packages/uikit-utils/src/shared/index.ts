@@ -55,3 +55,7 @@ export function mergeObjectArrays<T>(A: T[], B: T[], key: keyof T): T[] {
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+export function matchesOneOf<V, C extends V[]>(value: V, candidates: C) {
+  return candidates.includes(value);
+}
