@@ -14,7 +14,7 @@ type Listener = (params: { currentTime: number; duration: number; stopped: boole
 const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Modules): PlayerServiceInterface => {
   const module = new audioRecorderModule.default();
 
-  class Player implements PlayerServiceInterface {
+  class VoicePlayer implements PlayerServiceInterface {
     uri?: string;
     state: PlayerServiceInterface['state'] = 'idle';
     private readonly subscribers = new Set<Listener>();
@@ -121,7 +121,7 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
     }
   }
 
-  return new Player();
+  return new VoicePlayer();
 };
 
 export default createNativePlayerService;

@@ -16,7 +16,7 @@ type Modules = {
 const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: Modules): RecorderServiceInterface => {
   const module = new audioRecorderModule.default();
 
-  class Recorder implements RecorderServiceInterface {
+  class VoiceRecorder implements RecorderServiceInterface {
     // NOTE: In Android, even when startRecorder() is awaited, if stop() is executed immediately afterward, an error occurs
     private _recordStartedAt = 0;
     private _getRecorderStopSafeBuffer() {
@@ -146,7 +146,7 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
     }
   }
 
-  return new Recorder();
+  return new VoiceRecorder();
 };
 
 export default createNativeRecorderService;
