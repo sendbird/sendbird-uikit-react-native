@@ -30,6 +30,7 @@ import type {
   PinnedMessageListQuery,
   PinnedMessageListQueryParams,
 } from '@sendbird/chat/lib/__definition';
+import { FileCompat } from '@sendbird/chat/lib/__definition';
 import {
   MessageChangelogs,
   MessageRequestHandler,
@@ -49,6 +50,7 @@ import type {
   SendbirdGroupChannel,
   SendbirdMember,
   SendbirdMessageCollection,
+  SendbirdMultipleFilesMessage,
   SendbirdOpenChannel,
   SendbirdRestrictedUser,
   SendbirdUserMessage,
@@ -350,6 +352,23 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
     throw new Error('Method not implemented.');
   }
   getMessageChangeLogsSinceToken(): Promise<MessageChangelogs> {
+    throw new Error('Method not implemented.');
+  }
+  resendMessage(
+    failedMessage: SendbirdMultipleFilesMessage,
+  ): MultipleFilesMessageRequestHandler<SendbirdMultipleFilesMessage>;
+  resendMessage(failedMessage: SendbirdFileMessage, file?: FileCompat): MessageRequestHandler<SendbirdFileMessage>;
+  resendMessage(failedMessage: SendbirdUserMessage): MessageRequestHandler<SendbirdUserMessage>;
+  resendMessage(): unknown {
+    throw new Error('Method not implemented.');
+  }
+  copyMessage(
+    channel: SendbirdGroupChannel,
+    message: SendbirdMultipleFilesMessage,
+  ): MessageRequestHandler<SendbirdMultipleFilesMessage>;
+  copyMessage(channel: SendbirdBaseChannel, message: SendbirdFileMessage): MessageRequestHandler<SendbirdFileMessage>;
+  copyMessage(channel: SendbirdBaseChannel, message: SendbirdUserMessage): MessageRequestHandler<SendbirdUserMessage>;
+  copyMessage(): unknown {
     throw new Error('Method not implemented.');
   }
   sendUserMessage(): MessageRequestHandler {
