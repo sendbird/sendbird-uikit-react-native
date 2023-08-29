@@ -35,6 +35,8 @@ const ProgressBar = ({ current = 100, total = 100, trackColor, barColor, overlay
 
     animation.start();
     return () => {
+      if (Number.isNaN(percent)) return;
+
       animation.stop();
     };
   }, [percent]);
