@@ -79,9 +79,14 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
           throw e;
         }
       } else if (matchesOneOf(this.state, ['paused']) && this.uri === uri) {
-        this.setListener();
-        await module.resumePlayer();
-        this.state = 'playing';
+        try {
+          this.setListener();
+          await module.resumePlayer();
+          this.state = 'playing';
+        } catch (e) {
+          this.removeListener();
+          throw e;
+        }
       }
     }
 
