@@ -241,6 +241,25 @@ const createNativeFileService = ({
         } as const,
       };
     };
+
+    createRecordFilePath(customExtension = 'm4a'): { recordFilePath: string; uri: string } {
+      const filename = `record-${Date.now()}.${customExtension}`;
+      const path = `${fsModule.Dirs.CacheDir}/${filename}`;
+      return Platform.select({
+        ios: {
+          uri: path,
+          recordFilePath: filename,
+        },
+        android: {
+          uri: path.startsWith('file://') ? path : 'file://' + path,
+          recordFilePath: path,
+        },
+        default: {
+          uri: path,
+          recordFilePath: path,
+        },
+      });
+    }
   }
 
   return new NativeFileService();

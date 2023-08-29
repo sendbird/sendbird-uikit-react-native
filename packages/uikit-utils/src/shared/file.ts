@@ -18,6 +18,7 @@ const EXTENSION_MIME_MAP = {
 
   // Audio
   'aac': 'audio/aac',
+  'm4a': 'audio/m4a',
   'mid': 'audio/midi',
   'mp3': 'audio/mpeg',
   'ogg': 'audio/ogg',

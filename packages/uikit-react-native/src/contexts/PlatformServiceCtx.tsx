@@ -5,33 +5,21 @@ import type {
   FileServiceInterface,
   MediaServiceInterface,
   NotificationServiceInterface,
+  PlayerServiceInterface,
+  RecorderServiceInterface,
 } from '../platform/types';
-
-type Props = React.PropsWithChildren<{
-  fileService: FileServiceInterface;
-  clipboardService: ClipboardServiceInterface;
-  notificationService: NotificationServiceInterface;
-  mediaService: MediaServiceInterface;
-}>;
 
 export type PlatformServiceContextType = {
   fileService: FileServiceInterface;
   clipboardService: ClipboardServiceInterface;
   notificationService: NotificationServiceInterface;
   mediaService: MediaServiceInterface;
+  recorderService: RecorderServiceInterface;
+  playerService: PlayerServiceInterface;
 };
+type Props = React.PropsWithChildren<PlatformServiceContextType>;
 
 export const PlatformServiceContext = React.createContext<PlatformServiceContextType | null>(null);
-export const PlatformServiceProvider = ({
-  children,
-  fileService,
-  clipboardService,
-  notificationService,
-  mediaService,
-}: Props) => {
-  return (
-    <PlatformServiceContext.Provider value={{ fileService, clipboardService, notificationService, mediaService }}>
-      {children}
-    </PlatformServiceContext.Provider>
-  );
+export const PlatformServiceProvider = ({ children, ...services }: Props) => {
+  return <PlatformServiceContext.Provider value={services}>{children}</PlatformServiceContext.Provider>;
 };
