@@ -3,7 +3,6 @@ import type { Locale } from 'date-fns';
 import type { PartialDeep } from '@sendbird/uikit-utils';
 import {
   getDateSeparatorFormat,
-  getGroupChannelLastMessage,
   getGroupChannelPreviewTime,
   getGroupChannelTitle,
   getMessagePreviewBody,
@@ -13,6 +12,7 @@ import {
   getMessageType,
   getOpenChannelParticipants,
   getOpenChannelTitle,
+  isVoiceMessage,
 } from '@sendbird/uikit-utils';
 
 import { UNKNOWN_USER_ID } from '../constants';
@@ -33,6 +33,7 @@ type StringSetCreateOptions = {
 export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOptions): StringSet => {
   const USER_NO_NAME = overrides?.LABELS?.USER_NO_NAME ?? '(No name)';
   const CHANNEL_NO_MEMBERS = overrides?.LABELS?.CHANNEL_NO_MEMBERS ?? '(No members)';
+
   return {
     OPEN_CHANNEL: {
       HEADER_TITLE: (channel) => getOpenChannelTitle(channel),
@@ -191,7 +192,11 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       CHANNEL_PREVIEW_TITLE: (currentUserId, channel) =>
         getGroupChannelTitle(currentUserId, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       CHANNEL_PREVIEW_TITLE_CAPTION: (channel, locale) => getGroupChannelPreviewTime(channel, locale ?? dateLocale),
-      CHANNEL_PREVIEW_BODY: (channel) => getGroupChannelLastMessage(channel),
+      CHANNEL_PREVIEW_BODY: (channel) => {
+        if (!channel.lastMessage) return '';
+        if (isVoiceMessage(channel.lastMessage)) return 'Voice message';
+        return getMessagePreviewBody(channel.lastMessage);
+      },
       TYPE_SELECTOR_HEADER_TITLE: 'Channel type',
       TYPE_SELECTOR_GROUP: 'Group',
       TYPE_SELECTOR_SUPER_GROUP: 'Super group',
@@ -232,7 +237,10 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       HEADER_INPUT_PLACEHOLDER: 'Search',
       HEADER_RIGHT: 'Search',
       SEARCH_RESULT_ITEM_TITLE: (message) => getMessagePreviewTitle(message),
-      SEARCH_RESULT_ITEM_BODY: (message) => getMessagePreviewBody(message),
+      SEARCH_RESULT_ITEM_BODY: (message) => {
+        if (isVoiceMessage(message)) return 'Voice message';
+        return getMessagePreviewBody(message);
+      },
       SEARCH_RESULT_ITEM_TITLE_CAPTION: (message, locale) => {
         return getMessagePreviewTime(message.createdAt, locale ?? dateLocale);
       },
