@@ -294,6 +294,7 @@ export interface StringSet {
 
     /** Voice message **/
     VOICE_MESSAGE: string;
+    VOICE_MESSAGE_INPUT_CANCEL: string;
   };
   FILE_VIEWER: {
     TITLE: (message: SendbirdFileMessage) => string;
