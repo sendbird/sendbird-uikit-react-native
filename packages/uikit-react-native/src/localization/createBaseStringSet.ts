@@ -315,6 +315,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
         return 'Unknown message';
       },
       VOICE_MESSAGE: 'Voice message',
+      VOICE_MESSAGE_INPUT_CANCEL: 'Cancel',
       ...overrides?.LABELS,
     },
     FILE_VIEWER: {

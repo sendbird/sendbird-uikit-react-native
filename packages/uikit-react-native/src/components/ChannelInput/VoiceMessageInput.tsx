@@ -12,6 +12,7 @@ import {
 } from '@sendbird/uikit-react-native-foundation';
 import { millsToMMSS } from '@sendbird/uikit-utils';
 
+import { useLocalization } from '../../hooks/useContext';
 import useVoiceMessageInput from '../../hooks/useVoiceMessageInput';
 import type { FileType } from '../../platform/types';
 
@@ -21,6 +22,7 @@ export type VoiceMessageInputProps = {
 };
 
 const VoiceMessageInput = ({ onClose, onSend }: VoiceMessageInputProps) => {
+  const { STRINGS } = useLocalization();
   const { colors, palette, select } = useUIKitTheme();
   const { actions, state } = useVoiceMessageInput((file, duration) => onSend({ file, duration }));
 
@@ -114,7 +116,7 @@ const VoiceMessageInput = ({ onClose, onSend }: VoiceMessageInputProps) => {
       <Box height={34} alignItems={'center'} justifyContent={'center'}>
         {/** Cancel / Send **/}
         <Box flexDirection={'row'}>
-          <CancelButton label={'Cancel'} onPress={onPressCancel} />
+          <CancelButton label={STRINGS.LABELS.VOICE_MESSAGE_INPUT_CANCEL} onPress={onPressCancel} />
           <Box flex={1} />
           <SendButton disabled={state.status === 'idle' || lessThanMinimumDuration} onPress={onPressSend} />
         </Box>
