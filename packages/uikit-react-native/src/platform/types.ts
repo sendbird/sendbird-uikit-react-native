@@ -191,6 +191,11 @@ export interface RecorderServiceInterface {
   addRecordingListener(callback: (params: { currentTime: number; completed: boolean }) => void): Unsubscribe;
 
   /**
+   * Add state listener.
+   * */
+  addStateListener(callback: (state: RecorderServiceInterface['state']) => void): Unsubscribe;
+
+  /**
    * State transition:
    *   [idle, completed] to [recording]
    * */
