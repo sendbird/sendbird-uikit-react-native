@@ -261,6 +261,32 @@ const DarkUIKitTheme = createTheme({
             },
           },
         },
+        voiceMessageInput: {
+          default: {
+            active: {
+              textCancel: palette.primary200,
+              textTime: palette.onBackgroundLight01,
+              background: palette.background600,
+              actionIcon: palette.onBackgroundDark01,
+              actionIconBackground: palette.background500,
+              sendIcon: palette.onBackgroundLight01,
+              sendIconBackground: palette.primary200,
+              progressTrack: palette.primary200,
+              recording: palette.error300,
+            },
+            inactive: {
+              textCancel: palette.primary200,
+              textTime: palette.onBackgroundDark03,
+              background: palette.background600,
+              actionIcon: palette.onBackgroundDark01,
+              actionIconBackground: palette.background500,
+              sendIcon: palette.onBackgroundDark04,
+              sendIconBackground: palette.background500,
+              progressTrack: palette.background400,
+              recording: palette.error200,
+            },
+          },
+        },
       },
     } satisfies UIKitColors;
   },
