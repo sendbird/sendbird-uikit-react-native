@@ -6,6 +6,8 @@ import AdminMessage from './Message.admin';
 import FileMessage from './Message.file';
 import ImageFileMessage from './Message.file.image';
 import VideoFileMessage from './Message.file.video';
+import VoiceFileMessage from './Message.file.voice';
+import type { VoiceFileMessageState } from './Message.file.voice';
 import UnknownMessage from './Message.unknown';
 import UserMessage from './Message.user';
 import OpenGraphUser from './Message.user.og';
@@ -34,6 +36,10 @@ export type GroupChannelMessageProps<T extends SendbirdMessage, AdditionalProps 
   onPressAvatar?: () => void;
   onPressURL?: (url: string) => void;
   onPressMentionedUser?: (mentionedUser?: SendbirdUser) => void;
+  onToggleVoiceMessage?: (
+    state: VoiceFileMessageState,
+    setState: React.Dispatch<React.SetStateAction<VoiceFileMessageState>>,
+  ) => Promise<void>;
 } & AdditionalProps;
 
 const GroupChannelMessage = {
@@ -42,6 +48,7 @@ const GroupChannelMessage = {
   File: FileMessage,
   ImageFile: ImageFileMessage,
   VideoFile: VideoFileMessage,
+  VoiceFile: VoiceFileMessage,
   Admin: AdminMessage,
   Unknown: UnknownMessage,
 };
