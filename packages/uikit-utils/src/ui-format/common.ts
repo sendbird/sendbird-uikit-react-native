@@ -139,3 +139,16 @@ export const millsToMMSS = (mills: number) => {
 
   return `${mm}:${ss}`;
 };
+
+/**
+ * milliseconds to 0:00 format
+ * */
+export const millsToMSS = (mills: number) => {
+  let seconds = Math.floor(mills / 1000);
+  const minutes = Math.floor(seconds / 60);
+  seconds = seconds % 60;
+
+  const ss = String(seconds).padStart(2, '0');
+
+  return `${minutes}:${ss}`;
+};

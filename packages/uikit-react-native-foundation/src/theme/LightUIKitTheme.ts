@@ -1,43 +1,9 @@
+import { UIKitColors } from '../types';
 import createTheme from './createTheme';
 
 const LightUIKitTheme = createTheme({
   colorScheme: 'light',
   colors: (palette) => {
-    const groupChannelMessage = {
-      incoming: {
-        enabled: {
-          textMsg: palette.onBackgroundLight01,
-          textEdited: palette.onBackgroundLight02,
-          textTime: palette.onBackgroundLight03,
-          textSenderName: palette.onBackgroundLight02,
-          background: palette.background100,
-        },
-        pressed: {
-          textMsg: palette.onBackgroundLight01,
-          textEdited: palette.onBackgroundLight02,
-          textTime: palette.onBackgroundLight03,
-          textSenderName: palette.onBackgroundLight02,
-          background: palette.primary100,
-        },
-      },
-      outgoing: {
-        enabled: {
-          textMsg: palette.onBackgroundDark01,
-          textEdited: palette.onBackgroundDark02,
-          textTime: palette.onBackgroundLight03,
-          textSenderName: palette.transparent,
-          background: palette.primary300,
-        },
-        pressed: {
-          textMsg: palette.onBackgroundDark01,
-          textEdited: palette.onBackgroundDark02,
-          textTime: palette.onBackgroundLight03,
-          textSenderName: palette.transparent,
-          background: palette.primary400,
-        },
-      },
-    };
-
     return {
       primary: palette.primary300,
       secondary: palette.secondary300,
@@ -149,7 +115,6 @@ const LightUIKitTheme = createTheme({
             },
           },
         },
-        message: groupChannelMessage,
         dateSeparator: {
           default: {
             none: {
@@ -158,7 +123,60 @@ const LightUIKitTheme = createTheme({
             },
           },
         },
-        groupChannelMessage,
+        groupChannelMessage: {
+          incoming: {
+            enabled: {
+              textMsg: palette.onBackgroundLight01,
+              textEdited: palette.onBackgroundLight02,
+              textTime: palette.onBackgroundLight03,
+              textSenderName: palette.onBackgroundLight02,
+              background: palette.background100,
+              voiceTextTime: palette.onBackgroundLight01,
+              voiceSpinner: palette.primary300,
+              voiceProgressTrack: palette.background100,
+              voiceActionIcon: palette.primary300,
+              voiceActionIconBackground: palette.background50,
+            },
+            pressed: {
+              textMsg: palette.onBackgroundLight01,
+              textEdited: palette.onBackgroundLight02,
+              textTime: palette.onBackgroundLight03,
+              textSenderName: palette.onBackgroundLight02,
+              background: palette.primary100,
+              voiceTextTime: palette.onBackgroundLight01,
+              voiceSpinner: palette.primary300,
+              voiceProgressTrack: palette.background100,
+              voiceActionIcon: palette.primary300,
+              voiceActionIconBackground: palette.background50,
+            },
+          },
+          outgoing: {
+            enabled: {
+              textMsg: palette.onBackgroundDark01,
+              textEdited: palette.onBackgroundDark02,
+              textTime: palette.onBackgroundLight03,
+              textSenderName: palette.transparent,
+              background: palette.primary300,
+              voiceTextTime: palette.onBackgroundDark01,
+              voiceSpinner: palette.primary200,
+              voiceProgressTrack: palette.primary300,
+              voiceActionIcon: palette.primary300,
+              voiceActionIconBackground: palette.background50,
+            },
+            pressed: {
+              textMsg: palette.onBackgroundDark01,
+              textEdited: palette.onBackgroundDark02,
+              textTime: palette.onBackgroundLight03,
+              textSenderName: palette.transparent,
+              background: palette.primary400,
+              voiceTextTime: palette.onBackgroundDark01,
+              voiceSpinner: palette.primary200,
+              voiceProgressTrack: palette.primary300,
+              voiceActionIcon: palette.primary300,
+              voiceActionIconBackground: palette.background50,
+            },
+          },
+        },
         groupChannelPreview: {
           default: {
             none: {
@@ -244,7 +262,7 @@ const LightUIKitTheme = createTheme({
           },
         },
       },
-    };
+    } satisfies UIKitColors;
   },
 });
 

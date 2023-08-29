@@ -252,9 +252,25 @@ export function getDefaultMessageSearchQueryParams(channel: SendbirdGroupChannel
   };
 }
 
+const SBU_MIME_PARAM_KEY = 'sbu_type';
+const SBU_MIME_PARAM_VOICE_MESSAGE_VALUE = 'voice';
+
 export function isVoiceMessage(message: SendbirdMessage): message is SendbirdFileMessage {
   if (!message.isFileMessage()) return false;
 
   const { parameters } = parseMimeType(message.type);
-  return !!parameters['sbu_type'] && parameters['sbu_type'] === 'voice';
+  return !!parameters[SBU_MIME_PARAM_KEY] && parameters[SBU_MIME_PARAM_KEY] === SBU_MIME_PARAM_VOICE_MESSAGE_VALUE;
+}
+
+export function getVoiceMessageFileObject(uri: string, extension = 'm4a') {
+  return {
+    uri,
+    type: getVoiceMessageMimeType(extension),
+    name: `Voice_message.${extension}`,
+    size: 0,
+  };
+}
+
+export function getVoiceMessageMimeType(extension = 'm4a') {
+  return `audio/${extension};${SBU_MIME_PARAM_KEY}=${SBU_MIME_PARAM_VOICE_MESSAGE_VALUE}`;
 }
