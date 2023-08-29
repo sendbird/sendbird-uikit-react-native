@@ -87,8 +87,13 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
             await playerService.reset();
           }
 
+          const shouldSeekToTime = state.duration > state.currentTime && state.currentTime > 0;
+          let seekFinished = !shouldSeekToTime;
+
           playerService.addPlaybackListener((params) => {
-            setState((prevState) => ({ ...prevState, currentTime: params.currentTime, duration: params.duration }));
+            if (seekFinished) {
+              setState((prevState) => ({ ...prevState, currentTime: params.currentTime, duration: params.duration }));
+            }
           });
 
           playerService.addStateListener((state) => {
@@ -108,10 +113,9 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
           });
 
           await playerService.play(message.url);
-
-          const shouldPlayFromPausedTime = state.currentTime > 0 && state.currentTime < state.duration;
-          if (shouldPlayFromPausedTime) {
+          if (shouldSeekToTime) {
             await playerService.seek(state.currentTime);
+            seekFinished = true;
           }
         }
       }
