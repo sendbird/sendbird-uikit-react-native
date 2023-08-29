@@ -23,8 +23,10 @@ export type VoiceMessageInputProps = {
 
 const VoiceMessageInput = ({ onClose, onSend }: VoiceMessageInputProps) => {
   const { STRINGS } = useLocalization();
-  const { colors, palette, select } = useUIKitTheme();
+  const { colors } = useUIKitTheme();
   const { actions, state } = useVoiceMessageInput((file, duration) => onSend({ file, duration }));
+
+  const uiColors = colors.ui.voiceMessageInput.default[state.status !== 'idle' ? 'active' : 'inactive'];
 
   const onPressCancel = async () => {
     actions.cancel();
@@ -60,53 +62,32 @@ const VoiceMessageInput = ({ onClose, onSend }: VoiceMessageInputProps) => {
   const renderActionIcon = () => {
     switch (state.status) {
       case 'idle':
-        return (
-          <Icon icon={'recording'} size={20} color={select({ light: palette.error300, dark: palette.error200 })} />
-        );
+        return <Icon icon={'recording'} size={20} color={uiColors.recording} />;
       case 'recording':
-        return <Icon icon={'stop'} size={20} color={colors.onBackground01} />;
+        return <Icon icon={'stop'} size={20} color={uiColors.actionIcon} />;
       case 'recording_completed':
       case 'playing_paused':
-        return <Icon icon={'play'} size={20} color={colors.onBackground01} />;
+        return <Icon icon={'play'} size={20} color={uiColors.actionIcon} />;
       case 'playing':
-        return <Icon icon={'pause'} size={20} color={colors.onBackground01} />;
+        return <Icon icon={'pause'} size={20} color={uiColors.actionIcon} />;
     }
   };
 
-  const recordingInActiveStyle = {
-    bar: select({ light: palette.background100, dark: palette.background400 }),
-    track: select({ light: palette.background100, dark: palette.background400 }),
-    overlayText: colors.onBackground01,
-    overlayTextOpacity: 0.38,
-  };
-  const recordingActiveStyle = {
-    bar: colors.onBackground01,
-    track: colors.primary,
-    overlayText: colors.onBackgroundReverse01,
-    overlayTextOpacity: 0.88,
-  };
-
   const useRecorderProgress = state.status === 'recording' || state.status === 'recording_completed';
-  const recorderStyle = state.status !== 'idle' ? recordingActiveStyle : recordingInActiveStyle;
   const lessThanMinimumDuration = state.recordingTime.currentTime < state.recordingTime.minDuration;
 
   return (
-    <Box backgroundColor={colors.background} paddingVertical={24} paddingHorizontal={16} style={styles.container}>
+    <Box backgroundColor={uiColors.background} paddingVertical={24} paddingHorizontal={16} style={styles.container}>
       {/** Progress bar **/}
       <ProgressBar
         style={styles.progressBar}
         current={useRecorderProgress ? state.recordingTime.currentTime : state.playingTime.currentTime}
         total={useRecorderProgress ? state.recordingTime.maxDuration : state.playingTime.duration || 1}
-        barColor={recorderStyle.bar}
-        trackColor={recorderStyle.track}
+        trackColor={uiColors.progressTrack}
         overlay={
           <Box flex={1} flexDirection={'row'} alignItems={'center'} justifyContent={'flex-end'} paddingRight={16}>
             <RecordingLight visible={state.status === 'recording'} />
-            <Text
-              caption1
-              style={{ lineHeight: undefined, marginLeft: 6, opacity: recorderStyle.overlayTextOpacity }}
-              color={recorderStyle.overlayText}
-            >
+            <Text caption1 style={{ lineHeight: undefined, marginLeft: 6 }} color={uiColors.textTime}>
               {millsToMMSS(useRecorderProgress ? state.recordingTime.currentTime : state.playingTime.currentTime)}
             </Text>
           </Box>
@@ -130,7 +111,7 @@ const VoiceMessageInput = ({ onClose, onSend }: VoiceMessageInputProps) => {
               borderRadius={17}
               alignItems={'center'}
               justifyContent={'center'}
-              backgroundColor={select({ dark: palette.background500, light: palette.background100 })}
+              backgroundColor={uiColors.actionIconBackground}
             >
               {renderActionIcon()}
             </Box>
@@ -142,7 +123,8 @@ const VoiceMessageInput = ({ onClose, onSend }: VoiceMessageInputProps) => {
 };
 
 const RecordingLight = (props: { visible: boolean }) => {
-  const { palette, select } = useUIKitTheme();
+  const { colors } = useUIKitTheme();
+
   const value = useRef(new Animated.Value(0)).current;
   const animation = useRef(
     Animated.loop(
@@ -168,7 +150,7 @@ const RecordingLight = (props: { visible: boolean }) => {
         height: 12,
         borderRadius: 6,
         opacity: value,
-        backgroundColor: select({ light: palette.error300, dark: palette.error200 }),
+        backgroundColor: colors.ui.voiceMessageInput.default.active.recording,
       }}
     />
   );
@@ -180,7 +162,7 @@ const CancelButton = (props: { onPress: () => void; label: string }) => {
   return (
     <PressBox activeOpacity={0.8} onPress={props.onPress}>
       <Box paddingHorizontal={12} height={'100%'} alignItems={'center'} justifyContent={'center'}>
-        <Text button color={colors.ui.input.default.active.highlight} numberOfLines={1}>
+        <Text button color={colors.ui.voiceMessageInput.default.active.textCancel} numberOfLines={1}>
           {props.label}
         </Text>
       </Box>
@@ -189,17 +171,14 @@ const CancelButton = (props: { onPress: () => void; label: string }) => {
 };
 
 const SendButton = (props: { onPress: () => void; disabled: boolean }) => {
-  const { colors, select, palette } = useUIKitTheme();
+  const { colors } = useUIKitTheme();
 
-  const backgroundColor = props.disabled
-    ? select({ dark: palette.background500, light: palette.background100 })
-    : colors.primary;
-  const iconColor = props.disabled ? colors.onBackground04 : colors.onBackgroundReverse01;
+  const uiColors = colors.ui.voiceMessageInput.default[props.disabled ? 'inactive' : 'active'];
 
   return (
     <PressBox disabled={props.disabled} activeOpacity={0.8} onPress={props.onPress}>
-      <Box backgroundColor={backgroundColor} padding={7} borderRadius={40}>
-        <Icon icon={'send'} size={20} color={iconColor} />
+      <Box backgroundColor={uiColors.sendIconBackground} padding={7} borderRadius={40}>
+        <Icon icon={'send'} size={20} color={uiColors.sendIcon} />
       </Box>
     </PressBox>
   );
