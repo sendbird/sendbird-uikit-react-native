@@ -291,6 +291,9 @@ export interface StringSet {
     /** Channel > Message > Failed **/
     CHANNEL_MESSAGE_FAILED_RETRY: string;
     CHANNEL_MESSAGE_FAILED_REMOVE: string;
+
+    /** Voice message **/
+    VOICE_MESSAGE: string;
   };
   FILE_VIEWER: {
     TITLE: (message: SendbirdFileMessage) => string;

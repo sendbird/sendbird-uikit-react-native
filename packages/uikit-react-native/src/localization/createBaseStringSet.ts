@@ -3,7 +3,6 @@ import type { Locale } from 'date-fns';
 import type { PartialDeep } from '@sendbird/uikit-utils';
 import {
   getDateSeparatorFormat,
-  getFileTypeFromMessage,
   getGroupChannelLastMessage,
   getGroupChannelPreviewTime,
   getGroupChannelTitle,
@@ -11,6 +10,7 @@ import {
   getMessagePreviewTime,
   getMessagePreviewTitle,
   getMessageTimeFormat,
+  getMessageType,
   getOpenChannelParticipants,
   getOpenChannelTitle,
 } from '@sendbird/uikit-utils';
@@ -288,22 +288,25 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       CHANNEL_INPUT_REPLY_PREVIEW_TITLE: (user) => `Reply to ${user.nickname || USER_NO_NAME}`,
       CHANNEL_INPUT_REPLY_PREVIEW_BODY: (message) => {
         if (message.isFileMessage()) {
-          const fileType = getFileTypeFromMessage(message);
-          switch (fileType) {
-            case 'image':
+          const messageType = getMessageType(message);
+          switch (messageType) {
+            case 'file.image':
               return message.type.toLowerCase().includes('gif') ? 'GIF' : 'Photo';
-            case 'video':
+            case 'file.video':
               return 'Video';
-            case 'audio':
+            case 'file.audio':
               return 'Audio';
+            case 'file.voice':
+              return 'Voice message';
             default:
               return message.name;
           }
         } else if (message.isUserMessage()) {
           return message.message;
         }
-        return 'Unknown message type.';
+        return 'Unknown message';
       },
+      VOICE_MESSAGE: 'Voice message',
       ...overrides?.LABELS,
     },
     FILE_VIEWER: {
