@@ -5,7 +5,7 @@ const MyDocumentPickerModule = {
   getDocumentAsync: async (_: object) => ({ type: '', mimeType: '', uri: '', size: 0, name: '' }),
 };
 const MyMediaLibraryModule = { requestPermission: async () => 0, saveToLibrary: async (_: string) => 0 };
-const RNFetchBlob = { config: (_: object) => ({ fetch: async (_: string, __: string) => ({ path: () => '' }) }) };
+const RNFetchBlob = { config: (_: object) => ({ fetch: async (_: string, __: string) => ({ path: () => '' }) }), cacheDir: 'cache' };
 type FileCompat = { name: string; uri: string; size: number; type: string };
 type SaveRes = null | string;
 type OpenMediaLibraryRes = null | Array<null | FileCompat>;
@@ -111,6 +111,13 @@ class MyFileService implements FileServiceInterface {
     }
 
     return response.path();
+  }
+  createRecordFilePath(customExtension = 'm4a'): { recordFilePath: string; uri: string } {
+    const filename = `${Date.now()}.${customExtension}`;
+    return {
+      uri: `${RNFetchBlob.cacheDir}/${filename}`,
+      recordFilePath: `${RNFetchBlob.cacheDir}/${filename}`,
+    }
   }
 }
 /** ------------------ **/

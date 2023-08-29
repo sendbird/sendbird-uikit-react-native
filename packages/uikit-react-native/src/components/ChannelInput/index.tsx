@@ -23,7 +23,10 @@ import type { MentionedUser, Range } from '../../types';
 import type { AttachmentsButtonProps } from './AttachmentsButton';
 import AttachmentsButton from './AttachmentsButton';
 import EditInput from './EditInput';
+import type { MessageToReplyPreviewProps } from './MessageToReplyPreview';
+import { MessageToReplyPreview } from './MessageToReplyPreview';
 import SendInput from './SendInput';
+import VoiceMessageInput, { VoiceMessageInputProps } from './VoiceMessageInput';
 
 export type SuggestedMentionListProps = {
   text: string;
@@ -65,6 +68,8 @@ export type ChannelInputProps = {
 
   // sub-components
   AttachmentsButton?: (props: AttachmentsButtonProps) => JSX.Element | null;
+  MessageToReplyPreview?: (props: MessageToReplyPreviewProps) => JSX.Element | null;
+  VoiceMessageInput?: (props: VoiceMessageInputProps) => JSX.Element | null;
 };
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
@@ -93,6 +98,7 @@ const ChannelInput = (props: ChannelInputProps) => {
 
   const mentionAvailable =
     sbOptions.uikit.groupChannel.channel.enableMention && channel.isGroupChannel() && !channel.isBroadcast;
+
   const inputKeyToRemount = GET_INPUT_KEY(mentionAvailable ? mentionedUsers.length === 0 : false);
 
   const [inputHeight, setInputHeight] = useState(styles.inputDefault.height);
@@ -129,7 +135,9 @@ const ChannelInput = (props: ChannelInputProps) => {
                 onChangeText={onChangeText}
                 onSelectionChange={onSelectionChange}
                 mentionedUsers={mentionedUsers}
+                VoiceMessageInput={props.VoiceMessageInput ?? VoiceMessageInput}
                 AttachmentsButton={props.AttachmentsButton ?? AttachmentsButton}
+                MessageToReplyPreview={props.MessageToReplyPreview ?? MessageToReplyPreview}
               />
             )}
             {inputMode === 'edit' && messageToEdit && (

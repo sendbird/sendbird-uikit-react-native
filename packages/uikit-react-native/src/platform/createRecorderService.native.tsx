@@ -3,9 +3,12 @@ import * as RNAudioRecorder from 'react-native-audio-recorder-player';
 import * as Permissions from 'react-native-permissions';
 import { Permission } from 'react-native-permissions/src/types';
 
+import { matchesOneOf, sleep } from '@sendbird/uikit-utils';
+
 import nativePermissionGranted from '../utils/nativePermissionGranted';
 import type { RecorderServiceInterface, Unsubscribe } from './types';
 
+type Listener = (params: { currentTime: number; completed: boolean }) => void;
 type Modules = {
   audioRecorderModule: typeof RNAudioRecorder;
   permissionModule: typeof Permissions;
@@ -14,13 +17,23 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
   const module = new audioRecorderModule.default();
 
   class Recorder implements RecorderServiceInterface {
+    // NOTE: In Android, even when startRecorder() is awaited, if stop() is executed immediately afterward, an error occurs
+    private _recordStartedAt = 0;
+    private _getRecorderStopSafeBuffer() {
+      const minWaitingTime = 500;
+      const elapsedTime = Date.now() - this._recordStartedAt;
+      if (elapsedTime > minWaitingTime) return 0;
+      else return minWaitingTime - elapsedTime;
+    }
+
     state: RecorderServiceInterface['state'] = 'idle';
     options: RecorderServiceInterface['options'] = {
-      minDuration: 1,
-      maxDuration: 60,
+      minDuration: 1000,
+      maxDuration: 60000,
+      extension: 'm4a',
     };
 
-    private readonly subscribers = new Set<(currentTime: number) => void>();
+    private readonly subscribers = new Set<Listener>();
     private readonly audioSettings = {
       sampleRate: 11025,
       bitRate: 12000,
@@ -51,14 +64,13 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
 
       module.setSubscriptionDuration(0.1);
       module.addRecordBackListener((data) => {
+        const completed = data.currentPosition >= this.options.maxDuration;
+
+        if (completed) this.stop();
         if (this.state === 'recording') {
           this.subscribers.forEach((callback) => {
-            callback(data.currentPosition);
+            callback({ currentTime: data.currentPosition, completed });
           });
-        }
-
-        if (data.currentPosition >= this.options.maxDuration) {
-          this.stop();
         }
       });
     }
@@ -88,7 +100,7 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
       }
     }
 
-    addListener(callback: (currentTime: number) => void): Unsubscribe {
+    addRecordingListener(callback: Listener): Unsubscribe {
       this.subscribers.add(callback);
       return () => {
         this.subscribers.delete(callback);
@@ -96,21 +108,32 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
     }
 
     async record(uri?: string): Promise<void> {
-      if (this.state === 'idle' || this.state === 'completed') {
+      if (matchesOneOf(this.state, ['idle', 'completed'])) {
         try {
           this.state = 'preparing';
           await module.startRecorder(uri, {
             ...this.audioOptions,
           });
+
+          if (Platform.OS === 'android') {
+            this._recordStartedAt = Date.now();
+          }
+
           this.state = 'recording';
-        } catch {
+        } catch (e) {
           this.state = 'idle';
+          throw e;
         }
       }
     }
 
     async stop(): Promise<void> {
-      if (this.state === 'recording') {
+      if (matchesOneOf(this.state, ['recording'])) {
+        if (Platform.OS === 'android') {
+          const buffer = this._getRecorderStopSafeBuffer();
+          if (buffer > 0) await sleep(buffer);
+        }
+
         await module.stopRecorder();
         this.state = 'completed';
       }
