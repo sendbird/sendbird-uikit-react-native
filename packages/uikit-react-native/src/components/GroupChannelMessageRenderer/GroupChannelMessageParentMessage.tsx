@@ -52,6 +52,19 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
     });
   }, []);
 
+  const renderMessageWithText = (message: string) => {
+    return (
+      <Box
+        style={styles.bubbleContainer}
+        backgroundColor={select({ light: palette.background100, dark: palette.background400 })}
+      >
+        <Text body3 color={colors.onBackground03} suppressHighlighting numberOfLines={2} ellipsizeMode={'tail'}>
+          {message}
+        </Text>
+      </Box>
+    );
+  };
+
   const renderFileMessageAsVideoThumbnail = (url: string) => {
     return (
       <VideoThumbnail
@@ -88,16 +101,7 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
     switch (type) {
       case 'user':
       case 'user.opengraph': {
-        return (
-          <Box
-            style={styles.bubbleContainer}
-            backgroundColor={select({ light: palette.background100, dark: palette.background400 })}
-          >
-            <Text body3 color={colors.onBackground03} suppressHighlighting numberOfLines={2} ellipsizeMode={'tail'}>
-              {(parentMessage as SendbirdUserMessage).message}
-            </Text>
-          </Box>
-        );
+        return renderMessageWithText((parentMessage as SendbirdUserMessage).message);
       }
       case 'file':
       case 'file.audio': {
@@ -108,6 +112,9 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
       }
       case 'file.image': {
         return renderFileMessageAsPreview(getThumbnailUriFromFileMessage(parentMessage as SendbirdFileMessage));
+      }
+      case 'file.voice': {
+        return renderMessageWithText(STRINGS.LABELS.VOICE_MESSAGE);
       }
       default: {
         return null;
