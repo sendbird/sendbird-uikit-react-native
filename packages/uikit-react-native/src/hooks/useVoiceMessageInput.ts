@@ -110,6 +110,11 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
         }
 
         if (matchesOneOf(status, ['idle'])) {
+          // Before start recording, if player is not idle, reset it.
+          if (playerService.state !== 'idle') {
+            await playerService.reset();
+          }
+
           const { recordFilePath } = getVoiceMessageRecordingPath();
           recorderService.addRecordingListener(({ currentTime, completed }) => {
             setRecordingTime({
