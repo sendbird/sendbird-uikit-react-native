@@ -17,6 +17,7 @@ import {
   getFileTypeFromMessage,
   isDifferentChannel,
   isMyMessage,
+  isVoiceMessage,
   useIIFE,
   useUniqHandlerId,
 } from '@sendbird/uikit-utils';
@@ -56,6 +57,7 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
   const fileType = useIIFE(() => {
     if (!channel.lastMessage?.isFileMessage()) return undefined;
     if (typingUsers.length > 0) return undefined;
+    if (isVoiceMessage(channel.lastMessage)) return undefined;
     return getFileTypeFromMessage(channel.lastMessage);
   });
 
