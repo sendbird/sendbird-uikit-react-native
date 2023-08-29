@@ -70,6 +70,8 @@ export const MessageToReplyPreview = ({ messageToReply, setMessageToReply }: Mes
           return getFileIconAsImage(getThumbnailUriFromFileMessage(messageToReply));
         case 'file.video':
           return getFileIconAsVideoThumbnail(getThumbnailUriFromFileMessage(messageToReply));
+        case 'file.voice':
+          return null;
         default:
           return getFileIconAsSymbol(getFileIconFromMessageType(messageType));
       }

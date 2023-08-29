@@ -1,6 +1,6 @@
 import { MessageSearchOrder } from '@sendbird/chat/message';
 
-import { getFileExtension, getFileType } from '../shared/file';
+import { getFileExtension, getFileType, parseMimeType } from '../shared/file';
 import type {
   SendbirdBaseChannel,
   SendbirdBaseMessage,
@@ -161,7 +161,7 @@ export type MessageType =
   | 'file'
   | 'unknown'
   | `user.${'opengraph'}`
-  | `file.${'image' | 'video' | 'audio'}`;
+  | `file.${'image' | 'video' | 'audio' | 'voice'}`;
 
 export type FileType = 'file' | 'image' | 'audio' | 'video';
 
@@ -221,6 +221,10 @@ export function getMessageType(message: SendbirdMessage): MessageType {
   }
 
   if (message.isFileMessage()) {
+    if (isVoiceMessage(message)) {
+      return 'file.voice';
+    }
+
     const fileType = getFileTypeFromMessage(message);
     switch (fileType) {
       case 'image':
@@ -246,4 +250,11 @@ export function getDefaultMessageSearchQueryParams(channel: SendbirdGroupChannel
     messageTimestampFrom: Math.max(channel.joinedAt, channel.invitedAt),
     order: MessageSearchOrder.TIMESTAMP,
   };
+}
+
+export function isVoiceMessage(message: SendbirdMessage): message is SendbirdFileMessage {
+  if (!message.isFileMessage()) return false;
+
+  const { parameters } = parseMimeType(message.type);
+  return !!parameters['sbu_type'] && parameters['sbu_type'] === 'voice';
 }
