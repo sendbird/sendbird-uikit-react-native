@@ -83,7 +83,7 @@ const VoiceFileMessage = (props: Props) => {
                 <Text
                   body3
                   style={{ lineHeight: undefined, marginLeft: 6, opacity: 0.88 }}
-                  color={uiColors.enabled.voiceTextTime}
+                  color={uiColors.enabled.textVoicePlaytime}
                 >
                   {millsToMMSS(state.currentTime === 0 ? state.duration : state.currentTime)}
                 </Text>
