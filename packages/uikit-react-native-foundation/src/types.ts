@@ -98,7 +98,17 @@ export type ComponentColorTree = GetColorTree<{
     Badge: 'text' | 'background';
     Placeholder: 'content' | 'highlight';
     DateSeparator: 'text' | 'background';
-    GroupChannelMessage: 'textMsg' | 'textEdited' | 'textSenderName' | 'textTime' | 'background';
+    GroupChannelMessage:
+      | 'textMsg'
+      | 'textEdited'
+      | 'textSenderName'
+      | 'textTime'
+      | 'background'
+      | 'voiceTextTime'
+      | 'voiceSpinner'
+      | 'voiceProgressTrack'
+      | 'voiceActionIcon'
+      | 'voiceActionIconBackground';
     GroupChannelPreview:
       | 'textTitle'
       | 'textTitleCaption'
