@@ -1,5 +1,5 @@
-import { UIKitColors } from "../types";
-import createTheme from "./createTheme";
+import { UIKitColors } from '../types';
+import createTheme from './createTheme';
 
 const DarkUIKitTheme = createTheme({
   colorScheme: 'dark',

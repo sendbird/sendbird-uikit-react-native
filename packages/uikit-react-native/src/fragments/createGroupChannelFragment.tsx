@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ReplyType } from '@sendbird/chat/message';
 import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
@@ -25,7 +25,7 @@ import type {
   GroupChannelProps,
   GroupChannelPubSubContextPayload,
 } from '../domain/groupChannel/types';
-import { useSendbirdChat } from '../hooks/useContext';
+import { usePlatformService, useSendbirdChat } from '../hooks/useContext';
 import pubsub from '../utils/pubsub';
 
 const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): GroupChannelFragment => {
@@ -52,6 +52,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     sortComparator = messageComparator,
     flatListProps,
   }) => {
+    const { playerService, recorderService } = usePlatformService();
     const { sdk, currentUser, sbOptions } = useSendbirdChat();
 
     const [internalSearchItem, setInternalSearchItem] = useState(searchItem);
@@ -96,6 +97,30 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       startingPoint: internalSearchItem?.startingPoint,
       enableCollectionWithoutLocalCache: true,
     });
+
+    const onBlurFragment = () => {
+      return Promise.allSettled([playerService.reset(), recorderService.reset()]);
+    };
+    const _onPressHeaderLeft = useFreshCallback(async () => {
+      await onBlurFragment();
+      onPressHeaderLeft();
+    });
+    const _onPressHeaderRight = useFreshCallback(async () => {
+      await onBlurFragment();
+      onPressHeaderRight();
+    });
+    const _onPressMediaMessage: GroupChannelProps['MessageList']['onPressMediaMessage'] = useFreshCallback(
+      async (message, deleteMessage, uri) => {
+        await onBlurFragment();
+        onPressMediaMessage(message, deleteMessage, uri);
+      },
+    );
+
+    useEffect(() => {
+      return () => {
+        onBlurFragment();
+      };
+    }, []);
 
     const renderItem: GroupChannelProps['MessageList']['renderMessage'] = useFreshCallback((props) => {
       if (renderMessage) return renderMessage(props);
@@ -176,8 +201,8 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       >
         <GroupChannelModule.Header
           shouldHideRight={navigateFromMessageSearch}
-          onPressHeaderLeft={onPressHeaderLeft}
-          onPressHeaderRight={onPressHeaderRight}
+          onPressHeaderLeft={_onPressHeaderLeft}
+          onPressHeaderRight={_onPressHeaderRight}
         />
         <StatusComposition loading={loading} LoadingComponent={<GroupChannelModule.StatusLoading />}>
           <GroupChannelModule.MessageList
@@ -200,7 +225,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             renderScrollToBottomButton={renderScrollToBottomButton}
             onResendFailedMessage={resendMessage}
             onDeleteMessage={deleteMessage}
-            onPressMediaMessage={onPressMediaMessage}
+            onPressMediaMessage={_onPressMediaMessage}
             flatListProps={memoizedFlatListProps}
           />
           <GroupChannelModule.Input

@@ -20,8 +20,9 @@ import {
 } from '@sendbird/uikit-react-native-foundation';
 import { Logger, useIIFE } from '@sendbird/uikit-utils';
 
+import { VOICE_MESSAGE_META_ARRAY_DURATION_KEY, VOICE_MESSAGE_META_ARRAY_MESSAGE_TYPE_KEY } from '../../constants';
 import { useChannelInputItems } from '../../hooks/useChannelInputItems';
-import { useLocalization, useSendbirdChat } from '../../hooks/useContext';
+import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 import type { FileType } from '../../platform/types';
 import type { MentionedUser } from '../../types';
 import type { ChannelInputProps } from './index';
@@ -53,6 +54,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   },
   ref,
 ) {
+  const { recorderService } = usePlatformService();
   const { mentionManager, sbOptions } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { openSheet } = useBottomSheet();
@@ -112,14 +114,13 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     onPressSendFileMessage({
       file,
       metaArrays: [
-        // TODO: move to utils/constants
         new MessageMetaArray({
-          key: 'KEY_VOICE_MESSAGE_DURATION',
+          key: VOICE_MESSAGE_META_ARRAY_DURATION_KEY,
           value: [String(durationMills)],
         }),
         new MessageMetaArray({
-          key: 'KEY_INTERNAL_MESSAGE_TYPE',
-          value: ['voice/m4a'],
+          key: VOICE_MESSAGE_META_ARRAY_MESSAGE_TYPE_KEY,
+          value: [`voice/${recorderService.options.extension}`],
         }),
       ],
       ...messageReplyParams,
