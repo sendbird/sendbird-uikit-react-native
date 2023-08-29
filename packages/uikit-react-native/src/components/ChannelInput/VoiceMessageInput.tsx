@@ -1,7 +1,15 @@
-import React, { ReactNode, useEffect, useRef } from 'react';
-import { Animated, Easing, StyleSheet } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Animated } from 'react-native';
 
-import { Box, Icon, PressBox, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import {
+  Box,
+  Icon,
+  PressBox,
+  ProgressBar,
+  Text,
+  createStyleSheet,
+  useUIKitTheme,
+} from '@sendbird/uikit-react-native-foundation';
 import { millsToMMSS } from '@sendbird/uikit-utils';
 
 import useVoiceMessageInput from '../../hooks/useVoiceMessageInput';
@@ -84,6 +92,7 @@ const VoiceMessageInput = ({ onClose, onSend }: VoiceMessageInputProps) => {
     <Box backgroundColor={colors.background} paddingVertical={24} paddingHorizontal={16} style={styles.container}>
       {/** Progress bar **/}
       <ProgressBar
+        style={styles.progressBar}
         current={useRecorderProgress ? state.recordingTime.currentTime : state.playingTime.currentTime}
         total={useRecorderProgress ? state.recordingTime.maxDuration : state.playingTime.duration || 1}
         barColor={recorderStyle.bar}
@@ -163,69 +172,6 @@ const RecordingLight = (props: { visible: boolean }) => {
   );
 };
 
-const ProgressBar = (props: {
-  current: number;
-  total: number;
-  trackColor?: string;
-  barColor?: string;
-  overlay?: ReactNode | undefined;
-}) => {
-  const { current = 100, total = 100 } = props;
-
-  const { colors } = useUIKitTheme();
-
-  const uiColors = {
-    track: props.trackColor ?? colors.primary,
-    bar: props.barColor ?? colors.onBackground01,
-  };
-
-  const progress = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    const percent = current / total;
-    if (Number.isNaN(current / total)) return;
-
-    const animation = Animated.timing(progress, {
-      toValue: percent,
-      duration: 100,
-      useNativeDriver: false,
-      easing: Easing.linear,
-    });
-
-    animation.start();
-
-    return () => {
-      animation.stop();
-    };
-  }, [current / total]);
-
-  return (
-    <Box
-      flexDirection={'row'}
-      height={36}
-      backgroundColor={uiColors.track}
-      alignItems={'center'}
-      marginBottom={16}
-      borderRadius={18}
-      overflow={'hidden'}
-    >
-      <Animated.View
-        style={{
-          width: progress.interpolate({
-            inputRange: [0, 1],
-            outputRange: ['0%', '100%'],
-            extrapolate: 'clamp',
-          }),
-          height: '100%',
-          opacity: 0.38,
-          backgroundColor: uiColors.bar,
-        }}
-      />
-      <Box style={StyleSheet.absoluteFill}>{props.overlay}</Box>
-    </Box>
-  );
-};
-
 const CancelButton = (props: { onPress: () => void; label: string }) => {
   const { colors } = useUIKitTheme();
 
@@ -261,6 +207,11 @@ const styles = createStyleSheet({
   container: {
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
+  },
+  progressBar: {
+    height: 36,
+    marginBottom: 16,
+    borderRadius: 18,
   },
 });
 
