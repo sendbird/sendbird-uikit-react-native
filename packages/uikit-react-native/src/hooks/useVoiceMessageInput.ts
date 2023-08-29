@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-import { Logger, matchesOneOf } from '@sendbird/uikit-utils';
+import { Logger, getVoiceMessageFileObject, matchesOneOf } from '@sendbird/uikit-utils';
 
 import { FileType } from '../platform/types';
 import { usePlatformService } from './useContext';
@@ -115,25 +115,33 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
             await playerService.reset();
           }
 
-          const { recordFilePath } = getVoiceMessageRecordingPath();
-          recorderService.addRecordingListener(({ currentTime, completed }) => {
+          const unsubscribeRecording = recorderService.addRecordingListener(({ currentTime }) => {
             setRecordingTime({
               currentTime,
               maxDuration: recorderService.options.maxDuration,
               minDuration: recorderService.options.minDuration,
             });
-
-            if (completed) setStatus('recording_completed');
           });
 
-          await recorderService.record(recordFilePath);
-          setStatus('recording');
+          const unsubscribeState = recorderService.addStateListener((state) => {
+            switch (state) {
+              case 'recording':
+                setStatus('recording');
+                break;
+              case 'completed':
+                unsubscribeRecording();
+                unsubscribeState();
+                setStatus('recording_completed');
+                break;
+            }
+          });
+
+          await recorderService.record(getVoiceMessageRecordingPath().recordFilePath);
         }
       },
       async stopRecording() {
         if (matchesOneOf(status, ['recording'])) {
           await recorderService.stop();
-          setStatus('recording_completed');
         }
       },
       async playPlayer() {
@@ -145,23 +153,30 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
         }
 
         if (matchesOneOf(status, ['recording_completed', 'playing_paused'])) {
-          playerService.addPlaybackListener(({ currentTime, duration, stopped }) => {
-            setPlayingTime({
-              currentTime,
-              duration,
-            });
-
-            if (stopped) setStatus('playing_paused');
+          const unsubscribePlayback = playerService.addPlaybackListener(({ currentTime, duration }) => {
+            setPlayingTime({ currentTime, duration });
           });
-          const { recordFilePath } = getVoiceMessageRecordingPath();
-          await playerService.play(recordFilePath);
-          setStatus('playing');
+
+          const unsubscribeState = playerService.addStateListener((state) => {
+            switch (state) {
+              case 'playing':
+                setStatus('playing');
+                break;
+              case 'paused':
+              case 'stopped':
+                setStatus('playing_paused');
+                unsubscribeState();
+                unsubscribePlayback();
+                break;
+            }
+          });
+
+          await playerService.play(getVoiceMessageRecordingPath().recordFilePath);
         }
       },
       async pausePlayer() {
         if (matchesOneOf(status, ['playing'])) {
           await playerService.pause();
-          setStatus('playing_paused');
         }
       },
       async send() {
@@ -169,14 +184,7 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
           matchesOneOf(status, ['recording', 'recording_completed', 'playing', 'playing_paused']) &&
           recordingPath.current
         ) {
-          // TODO: move to utils/constants
-          const voiceFile = {
-            uri: recordingPath.current.uri,
-            type: 'audio/m4a;sbu_type=voice',
-            name: 'Voice_message.m4a',
-            size: 0,
-          };
-
+          const voiceFile = getVoiceMessageFileObject(recordingPath.current.uri, recorderService.options.extension);
           onSend(voiceFile, Math.floor(recordingTime.currentTime));
           await clear();
         }

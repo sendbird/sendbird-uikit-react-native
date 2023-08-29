@@ -10,11 +10,13 @@ import {
   calcMessageGrouping,
   getMessageType,
   isMyMessage,
+  isVoiceMessage,
   shouldRenderParentMessage,
   shouldRenderReaction,
   useIIFE,
 } from '@sendbird/uikit-utils';
 
+import { VOICE_MESSAGE_META_ARRAY_DURATION_KEY } from '../../constants';
 import type { GroupChannelProps } from '../../domain/groupChannel/types';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 import SBUUtils from '../../libs/SBUUtils';
@@ -39,7 +41,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   const { palette } = useUIKitTheme();
   const { sbOptions, currentUser, mentionManager } = useSendbirdChat();
   const { STRINGS } = useLocalization();
-  const { mediaService } = usePlatformService();
+  const { mediaService, playerService } = usePlatformService();
   const { groupWithPrev, groupWithNext } = calcMessageGrouping(
     Boolean(enableMessageGrouping),
     message,
@@ -71,6 +73,48 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     },
     onPressMentionedUser: (mentionedUser) => {
       if (mentionedUser) onShowUserProfile?.(mentionedUser);
+    },
+    onToggleVoiceMessage: async (state, setState) => {
+      if (isVoiceMessage(message)) {
+        if (playerService.uri === message.url) {
+          if (playerService.state === 'playing') {
+            await playerService.pause();
+          } else {
+            await playerService.play(message.url);
+          }
+        } else {
+          if (playerService.state !== 'idle') {
+            await playerService.reset();
+          }
+
+          playerService.addPlaybackListener((params) => {
+            setState((prevState) => ({ ...prevState, currentTime: params.currentTime, duration: params.duration }));
+          });
+
+          playerService.addStateListener((state) => {
+            switch (state) {
+              case 'preparing':
+                setState((prevState) => ({ ...prevState, status: 'preparing' }));
+                break;
+              case 'playing':
+                setState((prevState) => ({ ...prevState, status: 'playing' }));
+                break;
+              case 'idle':
+              case 'paused':
+              case 'stopped':
+                setState((prevState) => ({ ...prevState, status: 'paused' }));
+                break;
+            }
+          });
+
+          await playerService.play(message.url);
+
+          const shouldPlayFromPausedTime = state.currentTime > 0 && state.currentTime < state.duration;
+          if (shouldPlayFromPausedTime) {
+            await playerService.seek(state.currentTime);
+          }
+        }
+      }
     },
     groupedWithPrev: groupWithPrev,
     groupedWithNext: groupWithNext,
@@ -180,6 +224,15 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
           <GroupChannelMessage.VideoFile
             message={message as SendbirdFileMessage}
             fetchThumbnailFromVideoSource={(uri) => mediaService.getVideoThumbnail({ url: uri, timeMills: 1000 })}
+            {...messageProps}
+          />
+        );
+      }
+      case 'file.voice': {
+        return (
+          <GroupChannelMessage.VoiceFile
+            message={message as SendbirdFileMessage}
+            durationMetaArrayKey={VOICE_MESSAGE_META_ARRAY_DURATION_KEY}
             {...messageProps}
           />
         );
