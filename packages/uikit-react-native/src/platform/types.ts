@@ -109,6 +109,7 @@ export interface MediaServiceInterface {
 
 // ---------- PlayerService ---------- //
 export interface PlayerServiceInterface {
+  uri?: string;
   state: 'idle' | 'preparing' | 'playing' | 'paused' | 'stopped';
 
   /**
@@ -122,6 +123,11 @@ export interface PlayerServiceInterface {
   addPlaybackListener(
     callback: (params: { currentTime: number; duration: number; stopped: boolean }) => void,
   ): Unsubscribe;
+
+  /**
+   * Add a state listener.
+   * */
+  addStateListener(callback: (state: PlayerServiceInterface['state']) => void): Unsubscribe;
 
   /**
    * State transition:
