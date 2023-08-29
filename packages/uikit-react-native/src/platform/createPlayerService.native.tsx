@@ -76,6 +76,7 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
         } catch (e) {
           this.state = 'idle';
           this.uri = undefined;
+          this.removeListener();
           throw e;
         }
       } else if (matchesOneOf(this.state, ['paused']) && this.uri === uri) {
