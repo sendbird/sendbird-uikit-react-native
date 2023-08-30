@@ -41,15 +41,6 @@ const ProgressBar = ({ current = 100, total = 100, trackColor, barColor, overlay
     };
   }, [percent]);
 
-  const getInterpolate = () => {
-    const width = style?.minWidth ?? style?.width ?? style?.maxWidth ?? '100%';
-    return progress.interpolate({
-      inputRange: [0, 1],
-      outputRange: typeof width === 'number' ? [0, width] : ['0%', width],
-      extrapolate: 'clamp',
-    });
-  };
-
   return (
     <Box
       height={36}
@@ -61,7 +52,12 @@ const ProgressBar = ({ current = 100, total = 100, trackColor, barColor, overlay
     >
       <Animated.View
         style={{
-          width: getInterpolate(),
+          position: 'absolute',
+          width: progress.interpolate({
+            inputRange: [0, 1],
+            outputRange: ['0%', '100%'],
+            extrapolate: 'clamp',
+          }),
           height: '100%',
           opacity: 0.38,
           backgroundColor: uiColors.bar,
