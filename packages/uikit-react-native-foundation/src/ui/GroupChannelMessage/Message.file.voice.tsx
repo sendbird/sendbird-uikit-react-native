@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import type { SendbirdFileMessage } from '@sendbird/uikit-utils';
-import { millsToMMSS } from '@sendbird/uikit-utils';
+import { millsToMSS } from '@sendbird/uikit-utils';
 
 import Box from '../../components/Box';
 import Icon from '../../components/Icon';
@@ -85,7 +85,7 @@ const VoiceFileMessage = (props: Props) => {
                   style={{ lineHeight: undefined, marginLeft: 6, opacity: 0.88 }}
                   color={uiColors.enabled.textVoicePlaytime}
                 >
-                  {millsToMMSS(state.currentTime === 0 ? state.duration : state.currentTime)}
+                  {millsToMSS(state.currentTime === 0 ? state.duration : state.currentTime)}
                 </Text>
               </Box>
             }
