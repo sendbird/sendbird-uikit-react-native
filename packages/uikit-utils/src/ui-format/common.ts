@@ -130,7 +130,7 @@ export const getMessagePreviewTime = (timestamp: number, locale?: Locale) => {
  * milliseconds to 00:00 format
  * */
 export const millsToMMSS = (mills: number) => {
-  let seconds = Math.floor(mills / 1000);
+  let seconds = Math.floor(Math.max(0, mills) / 1000);
   const minutes = Math.floor(seconds / 60);
   seconds = seconds % 60;
 
@@ -144,7 +144,7 @@ export const millsToMMSS = (mills: number) => {
  * milliseconds to 0:00 format
  * */
 export const millsToMSS = (mills: number) => {
-  let seconds = Math.floor(mills / 1000);
+  let seconds = Math.floor(Math.max(0, mills) / 1000);
   const minutes = Math.floor(seconds / 60);
   seconds = seconds % 60;
 
