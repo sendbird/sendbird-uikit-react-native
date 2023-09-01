@@ -1,43 +1,9 @@
+import { UIKitColors } from '../types';
 import createTheme from './createTheme';
 
 const LightUIKitTheme = createTheme({
   colorScheme: 'light',
   colors: (palette) => {
-    const groupChannelMessage = {
-      incoming: {
-        enabled: {
-          textMsg: palette.onBackgroundLight01,
-          textEdited: palette.onBackgroundLight02,
-          textTime: palette.onBackgroundLight03,
-          textSenderName: palette.onBackgroundLight02,
-          background: palette.background100,
-        },
-        pressed: {
-          textMsg: palette.onBackgroundLight01,
-          textEdited: palette.onBackgroundLight02,
-          textTime: palette.onBackgroundLight03,
-          textSenderName: palette.onBackgroundLight02,
-          background: palette.primary100,
-        },
-      },
-      outgoing: {
-        enabled: {
-          textMsg: palette.onBackgroundDark01,
-          textEdited: palette.onBackgroundDark02,
-          textTime: palette.onBackgroundLight03,
-          textSenderName: palette.transparent,
-          background: palette.primary300,
-        },
-        pressed: {
-          textMsg: palette.onBackgroundDark01,
-          textEdited: palette.onBackgroundDark02,
-          textTime: palette.onBackgroundLight03,
-          textSenderName: palette.transparent,
-          background: palette.primary400,
-        },
-      },
-    };
-
     return {
       primary: palette.primary300,
       secondary: palette.secondary300,
@@ -149,7 +115,6 @@ const LightUIKitTheme = createTheme({
             },
           },
         },
-        message: groupChannelMessage,
         dateSeparator: {
           default: {
             none: {
@@ -158,7 +123,60 @@ const LightUIKitTheme = createTheme({
             },
           },
         },
-        groupChannelMessage,
+        groupChannelMessage: {
+          incoming: {
+            enabled: {
+              textMsg: palette.onBackgroundLight01,
+              textEdited: palette.onBackgroundLight02,
+              textTime: palette.onBackgroundLight03,
+              textSenderName: palette.onBackgroundLight02,
+              background: palette.background100,
+              textVoicePlaytime: palette.onBackgroundLight01,
+              voiceSpinner: palette.primary300,
+              voiceProgressTrack: palette.background100,
+              voiceActionIcon: palette.primary300,
+              voiceActionIconBackground: palette.background50,
+            },
+            pressed: {
+              textMsg: palette.onBackgroundLight01,
+              textEdited: palette.onBackgroundLight02,
+              textTime: palette.onBackgroundLight03,
+              textSenderName: palette.onBackgroundLight02,
+              background: palette.primary100,
+              textVoicePlaytime: palette.onBackgroundLight01,
+              voiceSpinner: palette.primary300,
+              voiceProgressTrack: palette.background100,
+              voiceActionIcon: palette.primary300,
+              voiceActionIconBackground: palette.background50,
+            },
+          },
+          outgoing: {
+            enabled: {
+              textMsg: palette.onBackgroundDark01,
+              textEdited: palette.onBackgroundDark02,
+              textTime: palette.onBackgroundLight03,
+              textSenderName: palette.transparent,
+              background: palette.primary300,
+              textVoicePlaytime: palette.onBackgroundDark01,
+              voiceSpinner: palette.primary200,
+              voiceProgressTrack: palette.primary300,
+              voiceActionIcon: palette.primary300,
+              voiceActionIconBackground: palette.background50,
+            },
+            pressed: {
+              textMsg: palette.onBackgroundDark01,
+              textEdited: palette.onBackgroundDark02,
+              textTime: palette.onBackgroundLight03,
+              textSenderName: palette.transparent,
+              background: palette.primary400,
+              textVoicePlaytime: palette.onBackgroundDark01,
+              voiceSpinner: palette.primary200,
+              voiceProgressTrack: palette.primary300,
+              voiceActionIcon: palette.primary300,
+              voiceActionIconBackground: palette.background50,
+            },
+          },
+        },
         groupChannelPreview: {
           default: {
             none: {
@@ -243,8 +261,34 @@ const LightUIKitTheme = createTheme({
             },
           },
         },
+        voiceMessageInput: {
+          default: {
+            active: {
+              textCancel: palette.primary300,
+              textTime: palette.onBackgroundDark01,
+              background: palette.background50,
+              actionIcon: palette.onBackgroundLight01,
+              actionIconBackground: palette.background100,
+              sendIcon: palette.onBackgroundDark01,
+              sendIconBackground: palette.primary300,
+              progressTrack: palette.primary300,
+              recording: palette.error300,
+            },
+            inactive: {
+              textCancel: palette.primary300,
+              textTime: palette.onBackgroundLight03,
+              background: palette.background50,
+              actionIcon: palette.onBackgroundLight01,
+              actionIconBackground: palette.background100,
+              sendIcon: palette.onBackgroundLight04,
+              sendIconBackground: palette.background100,
+              progressTrack: palette.background100,
+              recording: palette.error300,
+            },
+          },
+        },
       },
-    };
+    } satisfies UIKitColors;
   },
 });
 

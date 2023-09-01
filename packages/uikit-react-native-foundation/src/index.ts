@@ -9,6 +9,7 @@ export { default as Image } from './components/Image';
 export { default as ImageWithPlaceholder } from './components/ImageWithPlaceholder';
 export { default as Modal } from './components/Modal';
 export { default as PressBox } from './components/PressBox';
+export { default as ProgressBar } from './components/ProgressBar';
 export { default as RegexText } from './components/RegexText';
 export type { RegexTextPattern } from './components/RegexText';
 export { default as Switch } from './components/Switch';

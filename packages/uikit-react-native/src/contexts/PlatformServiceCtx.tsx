@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useAppState } from '@sendbird/uikit-utils';
+
 import type {
   ClipboardServiceInterface,
   FileServiceInterface,
@@ -21,5 +23,11 @@ type Props = React.PropsWithChildren<PlatformServiceContextType>;
 
 export const PlatformServiceContext = React.createContext<PlatformServiceContextType | null>(null);
 export const PlatformServiceProvider = ({ children, ...services }: Props) => {
+  useAppState('change', (state) => {
+    if (state !== 'active') {
+      Promise.allSettled([services.playerService.reset(), services.recorderService.reset()]);
+    }
+  });
+
   return <PlatformServiceContext.Provider value={services}>{children}</PlatformServiceContext.Provider>;
 };

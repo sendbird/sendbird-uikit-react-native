@@ -43,7 +43,8 @@ export type Component =
   | 'ProfileCard'
   | 'Reaction'
   | 'OpenChannelMessage'
-  | 'OpenChannelPreview';
+  | 'OpenChannelPreview'
+  | 'VoiceMessageInput';
 
 export type GetColorTree<
   Tree extends {
@@ -74,6 +75,7 @@ export type ComponentColorTree = GetColorTree<{
     Reaction: 'default' | 'rounded';
     OpenChannelMessage: 'default';
     OpenChannelPreview: 'default';
+    VoiceMessageInput: 'default';
   };
   State: {
     Header: 'none';
@@ -89,6 +91,7 @@ export type ComponentColorTree = GetColorTree<{
     Reaction: 'enabled' | 'selected';
     OpenChannelMessage: 'enabled' | 'pressed';
     OpenChannelPreview: 'none';
+    VoiceMessageInput: 'active' | 'inactive';
   };
   ColorPart: {
     Header: 'background' | 'borderBottom';
@@ -98,7 +101,17 @@ export type ComponentColorTree = GetColorTree<{
     Badge: 'text' | 'background';
     Placeholder: 'content' | 'highlight';
     DateSeparator: 'text' | 'background';
-    GroupChannelMessage: 'textMsg' | 'textEdited' | 'textSenderName' | 'textTime' | 'background';
+    GroupChannelMessage:
+      | 'textMsg'
+      | 'textEdited'
+      | 'textSenderName'
+      | 'textTime'
+      | 'textVoicePlaytime'
+      | 'background'
+      | 'voiceSpinner'
+      | 'voiceProgressTrack'
+      | 'voiceActionIcon'
+      | 'voiceActionIconBackground';
     GroupChannelPreview:
       | 'textTitle'
       | 'textTitleCaption'
@@ -128,6 +141,16 @@ export type ComponentColorTree = GetColorTree<{
       | 'background'
       | 'coverBackground'
       | 'separator';
+    VoiceMessageInput:
+      | 'textCancel'
+      | 'textTime'
+      | 'background'
+      | 'actionIcon'
+      | 'actionIconBackground'
+      | 'sendIcon'
+      | 'sendIconBackground'
+      | 'progressTrack'
+      | 'recording';
   };
 }>;
 export type ComponentColors<T extends Component> = {
@@ -175,6 +198,7 @@ export interface UIKitColors {
     reaction: ComponentColors<'Reaction'>;
     openChannelMessage: ComponentColors<'OpenChannelMessage'>;
     openChannelPreview: ComponentColors<'OpenChannelPreview'>;
+    voiceMessageInput: ComponentColors<'VoiceMessageInput'>;
   };
 }
 
