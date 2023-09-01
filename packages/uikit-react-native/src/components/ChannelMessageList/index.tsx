@@ -22,6 +22,7 @@ import {
   getFileExtension,
   getFileType,
   isMyMessage,
+  isVoiceMessage,
   messageKeyExtractor,
   shouldRenderReaction,
   toMegabyte,
@@ -277,7 +278,7 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
         },
       });
     }
-    if (msg.isFileMessage()) {
+    if (!isVoiceMessage(msg) && msg.isFileMessage()) {
       sheetItems.push({
         icon: 'download',
         title: STRINGS.LABELS.CHANNEL_MESSAGE_SAVE,
@@ -299,6 +300,7 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
         },
       });
     }
+
     if (!channel.isEphemeral) {
       if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
         if (msg.isUserMessage()) {

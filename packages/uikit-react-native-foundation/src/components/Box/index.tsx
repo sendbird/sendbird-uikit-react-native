@@ -45,7 +45,7 @@ const Box = ({ style, children, ...props }: BoxProps) => {
   const boxStyle = useBoxStyle(props);
 
   return (
-    <View style={[boxStyle, style]} {...props}>
+    <View {...props} style={[boxStyle, style]}>
       {children}
     </View>
   );

@@ -1,6 +1,6 @@
 import { MessageSearchOrder } from '@sendbird/chat/message';
 
-import { getFileExtension, getFileType } from '../shared/file';
+import { getFileExtension, getFileType, parseMimeType } from '../shared/file';
 import type {
   SendbirdBaseChannel,
   SendbirdBaseMessage,
@@ -161,7 +161,7 @@ export type MessageType =
   | 'file'
   | 'unknown'
   | `user.${'opengraph'}`
-  | `file.${'image' | 'video' | 'audio'}`;
+  | `file.${'image' | 'video' | 'audio' | 'voice'}`;
 
 export type FileType = 'file' | 'image' | 'audio' | 'video';
 
@@ -221,6 +221,10 @@ export function getMessageType(message: SendbirdMessage): MessageType {
   }
 
   if (message.isFileMessage()) {
+    if (isVoiceMessage(message)) {
+      return 'file.voice';
+    }
+
     const fileType = getFileTypeFromMessage(message);
     switch (fileType) {
       case 'image':
@@ -246,4 +250,27 @@ export function getDefaultMessageSearchQueryParams(channel: SendbirdGroupChannel
     messageTimestampFrom: Math.max(channel.joinedAt, channel.invitedAt),
     order: MessageSearchOrder.TIMESTAMP,
   };
+}
+
+const SBU_MIME_PARAM_KEY = 'sbu_type';
+const SBU_MIME_PARAM_VOICE_MESSAGE_VALUE = 'voice';
+
+export function isVoiceMessage(message: SendbirdMessage): message is SendbirdFileMessage {
+  if (!message.isFileMessage()) return false;
+
+  const { parameters } = parseMimeType(message.type);
+  return !!parameters[SBU_MIME_PARAM_KEY] && parameters[SBU_MIME_PARAM_KEY] === SBU_MIME_PARAM_VOICE_MESSAGE_VALUE;
+}
+
+export function getVoiceMessageFileObject(uri: string, extension = 'm4a') {
+  return {
+    uri,
+    type: getVoiceMessageMimeType(extension),
+    name: `Voice_message.${extension}`,
+    size: 0,
+  };
+}
+
+export function getVoiceMessageMimeType(extension = 'm4a') {
+  return `audio/${extension};${SBU_MIME_PARAM_KEY}=${SBU_MIME_PARAM_VOICE_MESSAGE_VALUE}`;
 }

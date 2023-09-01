@@ -10,38 +10,47 @@ type Modules = {
   audioRecorderModule: typeof RNAudioRecorder;
   permissionModule: typeof Permissions;
 };
-type Listener = (params: { currentTime: number; duration: number; stopped: boolean }) => void;
+type PlaybackListener = Parameters<PlayerServiceInterface['addPlaybackListener']>[number];
+type StateListener = Parameters<PlayerServiceInterface['addStateListener']>[number];
 const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Modules): PlayerServiceInterface => {
   const module = new audioRecorderModule.default();
 
-  class Player implements PlayerServiceInterface {
+  class VoicePlayer implements PlayerServiceInterface {
     uri?: string;
     state: PlayerServiceInterface['state'] = 'idle';
-    private readonly subscribers = new Set<Listener>();
+
+    private readonly playbackSubscribers = new Set<PlaybackListener>();
+    private readonly stateSubscribers = new Set<StateListener>();
 
     constructor() {
-      this.state = 'idle';
-
       module.setSubscriptionDuration(0.1);
     }
 
-    setListener() {
+    private setState = (state: PlayerServiceInterface['state']) => {
+      this.state = state;
+      this.stateSubscribers.forEach((callback) => {
+        callback(state);
+      });
+    };
+
+    private setListener = () => {
       module.addPlayBackListener((data) => {
         const stopped = data.currentPosition >= data.duration;
 
         if (stopped) this.stop();
         if (this.state === 'playing') {
-          this.subscribers.forEach((callback) => {
+          this.playbackSubscribers.forEach((callback) => {
             callback({ currentTime: data.currentPosition, duration: data.duration, stopped });
           });
         }
       });
-    }
-    removeListener() {
-      module.removePlayBackListener();
-    }
+    };
 
-    async requestPermission(): Promise<boolean> {
+    private removeListener = () => {
+      module.removePlayBackListener();
+    };
+
+    public requestPermission = async (): Promise<boolean> => {
       if (Platform.OS === 'android') {
         const { READ_MEDIA_AUDIO, READ_EXTERNAL_STORAGE } = permissionModule.PERMISSIONS.ANDROID;
         const permission = Platform.Version > 32 ? READ_MEDIA_AUDIO : READ_EXTERNAL_STORAGE;
@@ -56,25 +65,32 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
       } else {
         return true;
       }
-    }
+    };
 
-    addPlaybackListener(callback: Listener): Unsubscribe {
-      this.subscribers.add(callback);
+    public addPlaybackListener = (callback: PlaybackListener): Unsubscribe => {
+      this.playbackSubscribers.add(callback);
       return () => {
-        this.subscribers.delete(callback);
+        this.playbackSubscribers.delete(callback);
       };
-    }
+    };
 
-    async play(uri: string): Promise<void> {
+    public addStateListener = (callback: (state: PlayerServiceInterface['state']) => void): Unsubscribe => {
+      this.stateSubscribers.add(callback);
+      return () => {
+        this.stateSubscribers.delete(callback);
+      };
+    };
+
+    public play = async (uri: string): Promise<void> => {
       if (matchesOneOf(this.state, ['idle', 'stopped'])) {
         try {
-          this.state = 'preparing';
+          this.setState('preparing');
           this.uri = uri;
           this.setListener();
           await module.startPlayer(uri);
-          this.state = 'playing';
+          this.setState('playing');
         } catch (e) {
-          this.state = 'idle';
+          this.setState('idle');
           this.uri = undefined;
           this.removeListener();
           throw e;
@@ -83,45 +99,46 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
         try {
           this.setListener();
           await module.resumePlayer();
-          this.state = 'playing';
+          this.setState('playing');
         } catch (e) {
           this.removeListener();
           throw e;
         }
       }
-    }
+    };
 
-    async pause(): Promise<void> {
+    public pause = async (): Promise<void> => {
       if (matchesOneOf(this.state, ['playing'])) {
         await module.pausePlayer();
         this.removeListener();
-        this.state = 'paused';
+        this.setState('paused');
       }
-    }
+    };
 
-    async stop(): Promise<void> {
+    public stop = async (): Promise<void> => {
       if (matchesOneOf(this.state, ['preparing', 'playing', 'paused'])) {
         await module.stopPlayer();
         this.removeListener();
-        this.state = 'stopped';
+        this.setState('stopped');
       }
-    }
+    };
 
-    async reset(): Promise<void> {
+    public reset = async (): Promise<void> => {
       await this.stop();
-      this.state = 'idle';
+      this.setState('idle');
       this.uri = undefined;
-      this.subscribers.clear();
-    }
+      this.playbackSubscribers.clear();
+      this.stateSubscribers.clear();
+    };
 
-    async seek(time: number): Promise<void> {
+    public seek = async (time: number): Promise<void> => {
       if (matchesOneOf(this.state, ['playing', 'paused'])) {
         await module.seekToPlayer(time);
       }
-    }
+    };
   }
 
-  return new Player();
+  return new VoicePlayer();
 };
 
 export default createNativePlayerService;
