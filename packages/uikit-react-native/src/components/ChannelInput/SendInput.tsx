@@ -111,20 +111,28 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   };
 
   const sendVoiceMessage = (file: FileType, durationMills: number) => {
-    onPressSendFileMessage({
-      file,
-      metaArrays: [
-        new MessageMetaArray({
-          key: VOICE_MESSAGE_META_ARRAY_DURATION_KEY,
-          value: [String(durationMills)],
-        }),
-        new MessageMetaArray({
-          key: VOICE_MESSAGE_META_ARRAY_MESSAGE_TYPE_KEY,
-          value: [`voice/${recorderService.options.extension}`],
-        }),
-      ],
-      ...messageReplyParams,
-    }).catch(onFailureToSend);
+    if (inputMuted) {
+      toast.show(STRINGS.TOAST.USER_MUTED_ERROR, 'error');
+      Logger.error(STRINGS.TOAST.USER_MUTED_ERROR);
+    } else if (inputFrozen) {
+      toast.show(STRINGS.TOAST.CHANNEL_FROZEN_ERROR, 'error');
+      Logger.error(STRINGS.TOAST.CHANNEL_FROZEN_ERROR);
+    } else {
+      onPressSendFileMessage({
+        file,
+        metaArrays: [
+          new MessageMetaArray({
+            key: VOICE_MESSAGE_META_ARRAY_DURATION_KEY,
+            value: [String(durationMills)],
+          }),
+          new MessageMetaArray({
+            key: VOICE_MESSAGE_META_ARRAY_MESSAGE_TYPE_KEY,
+            value: [`voice/${recorderService.options.extension}`],
+          }),
+        ],
+        ...messageReplyParams,
+      }).catch(onFailureToSend);
+    }
 
     onChangeText('');
     setMessageToReply?.();
