@@ -361,6 +361,8 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       DELETE_MSG_ERROR: "Couldn't delete message.",
       RESEND_MSG_ERROR: "Couldn't send message.",
       SEND_MSG_ERROR: "Couldn't send message.",
+      USER_MUTED_ERROR: "You're muted by the operator.",
+      CHANNEL_FROZEN_ERROR: 'Channel is frozen.',
       UPDATE_MSG_ERROR: "Couldn't edit message.",
       TURN_ON_NOTIFICATIONS_ERROR: "Couldn't turn on notifications.",
       TURN_OFF_NOTIFICATIONS_ERROR: "Couldn't turn off notifications.",
