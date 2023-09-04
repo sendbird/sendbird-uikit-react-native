@@ -1,9 +1,11 @@
 import { useRef, useState } from 'react';
 
+import { useAlert } from '@sendbird/uikit-react-native-foundation';
 import { Logger, getVoiceMessageFileObject, matchesOneOf } from '@sendbird/uikit-utils';
 
+import SBUUtils from '../libs/SBUUtils';
 import { FileType } from '../platform/types';
-import { usePlatformService } from './useContext';
+import { useLocalization, usePlatformService } from './useContext';
 
 type State = {
   /**
@@ -54,6 +56,8 @@ export interface VoiceMessageInputResult {
 }
 
 const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) => void): VoiceMessageInputResult => {
+  const { alert } = useAlert();
+  const { STRINGS } = useLocalization();
   const { recorderService, playerService, fileService } = usePlatformService();
   const [status, setStatus] = useState<State['status']>('idle');
 
@@ -104,7 +108,14 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
       async startRecording() {
         const granted = await recorderService.requestPermission();
         if (!granted) {
-          // toast
+          alert({
+            title: STRINGS.DIALOG.ALERT_PERMISSIONS_TITLE,
+            message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE(
+              STRINGS.LABELS.PERMISSION_MICROPHONE,
+              STRINGS.LABELS.PERMISSION_APP_NAME,
+            ),
+            buttons: [{ text: STRINGS.DIALOG.ALERT_PERMISSIONS_OK, onPress: () => SBUUtils.openSettings() }],
+          });
           Logger.error('Failed to request permission for recorder');
           return;
         }
@@ -147,7 +158,14 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
       async playPlayer() {
         const granted = await playerService.requestPermission();
         if (!granted) {
-          // toast
+          alert({
+            title: STRINGS.DIALOG.ALERT_PERMISSIONS_TITLE,
+            message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE(
+              STRINGS.LABELS.PERMISSION_DEVICE_STORAGE,
+              STRINGS.LABELS.PERMISSION_APP_NAME,
+            ),
+            buttons: [{ text: STRINGS.DIALOG.ALERT_PERMISSIONS_OK, onPress: () => SBUUtils.openSettings() }],
+          });
           Logger.error('Failed to request permission for player');
           return;
         }

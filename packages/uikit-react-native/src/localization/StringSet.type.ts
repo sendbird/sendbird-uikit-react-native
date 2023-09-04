@@ -240,6 +240,7 @@ export interface StringSet {
     PERMISSION_APP_NAME: string;
     PERMISSION_CAMERA: string;
     PERMISSION_DEVICE_STORAGE: string;
+    PERMISSION_MICROPHONE: string;
 
     USER_NO_NAME: string;
     CHANNEL_NO_MEMBERS: string;
