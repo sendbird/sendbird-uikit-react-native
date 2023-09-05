@@ -1,4 +1,3 @@
-import { UIKitColors } from '../types';
 import createTheme from './createTheme';
 
 const LightUIKitTheme = createTheme({
@@ -288,7 +287,7 @@ const LightUIKitTheme = createTheme({
           },
         },
       },
-    } satisfies UIKitColors;
+    };
   },
 });
 

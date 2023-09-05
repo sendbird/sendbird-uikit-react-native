@@ -1,4 +1,3 @@
-import { UIKitColors } from '../types';
 import createTheme from './createTheme';
 
 const DarkUIKitTheme = createTheme({
@@ -288,7 +287,7 @@ const DarkUIKitTheme = createTheme({
           },
         },
       },
-    } satisfies UIKitColors;
+    };
   },
 });
 
