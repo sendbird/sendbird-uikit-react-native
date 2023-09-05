@@ -26,7 +26,8 @@
     "test": "jest",
     "build": "bob build",
     "clean": "del lib",
-    "publish:next": "npm publish --tag next"
+    "publish:next": "npm publish --tag next",
+    "publish:local": "yalc publish"
   },
   "repository": {
     "type": "git",
