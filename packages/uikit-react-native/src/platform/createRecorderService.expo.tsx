@@ -82,11 +82,11 @@ const createNativeRecorderService = ({ avModule }: Modules): RecorderServiceInte
 
     public requestPermission = async (): Promise<boolean> => {
       const status = await avModule.Audio.getPermissionsAsync();
-      if (expoPermissionGranted(status)) {
+      if (expoPermissionGranted([status])) {
         return true;
       } else {
         const status = await avModule.Audio.requestPermissionsAsync();
-        return expoPermissionGranted(status);
+        return expoPermissionGranted([status]);
       }
     };
 
