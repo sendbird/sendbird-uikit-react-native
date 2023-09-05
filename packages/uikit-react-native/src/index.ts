@@ -75,6 +75,8 @@ export { default as createExpoFileService } from './platform/createFileService.e
 export { default as createExpoClipboardService } from './platform/createClipboardService.expo';
 export { default as createExpoNotificationService } from './platform/createNotificationService.expo';
 export { default as createExpoMediaService } from './platform/createMediaService.expo';
+export { default as createExpoPlayerService } from './platform/createPlayerService.expo';
+export { default as createExpoRecorderService } from './platform/createRecorderService.expo';
 export * from './platform/types';
 
 /** Feature - shared **/
