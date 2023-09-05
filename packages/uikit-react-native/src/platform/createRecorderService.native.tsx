@@ -18,6 +18,7 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
   const module = new audioRecorderModule.default();
 
   class VoiceRecorder implements RecorderServiceInterface {
+    public uri: RecorderServiceInterface['uri'] = undefined;
     public state: RecorderServiceInterface['state'] = 'idle';
     public options: RecorderServiceInterface['options'] = {
       minDuration: 1000,
@@ -121,7 +122,7 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
       };
     };
 
-    public record = async (uri?: string): Promise<void> => {
+    public record = async (uri: string): Promise<void> => {
       if (matchesOneOf(this.state, ['idle', 'completed'])) {
         try {
           this.setState('preparing');
@@ -133,6 +134,7 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
             this._recordStartedAt = Date.now();
           }
 
+          this.uri = uri;
           this.setState('recording');
         } catch (e) {
           this.setState('idle');
@@ -155,8 +157,9 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
 
     public reset = async (): Promise<void> => {
       await this.stop();
-      this.setState('idle');
+      this.uri = undefined;
       this.recordingSubscribers.clear();
+      this.setState('idle');
     };
   }
 
