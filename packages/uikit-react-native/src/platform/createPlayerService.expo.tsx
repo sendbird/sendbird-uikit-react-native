@@ -20,10 +20,6 @@ const createNativePlayerService = ({ avModule }: Modules): PlayerServiceInterfac
     private readonly playbackSubscribers = new Set<PlaybackListener>();
     private readonly stateSubscribers = new Set<StateListener>();
 
-    constructor() {
-      sound.setProgressUpdateIntervalAsync(100);
-    }
-
     private setState = (state: PlayerServiceInterface['state']) => {
       this.state = state;
       this.stateSubscribers.forEach((callback) => {
@@ -32,6 +28,7 @@ const createNativePlayerService = ({ avModule }: Modules): PlayerServiceInterfac
     };
 
     private setListener = () => {
+      sound.setProgressUpdateIntervalAsync(100);
       sound.setOnPlaybackStatusUpdate((status) => {
         if (status.isLoaded) {
           if (status.didJustFinish) this.stop();
@@ -98,7 +95,7 @@ const createNativePlayerService = ({ avModule }: Modules): PlayerServiceInterfac
       } else if (matchesOneOf(this.state, ['paused']) && this.uri === uri) {
         try {
           this.setListener();
-          await sound.replayAsync();
+          await sound.playAsync();
           this.setState('playing');
         } catch (e) {
           this.removeListener();
@@ -116,7 +113,7 @@ const createNativePlayerService = ({ avModule }: Modules): PlayerServiceInterfac
     };
 
     public stop = async (): Promise<void> => {
-      if (matchesOneOf(this.state, ['preparing', 'playing', 'paused'])) {
+      if (matchesOneOf(this.state, ['playing', 'paused'])) {
         await sound.stopAsync();
         await sound.unloadAsync();
         this.removeListener();

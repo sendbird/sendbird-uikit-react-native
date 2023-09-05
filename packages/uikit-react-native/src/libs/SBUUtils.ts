@@ -37,4 +37,9 @@ export default class SBUUtils {
       await callback();
     } catch (e) {}
   }
+
+  static isExpo() {
+    const _g = global ?? window;
+    return typeof _g === 'object' && 'expo' in _g;
+  }
 }
