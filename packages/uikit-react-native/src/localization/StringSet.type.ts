@@ -240,6 +240,7 @@ export interface StringSet {
     PERMISSION_APP_NAME: string;
     PERMISSION_CAMERA: string;
     PERMISSION_DEVICE_STORAGE: string;
+    PERMISSION_MICROPHONE: string;
 
     USER_NO_NAME: string;
     CHANNEL_NO_MEMBERS: string;
@@ -335,6 +336,8 @@ export interface StringSet {
     RESEND_MSG_ERROR: string;
     DELETE_MSG_ERROR: string;
     SEND_MSG_ERROR: string;
+    USER_MUTED_ERROR: string;
+    CHANNEL_FROZEN_ERROR: string;
     UPDATE_MSG_ERROR: string;
     TURN_ON_NOTIFICATIONS_ERROR: string;
     TURN_OFF_NOTIFICATIONS_ERROR: string;

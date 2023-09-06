@@ -249,6 +249,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       PERMISSION_APP_NAME: 'Application',
       PERMISSION_CAMERA: 'camera',
       PERMISSION_DEVICE_STORAGE: 'device storage',
+      PERMISSION_MICROPHONE: 'microphone',
       USER_NO_NAME,
       CHANNEL_NO_MEMBERS,
       TYPING_INDICATOR_TYPINGS: (users, NO_NAME = USER_NO_NAME) => {
@@ -341,7 +342,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       ALERT_DEFAULT_OK: 'OK',
       ALERT_PERMISSIONS_TITLE: 'Allow access?',
       ALERT_PERMISSIONS_MESSAGE: (permission, appName = 'Application') => {
-        return `${appName} need permission to access your ${permission}.`;
+        return `${appName} needs permission to access your ${permission}.`;
       },
       ALERT_PERMISSIONS_OK: 'Go to settings',
       PROMPT_DEFAULT_OK: 'Submit',
@@ -360,6 +361,8 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       DELETE_MSG_ERROR: "Couldn't delete message.",
       RESEND_MSG_ERROR: "Couldn't send message.",
       SEND_MSG_ERROR: "Couldn't send message.",
+      USER_MUTED_ERROR: "You're muted by the operator.",
+      CHANNEL_FROZEN_ERROR: 'Channel is frozen.',
       UPDATE_MSG_ERROR: "Couldn't edit message.",
       TURN_ON_NOTIFICATIONS_ERROR: "Couldn't turn on notifications.",
       TURN_OFF_NOTIFICATIONS_ERROR: "Couldn't turn off notifications.",
