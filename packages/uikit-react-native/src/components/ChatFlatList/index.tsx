@@ -6,7 +6,18 @@ import { NOOP, SendbirdMessage, getMessageUniqId, useFreshCallback } from '@send
 
 import FlatListInternal from './FlatListInternal';
 
-let ANDROID_BUG_ALERT_SHOWED = Platform.OS !== 'android';
+function isInvertedFlatListFixedVersion() {
+  if (Platform.constants.reactNativeVersion?.major < 1) {
+    if (Platform.constants.reactNativeVersion?.minor < 73) {
+      if (Platform.constants.reactNativeVersion?.patch < 4) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+let ANDROID_BUG_ALERT_SHOWED = Platform.OS !== 'android' || isInvertedFlatListFixedVersion();
 const BOTTOM_DETECT_THRESHOLD = 50;
 const UNREACHABLE_THRESHOLD = Number.MIN_SAFE_INTEGER;
 
@@ -15,7 +26,6 @@ type Props = Omit<FlatListProps<SendbirdMessage>, 'onEndReached'> & {
   onTopReached: () => void;
   onScrolledAwayFromBottom: (value: boolean) => void;
 };
-// FIXME: Inverted FlatList performance issue on Android {@link https://github.com/facebook/react-native/issues/30034}
 const ChatFlatList = forwardRef<RNFlatList, Props>(function ChatFlatList(
   { onTopReached, onBottomReached, onScrolledAwayFromBottom, onScroll, ...props },
   ref,
@@ -44,7 +54,8 @@ const ChatFlatList = forwardRef<RNFlatList, Props>(function ChatFlatList(
     ANDROID_BUG_ALERT_SHOWED = true;
     // eslint-disable-next-line no-console
     console.warn(
-      'UIKit Warning: The inverted FlatList has a performance issue on Android. Maybe this is a bug.\n' +
+      'UIKit Warning: The Inverted FlatList had performance issues on Android.\n' +
+        'This issue was fixed in 0.72.4+\n' +
         'Please refer to the link: https://github.com/facebook/react-native/issues/30034',
     );
   }
