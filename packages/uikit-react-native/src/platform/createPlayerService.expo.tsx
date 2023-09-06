@@ -10,7 +10,7 @@ type Modules = {
 };
 type PlaybackListener = Parameters<PlayerServiceInterface['addPlaybackListener']>[number];
 type StateListener = Parameters<PlayerServiceInterface['addStateListener']>[number];
-const createNativePlayerService = ({ avModule }: Modules): PlayerServiceInterface => {
+const createExpoPlayerService = ({ avModule }: Modules): PlayerServiceInterface => {
   const sound = new avModule.Audio.Sound();
 
   class VoicePlayer implements PlayerServiceInterface {
@@ -139,4 +139,4 @@ const createNativePlayerService = ({ avModule }: Modules): PlayerServiceInterfac
   return new VoicePlayer();
 };
 
-export default createNativePlayerService;
+export default createExpoPlayerService;
