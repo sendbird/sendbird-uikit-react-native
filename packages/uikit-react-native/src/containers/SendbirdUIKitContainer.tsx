@@ -63,7 +63,7 @@ export const SendbirdUIKit = Object.freeze({
   },
 });
 
-type UnimplementedFeatures = 'enableVoiceMessage' | 'threadReplySelectType' | 'replyType';
+type UnimplementedFeatures = 'threadReplySelectType' | 'replyType';
 export type ChatOmittedInitParams = Omit<
   SendbirdChatParams<[GroupChannelModule, OpenChannelModule]>,
   (typeof chatOmitKeys)[number]
