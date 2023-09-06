@@ -12,7 +12,7 @@ type StateListener = Parameters<RecorderServiceInterface['addStateListener']>[nu
 type Modules = {
   avModule: typeof ExpoAV;
 };
-const createNativeRecorderService = ({ avModule }: Modules): RecorderServiceInterface => {
+const createExpoRecorderService = ({ avModule }: Modules): RecorderServiceInterface => {
   class VoiceRecorder implements RecorderServiceInterface {
     public uri: RecorderServiceInterface['uri'] = undefined;
     public state: RecorderServiceInterface['state'] = 'idle';
@@ -156,4 +156,4 @@ const createNativeRecorderService = ({ avModule }: Modules): RecorderServiceInte
   return new VoiceRecorder();
 };
 
-export default createNativeRecorderService;
+export default createExpoRecorderService;

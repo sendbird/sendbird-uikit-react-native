@@ -98,6 +98,6 @@
     ]
   },
   "resolutions": {
-    "@sendbird/chat": "4.9.8"
+    "@sendbird/chat": "4.9.10"
   }
 }
