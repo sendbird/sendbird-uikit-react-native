@@ -37,6 +37,7 @@ import ImageCompressionConfig from '../libs/ImageCompressionConfig';
 import InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
 import MentionConfig, { MentionConfigInterface } from '../libs/MentionConfig';
 import MentionManager from '../libs/MentionManager';
+import VoiceMessageConfig, { VoiceMessageConfigInterface } from '../libs/VoiceMessageConfig';
 import StringSetEn from '../localization/StringSet.en';
 import type { StringSet } from '../localization/StringSet.type';
 import SBUDynamicModule from '../platform/dynamicModule';
@@ -114,22 +115,23 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   };
   userMention?: Pick<Partial<MentionConfigInterface>, 'mentionLimit' | 'suggestionLimit' | 'debounceMills'>;
   imageCompression?: Partial<ImageCompressionConfigInterface>;
+  voiceMessage?: PartialDeep<VoiceMessageConfigInterface>;
 }>;
 
-const SendbirdUIKitContainer = ({
-  children,
-  appId,
-  chatOptions,
-  uikitOptions,
-  platformServices,
-  localization,
-  styles,
-  errorBoundary,
-  toast,
-  userProfile,
-  userMention,
-  imageCompression,
-}: SendbirdUIKitContainerProps) => {
+const SendbirdUIKitContainer = (props: SendbirdUIKitContainerProps) => {
+  const {
+    children,
+    appId,
+    chatOptions,
+    uikitOptions,
+    platformServices,
+    localization,
+    styles,
+    errorBoundary,
+    toast,
+    userProfile,
+  } = props;
+
   if (!chatOptions.localCacheStorage) {
     throw new Error('SendbirdUIKitContainer: chatOptions.localCacheStorage is required');
   }
@@ -146,26 +148,9 @@ const SendbirdUIKitContainer = ({
     return sendbird.chatSDK;
   });
 
+  const { imageCompressionConfig, voiceMessageConfig, mentionConfig } = useConfigInstance(props);
   const emojiManager = useMemo(() => new EmojiManager(internalStorage), [internalStorage]);
-
-  const mentionManager = useMemo(() => {
-    const config = new MentionConfig({
-      mentionLimit: userMention?.mentionLimit || MentionConfig.DEFAULT.MENTION_LIMIT,
-      suggestionLimit: userMention?.suggestionLimit || MentionConfig.DEFAULT.SUGGESTION_LIMIT,
-      debounceMills: userMention?.debounceMills ?? MentionConfig.DEFAULT.DEBOUNCE_MILLS,
-      delimiter: MentionConfig.DEFAULT.DELIMITER,
-      trigger: MentionConfig.DEFAULT.TRIGGER,
-    });
-    return new MentionManager(config);
-  }, [userMention?.mentionLimit, userMention?.suggestionLimit, userMention?.debounceMills]);
-
-  const imageCompressionConfig = useMemo(() => {
-    return new ImageCompressionConfig({
-      compressionRate: imageCompression?.compressionRate || ImageCompressionConfig.DEFAULT.COMPRESSION_RATE,
-      width: imageCompression?.width,
-      height: imageCompression?.height,
-    });
-  }, [imageCompression?.compressionRate, imageCompression?.width, imageCompression?.height]);
+  const mentionManager = useMemo(() => new MentionManager(mentionConfig), [mentionConfig]);
 
   useLayoutEffect(() => {
     if (!isFirstMount) {
@@ -212,6 +197,7 @@ const SendbirdUIKitContainer = ({
           emojiManager={emojiManager}
           mentionManager={mentionManager}
           imageCompressionConfig={imageCompressionConfig}
+          voiceMessageConfig={voiceMessageConfig}
           enableAutoPushTokenRegistration={
             chatOptions.enableAutoPushTokenRegistration ?? SendbirdUIKit.DEFAULT.AUTO_PUSH_TOKEN_REGISTRATION
           }
@@ -228,6 +214,7 @@ const SendbirdUIKitContainer = ({
               mediaService={platformServices.media}
               playerService={platformServices.player}
               recorderService={platformServices.recorder}
+              voiceMessageConfig={voiceMessageConfig}
             >
               <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
                 <HeaderStyleProvider
@@ -366,5 +353,40 @@ function getReactNativeVersion() {
   const { major, minor, patch } = Platform.constants.reactNativeVersion;
   return `${major}.${minor}.${patch}`;
 }
+
+const useConfigInstance = ({ imageCompression, userMention, voiceMessage }: SendbirdUIKitContainerProps) => {
+  const mentionConfig = useMemo(() => {
+    return new MentionConfig({
+      mentionLimit: userMention?.mentionLimit || MentionConfig.DEFAULT.MENTION_LIMIT,
+      suggestionLimit: userMention?.suggestionLimit || MentionConfig.DEFAULT.SUGGESTION_LIMIT,
+      debounceMills: userMention?.debounceMills ?? MentionConfig.DEFAULT.DEBOUNCE_MILLS,
+      delimiter: MentionConfig.DEFAULT.DELIMITER,
+      trigger: MentionConfig.DEFAULT.TRIGGER,
+    });
+  }, [userMention?.mentionLimit, userMention?.suggestionLimit, userMention?.debounceMills]);
+
+  const imageCompressionConfig = useMemo(() => {
+    return new ImageCompressionConfig({
+      compressionRate: imageCompression?.compressionRate || ImageCompressionConfig.DEFAULT.COMPRESSION_RATE,
+      width: imageCompression?.width,
+      height: imageCompression?.height,
+    });
+  }, [imageCompression?.compressionRate, imageCompression?.width, imageCompression?.height]);
+
+  const voiceMessageConfig = useMemo(() => {
+    return new VoiceMessageConfig({
+      recorder: {
+        minDuration: voiceMessage?.recorder?.minDuration ?? VoiceMessageConfig.DEFAULT.RECORDER.MIN_DURATION,
+        maxDuration: voiceMessage?.recorder?.maxDuration ?? VoiceMessageConfig.DEFAULT.RECORDER.MAX_DURATION,
+      },
+    });
+  }, [voiceMessage?.recorder?.minDuration, voiceMessage?.recorder?.maxDuration]);
+
+  return {
+    mentionConfig,
+    imageCompressionConfig,
+    voiceMessageConfig,
+  };
+};
 
 export default SendbirdUIKitContainer;

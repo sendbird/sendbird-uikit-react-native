@@ -5,6 +5,7 @@ import { Permission } from 'react-native-permissions/src/types';
 
 import { matchesOneOf, sleep } from '@sendbird/uikit-utils';
 
+import VoiceMessageConfig from '../libs/VoiceMessageConfig';
 import nativePermissionGranted from '../utils/nativePermissionGranted';
 import type { RecorderServiceInterface, Unsubscribe } from './types';
 
@@ -20,9 +21,9 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
   class VoiceRecorder implements RecorderServiceInterface {
     public state: RecorderServiceInterface['state'] = 'idle';
     public options: RecorderServiceInterface['options'] = {
-      minDuration: 1000,
-      maxDuration: 60000,
-      extension: 'm4a',
+      minDuration: VoiceMessageConfig.DEFAULT.RECORDER.MIN_DURATION,
+      maxDuration: VoiceMessageConfig.DEFAULT.RECORDER.MAX_DURATION,
+      extension: VoiceMessageConfig.DEFAULT.RECORDER.EXTENSION,
     };
 
     // NOTE: In Android, even when startRecorder() is awaited, if stop() is executed immediately afterward, an error occurs
@@ -37,9 +38,9 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
     private readonly recordingSubscribers = new Set<RecordingListener>();
     private readonly stateSubscribers = new Set<StateListener>();
     private readonly audioSettings = {
-      sampleRate: 11025,
-      bitRate: 12000,
-      audioChannels: 1,
+      sampleRate: VoiceMessageConfig.DEFAULT.RECORDER.SAMPLE_RATE,
+      bitRate: VoiceMessageConfig.DEFAULT.RECORDER.BIT_RATE,
+      audioChannels: VoiceMessageConfig.DEFAULT.RECORDER.CHANNELS,
       // encoding: mpeg4_aac
     };
     private readonly audioOptions = Platform.select({
