@@ -13,6 +13,7 @@ import { confirmAndMarkAsDelivered, useAppState, useForceUpdate } from '@sendbir
 import type EmojiManager from '../libs/EmojiManager';
 import type ImageCompressionConfig from '../libs/ImageCompressionConfig';
 import type MentionManager from '../libs/MentionManager';
+import type VoiceMessageConfig from '../libs/VoiceMessageConfig';
 import type { FileType } from '../platform/types';
 
 export interface ChatRelatedFeaturesInUIKit {
@@ -23,18 +24,23 @@ export interface ChatRelatedFeaturesInUIKit {
 
 interface Props extends ChatRelatedFeaturesInUIKit, React.PropsWithChildren {
   sdkInstance: SendbirdChatSDK;
+
   emojiManager: EmojiManager;
   mentionManager: MentionManager;
   imageCompressionConfig: ImageCompressionConfig;
+  voiceMessageConfig: VoiceMessageConfig;
 }
 
 export type SendbirdChatContextType = {
   sdk: SendbirdChatSDK;
+  currentUser?: SendbirdUser;
+  setCurrentUser: React.Dispatch<React.SetStateAction<SendbirdUser | undefined>>;
+
+  // feature related instances
   emojiManager: EmojiManager;
   mentionManager: MentionManager;
   imageCompressionConfig: ImageCompressionConfig;
-  currentUser?: SendbirdUser;
-  setCurrentUser: React.Dispatch<React.SetStateAction<SendbirdUser | undefined>>;
+  voiceMessageConfig: VoiceMessageConfig;
 
   // helper functions
   updateCurrentUserInfo: (nickname?: string, profile?: string | FileType) => Promise<SendbirdUser>;
@@ -84,6 +90,7 @@ export const SendbirdChatProvider = ({
   emojiManager,
   mentionManager,
   imageCompressionConfig,
+  voiceMessageConfig,
   enableAutoPushTokenRegistration,
   enableUseUserIdForNickname,
   enableImageCompression,
@@ -155,6 +162,7 @@ export const SendbirdChatProvider = ({
     emojiManager,
     mentionManager,
     imageCompressionConfig,
+    voiceMessageConfig,
     currentUser,
     setCurrentUser,
 
