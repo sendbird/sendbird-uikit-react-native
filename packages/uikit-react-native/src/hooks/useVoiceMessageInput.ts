@@ -73,10 +73,11 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
 
   const recordingPath = useRef<{ recordFilePath: string; uri: string }>();
   const getVoiceMessageRecordingPath = () => {
-    if (recordingPath.current) return recordingPath.current;
-
-    recordingPath.current = fileService.createRecordFilePath(recorderService.options.extension);
+    if (!recordingPath.current) throw new Error('No recording path');
     return recordingPath.current;
+  };
+  const setVoiceMessageRecordingPath = (path: { recordFilePath: string; uri: string }) => {
+    recordingPath.current = path;
   };
 
   const clear = async () => {
@@ -147,7 +148,15 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
             }
           });
 
-          await recorderService.record(getVoiceMessageRecordingPath().recordFilePath);
+          if (SBUUtils.isExpo()) {
+            await recorderService.record();
+            if (recorderService.uri) {
+              setVoiceMessageRecordingPath({ recordFilePath: recorderService.uri, uri: recorderService.uri });
+            }
+          } else {
+            setVoiceMessageRecordingPath(fileService.createRecordFilePath(recorderService.options.extension));
+            await recorderService.record(getVoiceMessageRecordingPath().recordFilePath);
+          }
         }
       },
       async stopRecording() {

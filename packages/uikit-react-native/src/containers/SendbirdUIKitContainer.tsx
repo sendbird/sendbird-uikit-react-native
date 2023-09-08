@@ -53,7 +53,7 @@ import VERSION from '../version';
 import InternalErrorBoundaryContainer from './InternalErrorBoundaryContainer';
 
 const NetInfo = SBUDynamicModule.get('@react-native-community/netinfo', 'warn');
-type UnimplementedFeatures = 'enableVoiceMessage' | 'threadReplySelectType' | 'replyType';
+type UnimplementedFeatures = 'threadReplySelectType' | 'replyType';
 export const SendbirdUIKit = Object.freeze({
   VERSION,
   PLATFORM: Platform.OS.toLowerCase(),

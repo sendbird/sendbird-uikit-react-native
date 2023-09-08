@@ -177,6 +177,7 @@ export interface RecorderOptions {
 }
 
 export interface RecorderServiceInterface {
+  uri?: string;
   options: RecorderOptions;
   state: 'idle' | 'preparing' | 'recording' | 'completed';
 
