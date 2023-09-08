@@ -17,14 +17,17 @@ import useVoiceMessageInput from '../../hooks/useVoiceMessageInput';
 import type { FileType } from '../../platform/types';
 
 export type VoiceMessageInputProps = {
-  onClose: () => void; // stop playing, recording, hide view
+  onClose: () => Promise<void>; // stop playing, recording, hide view
   onSend: (params: { file: FileType; duration: number }) => void;
 };
 
 const VoiceMessageInput = ({ onClose, onSend }: VoiceMessageInputProps) => {
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
-  const { actions, state } = useVoiceMessageInput((file, duration) => onSend({ file, duration }));
+  const { actions, state } = useVoiceMessageInput({
+    onSend: (file, duration) => onSend({ file, duration }),
+    onClose,
+  });
 
   const uiColors = colors.ui.voiceMessageInput.default[state.status !== 'idle' ? 'active' : 'inactive'];
 

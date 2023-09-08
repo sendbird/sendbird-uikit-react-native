@@ -55,7 +55,12 @@ export interface VoiceMessageInputResult {
   state: State;
 }
 
-const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) => void): VoiceMessageInputResult => {
+type Props = {
+  onClose: () => Promise<void>;
+  onSend: (voiceFile: FileType, duration: number) => void;
+};
+
+const useVoiceMessageInput = ({ onSend, onClose }: Props): VoiceMessageInputResult => {
   const { alert } = useAlert();
   const { STRINGS } = useLocalization();
   const { recorderService, playerService, fileService } = usePlatformService();
@@ -109,6 +114,7 @@ const useVoiceMessageInput = (onSend: (voiceFile: FileType, duration: number) =>
       async startRecording() {
         const granted = await recorderService.requestPermission();
         if (!granted) {
+          await onClose();
           alert({
             title: STRINGS.DIALOG.ALERT_PERMISSIONS_TITLE,
             message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE(

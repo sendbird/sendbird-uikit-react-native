@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef } from 'react';
 import {
   NativeSyntheticEvent,
   Platform,
@@ -18,7 +18,7 @@ import {
   useToast,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import { Logger, useIIFE } from '@sendbird/uikit-utils';
+import { Logger, useDeferredModalState, useIIFE } from '@sendbird/uikit-utils';
 
 import { VOICE_MESSAGE_META_ARRAY_DURATION_KEY, VOICE_MESSAGE_META_ARRAY_MESSAGE_TYPE_KEY } from '../../constants';
 import { useChannelInputItems } from '../../hooks/useChannelInputItems';
@@ -60,7 +60,12 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   const { openSheet } = useBottomSheet();
   const toast = useToast();
 
-  const [voiceMessageInputVisible, setVoiceMessageInputVisible] = useState(false);
+  const {
+    onClose,
+    onDismiss,
+    visible: voiceMessageInputVisible,
+    setVisible: setVoiceMessageInputVisible,
+  } = useDeferredModalState();
 
   const messageReplyParams = useIIFE(() => {
     const { groupChannel } = sbOptions.uikit;
@@ -187,15 +192,13 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
         {voiceMessageEnabled && VoiceMessageInput && (
           <Modal
             disableBackgroundClose
-            onClose={() => setVoiceMessageInputVisible(false)}
+            onClose={onClose}
+            onDismiss={onDismiss}
             backgroundStyle={{ justifyContent: 'flex-end' }}
             visible={voiceMessageInputVisible}
             type={'slide-no-gesture'}
           >
-            <VoiceMessageInput
-              onClose={() => setVoiceMessageInputVisible(false)}
-              onSend={({ file, duration }) => sendVoiceMessage(file, duration)}
-            />
+            <VoiceMessageInput onClose={onClose} onSend={({ file, duration }) => sendVoiceMessage(file, duration)} />
           </Modal>
         )}
       </View>
