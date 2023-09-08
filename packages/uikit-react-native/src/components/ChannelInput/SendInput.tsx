@@ -54,7 +54,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   },
   ref,
 ) {
-  const { recorderService } = usePlatformService();
+  const { playerService, recorderService } = usePlatformService();
   const { mentionManager, sbOptions } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { openSheet } = useBottomSheet();
@@ -193,7 +193,10 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
           <Modal
             disableBackgroundClose
             onClose={onClose}
-            onDismiss={onDismiss}
+            onDismiss={() => {
+              onDismiss();
+              Promise.allSettled([playerService.reset(), recorderService.reset()]);
+            }}
             backgroundStyle={{ justifyContent: 'flex-end' }}
             visible={voiceMessageInputVisible}
             type={'slide-no-gesture'}

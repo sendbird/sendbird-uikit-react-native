@@ -17,7 +17,7 @@ import useVoiceMessageInput from '../../hooks/useVoiceMessageInput';
 import type { FileType } from '../../platform/types';
 
 export type VoiceMessageInputProps = {
-  onClose: () => Promise<void>; // stop playing, recording, hide view
+  onClose: () => Promise<void>;
   onSend: (params: { file: FileType; duration: number }) => void;
 };
 
