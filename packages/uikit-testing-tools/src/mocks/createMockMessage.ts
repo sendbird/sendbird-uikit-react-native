@@ -1,4 +1,5 @@
 import { ChannelType } from '@sendbird/chat';
+import { NotificationData } from '@sendbird/chat/feedChannel';
 import { MessageType, SendingStatus } from '@sendbird/chat/message';
 import type {
   SendbirdAdminMessage,
@@ -65,6 +66,7 @@ class MockMessage implements GetMockProps<Params, SendbirdBaseMessage> {
   appleCriticalAlertOptions = null;
   scheduledInfo = null;
   extendedMessage = {};
+  notificationData: NotificationData | null = null;
 
   isFileMessage(): this is SendbirdFileMessage {
     return this.messageType === MessageType.FILE && !Object.prototype.hasOwnProperty.call(this, 'fileInfoList');
