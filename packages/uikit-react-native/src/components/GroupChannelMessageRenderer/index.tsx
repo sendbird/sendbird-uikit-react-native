@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 import type { GroupChannelMessageProps, RegexTextPattern } from '@sendbird/uikit-react-native-foundation';
 import { Box, GroupChannelMessage, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
@@ -38,6 +38,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   prevMessage,
   nextMessage,
 }) => {
+  const playerUnsubscribes = useRef<(() => void)[]>([]);
   const { palette } = useUIKitTheme();
   const { sbOptions, currentUser, mentionManager } = useSendbirdChat();
   const { STRINGS } = useLocalization();
@@ -59,6 +60,16 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     }
     return null;
   });
+
+  const resetPlayer = async () => {
+    playerUnsubscribes.current.forEach((unsubscribe) => {
+      try {
+        unsubscribe();
+      } catch {}
+    });
+    playerUnsubscribes.current.length = 0;
+    await playerService.reset();
+  };
 
   const variant = isMyMessage(message, currentUser?.userId) ? 'outgoing' : 'incoming';
 
@@ -84,19 +95,18 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
           }
         } else {
           if (playerService.state !== 'idle') {
-            await playerService.reset();
+            await resetPlayer();
           }
 
           const shouldSeekToTime = state.duration > state.currentTime && state.currentTime > 0;
           let seekFinished = !shouldSeekToTime;
 
-          playerService.addPlaybackListener((params) => {
+          const forPlayback = playerService.addPlaybackListener((params) => {
             if (seekFinished) {
               setState((prevState) => ({ ...prevState, currentTime: params.currentTime, duration: params.duration }));
             }
           });
-
-          playerService.addStateListener((state) => {
+          const forState = playerService.addStateListener((state) => {
             switch (state) {
               case 'preparing':
                 setState((prevState) => ({ ...prevState, status: 'preparing' }));
@@ -114,6 +124,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
                 break;
             }
           });
+          playerUnsubscribes.current.push(forPlayback, forState);
 
           await playerService.play(message.url);
           if (shouldSeekToTime) {
@@ -240,6 +251,11 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
           <GroupChannelMessage.VoiceFile
             message={message as SendbirdFileMessage}
             durationMetaArrayKey={VOICE_MESSAGE_META_ARRAY_DURATION_KEY}
+            onUnmount={() => {
+              if (isVoiceMessage(message) && playerService.uri === message.url) {
+                resetPlayer();
+              }
+            }}
             {...messageProps}
           />
         );

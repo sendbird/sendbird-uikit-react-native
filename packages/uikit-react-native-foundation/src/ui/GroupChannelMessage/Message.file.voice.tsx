@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import type { SendbirdFileMessage } from '@sendbird/uikit-utils';
 import { millsToMSS } from '@sendbird/uikit-utils';
@@ -24,6 +24,7 @@ type Props = GroupChannelMessageProps<
   SendbirdFileMessage,
   {
     durationMetaArrayKey?: string;
+    onUnmount: () => void;
   }
 >;
 const VoiceFileMessage = (props: Props) => {
@@ -33,6 +34,7 @@ const VoiceFileMessage = (props: Props) => {
     onToggleVoiceMessage,
     message,
     durationMetaArrayKey = 'KEY_VOICE_MESSAGE_DURATION',
+    onUnmount,
   } = props;
 
   const { colors } = useUIKitTheme();
@@ -47,6 +49,12 @@ const VoiceFileMessage = (props: Props) => {
       duration: initialDuration,
     };
   });
+
+  useEffect(() => {
+    return () => {
+      onUnmount();
+    };
+  }, []);
 
   const uiColors = colors.ui.groupChannelMessage[variant];
   const remainingTime = state.duration - state.currentTime;
