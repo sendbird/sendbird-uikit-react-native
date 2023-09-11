@@ -105,9 +105,12 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
                 setState((prevState) => ({ ...prevState, status: 'playing' }));
                 break;
               case 'idle':
-              case 'paused':
-              case 'stopped':
+              case 'paused': {
                 setState((prevState) => ({ ...prevState, status: 'paused' }));
+                break;
+              }
+              case 'stopped':
+                setState((prevState) => ({ ...prevState, status: 'paused', currentTime: 0 }));
                 break;
             }
           });

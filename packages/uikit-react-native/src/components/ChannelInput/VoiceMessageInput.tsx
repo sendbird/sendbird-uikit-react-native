@@ -85,7 +85,10 @@ const VoiceMessageInput = ({ onClose, onSend }: VoiceMessageInputProps) => {
       {/** Progress bar **/}
       <ProgressBar
         style={styles.progressBar}
-        current={isRecorderState ? state.recordingTime.currentTime : state.playingTime.currentTime}
+        current={conditionChaining(
+          [state.status === 'recording', state.status === 'recording_completed'],
+          [state.recordingTime.currentTime, 0, state.playingTime.currentTime],
+        )}
         total={(isRecorderState ? state.recordingTime.maxDuration : state.playingTime.duration) || 1}
         trackColor={uiColors.progressTrack}
         overlay={
