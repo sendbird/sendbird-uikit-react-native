@@ -14,6 +14,7 @@ import {
   Modal,
   TextInput,
   createStyleSheet,
+  useAlert,
   useBottomSheet,
   useToast,
   useUIKitTheme,
@@ -23,6 +24,7 @@ import { Logger, useDeferredModalState, useIIFE } from '@sendbird/uikit-utils';
 import { VOICE_MESSAGE_META_ARRAY_DURATION_KEY, VOICE_MESSAGE_META_ARRAY_MESSAGE_TYPE_KEY } from '../../constants';
 import { useChannelInputItems } from '../../hooks/useChannelInputItems';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
+import SBUUtils from '../../libs/SBUUtils';
 import type { FileType } from '../../platform/types';
 import type { MentionedUser } from '../../types';
 import type { ChannelInputProps } from './index';
@@ -211,11 +213,46 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
 
 type InputButtonProps = { visible: boolean; disabled: boolean; onPress: () => void };
 const VoiceMessageButton = ({ visible, disabled, onPress }: InputButtonProps) => {
+  const { STRINGS } = useLocalization();
+  const { alert } = useAlert();
+  const { playerService, recorderService } = usePlatformService();
   const { colors } = useUIKitTheme();
   if (!visible) return null;
 
+  const onPressWithPermissionCheck = async () => {
+    const recorderGranted = await recorderService.requestPermission();
+    if (!recorderGranted) {
+      alert({
+        title: STRINGS.DIALOG.ALERT_PERMISSIONS_TITLE,
+        message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE(
+          STRINGS.LABELS.PERMISSION_MICROPHONE,
+          STRINGS.LABELS.PERMISSION_APP_NAME,
+        ),
+        buttons: [{ text: STRINGS.DIALOG.ALERT_PERMISSIONS_OK, onPress: () => SBUUtils.openSettings() }],
+      });
+      Logger.error('Failed to request permission for recorder');
+      return;
+    }
+
+    const playerGranted = await playerService.requestPermission();
+    if (!playerGranted) {
+      alert({
+        title: STRINGS.DIALOG.ALERT_PERMISSIONS_TITLE,
+        message: STRINGS.DIALOG.ALERT_PERMISSIONS_MESSAGE(
+          STRINGS.LABELS.PERMISSION_DEVICE_STORAGE,
+          STRINGS.LABELS.PERMISSION_APP_NAME,
+        ),
+        buttons: [{ text: STRINGS.DIALOG.ALERT_PERMISSIONS_OK, onPress: () => SBUUtils.openSettings() }],
+      });
+      Logger.error('Failed to request permission for player');
+      return;
+    }
+
+    onPress();
+  };
+
   return (
-    <TouchableOpacity onPress={onPress} disabled={disabled}>
+    <TouchableOpacity onPress={onPressWithPermissionCheck} disabled={disabled}>
       <Icon
         color={disabled ? colors.ui.input.default.disabled.highlight : colors.ui.input.default.active.highlight}
         icon={'audio-on'}
