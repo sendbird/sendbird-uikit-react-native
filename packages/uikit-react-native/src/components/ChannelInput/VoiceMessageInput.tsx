@@ -132,8 +132,8 @@ const RecordingLight = (props: { visible: boolean }) => {
   const animation = useRef(
     Animated.loop(
       Animated.sequence([
-        Animated.timing(value, { toValue: 1, duration: 1000, useNativeDriver: true }),
-        Animated.timing(value, { toValue: 0, duration: 1000, useNativeDriver: true }),
+        Animated.timing(value, { toValue: 1, duration: 500, useNativeDriver: true }),
+        Animated.timing(value, { toValue: 0, duration: 500, useNativeDriver: true }),
       ]),
     ),
   ).current;
