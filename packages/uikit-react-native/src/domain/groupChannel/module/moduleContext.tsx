@@ -7,6 +7,7 @@ import {
   SendbirdGroupChannel,
   SendbirdUser,
   SendbirdUserMessage,
+  getGroupChannelChatAvailableState,
   isDifferentChannel,
   useUniqHandlerId,
 } from '@sendbird/uikit-utils';
@@ -73,7 +74,9 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
     },
     onChannelFrozen(frozenChannel) {
       if (frozenChannel.url === channel.url) {
-        setMessageToReply(undefined);
+        if (frozenChannel.isGroupChannel() && getGroupChannelChatAvailableState(channel).frozen) {
+          setMessageToReply(undefined);
+        }
       }
     },
     onUserMuted(mutedChannel, user) {
