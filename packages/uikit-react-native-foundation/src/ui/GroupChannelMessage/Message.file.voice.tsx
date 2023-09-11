@@ -49,6 +49,7 @@ const VoiceFileMessage = (props: Props) => {
   });
 
   const uiColors = colors.ui.groupChannelMessage[variant];
+  const remainingTime = state.duration - state.currentTime;
 
   return (
     <MessageContainer {...props}>
@@ -85,7 +86,7 @@ const VoiceFileMessage = (props: Props) => {
                   style={{ lineHeight: undefined, marginLeft: 6, opacity: 0.88 }}
                   color={uiColors.enabled.textVoicePlaytime}
                 >
-                  {millsToMSS(state.currentTime === 0 ? state.duration : state.currentTime)}
+                  {millsToMSS(state.currentTime === 0 ? state.duration : remainingTime)}
                 </Text>
               </Box>
             }

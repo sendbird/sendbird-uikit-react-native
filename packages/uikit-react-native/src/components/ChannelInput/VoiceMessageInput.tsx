@@ -10,7 +10,7 @@ import {
   createStyleSheet,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import { millsToMMSS } from '@sendbird/uikit-utils';
+import { conditionChaining, millsToMMSS } from '@sendbird/uikit-utils';
 
 import { useLocalization } from '../../hooks/useContext';
 import useVoiceMessageInput from '../../hooks/useVoiceMessageInput';
@@ -76,22 +76,23 @@ const VoiceMessageInput = ({ onClose, onSend }: VoiceMessageInputProps) => {
     }
   };
 
-  const useRecorderProgress = state.status === 'recording' || state.status === 'recording_completed';
+  const isRecorderState = state.status === 'recording' || state.status === 'recording_completed';
   const lessThanMinimumDuration = state.recordingTime.currentTime < state.recordingTime.minDuration;
+  const remainingTime = state.playingTime.duration - state.playingTime.currentTime;
 
   return (
     <Box backgroundColor={uiColors.background} paddingVertical={24} paddingHorizontal={16} style={styles.container}>
       {/** Progress bar **/}
       <ProgressBar
         style={styles.progressBar}
-        current={useRecorderProgress ? state.recordingTime.currentTime : state.playingTime.currentTime}
-        total={useRecorderProgress ? state.recordingTime.maxDuration : state.playingTime.duration || 1}
+        current={isRecorderState ? state.recordingTime.currentTime : state.playingTime.currentTime}
+        total={(isRecorderState ? state.recordingTime.maxDuration : state.playingTime.duration) || 1}
         trackColor={uiColors.progressTrack}
         overlay={
           <Box flex={1} flexDirection={'row'} alignItems={'center'} justifyContent={'flex-end'} paddingRight={16}>
             <RecordingLight visible={state.status === 'recording'} />
             <Text caption1 style={{ lineHeight: undefined, marginLeft: 6 }} color={uiColors.textTime}>
-              {millsToMMSS(useRecorderProgress ? state.recordingTime.currentTime : state.playingTime.currentTime)}
+              {millsToMMSS(isRecorderState ? state.recordingTime.currentTime : remainingTime)}
             </Text>
           </Box>
         }
