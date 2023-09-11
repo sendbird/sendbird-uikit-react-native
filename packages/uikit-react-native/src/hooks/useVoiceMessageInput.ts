@@ -139,6 +139,7 @@ const useVoiceMessageInput = ({ onSend, onClose }: Props): VoiceMessageInputResu
               maxDuration: recorderService.options.maxDuration,
               minDuration: recorderService.options.minDuration,
             });
+            setPlayingTime((prev) => ({ ...prev, duration: currentTime }));
           });
 
           const unsubscribeState = recorderService.addStateListener((state) => {
@@ -147,9 +148,9 @@ const useVoiceMessageInput = ({ onSend, onClose }: Props): VoiceMessageInputResu
                 setStatus('recording');
                 break;
               case 'completed':
+                setStatus('recording_completed');
                 unsubscribeRecording();
                 unsubscribeState();
-                setStatus('recording_completed');
                 break;
             }
           });
@@ -195,12 +196,19 @@ const useVoiceMessageInput = ({ onSend, onClose }: Props): VoiceMessageInputResu
               case 'playing':
                 setStatus('playing');
                 break;
-              case 'paused':
-              case 'stopped':
+              case 'paused': {
                 setStatus('playing_paused');
                 unsubscribeState();
                 unsubscribePlayback();
                 break;
+              }
+              case 'stopped': {
+                setStatus('playing_paused');
+                unsubscribeState();
+                unsubscribePlayback();
+                setPlayingTime((prev) => ({ ...prev, currentTime: 0 }));
+                break;
+              }
             }
           });
 
