@@ -250,6 +250,7 @@ export interface StringSet {
       parentMessage: SendbirdUserMessage | SendbirdFileMessage,
       currentUserId?: string,
     ) => string;
+    MESSAGE_UNAVAILABLE: string;
 
     USER_BAR_ME_POSTFIX: string;
     USER_BAR_OPERATOR: string;

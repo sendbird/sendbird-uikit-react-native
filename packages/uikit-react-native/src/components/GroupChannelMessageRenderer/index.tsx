@@ -142,9 +142,10 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     ) : null,
     parentMessage: shouldRenderParentMessage(message) ? (
       <GroupChannelMessageParentMessage
+        channel={channel}
+        message={message.parentMessage}
         variant={variant}
         childMessage={message}
-        message={message.parentMessage}
         onPress={onPressParentMessage}
       />
     ) : null,
