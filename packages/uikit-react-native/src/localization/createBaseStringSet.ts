@@ -264,6 +264,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
         const receiverNickname = parent.sender.nickname || USER_NO_NAME;
         return `${reply.sender.userId !== currentUserId ? senderNickname : 'You'} replied to ${receiverNickname}`;
       },
+      MESSAGE_UNAVAILABLE: 'Message unavailable',
 
       USER_BAR_ME_POSTFIX: ' (You)',
       USER_BAR_OPERATOR: 'Operator',

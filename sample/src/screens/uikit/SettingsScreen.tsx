@@ -80,7 +80,7 @@ const SettingsScreen = () => {
 
             if (!photo) return;
 
-            await updateCurrentUserInfo(sdk.currentUser.nickname, photo);
+            await updateCurrentUserInfo(sdk.currentUser?.nickname, photo);
           },
         },
         {
@@ -106,7 +106,7 @@ const SettingsScreen = () => {
             });
             if (!files || !files[0]) return;
 
-            await updateCurrentUserInfo(sdk.currentUser.nickname, files[0]);
+            await updateCurrentUserInfo(sdk.currentUser?.nickname, files[0]);
           },
         },
       ],

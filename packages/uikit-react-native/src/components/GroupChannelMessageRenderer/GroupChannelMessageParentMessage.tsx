@@ -12,6 +12,7 @@ import {
 } from '@sendbird/uikit-react-native-foundation';
 import {
   SendbirdFileMessage,
+  SendbirdGroupChannel,
   SendbirdMessage,
   SendbirdUserMessage,
   getFileIconFromMessageType,
@@ -26,12 +27,13 @@ import { useLocalization, usePlatformService, useSendbirdChat } from '../../hook
 
 type Props = {
   variant: 'outgoing' | 'incoming';
+  channel: SendbirdGroupChannel;
   message: SendbirdUserMessage | SendbirdFileMessage;
   childMessage: SendbirdUserMessage | SendbirdFileMessage;
   onPress?: (message: SendbirdMessage) => void;
 };
 
-const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPress }: Props) => {
+const GroupChannelMessageParentMessage = ({ variant, channel, message, childMessage, onPress }: Props) => {
   const { currentUser } = useSendbirdChat();
   const groupChannelPubSub = useContext(GroupChannelContexts.PubSub);
   const { select, colors, palette } = useUIKitTheme();
@@ -98,6 +100,10 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
   };
 
   const parentMessageComponent = useIIFE(() => {
+    if (channel.messageOffsetTimestamp > parentMessage.createdAt) {
+      return renderMessageWithText(STRINGS.LABELS.MESSAGE_UNAVAILABLE);
+    }
+
     switch (type) {
       case 'user':
       case 'user.opengraph': {
