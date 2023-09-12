@@ -2,7 +2,7 @@ import { Platform } from 'react-native';
 import type * as RNAudioRecorder from 'react-native-audio-recorder-player';
 import * as Permissions from 'react-native-permissions';
 
-import { matchesOneOf } from '@sendbird/uikit-utils';
+import { matchesOneOf, sleep } from '@sendbird/uikit-utils';
 
 import type { PlayerServiceInterface, Unsubscribe } from './types';
 
@@ -87,7 +87,11 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
           this.setState('preparing');
           this.uri = uri;
           this.setListener();
+
+          // FIXME: Workaround, `module.startPlayer()` caused a significant frame-drop and prevented the 'preparing' UI transition.
+          await sleep(0);
           await module.startPlayer(uri);
+
           this.setState('playing');
         } catch (e) {
           this.setState('idle');
