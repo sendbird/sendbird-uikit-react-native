@@ -86,7 +86,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
       if (mentionedUser) onShowUserProfile?.(mentionedUser);
     },
     onToggleVoiceMessage: async (state, setState) => {
-      if (isVoiceMessage(message)) {
+      if (isVoiceMessage(message) && message.sendingStatus === 'succeeded') {
         if (playerService.uri === message.url) {
           if (playerService.state === 'playing') {
             await playerService.pause();
