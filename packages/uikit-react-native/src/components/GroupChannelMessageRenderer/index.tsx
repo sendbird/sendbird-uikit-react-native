@@ -101,9 +101,9 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
           const shouldSeekToTime = state.duration > state.currentTime && state.currentTime > 0;
           let seekFinished = !shouldSeekToTime;
 
-          const forPlayback = playerService.addPlaybackListener((params) => {
+          const forPlayback = playerService.addPlaybackListener(({ stopped, currentTime, duration }) => {
             if (seekFinished) {
-              setState((prevState) => ({ ...prevState, currentTime: params.currentTime, duration: params.duration }));
+              setState((prevState) => ({ ...prevState, currentTime: stopped ? 0 : currentTime, duration }));
             }
           });
           const forState = playerService.addStateListener((state) => {
@@ -120,7 +120,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
                 break;
               }
               case 'stopped':
-                setState((prevState) => ({ ...prevState, status: 'paused', currentTime: 0 }));
+                setState((prevState) => ({ ...prevState, status: 'paused' }));
                 break;
             }
           });
