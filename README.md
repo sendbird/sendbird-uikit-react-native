@@ -21,6 +21,18 @@ This mono-repository the UIKit source code is consists as explained below.
 Find out more about Sendbird UIKit for React-Native at [UIKit for React Native doc](https://sendbird.com/docs/uikit/v3/react-native/overview).
 If you need any help in resolving any issues or have questions, visit [our community](https://community.sendbird.com).
 
+### Easily Customize UIKit with Just a Few Clicks!
+
+![uikit-config](/uikit-config.png)
+
+UIKit config allows you to customize UIKit with just a few clicks, without writing any code. Toggle features on and off effortlessly.
+
+> Try it now on the [Dashboard](https://dashboard.sendbird.com/application-id/ui-kit)
+> Learn more/Get detailed explanation in the [Documentation](https://docs.sendbird.com/docs/chat/uikit/v3/react-native/uikit-config-guide/overview)
+
+
+
+
 <br/>
 
 ## Requirements
