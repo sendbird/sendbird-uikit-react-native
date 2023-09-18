@@ -40,7 +40,7 @@
     "fbjs": "^3.0.4",
     "react": "17.0.2",
     "react-native": "0.67.5",
-    "react-native-audio-recorder-player": "^3.5.4",
+    "react-native-audio-recorder-player": "^3.6.0",
     "react-native-create-thumbnail": "^1.5.1",
     "react-native-document-picker": "^8.0.0",
     "react-native-fast-image": "^8.5.11",
