@@ -23,12 +23,12 @@ If you need any help in resolving any issues or have questions, visit [our commu
 
 ### Easily Customize UIKit with Just a Few Clicks!
 
-![uikit-config](/uikit-config.png)
+![uikit-config](/screenshot-uikitconfig.png)
 
 UIKit config allows you to customize UIKit with just a few clicks, without writing any code. Toggle features on and off effortlessly.
 
-> Try it now on the [Dashboard](https://dashboard.sendbird.com/application-id/ui-kit)
-> Learn more/Get detailed explanation in the [Documentation](https://docs.sendbird.com/docs/chat/uikit/v3/react-native/uikit-config-guide/overview)
+- Try it now on the [Dashboard](https://dashboard.sendbird.com/application-id/ui-kit)
+- Learn more/Get detailed explanation in the [Documentation](https://docs.sendbird.com/docs/chat/uikit/v3/react-native/uikit-config-guide/overview)
 
 
 
