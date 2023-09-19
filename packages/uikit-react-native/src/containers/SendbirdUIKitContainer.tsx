@@ -18,6 +18,7 @@ import { SBUConfig, UIKitConfigProvider } from '@sendbird/uikit-tools';
 import type {
   PartialDeep,
   SendbirdChatSDK,
+  SendbirdEncryption,
   SendbirdGroupChannel,
   SendbirdGroupChannelCreateParams,
   SendbirdMember,
@@ -72,6 +73,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   };
   chatOptions: {
     localCacheStorage: LocalCacheStorage;
+    localCacheEncryption?: SendbirdEncryption;
     onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
   } & Partial<ChatRelatedFeaturesInUIKit>;
   uikitOptions?: PartialDeep<{
@@ -137,7 +139,7 @@ const SendbirdUIKitContainer = ({
 
   const [internalStorage] = useState(() => new InternalLocalCacheStorage(chatOptions.localCacheStorage));
   const [sdkInstance, setSdkInstance] = useState<SendbirdChatSDK>(() => {
-    const sendbird = initializeSendbird(appId, internalStorage, chatOptions.onInitialized);
+    const sendbird = initializeSendbird(appId, { internalStorage, ...chatOptions });
     unsubscribes.current = sendbird.unsubscribes;
     return sendbird.chatSDK;
   });
@@ -165,7 +167,7 @@ const SendbirdUIKitContainer = ({
 
   useLayoutEffect(() => {
     if (!isFirstMount) {
-      const sendbird = initializeSendbird(appId, internalStorage, chatOptions.onInitialized);
+      const sendbird = initializeSendbird(appId, { internalStorage, ...chatOptions });
       setSdkInstance(sendbird.chatSDK);
       unsubscribes.current = sendbird.unsubscribes;
     }
@@ -270,18 +272,23 @@ const SendbirdUIKitContainer = ({
 
 const initializeSendbird = (
   appId: string,
-  internalStorage?: InternalLocalCacheStorage,
-  onInitialized?: (sdk: SendbirdChatSDK) => SendbirdChatSDK,
+  options: {
+    internalStorage?: InternalLocalCacheStorage;
+    onInitialized?: (sdk: SendbirdChatSDK) => SendbirdChatSDK;
+    localCacheEncryption?: SendbirdEncryption;
+  },
 ) => {
-  const unsubscribes: Array<() => void> = [];
   let chatSDK: SendbirdChatSDK;
+  const unsubscribes: Array<() => void> = [];
+  const { internalStorage, localCacheEncryption, onInitialized } = options;
 
   chatSDK = Sendbird.init({
     appId,
+    newInstance: true,
     modules: [new GroupChannelModule(), new OpenChannelModule()],
     localCacheEnabled: Boolean(internalStorage),
     useAsyncStorageStore: internalStorage as never,
-    newInstance: true,
+    localCacheEncryption,
   });
 
   if (onInitialized) {
