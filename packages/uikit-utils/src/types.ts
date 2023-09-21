@@ -9,6 +9,7 @@ import type {
   Emoji,
   EmojiCategory,
   EmojiContainer,
+  Encryption,
   Participant,
   RestrictedUser,
   SendbirdError as SBError,
@@ -79,7 +80,6 @@ export type OnBeforeHandler<T> = (params: T) => T | Promise<T>;
 export interface UserStruct {
   userId: string;
 }
-
 export type SendbirdChatSDK = SendbirdChat & ModuleNamespaces<[GroupChannelModule, OpenChannelModule]>;
 export type SendbirdMessage = BaseMessage | FileMessage | UserMessage | AdminMessage | SendableMessage;
 export type SendbirdChannel = BaseChannel | GroupChannel | OpenChannel;
@@ -123,6 +123,7 @@ export type SendbirdPreviousMessageListQuery = PreviousMessageListQuery;
 export type SendbirdMessageSearchQuery = MessageSearchQuery;
 
 export type SendbirdError = SBError;
+export type SendbirdEncryption = Encryption;
 
 export interface SendbirdDataPayload {
   app_id: string;
