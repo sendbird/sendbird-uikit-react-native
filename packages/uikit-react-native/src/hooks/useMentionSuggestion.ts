@@ -93,7 +93,8 @@ const useMentionSuggestion = (params: {
         .filter(
           (member) =>
             member.nickname?.toLowerCase().startsWith(searchString.toLowerCase()) &&
-            member.userId !== currentUser?.userId,
+            member.userId !== currentUser?.userId &&
+            member.isActive,
         )
         .slice(0, mentionManager.config.suggestionLimit);
     }
