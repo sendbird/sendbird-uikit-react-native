@@ -1,5 +1,5 @@
-## v3.1.1
+## v3.1.2
 
-### Improvements
-
-- When there is a thumbnail in the message, uses the first thumbnail of the video/image message
+- Add `chatOptions.localCacheEncryption` to SendbirdUIKitContainer props
+- Filter deactivated users when making mention suggestions
+- In the case of a resolved version, a android inverted flatlist warning message is not displayed.
