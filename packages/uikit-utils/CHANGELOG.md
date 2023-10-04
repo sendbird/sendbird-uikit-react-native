@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.1.1...v3.1.2) (2023-10-04)
+
+### Features
+
+- add localCacheEncryption interface to container prop ([3341992](https://github.com/sendbird/sendbird-uikit-react-native/commit/33419920352375ad7df08c19d32449179d2e52e9))
+
 ## [3.1.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.1.0...v3.1.1) (2023-08-23)
 
 ### Features
