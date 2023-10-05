@@ -110,6 +110,9 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
       users: SendbirdUser[] | SendbirdMember[],
     ) => SendbirdGroupChannelCreateParams | Promise<SendbirdGroupChannelCreateParams>;
   };
+  reaction?: {
+    onPressUserProfile?: (user: SendbirdUser | SendbirdMember) => void;
+  };
   userMention?: Pick<Partial<MentionConfigInterface>, 'mentionLimit' | 'suggestionLimit' | 'debounceMills'>;
   imageCompression?: Partial<ImageCompressionConfigInterface>;
 }>;
@@ -125,6 +128,7 @@ const SendbirdUIKitContainer = ({
   errorBoundary,
   toast,
   userProfile,
+  reaction,
   userMention,
   imageCompression,
 }: SendbirdUIKitContainerProps) => {
@@ -232,12 +236,8 @@ const SendbirdUIKitContainer = ({
                   statusBarTranslucent={styles?.statusBarTranslucent ?? true}
                 >
                   <ToastProvider dismissTimeout={toast?.dismissTimeout}>
-                    <UserProfileProvider
-                      onCreateChannel={userProfile?.onCreateChannel}
-                      onBeforeCreateChannel={userProfile?.onBeforeCreateChannel}
-                      statusBarTranslucent={styles?.statusBarTranslucent ?? true}
-                    >
-                      <ReactionProvider>
+                    <UserProfileProvider {...userProfile} statusBarTranslucent={styles?.statusBarTranslucent ?? true}>
+                      <ReactionProvider {...reaction}>
                         <LocalizationContext.Consumer>
                           {(value) => {
                             const STRINGS = value?.STRINGS || defaultStringSet;

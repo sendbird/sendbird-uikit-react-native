@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useReducer, useRef, useState } from 're
 import type { SendbirdBaseChannel, SendbirdBaseMessage } from '@sendbird/uikit-utils';
 import { NOOP } from '@sendbird/uikit-utils';
 
-import { ReactionBottomSheets } from '../components/ReactionBottomSheets';
+import { ReactionBottomSheetProps, ReactionBottomSheets } from '../components/ReactionBottomSheets';
 import { LocalizationContext } from '../contexts/LocalizationCtx';
 import { SendbirdChatContext } from '../contexts/SendbirdChatCtx';
 import { UserProfileContext } from '../contexts/UserProfileCtx';
@@ -19,10 +19,12 @@ export type ReactionContextType = {
   focusIndex: number;
 } & State;
 
-type Props = React.PropsWithChildren<{}>;
+type Props = React.PropsWithChildren<{
+  onPressUserProfile?: ReactionBottomSheetProps['onPressUserProfile'];
+}>;
 
 export const ReactionContext = React.createContext<ReactionContextType | null>(null);
-export const ReactionProvider = ({ children }: Props) => {
+export const ReactionProvider = ({ children, onPressUserProfile }: Props) => {
   const chatCtx = useContext(SendbirdChatContext);
   const localizationCtx = useContext(LocalizationContext);
   const userProfileCtx = useContext(UserProfileContext);
@@ -73,11 +75,11 @@ export const ReactionProvider = ({ children }: Props) => {
     focusIndex: reactionUserListFocusIndex,
   };
 
-  const sheetProps = {
+  const sheetProps: Omit<ReactionBottomSheetProps, 'visible' | 'onClose'> = {
     chatCtx,
     reactionCtx,
     localizationCtx,
-    userProfileCtx,
+    onPressUserProfile: onPressUserProfile ?? userProfileCtx.show,
     onDismiss: () => {
       setState({});
       closeResolver.current?.();
