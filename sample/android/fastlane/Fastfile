@@ -14,6 +14,6 @@ platform :android do
   lane :deploy do
     android_set_version_name(gradle_file: "app/build.gradle", version_name: "#{VERSION}-#{DATE}")
     gradle(task: "assemble", build_type: "Release", flags: "--no-daemon")
-    firebase_app_distribution(groups: "sendbird")
+    firebase_app_distribution(groups: "sendbird, external")
   end
 end
