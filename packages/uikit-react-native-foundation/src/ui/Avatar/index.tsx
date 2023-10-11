@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
 import { conditionChaining } from '@sendbird/uikit-utils';
@@ -10,10 +10,6 @@ import useUIKitTheme from '../../theme/useUIKitTheme';
 import AvatarGroup from './AvatarGroup';
 import AvatarIcon from './AvatarIcon';
 
-type SubComponents = {
-  Group: typeof AvatarGroup;
-  Icon: typeof AvatarIcon;
-};
 type Props = {
   uri?: string;
   size?: number;
@@ -21,13 +17,8 @@ type Props = {
   muted?: boolean;
   containerStyle?: StyleProp<ViewStyle>;
 };
-const Avatar: ((props: Props) => ReactNode) & SubComponents = ({
-  uri,
-  square,
-  muted = false,
-  size = 56,
-  containerStyle,
-}) => {
+
+const Avatar = ({ uri, square, muted = false, size = 56, containerStyle }: Props) => {
   const { colors, palette } = useUIKitTheme();
   const [loadFailure, setLoadFailure] = useState(false);
 
@@ -74,6 +65,7 @@ const styles = createStyleSheet({
   },
 });
 
-Avatar.Group = AvatarGroup;
-Avatar.Icon = AvatarIcon;
-export default Avatar;
+export default Object.assign(Avatar, {
+  Group: AvatarGroup,
+  Icon: AvatarIcon,
+});

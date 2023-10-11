@@ -10,9 +10,9 @@ const createScaleFactor = (deviceWidth = DESIGNED_DEVICE_WIDTH) => {
   return (dp: number) => PixelRatio.roundToNearestPixel(dp * rangedRatio);
 };
 
-createScaleFactor.updateScaleFactor = (scaleFactor: (dp: number) => number) => {
-  DEFAULT_SCALE_FACTOR = scaleFactor;
-};
-
 export let DEFAULT_SCALE_FACTOR = createScaleFactor();
-export default createScaleFactor;
+export default Object.assign(createScaleFactor, {
+  updateScaleFactor: (scaleFactor: (dp: number) => number) => {
+    DEFAULT_SCALE_FACTOR = scaleFactor;
+  },
+});
