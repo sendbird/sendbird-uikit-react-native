@@ -22,7 +22,7 @@ const ReactionUserListBottomSheet = ({
   reactionCtx,
   chatCtx,
   localizationCtx,
-  userProfileCtx,
+  onPressUserProfile,
 }: ReactionBottomSheetProps) => {
   const { width } = useWindowDimensions();
   const { bottom, left, right } = useSafeAreaInsets();
@@ -134,7 +134,7 @@ const ReactionUserListBottomSheet = ({
                 onPress={async () => {
                   if (user) {
                     await onClose();
-                    userProfileCtx.show(user);
+                    onPressUserProfile(user);
                   }
                 }}
                 style={styles.pageItem}
