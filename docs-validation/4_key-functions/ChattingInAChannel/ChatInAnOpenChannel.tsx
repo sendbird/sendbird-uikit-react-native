@@ -4,7 +4,7 @@ const DonationMessage = (_:object) => <></>
 
 /**
  * Usage
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-an-open-channel#2-usage}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-an-open-channel#2-usage}
  * */
 import { useSendbirdChat, createOpenChannelFragment } from "@sendbird/uikit-react-native";
 import { useOpenChannel } from "@sendbird/uikit-chat-hooks";
@@ -35,7 +35,7 @@ const OpenChannelScreen = ({ route: { params } }: any) => {
 
 /**
  * Context
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-context}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-context}
  * */
 function _context(_: OpenChannelContextsType) {
   const fragment = useContext(_.Fragment);
@@ -49,7 +49,7 @@ function _context(_: OpenChannelContextsType) {
 
 /**
  * Fragment
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-context-3-fragment}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-context-3-fragment}
  * */
 const Component = () => {
   const {
@@ -64,7 +64,7 @@ const Component = () => {
 
 /**
  * Customization
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-customization}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-customization}
  * */
 import React, { useContext, useLayoutEffect } from 'react';
 import { Pressable } from 'react-native';

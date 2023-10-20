@@ -11,7 +11,7 @@ const createMyAppUserQuery = () => ({
 
 /**
  * Usage
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/creating-a-channel/create-a-group-channel#2-usage}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/creating-a-channel/create-a-group-channel#2-usage}
  * */
 import type { GroupChannelType, UserListContextsType } from "@sendbird/uikit-react-native";
 import type { SendbirdUser } from '@sendbird/uikit-utils';
@@ -34,7 +34,7 @@ const GroupChannelCreateScreen = ({ route: { params } }: any) => {
 
 /**
  * Context
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/creating-a-channel/create-a-group-channel#2-context}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/creating-a-channel/create-a-group-channel#2-context}
  * */
 function _context<T>(_: UserListContextsType<T>) {
   const fragment = useContext(_.Fragment);
@@ -49,7 +49,7 @@ function _context<T>(_: UserListContextsType<T>) {
 
 /**
  * Fragment
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/creating-a-channel/create-a-group-channel#2-context-3-fragment}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/creating-a-channel/create-a-group-channel#2-context-3-fragment}
  * */
 import { UserListContexts } from "@sendbird/uikit-react-native";
 const Component = () => {
@@ -59,7 +59,7 @@ const Component = () => {
 
 /**
  * List
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/creating-a-channel/create-a-group-channel#2-context-3-list}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/creating-a-channel/create-a-group-channel#2-context-3-list}
  * */
 
 const Component2 = () => {
@@ -69,7 +69,7 @@ const Component2 = () => {
 
 /**
  * Customization
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/creating-a-channel/create-a-group-channel#2-customization}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/creating-a-channel/create-a-group-channel#2-customization}
  * */
 import type { UserStruct } from '@sendbird/uikit-utils';
 import { CustomQuery } from '@sendbird/uikit-chat-hooks';

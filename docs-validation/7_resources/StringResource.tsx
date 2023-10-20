@@ -4,7 +4,7 @@ const Navigations = () => <></>;
 
 /**
  * Customize the StringSet
- * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/string-resource#2-customize-the-stringset}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/resources/string-resource#2-customize-the-stringset}
  * */
 import { View } from 'react-native';
 import dateLocale from 'date-fns/locale/ko';

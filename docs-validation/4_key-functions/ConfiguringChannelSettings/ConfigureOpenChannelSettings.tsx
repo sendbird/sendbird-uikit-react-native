@@ -2,7 +2,7 @@ import type { OpenChannelSettingsContextsType } from '@sendbird/uikit-react-nati
 
 /**
  * Usage
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/configuring-channel-settings/configure-open-channel-settings#2-usage}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/configuring-channel-settings/configure-open-channel-settings#2-usage}
  * */
 import React, { useState } from 'react';
 import { useSendbirdChat, createOpenChannelSettingsFragment } from '@sendbird/uikit-react-native';
@@ -35,7 +35,7 @@ const OpenChannelSettingsScreen = ({ route: { params } }: any) => {
 
 /**
  * Context
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/configuring-channel-settings/configure-open-channel-settings#2-context}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/configuring-channel-settings/configure-open-channel-settings#2-context}
  * */
 function _context(_: OpenChannelSettingsContextsType) {
   const fragment = useContext(_.Fragment);
@@ -48,7 +48,7 @@ function _context(_: OpenChannelSettingsContextsType) {
 
 /**
  * Fragment
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/configuring-channel-settings/configure-open-channel-settings#2-context-3-fragment}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/configuring-channel-settings/configure-open-channel-settings#2-context-3-fragment}
  * */
 import { useContext } from 'react';
 import { OpenChannelSettingsContexts } from '@sendbird/uikit-react-native';
@@ -60,7 +60,7 @@ const Component = () => {
 
 /**
  * Customization
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/configuring-channel-settings/configure-open-channel-settings#2-customization}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/configuring-channel-settings/configure-open-channel-settings#2-customization}
  * */
 import { Share } from 'react-native';
 

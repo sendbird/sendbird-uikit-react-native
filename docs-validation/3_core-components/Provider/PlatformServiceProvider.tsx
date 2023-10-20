@@ -14,7 +14,7 @@ type GetFileRes = null | FileCompat;
 
 /**
  * FileServiceInterface
- * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/provider/platformserviceprovider#2-fileserviceinterface}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/core-components/provider/platformserviceprovider#2-fileserviceinterface}
  * */
 async function fileServiceInterface(service: FileServiceInterface) {
   const mediaType = '' as 'photo' | 'video' | 'all' | undefined;
@@ -50,7 +50,7 @@ async function mediaServiceInterface(service: MediaServiceInterface) {
 
 /**
  * Usage
- * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/provider/platformserviceprovider#2-usage}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/core-components/provider/platformserviceprovider#2-usage}
  * */
 import { usePlatformService } from '@sendbird/uikit-react-native';
 
@@ -61,7 +61,7 @@ const Component = () => {
 
 /**
  * Direct implementation
- * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/provider/platformserviceprovider#2-direct-implementation}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/core-components/provider/platformserviceprovider#2-direct-implementation}
  * */
 import {
   FilePickerResponse,

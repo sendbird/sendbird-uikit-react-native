@@ -2,7 +2,7 @@ import React from 'react';
 
 /**
  * Implement platform service interfaces using native modules
- * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-4-implement-platform-service-interfaces-using-native-modules}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-4-implement-platform-service-interfaces-using-native-modules}
  * */
 import {
   createNativeClipboardService,
@@ -58,7 +58,7 @@ export const platformServices: SendbirdUIKitContainerProps['platformServices'] =
 
 /**
  * Wrap your app in SendbirdUIKitContainer
- * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-5-wrap-your-app-in-sendbirduikitcontainer}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-5-wrap-your-app-in-sendbirduikitcontainer}
  * */
 import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -78,7 +78,7 @@ const App = () => {
 
 /**
  * Create a fragment and module components
- * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-7-create-a-fragment-and-module-components}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-7-create-a-fragment-and-module-components}
  * */
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useGroupChannel } from '@sendbird/uikit-chat-hooks';
@@ -156,7 +156,7 @@ const GroupChannelScreen = () => {
 
 /**
  * Register navigation library to the screen
- * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-8-register-navigation-library-to-the-screen}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-8-register-navigation-library-to-the-screen}
  * */
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -197,7 +197,7 @@ const App2 = () => {
 
 /**
  * Connect to the Sendbird server
- * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-9-connect-to-the-sendbird-server}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-9-connect-to-the-sendbird-server}
  * */
 import { Pressable, Text, View } from 'react-native';
 import { useConnection } from '@sendbird/uikit-react-native';

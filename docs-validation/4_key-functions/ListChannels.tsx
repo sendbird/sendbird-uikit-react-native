@@ -3,7 +3,7 @@ import React, { useContext, useLayoutEffect } from 'react';
 
 /**
  * Usage
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/list-channels#2-usage}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/list-channels#2-usage}
  * */
 import { createGroupChannelListFragment } from '@sendbird/uikit-react-native';
 
@@ -23,7 +23,7 @@ const GroupChannelListScreen = () => {
 
 /**
  * Context
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/list-channels#2-context}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/list-channels#2-context}
  * */
 function _context(_: GroupChannelListContextsType) {
   const fragment = useContext(_.Fragment);
@@ -39,7 +39,7 @@ function _context(_: GroupChannelListContextsType) {
 
 /**
  * Fragment
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/list-channels#2-context-3-fragment}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/list-channels#2-context-3-fragment}
  * */
 // import { useContext } from 'react';
 import { GroupChannelListContexts } from '@sendbird/uikit-react-native';
@@ -51,7 +51,7 @@ const Component = () => {
 
 /**
  * TypeSelector
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/list-channels#2-context-3-typeselector}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/list-channels#2-context-3-typeselector}
  * */
 // import { useContext } from 'react';
 // import { GroupChannelListContexts } from '@sendbird/uikit-react-native';
@@ -63,7 +63,7 @@ const Component2 = () => {
 
 /**
  * Customization
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/list-channels#2-customization}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/list-channels#2-customization}
  * */
 // import React, { useContext, useLayoutEffect } from 'react';
 import { Pressable } from 'react-native';

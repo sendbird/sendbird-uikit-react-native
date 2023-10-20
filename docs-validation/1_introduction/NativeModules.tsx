@@ -15,7 +15,7 @@ import {
 
 /**
  * Helper functions#React Native CLI
- * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/native-modules#2-helper-functions-3-react-native-cli}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/introduction/native-modules#2-helper-functions-3-react-native-cli}
  * */
 import Clipboard from '@react-native-clipboard/clipboard';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
@@ -60,7 +60,7 @@ const nativePlatformServices = {
 
 /**
  * Helper functions#Expo CLI
- * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/native-modules#2-helper-functions-3-expo-cli}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/introduction/native-modules#2-helper-functions-3-expo-cli}
  * */
 import * as ExpoClipboard from 'expo-clipboard';
 import * as ExpoDocumentPicker from 'expo-document-picker';

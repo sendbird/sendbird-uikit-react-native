@@ -24,7 +24,7 @@ const App = () => {
 
 /**
  * Customize the UI for message search
- * {@link https://sendbird.com/docs/uikit/v3/react-native/beta-features/message-search#2-customize-the-ui-for-message-search}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/beta-features/message-search#2-customize-the-ui-for-message-search}
  * */
 const MessageSearchFragment = createMessageSearchFragment();
 
@@ -42,7 +42,7 @@ const MessageSearchScreen = () => {
 
 /**
  * String resource
- * {@link https://sendbird.com/docs/uikit/v3/react-native/features/message-search#2-customize-the-ui-for-message-search-3-string-resource}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/features/message-search#2-customize-the-ui-for-message-search-3-string-resource}
  * */
 function _stringResource(str: StringSet) {
   str.MESSAGE_SEARCH.HEADER_INPUT_PLACEHOLDER
@@ -57,7 +57,7 @@ function _stringResource(str: StringSet) {
 
 /**
  * Icon resource
- * {@link https://sendbird.com/docs/uikit/v3/react-native/features/message-search#2-customize-the-ui-for-message-search-3-icon-resource}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/features/message-search#2-customize-the-ui-for-message-search-3-icon-resource}
  * */
 Icon.Assets['photo'] = require('your_icons/photo_icon.png');
 Icon.Assets['play'] = require('your_icons/play_icon.png');

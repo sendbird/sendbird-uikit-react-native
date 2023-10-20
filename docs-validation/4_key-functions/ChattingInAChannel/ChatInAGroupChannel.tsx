@@ -4,7 +4,7 @@ const AdvertiseMessage = (_:object) => <></>
 
 /**
  * Usage
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-usage}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-usage}
  * */
 import { useSendbirdChat, createGroupChannelFragment } from "@sendbird/uikit-react-native";
 import { useGroupChannel } from "@sendbird/uikit-chat-hooks";
@@ -33,7 +33,7 @@ const GroupChannelScreen = ({ route: { params } }: any) => {
 
 /**
  * Context
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-context}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-context}
  * */
 function _context(_: GroupChannelContextsType) {
   const fragment = useContext(_.Fragment);
@@ -52,7 +52,7 @@ function _context(_: GroupChannelContextsType) {
 
 /**
  * Fragment
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-context-3-fragment}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-context-3-fragment}
  * */
 const Component = () => {
   const {
@@ -69,7 +69,7 @@ const Component = () => {
 
 /**
  * TypingIndicator
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-context-3-typeselector}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-context-3-typeselector}
  * */
 const Component2 = () => {
   const { typingUsers } = useContext(GroupChannelContexts.TypingIndicator);
@@ -78,7 +78,7 @@ const Component2 = () => {
 
 /**
  * Customization
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-customization}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-customization}
  * */
 import React, { useContext, useLayoutEffect } from 'react';
 import { Pressable } from 'react-native';

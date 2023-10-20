@@ -9,7 +9,7 @@ const isImageFile = (x: string) => x;
 
 /**
  * Customize the UI for file sharing
- * {@link https://sendbird.com/docs/uikit/v3/react-native/features/file-sharing#2-customize-the-ui-for-file-sharing}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/features/file-sharing#2-customize-the-ui-for-file-sharing}
  * */
 import { createGroupChannelFragment, GroupChannelMessageRenderer } from '@sendbird/uikit-react-native';
 
@@ -32,7 +32,7 @@ const GroupChannelScreen = () => {
 
 /**
  * Color resource
- * {@link https://sendbird.com/docs/uikit/v3/react-native/features/file-sharing#2-customize-the-ui-for-file-sharing-3-color-resource}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/features/file-sharing#2-customize-the-ui-for-file-sharing-3-color-resource}
  * */
 function _colorResource(colors: UIKitColors) {
   colors.ui.groupChannelMessage;
@@ -50,7 +50,7 @@ function _colorResource(colors: UIKitColors) {
 
 /**
  * Icon resource
- * {@link https://sendbird.com/docs/uikit/v3/react-native/features/file-sharing#2-customize-the-ui-for-file-sharing-3-icon-resource}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/features/file-sharing#2-customize-the-ui-for-file-sharing-3-icon-resource}
  * */
 Icon.Assets['add'] = require('your_icons/add_icon.png');
 Icon.Assets['document'] = require('your_icons/document_icon.png');
@@ -61,7 +61,7 @@ Icon.Assets['play'] = require('your_icons/play_icon.png');
 
 /**
  * String resource
- * {@link https://sendbird.com/docs/uikit/v3/react-native/features/file-sharing#2-customize-the-ui-for-file-sharing-3-string-resource}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/features/file-sharing#2-customize-the-ui-for-file-sharing-3-string-resource}
  * */
 function _stringResource(str: StringSet) {
   str.GROUP_CHANNEL;
@@ -83,7 +83,7 @@ function _stringResource(str: StringSet) {
 
 /**
  * Image compression
- * {@link https://sendbird.com/docs/uikit/v3/react-native/features/file-sharing#2-image-compression}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/features/file-sharing#2-image-compression}
  * */
 import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
 

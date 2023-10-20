@@ -137,7 +137,7 @@ const App = () => {
 In order to implement the interfaces to your React Native app more easily, we provide various helper functions for each interface.
 
 > **NOTE**: Helper function is not required! You can implement it with native modules you're using.
-> More details about PlatformService interfaces, please see [here](https://sendbird.com/docs/uikit/v3/react-native/core-components/provider/platformserviceprovider)
+> More details about PlatformService interfaces, please see [here](https://sendbird.com/docs/chat/uikit/v3/react-native/core-components/provider/platformserviceprovider)
 
 **Using React Native CLI**
 
@@ -303,7 +303,7 @@ const App = () => {
 ### Integration with navigation library
 
 Now you can create a screen and integrate it with a navigation library like [`react-navigation`](https://reactnavigation.org/).
-See more details on [here](https://st.sendbird.com/docs/uikit/v3/react-native/introduction/screen-navigation)
+See more details on [here](https://sendbird.com/docs/chat/uikit/v3/react-native/introduction/screen-navigation)
 
 The example below shows how to integrate using `react-navigation`.
 
@@ -454,4 +454,4 @@ const App = () => {
 ```
 
 > You can use sendbird sdk using `useSendbirdChat()` hook, and you can connect or disconnect using `useConnection()` hook.
-> for more details about hooks, please refer to our [docs](https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks)
+> for more details about hooks, please refer to our [docs](https://sendbird.com/docs/chat/uikit/v3/react-native/core-components/hooks)

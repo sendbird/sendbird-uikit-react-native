@@ -2,7 +2,7 @@ const MyHeader = () => null;
 
 /**
  *
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/moderating-channels-and-members/moderate-group-channels-and-members}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/moderating-channels-and-members/moderate-group-channels-and-members}
  * */
 import React from 'react';
 
@@ -33,7 +33,7 @@ const OpenChannelModerationScreen = ({ route: { params } }: any) => {
 
 /**
  *
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/moderating-channels-and-members/moderate-group-channels-and-members}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/moderating-channels-and-members/moderate-group-channels-and-members}
  * */
 const OpenChannelModerationFragment2 = createOpenChannelModerationFragment({
   Header: () => <MyHeader />, // Use custom header

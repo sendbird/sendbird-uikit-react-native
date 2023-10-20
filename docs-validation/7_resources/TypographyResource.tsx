@@ -3,7 +3,7 @@ import { Text, createTheme } from '@sendbird/uikit-react-native-foundation';
 
 /**
  * Text component
- * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/typography-resource#2-how-to-use-3-text-component}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/resources/typography-resource#2-how-to-use-3-text-component}
  * */
 const TextList = () => {
   return (
@@ -21,7 +21,7 @@ const TextList = () => {
 
 /**
  * Typography property
- * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/typography-resource#2-how-to-use-3-typography-property}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/resources/typography-resource#2-how-to-use-3-typography-property}
  * */
 import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 // import { Text } from 'react-native';
@@ -35,7 +35,7 @@ const Component = () => {
 
 /**
  * Customize with default themes
- * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/typography-resource#2-customize-the-typography-3-customize-with-default-themes}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/resources/typography-resource#2-customize-the-typography-3-customize-with-default-themes}
  * */
 import { LightUIKitTheme, createTypography } from '@sendbird/uikit-react-native-foundation';
 
@@ -63,7 +63,7 @@ LightUIKitTheme.typography.h1 = {};
 
 /**
  * Customize with createTheme()
- * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/typography-resource#2-customize-the-typography-3-customize-with-createtheme-}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/resources/typography-resource#2-customize-the-typography-3-customize-with-createtheme-}
  * */
 // import { createTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 

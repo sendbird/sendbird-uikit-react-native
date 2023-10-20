@@ -1,6 +1,6 @@
 /**
  * Usage
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/list-channels#2-usage}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/list-channels#2-usage}
  * */
 import React from 'react';
 

@@ -4,7 +4,7 @@ const Analytics = { logError: (_: unknown) => 0 };
 
 /**
  * HeaderComponent
- * {@link https://sendbird.com/docs/uikit/v3/react-native/customization/overview#2-sendbirduikitcontainer-3-headercomponent}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/customization/overview#2-sendbirduikitcontainer-3-headercomponent}
  * */
 import React, { useEffect } from 'react';
 import { Pressable } from 'react-native';
@@ -43,7 +43,7 @@ const App = () => {
 
 /**
  * ErrorBoundary
- * {@link https://sendbird.com/docs/uikit/v3/react-native/customization/overview#2-sendbirduikitcontainer-3-errorboundary}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/customization/overview#2-sendbirduikitcontainer-3-errorboundary}
  * */
 import { View } from 'react-native';
 // import { Text, Button } from '@sendbird/uikit-react-native-foundation';

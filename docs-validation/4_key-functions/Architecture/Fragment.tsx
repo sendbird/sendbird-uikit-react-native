@@ -5,7 +5,7 @@ const FriendComponent = (_: { user: SendbirdUser }) => <></>;
 
 /**
  * Customize a Fragment
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/architecture/fragment#2-customize-a-fragment}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/architecture/fragment#2-customize-a-fragment}
  * */
 import { CustomQuery, useUserList } from '@sendbird/uikit-chat-hooks';
 import { createUserListModule, useSendbirdChat } from '@sendbird/uikit-react-native';

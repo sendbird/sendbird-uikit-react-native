@@ -11,14 +11,14 @@ Sendbird UIKit for React-Native is a development kit with an user interface that
 This mono-repository the UIKit source code is consists as explained below.
 
 - [**packages/uikit-react-native**](/packages/uikit-react-native) is where you can find the open source code. Check out [UIKit Open Source Guidelines](/OPENSOURCE_GUIDELINES.md) for more information regarding our stance on open source.
-- [**sample**](/sample) is a chat app with UIKit’s core features in which you can see items such as push notifications, total unread message count and auto sign-in are demonstrated. When you sign in to the sample app, you will only see a list of channels rendered by the [GroupChannelListFragment](https://sendbird.com/docs/uikit/v3/react-native/key-functions/list-channels) on the screen.
+- [**sample**](/sample) is a chat app with UIKit’s core features in which you can see items such as push notifications, total unread message count and auto sign-in are demonstrated. When you sign in to the sample app, you will only see a list of channels rendered by the [GroupChannelListFragment](https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/list-channels) on the screen.
 - [**packages/uikit-react-native-foundation**](/packages/uikit-react-native-foundation) is a UI package for `uikit-react-native`.
 - [**packages/uikit-chat-hooks**](/packages/uikit-chat-hooks) is a react hooks package for `uikit-react-native`.
 - [**packages/uikit-utils**](/packages/uikit-utils) is a utility package for `uikit-react-native`.
 
 ### More about Sendbird UIKit for React-Native
 
-Find out more about Sendbird UIKit for React-Native at [UIKit for React Native doc](https://sendbird.com/docs/uikit/v3/react-native/overview).
+Find out more about Sendbird UIKit for React-Native at [UIKit for React Native doc](https://sendbird.com/docs/chat/uikit/v3/react-native/overview).
 If you need any help in resolving any issues or have questions, visit [our community](https://community.sendbird.com).
 
 <br/>

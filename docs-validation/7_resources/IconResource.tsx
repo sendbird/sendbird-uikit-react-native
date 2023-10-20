@@ -5,7 +5,7 @@ import { Icon } from '@sendbird/uikit-react-native-foundation';
 
 /**
  * Icon component
- * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/icon-resource#2-how-to-use-3-icon-component}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/resources/icon-resource#2-how-to-use-3-icon-component}
  * */
 // import { Pressable } from 'react-native';
 // import { Icon } from '@sendbird/uikit-react-native-foundation';
@@ -21,7 +21,7 @@ const CameraButton = (props: object) => {
 
 /**
  * Icon.Assets
- * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/icon-resource#2-how-to-use-3-icon-assets}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/resources/icon-resource#2-how-to-use-3-icon-assets}
  * */
 // import { Image, Pressable } from 'react-native';
 // import { Icon } from '@sendbird/uikit-react-native-foundation';
@@ -37,7 +37,7 @@ const CameraButton2 = (props: object) => {
 
 /**
  * Customize the icons
- * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/icon-resource#2-customize-the-icons}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/resources/icon-resource#2-customize-the-icons}
  * */
 // import { Icon } from '@sendbird/uikit-react-native-foundation';
 
