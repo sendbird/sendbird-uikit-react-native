@@ -19,6 +19,25 @@ import type { ChannelMessageListProps } from '../../components/ChannelMessageLis
 import type { CommonComponent } from '../../types';
 import type { PubSub } from '../../utils/pubsub';
 
+/**
+ * Function that scrolls to a message within a group channel.
+ * @param messageId {number} - The id of the message to scroll.
+ * @param options {object} - Scroll options (optional).
+ * @param options.focusAnimated {boolean} - Enable a shake animation on the message component upon completion of scrolling.
+ * @param options.viewPosition {number} - Position information to adjust the visible area during scrolling. bottom(0) ~ top(1.0)
+ *
+ * @example
+ * ```
+ *   const { scrollToMessage } = useContext(GroupChannelContexts.Fragment);
+ *   const messageIncludedInMessageList = scrollToMessage(lastMessage.messageId, { focusAnimated: true, viewPosition: 1 });
+ *   if (!messageIncludedInMessageList) console.warn('Message not found in the message list.');
+ * ```
+ * */
+export type GroupChannelScrollToMessageFunc = (
+  messageId: number,
+  options?: { focusAnimated?: boolean; viewPosition?: number },
+) => void;
+
 export interface GroupChannelProps {
   Fragment: {
     channel: SendbirdGroupChannel;
@@ -112,6 +131,8 @@ export interface GroupChannelContextsType {
     setMessageToEdit: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
     messageToReply?: SendbirdUserMessage | SendbirdFileMessage;
     setMessageToReply: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
+    scrollToMessage: GroupChannelScrollToMessageFunc;
+    __internalSetScrollToMessageFunc: (func: () => GroupChannelScrollToMessageFunc) => void;
   }>;
   TypingIndicator: React.Context<{
     typingUsers: SendbirdUser[];

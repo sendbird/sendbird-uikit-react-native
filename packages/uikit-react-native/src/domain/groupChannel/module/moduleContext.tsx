@@ -2,6 +2,7 @@ import React, { createContext, useCallback, useState } from 'react';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import {
+  Logger,
   NOOP,
   SendbirdFileMessage,
   SendbirdGroupChannel,
@@ -14,7 +15,12 @@ import {
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import type { PubSub } from '../../../utils/pubsub';
-import type { GroupChannelContextsType, GroupChannelModule, GroupChannelPubSubContextPayload } from '../types';
+import type {
+  GroupChannelContextsType,
+  GroupChannelModule,
+  GroupChannelPubSubContextPayload,
+  GroupChannelScrollToMessageFunc,
+} from '../types';
 
 export const GroupChannelContexts: GroupChannelContextsType = {
   Fragment: createContext({
@@ -22,6 +28,12 @@ export const GroupChannelContexts: GroupChannelContextsType = {
     channel: {} as SendbirdGroupChannel,
     setMessageToEdit: NOOP,
     setMessageToReply: NOOP,
+    scrollToMessage: (_: number) => {
+      // noop
+    },
+    __internalSetScrollToMessageFunc: (_: () => GroupChannelScrollToMessageFunc) => {
+      // noop
+    },
   }),
   TypingIndicator: createContext({
     typingUsers: [] as SendbirdUser[],
@@ -48,6 +60,11 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
   const [typingUsers, setTypingUsers] = useState<SendbirdUser[]>([]);
   const [messageToEdit, setMessageToEdit] = useState<SendbirdUserMessage | SendbirdFileMessage>();
   const [messageToReply, setMessageToReply] = useState<SendbirdUserMessage | SendbirdFileMessage>();
+  const [scrollToMessage, __internalSetScrollToMessageFunc] = useState<GroupChannelScrollToMessageFunc>(() => () => {
+    Logger.error(
+      'You should render `src/domain/groupChannel/component/GroupChannelMessageList.tsx` component first to use scrollToMessage.',
+    );
+  });
 
   const updateInputMode = (mode: 'send' | 'edit' | 'reply', message?: SendbirdUserMessage | SendbirdFileMessage) => {
     if (mode === 'send' || !message) {
@@ -99,6 +116,8 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
           setMessageToEdit: useCallback((message) => updateInputMode('edit', message), []),
           messageToReply,
           setMessageToReply: useCallback((message) => updateInputMode('reply', message), []),
+          scrollToMessage,
+          __internalSetScrollToMessageFunc,
         }}
       >
         <GroupChannelContexts.TypingIndicator.Provider value={{ typingUsers }}>

@@ -10,13 +10,15 @@ import ChannelMessageList from '../../../components/ChannelMessageList';
 import { MESSAGE_FOCUS_ANIMATION_DELAY, MESSAGE_SEARCH_SAFE_SCROLL_DELAY } from '../../../constants';
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelContexts } from '../module/moduleContext';
-import type { GroupChannelProps } from '../types';
+import type { GroupChannelProps, GroupChannelScrollToMessageFunc } from '../types';
 
 const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   const toast = useToast();
   const { STRINGS } = useLocalization();
   const { sdk } = useSendbirdChat();
-  const { setMessageToEdit, setMessageToReply } = useContext(GroupChannelContexts.Fragment);
+  const { setMessageToEdit, setMessageToReply, __internalSetScrollToMessageFunc } = useContext(
+    GroupChannelContexts.Fragment,
+  );
   const { subscribe } = useContext(GroupChannelContexts.PubSub);
 
   const id = useUniqHandlerId('GroupChannelMessageList');
@@ -31,13 +33,31 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   };
 
   // FIXME: Workaround, should run after data has been applied to UI.
-  const lazyScrollToIndex = (index = 0, animated = false, timeout = 0) => {
+  const lazyScrollToIndex = (index = 0, animated = false, timeout = 0, viewPosition = 0.5) => {
     setTimeout(() => {
-      ref.current?.scrollToIndex({ index, animated, viewPosition: 0.5 });
+      ref.current?.scrollToIndex({ index, animated, viewPosition });
     }, timeout);
   };
 
-  const scrollToMessage = useFreshCallback((createdAt: number, focusAnimated = false): boolean => {
+  const scrollToMessage = useFreshCallback<GroupChannelScrollToMessageFunc>((messageId, options) => {
+    const foundMessageIndex = props.messages.findIndex((it) => it.messageId === messageId);
+    const isIncludedInList = foundMessageIndex > -1;
+
+    if (isIncludedInList) {
+      if (options?.focusAnimated) {
+        setTimeout(
+          () => props.onUpdateSearchItem({ startingPoint: props.messages[foundMessageIndex].createdAt }),
+          MESSAGE_FOCUS_ANIMATION_DELAY,
+        );
+      }
+      lazyScrollToIndex(foundMessageIndex, true, 0, options?.viewPosition);
+      return true;
+    } else {
+      return false;
+    }
+  });
+
+  const scrollToMessageWithCreatedAt = useFreshCallback((createdAt: number, focusAnimated = false): boolean => {
     const foundMessageIndex = props.messages.findIndex((it) => it.createdAt === createdAt);
     const isIncludedInList = foundMessageIndex > -1;
 
@@ -54,7 +74,6 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
         return false;
       }
     }
-
     return true;
   });
 
@@ -102,17 +121,21 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
     });
   }, [props.scrolledAwayFromBottom]);
 
-  // Only trigger once when message list mount with initial props.searchItem
-  // - Search screen + searchItem > mount message list
-  // - Reset message list + searchItem > re-mount message list
   useEffect(() => {
+    // Only trigger once when message list mount with initial props.searchItem
+    // - Search screen + searchItem > mount message list
+    // - Reset message list + searchItem > re-mount message list
     if (isFirstMount && props.searchItem) {
-      scrollToMessage(props.searchItem.startingPoint);
+      scrollToMessageWithCreatedAt(props.searchItem.startingPoint);
     }
   }, [isFirstMount]);
 
+  useEffect(() => {
+    __internalSetScrollToMessageFunc(() => scrollToMessage);
+  }, []);
+
   const onPressParentMessage = useFreshCallback((message: SendbirdMessage) => {
-    const canScrollToParent = scrollToMessage(message.createdAt, true);
+    const canScrollToParent = scrollToMessageWithCreatedAt(message.createdAt, true);
     if (!canScrollToParent) toast.show(STRINGS.TOAST.FIND_PARENT_MSG_ERROR, 'error');
   });
 
