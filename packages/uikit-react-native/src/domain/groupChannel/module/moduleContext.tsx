@@ -28,10 +28,8 @@ export const GroupChannelContexts: GroupChannelContextsType = {
     channel: {} as SendbirdGroupChannel,
     setMessageToEdit: NOOP,
     setMessageToReply: NOOP,
-    scrollToMessage: (_: number) => {
-      // noop
-    },
-    __internalSetScrollToMessageFunc: (_: () => GroupChannelScrollToMessageFunc) => {
+    scrollToMessage: (() => false) as GroupChannelScrollToMessageFunc,
+    __internalSetScrollToMessageFunc: (_func: () => GroupChannelScrollToMessageFunc) => {
       // noop
     },
   }),
@@ -64,6 +62,7 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
     Logger.error(
       'You should render `src/domain/groupChannel/component/GroupChannelMessageList.tsx` component first to use scrollToMessage.',
     );
+    return false;
   });
 
   const updateInputMode = (mode: 'send' | 'edit' | 'reply', message?: SendbirdUserMessage | SendbirdFileMessage) => {

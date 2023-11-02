@@ -36,7 +36,7 @@ import type { PubSub } from '../../utils/pubsub';
 export type GroupChannelScrollToMessageFunc = (
   messageId: number,
   options?: { focusAnimated?: boolean; viewPosition?: number },
-) => void;
+) => boolean;
 
 export interface GroupChannelProps {
   Fragment: {
