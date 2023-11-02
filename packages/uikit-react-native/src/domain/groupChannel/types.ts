@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { FlatList } from 'react-native';
 
 import type { UseGroupChannelMessagesOptions } from '@sendbird/uikit-chat-hooks';
 import type {
@@ -18,25 +19,6 @@ import type { ChannelInputProps, SuggestedMentionListProps } from '../../compone
 import type { ChannelMessageListProps } from '../../components/ChannelMessageList';
 import type { CommonComponent } from '../../types';
 import type { PubSub } from '../../utils/pubsub';
-
-/**
- * Function that scrolls to a message within a group channel.
- * @param messageId {number} - The id of the message to scroll.
- * @param options {object} - Scroll options (optional).
- * @param options.focusAnimated {boolean} - Enable a shake animation on the message component upon completion of scrolling.
- * @param options.viewPosition {number} - Position information to adjust the visible area during scrolling. bottom(0) ~ top(1.0)
- *
- * @example
- * ```
- *   const { scrollToMessage } = useContext(GroupChannelContexts.Fragment);
- *   const messageIncludedInMessageList = scrollToMessage(lastMessage.messageId, { focusAnimated: true, viewPosition: 1 });
- *   if (!messageIncludedInMessageList) console.warn('Message not found in the message list.');
- * ```
- * */
-export type GroupChannelScrollToMessageFunc = (
-  messageId: number,
-  options?: { focusAnimated?: boolean; viewPosition?: number },
-) => boolean;
 
 export interface GroupChannelProps {
   Fragment: {
@@ -114,6 +96,10 @@ export interface GroupChannelProps {
     enableTypingIndicator: boolean;
     keyboardAvoidOffset?: number;
     groupChannelPubSub: PubSub<GroupChannelPubSubContextPayload>;
+
+    messages: SendbirdMessage[];
+    // Changing the search item will trigger the focus animation on messages.
+    onUpdateSearchItem: (searchItem?: GroupChannelProps['MessageList']['searchItem']) => void;
   };
 }
 
@@ -131,13 +117,47 @@ export interface GroupChannelContextsType {
     setMessageToEdit: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
     messageToReply?: SendbirdUserMessage | SendbirdFileMessage;
     setMessageToReply: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
-    scrollToMessage: GroupChannelScrollToMessageFunc;
-    __internalSetScrollToMessageFunc: (func: () => GroupChannelScrollToMessageFunc) => void;
   }>;
   TypingIndicator: React.Context<{
     typingUsers: SendbirdUser[];
   }>;
   PubSub: React.Context<PubSub<GroupChannelPubSubContextPayload>>;
+  MessageList: React.Context<{
+    /**
+     * ref object for FlatList of MessageList
+     * */
+    flatListRef: React.MutableRefObject<FlatList | null>;
+    /**
+     * Function that scrolls to a message within a group channel.
+     * @param messageId {number} - The id of the message to scroll.
+     * @param options {object} - Scroll options (optional).
+     * @param options.focusAnimated {boolean} - Enable a shake animation on the message component upon completion of scrolling.
+     * @param options.viewPosition {number} - Position information to adjust the visible area during scrolling. bottom(0) ~ top(1.0)
+     *
+     * @example
+     * ```
+     *   const { scrollToMessage } = useContext(GroupChannelContexts.MessageList);
+     *   const messageIncludedInMessageList = scrollToMessage(lastMessage.messageId, { focusAnimated: true, viewPosition: 1 });
+     *   if (!messageIncludedInMessageList) console.warn('Message not found in the message list.');
+     * ```
+     * */
+    scrollToMessage: (messageId: number, options?: { focusAnimated?: boolean; viewPosition?: number }) => boolean;
+    /**
+     * Call the FlatList function asynchronously to scroll to bottom lazily
+     * to avoid scrolling before data rendering has been committed.
+     * */
+    lazyScrollToBottom: (params?: { animated?: boolean; timeout?: number }) => void;
+    /**
+     * Call the FlatList function asynchronously to scroll to index lazily.
+     * to avoid scrolling before data rendering has been committed.
+     * */
+    lazyScrollToIndex: (params?: {
+      index?: number;
+      animated?: boolean;
+      timeout?: number;
+      viewPosition?: number;
+    }) => void;
+  }>;
 }
 export interface GroupChannelModule {
   Provider: CommonComponent<GroupChannelProps['Provider']>;
