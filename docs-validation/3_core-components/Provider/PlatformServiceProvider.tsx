@@ -1,4 +1,5 @@
 import type { MediaServiceInterface } from '@sendbird/uikit-react-native';
+import type { ReactNode } from 'react';
 
 const isMediaFile = (_: string) => 0;
 const MyDocumentPickerModule = {
@@ -34,7 +35,7 @@ async function fileServiceInterface(service: FileServiceInterface) {
  * {@link }
  * */
 async function mediaServiceInterface(service: MediaServiceInterface) {
-  const jsx: JSX.Element = service.VideoComponent({
+  const jsx: ReactNode = service.VideoComponent({
     source: 0 as number | { uri: string },
     resizeMode: '' as 'cover' | 'stretch' | 'contain' | undefined,
     onLoad: () => 0,

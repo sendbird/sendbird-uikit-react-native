@@ -142,7 +142,7 @@ class MentionManager {
             ],
           };
         },
-        { leftText: text, components: [] as (string | JSX.Element)[] },
+        { leftText: text, components: [] as (string | React.ReactNode)[] },
       );
 
     return [leftText, ...components];

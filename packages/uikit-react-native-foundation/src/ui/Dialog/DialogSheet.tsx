@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 
 import Icon from '../../components/Icon';
@@ -9,7 +9,7 @@ import useUIKitTheme from '../../theme/useUIKitTheme';
 type Props = React.PropsWithChildren<{
   style?: StyleProp<ViewStyle>;
 }>;
-const DialogSheet: ((props: Props) => JSX.Element) & { Item: typeof SheetItem } = ({ style, children }) => {
+const DialogSheet: ((props: Props) => ReactNode) & { Item: typeof SheetItem } = ({ style, children }) => {
   const { colors } = useUIKitTheme();
   return (
     <View style={[styles.container, { backgroundColor: colors.ui.dialog.default.none.background }, style]}>

@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -61,10 +61,10 @@ export type ChannelInputProps = {
   setMessageToReply?: (message?: undefined | SendbirdUserMessage | SendbirdFileMessage) => void;
 
   // mention
-  SuggestedMentionList?: (props: SuggestedMentionListProps) => JSX.Element | null;
+  SuggestedMentionList?: (props: SuggestedMentionListProps) => React.ReactNode | null;
 
   // sub-components
-  AttachmentsButton?: (props: AttachmentsButtonProps) => JSX.Element | null;
+  AttachmentsButton?: (props: AttachmentsButtonProps) => React.ReactNode | null;
 };
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
@@ -181,7 +181,7 @@ const useTextClearOnDisabled = (setText: (val: string) => void, chatDisabled: bo
 };
 
 const useAutoFocusOnEditMode = (
-  textInputRef: MutableRefObject<TextInput | undefined>,
+  textInputRef: React.MutableRefObject<TextInput | undefined>,
   messageToEdit?: SendbirdBaseMessage,
 ) => {
   useEffect(() => {

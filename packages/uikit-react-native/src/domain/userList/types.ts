@@ -7,8 +7,8 @@ import type { CommonComponent } from '../../types';
 export interface UserListProps<User> {
   /** Props for `UserListModule.Header` **/
   Header: {
-    right?: React.ReactElement;
-    left?: React.ReactElement;
+    right?: React.ReactNode;
+    left?: React.ReactNode;
     onPressHeaderLeft: () => void;
     onPressHeaderRight: (selectedUsers: User[]) => Promise<void>;
     shouldActivateHeaderRight?: (selectedUsers: User[]) => boolean;

@@ -1,16 +1,15 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { conditionChaining } from '@sendbird/uikit-utils';
 
 import Text, { TextProps } from '../../components/Text';
-import type { BaseHeaderProps } from '../../index';
+import type { BaseHeaderProps, HeaderElement } from '../../index';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 
-type HeaderElement = string | React.ReactElement | null;
 export type HeaderProps = BaseHeaderProps<
   {
     title?: HeaderElement;
@@ -27,7 +26,7 @@ export type HeaderProps = BaseHeaderProps<
 >;
 
 const AlignMapper = { left: 'flex-start', center: 'center', right: 'flex-end' } as const;
-const Header: ((props: HeaderProps) => JSX.Element) & {
+const Header: ((props: HeaderProps) => ReactNode) & {
   Button: typeof HeaderButton;
   Title: typeof HeaderTitle;
   Subtitle: typeof HeaderSubtitle;

@@ -101,7 +101,7 @@ const MessageContainer = ({
   );
 };
 
-const SendingStatusContainer = ({ children }: { children: React.ReactElement }) => {
+const SendingStatusContainer = ({ children }: { children: React.ReactNode }) => {
   return (
     <Box flexDirection={'row'}>
       <Box marginTop={2}>{children}</Box>

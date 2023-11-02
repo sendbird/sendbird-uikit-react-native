@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { TouchableOpacity, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -17,7 +17,7 @@ export type BottomSheetItem = {
     disabled?: boolean;
     onPress: () => void;
   }[];
-  HeaderComponent?: (props: HeaderProps) => JSX.Element;
+  HeaderComponent?: (props: HeaderProps) => ReactNode;
 };
 type Props = {
   visible: boolean;

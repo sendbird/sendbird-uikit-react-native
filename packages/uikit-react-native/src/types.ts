@@ -17,7 +17,7 @@ export interface LocalCacheStorage {
 
 export type ErrorBoundaryProps = { error: Error; errorInfo: ErrorInfo; reset: () => void };
 
-export type CommonComponent<P = {}> = (props: P & { children?: ReactNode }) => null | JSX.Element; //ReactNode;
+export type CommonComponent<P = {}> = (props: P & { children?: ReactNode }) => null | ReactNode;
 
 export type MentionedUser = {
   range: Range;

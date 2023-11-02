@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
 import { conditionChaining } from '@sendbird/uikit-utils';
@@ -21,7 +21,7 @@ type Props = {
   muted?: boolean;
   containerStyle?: StyleProp<ViewStyle>;
 };
-const Avatar: ((props: Props) => JSX.Element) & SubComponents = ({
+const Avatar: ((props: Props) => ReactNode) & SubComponents = ({
   uri,
   square,
   muted = false,
