@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import Sendbird, { DeviceOsPlatform, SendbirdPlatform, SendbirdProduct } from '@sendbird/chat';
+import SendbirdChat, { DeviceOsPlatform, SendbirdChatParams, SendbirdPlatform, SendbirdProduct } from '@sendbird/chat';
 import { GroupChannelModule } from '@sendbird/chat/groupChannel';
 import { OpenChannelModule } from '@sendbird/chat/openChannel';
 import type { HeaderStyleContextType, UIKitTheme } from '@sendbird/uikit-react-native-foundation';
@@ -18,7 +18,6 @@ import { SBUConfig, UIKitConfigProvider } from '@sendbird/uikit-tools';
 import type {
   PartialDeep,
   SendbirdChatSDK,
-  SendbirdEncryption,
   SendbirdGroupChannel,
   SendbirdGroupChannelCreateParams,
   SendbirdMember,
@@ -52,7 +51,6 @@ import VERSION from '../version';
 import InternalErrorBoundaryContainer from './InternalErrorBoundaryContainer';
 
 const NetInfo = SBUDynamicModule.get('@react-native-community/netinfo', 'warn');
-type UnimplementedFeatures = 'enableVoiceMessage' | 'threadReplySelectType' | 'replyType';
 export const SendbirdUIKit = Object.freeze({
   VERSION,
   PLATFORM: Platform.OS.toLowerCase(),
@@ -62,6 +60,27 @@ export const SendbirdUIKit = Object.freeze({
     IMAGE_COMPRESSION: true,
   },
 });
+
+type UnimplementedFeatures = 'enableVoiceMessage' | 'threadReplySelectType' | 'replyType';
+export type ChatOmittedInitParams = Omit<
+  SendbirdChatParams<[GroupChannelModule, OpenChannelModule]>,
+  (typeof chatOmitKeys)[number]
+>;
+
+const chatOmitKeys = [
+  'appId',
+  'newInstance',
+  'modules',
+  'debugMode',
+  'appVersion',
+  'localCacheEnabled',
+  'useAsyncStorageStore',
+] as const;
+function sanitizeChatOptions<T extends Record<string, unknown>>(chatOptions: T): T {
+  const opts = { ...chatOptions };
+  chatOmitKeys.forEach((key) => delete opts[key]);
+  return opts;
+}
 
 export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   appId: string;
@@ -73,9 +92,9 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   };
   chatOptions: {
     localCacheStorage: LocalCacheStorage;
-    localCacheEncryption?: SendbirdEncryption;
     onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
-  } & Partial<ChatRelatedFeaturesInUIKit>;
+  } & Partial<ChatOmittedInitParams> &
+    Partial<ChatRelatedFeaturesInUIKit>;
   uikitOptions?: PartialDeep<{
     common: SBUConfig['common'];
     groupChannel: Omit<SBUConfig['groupChannel']['channel'], UnimplementedFeatures> & {
@@ -143,7 +162,7 @@ const SendbirdUIKitContainer = ({
 
   const [internalStorage] = useState(() => new InternalLocalCacheStorage(chatOptions.localCacheStorage));
   const [sdkInstance, setSdkInstance] = useState<SendbirdChatSDK>(() => {
-    const sendbird = initializeSendbird(appId, { internalStorage, ...chatOptions });
+    const sendbird = initializeSendbird(appId, { internalStorage, ...sanitizeChatOptions(chatOptions) });
     unsubscribes.current = sendbird.unsubscribes;
     return sendbird.chatSDK;
   });
@@ -171,7 +190,7 @@ const SendbirdUIKitContainer = ({
 
   useLayoutEffect(() => {
     if (!isFirstMount) {
-      const sendbird = initializeSendbird(appId, { internalStorage, ...chatOptions });
+      const sendbird = initializeSendbird(appId, { internalStorage, ...sanitizeChatOptions(chatOptions) });
       setSdkInstance(sendbird.chatSDK);
       unsubscribes.current = sendbird.unsubscribes;
     }
@@ -270,25 +289,22 @@ const SendbirdUIKitContainer = ({
   );
 };
 
-const initializeSendbird = (
-  appId: string,
-  options: {
-    internalStorage?: InternalLocalCacheStorage;
-    onInitialized?: (sdk: SendbirdChatSDK) => SendbirdChatSDK;
-    localCacheEncryption?: SendbirdEncryption;
-  },
-) => {
+interface InitOptions extends ChatOmittedInitParams {
+  internalStorage: InternalLocalCacheStorage;
+  onInitialized?: (sdk: SendbirdChatSDK) => SendbirdChatSDK;
+}
+const initializeSendbird = (appId: string, options: InitOptions) => {
   let chatSDK: SendbirdChatSDK;
   const unsubscribes: Array<() => void> = [];
-  const { internalStorage, localCacheEncryption, onInitialized } = options;
+  const { internalStorage, onInitialized, ...chatInitParams } = options;
 
-  chatSDK = Sendbird.init({
+  chatSDK = SendbirdChat.init({
+    ...chatInitParams,
     appId,
     newInstance: true,
     modules: [new GroupChannelModule(), new OpenChannelModule()],
-    localCacheEnabled: Boolean(internalStorage),
+    localCacheEnabled: true,
     useAsyncStorageStore: internalStorage as never,
-    localCacheEncryption,
   });
 
   if (onInitialized) {
