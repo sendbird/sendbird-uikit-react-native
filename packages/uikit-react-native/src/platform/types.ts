@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import type SBUError from '../libs/SBUError';
 
 export type Unsubscribe = () => void | undefined;
@@ -99,7 +101,7 @@ export type CompressImageOptions = {
 export type CompressImageResult = Promise<{ uri: string; size: number } | null>;
 
 export interface MediaServiceInterface {
-  VideoComponent<Props = {}>(props: VideoProps & Props): JSX.Element;
+  VideoComponent<Props = {}>(props: VideoProps & Props): ReactNode;
   getVideoThumbnail(options: GetVideoThumbnailOptions): GetVideoThumbnailResult;
   compressImage(options: CompressImageOptions): CompressImageResult;
 }

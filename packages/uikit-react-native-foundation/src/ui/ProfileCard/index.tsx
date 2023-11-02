@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 
 import Divider from '../../components/Divider';
@@ -11,7 +11,7 @@ type Props = {
   uri: string;
   username: string;
 
-  button?: JSX.Element;
+  button?: ReactNode;
 
   bodyLabel: string;
   body: string;

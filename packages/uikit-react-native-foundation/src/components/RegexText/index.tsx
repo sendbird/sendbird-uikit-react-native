@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import { replaceWithRegex } from '@sendbird/uikit-utils';
 
@@ -12,7 +12,7 @@ export interface RegexTextPattern {
     index: number;
     keyPrefix: string;
     parentProps?: TextProps;
-  }): string | JSX.Element;
+  }): string | ReactNode;
 }
 
 type Props = { patterns: RegexTextPattern[] } & TextProps;
@@ -20,7 +20,7 @@ type Props = { patterns: RegexTextPattern[] } & TextProps;
 const RegexText = ({ children, patterns, ...props }: Props) => {
   if (patterns.length === 0 || typeof children !== 'string') return <>{children}</>;
 
-  const matchedTexts: Array<string | JSX.Element> = [children];
+  const matchedTexts: Array<string | ReactNode> = [children];
 
   patterns.forEach(({ regex, replacer }, patterIndex) => {
     const matchedTextsTemp = matchedTexts.concat();

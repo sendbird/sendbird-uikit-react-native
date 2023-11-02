@@ -51,7 +51,7 @@
     "@types/react": "*",
     "react": "17.0.2",
     "react-native-builder-bob": "^0.18.0",
-    "typescript": "4.9.4"
+    "typescript": "5.2.2"
   },
   "peerDependencies": {
     "@sendbird/chat": "^4.9.8",

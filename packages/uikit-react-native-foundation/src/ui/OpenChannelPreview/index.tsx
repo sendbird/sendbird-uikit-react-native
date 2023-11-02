@@ -10,7 +10,7 @@ import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 
 type Props = {
-  customCover?: React.ReactElement;
+  customCover?: React.ReactNode;
   coverUrl: string;
   title: string;
   participantsCount?: number;

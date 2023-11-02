@@ -97,7 +97,7 @@
     "react-native-permissions": "^3.6.0",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-video": "^5.2.0",
-    "typescript": "4.9.4"
+    "typescript": "5.2.2"
   },
   "peerDependencies": {
     "@bam.tech/react-native-image-resizer": ">=3.0.0",

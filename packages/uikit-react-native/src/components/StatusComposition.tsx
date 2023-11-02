@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 type Props = {
   loading?: boolean;
-  LoadingComponent?: JSX.Element;
+  LoadingComponent?: ReactNode;
   error?: boolean;
-  ErrorComponent?: JSX.Element;
+  ErrorComponent?: ReactNode;
   children: React.ReactNode;
 };
 const StatusComposition = ({ children, error, ErrorComponent, LoadingComponent, loading }: Props) => {

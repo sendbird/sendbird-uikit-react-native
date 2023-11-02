@@ -55,7 +55,7 @@ const useAppearance = () => {
   return useContext(AppearanceContext);
 };
 
-export const withAppearance = (Component: (props: object) => JSX.Element) => {
+export const withAppearance = (Component: (props: object) => React.ReactNode) => {
   return (props: object) => (
     <AppearanceProvider>
       <Component {...props} />

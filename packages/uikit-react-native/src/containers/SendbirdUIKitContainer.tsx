@@ -98,7 +98,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   errorBoundary?: {
     disabled?: boolean;
     onError?: (props: ErrorBoundaryProps) => void;
-    ErrorInfoComponent?: (props: ErrorBoundaryProps) => JSX.Element;
+    ErrorInfoComponent?: (props: ErrorBoundaryProps) => React.ReactNode;
   };
   toast?: {
     dismissTimeout?: number;

@@ -6,7 +6,7 @@ import type { HeaderProps } from '../ui/Header';
 import getDefaultHeaderHeight from './getDefaultHeaderHeight';
 
 export type HeaderStyleContextType = {
-  HeaderComponent: (props: HeaderProps) => React.ReactElement | null;
+  HeaderComponent: (props: HeaderProps) => React.ReactNode | null;
   defaultTitleAlign: 'left' | 'center';
   statusBarTranslucent: boolean;
   topInset: number;

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import type { TextStyle } from 'react-native';
 
 export interface UIKitTypography {
@@ -178,11 +178,11 @@ export interface UIKitColors {
   };
 }
 
-export type HeaderElement = string | ReactElement | null;
+export type HeaderElement = ReactNode;
 export type HeaderPartProps = {
-  title?: HeaderElement;
-  right?: HeaderElement;
-  left?: HeaderElement;
+  title?: ReactNode;
+  right?: ReactNode;
+  left?: ReactNode;
   onPressLeft?: (...params: any[]) => any;
   onPressRight?: (...params: any[]) => any;
 };

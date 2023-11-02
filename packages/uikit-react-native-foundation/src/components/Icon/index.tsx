@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Image, ImageStyle, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
 import { FileType, convertFileTypeToMessageType, getFileIconFromMessageType } from '@sendbird/uikit-utils';
@@ -17,7 +17,7 @@ type Props = {
   style?: StyleProp<ImageStyle>;
   containerStyle?: StyleProp<ViewStyle>;
 };
-const Icon: ((props: Props) => JSX.Element) & {
+const Icon: ((props: Props) => ReactNode) & {
   Assets: typeof IconAssets;
   File: typeof FileIcon;
 } = ({ icon, color, size = 24, containerStyle, style }) => {

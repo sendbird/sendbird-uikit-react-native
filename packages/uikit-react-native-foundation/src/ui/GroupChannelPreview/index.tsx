@@ -11,13 +11,13 @@ import useUIKitTheme from '../../theme/useUIKitTheme';
 import Badge from '../Badge';
 
 type Props = {
-  customCover?: React.ReactElement;
+  customCover?: React.ReactNode;
   coverUrl: string;
 
   title: string;
 
   titleCaption: string;
-  titleCaptionLeft?: React.ReactElement;
+  titleCaptionLeft?: React.ReactNode;
 
   bodyIcon?: keyof typeof Icon.Assets;
   body: string;
