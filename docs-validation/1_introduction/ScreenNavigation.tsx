@@ -4,7 +4,7 @@ const GroupChannelScreen = () => <React.Fragment />;
 
 /**
  * Set up navigation in a fragment
- * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/screen-navigation#2-set-up-navigation-in-a-fragment}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/introduction/screen-navigation#2-set-up-navigation-in-a-fragment}
  * */
 // @ts-ignore
 import { Navigation } from 'react-native-navigation';
@@ -34,7 +34,7 @@ const GroupChannelListScreen = (props: { componentId: string }) => {
 
 /**
  * Integrate navigation library
- * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/screen-navigation#2-integrate-navigation-library}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/introduction/screen-navigation#2-integrate-navigation-library}
  * */
 Navigation.registerComponent('GroupChannel', () => GroupChannelScreen);
 Navigation.registerComponent('GroupChannelList', () => GroupChannelListScreen);

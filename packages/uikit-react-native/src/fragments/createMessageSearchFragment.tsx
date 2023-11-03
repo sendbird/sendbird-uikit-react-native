@@ -104,7 +104,7 @@ const useMessageSearch = (
     const query = getMessageSearchQuery(sdk, {
       keyword,
       channelUrl: channel.url,
-      messageTimestampFrom: Math.max(channel.joinedAt, channel.invitedAt),
+      messageTimestampFrom: channel.messageOffsetTimestamp,
       order: MessageSearchOrder.TIMESTAMP,
       queryCreator,
     });

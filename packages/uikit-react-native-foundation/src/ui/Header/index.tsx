@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -26,11 +26,7 @@ export type HeaderProps = BaseHeaderProps<
 >;
 
 const AlignMapper = { left: 'flex-start', center: 'center', right: 'flex-end' } as const;
-const Header: ((props: HeaderProps) => ReactNode) & {
-  Button: typeof HeaderButton;
-  Title: typeof HeaderTitle;
-  Subtitle: typeof HeaderSubtitle;
-} = ({
+const Header = ({
   children,
   titleAlign,
   title = null,
@@ -41,7 +37,7 @@ const Header: ((props: HeaderProps) => ReactNode) & {
   clearTitleMargin = false,
   clearStatusBarTopInset = false,
   statusBarTopInsetAs = 'padding',
-}) => {
+}: HeaderProps) => {
   const { topInset, defaultTitleAlign, defaultHeight } = useHeaderStyle();
 
   const { colors } = useUIKitTheme();
@@ -183,7 +179,8 @@ const styles = createStyleSheet({
   },
 });
 
-Header.Button = HeaderButton;
-Header.Title = HeaderTitle;
-Header.Subtitle = HeaderSubtitle;
-export default Header;
+export default Object.assign(Header, {
+  Button: HeaderButton,
+  Title: HeaderTitle,
+  Subtitle: HeaderSubtitle,
+});

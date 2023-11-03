@@ -86,7 +86,7 @@ const Modal = ({
       <KeyboardAvoidingView
         // NOTE: This is trick for Android.
         //  When orientation is changed on Android, the offset that to avoid soft-keyboard is not updated normally.
-        key={`${width}-${height}`}
+        key={Platform.OS === 'android' && enableKeyboardAvoid ? `${width}-${height}` : undefined}
         enabled={enableKeyboardAvoid}
         style={styles.background}
         behavior={Platform.select({ ios: 'padding', default: 'height' })}

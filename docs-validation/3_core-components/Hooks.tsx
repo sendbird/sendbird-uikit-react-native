@@ -1,6 +1,6 @@
 /**
  * useSendbirdChat
- * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-usesendbirdchat-}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/core-components/hooks#-3-usesendbirdchat-}
  * */
 import { useSendbirdChat } from '@sendbird/uikit-react-native';
 
@@ -15,7 +15,7 @@ const Component = () => {
 
 /**
  * useConnection
- * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-useconnection-}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/core-components/hooks#-3-useconnection-}
  * */
 import { useConnection, SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
 
@@ -38,7 +38,7 @@ const App = () => {
 
 /**
  * useUIKitTheme
- * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-useuikittheme-}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/core-components/hooks#-3-useuikittheme-}
  * */
 import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
@@ -52,7 +52,7 @@ const Component3 = () => {
 
 /**
  * usePlatformService
- * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-useplatformservice-}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/core-components/hooks#-3-useplatformservice-}
  * */
 import { usePlatformService } from '@sendbird/uikit-react-native';
 
@@ -70,7 +70,7 @@ const Component4 = () => {
 
 /**
  * useLocalization
- * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-uselocalization-}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/core-components/hooks#-3-uselocalization-}
  * */
 import { useLocalization } from '@sendbird/uikit-react-native';
 
@@ -81,7 +81,7 @@ const Component5 = () => {
 
 /**
  * useToast
- * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-usetoast-}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/core-components/hooks#-3-usetoast-}
  * */
 import { useToast } from '@sendbird/uikit-react-native-foundation';
 
@@ -93,7 +93,7 @@ const Component6 = () => {
 
 /**
  * usePrompt
- * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-useprompt-}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/core-components/hooks#-3-useprompt-}
  * */
 import { usePrompt } from '@sendbird/uikit-react-native-foundation';
 
@@ -109,7 +109,7 @@ const Component7 = () => {
 
 /**
  * useBottomSheet
- * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-usebottomsheet-}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/core-components/hooks#-3-usebottomsheet-}
  * */
 import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
 
@@ -128,7 +128,7 @@ const Component8 = () => {
 
 /**
  * useActionMenu
- * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-useactionmenu-}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/core-components/hooks#-3-useactionmenu-}
  * */
 import { useActionMenu } from '@sendbird/uikit-react-native-foundation';
 
@@ -147,7 +147,7 @@ const Component9 = () => {
 
 /**
  * useAlert
- * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-usealert-}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/core-components/hooks#-3-usealert-}
  * */
 import { useAlert } from '@sendbird/uikit-react-native-foundation';
 

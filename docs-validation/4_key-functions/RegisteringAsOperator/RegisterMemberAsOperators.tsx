@@ -2,7 +2,7 @@ const MyHeader = () => null;
 
 /**
  *
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/registering-as-operator-register-member-as-operators}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/registering-as-operator-register-member-as-operators}
  * */
 import React from 'react';
 
@@ -29,7 +29,7 @@ const GroupChannelRegisterOperatorScreen = ({ route: { params } }: any) => {
 
 /**
  *
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/registering-as-operator-register-member-as-operators}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/registering-as-operator-register-member-as-operators}
  * */
 const GroupChannelRegisterOperatorFragment2 = createGroupChannelRegisterOperatorFragment({
     Header: () => <MyHeader />, // Use custom header

@@ -5,7 +5,7 @@ const PROFILE_FILE: FileType = { name: '', size: 0, type: '', uri: '' };
 
 /**
  * Connect to the Sendbird server
- * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/authentication#2-connect-to-the-sendbird-server}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/introduction/authentication#2-connect-to-the-sendbird-server}
  * */
 import { useConnection } from '@sendbird/uikit-react-native';
 
@@ -27,7 +27,7 @@ const Component = () => {
 
 /**
  * Disconnect from the Sendbird server
- * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/authentication#2-disconnect-from-the-sendbird-server}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/introduction/authentication#2-disconnect-from-the-sendbird-server}
  * */
 const Component2 = () => {
   const { disconnect } = useConnection();
@@ -37,7 +37,7 @@ const Component2 = () => {
 
 /**
  * Retrieve online status of current user
- * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/authentication#2-retrieve-online-status-of-current-user}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/introduction/authentication#2-retrieve-online-status-of-current-user}
  * */
 import { useSendbirdChat } from '@sendbird/uikit-react-native';
 
@@ -54,7 +54,7 @@ const Component3 = () => {
 
 /**
  * Register for push notifications
- * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/authentication#2-register-for-push-notifications}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/introduction/authentication#2-register-for-push-notifications}
  * */
 import RNFBMessaging from '@react-native-firebase/messaging';
 import * as Permissions from 'react-native-permissions';
@@ -77,7 +77,7 @@ const App = () => {
 
 /**
  * Unregister push notifications
- * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/authentication#2-unregister-push-notifications}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/introduction/authentication#2-unregister-push-notifications}
  * */
 const App2 = () => {
   return (
@@ -92,7 +92,7 @@ const App2 = () => {
 
 /**
  * Update user profile
- * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/authentication#2-update-user-profile}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/introduction/authentication#2-update-user-profile}
  * */
 const Component4 = () => {
   const { updateCurrentUserInfo } = useSendbirdChat();

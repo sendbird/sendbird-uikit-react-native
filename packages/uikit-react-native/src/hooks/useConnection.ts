@@ -67,7 +67,7 @@ const useConnection = () => {
             Logger.warn('[useConnection]', 'clear cached-data');
             await sdk.clearCachedData().catch((e) => Logger.warn('[useConnection]', 'clear cached-data failure', e));
           } else if (sdk.currentUser) {
-            await initEmoji(sdk, emojiManager);
+            await Promise.allSettled([initEmoji(sdk, emojiManager), initDashboardConfigs(sdk)]);
 
             Logger.debug('[useConnection]', 'connected! (offline)');
             setCurrentUser(sdk.currentUser);

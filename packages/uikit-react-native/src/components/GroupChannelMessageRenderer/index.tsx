@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 import type { GroupChannelMessageProps, RegexTextPattern } from '@sendbird/uikit-react-native-foundation';
 import { Box, GroupChannelMessage, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
@@ -10,11 +10,13 @@ import {
   calcMessageGrouping,
   getMessageType,
   isMyMessage,
+  isVoiceMessage,
   shouldRenderParentMessage,
   shouldRenderReaction,
   useIIFE,
 } from '@sendbird/uikit-utils';
 
+import { VOICE_MESSAGE_META_ARRAY_DURATION_KEY } from '../../constants';
 import type { GroupChannelProps } from '../../domain/groupChannel/types';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 import SBUUtils from '../../libs/SBUUtils';
@@ -36,10 +38,11 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   prevMessage,
   nextMessage,
 }) => {
+  const playerUnsubscribes = useRef<(() => void)[]>([]);
   const { palette } = useUIKitTheme();
   const { sbOptions, currentUser, mentionManager } = useSendbirdChat();
   const { STRINGS } = useLocalization();
-  const { mediaService } = usePlatformService();
+  const { mediaService, playerService } = usePlatformService();
   const { groupWithPrev, groupWithNext } = calcMessageGrouping(
     Boolean(enableMessageGrouping),
     message,
@@ -58,6 +61,16 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     return null;
   });
 
+  const resetPlayer = async () => {
+    playerUnsubscribes.current.forEach((unsubscribe) => {
+      try {
+        unsubscribe();
+      } catch {}
+    });
+    playerUnsubscribes.current.length = 0;
+    await playerService.reset();
+  };
+
   const variant = isMyMessage(message, currentUser?.userId) ? 'outgoing' : 'incoming';
 
   const messageProps: Omit<GroupChannelMessageProps<SendbirdMessage>, 'message'> = {
@@ -72,6 +85,55 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     onPressMentionedUser: (mentionedUser) => {
       if (mentionedUser) onShowUserProfile?.(mentionedUser);
     },
+    onToggleVoiceMessage: async (state, setState) => {
+      if (isVoiceMessage(message) && message.sendingStatus === 'succeeded') {
+        if (playerService.uri === message.url) {
+          if (playerService.state === 'playing') {
+            await playerService.pause();
+          } else {
+            await playerService.play(message.url);
+          }
+        } else {
+          if (playerService.state !== 'idle') {
+            await resetPlayer();
+          }
+
+          const shouldSeekToTime = state.duration > state.currentTime && state.currentTime > 0;
+          let seekFinished = !shouldSeekToTime;
+
+          const forPlayback = playerService.addPlaybackListener(({ stopped, currentTime, duration }) => {
+            if (seekFinished) {
+              setState((prevState) => ({ ...prevState, currentTime: stopped ? 0 : currentTime, duration }));
+            }
+          });
+          const forState = playerService.addStateListener((state) => {
+            switch (state) {
+              case 'preparing':
+                setState((prevState) => ({ ...prevState, status: 'preparing' }));
+                break;
+              case 'playing':
+                setState((prevState) => ({ ...prevState, status: 'playing' }));
+                break;
+              case 'idle':
+              case 'paused': {
+                setState((prevState) => ({ ...prevState, status: 'paused' }));
+                break;
+              }
+              case 'stopped':
+                setState((prevState) => ({ ...prevState, status: 'paused' }));
+                break;
+            }
+          });
+          playerUnsubscribes.current.push(forPlayback, forState);
+
+          await playerService.play(message.url);
+          if (shouldSeekToTime) {
+            await playerService.seek(state.currentTime);
+            seekFinished = true;
+          }
+        }
+      }
+    },
     groupedWithPrev: groupWithPrev,
     groupedWithNext: groupWithNext,
     children: reactionChildren,
@@ -80,9 +142,10 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     ) : null,
     parentMessage: shouldRenderParentMessage(message) ? (
       <GroupChannelMessageParentMessage
+        channel={channel}
+        message={message.parentMessage}
         variant={variant}
         childMessage={message}
-        message={message.parentMessage}
         onPress={onPressParentMessage}
       />
     ) : null,
@@ -180,6 +243,20 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
           <GroupChannelMessage.VideoFile
             message={message as SendbirdFileMessage}
             fetchThumbnailFromVideoSource={(uri) => mediaService.getVideoThumbnail({ url: uri, timeMills: 1000 })}
+            {...messageProps}
+          />
+        );
+      }
+      case 'file.voice': {
+        return (
+          <GroupChannelMessage.VoiceFile
+            message={message as SendbirdFileMessage}
+            durationMetaArrayKey={VOICE_MESSAGE_META_ARRAY_DURATION_KEY}
+            onUnmount={() => {
+              if (isVoiceMessage(message) && playerService.uri === message.url) {
+                resetPlayer();
+              }
+            }}
             {...messageProps}
           />
         );

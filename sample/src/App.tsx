@@ -9,15 +9,7 @@ import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-fo
 
 // import LogView from './components/LogView';
 import { APP_ID } from './env';
-import {
-  ClipboardService,
-  FileService,
-  GetTranslucent,
-  MediaService,
-  NotificationService,
-  RootStack,
-  SetSendbirdSDK,
-} from './factory';
+import { GetTranslucent, RootStack, SetSendbirdSDK, platformServices } from './factory';
 import useAppearance from './hooks/useAppearance';
 import { Routes, navigationActions, navigationRef } from './libs/navigation';
 import { notificationHandler } from './libs/notification';
@@ -82,12 +74,7 @@ const App = () => {
         onInitialized: SetSendbirdSDK,
         enableAutoPushTokenRegistration: true,
       }}
-      platformServices={{
-        file: FileService,
-        notification: NotificationService,
-        clipboard: ClipboardService,
-        media: MediaService,
-      }}
+      platformServices={platformServices}
       styles={{
         defaultHeaderTitleAlign: 'left', //'center',
         theme: isLightTheme ? LightUIKitTheme : DarkUIKitTheme,
@@ -208,7 +195,7 @@ const Navigations = () => {
  *
  * @example How to customize UIKit global navigation
  * ```
- * const UseReactNavigationHeader: HeaderStyleContextType['HeaderComponent'] = ({
+ * const ReactNavigationHeader: HeaderStyleContextType['HeaderComponent'] = ({
  *   title,
  *   right,
  *   left,
@@ -233,15 +220,48 @@ const Navigations = () => {
  *   return (
  *     <SendbirdUIKitContainer
  *       appId={APP_ID}
- *       styles={{
- *         HeaderComponent: UseReactNavigationHeader,
- *       }}
+ *       styles={{ HeaderComponent: ReactNavigationHeader }}
  *     >
  *       <Navigations />
  *     </SendbirdUIKitContainer>
  *   );
  * };
  *
+ * ```
+ * */
+
+/**
+ * @example How to implement custom local cache storage
+ * ```
+ * import { MMKV } from 'react-native-mmkv';
+ * import { LocalCacheStorage } from '@sendbird/uikit-react-native';
+ *
+ * const mmkvStorage = new MMKV();
+ * const localCacheStorage: LocalCacheStorage = {
+ *   async getAllKeys() {
+ *     return mmkvStorage.getAllKeys();
+ *   },
+ *   async setItem(key: string, value: string) {
+ *     return mmkvStorage.set(key, value);
+ *   },
+ *   async getItem(key: string) {
+ *     return mmkvStorage.getString(key) ?? null;
+ *   },
+ *   async removeItem(key: string) {
+ *     return mmkvStorage.delete(key);
+ *   },
+ * };
+ *
+ * const App = () => {
+ *   return (
+ *     <SendbirdUIKitContainer
+ *       appId={APP_ID}
+ *       chatOptions={{ localCacheStorage }}
+ *     >
+ *       <Navigations />
+ *     </SendbirdUIKitContainer>
+ *   );
+ * };
  * ```
  * */
 

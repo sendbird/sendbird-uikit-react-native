@@ -10,7 +10,7 @@ import {
 
 /**
  * UIKitPalette
- * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/color-resource#2-uikitpalette}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/resources/color-resource#2-uikitpalette}
  * */
 import type { UIKitPalette } from '@sendbird/uikit-react-native-foundation';
 
@@ -63,7 +63,7 @@ const Palette: UIKitPalette = {
 
 /**
  * UIKitColors
- * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/color-resource#2-uikitpalette}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/resources/color-resource#2-uikitpalette}
  * */
 function uikitColors(_: UIKitColors) {
   const {
@@ -99,7 +99,7 @@ const Component = () => {
 
 /**
  * How to use
- * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/color-resource#2-how-to-use}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/resources/color-resource#2-how-to-use}
  * */
 // import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 // import { View, Text } from 'react-native';
@@ -117,7 +117,7 @@ const Component2 = () => {
 
 /**
  * Customize with default themes
- * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/color-resource#2-customize-the-colors-3-customize-with-default-themes}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/resources/color-resource#2-customize-the-colors-3-customize-with-default-themes}
  * */
 // import { LightUIKitTheme, Palette } from '@sendbird/uikit-react-native-foundation';
 
@@ -148,7 +148,7 @@ LightUIKitTheme.colors.ui.button.contained = {
 
 /**
  * Customize the createTheme()
- * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/color-resource#2-customize-the-colors-3-customize-with-createtheme-}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/resources/color-resource#2-customize-the-colors-3-customize-with-createtheme-}
  * */
 import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
 // import { createTheme } from '@sendbird/uikit-react-native-foundation';

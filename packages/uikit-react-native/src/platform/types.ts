@@ -60,6 +60,7 @@ export interface FileSystemServiceInterface {
   // - Supports opening documents in place
   // - Application supports iTunes file sharing
   save(options?: SaveOptions): Promise<DownloadedPath | null>;
+  createRecordFilePath(customExtension?: string): { recordFilePath: string; uri: string };
 }
 
 // ---------- MediaService ---------- //
@@ -104,4 +105,114 @@ export interface MediaServiceInterface {
   VideoComponent<Props = {}>(props: VideoProps & Props): ReactNode;
   getVideoThumbnail(options: GetVideoThumbnailOptions): GetVideoThumbnailResult;
   compressImage(options: CompressImageOptions): CompressImageResult;
+}
+
+// ---------- PlayerService ---------- //
+export interface PlayerServiceInterface {
+  uri?: string;
+  state: 'idle' | 'preparing' | 'playing' | 'paused' | 'stopped';
+
+  /**
+   * Check and request permission for the player.
+   * */
+  requestPermission(): Promise<boolean>;
+
+  /**
+   * Add a playback listener.
+   * */
+  addPlaybackListener(
+    callback: (params: { currentTime: number; duration: number; stopped: boolean }) => void,
+  ): Unsubscribe;
+
+  /**
+   * Add a state listener.
+   * */
+  addStateListener(callback: (state: PlayerServiceInterface['state']) => void): Unsubscribe;
+
+  /**
+   * State transition:
+   *   [idle, stopped] to [playing] - start from the beginning
+   *   [paused] to [playing] - resume
+   * */
+  play(uri: string): Promise<void>;
+
+  /**
+   * State transition:
+   *   [playing] to [paused]
+   * */
+  pause(): Promise<void>;
+
+  /**
+   * State transition:
+   *   [preparing, playing, paused] to [stop]
+   * */
+  stop(): Promise<void>;
+
+  /**
+   * State transition:
+   *   [*] to [idle]
+   * */
+  reset(): Promise<void>;
+
+  /**
+   * Seek time, only available when the state is [playing, paused].
+   * */
+  seek(time: number): Promise<void>;
+}
+
+// ---------- RecorderService ---------- //
+export interface RecorderOptions {
+  /**
+   * Minimum recording duration (milliseconds).
+   * */
+  minDuration: number;
+
+  /**
+   * Maximum recording duration (milliseconds).
+   * */
+  maxDuration: number;
+
+  /**
+   * File extension for recorded audio file
+   * */
+  extension: string;
+}
+
+export interface RecorderServiceInterface {
+  uri?: string;
+  options: RecorderOptions;
+  state: 'idle' | 'preparing' | 'recording' | 'completed';
+
+  /**
+   * Check and request permission for the recorder.
+   * */
+  requestPermission(): Promise<boolean>;
+
+  /**
+   * Add recording listener.
+   * */
+  addRecordingListener(callback: (params: { currentTime: number; completed: boolean }) => void): Unsubscribe;
+
+  /**
+   * Add state listener.
+   * */
+  addStateListener(callback: (state: RecorderServiceInterface['state']) => void): Unsubscribe;
+
+  /**
+   * State transition:
+   *   [idle, completed] to [recording]
+   * */
+  record(uri?: string): Promise<void>;
+
+  /**
+   * State transition:
+   *   [recording] to [completed]
+   * */
+  stop(): Promise<void>;
+
+  /**
+   * State transition:
+   *   [*] to [idle]
+   * */
+  reset(): Promise<void>;
 }

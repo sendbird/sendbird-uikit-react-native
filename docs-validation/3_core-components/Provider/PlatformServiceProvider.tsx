@@ -6,7 +6,7 @@ const MyDocumentPickerModule = {
   getDocumentAsync: async (_: object) => ({ type: '', mimeType: '', uri: '', size: 0, name: '' }),
 };
 const MyMediaLibraryModule = { requestPermission: async () => 0, saveToLibrary: async (_: string) => 0 };
-const RNFetchBlob = { config: (_: object) => ({ fetch: async (_: string, __: string) => ({ path: () => '' }) }) };
+const RNFetchBlob = { config: (_: object) => ({ fetch: async (_: string, __: string) => ({ path: () => '' }) }), cacheDir: 'cache' };
 type FileCompat = { name: string; uri: string; size: number; type: string };
 type SaveRes = null | string;
 type OpenMediaLibraryRes = null | Array<null | FileCompat>;
@@ -14,7 +14,7 @@ type GetFileRes = null | FileCompat;
 
 /**
  * FileServiceInterface
- * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/provider/platformserviceprovider#2-fileserviceinterface}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/core-components/provider/platformserviceprovider#2-fileserviceinterface}
  * */
 async function fileServiceInterface(service: FileServiceInterface) {
   const mediaType = '' as 'photo' | 'video' | 'all' | undefined;
@@ -50,7 +50,7 @@ async function mediaServiceInterface(service: MediaServiceInterface) {
 
 /**
  * Usage
- * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/provider/platformserviceprovider#2-usage}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/core-components/provider/platformserviceprovider#2-usage}
  * */
 import { usePlatformService } from '@sendbird/uikit-react-native';
 
@@ -61,7 +61,7 @@ const Component = () => {
 
 /**
  * Direct implementation
- * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/provider/platformserviceprovider#2-direct-implementation}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/core-components/provider/platformserviceprovider#2-direct-implementation}
  * */
 import {
   FilePickerResponse,
@@ -112,6 +112,13 @@ class MyFileService implements FileServiceInterface {
     }
 
     return response.path();
+  }
+  createRecordFilePath(customExtension = 'm4a'): { recordFilePath: string; uri: string } {
+    const filename = `${Date.now()}.${customExtension}`;
+    return {
+      uri: `${RNFetchBlob.cacheDir}/${filename}`,
+      recordFilePath: `${RNFetchBlob.cacheDir}/${filename}`,
+    }
   }
 }
 /** ------------------ **/

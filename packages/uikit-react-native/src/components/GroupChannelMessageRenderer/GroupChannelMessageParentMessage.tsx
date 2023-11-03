@@ -12,6 +12,7 @@ import {
 } from '@sendbird/uikit-react-native-foundation';
 import {
   SendbirdFileMessage,
+  SendbirdGroupChannel,
   SendbirdMessage,
   SendbirdUserMessage,
   getFileIconFromMessageType,
@@ -26,12 +27,13 @@ import { useLocalization, usePlatformService, useSendbirdChat } from '../../hook
 
 type Props = {
   variant: 'outgoing' | 'incoming';
+  channel: SendbirdGroupChannel;
   message: SendbirdUserMessage | SendbirdFileMessage;
   childMessage: SendbirdUserMessage | SendbirdFileMessage;
   onPress?: (message: SendbirdMessage) => void;
 };
 
-const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPress }: Props) => {
+const GroupChannelMessageParentMessage = ({ variant, channel, message, childMessage, onPress }: Props) => {
   const { currentUser } = useSendbirdChat();
   const groupChannelPubSub = useContext(GroupChannelContexts.PubSub);
   const { select, colors, palette } = useUIKitTheme();
@@ -51,6 +53,19 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
       }
     });
   }, []);
+
+  const renderMessageWithText = (message: string) => {
+    return (
+      <Box
+        style={styles.bubbleContainer}
+        backgroundColor={select({ light: palette.background100, dark: palette.background400 })}
+      >
+        <Text body3 color={colors.onBackground03} suppressHighlighting numberOfLines={2} ellipsizeMode={'tail'}>
+          {message}
+        </Text>
+      </Box>
+    );
+  };
 
   const renderFileMessageAsVideoThumbnail = (url: string) => {
     return (
@@ -85,19 +100,14 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
   };
 
   const parentMessageComponent = useIIFE(() => {
+    if (channel.messageOffsetTimestamp > parentMessage.createdAt) {
+      return renderMessageWithText(STRINGS.LABELS.MESSAGE_UNAVAILABLE);
+    }
+
     switch (type) {
       case 'user':
       case 'user.opengraph': {
-        return (
-          <Box
-            style={styles.bubbleContainer}
-            backgroundColor={select({ light: palette.background100, dark: palette.background400 })}
-          >
-            <Text body3 color={colors.onBackground03} suppressHighlighting numberOfLines={2} ellipsizeMode={'tail'}>
-              {(parentMessage as SendbirdUserMessage).message}
-            </Text>
-          </Box>
-        );
+        return renderMessageWithText((parentMessage as SendbirdUserMessage).message);
       }
       case 'file':
       case 'file.audio': {
@@ -108,6 +118,9 @@ const GroupChannelMessageParentMessage = ({ variant, message, childMessage, onPr
       }
       case 'file.image': {
         return renderFileMessageAsPreview(getThumbnailUriFromFileMessage(parentMessage as SendbirdFileMessage));
+      }
+      case 'file.voice': {
+        return renderMessageWithText(STRINGS.LABELS.VOICE_MESSAGE);
       }
       default: {
         return null;

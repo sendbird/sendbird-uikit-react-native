@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AppState, AppStateEvent, AppStateStatus } from 'react-native';
 import { EdgeInsets, useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -43,4 +43,27 @@ export const useAppState = (type: AppStateEvent, listener: AppStateListener) => 
       if (subscriber?.remove) subscriber.remove();
     };
   }, []);
+};
+
+/**
+ * To display a new modal in React-Native, you should ensure that a new modal is opened only after the existing modal has been dismissed to avoid conflicts.
+ * To achieve this, you can use a deferred onClose that can be awaited until the onDismiss is called.
+ * */
+export const useDeferredModalState = () => {
+  const resolveRef = useRef<(value: void) => void>();
+  const [visible, setVisible] = useState(false);
+
+  return {
+    onClose: () => {
+      return new Promise<void>((resolve) => {
+        resolveRef.current = resolve;
+        setVisible(false);
+      });
+    },
+    onDismiss: () => {
+      resolveRef.current?.();
+    },
+    visible,
+    setVisible,
+  };
 };

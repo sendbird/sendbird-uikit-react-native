@@ -63,6 +63,7 @@ const OpenChannelMessageRenderer: OpenChannelProps['Fragment']['renderMessage'] 
         }
       }
       case 'file':
+      case 'file.voice':
       case 'file.audio': {
         return <OpenChannelMessage.File message={message as SendbirdFileMessage} {...messageProps} />;
       }

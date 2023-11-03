@@ -29,6 +29,7 @@
     "build": "bob build",
     "clean": "del lib",
     "publish:next": "npm publish --tag next",
+    "publish:local": "yalc publish",
     "generate-icons": "node src/assets/bundle-icons.js"
   },
   "repository": {

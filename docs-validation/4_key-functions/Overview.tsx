@@ -3,7 +3,7 @@ const useHooksForChat = () => ({ dataA: '', dataB: '' });
 
 /**
  * Key functions
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/overview}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/overview}
  * */
 import React, { createContext, useContext } from 'react';
 import { Text } from 'react-native';

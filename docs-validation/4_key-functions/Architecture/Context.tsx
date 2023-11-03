@@ -1,6 +1,6 @@
 /**
  * How to use context
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/architecture/context#2-how-to-use-context}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/architecture/context#2-how-to-use-context}
  * */
 import React, { useContext } from 'react';
 import { Text } from 'react-native';

@@ -14,7 +14,7 @@ const UnknownMessage = (props: GroupChannelMessageProps<SendbirdMessage>) => {
   const { variant = 'incoming' } = props;
 
   const { colors } = useUIKitTheme();
-  const color = colors.ui.groupChannelMessage['incoming'];
+  const color = colors.ui.groupChannelMessage[variant];
   const titleColor = variant === 'incoming' ? colors.onBackground01 : colors.onBackgroundReverse01;
   const descColor = variant === 'incoming' ? colors.onBackground02 : colors.onBackgroundReverse02;
 

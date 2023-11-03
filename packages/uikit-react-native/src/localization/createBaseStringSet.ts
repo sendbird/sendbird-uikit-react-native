@@ -3,16 +3,16 @@ import type { Locale } from 'date-fns';
 import type { PartialDeep } from '@sendbird/uikit-utils';
 import {
   getDateSeparatorFormat,
-  getFileTypeFromMessage,
-  getGroupChannelLastMessage,
   getGroupChannelPreviewTime,
   getGroupChannelTitle,
   getMessagePreviewBody,
   getMessagePreviewTime,
   getMessagePreviewTitle,
   getMessageTimeFormat,
+  getMessageType,
   getOpenChannelParticipants,
   getOpenChannelTitle,
+  isVoiceMessage,
 } from '@sendbird/uikit-utils';
 
 import { UNKNOWN_USER_ID } from '../constants';
@@ -33,6 +33,7 @@ type StringSetCreateOptions = {
 export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOptions): StringSet => {
   const USER_NO_NAME = overrides?.LABELS?.USER_NO_NAME ?? '(No name)';
   const CHANNEL_NO_MEMBERS = overrides?.LABELS?.CHANNEL_NO_MEMBERS ?? '(No members)';
+
   return {
     OPEN_CHANNEL: {
       HEADER_TITLE: (channel) => getOpenChannelTitle(channel),
@@ -191,7 +192,11 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       CHANNEL_PREVIEW_TITLE: (currentUserId, channel) =>
         getGroupChannelTitle(currentUserId, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       CHANNEL_PREVIEW_TITLE_CAPTION: (channel, locale) => getGroupChannelPreviewTime(channel, locale ?? dateLocale),
-      CHANNEL_PREVIEW_BODY: (channel) => getGroupChannelLastMessage(channel),
+      CHANNEL_PREVIEW_BODY: (channel) => {
+        if (!channel.lastMessage) return '';
+        if (isVoiceMessage(channel.lastMessage)) return 'Voice message';
+        return getMessagePreviewBody(channel.lastMessage);
+      },
       TYPE_SELECTOR_HEADER_TITLE: 'Channel type',
       TYPE_SELECTOR_GROUP: 'Group',
       TYPE_SELECTOR_SUPER_GROUP: 'Super group',
@@ -232,7 +237,10 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       HEADER_INPUT_PLACEHOLDER: 'Search',
       HEADER_RIGHT: 'Search',
       SEARCH_RESULT_ITEM_TITLE: (message) => getMessagePreviewTitle(message),
-      SEARCH_RESULT_ITEM_BODY: (message) => getMessagePreviewBody(message),
+      SEARCH_RESULT_ITEM_BODY: (message) => {
+        if (isVoiceMessage(message)) return 'Voice message';
+        return getMessagePreviewBody(message);
+      },
       SEARCH_RESULT_ITEM_TITLE_CAPTION: (message, locale) => {
         return getMessagePreviewTime(message.createdAt, locale ?? dateLocale);
       },
@@ -241,6 +249,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       PERMISSION_APP_NAME: 'Application',
       PERMISSION_CAMERA: 'camera',
       PERMISSION_DEVICE_STORAGE: 'device storage',
+      PERMISSION_MICROPHONE: 'microphone',
       USER_NO_NAME,
       CHANNEL_NO_MEMBERS,
       TYPING_INDICATOR_TYPINGS: (users, NO_NAME = USER_NO_NAME) => {
@@ -255,6 +264,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
         const receiverNickname = parent.sender.nickname || USER_NO_NAME;
         return `${reply.sender.userId !== currentUserId ? senderNickname : 'You'} replied to ${receiverNickname}`;
       },
+      MESSAGE_UNAVAILABLE: 'Message unavailable',
 
       USER_BAR_ME_POSTFIX: ' (You)',
       USER_BAR_OPERATOR: 'Operator',
@@ -288,22 +298,26 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       CHANNEL_INPUT_REPLY_PREVIEW_TITLE: (user) => `Reply to ${user.nickname || USER_NO_NAME}`,
       CHANNEL_INPUT_REPLY_PREVIEW_BODY: (message) => {
         if (message.isFileMessage()) {
-          const fileType = getFileTypeFromMessage(message);
-          switch (fileType) {
-            case 'image':
+          const messageType = getMessageType(message);
+          switch (messageType) {
+            case 'file.image':
               return message.type.toLowerCase().includes('gif') ? 'GIF' : 'Photo';
-            case 'video':
+            case 'file.video':
               return 'Video';
-            case 'audio':
+            case 'file.audio':
               return 'Audio';
+            case 'file.voice':
+              return 'Voice message';
             default:
               return message.name;
           }
         } else if (message.isUserMessage()) {
           return message.message;
         }
-        return 'Unknown message type.';
+        return 'Unknown message';
       },
+      VOICE_MESSAGE: 'Voice message',
+      VOICE_MESSAGE_INPUT_CANCEL: 'Cancel',
       ...overrides?.LABELS,
     },
     FILE_VIEWER: {
@@ -329,7 +343,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       ALERT_DEFAULT_OK: 'OK',
       ALERT_PERMISSIONS_TITLE: 'Allow access?',
       ALERT_PERMISSIONS_MESSAGE: (permission, appName = 'Application') => {
-        return `${appName} need permission to access your ${permission}.`;
+        return `${appName} needs permission to access your ${permission}.`;
       },
       ALERT_PERMISSIONS_OK: 'Go to settings',
       PROMPT_DEFAULT_OK: 'Submit',
@@ -348,6 +362,8 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       DELETE_MSG_ERROR: "Couldn't delete message.",
       RESEND_MSG_ERROR: "Couldn't send message.",
       SEND_MSG_ERROR: "Couldn't send message.",
+      USER_MUTED_ERROR: "You're muted by the operator.",
+      CHANNEL_FROZEN_ERROR: 'Channel is frozen.',
       UPDATE_MSG_ERROR: "Couldn't edit message.",
       TURN_ON_NOTIFICATIONS_ERROR: "Couldn't turn on notifications.",
       TURN_OFF_NOTIFICATIONS_ERROR: "Couldn't turn off notifications.",

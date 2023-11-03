@@ -11,6 +11,7 @@ import {
   SendbirdMessage,
   SendbirdUser,
   SendbirdUserMessage,
+  getGroupChannelChatAvailableState,
   isDifferentChannel,
   useFreshCallback,
   useUniqHandlerId,
@@ -97,7 +98,9 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
     },
     onChannelFrozen(frozenChannel) {
       if (frozenChannel.url === channel.url) {
-        setMessageToReply(undefined);
+        if (frozenChannel.isGroupChannel() && getGroupChannelChatAvailableState(channel).frozen) {
+          setMessageToReply(undefined);
+        }
       }
     },
     onUserMuted(mutedChannel, user) {

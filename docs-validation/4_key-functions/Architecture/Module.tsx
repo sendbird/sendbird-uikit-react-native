@@ -4,7 +4,7 @@ const CustomHeader = () => <></>;
 
 /**
  * Create a module
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/architecture/module#2-create-a-module}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/architecture/module#2-create-a-module}
  * */
 import { createGroupChannelModule } from '@sendbird/uikit-react-native';
 const GroupChannelModule = createGroupChannelModule();
@@ -26,7 +26,7 @@ const RenderModule = () => {
 
 /**
  * Customize a module
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/architecture/module#2-customize-a-module}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/architecture/module#2-customize-a-module}
  * */
 import { createGroupChannelFragment } from '@sendbird/uikit-react-native';
 
@@ -38,7 +38,7 @@ const GroupChannelFragment = createGroupChannelFragment({ Header: CustomHeader }
 
 /**
  * Customize a module component
- * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/architecture/module#2-customize-a-module-3-customize-a-module-component}
+ * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/architecture/module#2-customize-a-module-3-customize-a-module-component}
  * */
 import { Text } from 'react-native';
 import type { GroupChannelProps } from '@sendbird/uikit-react-native';
