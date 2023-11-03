@@ -84,7 +84,7 @@ describe('useGroupChannelMessagesWithCollection', () => {
     });
 
     await act(() => {
-      return new Promise((resolve) => {
+      return new Promise<void>((resolve) => {
         setTimeout(() => {
           unmount();
           resolve();

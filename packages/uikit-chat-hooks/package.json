@@ -71,10 +71,5 @@
         }
       ]
     ]
-  },
-  "typedoc": {
-    "entryPoint": "./src/index.ts",
-    "readmeFile": "./README.md",
-    "displayName": "@sendbird/uikit-chat-hooks"
   }
 }
