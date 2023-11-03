@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.1.2...v3.2.0) (2023-11-03)
+
+### Features
+
+- add yalc for local deployment ([7778d67](https://github.com/sendbird/sendbird-uikit-react-native/commit/7778d67c97dda62be02e2ac7c9390864549ef53a))
+- **foundation:** add audio icon ([366d6af](https://github.com/sendbird/sendbird-uikit-react-native/commit/366d6afc1538ae488e8aaf3ebad6daf3fc556e4e))
+- **foundation:** add progress bar component ([af6a2fb](https://github.com/sendbird/sendbird-uikit-react-native/commit/af6a2fb4424f99b2fc46ff8dc8e6a3f74be08c86))
+- **foundation:** add voice message input color set ([b94d230](https://github.com/sendbird/sendbird-uikit-react-native/commit/b94d230b6947aa2b46f59ced77e2bbb505cb5bfc))
+- **foundation:** implement voice file message component ([f6d90db](https://github.com/sendbird/sendbird-uikit-react-native/commit/f6d90db47dc933f607450667b4095b5926cd854d))
+- **foundation:** update icons ([85d7d58](https://github.com/sendbird/sendbird-uikit-react-native/commit/85d7d588b9b5b55113e2a5399d24c38c838b9d06))
+- implement voice message logic ([337d022](https://github.com/sendbird/sendbird-uikit-react-native/commit/337d0228fd1fc593c12d886aa8bd776d5666a4bc))
+
+### Bug Fixes
+
+- **foundation:** fixed to use color variant in unknown group channel message ([1b8576a](https://github.com/sendbird/sendbird-uikit-react-native/commit/1b8576aed15d651b832f2690df768210729bb4e9))
+
 ## [3.1.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.1.1...v3.1.2) (2023-10-04)
 
 **Note:** Version bump only for package @sendbird/uikit-react-native-foundation

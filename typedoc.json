@@ -1,0 +1,10 @@
+{
+  "out": "./docs",
+  "entryPointStrategy": "packages",
+  "entryPoints": [
+    "./packages/uikit-chat-hooks",
+    "./packages/uikit-react-native",
+    "./packages/uikit-react-native-foundation",
+    "./packages/uikit-utils"
+  ]
+}
