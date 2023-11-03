@@ -109,7 +109,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       await onBlurFragment();
       onPressHeaderRight();
     });
-    const _onPressMediaMessage: GroupChannelProps['MessageList']['onPressMediaMessage'] = useFreshCallback(
+    const _onPressMediaMessage: NonNullable<GroupChannelProps['MessageList']['onPressMediaMessage']> = useFreshCallback(
       async (message, deleteMessage, uri) => {
         await onBlurFragment();
         onPressMediaMessage(message, deleteMessage, uri);

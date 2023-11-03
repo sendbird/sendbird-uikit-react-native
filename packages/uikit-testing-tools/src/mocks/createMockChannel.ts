@@ -125,14 +125,9 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
   isOperator(): boolean {
     throw new Error('Method not implemented.');
   }
-  refresh = jest.fn(async (): Promise<never> => {
+  refresh = jest.fn(async (): Promise<this> => {
     this.params.sdk?.__throwIfFailureTest();
-
-    if (this.isGroupChannel()) {
-      return this.asGroupChannel() as never;
-    } else {
-      return this.asOpenChannel() as never;
-    }
+    return this;
   });
 
   enter = jest.fn(async () => {
