@@ -171,6 +171,8 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
         groupChannelPubSub={groupChannelPubSub}
         enableTypingIndicator={enableTypingIndicator ?? sbOptions.uikit.groupChannel.channel.enableTypingIndicator}
         keyboardAvoidOffset={keyboardAvoidOffset}
+        messages={messages}
+        onUpdateSearchItem={onUpdateSearchItem}
       >
         <GroupChannelModule.Header
           shouldHideRight={navigateFromMessageSearch}

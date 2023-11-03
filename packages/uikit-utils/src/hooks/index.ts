@@ -72,10 +72,10 @@ export const useIsFirstMount = () => {
   return isFirstMount.current;
 };
 
-export const useFreshCallback = <T extends (...args: any[]) => any>(callback: T): T => {
+export const useFreshCallback = <T extends Function>(callback: T): T => {
   const ref = useRef<T>(callback);
   ref.current = callback;
-  return useCallback(((...args) => ref.current(...args)) as T, []);
+  return useCallback(((...args: any[]) => ref.current(...args)) as unknown as T, []);
 };
 
 export const useDebounceEffect = (action: () => void, delay: number, deps: DependencyList = []) => {
