@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.1.2...v3.2.0) (2023-11-03)
+
+### Features
+
+- add yalc for local deployment ([7778d67](https://github.com/sendbird/sendbird-uikit-react-native/commit/7778d67c97dda62be02e2ac7c9390864549ef53a))
+- **foundation:** implement voice file message component ([f6d90db](https://github.com/sendbird/sendbird-uikit-react-native/commit/f6d90db47dc933f607450667b4095b5926cd854d))
+- implement voice message input ([9e6bc75](https://github.com/sendbird/sendbird-uikit-react-native/commit/9e6bc7551d0e28d020fc04599a833c0dd34bcd80))
+
+### Bug Fixes
+
+- await onClose for voice message input before displaying permission alert ([62ef277](https://github.com/sendbird/sendbird-uikit-react-native/commit/62ef277069a057bb4e5ee6331b2bcb9320bb6c7b))
+
+### Improvements
+
+- lift up the flatListRef to the provider and created MessageList context ([4a6efdc](https://github.com/sendbird/sendbird-uikit-react-native/commit/4a6efdcf71ce8659f1de5ea90a34be630e47df55))
+
 ## [3.1.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.1.1...v3.1.2) (2023-10-04)
 
 ### Features

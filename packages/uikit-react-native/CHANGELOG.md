@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.1.2...v3.2.0) (2023-11-03)
+
+### Features
+
+- add chat init params to chatOptions ([7742853](https://github.com/sendbird/sendbird-uikit-react-native/commit/7742853837959884feb1e577e4682802486efb9f))
+- add createRecordFilePath method to FileServiceInterface ([0b7fd40](https://github.com/sendbird/sendbird-uikit-react-native/commit/0b7fd40faaf12721dfc84cb90fdbc8040e4ea951))
+- add reaction.onPressUserProfile to SendbirdUIKitContainer props ([379bcce](https://github.com/sendbird/sendbird-uikit-react-native/commit/379bcce0bb4f123108bec86e6decdfe93b3c3718))
+- add scrollToMessage to group channel contexts ([df48e2c](https://github.com/sendbird/sendbird-uikit-react-native/commit/df48e2c3a20abecc3577aa59748b18500c61236e))
+- add string set for microphone permission ([9e9c2e1](https://github.com/sendbird/sendbird-uikit-react-native/commit/9e9c2e177932fb0ae7034cd932d2bbb7d5af9eed))
+- add string set for muted and frozen when sending a voice message ([0c8d1f5](https://github.com/sendbird/sendbird-uikit-react-native/commit/0c8d1f561e0a8a1685363851529a5eeff52426d3))
+- add voice message config to uikit container ([6f5de2c](https://github.com/sendbird/sendbird-uikit-react-native/commit/6f5de2c7e100d08f56de58047f9e865bcfe5121e))
+- add yalc for local deployment ([7778d67](https://github.com/sendbird/sendbird-uikit-react-native/commit/7778d67c97dda62be02e2ac7c9390864549ef53a))
+- **foundation:** add progress bar component ([af6a2fb](https://github.com/sendbird/sendbird-uikit-react-native/commit/af6a2fb4424f99b2fc46ff8dc8e6a3f74be08c86))
+- **foundation:** add voice message input color set ([b94d230](https://github.com/sendbird/sendbird-uikit-react-native/commit/b94d230b6947aa2b46f59ced77e2bbb505cb5bfc))
+- implement cli player service ([b136de4](https://github.com/sendbird/sendbird-uikit-react-native/commit/b136de4ebaa32cc0651ee9a66f9598454d8adac2))
+- implement cli recorder service ([e05cf93](https://github.com/sendbird/sendbird-uikit-react-native/commit/e05cf93754900675dae71d2d542701488df8afdd))
+- implement recorder and player service for expo ([851ec0e](https://github.com/sendbird/sendbird-uikit-react-native/commit/851ec0efbff989da6becf9938dbf5a2bd8efcc69))
+- implement voice message input ([9e6bc75](https://github.com/sendbird/sendbird-uikit-react-native/commit/9e6bc7551d0e28d020fc04599a833c0dd34bcd80))
+- implement voice message logic ([337d022](https://github.com/sendbird/sendbird-uikit-react-native/commit/337d0228fd1fc593c12d886aa8bd776d5666a4bc))
+
+### Bug Fixes
+
+- await onClose for voice message input before displaying permission alert ([62ef277](https://github.com/sendbird/sendbird-uikit-react-native/commit/62ef277069a057bb4e5ee6331b2bcb9320bb6c7b))
+- **CLNP-983:** display a message unavailable text if the message is not accessible ([e38512a](https://github.com/sendbird/sendbird-uikit-react-native/commit/e38512aeece12c32aea2c56b7a7a9ed49bc6f7bb))
+- **CLNP-983:** search for messages from an accessible range ([b025f7f](https://github.com/sendbird/sendbird-uikit-react-native/commit/b025f7f771e8c335101651aebb97380be9516c36))
+- reset player and recorder if input closed with back button press ([e8e43ec](https://github.com/sendbird/sendbird-uikit-react-native/commit/e8e43ec727f9cd2483bd3a82ed00984560c983aa))
+- **UIKIT-4452:** uikit configuration should always be initialized ([1e539bb](https://github.com/sendbird/sendbird-uikit-react-native/commit/1e539bbdd3ee332a0d1f7eee839d77a9972b4b4e))
+
+### Improvements
+
+- lift up the flatListRef to the provider and created MessageList context ([4a6efdc](https://github.com/sendbird/sendbird-uikit-react-native/commit/4a6efdcf71ce8659f1de5ea90a34be630e47df55))
+
 ## [3.1.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.1.1...v3.1.2) (2023-10-04)
 
 ### Features

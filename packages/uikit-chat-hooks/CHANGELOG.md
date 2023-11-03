@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.1.2...v3.2.0) (2023-11-03)
+
+### Features
+
+- add yalc for local deployment ([7778d67](https://github.com/sendbird/sendbird-uikit-react-native/commit/7778d67c97dda62be02e2ac7c9390864549ef53a))
+
 ## [3.1.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.1.1...v3.1.2) (2023-10-04)
 
 **Note:** Version bump only for package @sendbird/uikit-chat-hooks

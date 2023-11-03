@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.1.2...v3.2.0) (2023-11-03)
+
+### Bug Fixes
+
+- **CLNP-983:** display a message unavailable text if the message is not accessible ([e38512a](https://github.com/sendbird/sendbird-uikit-react-native/commit/e38512aeece12c32aea2c56b7a7a9ed49bc6f7bb))
+
 ## [3.1.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.1.1...v3.1.2) (2023-10-04)
 
 **Note:** Version bump only for package @sendbird/uikit-sample-cli
