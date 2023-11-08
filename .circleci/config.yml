@@ -30,8 +30,8 @@ aliases:
 # Cache key template - https://circleci.com/docs/caching/#using-keys-and-templates
 version: 2.1
 orbs:
-  ruby: circleci/ruby@1.6.0
-  macos: circleci/macos@2
+  ruby: circleci/ruby@2.1.0
+  macos: circleci/macos@2.4.0
 
 parameters:
   platform:
