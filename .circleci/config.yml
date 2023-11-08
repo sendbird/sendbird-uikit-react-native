@@ -52,7 +52,7 @@ jobs:
     steps:
       - checkout
       - macos/switch-ruby:
-          version: '2.7.6'
+          version: '2.7'
       - ruby/install-deps:
           key: v{{ .Environment.CACHE_VERSION }}-gems-ios
           app-dir: ./sample/ios
