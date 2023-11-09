@@ -73,7 +73,7 @@ jobs:
             - sample/ios/Pods
       - run: *create_app_env
       - run:
-          name: Expose environments
+          name: Export environments
           command: |
             echo "export MATCH_PASSWORD=$FASTLANE_IOS_MATCH_PASSWORD" >> $BASH_ENV
             echo "export MATCH_GIT_URL=$FASTLANE_IOS_MATCH_GIT_URL" >> $BASH_ENV
@@ -83,6 +83,7 @@ jobs:
             echo "export PILOT_ITC_PROVIDER=$FASTLANE_IOS_TEAM_ID" >> $BASH_ENV 
             echo "export PILOT_SKIP_WAITING_FOR_BUILD_PROCESSING=true" >> $BASH_ENV
             echo "export FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=$FASTLANE_IOS_APPLE_APPLICATION_SPECIFIC_PASSWORD" >> $BASH_ENV
+            ln -s $(which node) /usr/local/bin/node
       - run:
           name: Run fastlane
           command: yarn deploy:ios version:$APP_VERSION
