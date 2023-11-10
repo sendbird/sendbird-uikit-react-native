@@ -30,8 +30,8 @@ aliases:
 # Cache key template - https://circleci.com/docs/caching/#using-keys-and-templates
 version: 2.1
 orbs:
-  ruby: circleci/ruby@1.6.0
-  macos: circleci/macos@2
+  ruby: circleci/ruby@2.1.0
+  macos: circleci/macos@2.4.0
 
 parameters:
   platform:
@@ -45,14 +45,14 @@ parameters:
 jobs:
   deploy-ios:
     macos:
-      xcode: 14.1.0
-    resource_class: macos.x86.medium.gen2
+      xcode: 14.3.1
+    resource_class: macos.m1.medium.gen1
     environment:
       APP_VERSION: << pipeline.parameters.version >>
     steps:
       - checkout
       - macos/switch-ruby:
-          version: '2.7.6'
+          version: '2.7'
       - ruby/install-deps:
           key: v{{ .Environment.CACHE_VERSION }}-gems-ios
           app-dir: ./sample/ios
@@ -73,7 +73,7 @@ jobs:
             - sample/ios/Pods
       - run: *create_app_env
       - run:
-          name: Expose environments
+          name: Export environments
           command: |
             echo "export MATCH_PASSWORD=$FASTLANE_IOS_MATCH_PASSWORD" >> $BASH_ENV
             echo "export MATCH_GIT_URL=$FASTLANE_IOS_MATCH_GIT_URL" >> $BASH_ENV

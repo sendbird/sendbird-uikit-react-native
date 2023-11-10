@@ -435,7 +435,7 @@ PODS:
     - React-jsi (= 0.67.5)
     - React-logger (= 0.67.5)
     - React-perflogger (= 0.67.5)
-  - RNAudioRecorderPlayer (3.5.4):
+  - RNAudioRecorderPlayer (3.6.0):
     - React-Core
   - RNCAsyncStorage (1.18.1):
     - React-Core
@@ -775,7 +775,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: c3b8a3245267a3849b0c7cb91a37606bf5f3aa65
   React-runtimeexecutor: 434efc9e5b6d0f14f49867f130b39376c971c1aa
   ReactCommon: a30c2448e5a88bae6fcb0e3da124c14ae493dac1
-  RNAudioRecorderPlayer: 1ff1ddabbe89031df12ba9d5ac2fa724697c5c48
+  RNAudioRecorderPlayer: 4690a7cd9e4fd8e58d9671936a7bc3b686e59051
   RNCAsyncStorage: b90b71f45b8b97be43bc4284e71a6af48ac9f547
   RNCClipboard: 3f0451a8100393908bea5c5c5b16f96d45f30bfc
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
@@ -795,4 +795,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 7326d70ef2ded7c9137457434d401f2de40cb420
 
-COCOAPODS: 1.12.0
+COCOAPODS: 1.14.2
