@@ -18,6 +18,8 @@ type Props = React.PropsWithChildren<{
   styles?: {
     borderWidth?: number;
     borderColor?: string;
+    remainsTextColor?: string;
+    remainsBackgroundColor?: string;
   };
 }>;
 
@@ -29,20 +31,26 @@ const AvatarStack = ({
   size = DEFAULT_AVATAR_SIZE,
   avatarGap = DEFAULT_AVATAR_GAP,
 }: Props) => {
-  const { colors, palette } = useUIKitTheme();
-  const defaultStyles = { borderWidth: DEFAULT_BORDER_WIDTH, borderColor: colors.background };
+  const { colors, palette, select } = useUIKitTheme();
+  const defaultStyles = {
+    borderWidth: DEFAULT_BORDER_WIDTH,
+    borderColor: colors.background,
+    remainsTextColor: colors.onBackground02,
+    remainsBackgroundColor: select({ light: palette.background100, dark: palette.background600 }),
+  };
   const avatarStyles = { ...defaultStyles, ...styles };
 
   const childrenArray = React.Children.toArray(children).filter((it) => React.isValidElement(it));
   const remains = childrenArray.length - maxAvatar;
   const shouldRenderRemains = remains > 0;
 
+  const actualSize = size + avatarStyles.borderWidth * 2;
   const actualGap = avatarGap - avatarStyles.borderWidth;
 
   const renderAvatars = () => {
     return childrenArray.slice(0, maxAvatar).map((child, index) =>
       React.cloneElement(child as ReactElement, {
-        size,
+        size: actualSize,
         containerStyle: {
           left: actualGap * index,
           borderWidth: avatarStyles.borderWidth,
@@ -60,16 +68,16 @@ const AvatarStack = ({
           avatarStyles,
           {
             left: actualGap * maxAvatar,
-            width: size,
-            height: size,
-            borderRadius: size / 2,
+            width: actualSize,
+            height: actualSize,
+            borderRadius: actualSize / 2,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: palette.background100,
+            backgroundColor: avatarStyles.remainsBackgroundColor,
           },
         ]}
       >
-        <Text style={{ color: colors.onBackground02, fontSize: 8 }} caption4>
+        <Text style={{ color: avatarStyles.remainsTextColor, fontSize: 8 }} caption4>
           {`+${Math.min(remains, DEFAULT_REMAINS_MAX)}`}
         </Text>
       </View>
@@ -77,15 +85,15 @@ const AvatarStack = ({
   };
 
   const calculateWidth = () => {
-    const widthEach = size + actualGap;
+    const widthEach = actualSize + actualGap;
     const avatarCountOffset = shouldRenderRemains ? 1 : 0;
     const avatarCount = shouldRenderRemains ? maxAvatar : childrenArray.length;
     const count = avatarCount + avatarCountOffset;
-    return widthEach * count - actualGap;
+    return widthEach * count + avatarStyles.borderWidth;
   };
 
   return (
-    <View style={[containerStyle, { flexDirection: 'row', width: calculateWidth() }]}>
+    <View style={[containerStyle, { left: -avatarStyles.borderWidth, flexDirection: 'row', width: calculateWidth() }]}>
       {renderAvatars()}
       {renderRemainsCount()}
     </View>

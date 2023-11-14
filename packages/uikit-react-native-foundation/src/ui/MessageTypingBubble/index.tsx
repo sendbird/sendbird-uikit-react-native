@@ -11,28 +11,42 @@ import Avatar from '../Avatar';
 type Props = {
   typingUsers: SendbirdUser[];
   containerStyle?: StyleProp<ViewStyle>;
-  styles?: {};
-
   maxAvatar?: number;
 };
 
 const MessageTypingBubble = ({ typingUsers, containerStyle, maxAvatar }: Props) => {
+  const { select, palette, colors } = useUIKitTheme();
+
   if (typingUsers.length === 0) return null;
 
   return (
     <Box flexDirection={'row'} justifyContent={'flex-start'} alignItems={'center'} style={containerStyle}>
-      <Avatar.Stack size={26} maxAvatar={maxAvatar} containerStyle={{ marginRight: 12 }}>
+      <Avatar.Stack
+        size={26}
+        maxAvatar={maxAvatar}
+        styles={{
+          remainsTextColor: colors.onBackground02,
+          remainsBackgroundColor: select({ light: palette.background100, dark: palette.background400 }),
+        }}
+        containerStyle={{ marginRight: 12 }}
+      >
         {typingUsers.map((user, index) => (
           <Avatar key={index} uri={user.profileUrl} />
         ))}
       </Avatar.Stack>
-      <TypingDots />
+      <TypingDots
+        dotColor={select({ light: palette.background100, dark: palette.background400 })}
+        backgroundColor={colors.onBackground02}
+      />
     </Box>
   );
 };
 
-const TypingDots = () => {
-  const { select, palette, colors } = useUIKitTheme();
+type TypingDotsProps = {
+  dotColor: string;
+  backgroundColor: string;
+};
+const TypingDots = ({ dotColor, backgroundColor }: TypingDotsProps) => {
   const animation = useRef(new Animated.Value(0)).current;
   const dots = matrix.map(([timeline, scale, opacity]) => [
     animation.interpolate({ inputRange: timeline, outputRange: scale, extrapolate: 'clamp' }),
@@ -55,7 +69,7 @@ const TypingDots = () => {
       borderRadius={16}
       paddingHorizontal={12}
       height={34}
-      backgroundColor={select({ light: palette.background100, dark: palette.background600 })}
+      backgroundColor={dotColor}
     >
       {dots.map(([scale, opacity], index) => {
         return (
@@ -67,7 +81,7 @@ const TypingDots = () => {
                 marginRight: index === dots.length - 1 ? 0 : 6,
                 opacity: opacity,
                 transform: [{ scale: scale }],
-                backgroundColor: colors.onBackground02,
+                backgroundColor: backgroundColor,
               },
             ]}
           />
