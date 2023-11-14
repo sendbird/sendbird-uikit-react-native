@@ -60,6 +60,7 @@ const App = () => {
         },
         groupChannel: {
           enableMention: true,
+          typingIndicatorTypes: new Set(['bubble']),
         },
         groupChannelList: {
           enableTypingIndicator: true,

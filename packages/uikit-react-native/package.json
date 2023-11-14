@@ -61,7 +61,7 @@
   "dependencies": {
     "@sendbird/uikit-chat-hooks": "3.2.0",
     "@sendbird/uikit-react-native-foundation": "3.2.0",
-    "@sendbird/uikit-tools": "^0.0.1-alpha.38",
+    "@sendbird/uikit-tools": "0.0.1-alpha.42",
     "@sendbird/uikit-utils": "3.2.0"
   },
   "devDependencies": {

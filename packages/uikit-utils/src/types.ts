@@ -60,7 +60,9 @@ export type UnionToIntersection<U> = (U extends unknown ? (k: U) => void : never
 export type OmittedValues<T, K extends keyof T> = Omit<T, K>[keyof Omit<T, K>];
 
 export type PartialDeep<T> = T extends object
-  ? T extends Function
+  ? T extends Set<unknown>
+    ? T
+    : T extends Function
     ? T
     : {
         [P in keyof T]?: PartialDeep<T[P]>;

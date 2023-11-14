@@ -3382,10 +3382,10 @@
   resolved "https://registry.yarnpkg.com/@sendbird/react-native-scrollview-enhancer/-/react-native-scrollview-enhancer-0.2.1.tgz#25de4af78293978a4c0ef6fddee25d822a364c46"
   integrity sha512-LN+Tm+ZUkE2MBVreg/JI8SVr8SOKRteZN0YFpGzRtbKkP45+pKyPN4JQPf73eFx7qO8zDL+TUVyzz/1MOnIK7g==
 
-"@sendbird/uikit-tools@^0.0.1-alpha.38":
-  version "0.0.1-alpha.39"
-  resolved "https://registry.yarnpkg.com/@sendbird/uikit-tools/-/uikit-tools-0.0.1-alpha.39.tgz#1982e2e9d752779d0229fee39349fbac25836f92"
-  integrity sha512-hHHeYXEF8my7EfX/jkLfC7iWo1G7GKITL6ZMA3rw2AIHbCTuoF+qzB9r5sE1KZYkXDL4spsZDP7FXv2fqGRyiw==
+"@sendbird/uikit-tools@0.0.1-alpha.42":
+  version "0.0.1-alpha.42"
+  resolved "https://registry.yarnpkg.com/@sendbird/uikit-tools/-/uikit-tools-0.0.1-alpha.42.tgz#dc4bdedd8a08c8681524cd5d27e68f813a40a52a"
+  integrity sha512-4XGuw5qbFbPSnpM6SdXoX9UKHwFD0cXKHS7BSfdnmJ7oF+6slpj5TthigWL8/+rhlYb/RLbwE7gqCOllnr+l2w==
 
 "@sideway/address@^4.1.3":
   version "4.1.4"

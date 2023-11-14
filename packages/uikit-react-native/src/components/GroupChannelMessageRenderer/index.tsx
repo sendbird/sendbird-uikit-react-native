@@ -1,7 +1,13 @@
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 
 import type { GroupChannelMessageProps, RegexTextPattern } from '@sendbird/uikit-react-native-foundation';
-import { Box, GroupChannelMessage, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import {
+  Box,
+  GroupChannelMessage,
+  MessageTypingBubble,
+  Text,
+  useUIKitTheme,
+} from '@sendbird/uikit-react-native-foundation';
 import {
   SendbirdAdminMessage,
   SendbirdFileMessage,
@@ -17,6 +23,7 @@ import {
 } from '@sendbird/uikit-utils';
 
 import { VOICE_MESSAGE_META_ARRAY_DURATION_KEY } from '../../constants';
+import { GroupChannelContexts } from '../../domain/groupChannel/module/moduleContext';
 import type { GroupChannelProps } from '../../domain/groupChannel/types';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 import SBUUtils from '../../libs/SBUUtils';
@@ -37,7 +44,9 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   focused,
   prevMessage,
   nextMessage,
+  isFirstItem,
 }) => {
+  const { typingUsers } = useContext(GroupChannelContexts.TypingIndicator);
   const playerUnsubscribes = useRef<(() => void)[]>([]);
   const { palette } = useUIKitTheme();
   const { sbOptions, currentUser, mentionManager } = useSendbirdChat();
@@ -284,10 +293,19 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     }
   });
 
+  const renderTypingBubble = () => {
+    if (!isFirstItem) return null;
+    if (!sbOptions.uikit.groupChannel.channel.enableTypingIndicator) return null;
+    if (!sbOptions.uikit.groupChannel.channel.typingIndicatorTypes.has('bubble')) return null;
+
+    return <MessageTypingBubble typingUsers={typingUsers} containerStyle={{ marginTop: 20 }} />;
+  };
+
   return (
     <Box paddingHorizontal={16} marginBottom={messageGap}>
       <GroupChannelMessageDateSeparator message={message} prevMessage={prevMessage} />
       <GroupChannelMessageFocusAnimation focused={focused}>{renderMessage()}</GroupChannelMessageFocusAnimation>
+      {renderTypingBubble()}
     </Box>
   );
 };
