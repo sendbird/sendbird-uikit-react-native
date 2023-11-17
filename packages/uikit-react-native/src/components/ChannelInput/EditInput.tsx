@@ -1,11 +1,5 @@
 import React, { forwardRef } from 'react';
-import {
-  NativeSyntheticEvent,
-  Platform,
-  TextInput as RNTextInput,
-  TextInputSelectionChangeEventData,
-  View,
-} from 'react-native';
+import { NativeSyntheticEvent, TextInput as RNTextInput, TextInputSelectionChangeEventData, View } from 'react-native';
 
 import { MentionType } from '@sendbird/chat/message';
 import { Button, TextInput, createStyleSheet, useToast } from '@sendbird/uikit-react-native-foundation';
@@ -27,6 +21,7 @@ interface EditInputProps extends ChannelInputProps {
 
 const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
   {
+    style,
     text,
     onChangeText,
     messageToEdit,
@@ -81,7 +76,7 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
           editable={!inputDisabled}
           autoFocus={autoFocus}
           onChangeText={onChangeText}
-          style={styles.input}
+          style={style}
           placeholder={STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_ACTIVE}
           onSelectionChange={onSelectionChange}
         >
@@ -111,13 +106,6 @@ const styles = createStyleSheet({
     paddingHorizontal: 16,
     flexDirection: 'column',
     alignItems: 'center',
-  },
-  input: {
-    flex: 1,
-    marginRight: 4,
-    minHeight: 36,
-    maxHeight: 36 * Platform.select({ ios: 2.5, default: 2 }),
-    borderRadius: 20,
   },
   inputWrapper: {
     flexDirection: 'row',

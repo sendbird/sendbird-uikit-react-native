@@ -15,6 +15,10 @@ const TextInput = React.forwardRef<RNTextInput, Props>(function TextInput(
   const variantStyle = colors['ui']['input'][variant];
   const inputStyle = editable ? variantStyle.active : variantStyle.disabled;
   const underlineStyle = variant === 'underline' && { borderBottomWidth: 2, borderBottomColor: inputStyle.highlight };
+  const fontStyle = {
+    ...typography.body3,
+    lineHeight: typography.body3.fontSize ? typography.body3.fontSize * 1.2 : undefined,
+  };
 
   return (
     <RNTextInput
@@ -23,7 +27,7 @@ const TextInput = React.forwardRef<RNTextInput, Props>(function TextInput(
       selectionColor={inputStyle.highlight}
       placeholderTextColor={inputStyle.placeholder}
       style={[
-        typography.body3,
+        fontStyle,
         styles.input,
         { color: inputStyle.text, backgroundColor: inputStyle.background },
         underlineStyle,
@@ -38,8 +42,11 @@ const TextInput = React.forwardRef<RNTextInput, Props>(function TextInput(
 
 const styles = createStyleSheet({
   input: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    includeFontPadding: false,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
   },
 });
 

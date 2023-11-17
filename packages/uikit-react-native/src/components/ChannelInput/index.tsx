@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, TextInput, View } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { KeyboardAvoidingView, Platform, StyleProp, StyleSheet, TextInput, TextStyle, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
@@ -39,6 +39,9 @@ export type SuggestedMentionListProps = {
 };
 
 export type ChannelInputProps = {
+  // style
+  style?: StyleProp<TextStyle>;
+
   // default
   channel: SendbirdBaseChannel;
   shouldRenderInput: boolean;
@@ -85,7 +88,7 @@ const ChannelInput = (props: ChannelInputProps) => {
   const { channel, keyboardAvoidOffset, messageToEdit, setMessageToEdit } = props;
 
   const { top, left, right, bottom } = useSafeAreaInsets();
-  const { colors } = useUIKitTheme();
+  const { colors, typography } = useUIKitTheme();
   const { sbOptions, mentionManager } = useSendbirdChat();
 
   const { selection, onSelectionChange, textInputRef, text, onChangeText, mentionedUsers } = useMentionTextInput({
@@ -98,10 +101,17 @@ const ChannelInput = (props: ChannelInputProps) => {
 
   const mentionAvailable =
     sbOptions.uikit.groupChannel.channel.enableMention && channel.isGroupChannel() && !channel.isBroadcast;
-
   const inputKeyToRemount = GET_INPUT_KEY(mentionAvailable ? mentionedUsers.length === 0 : false);
 
   const [inputHeight, setInputHeight] = useState(styles.inputDefault.height);
+
+  const fontStyle = useMemo(() => {
+    if (!typography.body3.fontSize) return typography.body3;
+    // NOTE: iOS does not support textAlignVertical, so we should adjust lineHeight to center the text in multiline TextInput.
+    return { ...typography.body3, lineHeight: typography.body3.fontSize * 1.275, textAlignVertical: 'center' };
+  }, [typography.body3.fontSize]);
+
+  const textInputStyle = StyleSheet.flatten([styles.input, fontStyle, props.style]);
 
   useTypingTrigger(text, channel);
   useTextClearOnDisabled(onChangeText, props.inputDisabled);
@@ -138,6 +148,7 @@ const ChannelInput = (props: ChannelInputProps) => {
                 VoiceMessageInput={props.VoiceMessageInput ?? VoiceMessageInput}
                 AttachmentsButton={props.AttachmentsButton ?? AttachmentsButton}
                 MessageToReplyPreview={props.MessageToReplyPreview ?? MessageToReplyPreview}
+                style={textInputStyle}
               />
             )}
             {inputMode === 'edit' && messageToEdit && (
@@ -152,6 +163,7 @@ const ChannelInput = (props: ChannelInputProps) => {
                 mentionedUsers={mentionedUsers}
                 messageToEdit={messageToEdit}
                 setMessageToEdit={setMessageToEdit}
+                style={textInputStyle}
               />
             )}
           </View>
@@ -210,6 +222,17 @@ const styles = createStyleSheet({
   },
   inputDefault: {
     height: 56,
+  },
+  input: {
+    flex: 1,
+    marginRight: 4,
+    borderRadius: 20,
+    paddingTop: 8,
+    paddingBottom: 8,
+    minHeight: 36,
+    // Android - padding area is hidden
+    // iOS - padding area is visible
+    maxHeight: Platform.select({ ios: 36 * 2 + 16, android: 36 * 2 }),
   },
 });
 

@@ -1,7 +1,6 @@
 import React, { forwardRef } from 'react';
 import {
   NativeSyntheticEvent,
-  Platform,
   TextInput as RNTextInput,
   TextInputSelectionChangeEventData,
   TouchableOpacity,
@@ -38,6 +37,7 @@ interface SendInputProps extends ChannelInputProps {
 
 const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   {
+    style,
     VoiceMessageInput,
     MessageToReplyPreview,
     AttachmentsButton,
@@ -173,7 +173,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
           onSelectionChange={onSelectionChange}
           editable={!inputDisabled}
           onChangeText={onChangeText}
-          style={styles.input}
+          style={style}
           placeholder={getPlaceholder()}
         >
           {mentionManager.textToMentionedComponents(
@@ -283,13 +283,6 @@ const styles = createStyleSheet({
     paddingHorizontal: 12,
     alignItems: 'center',
     flexDirection: 'row',
-  },
-  input: {
-    flex: 1,
-    marginRight: 4,
-    minHeight: 36,
-    maxHeight: 36 * Platform.select({ ios: 2.5, default: 2 }),
-    borderRadius: 20,
   },
   sendIcon: {
     marginLeft: 4,
