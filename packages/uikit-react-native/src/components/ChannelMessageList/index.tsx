@@ -36,8 +36,9 @@ import type { CommonComponent } from '../../types';
 import ChatFlatList from '../ChatFlatList';
 import { ReactionAddons } from '../ReactionAddons';
 
-type PressActions = { onPress?: () => void; onLongPress?: () => void };
+type PressActions = { onPress?: () => void; onLongPress?: () => void; bottomSheetItem?: BottomSheetItem };
 type HandleableMessage = SendbirdUserMessage | SendbirdFileMessage;
+type CreateMessagePressActions = (params: { message: SendbirdMessage }) => PressActions;
 export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpenChannel> = {
   enableMessageGrouping: boolean;
   currentUserId?: string;
@@ -74,6 +75,7 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
     channel: T;
     currentUserId?: ChannelMessageListProps<T>['currentUserId'];
     enableMessageGrouping: ChannelMessageListProps<T>['enableMessageGrouping'];
+    bottomSheetItem?: BottomSheetItem;
   }) => React.ReactElement | null;
   renderNewMessagesButton: null | CommonComponent<{
     visible: boolean;
@@ -121,7 +123,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
   const { colors } = useUIKitTheme();
   const { show } = useUserProfile();
   const { left, right } = useSafeAreaInsets();
-  const getMessagePressActions = useGetMessagePressActions({
+  const createMessagePressActions = useCreateMessagePressActions({
     channel,
     currentUserId,
     onEditMessage,
@@ -134,7 +136,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
   const safeAreaLayout = { paddingLeft: left, paddingRight: right };
 
   const renderItem: ListRenderItem<SendbirdMessage> = useFreshCallback(({ item, index }) => {
-    const { onPress, onLongPress } = getMessagePressActions(item);
+    const { onPress, onLongPress, bottomSheetItem } = createMessagePressActions({ message: item });
     return renderMessage({
       message: item,
       prevMessage: messages[index + 1],
@@ -147,6 +149,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
       channel,
       currentUserId,
       focused: (searchItem?.startingPoint ?? -1) === item.createdAt,
+      bottomSheetItem,
     });
   });
 
@@ -191,7 +194,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
   );
 };
 
-const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpenChannel>({
+const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpenChannel>({
   channel,
   currentUserId,
   onResendFailedMessage,
@@ -208,7 +211,7 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
   | 'onDeleteMessage'
   | 'onResendFailedMessage'
   | 'onPressMediaMessage'
->) => {
+>): CreateMessagePressActions => {
   const { colors } = useUIKitTheme();
   const { STRINGS } = useLocalization();
   const toast = useToast();
@@ -217,161 +220,186 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
   const { clipboardService, fileService } = usePlatformService();
   const { sbOptions } = useSendbirdChat();
 
-  const onFailureToReSend = (error: Error) => {
+  const onResendFailure = (error: Error) => {
     toast.show(STRINGS.TOAST.RESEND_MSG_ERROR, 'error');
     Logger.error(STRINGS.TOAST.RESEND_MSG_ERROR, error);
   };
 
-  const handleFailedMessage = (message: HandleableMessage) => {
+  const onDeleteFailure = (error: Error) => {
+    toast.show(STRINGS.TOAST.DELETE_MSG_ERROR, 'error');
+    Logger.error(STRINGS.TOAST.DELETE_MSG_ERROR, error);
+  };
+
+  const onCopyText = (message: HandleableMessage) => {
+    if (message.isUserMessage()) {
+      clipboardService.setString(message.message || '');
+      toast.show(STRINGS.TOAST.COPY_OK, 'success');
+    }
+  };
+
+  const onDownloadFile = (message: HandleableMessage) => {
+    if (message.isFileMessage()) {
+      if (toMegabyte(message.size) > 4) {
+        toast.show(STRINGS.TOAST.DOWNLOAD_START, 'success');
+      }
+
+      fileService
+        .save({ fileUrl: message.url, fileName: message.name, fileType: message.type })
+        .then((response) => {
+          toast.show(STRINGS.TOAST.DOWNLOAD_OK, 'success');
+          Logger.log('File saved to', response);
+        })
+        .catch((err) => {
+          toast.show(STRINGS.TOAST.DOWNLOAD_ERROR, 'error');
+          Logger.log('File save failure', err);
+        });
+    }
+  };
+
+  const onOpenFile = (message: HandleableMessage) => {
+    if (message.isFileMessage()) {
+      const fileType = getFileType(message.type || getFileExtension(message.name));
+      if (['image', 'video', 'audio'].includes(fileType)) {
+        onPressMediaMessage?.(message, () => onDeleteMessage(message), getAvailableUriFromFileMessage(message));
+      } else {
+        SBUUtils.openURL(message.url);
+      }
+    }
+  };
+
+  const openSheetForFailedMessage = (message: HandleableMessage) => {
     openSheet({
       sheetItems: [
         {
           title: STRINGS.LABELS.CHANNEL_MESSAGE_FAILED_RETRY,
-          onPress: () => {
-            onResendFailedMessage(message).catch(onFailureToReSend);
-          },
+          onPress: () => onResendFailedMessage(message).catch(onResendFailure),
         },
         {
           title: STRINGS.LABELS.CHANNEL_MESSAGE_FAILED_REMOVE,
           titleColor: colors.ui.dialog.default.none.destructive,
-          onPress: () => confirmDelete(message),
+          onPress: () => alertForMessageDelete(message),
         },
       ],
     });
   };
-  const confirmDelete = (message: HandleableMessage) => {
+
+  const alertForMessageDelete = (message: HandleableMessage) => {
     alert({
       title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE,
       buttons: [
-        {
-          text: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_CANCEL,
-        },
+        { text: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_CANCEL },
         {
           text: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_OK,
           style: 'destructive',
           onPress: () => {
-            onDeleteMessage(message).catch(() => toast.show(STRINGS.TOAST.DELETE_MSG_ERROR, 'error'));
+            onDeleteMessage(message).catch(onDeleteFailure);
           },
         },
       ],
     });
   };
 
-  return (msg: SendbirdMessage) => {
-    if (!msg.isUserMessage() && !msg.isFileMessage()) {
-      return { onPress: undefined, onLongPress: undefined };
-    }
+  return ({ message }) => {
+    if (!message.isUserMessage() && !message.isFileMessage()) return {};
 
     const sheetItems: BottomSheetItem['sheetItems'] = [];
-    const response: PressActions = {
-      onPress: undefined,
-      onLongPress: undefined,
+    const menu = {
+      copy: (message: HandleableMessage) => ({
+        icon: 'copy' as const,
+        title: STRINGS.LABELS.CHANNEL_MESSAGE_COPY,
+        onPress: () => onCopyText(message),
+      }),
+      edit: (message: HandleableMessage) => ({
+        icon: 'edit' as const,
+        title: STRINGS.LABELS.CHANNEL_MESSAGE_EDIT,
+        onPress: () => onEditMessage(message),
+      }),
+      delete: (message: HandleableMessage) => ({
+        disabled: message.threadInfo ? message.threadInfo.replyCount > 0 : undefined,
+        icon: 'delete' as const,
+        title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
+        onPress: () => alertForMessageDelete(message),
+      }),
+      reply: (message: HandleableMessage) => ({
+        disabled: Boolean(message.parentMessageId),
+        icon: 'reply' as const,
+        title: STRINGS.LABELS.CHANNEL_MESSAGE_REPLY,
+        onPress: () => onReplyMessage?.(message),
+      }),
+      download: (message: HandleableMessage) => ({
+        icon: 'download' as const,
+        title: STRINGS.LABELS.CHANNEL_MESSAGE_SAVE,
+        onPress: () => onDownloadFile(message),
+      }),
     };
 
-    if (msg.isUserMessage()) {
-      sheetItems.push({
-        icon: 'copy',
-        title: STRINGS.LABELS.CHANNEL_MESSAGE_COPY,
-        onPress: () => {
-          clipboardService.setString(msg.message || '');
-          toast.show(STRINGS.TOAST.COPY_OK, 'success');
-        },
-      });
-    }
-    if (!isVoiceMessage(msg) && msg.isFileMessage()) {
-      sheetItems.push({
-        icon: 'download',
-        title: STRINGS.LABELS.CHANNEL_MESSAGE_SAVE,
-        onPress: async () => {
-          if (toMegabyte(msg.size) > 4) {
-            toast.show(STRINGS.TOAST.DOWNLOAD_START, 'success');
-          }
-
-          fileService
-            .save({ fileUrl: msg.url, fileName: msg.name, fileType: msg.type })
-            .then((response) => {
-              toast.show(STRINGS.TOAST.DOWNLOAD_OK, 'success');
-              Logger.log('File saved to', response);
-            })
-            .catch((err) => {
-              toast.show(STRINGS.TOAST.DOWNLOAD_ERROR, 'error');
-              Logger.log('File save failure', err);
-            });
-        },
-      });
-    }
-
-    if (!channel.isEphemeral) {
-      if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
-        if (msg.isUserMessage()) {
-          sheetItems.push({
-            icon: 'edit',
-            title: STRINGS.LABELS.CHANNEL_MESSAGE_EDIT,
-            onPress: () => onEditMessage(msg),
-          });
+    if (message.isUserMessage()) {
+      sheetItems.push(menu.copy(message));
+      if (!channel.isEphemeral) {
+        if (isMyMessage(message, currentUserId) && message.sendingStatus === 'succeeded') {
+          sheetItems.push(menu.edit(message));
+          sheetItems.push(menu.delete(message));
         }
-        sheetItems.push({
-          disabled: msg.threadInfo ? msg.threadInfo.replyCount > 0 : undefined,
-          icon: 'delete',
-          title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
-          onPress: () => confirmDelete(msg),
-        });
-      }
-      if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
-        sheetItems.push({
-          disabled: Boolean(msg.parentMessageId),
-          icon: 'reply',
-          title: STRINGS.LABELS.CHANNEL_MESSAGE_REPLY,
-          onPress: () => onReplyMessage?.(msg),
-        });
-      }
-    }
-
-    if (msg.isFileMessage()) {
-      const fileType = getFileType(msg.type || getFileExtension(msg.name));
-      switch (fileType) {
-        case 'image':
-        case 'video':
-        case 'audio': {
-          response.onPress = () => {
-            onPressMediaMessage?.(msg, () => onDeleteMessage(msg), getAvailableUriFromFileMessage(msg));
-          };
-          break;
-        }
-        default: {
-          response.onPress = () => SBUUtils.openURL(msg.url);
-          break;
+        if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
+          sheetItems.push(menu.reply(message));
         }
       }
     }
 
-    if (sheetItems.length > 0) {
-      response.onLongPress = () => {
-        openSheet({
-          sheetItems,
-          HeaderComponent: shouldRenderReaction(
-            channel,
-            sbOptions.uikitWithAppInfo.groupChannel.channel.enableReactions,
-          )
-            ? ({ onClose }) => <ReactionAddons.BottomSheet message={msg} channel={channel} onClose={onClose} />
-            : undefined,
-        });
-      };
+    if (message.isFileMessage()) {
+      if (!isVoiceMessage(message)) {
+        sheetItems.push(menu.download(message));
+      }
+      if (!channel.isEphemeral) {
+        if (isMyMessage(message, currentUserId) && message.sendingStatus === 'succeeded') {
+          sheetItems.push(menu.delete(message));
+        }
+        if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
+          sheetItems.push(menu.reply(message));
+        }
+      }
     }
 
-    if (msg.sendingStatus === 'failed') {
-      response.onLongPress = () => handleFailedMessage(msg);
-      response.onPress = () => {
-        onResendFailedMessage(msg).catch(onFailureToReSend);
-      };
-    }
+    const bottomSheetItem: BottomSheetItem = {
+      sheetItems,
+      HeaderComponent: shouldRenderReaction(channel, sbOptions.uikitWithAppInfo.groupChannel.channel.enableReactions)
+        ? ({ onClose }) => <ReactionAddons.BottomSheet message={message} channel={channel} onClose={onClose} />
+        : undefined,
+    };
 
-    if (msg.sendingStatus === 'pending') {
-      response.onLongPress = undefined;
-      response.onPress = undefined;
-    }
+    switch (true) {
+      case message.sendingStatus === 'pending': {
+        return {
+          onPress: undefined,
+          onLongPress: undefined,
+          bottomSheetItem: undefined,
+        };
+      }
 
-    return response;
+      case message.sendingStatus === 'failed': {
+        return {
+          onPress: () => onResendFailedMessage(message).catch(onResendFailure),
+          onLongPress: () => openSheetForFailedMessage(message),
+          bottomSheetItem,
+        };
+      }
+
+      case message.isFileMessage(): {
+        return {
+          onPress: () => onOpenFile(message),
+          onLongPress: () => openSheet(bottomSheetItem),
+          bottomSheetItem,
+        };
+      }
+
+      default: {
+        return {
+          onPress: undefined,
+          onLongPress: () => openSheet(bottomSheetItem),
+          bottomSheetItem,
+        };
+      }
+    }
   };
 };
 
