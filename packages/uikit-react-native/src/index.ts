@@ -2,6 +2,8 @@ import { Platform } from 'react-native';
 
 import { Logger } from '@sendbird/uikit-utils';
 
+import { PromisePolyfill } from './utils/promise';
+
 /** Components **/
 export { default as ChannelInput } from './components/ChannelInput';
 export { default as ChannelMessageList } from './components/ChannelMessageList';
@@ -137,3 +139,6 @@ export * from './types';
 
 Logger.setLogLevel(__DEV__ ? 'warn' : 'none');
 Logger.setTitle(`[UIKIT_${Platform.OS}]`);
+
+// NOTE: In Hermes, not all implementations of Promise are included
+PromisePolyfill.apply();
