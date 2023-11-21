@@ -76,6 +76,7 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
     currentUserId?: ChannelMessageListProps<T>['currentUserId'];
     enableMessageGrouping: ChannelMessageListProps<T>['enableMessageGrouping'];
     bottomSheetItem?: BottomSheetItem;
+    isFirstItem: boolean;
   }) => React.ReactElement | null;
   renderNewMessagesButton: null | CommonComponent<{
     visible: boolean;
@@ -150,6 +151,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
       currentUserId,
       focused: (searchItem?.startingPoint ?? -1) === item.createdAt,
       bottomSheetItem,
+      isFirstItem: index === 0,
     });
   });
 

@@ -1,7 +1,13 @@
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 
 import type { GroupChannelMessageProps, RegexTextPattern } from '@sendbird/uikit-react-native-foundation';
-import { Box, GroupChannelMessage, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import {
+  Box,
+  GroupChannelMessage,
+  Text,
+  TypingIndicatorBubble,
+  useUIKitTheme,
+} from '@sendbird/uikit-react-native-foundation';
 import {
   SendbirdAdminMessage,
   SendbirdFileMessage,
@@ -17,9 +23,11 @@ import {
 } from '@sendbird/uikit-utils';
 
 import { VOICE_MESSAGE_META_ARRAY_DURATION_KEY } from '../../constants';
+import { GroupChannelContexts } from '../../domain/groupChannel/module/moduleContext';
 import type { GroupChannelProps } from '../../domain/groupChannel/types';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 import SBUUtils from '../../libs/SBUUtils';
+import { TypingIndicatorType } from '../../types';
 import { ReactionAddons } from '../ReactionAddons';
 import GroupChannelMessageDateSeparator from './GroupChannelMessageDateSeparator';
 import GroupChannelMessageFocusAnimation from './GroupChannelMessageFocusAnimation';
@@ -288,6 +296,21 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     <Box paddingHorizontal={16} marginBottom={messageGap}>
       <GroupChannelMessageDateSeparator message={message} prevMessage={prevMessage} />
       <GroupChannelMessageFocusAnimation focused={focused}>{renderMessage()}</GroupChannelMessageFocusAnimation>
+    </Box>
+  );
+};
+
+export const GroupChannelTypingIndicatorBubble = () => {
+  const { sbOptions } = useSendbirdChat();
+  const { typingUsers } = useContext(GroupChannelContexts.TypingIndicator);
+
+  if (typingUsers.length === 0) return null;
+  if (!sbOptions.uikit.groupChannel.channel.enableTypingIndicator) return null;
+  if (!sbOptions.uikit.groupChannel.channel.typingIndicatorTypes.has(TypingIndicatorType.Bubble)) return null;
+
+  return (
+    <Box paddingHorizontal={16} marginTop={4} marginBottom={16}>
+      <TypingIndicatorBubble typingUsers={typingUsers} />
     </Box>
   );
 };

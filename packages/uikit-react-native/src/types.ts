@@ -28,3 +28,8 @@ export type Range = {
   start: number;
   end: number;
 };
+
+export enum TypingIndicatorType {
+  Text = 'text',
+  Bubble = 'bubble',
+}

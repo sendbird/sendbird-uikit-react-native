@@ -4,7 +4,7 @@ import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/
 import React, { useEffect } from 'react';
 import { AppState } from 'react-native';
 
-import { SendbirdUIKitContainer, useSendbirdChat } from '@sendbird/uikit-react-native';
+import { SendbirdUIKitContainer, TypingIndicatorType, useSendbirdChat } from '@sendbird/uikit-react-native';
 import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 // import LogView from './components/LogView';
@@ -60,6 +60,7 @@ const App = () => {
         },
         groupChannel: {
           enableMention: true,
+          typingIndicatorTypes: new Set([TypingIndicatorType.Text, TypingIndicatorType.Bubble]),
         },
         groupChannelList: {
           enableTypingIndicator: true,

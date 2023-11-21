@@ -9,6 +9,7 @@ import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import AvatarGroup from './AvatarGroup';
 import AvatarIcon from './AvatarIcon';
+import AvatarStack from './AvatarStack';
 
 type Props = {
   uri?: string;
@@ -68,4 +69,5 @@ const styles = createStyleSheet({
 export default Object.assign(Avatar, {
   Group: AvatarGroup,
   Icon: AvatarIcon,
+  Stack: AvatarStack,
 });

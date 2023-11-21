@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ReplyType } from '@sendbird/chat/message';
 import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
+import { Box } from '@sendbird/uikit-react-native-foundation';
 import {
   NOOP,
   PASS,
@@ -14,7 +15,9 @@ import {
   useRefTracker,
 } from '@sendbird/uikit-utils';
 
-import GroupChannelMessageRenderer from '../components/GroupChannelMessageRenderer';
+import GroupChannelMessageRenderer, {
+  GroupChannelTypingIndicatorBubble,
+} from '../components/GroupChannelMessageRenderer';
 import NewMessagesButton from '../components/NewMessagesButton';
 import ScrollToBottomButton from '../components/ScrollToBottomButton';
 import StatusComposition from '../components/StatusComposition';
@@ -123,8 +126,13 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     }, []);
 
     const renderItem: GroupChannelProps['MessageList']['renderMessage'] = useFreshCallback((props) => {
-      if (renderMessage) return renderMessage(props);
-      return <GroupChannelMessageRenderer {...props} />;
+      const content = renderMessage ? renderMessage(props) : <GroupChannelMessageRenderer {...props} />;
+      return (
+        <Box>
+          {content}
+          {props.isFirstItem && !hasNext() && <GroupChannelTypingIndicatorBubble />}
+        </Box>
+      );
     });
 
     const memoizedFlatListProps = useMemo(
