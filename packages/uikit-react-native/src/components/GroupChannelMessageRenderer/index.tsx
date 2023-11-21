@@ -4,8 +4,8 @@ import type { GroupChannelMessageProps, RegexTextPattern } from '@sendbird/uikit
 import {
   Box,
   GroupChannelMessage,
-  MessageTypingBubble,
   Text,
+  TypingIndicatorBubble,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
 import {
@@ -27,6 +27,7 @@ import { GroupChannelContexts } from '../../domain/groupChannel/module/moduleCon
 import type { GroupChannelProps } from '../../domain/groupChannel/types';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 import SBUUtils from '../../libs/SBUUtils';
+import { TypingIndicatorType } from '../../types';
 import { ReactionAddons } from '../ReactionAddons';
 import GroupChannelMessageDateSeparator from './GroupChannelMessageDateSeparator';
 import GroupChannelMessageFocusAnimation from './GroupChannelMessageFocusAnimation';
@@ -299,17 +300,17 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   );
 };
 
-export const GroupChannelMessageTypingBubble = () => {
+export const GroupChannelTypingIndicatorBubble = () => {
   const { sbOptions } = useSendbirdChat();
   const { typingUsers } = useContext(GroupChannelContexts.TypingIndicator);
 
   if (typingUsers.length === 0) return null;
   if (!sbOptions.uikit.groupChannel.channel.enableTypingIndicator) return null;
-  if (!sbOptions.uikit.groupChannel.channel.typingIndicatorTypes.has('bubble')) return null;
+  if (!sbOptions.uikit.groupChannel.channel.typingIndicatorTypes.has(TypingIndicatorType.Bubble)) return null;
 
   return (
     <Box paddingHorizontal={16} marginTop={4} marginBottom={16}>
-      <MessageTypingBubble typingUsers={typingUsers} />
+      <TypingIndicatorBubble typingUsers={typingUsers} />
     </Box>
   );
 };

@@ -5,6 +5,7 @@ import { Header, Icon, createStyleSheet, useHeaderStyle } from '@sendbird/uikit-
 
 import ChannelCover from '../../../components/ChannelCover';
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
+import { TypingIndicatorType } from '../../../types';
 import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
 
@@ -24,7 +25,7 @@ const GroupChannelHeader = ({
 
     if (!subtitle) return null;
     if (!sbOptions.uikit.groupChannel.channel.enableTypingIndicator) return null;
-    if (!sbOptions.uikit.groupChannel.channel.typingIndicatorTypes.has('text')) return null;
+    if (!sbOptions.uikit.groupChannel.channel.typingIndicatorTypes.has(TypingIndicatorType.Text)) return null;
 
     return <Header.Subtitle style={styles.subtitle}>{subtitle}</Header.Subtitle>;
   };

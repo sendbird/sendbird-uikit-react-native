@@ -33,7 +33,6 @@ export { default as Header } from './ui/Header';
 export { default as LoadingSpinner } from './ui/LoadingSpinner';
 export { default as MenuBar } from './ui/MenuBar';
 export type { MenuBarProps } from './ui/MenuBar';
-export { default as MessageTypingBubble } from './ui/MessageTypingBubble';
 export { default as OpenChannelMessage } from './ui/OpenChannelMessage';
 export type { OpenChannelMessageProps } from './ui/OpenChannelMessage';
 export { default as OpenChannelPreview } from './ui/OpenChannelPreview';
@@ -42,6 +41,7 @@ export { default as Placeholder } from './ui/Placeholder';
 export { default as ProfileCard } from './ui/ProfileCard';
 export { default as Prompt } from './ui/Prompt';
 export { default as Toast, useToast, ToastProvider } from './ui/Toast';
+export { default as TypingIndicatorBubble } from './ui/TypingIndicatorBubble';
 
 /** Styles **/
 export { default as createSelectByColorScheme } from './styles/createSelectByColorScheme';

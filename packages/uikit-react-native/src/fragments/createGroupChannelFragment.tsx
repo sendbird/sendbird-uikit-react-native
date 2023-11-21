@@ -16,7 +16,7 @@ import {
 } from '@sendbird/uikit-utils';
 
 import GroupChannelMessageRenderer, {
-  GroupChannelMessageTypingBubble,
+  GroupChannelTypingIndicatorBubble,
 } from '../components/GroupChannelMessageRenderer';
 import NewMessagesButton from '../components/NewMessagesButton';
 import ScrollToBottomButton from '../components/ScrollToBottomButton';
@@ -130,7 +130,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       return (
         <Box>
           {content}
-          {props.isFirstItem && !hasNext() && <GroupChannelMessageTypingBubble />}
+          {props.isFirstItem && !hasNext() && <GroupChannelTypingIndicatorBubble />}
         </Box>
       );
     });

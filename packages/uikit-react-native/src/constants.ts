@@ -5,8 +5,3 @@ export const MESSAGE_FOCUS_ANIMATION_DELAY = 250;
 export const UNKNOWN_USER_ID = '##__USER_ID_IS_NOT_PROVIDED__##';
 export const VOICE_MESSAGE_META_ARRAY_DURATION_KEY = 'KEY_VOICE_MESSAGE_DURATION';
 export const VOICE_MESSAGE_META_ARRAY_MESSAGE_TYPE_KEY = 'KEY_INTERNAL_MESSAGE_TYPE';
-
-export enum TypingIndicatorType {
-  Text = 'text',
-  Bubble = 'bubble',
-}

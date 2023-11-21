@@ -14,7 +14,7 @@ type Props = {
   maxAvatar?: number;
 };
 
-const MessageTypingBubble = ({ typingUsers, containerStyle, maxAvatar }: Props) => {
+const TypingIndicatorBubble = ({ typingUsers, containerStyle, maxAvatar }: Props) => {
   const { select, palette, colors } = useUIKitTheme();
 
   if (typingUsers.length === 0) return null;
@@ -117,4 +117,4 @@ const styles = createStyleSheet({
   },
 });
 
-export default MessageTypingBubble;
+export default TypingIndicatorBubble;
