@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 
 import type { GroupChannelMessageProps, RegexTextPattern } from '@sendbird/uikit-react-native-foundation';
 import {
@@ -302,12 +302,21 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
 
 export const GroupChannelTypingIndicatorBubble = () => {
   const { sbOptions } = useSendbirdChat();
+  const { publish } = useContext(GroupChannelContexts.PubSub);
   const { typingUsers } = useContext(GroupChannelContexts.TypingIndicator);
 
-  if (typingUsers.length === 0) return null;
-  if (!sbOptions.uikit.groupChannel.channel.enableTypingIndicator) return null;
-  if (!sbOptions.uikit.groupChannel.channel.typingIndicatorTypes.has(TypingIndicatorType.Bubble)) return null;
+  const shouldRenderBubble = useIIFE(() => {
+    if (typingUsers.length === 0) return false;
+    if (!sbOptions.uikit.groupChannel.channel.enableTypingIndicator) return false;
+    if (!sbOptions.uikit.groupChannel.channel.typingIndicatorTypes.has(TypingIndicatorType.Bubble)) return false;
+    return true;
+  });
 
+  useEffect(() => {
+    if (shouldRenderBubble) publish({ type: 'TYPING_BUBBLE_RENDERED' });
+  }, [shouldRenderBubble]);
+
+  if (!shouldRenderBubble) return null;
   return (
     <Box paddingHorizontal={16} marginTop={4} marginBottom={16}>
       <TypingIndicatorBubble typingUsers={typingUsers} />
