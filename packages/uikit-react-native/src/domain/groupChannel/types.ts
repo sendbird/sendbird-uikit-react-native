@@ -183,4 +183,8 @@ export type GroupChannelPubSubContextPayload =
       data: {
         messages: SendbirdMessage[];
       };
+    }
+  | {
+      type: 'TYPING_BUBBLE_RENDERED';
+      data?: undefined;
     };

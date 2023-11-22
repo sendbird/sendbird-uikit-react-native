@@ -73,6 +73,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   useEffect(() => {
     return subscribe(({ type }) => {
       switch (type) {
+        case 'TYPING_BUBBLE_RENDERED':
         case 'MESSAGES_RECEIVED': {
           if (!props.scrolledAwayFromBottom) {
             scrollToBottom(true);
