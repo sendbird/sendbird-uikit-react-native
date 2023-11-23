@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.2.0...v3.3.0) (2023-11-23)
+
+### Features
+
+- add bottomSheetItem to props of renderMessage ([83f8710](https://github.com/sendbird/sendbird-uikit-react-native/commit/83f87108321a8c6a532afa5f24e40d95a6552a36))
+- add typing indicator bubble ui and logic ([9223b43](https://github.com/sendbird/sendbird-uikit-react-native/commit/9223b438f78d8b63da778c3c74329bdb383ba997))
+
+### Bug Fixes
+
+- add promise polyfills for hermes ([2f31a45](https://github.com/sendbird/sendbird-uikit-react-native/commit/2f31a4562aefcfb26e81d2525340857e9456ab4c))
+- adjust lineHeight of iOS TextInput ([c9c253e](https://github.com/sendbird/sendbird-uikit-react-native/commit/c9c253e5d2b863c87c22f4439e0bac6e9a9187de))
+- if the bubble renders and the scroll reaches the bottom, it should scroll to bottom on android ([a866422](https://github.com/sendbird/sendbird-uikit-react-native/commit/a866422b715b179337b11a6e8079c7c765a03a9d))
+
 ## [3.2.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.1.2...v3.2.0) (2023-11-03)
 
 ### Features
