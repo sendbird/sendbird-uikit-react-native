@@ -1,39 +1,62 @@
-## v3.2.0
+## v3.3.0
 
-- Add chat init params to `chatOptions` in `SendbirdUIKitContainer` props.
-- Add `reaction.onPressUserProfile` to `SendbirdUIKitContainer` props.
-- Add `scrollToMessage` to `GroupChannelContexts.MessageList`.
-- Add Voice message
+- Add typing indicator bubble feature.
+
+  `TypingIndicatorBubble` is a new typing indicator UI that can be turned on through `typingIndicatorTypes` option.
+  When turned on, it will be displayed in `GroupChannelMessageList` upon receiving typing event in real time.
 
   ```tsx
+  import { SendbirdUIKitContainer, TypingIndicatorType } from '@sendbird/uikit-react-native';
+
   const App = () => {
     return (
       <SendbirdUIKitContainer
         uikitOptions={{
           groupChannel: {
-            enableVoiceMessage: true,
+            typingIndicatorTypes: new Set([TypingIndicatorType.Bubble]),
           },
-        }}
-        platformServices={{
-          recorder: RecorderService,
-          player: PlayerService,
         }}
       />
     );
   };
   ```
 
-  Before using it, you should implement the `RecorderService` and `PlayerService` platform services.<br/>
-  You can implement this easily by using helper functions.
+- Add `bottomSheetItem` to the props of renderMessage.
 
-  > - CLI
-  >   - Install `react-native-permissions` and `react-native-audio-recorder-player`.
-  >   - Create platform services using `createNativeRecorderService` and `createNativePlayerService`.
-  > - Expo:
-  >   - Install `expo-av`
-  >   - Create platform services using `createExpoRecorderService` and `createExpoPlayerService`.
+  `bottomSheetItem` is a new prop for `renderMessage` that can be utilized to add a custom item to the bottom sheet of a message.
+  It can be used to add a custom menu item to the bottom sheet of a message.
 
-- Fix the display of a message unavailable text if the message is not accessible.
-- Fix the search for messages within an accessible range.
-- Fix the usage of color variants in unknown group channel messages.
-- Fix the ensure that the UIKit configuration is always initialized, even in offline mode.
+  ```tsx
+  import { GroupChannelMessageRenderer } from '@sendbird/uikit-react-native';
+  import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
+
+  const GroupChannelScreen = () => {
+    const { openSheet } = useBottomSheet();
+
+    const onOpenMessageMenu = () => {
+      if (!props.bottomSheetItem) return;
+
+      openSheet({
+        ...props.bottomSheetItem,
+        sheetItems: [
+          // Update bottomSheetItem.sheetItems or append your custom menu item
+          ...props.bottomSheetItem.sheetItems,
+          { icon: 'search', title: 'Search', onPress: () => console.log('Search') },
+        ],
+      });
+    };
+
+    return (
+      <GroupChannelFragment
+        renderMessage={(props) => {
+          return (
+            <GroupChannelMessageRenderer {...props} onLongPress={() => onOpenMessageMenu(props.bottomSheetItem)} />
+          );
+        }}
+      />
+    );
+  };
+  ```
+
+- Fix the not found `Promise.allSettled` error in Hermes.
+- Fix the vertical alignment of iOS TextInput.
