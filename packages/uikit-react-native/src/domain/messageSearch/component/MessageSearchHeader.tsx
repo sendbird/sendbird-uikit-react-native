@@ -91,7 +91,10 @@ const styles = createStyleSheet({
     flex: 1,
     height: '100%',
     fontSize: 14,
-    padding: 0,
+    paddingLeft: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingRight: 0,
   },
 });
 

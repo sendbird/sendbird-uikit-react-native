@@ -98,7 +98,7 @@ const Prompt = ({
             variant={'underline'}
             value={text}
             onChangeText={setText}
-            style={{ paddingHorizontal: 0, paddingVertical: 10 }}
+            style={{ paddingLeft: 0, paddingRight: 0, paddingTop: 10, paddingBottom: 10 }}
           />
         </View>
 
