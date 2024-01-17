@@ -25,8 +25,10 @@ type Props = React.PropsWithChildren<PlatformServiceContextType & { voiceMessage
 export const PlatformServiceContext = React.createContext<PlatformServiceContextType | null>(null);
 export const PlatformServiceProvider = ({ children, voiceMessageConfig, ...services }: Props) => {
   useEffect(() => {
-    services.recorderService.options.minDuration = voiceMessageConfig.recorder.minDuration;
-    services.recorderService.options.maxDuration = voiceMessageConfig.recorder.maxDuration;
+    if (services.recorderService !== undefined) {
+      services.recorderService.options.minDuration = voiceMessageConfig.recorder.minDuration;
+      services.recorderService.options.maxDuration = voiceMessageConfig.recorder.maxDuration;
+    }
   }, [voiceMessageConfig]);
 
   useAppState('change', (state) => {
