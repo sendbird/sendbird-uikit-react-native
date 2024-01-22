@@ -142,8 +142,10 @@ const styles = createStyleSheet({
   },
   input: {
     flex: 1,
-    paddingVertical: 0,
-    paddingHorizontal: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
   },
   removeButtonContainer: {
     alignItems: 'flex-end',
