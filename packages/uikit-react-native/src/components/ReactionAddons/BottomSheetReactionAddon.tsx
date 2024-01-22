@@ -2,6 +2,7 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import type { BaseMessage } from '@sendbird/chat/message';
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { Icon, Image, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { SendbirdBaseChannel, SendbirdBaseMessage, useUniqHandlerId } from '@sendbird/uikit-utils';
@@ -24,12 +25,12 @@ const BottomSheetReactionAddon = ({ onClose, message, channel }: Props) => {
   useChannelHandler(sdk, handlerId, {
     async onReactionUpdated(eventChannel, event) {
       if (channel?.url === eventChannel.url && event.messageId === message?.messageId) {
-        const msg = await sdk.message.getMessage({
+        const msg = (await sdk.message.getMessage({
           includeReactions: true,
           messageId: message.messageId,
           channelUrl: message.channelUrl,
           channelType: message.channelType,
-        });
+        })) as null | BaseMessage;
         if (msg) updateReactionFocusedItem({ message: msg });
       }
     },

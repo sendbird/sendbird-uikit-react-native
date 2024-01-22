@@ -73,8 +73,8 @@ export interface GroupChannelProps {
     | 'hasNext'
     | 'searchItem'
   > & {
-    onResetMessageList: (callback?: () => void) => void;
-    onResetMessageListWithStartingPoint: (startingPoint: number, callback?: () => void) => void;
+    onResetMessageList: () => Promise<void>;
+    onResetMessageListWithStartingPoint: (startingPoint: number) => Promise<void>;
 
     // Changing the search item will trigger the focus animation on messages.
     onUpdateSearchItem: (searchItem?: GroupChannelProps['MessageList']['searchItem']) => void;

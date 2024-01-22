@@ -1,6 +1,8 @@
+// @ts-nocheck
 import { ChannelType } from '@sendbird/chat';
 import { NotificationData } from '@sendbird/chat/feedChannel';
-import { MessageType, SendingStatus } from '@sendbird/chat/message';
+import { Form } from '@sendbird/chat/lib/__definition';
+import { AdminMessage, Feedback, FeedbackStatus, MessageType, SendingStatus } from '@sendbird/chat/message';
 import type {
   SendbirdAdminMessage,
   SendbirdBaseMessage,
@@ -67,6 +69,10 @@ class MockMessage implements GetMockProps<Params, SendbirdBaseMessage> {
   scheduledInfo = null;
   extendedMessage = {};
   notificationData: NotificationData | null = null;
+  forms: Form[] | null = null;
+  myFeedback: Feedback | null = null;
+  myFeedbackStatus: FeedbackStatus = 'NO_FEEDBACK';
+  suggestedReplies: string[] | null = null;
 
   isFileMessage(): this is SendbirdFileMessage {
     return this.messageType === MessageType.FILE && !Object.prototype.hasOwnProperty.call(this, 'fileInfoList');
@@ -107,6 +113,26 @@ class MockMessage implements GetMockProps<Params, SendbirdBaseMessage> {
 
   serialize(): object {
     return Object.assign({}, this);
+  }
+
+  deleteFeedback(_: number): Promise<void> {
+    return Promise.resolve(undefined);
+  }
+
+  hasForm(): this is AdminMessage {
+    return this.forms !== null;
+  }
+
+  submitFeedback(_: Pick<Feedback, 'rating' | 'comment'>): Promise<void> {
+    return Promise.resolve(undefined);
+  }
+
+  submitForm(_: { formId?: string; answers?: Record<string, string> }): Promise<void> {
+    return Promise.resolve(undefined);
+  }
+
+  updateFeedback(_: Feedback): Promise<void> {
+    return Promise.resolve(undefined);
   }
 
   asFileMessage(): SendbirdFileMessage {

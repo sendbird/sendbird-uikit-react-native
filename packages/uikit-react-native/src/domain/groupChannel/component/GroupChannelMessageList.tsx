@@ -34,7 +34,9 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
         lazyScrollToIndex({ index: foundMessageIndex, animated: true, timeout });
       } else {
         if (props.channel.messageOffsetTimestamp <= createdAt) {
-          if (focusAnimated) props.onUpdateSearchItem({ startingPoint: createdAt });
+          if (focusAnimated) {
+            props.onUpdateSearchItem({ startingPoint: createdAt });
+          }
           props.onResetMessageListWithStartingPoint(createdAt);
         } else {
           return false;
@@ -44,15 +46,14 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
     },
   );
 
-  const scrollToBottom = useFreshCallback((animated = false) => {
+  const scrollToBottom = useFreshCallback(async (animated = false) => {
     if (props.hasNext()) {
       props.onUpdateSearchItem(undefined);
       props.onScrolledAwayFromBottom(false);
 
-      props.onResetMessageList(() => {
-        props.onScrolledAwayFromBottom(false);
-        lazyScrollToBottom({ animated });
-      });
+      await props.onResetMessageList();
+      props.onScrolledAwayFromBottom(false);
+      lazyScrollToBottom({ animated });
     } else {
       lazyScrollToBottom({ animated });
     }

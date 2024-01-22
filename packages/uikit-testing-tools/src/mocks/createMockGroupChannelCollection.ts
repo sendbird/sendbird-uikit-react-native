@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ChannelType } from '@sendbird/chat';
 import {
   GroupChannel,

@@ -1,14 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ReplyType } from '@sendbird/chat/message';
-import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
 import { Box } from '@sendbird/uikit-react-native-foundation';
+import { useGroupChannelMessages } from '@sendbird/uikit-tools';
 import {
   NOOP,
   PASS,
   SendbirdFileMessage,
   SendbirdGroupChannel,
   SendbirdUserMessage,
+  confirmAndMarkAsRead,
   messageComparator,
   useFreshCallback,
   useIIFE,
@@ -75,8 +76,8 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       messages,
       newMessages,
       resetNewMessages,
-      next,
-      prev,
+      loadNext,
+      loadPrevious,
       hasNext,
       sendFileMessage,
       sendUserMessage,
@@ -85,7 +86,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       resendMessage,
       deleteMessage,
       resetWithStartingPoint,
-    } = useGroupChannelMessages(sdk, channel, currentUser?.userId, {
+    } = useGroupChannelMessages(sdk, channel, {
       shouldCountNewMessages: () => scrolledAwayFromBottomRef.current,
       onMessagesReceived(messages) {
         groupChannelPubSub.publish({ type: 'MESSAGES_RECEIVED', data: { messages } });
@@ -93,12 +94,13 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       onMessagesUpdated(messages) {
         groupChannelPubSub.publish({ type: 'MESSAGES_UPDATED', data: { messages } });
       },
+      onChannelDeleted,
+      onCurrentUserBanned: onChannelDeleted,
       collectionCreator,
       sortComparator,
-      onChannelDeleted,
+      markAsRead: confirmAndMarkAsRead,
       replyType,
       startingPoint: internalSearchItem?.startingPoint,
-      enableCollectionWithoutLocalCache: true,
     });
 
     const onBlurFragment = () => {
@@ -144,12 +146,12 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       [flatListProps],
     );
 
-    const onResetMessageList = useCallback((callback?: () => void) => {
-      resetWithStartingPoint(Number.MAX_SAFE_INTEGER, callback);
+    const onResetMessageList = useCallback(async () => {
+      return await resetWithStartingPoint(Number.MAX_SAFE_INTEGER);
     }, []);
 
-    const onResetMessageListWithStartingPoint = useCallback((startingPoint: number, callback?: () => void) => {
-      resetWithStartingPoint(startingPoint, callback);
+    const onResetMessageListWithStartingPoint = useCallback(async (startingPoint: number) => {
+      return await resetWithStartingPoint(startingPoint);
     }, []);
 
     // Changing the search item will trigger the focus animation on messages.
@@ -224,8 +226,8 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             renderMessage={renderItem}
             messages={messages}
             newMessages={newMessages}
-            onTopReached={prev}
-            onBottomReached={next}
+            onTopReached={loadPrevious}
+            onBottomReached={loadNext}
             hasNext={hasNext}
             scrolledAwayFromBottom={scrolledAwayFromBottom}
             onScrolledAwayFromBottom={onScrolledAwayFromBottom}

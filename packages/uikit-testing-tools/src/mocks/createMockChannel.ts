@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   BannedUserListQuery,
   ChannelType,
@@ -125,6 +126,7 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
   isOperator(): boolean {
     throw new Error('Method not implemented.');
   }
+  // @ts-ignore
   refresh = jest.fn(async (): Promise<this> => {
     this.params.sdk?.__throwIfFailureTest();
     return this;

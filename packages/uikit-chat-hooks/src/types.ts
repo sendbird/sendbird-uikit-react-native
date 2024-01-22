@@ -73,6 +73,8 @@ export type UseGroupChannelListOptions = {
 };
 
 /**
+ * @deprecated This hook is deprecated and will be replaced by the 'uikit-tools' package.
+ *
  * @interface UseGroupChannelMessages
  * @description interface for group channel messages hook
  * - Receive new messages from other users & should count new messages -> append to state(newMessages)
