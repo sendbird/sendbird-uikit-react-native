@@ -4,6 +4,9 @@ import type { UseGroupChannelMessages } from '../../types';
 import { useGroupChannelMessagesWithCollection } from './useGroupChannelMessagesWithCollection';
 import { useGroupChannelMessagesWithQuery } from './useGroupChannelMessagesWithQuery';
 
+/**
+ * @deprecated This hook is deprecated and will be replaced by the 'uikit-tools' package.
+ * */
 export const useGroupChannelMessages: UseGroupChannelMessages = (sdk, channel, userId, options) => {
   if (sdk.isCacheEnabled || options?.enableCollectionWithoutLocalCache) {
     if (options?.queryCreator) printIgnoredWarning();
