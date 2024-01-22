@@ -75,7 +75,7 @@ export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, cha
       const messageContext = {
         updatedMessages: [] as SendbirdBaseMessage[],
         addedMessages: [] as SendbirdBaseMessage[],
-        deletedMessageIds: [] as number[],
+        deletedMessageIds: [] as (number | string)[],
       };
       const changeLogsContext = {
         hasMore: false,

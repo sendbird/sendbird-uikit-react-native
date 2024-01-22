@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   MessageCollectionEventHandler,
   MessageCollectionInitHandler,
@@ -6,7 +7,7 @@ import {
   MessageCollectionParams,
   MessageFilter,
 } from '@sendbird/chat/groupChannel';
-import { SendingStatus } from '@sendbird/chat/message';
+import { BaseMessage, SendingStatus } from '@sendbird/chat/message';
 import type {
   SendbirdBaseMessage,
   SendbirdGroupChannel,
@@ -57,7 +58,7 @@ class MockMessageCollection implements GetMockProps<Params, Omit<SendbirdMessage
   });
 
   initialize = jest.fn((_policy: MessageCollectionInitPolicy) => {
-    const initHandler: MessageCollectionInitHandler = {
+    const initHandler: MessageCollectionInitHandler<BaseMessage> = {
       onCacheResult: jest.fn((handler: MessageCollectionInitResultHandler) => {
         this.__cacheInitHandler = handler;
         return initHandler;

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { UserOnlineState } from '@sendbird/chat';
 import type { Sender } from '@sendbird/chat/message';
 import type {

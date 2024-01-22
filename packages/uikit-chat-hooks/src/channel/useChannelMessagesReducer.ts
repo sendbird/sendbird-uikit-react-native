@@ -28,7 +28,7 @@ type Action =
     }
   | {
       type: 'delete_messages' | 'delete_new_messages';
-      value: { messageIds: number[]; reqIds: string[] };
+      value: { messageIds: (string | number)[]; reqIds: string[] };
     };
 
 type State = {
@@ -153,7 +153,7 @@ export const useChannelMessagesReducer = (sortComparator?: Options['sortComparat
   const updateMessages = (messages: SendbirdBaseMessage[], clearBeforeAction: boolean, currentUserId?: string) => {
     dispatch({ type: 'update_messages', value: { messages, clearBeforeAction, currentUserId } });
   };
-  const deleteMessages = (messageIds: number[], reqIds: string[]) => {
+  const deleteMessages = (messageIds: (string | number)[], reqIds: string[]) => {
     dispatch({ type: 'delete_messages', value: { messageIds, reqIds } });
   };
   const updateNewMessages = (messages: SendbirdBaseMessage[], clearBeforeAction: boolean, currentUserId?: string) => {

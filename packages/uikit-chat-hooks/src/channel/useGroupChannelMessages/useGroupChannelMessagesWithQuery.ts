@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-import type { PreviousMessageListQueryParams } from '@sendbird/chat/message';
+import type { BaseMessage, PreviousMessageListQueryParams } from '@sendbird/chat/message';
 import type {
   SendbirdBaseChannel,
   SendbirdGroupChannel,
@@ -116,7 +116,7 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
         channelUrl: channel.url,
         channelType: channel.channelType,
       });
-      if (message) updateMessages([message], false, sdk.currentUser?.userId);
+      if (message) updateMessages([message as BaseMessage], false, sdk.currentUser?.userId);
     },
     // Channels
     onChannelChanged: channelUpdater,
