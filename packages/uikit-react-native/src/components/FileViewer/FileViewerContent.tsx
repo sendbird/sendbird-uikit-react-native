@@ -117,7 +117,13 @@ const ZoomableImageView = ({
   }, [props.source.uri, width, height]);
 
   return (
-    <ReactNativeZoomableView style={{ width, height }} initialZoom={1} {...contentSizeProps} {...zoomProps}>
+    <ReactNativeZoomableView
+      visualTouchFeedbackEnabled={false}
+      style={{ width, height }}
+      initialZoom={1}
+      {...contentSizeProps}
+      {...zoomProps}
+    >
       <Image {...props} />
     </ReactNativeZoomableView>
   );
