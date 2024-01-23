@@ -90,7 +90,10 @@ const ZoomableImageView = ({
   const { width, height } = useWindowDimensions();
 
   const imageSize = useRef<{ width: number; height: number }>();
-  const [contentSizeProps, setContentSizeProps] = useState<ReactNativeZoomableViewProps>({});
+  const [contentSizeProps, setContentSizeProps] = useState<ReactNativeZoomableViewProps>({
+    contentWidth: width,
+    contentHeight: height,
+  });
 
   useLayoutEffect(() => {
     SBUUtils.safeRun(async () => {
