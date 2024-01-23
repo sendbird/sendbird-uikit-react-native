@@ -3077,6 +3077,13 @@
   dependencies:
     "@octokit/openapi-types" "^16.0.0"
 
+"@openspacelabs/react-native-zoomable-view@^2.1.5":
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/@openspacelabs/react-native-zoomable-view/-/react-native-zoomable-view-2.1.5.tgz#e738a6493733461f0ab8327033b3dfbee2e93998"
+  integrity sha512-AE2y7S+8cFXXrrpKJQVrTCLh5E9Iu506/T1xgDBx9SJeiUeNFCIyoZdWhAAtsmppY5vLaUeI7qz+JVBDzmQsEA==
+  dependencies:
+    prop-types "^15.7.2"
+
 "@parcel/watcher@2.0.4":
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@parcel/watcher/-/watcher-2.0.4.tgz#f300fef4cc38008ff4b8c29d92588eced3ce014b"
@@ -3372,7 +3379,7 @@
   dependencies:
     nanoid "^3.1.23"
 
-"@sendbird/chat@4.10.7", "@sendbird/chat@^4.10.7", "@sendbird/chat@^4.9.8":
+"@sendbird/chat@4.10.7", "@sendbird/chat@^4.10.7":
   version "4.10.7"
   resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.10.7.tgz#45b23849a854273811c36a072044e64c6a0bc4bd"
   integrity sha512-68h9sj5mMaBzYMfcX0G7TU91JMrGRz0rbUJj6pSLet911pRMBpUi0f6smS8XtUJMNdXtwFh56TyMyAZQM6TcCQ==

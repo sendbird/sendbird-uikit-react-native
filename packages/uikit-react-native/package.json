@@ -59,6 +59,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@openspacelabs/react-native-zoomable-view": "^2.1.5",
     "@sendbird/uikit-chat-hooks": "3.3.0",
     "@sendbird/uikit-react-native-foundation": "3.3.0",
     "@sendbird/uikit-tools": "0.0.1-alpha.57",
