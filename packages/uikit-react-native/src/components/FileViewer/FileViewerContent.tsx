@@ -2,7 +2,6 @@ import { ReactNativeZoomableView, ReactNativeZoomableViewProps } from '@openspac
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { ImageProps, ImageStyle, ImageURISource, StyleProp, StyleSheet, useWindowDimensions } from 'react-native';
 
-import { SBUUtils } from '@sendbird/uikit-react-native';
 import {
   Box,
   Image,
@@ -14,6 +13,7 @@ import {
 import { FileType, useIIFE } from '@sendbird/uikit-utils';
 
 import { usePlatformService } from '../../hooks/useContext';
+import SBUUtils from '../../libs/SBUUtils';
 
 type Props = {
   type: FileType;
