@@ -19,7 +19,7 @@ import {
 
 import { useSendbirdChat } from '../../hooks/useContext';
 import useMentionTextInput from '../../hooks/useMentionTextInput';
-import type { MentionedUser, Range } from '../../types';
+import type { CommonComponent, MentionedUser, Range } from '../../types';
 import type { AttachmentsButtonProps } from './AttachmentsButton';
 import AttachmentsButton from './AttachmentsButton';
 import EditInput from './EditInput';
@@ -67,7 +67,7 @@ export type ChannelInputProps = {
   setMessageToReply?: (message?: undefined | SendbirdUserMessage | SendbirdFileMessage) => void;
 
   // mention
-  SuggestedMentionList?: (props: SuggestedMentionListProps) => React.ReactNode | null;
+  SuggestedMentionList?: CommonComponent<SuggestedMentionListProps>;
 
   // sub-components
   AttachmentsButton?: (props: AttachmentsButtonProps) => React.ReactNode | null;

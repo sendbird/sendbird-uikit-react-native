@@ -32,7 +32,6 @@ import {
 import type { UserProfileContextType } from '../../contexts/UserProfileCtx';
 import { useLocalization, usePlatformService, useSendbirdChat, useUserProfile } from '../../hooks/useContext';
 import SBUUtils from '../../libs/SBUUtils';
-import type { CommonComponent } from '../../types';
 import ChatFlatList from '../ChatFlatList';
 import { ReactionAddons } from '../ReactionAddons';
 
@@ -78,15 +77,10 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
     bottomSheetItem?: BottomSheetItem;
     isFirstItem: boolean;
   }) => React.ReactElement | null;
-  renderNewMessagesButton: null | CommonComponent<{
-    visible: boolean;
-    onPress: () => void;
-    newMessages: SendbirdMessage[];
-  }>;
-  renderScrollToBottomButton: null | CommonComponent<{
-    visible: boolean;
-    onPress: () => void;
-  }>;
+  renderNewMessagesButton:
+    | null
+    | ((props: { visible: boolean; onPress: () => void; newMessages: SendbirdMessage[] }) => React.ReactElement | null);
+  renderScrollToBottomButton: null | ((props: { visible: boolean; onPress: () => void }) => React.ReactElement | null);
   flatListProps?: Omit<FlatListProps<SendbirdMessage>, 'data' | 'renderItem'>;
 } & {
   ref?: Ref<FlatList<SendbirdMessage>> | undefined;
