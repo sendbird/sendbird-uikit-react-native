@@ -63,6 +63,10 @@ const GroupChannelListScreen = () => {
       onPressChannel={(channel) => {
         navigation.navigate(Routes.GroupChannel, { channelUrl: channel.url });
       }}
+      // channelListQueryParams={{
+      //   includeEmpty: true,
+      //   includeFrozen: false,
+      // }}
     />
   );
 };

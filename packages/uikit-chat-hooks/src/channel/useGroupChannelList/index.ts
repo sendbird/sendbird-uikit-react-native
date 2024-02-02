@@ -4,6 +4,9 @@ import type { UseGroupChannelList } from '../../types';
 import { useGroupChannelListWithCollection } from './useGroupChannelListWithCollection';
 import { useGroupChannelListWithQuery } from './useGroupChannelListWithQuery';
 
+/**
+ * @deprecated This hook is deprecated and will be replaced by the 'uikit-tools' package.
+ * */
 export const useGroupChannelList: UseGroupChannelList = (sdk, userId, options) => {
   if (sdk.isCacheEnabled || options?.enableCollectionWithoutLocalCache) {
     if (options?.queryCreator) Logger.warn('`queryCreator` is ignored, please use `collectionCreator` instead.');
