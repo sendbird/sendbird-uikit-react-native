@@ -97,6 +97,10 @@ const GroupChannelScreen = () => {
         // Navigate to group channel settings
         navigation.push(Routes.GroupChannelSettings, params);
       }}
+      // messageListQueryParams={{
+      //   prevResultLimit: 20,
+      //   customTypesFilter: ['filter'],
+      // }}
     />
   );
 };

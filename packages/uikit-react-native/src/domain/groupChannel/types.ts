@@ -1,6 +1,7 @@
 import type React from 'react';
 import type { FlatList } from 'react-native';
 
+import type { MessageCollectionParams, MessageFilterParams } from '@sendbird/chat/groupChannel';
 import type { UseGroupChannelMessagesOptions } from '@sendbird/uikit-chat-hooks';
 import type {
   OnBeforeHandler,
@@ -20,6 +21,7 @@ import type { ChannelMessageListProps } from '../../components/ChannelMessageLis
 import type { CommonComponent } from '../../types';
 import type { PubSub } from '../../utils/pubsub';
 
+export type MessageListQueryParamsType = Omit<MessageCollectionParams, 'filter'> & MessageFilterParams;
 export interface GroupChannelProps {
   Fragment: {
     channel: SendbirdGroupChannel;
@@ -43,9 +45,19 @@ export interface GroupChannelProps {
     keyboardAvoidOffset?: GroupChannelProps['Provider']['keyboardAvoidOffset'];
     flatListProps?: GroupChannelProps['MessageList']['flatListProps'];
     sortComparator?: UseGroupChannelMessagesOptions['sortComparator'];
-    collectionCreator?: UseGroupChannelMessagesOptions['collectionCreator'];
 
     searchItem?: GroupChannelProps['MessageList']['searchItem'];
+
+    /**
+     * @description You can specify the query parameters for the message list.
+     * @example
+     * ```
+     * <GroupChannelFragment messageListQueryParams={{ prevResultLimit: 20, customTypesFilter: ['filter'] }} />
+     * ```
+     * */
+    messageListQueryParams?: MessageListQueryParamsType;
+    /** @deprecated Please use `messageListQueryParams` instead */
+    collectionCreator?: UseGroupChannelMessagesOptions['collectionCreator'];
   };
   Header: {
     shouldHideRight: () => boolean;
