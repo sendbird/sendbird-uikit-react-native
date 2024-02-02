@@ -35,4 +35,4 @@ export interface GroupChannelNotificationsModule {
   View: CommonComponent<GroupChannelNotificationsProps['View']>;
 }
 
-export type GroupChannelNotificationsFragment = CommonComponent<GroupChannelNotificationsProps['Fragment']>;
+export type GroupChannelNotificationsFragment = React.FC<GroupChannelNotificationsProps['Fragment']>;

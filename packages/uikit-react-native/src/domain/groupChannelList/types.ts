@@ -1,21 +1,32 @@
 import type React from 'react';
 import type { FlatListProps } from 'react-native';
 
+import type { GroupChannelCollectionParams, GroupChannelFilterParams } from '@sendbird/chat/groupChannel';
 import type { UseGroupChannelListOptions } from '@sendbird/uikit-chat-hooks';
 import type { ActionMenuItem } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdGroupChannel } from '@sendbird/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 
+export type ChannelListQueryParamsType = Omit<GroupChannelCollectionParams, 'filter'> & GroupChannelFilterParams;
 export interface GroupChannelListProps {
   Fragment: {
     onPressChannel: GroupChannelListProps['List']['onPressChannel'];
     onPressCreateChannel: (channelType: GroupChannelType) => void;
     renderGroupChannelPreview?: GroupChannelListProps['List']['renderGroupChannelPreview'];
     skipTypeSelection?: boolean;
-    collectionCreator?: UseGroupChannelListOptions['collectionCreator'];
     flatListProps?: GroupChannelListProps['List']['flatListProps'];
     menuItemCreator?: GroupChannelListProps['List']['menuItemCreator'];
+    /**
+     * @description You can specify the query parameters for the channel list.
+     * @example
+     * ```
+     * <GroupChannelListFragment channelListQueryParams={{ limit: 20, includeEmpty: false }} />
+     * ```
+     * */
+    channelListQueryParams?: ChannelListQueryParamsType;
+    /** @deprecated Please use `channelListQueryParams` instead */
+    collectionCreator?: UseGroupChannelListOptions['collectionCreator'];
   };
   Header: {};
   List: {
@@ -61,5 +72,5 @@ export interface GroupChannelListModule {
   StatusLoading: CommonComponent;
 }
 
-export type GroupChannelListFragment = CommonComponent<GroupChannelListProps['Fragment']>;
+export type GroupChannelListFragment = React.FC<GroupChannelListProps['Fragment']>;
 export type GroupChannelType = 'GROUP' | 'SUPER_GROUP' | 'BROADCAST';

@@ -52,7 +52,7 @@ export interface GroupChannelMembersProps {
     queryCreator?: UseUserListOptions<SendbirdMember>['queryCreator'];
   };
 }
-export type GroupChannelMembersFragment = CommonComponent<GroupChannelMembersProps['Fragment']>;
+export type GroupChannelMembersFragment = React.FC<GroupChannelMembersProps['Fragment']>;
 
 export interface GroupChannelRegisterOperatorProps {
   Fragment: {
@@ -64,4 +64,4 @@ export interface GroupChannelRegisterOperatorProps {
     queryCreator?: UseUserListOptions<SendbirdMember>['queryCreator'];
   };
 }
-export type GroupChannelRegisterOperatorFragment = CommonComponent<GroupChannelRegisterOperatorProps['Fragment']>;
+export type GroupChannelRegisterOperatorFragment = React.FC<GroupChannelRegisterOperatorProps['Fragment']>;

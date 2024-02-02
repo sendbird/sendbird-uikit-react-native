@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { useGroupChannelList } from '@sendbird/uikit-chat-hooks';
-import { PASS, useAppState, useFreshCallback } from '@sendbird/uikit-utils';
+import { GroupChannelCollection, GroupChannelFilter } from '@sendbird/chat/groupChannel';
+import { useGroupChannelList } from '@sendbird/uikit-tools';
+import { PASS, SendbirdChatSDK, confirmAndMarkAsDelivered, useAppState, useFreshCallback } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import GroupChannelPreviewContainer from '../containers/GroupChannelPreviewContainer';
@@ -18,16 +19,17 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
   return ({
     onPressChannel,
     onPressCreateChannel,
-    collectionCreator,
     renderGroupChannelPreview,
     skipTypeSelection = false,
     flatListProps = {},
     menuItemCreator = PASS,
+    channelListQueryParams,
+    collectionCreator,
   }) => {
-    const { sdk, currentUser, sbOptions, markAsDeliveredWithChannel } = useSendbirdChat();
-    const { groupChannels, next, loading } = useGroupChannelList(sdk, currentUser?.userId, {
-      collectionCreator,
-      enableCollectionWithoutLocalCache: true,
+    const { sdk, sbOptions, markAsDeliveredWithChannel } = useSendbirdChat();
+    const { groupChannels, loadMore, initialized } = useGroupChannelList(sdk, {
+      collectionCreator: getCollectionCreator(sdk, channelListQueryParams, collectionCreator),
+      markAsDelivered: confirmAndMarkAsDelivered,
     });
 
     if (sbOptions.appInfo.deliveryReceiptEnabled) {
@@ -49,13 +51,13 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     return (
       <GroupChannelListModule.Provider>
         <GroupChannelListModule.Header />
-        <StatusComposition loading={loading} LoadingComponent={<GroupChannelListModule.StatusLoading />}>
+        <StatusComposition loading={!initialized} LoadingComponent={<GroupChannelListModule.StatusLoading />}>
           <GroupChannelListModule.List
             onPressChannel={onPressChannel}
             menuItemCreator={menuItemCreator}
             renderGroupChannelPreview={_renderGroupChannelPreview}
             groupChannels={groupChannels}
-            onLoadNext={next}
+            onLoadNext={loadMore}
             flatListProps={{
               ListEmptyComponent: <GroupChannelListModule.StatusEmpty />,
               contentContainerStyle: { flexGrow: 1 },
@@ -71,5 +73,21 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
     );
   };
 };
+
+function getCollectionCreator(
+  sdk: SendbirdChatSDK,
+  channelListQueryParams?: GroupChannelListProps['Fragment']['channelListQueryParams'],
+  deprecatedCreatorProp?: () => GroupChannelCollection,
+) {
+  if (!channelListQueryParams && deprecatedCreatorProp) return deprecatedCreatorProp;
+
+  return (defaultParams: GroupChannelListProps['Fragment']['channelListQueryParams']) => {
+    const params = { ...defaultParams, ...channelListQueryParams };
+    return sdk.groupChannel.createGroupChannelCollection({
+      ...params,
+      filter: new GroupChannelFilter(params),
+    });
+  };
+}
 
 export default createGroupChannelListFragment;

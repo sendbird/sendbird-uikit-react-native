@@ -51,4 +51,4 @@ export interface OpenChannelSettingsModule {
   Menu: CommonComponent<OpenChannelSettingsProps['Menu']>;
 }
 
-export type OpenChannelSettingsFragment = CommonComponent<OpenChannelSettingsProps['Fragment']>;
+export type OpenChannelSettingsFragment = React.FC<OpenChannelSettingsProps['Fragment']>;

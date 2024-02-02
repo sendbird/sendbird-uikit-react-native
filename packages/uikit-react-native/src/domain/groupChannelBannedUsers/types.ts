@@ -49,4 +49,4 @@ export interface GroupChannelBannedUsersModule {
   StatusError: CommonComponent<GroupChannelBannedUsersProps['StatusError']>;
 }
 
-export type GroupChannelBannedUsersFragment = CommonComponent<GroupChannelBannedUsersProps['Fragment']>;
+export type GroupChannelBannedUsersFragment = React.FC<GroupChannelBannedUsersProps['Fragment']>;

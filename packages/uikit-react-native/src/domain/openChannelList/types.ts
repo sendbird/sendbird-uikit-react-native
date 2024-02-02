@@ -53,4 +53,4 @@ export interface OpenChannelListModule {
   StatusError: CommonComponent<OpenChannelListProps['StatusError']>;
 }
 
-export type OpenChannelListFragment = CommonComponent<OpenChannelListProps['Fragment']>;
+export type OpenChannelListFragment = React.FC<OpenChannelListProps['Fragment']>;

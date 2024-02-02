@@ -33,6 +33,8 @@ export interface CustomBidirectionalQueryInterface<Data> {
 }
 
 /**
+ * @deprecated This hook is deprecated and will be replaced by the 'uikit-tools' package.
+ *
  * @interface UseGroupChannelList
  * @description interface for group channel list hook
  * */

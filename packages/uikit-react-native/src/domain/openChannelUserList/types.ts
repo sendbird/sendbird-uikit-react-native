@@ -1,7 +1,8 @@
+import type React from 'react';
+
 import type { UseUserListOptions } from '@sendbird/uikit-chat-hooks';
 import type { SendbirdOpenChannel, SendbirdParticipant, SendbirdUser } from '@sendbird/uikit-utils';
 
-import type { CommonComponent } from '../../types';
 import type { UserListProps } from '../userList/types';
 
 export interface OpenChannelParticipantsProps {
@@ -14,7 +15,7 @@ export interface OpenChannelParticipantsProps {
     sortComparator?: UseUserListOptions<SendbirdUser | SendbirdParticipant>['sortComparator'];
   };
 }
-export type OpenChannelParticipantsFragment = CommonComponent<OpenChannelParticipantsProps['Fragment']>;
+export type OpenChannelParticipantsFragment = React.FC<OpenChannelParticipantsProps['Fragment']>;
 
 export interface OpenChannelRegisterOperatorProps {
   Fragment: {
@@ -27,4 +28,4 @@ export interface OpenChannelRegisterOperatorProps {
     sortComparator?: UseUserListOptions<SendbirdUser | SendbirdParticipant>['sortComparator'];
   };
 }
-export type OpenChannelRegisterOperatorFragment = CommonComponent<OpenChannelRegisterOperatorProps['Fragment']>;
+export type OpenChannelRegisterOperatorFragment = React.FC<OpenChannelRegisterOperatorProps['Fragment']>;

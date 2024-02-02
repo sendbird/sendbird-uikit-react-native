@@ -51,4 +51,4 @@ export interface GroupChannelOperatorsModule {
   StatusError: CommonComponent<GroupChannelOperatorsProps['StatusError']>;
 }
 
-export type GroupChannelOperatorsFragment = CommonComponent<GroupChannelOperatorsProps['Fragment']>;
+export type GroupChannelOperatorsFragment = React.FC<GroupChannelOperatorsProps['Fragment']>;

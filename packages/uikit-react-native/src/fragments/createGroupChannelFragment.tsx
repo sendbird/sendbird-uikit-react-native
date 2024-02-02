@@ -1,14 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { MessageCollection, MessageFilter } from '@sendbird/chat/groupChannel';
 import { ReplyType } from '@sendbird/chat/message';
 import { Box } from '@sendbird/uikit-react-native-foundation';
 import { useGroupChannelMessages } from '@sendbird/uikit-tools';
+import type { SendbirdFileMessage, SendbirdGroupChannel, SendbirdUserMessage } from '@sendbird/uikit-utils';
 import {
   NOOP,
   PASS,
-  SendbirdFileMessage,
-  SendbirdGroupChannel,
-  SendbirdUserMessage,
   confirmAndMarkAsRead,
   messageComparator,
   useFreshCallback,
@@ -52,9 +51,10 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     onBeforeUpdateFileMessage = PASS,
     channel,
     keyboardAvoidOffset,
-    collectionCreator,
     sortComparator = messageComparator,
     flatListProps,
+    messageListQueryParams,
+    collectionCreator,
   }) => {
     const { playerService, recorderService } = usePlatformService();
     const { sdk, currentUser, sbOptions } = useSendbirdChat();
@@ -96,7 +96,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       },
       onChannelDeleted,
       onCurrentUserBanned: onChannelDeleted,
-      collectionCreator,
+      collectionCreator: getCollectionCreator(channel, messageListQueryParams, collectionCreator),
       sortComparator,
       markAsRead: confirmAndMarkAsRead,
       replyType,
@@ -258,6 +258,22 @@ function shouldRenderInput(channel: SendbirdGroupChannel) {
   }
 
   return true;
+}
+
+function getCollectionCreator(
+  channel: SendbirdGroupChannel,
+  messageListQueryParams?: GroupChannelProps['Fragment']['messageListQueryParams'],
+  deprecatedCreatorProp?: () => MessageCollection,
+) {
+  if (!messageListQueryParams && deprecatedCreatorProp) return deprecatedCreatorProp;
+
+  return (defaultParams: GroupChannelProps['Fragment']['messageListQueryParams']) => {
+    const params = { ...defaultParams, ...messageListQueryParams };
+    return channel.createMessageCollection({
+      ...params,
+      filter: new MessageFilter(params),
+    });
+  };
 }
 
 export default createGroupChannelFragment;

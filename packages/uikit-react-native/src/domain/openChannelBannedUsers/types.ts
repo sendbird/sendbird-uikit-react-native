@@ -49,4 +49,4 @@ export interface OpenChannelBannedUsersModule {
   StatusError: CommonComponent<OpenChannelBannedUsersProps['StatusError']>;
 }
 
-export type OpenChannelBannedUsersFragment = CommonComponent<OpenChannelBannedUsersProps['Fragment']>;
+export type OpenChannelBannedUsersFragment = React.FC<OpenChannelBannedUsersProps['Fragment']>;

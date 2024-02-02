@@ -52,4 +52,4 @@ export interface MessageSearchModule {
   StatusError: CommonComponent<MessageSearchProps['StatusError']>;
 }
 
-export type MessageSearchFragment = CommonComponent<MessageSearchProps['Fragment']>;
+export type MessageSearchFragment = React.FC<MessageSearchProps['Fragment']>;
