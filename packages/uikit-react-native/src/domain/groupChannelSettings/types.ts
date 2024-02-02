@@ -53,4 +53,4 @@ export interface GroupChannelSettingsModule {
   Menu: CommonComponent<GroupChannelSettingsProps['Menu']>;
 }
 
-export type GroupChannelSettingsFragment = CommonComponent<GroupChannelSettingsProps['Fragment']>;
+export type GroupChannelSettingsFragment = React.FC<GroupChannelSettingsProps['Fragment']>;

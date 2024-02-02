@@ -45,4 +45,4 @@ export interface GroupChannelModerationModule {
   Menu: CommonComponent<GroupChannelModerationProps['Menu']>;
 }
 
-export type GroupChannelModerationFragment = CommonComponent<GroupChannelModerationProps['Fragment']>;
+export type GroupChannelModerationFragment = React.FC<GroupChannelModerationProps['Fragment']>;

@@ -51,4 +51,4 @@ export interface OpenChannelOperatorsModule {
   StatusError: CommonComponent<OpenChannelOperatorsProps['StatusError']>;
 }
 
-export type OpenChannelOperatorsFragment = CommonComponent<OpenChannelOperatorsProps['Fragment']>;
+export type OpenChannelOperatorsFragment = React.FC<OpenChannelOperatorsProps['Fragment']>;

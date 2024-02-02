@@ -49,4 +49,4 @@ export interface GroupChannelMutedMembersModule {
   StatusError: CommonComponent<GroupChannelMutedMembersProps['StatusError']>;
 }
 
-export type GroupChannelMutedMembersFragment = CommonComponent<GroupChannelMutedMembersProps['Fragment']>;
+export type GroupChannelMutedMembersFragment = React.FC<GroupChannelMutedMembersProps['Fragment']>;

@@ -72,5 +72,5 @@ export interface GroupChannelListModule {
   StatusLoading: CommonComponent;
 }
 
-export type GroupChannelListFragment = CommonComponent<GroupChannelListProps['Fragment']>;
+export type GroupChannelListFragment = React.FC<GroupChannelListProps['Fragment']>;
 export type GroupChannelType = 'GROUP' | 'SUPER_GROUP' | 'BROADCAST';

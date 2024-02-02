@@ -45,4 +45,4 @@ export interface OpenChannelModerationModule {
   Menu: CommonComponent<OpenChannelModerationProps['Menu']>;
 }
 
-export type OpenChannelModerationFragment = CommonComponent<OpenChannelModerationProps['Fragment']>;
+export type OpenChannelModerationFragment = React.FC<OpenChannelModerationProps['Fragment']>;

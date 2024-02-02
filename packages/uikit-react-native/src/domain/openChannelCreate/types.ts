@@ -42,4 +42,4 @@ export interface OpenChannelCreateModule {
   StatusLoading: CommonComponent;
 }
 
-export type OpenChannelCreateFragment = CommonComponent<OpenChannelCreateProps['Fragment']>;
+export type OpenChannelCreateFragment = React.FC<OpenChannelCreateProps['Fragment']>;

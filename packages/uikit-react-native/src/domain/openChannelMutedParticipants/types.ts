@@ -49,4 +49,4 @@ export interface OpenChannelMutedParticipantsModule {
   StatusError: CommonComponent<OpenChannelMutedParticipantsProps['StatusError']>;
 }
 
-export type OpenChannelMutedParticipantsFragment = CommonComponent<OpenChannelMutedParticipantsProps['Fragment']>;
+export type OpenChannelMutedParticipantsFragment = React.FC<OpenChannelMutedParticipantsProps['Fragment']>;

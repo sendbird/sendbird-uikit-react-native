@@ -111,7 +111,7 @@ export interface OpenChannelModule {
   StatusLoading: CommonComponent;
 }
 
-export type OpenChannelFragment = CommonComponent<OpenChannelProps['Fragment']>;
+export type OpenChannelFragment = React.FC<OpenChannelProps['Fragment']>;
 
 export type OpenChannelPubSubContextPayload =
   | {

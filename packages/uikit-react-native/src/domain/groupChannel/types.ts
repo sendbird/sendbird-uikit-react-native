@@ -169,7 +169,7 @@ export interface GroupChannelModule {
   StatusLoading: CommonComponent;
 }
 
-export type GroupChannelFragment = CommonComponent<GroupChannelProps['Fragment']>;
+export type GroupChannelFragment = React.FC<GroupChannelProps['Fragment']>;
 
 export type GroupChannelPubSubContextPayload =
   | {
