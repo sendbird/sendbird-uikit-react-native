@@ -1,4 +1,4 @@
-import type { ErrorInfo, ReactNode } from 'react';
+import type { ComponentType, ErrorInfo, ReactNode } from 'react';
 
 import type { SendbirdUser } from '@sendbird/uikit-utils';
 
@@ -17,7 +17,7 @@ export interface LocalCacheStorage {
 
 export type ErrorBoundaryProps = { error: Error; errorInfo: ErrorInfo; reset: () => void };
 
-export type CommonComponent<P = {}> = (props: P & { children?: ReactNode }) => null | ReactNode;
+export type CommonComponent<P = {}> = ComponentType<P & { children?: ReactNode | undefined }>;
 
 export type MentionedUser = {
   range: Range;
