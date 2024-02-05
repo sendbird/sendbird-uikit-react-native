@@ -2,6 +2,7 @@
 import {
   BannedUserListQuery,
   ChannelType,
+  FileUploadResult,
   MetaCounter,
   MetaData,
   MutedInfo,
@@ -24,8 +25,9 @@ import {
   OperatorFilter,
   ReadStatus,
 } from '@sendbird/chat/groupChannel';
-import type {
+import {
   BaseListQueryParams,
+  DeliveryStatus,
   MultipleFilesMessageCreateParams,
   MultipleFilesMessageRequestHandler,
   PinnedMessageListQuery,
@@ -509,6 +511,9 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
   getTypingUsers(): SendbirdMember[] {
     return [];
   }
+  getDeliveryStatus(): { [p: string]: DeliveryStatus } {
+    return {};
+  }
 
   getUndeliveredMemberCount = jest.fn(() => 0);
 
@@ -636,6 +641,9 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
     throw new Error('Method not implemented.');
   }
   sendMultipleFilesMessage(_params: MultipleFilesMessageCreateParams): MultipleFilesMessageRequestHandler {
+    throw new Error('Method not implemented.');
+  }
+  uploadFile(): Promise<FileUploadResult> {
     throw new Error('Method not implemented.');
   }
 }
