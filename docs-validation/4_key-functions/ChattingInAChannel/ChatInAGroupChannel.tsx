@@ -141,6 +141,11 @@ const GroupChannelScreen2 = ({ route: { params } }: any) => {
         }
         return <GroupChannelMessageRenderer {...props} />
       }}
+      // Apply query parameters for message list
+      messageListQueryParams={{
+        prevResultLimit: 20,
+        customTypesFilter: ['filter']
+      }}
     />
   );
 };

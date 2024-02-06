@@ -1,6 +1,8 @@
 import type { GroupChannelListContextsType, GroupChannelListModule } from '@sendbird/uikit-react-native';
 import React, { useContext, useLayoutEffect } from 'react';
 
+const CustomChannelPreview = (_:object) => <></>
+
 /**
  * Usage
  * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/list-channels#2-usage}
@@ -107,6 +109,15 @@ const CustomGroupChannelListScreen2 = () => {
     <GroupChannelListFragment2
       onPressCreateChannel={navigateToGroupChannelCreateScreen}
       onPressChannel={navigateToGroupChannelScreen}
+      // Render custom channel preview
+      renderGroupChannelPreview={(props) => {
+        return <CustomChannelPreview {...props} />;
+      }}
+      // Apply query parameters for channel list
+      channelListQueryParams={{
+        includeEmpty: true,
+        includeFrozen: false,
+      }}
     />
   );
 };
