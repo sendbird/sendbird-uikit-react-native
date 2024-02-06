@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.4.0...v3.4.1) (2024-02-06)
+
+### Bug Fixes
+
+- use ComponentType instead of function structure in CommonComponent type ([2cf00e9](https://github.com/sendbird/sendbird-uikit-react-native/commit/2cf00e933e09c5ce8e138c36188c0123e5100abe))
+
 ## [3.4.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.3.0...v3.4.0) (2024-01-30)
 
 ### Features
