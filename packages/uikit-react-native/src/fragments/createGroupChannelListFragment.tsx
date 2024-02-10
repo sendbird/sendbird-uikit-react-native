@@ -32,11 +32,11 @@ const createGroupChannelListFragment = (initModule?: Partial<GroupChannelListMod
       markAsDelivered: confirmAndMarkAsDelivered,
     });
 
-    if (sbOptions.appInfo.deliveryReceiptEnabled) {
-      useAppState('change', (status) => {
+    useAppState('change', (status) => {
+      if (sbOptions.appInfo.deliveryReceiptEnabled) {
         if (status === 'active') groupChannels.forEach(markAsDeliveredWithChannel);
-      });
-    }
+      }
+    });
 
     const _renderGroupChannelPreview: GroupChannelListProps['List']['renderGroupChannelPreview'] = useFreshCallback(
       (props) => {
