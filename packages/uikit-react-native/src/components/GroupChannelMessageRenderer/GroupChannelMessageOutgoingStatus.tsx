@@ -15,12 +15,12 @@ type Props = {
   style?: StyleProp<ImageStyle>;
 };
 const GroupChannelMessageOutgoingStatus = ({ channel, message, style }: Props) => {
-  if (!message.isUserMessage() && !message.isFileMessage()) return null;
-  if (channel.isEphemeral) return null;
-
   const { sdk } = useSendbirdChat();
   const { colors } = useUIKitTheme();
   const outgoingStatus = useMessageOutgoingStatus(sdk, channel, message);
+
+  if (!message.isUserMessage() && !message.isFileMessage()) return null;
+  if (channel.isEphemeral) return null;
 
   if (outgoingStatus === 'PENDING') {
     return <LoadingSpinner size={SIZE} style={style} />;

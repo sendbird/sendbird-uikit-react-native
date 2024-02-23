@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-empty-interface */
 import type React from 'react';
 
-import type SendbirdChat from '@sendbird/chat';
 import type {
   BaseChannel,
   Emoji,
@@ -13,6 +10,7 @@ import type {
   Participant,
   RestrictedUser,
   SendbirdError as SBError,
+  SendbirdChatWith,
   User,
   UserUpdateParams,
 } from '@sendbird/chat';
@@ -28,7 +26,6 @@ import type {
   MessageCollection,
 } from '@sendbird/chat/groupChannel';
 import type {
-  ModuleNamespaces,
   OpenChannelCreateParams,
   OpenChannelUpdateParams,
   SendableMessage,
@@ -82,7 +79,7 @@ export type OnBeforeHandler<T> = (params: T) => T | Promise<T>;
 export interface UserStruct {
   userId: string;
 }
-export type SendbirdChatSDK = SendbirdChat & ModuleNamespaces<[GroupChannelModule, OpenChannelModule]>;
+export type SendbirdChatSDK = SendbirdChatWith<[GroupChannelModule, OpenChannelModule]>;
 export type SendbirdMessage = BaseMessage | FileMessage | UserMessage | AdminMessage | SendableMessage;
 export type SendbirdChannel = BaseChannel | GroupChannel | OpenChannel;
 export type SendbirdUserMessage = UserMessage;
