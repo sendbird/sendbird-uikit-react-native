@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.4.1...v3.4.2) (2024-03-06)
+
+### Bug Fixes
+
+- remove conditional hooks even if they depend on an unchanging value. ([d61e137](https://github.com/sendbird/sendbird-uikit-react-native/commit/d61e13790fc8e5ec50d430d423b66f1f2d9240fe))
+
 ## [3.4.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.4.0...v3.4.1) (2024-02-06)
 
 ### Bug Fixes
