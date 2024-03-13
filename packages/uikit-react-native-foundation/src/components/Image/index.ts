@@ -1,15 +1,15 @@
-import { ReactNode } from 'react';
+import { ComponentType } from 'react';
 import type { ImageProps as NativeImageProps } from 'react-native';
 import { NativeModules } from 'react-native';
 
 export interface SendbirdImageProps extends Omit<NativeImageProps, 'onLoad' | 'onError'> {
+  disableFastImage?: boolean;
   onLoad?: (event: { width: number; height: number }) => void;
   onError?: (event: { error?: unknown }) => void;
   tintColor?: string;
 }
 
-export type SendbirdImageComponent = (props: SendbirdImageProps) => ReactNode;
-
+export type SendbirdImageComponent = ComponentType<SendbirdImageProps>;
 function getImageModule(): SendbirdImageComponent {
   const hasFastImage = Boolean(NativeModules.FastImageView);
   if (hasFastImage) {
@@ -23,4 +23,10 @@ function getImageModule(): SendbirdImageComponent {
   }
 }
 
-export default getImageModule();
+const Image = getImageModule();
+
+Image.defaultProps = {
+  disableFastImage: false,
+};
+
+export default Image;
