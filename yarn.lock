@@ -3379,10 +3379,10 @@
   dependencies:
     nanoid "^3.1.23"
 
-"@sendbird/chat@4.11.2", "@sendbird/chat@^4.10.7":
-  version "4.11.2"
-  resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.11.2.tgz#e223ef121ce3b610d9f51f002e7230b02f6c165e"
-  integrity sha512-ea9GZ+vZdbHpsrCnexQh1fKxw52GfwH/D7NYAgt7mzSzoiL2KIViYL7FpwLifFHDtdMprdgoIZBUzOTwtf21rQ==
+"@sendbird/chat@4.11.3", "@sendbird/chat@^4.10.7":
+  version "4.11.3"
+  resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.11.3.tgz#f0f6b2c1da3c24fd27f49221ccfde02105b30951"
+  integrity sha512-I5OIWBL4jdVHvBn2UqJZJkcE+sXPOVVxZFtJfK3FrllkT9hDtCLzCi5GPWnh0X73vr+WBLY6KSw27y4dZfIPEg==
 
 "@sendbird/react-native-scrollview-enhancer@^0.2.1":
   version "0.2.1"
