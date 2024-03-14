@@ -1,4 +1,5 @@
 import React from 'react';
+import { Image } from 'react-native';
 import type { FastImageProps, ResizeMode, Source } from 'react-native-fast-image';
 
 import FastImageInternal from './FastImageInternal';
@@ -61,8 +62,21 @@ const Image_FastImage: SendbirdImageComponent = ({
   onLoad,
   onError,
   style,
+  tintColor,
+  disableFastImage,
   ...props
 }) => {
+  if (disableFastImage) {
+    return (
+      <Image
+        {...props}
+        source={source}
+        style={[style, { tintColor }]}
+        onError={onError && ((e) => onError(e.nativeEvent))}
+        onLoad={onLoad && ((e) => onLoad(e.nativeEvent.source))}
+      />
+    );
+  }
   return (
     <FastImageInternal
       {...props}
