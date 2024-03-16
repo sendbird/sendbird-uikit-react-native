@@ -11,7 +11,10 @@ export default class SBUUtils {
 
   static async openURL(url: string) {
     try {
-      const targetUrl = url.startsWith('http') ? url : 'https://' + url;
+      let targetUrl = url;
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        targetUrl = 'https://' + url;
+      }
       await Linking.openURL(targetUrl);
     } catch (e) {
       Logger.warn('Cannot open url', e);
