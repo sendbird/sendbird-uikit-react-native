@@ -1,9 +1,20 @@
-## v3.4.3
+## v3.5.0
 
-- Added `disableFastImage` prop to Image component in foundation package.
+- Added `enableReactionsSupergroup` to enable reactions in super group channels.
   ```tsx
-  import { Image } from '@sendbird/uikit-react-native-foundation';
-  
-  // If you don't want to use FastImage in UIKit for React Native, you can specify this default prop
-  if (Image.defaultProps) Image.defaultProps.disableFastImage = true;
+  import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
+
+  const App = () => {
+    return (
+      <SendbirdUIKitContainer
+        uikitOptions={{
+          groupChannel: {
+            enableReactionsSupergroup: true,
+          },
+        }}
+      >
+        {/* Rest of your app */}
+      </SendbirdUIKitContainer>
+    );
+  };
   ```
