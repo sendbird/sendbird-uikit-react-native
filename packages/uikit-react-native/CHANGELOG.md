@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.4.3...v3.5.0) (2024-03-26)
+
+### Features
+
+- support reactions for super group channel ([8ab0720](https://github.com/sendbird/sendbird-uikit-react-native/commit/8ab07205c6bda1b9fe8c61153288ab6a6534dfca))
+
 ## [3.4.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.4.2...v3.4.3) (2024-03-20)
 
 **Note:** Version bump only for package @sendbird/uikit-react-native
