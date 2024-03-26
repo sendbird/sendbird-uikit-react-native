@@ -52,16 +52,17 @@ export type SendbirdChatContextType = {
     uikitWithAppInfo: {
       groupChannel: {
         channel: {
-          enableReactions: boolean;
-          enableOgtag: boolean;
+          readonly enableReactions: boolean;
+          readonly enableReactionsSupergroup: boolean;
+          readonly enableOgtag: boolean;
         };
         setting: {
-          enableMessageSearch: boolean;
+          readonly enableMessageSearch: boolean;
         };
       };
       openChannel: {
         channel: {
-          enableOgtag: boolean;
+          readonly enableOgtag: boolean;
         };
       };
     };
