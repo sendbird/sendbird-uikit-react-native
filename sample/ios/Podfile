@@ -18,7 +18,6 @@ target 'SendbirdUIKitSample' do
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
   pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone"
   pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
-  pod 'Permission-MediaLibrary', :path => "#{permissions_path}/MediaLibrary"
   pod 'Permission-PhotoLibraryAddOnly', :path => "#{permissions_path}/PhotoLibraryAddOnly"
 
   # Enables Flipper.
@@ -30,7 +29,7 @@ target 'SendbirdUIKitSample' do
   post_install do |installer|
     react_native_post_install(installer)
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
-    
+
     installer.pods_project.targets.each do |target|
         target.build_configurations.each do |config|
           config.build_settings['EXPANDED_CODE_SIGN_IDENTITY'] = ''

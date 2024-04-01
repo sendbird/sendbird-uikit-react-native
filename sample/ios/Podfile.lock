@@ -139,8 +139,6 @@ PODS:
   - OpenSSL-Universal (1.1.180)
   - Permission-Camera (3.8.0):
     - RNPermissions
-  - Permission-MediaLibrary (3.8.0):
-    - RNPermissions
   - Permission-Microphone (3.8.0):
     - RNPermissions
   - Permission-PhotoLibrary (3.8.0):
@@ -507,7 +505,6 @@ DEPENDENCIES:
   - glog (from `../../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - OpenSSL-Universal (= 1.1.180)
   - Permission-Camera (from `../../node_modules/react-native-permissions/ios/Camera`)
-  - Permission-MediaLibrary (from `../../node_modules/react-native-permissions/ios/MediaLibrary`)
   - Permission-Microphone (from `../../node_modules/react-native-permissions/ios/Microphone`)
   - Permission-PhotoLibrary (from `../../node_modules/react-native-permissions/ios/PhotoLibrary`)
   - Permission-PhotoLibraryAddOnly (from `../../node_modules/react-native-permissions/ios/PhotoLibraryAddOnly`)
@@ -604,8 +601,6 @@ EXTERNAL SOURCES:
     :podspec: "../../node_modules/react-native/third-party-podspecs/glog.podspec"
   Permission-Camera:
     :path: "../../node_modules/react-native-permissions/ios/Camera"
-  Permission-MediaLibrary:
-    :path: "../../node_modules/react-native-permissions/ios/MediaLibrary"
   Permission-Microphone:
     :path: "../../node_modules/react-native-permissions/ios/Microphone"
   Permission-PhotoLibrary:
@@ -736,7 +731,6 @@ SPEC CHECKSUMS:
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
   Permission-Camera: e6d142d7d8b714afe0a83e5e6ae17eb949f1e3e9
-  Permission-MediaLibrary: 6a5888dd77669b568716bea80c21340aaab74c51
   Permission-Microphone: 644b1de8bcc2afcaf934e09a22bee507a95796a7
   Permission-PhotoLibrary: 31787bbe77d0d3ae6a5267b8435e4a2e9ef78f1d
   Permission-PhotoLibraryAddOnly: 16c92ad62b802514f3f788e00b298080be996337
@@ -793,6 +787,6 @@ SPEC CHECKSUMS:
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
   ZIPFoundation: b1f0de4eed33e74a676f76e12559ab6b75990197
 
-PODFILE CHECKSUM: 7326d70ef2ded7c9137457434d401f2de40cb420
+PODFILE CHECKSUM: e4c7896172c786f630076d08be27f2516caf1825
 
 COCOAPODS: 1.14.2

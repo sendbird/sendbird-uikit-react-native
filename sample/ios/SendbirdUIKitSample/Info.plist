@@ -16,8 +16,6 @@
 	<string>Permission request for Camera usage</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Permission request for Microphone usage</string>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>Permission request for MediaLibrary usage</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Permission request for PhotoLibrary usage</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

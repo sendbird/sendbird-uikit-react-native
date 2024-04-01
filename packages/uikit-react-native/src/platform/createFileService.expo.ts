@@ -39,13 +39,13 @@ const createExpoFileService = ({
       return expoPermissionGranted([res]);
     }
     async hasMediaLibraryPermission(type: 'write' | 'read'): Promise<boolean> {
-      const perms = (await mediaLibraryModule.getPermissionsAsync(
+      const perms = (await imagePickerModule.getMediaLibraryPermissionsAsync(
         type === 'write',
       )) as ExpoMediaLibraryPermissionResponse;
       return expoPermissionGranted([perms]);
     }
     async requestMediaLibraryPermission(type: 'write' | 'read'): Promise<boolean> {
-      const perms = (await mediaLibraryModule.requestPermissionsAsync(
+      const perms = (await imagePickerModule.requestMediaLibraryPermissionsAsync(
         type === 'write',
       )) as ExpoMediaLibraryPermissionResponse;
       return expoPermissionGranted([perms]);
