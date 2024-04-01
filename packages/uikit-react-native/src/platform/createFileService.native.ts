@@ -67,7 +67,7 @@ const createNativeFileService = ({
     default: [],
   });
   const mediaLibraryPermissions: Permission[] = Platform.select({
-    ios: [permissionModule.PERMISSIONS.IOS.MEDIA_LIBRARY, permissionModule.PERMISSIONS.IOS.PHOTO_LIBRARY],
+    ios: [permissionModule.PERMISSIONS.IOS.PHOTO_LIBRARY, permissionModule.PERMISSIONS.IOS.PHOTO_LIBRARY_ADD_ONLY],
     android: getAndroidStoragePermissionsByAPILevel(permissionModule),
     default: [],
   });
@@ -83,14 +83,6 @@ const createNativeFileService = ({
     }
     async hasMediaLibraryPermission(): Promise<boolean> {
       const status = await permissionModule.checkMultiple(mediaLibraryPermissions);
-      if (
-        __DEV__ &&
-        Platform.OS === 'ios' &&
-        status['ios.permission.MEDIA_LIBRARY'] === 'unavailable' &&
-        status['ios.permission.PHOTO_LIBRARY'] === 'granted'
-      ) {
-        return true;
-      }
       return nativePermissionGranted(status);
     }
     async requestMediaLibraryPermission(): Promise<boolean> {

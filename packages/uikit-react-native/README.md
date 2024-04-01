@@ -96,7 +96,6 @@ Add the following permission usage descriptions to your `info.plist` file.
 | Key                                                 | Type   | Value                                                           |
 | --------------------------------------------------- | ------ | --------------------------------------------------------------- |
 | Privacy - Camera Usage Description                  | string | $(PRODUCT_NAME) would like to use your camera                   |
-| Privacy - Media Library Usage Description           | string | $(PRODUCT_NAME) would like access to your photo library         |
 | Privacy - Photo Library Usage Description           | string | $(PRODUCT_NAME) would like access to your photo library         |
 | Privacy - Photo Library Additions Usage Description | string | $(PRODUCT_NAME) would like to save photos to your photo library |
 
