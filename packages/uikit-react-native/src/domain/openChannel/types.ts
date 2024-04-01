@@ -72,6 +72,7 @@ export type OpenChannelProps = {
   >;
   Input: Pick<
     ChannelInputProps,
+    | 'inputDisabled'
     | 'shouldRenderInput'
     | 'onPressSendUserMessage'
     | 'onPressSendFileMessage'

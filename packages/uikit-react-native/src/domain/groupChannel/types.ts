@@ -93,6 +93,7 @@ export interface GroupChannelProps {
   };
   Input: Pick<
     ChannelInputProps,
+    | 'inputDisabled'
     | 'shouldRenderInput'
     | 'onPressSendUserMessage'
     | 'onPressSendFileMessage'
