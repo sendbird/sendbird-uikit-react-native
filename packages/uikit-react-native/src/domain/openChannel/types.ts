@@ -4,6 +4,7 @@ import type { UseOpenChannelMessagesOptions } from '@sendbird/uikit-chat-hooks';
 import type { Icon } from '@sendbird/uikit-react-native-foundation';
 import type {
   OnBeforeHandler,
+  PickPartial,
   SendbirdFileMessage,
   SendbirdFileMessageCreateParams,
   SendbirdFileMessageUpdateParams,
@@ -70,15 +71,15 @@ export type OpenChannelProps = {
     | 'flatListProps'
     | 'hasNext'
   >;
-  Input: Pick<
+  Input: PickPartial<
     ChannelInputProps,
-    | 'inputDisabled'
     | 'shouldRenderInput'
     | 'onPressSendUserMessage'
     | 'onPressSendFileMessage'
     | 'onPressUpdateUserMessage'
     | 'onPressUpdateFileMessage'
-    | 'AttachmentsButton'
+    | 'AttachmentsButton',
+    'inputDisabled'
   >;
 
   Provider: {
