@@ -1,20 +1,3 @@
-## v3.5.0
+## v3.5.1
 
-- Added `enableReactionsSupergroup` to enable reactions in super group channels.
-  ```tsx
-  import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
-
-  const App = () => {
-    return (
-      <SendbirdUIKitContainer
-        uikitOptions={{
-          groupChannel: {
-            enableReactionsSupergroup: true,
-          },
-        }}
-      >
-        {/* Rest of your app */}
-      </SendbirdUIKitContainer>
-    );
-  };
-  ```
+- Removed unused ios media library permission in the `FileService` implementation.
