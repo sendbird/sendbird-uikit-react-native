@@ -1,2 +1,3 @@
 storage_mode("git")
 git_branch("fastlane")
+app_identifier(["com.sendbird.uikit.reactnative.sample", "com.sendbird.uikit.reactnative.sample.NotificationService"])
