@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Platform, StyleProp, StyleSheet, ViewStyle } from 'react-native';
 
-import { useForceUpdate } from '@sendbird/uikit-utils';
+import { useForceUpdate } from '@gathertown/uikit-utils';
 
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';

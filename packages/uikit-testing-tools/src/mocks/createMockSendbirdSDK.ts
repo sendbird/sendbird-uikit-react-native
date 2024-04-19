@@ -25,8 +25,8 @@ import type {
   SendbirdGroupChannel,
   SendbirdGroupChannelCollection,
   SendbirdOpenChannel,
-} from '@sendbird/uikit-utils';
-import { ApplicationAttributes, PremiumFeatures } from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
+import { ApplicationAttributes, PremiumFeatures } from '@gathertown/uikit-utils';
 
 import { createTestContext } from '../utils/createTestContext';
 import { createMockChannel } from './createMockChannel';

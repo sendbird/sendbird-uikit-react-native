@@ -1,8 +1,8 @@
 import { act, renderHook, waitFor } from '@testing-library/react-native';
 
-import type { CustomQueryInterface } from '@sendbird/uikit-chat-hooks';
-import { createMockSendbirdChat } from '@sendbird/uikit-testing-tools';
-import { NOOP } from '@sendbird/uikit-utils';
+import type { CustomQueryInterface } from '@gathertown/uikit-chat-hooks';
+import { createMockSendbirdChat } from '@gathertown/uikit-testing-tools';
+import { NOOP } from '@gathertown/uikit-utils';
 
 import { useUserList } from '../../common/useUserList';
 

@@ -1,10 +1,10 @@
-import type { StringSet } from '@sendbird/uikit-react-native';
+import type { StringSet } from '@gathertown/uikit-react-native';
 
 /**
  * How to use
  * {@link }
  * */
-import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
+import { SendbirdUIKitContainer } from '@gathertown/uikit-react-native';
 
 const App = () => {
   // @ts-ignore
@@ -16,7 +16,7 @@ const App = () => {
  * Configure mention settings
  * {@link }
  * */
-// import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
+// import { SendbirdUIKitContainer } from '@gathertown/uikit-react-native';
 
 const App2 = () => {
   // @ts-ignore
@@ -49,7 +49,7 @@ function _stringResource(str: StringSet) {
  * Icon resource
  * {@link }
  * */
-import { Icon } from '@sendbird/uikit-react-native-foundation';
+import { Icon } from '@gathertown/uikit-react-native-foundation';
 
 Icon.Assets['info'] = require('your_icons/info_icon.png');
 Icon.Assets['radio-on'] = require('your_icons/radio-on_icon.png');

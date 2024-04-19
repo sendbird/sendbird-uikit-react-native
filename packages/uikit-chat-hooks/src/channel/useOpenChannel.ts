@@ -1,6 +1,6 @@
 import { useReducer } from 'react';
 
-import { SendbirdChatSDK, SendbirdOpenChannel, useAsyncEffect } from '@sendbird/uikit-utils';
+import { SendbirdChatSDK, SendbirdOpenChannel, useAsyncEffect } from '@gathertown/uikit-utils';
 
 type State = { loading: boolean; channel?: SendbirdOpenChannel; error?: unknown };
 

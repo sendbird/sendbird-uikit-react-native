@@ -1,6 +1,6 @@
 import type { Locale } from 'date-fns';
 
-import type { PartialDeep } from '@sendbird/uikit-utils';
+import type { PartialDeep } from '@gathertown/uikit-utils';
 import {
   getDateSeparatorFormat,
   getFileTypeFromMessage,
@@ -13,7 +13,7 @@ import {
   getMessageTimeFormat,
   getOpenChannelParticipants,
   getOpenChannelTitle,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import { UNKNOWN_USER_ID } from '../constants';
 import type { StringSet } from './StringSet.type';

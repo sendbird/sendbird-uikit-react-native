@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { createContext, useState } from 'react';
 
-import type { ContextValue } from '@sendbird/uikit-utils';
-import { NOOP } from '@sendbird/uikit-utils';
+import type { ContextValue } from '@gathertown/uikit-utils';
+import { NOOP } from '@gathertown/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import type { UserListContextsType, UserListModule } from '../types';

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { NativeSyntheticEvent, TextInput, TextInputSelectionChangeEventData } from 'react-native';
 import { Platform } from 'react-native';
 
-import { SendbirdFileMessage, SendbirdUserMessage, replace, useFreshCallback } from '@sendbird/uikit-utils';
+import { SendbirdFileMessage, SendbirdUserMessage, replace, useFreshCallback } from '@gathertown/uikit-utils';
 
 import type { MentionedUser } from '../types';
 import { useSendbirdChat } from './useContext';

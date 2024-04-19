@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { createMessageSearchFragment, SendbirdUIKitContainer, StringSet } from "@sendbird/uikit-react-native";
-import { Icon } from "@sendbird/uikit-react-native-foundation";
+import { createMessageSearchFragment, SendbirdUIKitContainer, StringSet } from "@gathertown/uikit-react-native";
+import { Icon } from "@gathertown/uikit-react-native-foundation";
 
 const MySearchResultItem = (_: object) => <React.Fragment />;
 

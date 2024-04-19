@@ -1,5 +1,5 @@
 {
-  "repository": "git@github.com:sendbird/sendbird-uikit-react-native.git",
+  "repository": "git@github.com:gathertown/sendbird-uikit-react-native.git",
   "private": true,
   "workspaces": {
     "packages": [
@@ -31,11 +31,11 @@
     "sample:android": "cd sample; yarn android",
     "deploy:ios": "cd sample/ios && bundle exec fastlane deploy",
     "deploy:android": "cd sample/android && bundle exec fastlane deploy",
-    "bump:major": "lerna version major --no-git-tag-version",
-    "bump:minor": "lerna version minor --no-git-tag-version",
-    "bump:patch": "lerna version patch --no-git-tag-version",
+    "bump:major": "lerna version major --conventional-commits --no-changelog --force-publish",
+    "bump:minor": "lerna version minor --conventional-commits --no-changelog --force-publish",
+    "bump:patch": "lerna version patch --conventional-commits --no-changelog --force-publish",
     "deploy:npm": "lerna publish from-git",
-    "make:feat": "yarn workspace @sendbird/uikit-react-native create-domain"
+    "make:feat": "yarn workspace @gathertown/uikit-react-native create-domain"
   },
   "devDependencies": {
     "@testing-library/react-native": "11",

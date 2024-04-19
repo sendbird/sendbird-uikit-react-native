@@ -7,7 +7,7 @@ import {
   createNativeFileService,
   createNativeMediaService,
   createNativeNotificationService,
-} from '@sendbird/uikit-react-native';
+} from '@gathertown/uikit-react-native';
 
 /**
  * Helper functions#React Native CLI

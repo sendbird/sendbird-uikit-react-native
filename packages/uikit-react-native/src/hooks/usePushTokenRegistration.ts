@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { Platform } from 'react-native';
 
-import { Logger, useFreshCallback, useIIFE } from '@sendbird/uikit-utils';
+import { Logger, useFreshCallback, useIIFE } from '@gathertown/uikit-utils';
 
 import { usePlatformService, useSendbirdChat } from './useContext';
 

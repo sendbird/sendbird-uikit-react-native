@@ -1,7 +1,7 @@
 import type React from 'react';
 import type { FlatListProps } from 'react-native';
 
-import type { SendbirdBaseMessage, SendbirdGroupChannel, SendbirdMessageSearchQuery } from '@sendbird/uikit-utils';
+import type { SendbirdBaseMessage, SendbirdGroupChannel, SendbirdMessageSearchQuery } from '@gathertown/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 

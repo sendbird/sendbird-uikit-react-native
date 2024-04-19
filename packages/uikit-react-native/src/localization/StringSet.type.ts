@@ -10,7 +10,7 @@ import type {
   SendbirdParticipant,
   SendbirdUser,
   SendbirdUserMessage,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 /**
  * StringSet interface

@@ -1,8 +1,8 @@
 import { useEffect, useLayoutEffect, useRef } from 'react';
 
 import { UserEventHandler } from '@sendbird/chat';
-import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
-import { Logger } from '@sendbird/uikit-utils';
+import type { SendbirdChatSDK } from '@gathertown/uikit-utils';
+import { Logger } from '@gathertown/uikit-utils';
 
 export const useUserEventHandler = (
   sdk: SendbirdChatSDK,

@@ -10,9 +10,9 @@ import {
   useBottomSheet,
   useToast,
   useUIKitTheme,
-} from '@sendbird/uikit-react-native-foundation';
-import Icon from '@sendbird/uikit-react-native-foundation/src/components/Icon';
-import { ifThenOr, useSafeAreaPadding } from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-react-native-foundation';
+import Icon from '@gathertown/uikit-react-native-foundation/src/components/Icon';
+import { ifThenOr, useSafeAreaPadding } from '@gathertown/uikit-utils';
 
 import { useLocalization, usePlatformService } from '../../../hooks/useContext';
 import SBUError from '../../../libs/SBUError';

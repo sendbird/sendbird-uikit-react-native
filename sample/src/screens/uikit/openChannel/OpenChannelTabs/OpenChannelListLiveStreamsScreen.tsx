@@ -5,7 +5,7 @@ import {
   createOpenChannelListFragment,
   createOpenChannelListModule,
   useSendbirdChat,
-} from '@sendbird/uikit-react-native';
+} from '@gathertown/uikit-react-native';
 import {
   Avatar,
   Box,
@@ -14,8 +14,8 @@ import {
   Text,
   useHeaderStyle,
   useUIKitTheme,
-} from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdOpenChannel } from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-react-native-foundation';
+import type { SendbirdOpenChannel } from '@gathertown/uikit-utils';
 
 import { useAppNavigation } from '../../../../hooks/useAppNavigation';
 import { Routes } from '../../../../libs/navigation';

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import type { SendbirdAdminMessage } from '@sendbird/uikit-utils';
+import type { SendbirdAdminMessage } from '@gathertown/uikit-utils';
 
 import Box from '../../components/Box';
 import Text from '../../components/Text';

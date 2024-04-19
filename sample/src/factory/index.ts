@@ -16,8 +16,8 @@ import {
   createNativeFileService,
   createNativeMediaService,
   createNativeNotificationService,
-} from '@sendbird/uikit-react-native';
-import { Logger, SendbirdChatSDK } from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-react-native';
+import { Logger, SendbirdChatSDK } from '@gathertown/uikit-utils';
 
 import { APP_ID } from '../env';
 

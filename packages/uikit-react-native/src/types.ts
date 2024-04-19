@@ -1,6 +1,6 @@
 import type { ErrorInfo, ReactNode } from 'react';
 
-import type { SendbirdUser } from '@sendbird/uikit-utils';
+import type { SendbirdUser } from '@gathertown/uikit-utils';
 
 export type KeyValuePairGet = [string, string | null];
 export type KeyValuePairSet = [string, string];

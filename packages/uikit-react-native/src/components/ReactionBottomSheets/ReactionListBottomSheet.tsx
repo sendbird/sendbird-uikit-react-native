@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, Pressable, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Image, Modal, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { Image, Modal, createStyleSheet, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
 
 import { UNKNOWN_USER_ID } from '../../constants';
 import type { ReactionBottomSheetProps } from './index';

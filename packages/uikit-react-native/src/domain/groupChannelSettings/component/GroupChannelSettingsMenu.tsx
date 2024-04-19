@@ -2,9 +2,9 @@ import React, { useContext } from 'react';
 import { View } from 'react-native';
 
 import { PushTriggerOption } from '@sendbird/chat';
-import type { MenuBarProps } from '@sendbird/uikit-react-native-foundation';
-import { Icon, MenuBar, Switch, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { Logger, conditionChaining, useIIFE } from '@sendbird/uikit-utils';
+import type { MenuBarProps } from '@gathertown/uikit-react-native-foundation';
+import { Icon, MenuBar, Switch, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
+import { Logger, conditionChaining, useIIFE } from '@gathertown/uikit-utils';
 
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelSettingsContexts } from '../module/moduleContext';

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Keyboard, KeyboardEvent, KeyboardEventName, LayoutAnimation, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { NOOP } from '@sendbird/uikit-utils';
+import { NOOP } from '@gathertown/uikit-utils';
 
 type KeyboardEvents = {
   showEvent: KeyboardEventName;

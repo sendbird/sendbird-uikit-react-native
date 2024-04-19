@@ -1,4 +1,4 @@
-import type { OpenChannelContextsType } from '@sendbird/uikit-react-native';
+import type { OpenChannelContextsType } from '@gathertown/uikit-react-native';
 
 const DonationMessage = (_:object) => <></>
 
@@ -6,8 +6,8 @@ const DonationMessage = (_:object) => <></>
  * Usage
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-an-open-channel#2-usage}
  * */
-import { useSendbirdChat, createOpenChannelFragment } from "@sendbird/uikit-react-native";
-import { useOpenChannel } from "@sendbird/uikit-chat-hooks";
+import { useSendbirdChat, createOpenChannelFragment } from "@gathertown/uikit-react-native";
+import { useOpenChannel } from "@gathertown/uikit-chat-hooks";
 
 const OpenChannelFragment = createOpenChannelFragment();
 
@@ -72,9 +72,9 @@ import { Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/elements';
 
-import { OpenChannelContexts, OpenChannelModule, OpenChannelMessageRenderer } from '@sendbird/uikit-react-native';
-import { Icon } from '@sendbird/uikit-react-native-foundation';
-// import { useOpenChannel } from "@sendbird/uikit-chat-hooks";
+import { OpenChannelContexts, OpenChannelModule, OpenChannelMessageRenderer } from '@gathertown/uikit-react-native';
+import { Icon } from '@gathertown/uikit-react-native-foundation';
+// import { useOpenChannel } from "@gathertown/uikit-chat-hooks";
 
 const UseReactNavigationHeader: OpenChannelModule['Header'] = ({ rightIconName, onPressHeaderRight, onPressHeaderLeft }) => {
   const navigation = useNavigation();

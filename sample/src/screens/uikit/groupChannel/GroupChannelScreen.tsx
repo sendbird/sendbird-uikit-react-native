@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { useGroupChannel } from '@sendbird/uikit-chat-hooks';
-import { createGroupChannelFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
+import { useGroupChannel } from '@gathertown/uikit-chat-hooks';
+import { createGroupChannelFragment, useSendbirdChat } from '@gathertown/uikit-react-native';
 
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
 import { Routes } from '../../../libs/navigation';
@@ -22,8 +22,8 @@ import { Routes } from '../../../libs/navigation';
  * import { useNavigation } from "@react-navigation/native";
  * import { useHeaderHeight } from '@react-navigation/elements';
  *
- * import { GroupChannelContexts, GroupChannelModule } from '@sendbird/uikit-react-native';
- * import { Icon } from '@sendbird/uikit-react-native-foundation';
+ * import { GroupChannelContexts, GroupChannelModule } from '@gathertown/uikit-react-native';
+ * import { Icon } from '@gathertown/uikit-react-native-foundation';
  *
  * const UseReactNavigationHeader: GroupChannelModule['Header'] = ({ onPressHeaderRight, onPressHeaderLeft }) => {
  *   const navigation = useNavigation();

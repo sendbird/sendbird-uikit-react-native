@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
 
-import { useChannelHandler, useUserList } from '@sendbird/uikit-chat-hooks';
-import type { ActionMenuItem } from '@sendbird/uikit-react-native-foundation';
-import { useActionMenu } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdParticipant } from '@sendbird/uikit-utils';
-import { ASYNC_NOOP, ifThenOr, isDifferentChannel, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
+import { useChannelHandler, useUserList } from '@gathertown/uikit-chat-hooks';
+import type { ActionMenuItem } from '@gathertown/uikit-react-native-foundation';
+import { useActionMenu } from '@gathertown/uikit-react-native-foundation';
+import type { SendbirdParticipant } from '@gathertown/uikit-utils';
+import { ASYNC_NOOP, ifThenOr, isDifferentChannel, useFreshCallback, useUniqHandlerId } from '@gathertown/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import UserActionBar from '../components/UserActionBar';

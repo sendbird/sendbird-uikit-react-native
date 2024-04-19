@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { useGroupChannelList } from '@sendbird/uikit-chat-hooks';
-import { PASS, useAppState, useFreshCallback } from '@sendbird/uikit-utils';
+import { useGroupChannelList } from '@gathertown/uikit-chat-hooks';
+import { PASS, useAppState, useFreshCallback } from '@gathertown/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import GroupChannelPreviewContainer from '../containers/GroupChannelPreviewContainer';

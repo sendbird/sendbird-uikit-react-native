@@ -8,7 +8,7 @@ const GroupChannelScreen = () => <React.Fragment />;
  * */
 // @ts-ignore
 import { Navigation } from 'react-native-navigation';
-import { createGroupChannelListFragment } from '@sendbird/uikit-react-native';
+import { createGroupChannelListFragment } from '@gathertown/uikit-react-native';
 
 const GroupChannelListFragment = createGroupChannelListFragment();
 

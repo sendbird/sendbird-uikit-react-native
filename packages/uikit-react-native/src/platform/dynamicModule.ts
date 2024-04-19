@@ -2,7 +2,7 @@
 import type * as RNCNetInfo from '@react-native-community/netinfo';
 import { NativeModules, UIManager } from 'react-native';
 
-import { Logger } from '@sendbird/uikit-utils';
+import { Logger } from '@gathertown/uikit-utils';
 
 export type SBUNativeModule = keyof DynamicModules;
 

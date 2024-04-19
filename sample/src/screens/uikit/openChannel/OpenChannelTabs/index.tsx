@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 
-import { Icon, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { Icon, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
 
 import { useAppNavigation } from '../../../../hooks/useAppNavigation';
 import { Routes } from '../../../../libs/navigation';

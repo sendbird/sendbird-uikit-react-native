@@ -1,8 +1,8 @@
 import { useCallback, useRef, useState } from 'react';
 
-import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
-import type { SendbirdChatSDK, SendbirdGroupChannel, SendbirdMember, SendbirdUser } from '@sendbird/uikit-utils';
-import { isDifferentChannel, useAsyncEffect, useDebounceEffect, useUniqHandlerId } from '@sendbird/uikit-utils';
+import { useChannelHandler } from '@gathertown/uikit-chat-hooks';
+import type { SendbirdChatSDK, SendbirdGroupChannel, SendbirdMember, SendbirdUser } from '@gathertown/uikit-utils';
+import { isDifferentChannel, useAsyncEffect, useDebounceEffect, useUniqHandlerId } from '@gathertown/uikit-utils';
 
 import { useSendbirdChat } from '../hooks/useContext';
 import type { Range } from '../types';

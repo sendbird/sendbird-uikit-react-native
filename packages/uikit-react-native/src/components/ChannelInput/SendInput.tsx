@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import { MentionType } from '@sendbird/chat/message';
-import type { BottomSheetItem } from '@sendbird/uikit-react-native-foundation';
+import type { BottomSheetItem } from '@gathertown/uikit-react-native-foundation';
 import {
   Icon,
   ImageWithPlaceholder,
@@ -21,7 +21,7 @@ import {
   useBottomSheet,
   useToast,
   useUIKitTheme,
-} from '@sendbird/uikit-react-native-foundation';
+} from '@gathertown/uikit-react-native-foundation';
 import {
   FileIcon,
   Logger,
@@ -33,7 +33,7 @@ import {
   isImage,
   shouldCompressImage,
   useIIFE,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 import SBUError from '../../libs/SBUError';

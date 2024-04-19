@@ -1,7 +1,7 @@
 import { act, renderHook, waitFor } from '@testing-library/react-native';
 
 import { ChannelType } from '@sendbird/chat';
-import { createMockChannel, createMockMessage } from '@sendbird/uikit-testing-tools';
+import { createMockChannel, createMockMessage } from '@gathertown/uikit-testing-tools';
 
 import { useGroupChannelListReducer } from '../../../channel/useGroupChannelList/reducer';
 

@@ -1,8 +1,8 @@
 import { useRef } from 'react';
 
 import { GroupChannelListOrder } from '@sendbird/chat/groupChannel';
-import type { SendbirdChannel, SendbirdChatSDK, SendbirdGroupChannelListQuery } from '@sendbird/uikit-utils';
-import { confirmAndMarkAsDelivered, useAsyncEffect, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
+import type { SendbirdChannel, SendbirdChatSDK, SendbirdGroupChannelListQuery } from '@gathertown/uikit-utils';
+import { confirmAndMarkAsDelivered, useAsyncEffect, useFreshCallback, useUniqHandlerId } from '@gathertown/uikit-utils';
 
 import { useAppFeatures } from '../../common/useAppFeatures';
 import { useChannelHandler } from '../../handler/useChannelHandler';

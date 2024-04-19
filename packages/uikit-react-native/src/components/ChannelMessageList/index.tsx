@@ -10,7 +10,7 @@ import {
   useBottomSheet,
   useToast,
   useUIKitTheme,
-} from '@sendbird/uikit-react-native-foundation';
+} from '@gathertown/uikit-react-native-foundation';
 import {
   Logger,
   SendbirdFileMessage,
@@ -26,7 +26,7 @@ import {
   shouldRenderReaction,
   toMegabyte,
   useFreshCallback,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import type { UserProfileContextType } from '../../contexts/UserProfileCtx';
 import { useLocalization, usePlatformService, useSendbirdChat, useUserProfile } from '../../hooks/useContext';

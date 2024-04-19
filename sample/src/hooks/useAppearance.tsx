@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useContext, useState } from 'react';
 import { Appearance } from 'react-native';
 
-import { NOOP, useAsyncLayoutEffect } from '@sendbird/uikit-utils';
+import { NOOP, useAsyncLayoutEffect } from '@gathertown/uikit-utils';
 
 const DEFAULT_APPEARANCE = 'light';
 

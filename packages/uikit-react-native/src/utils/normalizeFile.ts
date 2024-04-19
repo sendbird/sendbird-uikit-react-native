@@ -1,11 +1,11 @@
-import type { PartialNullable } from '@sendbird/uikit-utils';
+import type { PartialNullable } from '@gathertown/uikit-utils';
 import {
   getFileExtension,
   getFileExtensionFromMime,
   getFileExtensionFromUri,
   getMimeFromFileExtension,
   normalizeFileName,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import type { FilePickerResponse, FileType } from '../platform/types';
 

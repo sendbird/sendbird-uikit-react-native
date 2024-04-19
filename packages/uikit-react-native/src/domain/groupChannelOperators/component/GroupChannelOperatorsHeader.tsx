@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { Icon, useHeaderStyle } from '@sendbird/uikit-react-native-foundation';
+import { Icon, useHeaderStyle } from '@gathertown/uikit-react-native-foundation';
 
 import { GroupChannelOperatorsContexts } from '../module/moduleContext';
 import type { GroupChannelOperatorsProps } from '../types';

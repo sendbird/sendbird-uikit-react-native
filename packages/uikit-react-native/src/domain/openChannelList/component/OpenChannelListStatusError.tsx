@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box } from '@sendbird/uikit-react-native-foundation';
+import { Box } from '@gathertown/uikit-react-native-foundation';
 
 import TypedPlaceholder from '../../../components/TypedPlaceholder';
 import type { OpenChannelListModule } from '../types';

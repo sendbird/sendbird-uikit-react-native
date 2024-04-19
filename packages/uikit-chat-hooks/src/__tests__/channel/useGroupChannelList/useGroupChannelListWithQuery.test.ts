@@ -1,7 +1,7 @@
 import { act, renderHook, waitFor } from '@testing-library/react-native';
 
 import { GroupChannelListOrder, GroupChannelListQuery } from '@sendbird/chat/groupChannel';
-import { createMockQuery, createMockSendbirdChat } from '@sendbird/uikit-testing-tools';
+import { createMockQuery, createMockSendbirdChat } from '@gathertown/uikit-testing-tools';
 
 import { useGroupChannelListWithQuery } from '../../../channel/useGroupChannelList/useGroupChannelListWithQuery';
 

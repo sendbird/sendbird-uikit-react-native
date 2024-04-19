@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useState } from 'react';
 
-import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
+import { useChannelHandler } from '@gathertown/uikit-chat-hooks';
 import {
   NOOP,
   SendbirdFileMessage,
@@ -9,7 +9,7 @@ import {
   SendbirdUserMessage,
   isDifferentChannel,
   useUniqHandlerId,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';

@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, ListRenderItem } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { SendbirdUser, getUserUniqId, useFreshCallback } from '@sendbird/uikit-utils';
+import { SendbirdUser, getUserUniqId, useFreshCallback } from '@gathertown/uikit-utils';
 
 import type { OpenChannelOperatorsProps } from '../types';
 

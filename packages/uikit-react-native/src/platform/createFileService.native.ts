@@ -13,7 +13,7 @@ import {
   getFileExtensionFromUri,
   getFileType,
   normalizeFileName,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import SBUError from '../libs/SBUError';
 import nativePermissionGranted from '../utils/nativePermissionGranted';

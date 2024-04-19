@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { useUserList } from '@sendbird/uikit-chat-hooks';
-import { useActionMenu } from '@sendbird/uikit-react-native-foundation';
-import { useFreshCallback } from '@sendbird/uikit-utils';
+import { useUserList } from '@gathertown/uikit-chat-hooks';
+import { useActionMenu } from '@gathertown/uikit-react-native-foundation';
+import { useFreshCallback } from '@gathertown/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import UserActionBar from '../components/UserActionBar';

@@ -1,7 +1,7 @@
 import type React from 'react';
 
-import type { MenuBarProps } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdOpenChannel } from '@sendbird/uikit-utils';
+import type { MenuBarProps } from '@gathertown/uikit-react-native-foundation';
+import type { SendbirdOpenChannel } from '@gathertown/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 

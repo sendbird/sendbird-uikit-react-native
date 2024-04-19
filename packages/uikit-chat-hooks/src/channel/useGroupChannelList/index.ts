@@ -1,4 +1,4 @@
-import { Logger } from '@sendbird/uikit-utils';
+import { Logger } from '@gathertown/uikit-utils';
 
 import type { UseGroupChannelList } from '../../types';
 import { useGroupChannelListWithCollection } from './useGroupChannelListWithCollection';

@@ -2,9 +2,9 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
-import { Icon, Image, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { SendbirdBaseChannel, SendbirdBaseMessage, useUniqHandlerId } from '@sendbird/uikit-utils';
+import { useChannelHandler } from '@gathertown/uikit-chat-hooks';
+import { Icon, Image, createStyleSheet, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
+import { SendbirdBaseChannel, SendbirdBaseMessage, useUniqHandlerId } from '@gathertown/uikit-utils';
 
 import { UNKNOWN_USER_ID } from '../../constants';
 import { useReaction, useSendbirdChat } from '../../hooks/useContext';

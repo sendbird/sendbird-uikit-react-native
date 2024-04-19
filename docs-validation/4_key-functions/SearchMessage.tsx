@@ -4,8 +4,8 @@
  * */
 import React from 'react';
 
-import { useGroupChannel } from '@sendbird/uikit-chat-hooks';
-import { MessageSearchProps, createMessageSearchFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
+import { useGroupChannel } from '@gathertown/uikit-chat-hooks';
+import { MessageSearchProps, createMessageSearchFragment, useSendbirdChat } from '@gathertown/uikit-react-native';
 
 const MessageSearchFragment = createMessageSearchFragment();
 const MessageSearchScreen = ({ route: { params } }: any) => {

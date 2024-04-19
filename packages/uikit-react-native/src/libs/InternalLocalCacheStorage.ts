@@ -1,4 +1,4 @@
-import { ASYNC_NOOP } from '@sendbird/uikit-utils';
+import { ASYNC_NOOP } from '@gathertown/uikit-utils';
 
 import type { KeyValuePairGet, KeyValuePairSet, LocalCacheStorage } from '../types';
 

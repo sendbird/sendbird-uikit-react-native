@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Placeholder } from '@sendbird/uikit-react-native-foundation';
+import { Placeholder } from '@gathertown/uikit-react-native-foundation';
 
 import { useLocalization } from '../hooks/useContext';
 

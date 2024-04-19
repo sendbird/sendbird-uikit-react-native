@@ -1,8 +1,8 @@
 import React from 'react';
 import { SectionList, View } from 'react-native';
 
-import type { ErrorBoundaryProps } from '@sendbird/uikit-react-native';
-import { Button, Palette, Text } from '@sendbird/uikit-react-native-foundation';
+import type { ErrorBoundaryProps } from '@gathertown/uikit-react-native';
+import { Button, Palette, Text } from '@gathertown/uikit-react-native-foundation';
 
 const ErrorInfoScreen = (props: ErrorBoundaryProps) => {
   const renderHeader = (props: { section: { title: string } }) => (

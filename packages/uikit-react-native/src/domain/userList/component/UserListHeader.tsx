@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { Icon, Text, useHeaderStyle, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { Icon, Text, useHeaderStyle, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
 
 import { UserListContexts } from '../module/moduleContext';
 import type { UserListContextsType, UserListProps } from '../types';

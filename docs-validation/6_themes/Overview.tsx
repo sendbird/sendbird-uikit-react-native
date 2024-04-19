@@ -6,7 +6,7 @@ import {
   UIKitPalette,
   UIKitTheme,
   createTheme,
-} from '@sendbird/uikit-react-native-foundation';
+} from '@gathertown/uikit-react-native-foundation';
 
 const CustomPalette: UIKitPalette = Palette;
 
@@ -16,8 +16,8 @@ const CustomPalette: UIKitPalette = Palette;
  * */
 import { useColorScheme, View, Text } from 'react-native';
 
-import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
-import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { SendbirdUIKitContainer } from '@gathertown/uikit-react-native';
+import { DarkUIKitTheme, LightUIKitTheme } from '@gathertown/uikit-react-native-foundation';
 
 const App = () => {
   const colorScheme = useColorScheme();
@@ -55,7 +55,7 @@ function theme(_: UIKitTheme) {
  * How to use
  * {@link https://sendbird.com/docs/uikit/v3/react-native/themes/overview#2-how-to-use}
  * */
-import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
 
 const Component = () => {
   const { colors } = useUIKitTheme();
@@ -71,7 +71,7 @@ const Component = () => {
  * Customize the theme
  * {@link https://sendbird.com/docs/uikit/v3/react-native/themes/overview#2-customize-the-theme}
  * */
-// import { DarkUIKitTheme, createTheme } from '@sendbird/uikit-react-native-foundation';
+// import { DarkUIKitTheme, createTheme } from '@gathertown/uikit-react-native-foundation';
 
 const MyCustomDarkTheme = createTheme({
   colorScheme: 'dark',

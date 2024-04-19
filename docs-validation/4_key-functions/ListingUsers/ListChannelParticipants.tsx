@@ -3,16 +3,16 @@
 import {
   UserActionBar,
   UserListContextsType,
-} from '@sendbird/uikit-react-native';
-import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
+} from '@gathertown/uikit-react-native';
+import { useBottomSheet } from '@gathertown/uikit-react-native-foundation';
 
 /**
  *
  * {@link }
  * */
 import React, { useState } from 'react';
-import { useSendbirdChat, createOpenChannelParticipantsFragment } from '@sendbird/uikit-react-native';
-import { useOpenChannel } from "@sendbird/uikit-chat-hooks";
+import { useSendbirdChat, createOpenChannelParticipantsFragment } from '@gathertown/uikit-react-native';
+import { useOpenChannel } from "@gathertown/uikit-chat-hooks";
 
 const OpenChannelParticipantsFragment = createOpenChannelParticipantsFragment();
 const OpenChannelParticipantsScreen = ({ route: { params } }: any) => {
@@ -51,7 +51,7 @@ function _context<T>(_: UserListContextsType<T>) {
  * {@link }
  * */
 import { useContext } from 'react';
-import { UserListContexts } from "@sendbird/uikit-react-native";
+import { UserListContexts } from "@gathertown/uikit-react-native";
 
 const Component = () => {
   const { headerTitle, headerRight } = useContext(UserListContexts.Fragment);
@@ -63,7 +63,7 @@ const Component = () => {
  * {@link }
  * */
 // import { useContext } from 'react';
-// import { UserListContexts } from "@sendbird/uikit-react-native";
+// import { UserListContexts } from "@gathertown/uikit-react-native";
 
 const Component2 = () => {
   const { selectedUsers, setSelectedUsers } = useContext(UserListContexts.List);
@@ -75,8 +75,8 @@ const Component2 = () => {
  * {@link }
  * */
 // import React, { useState } from 'react';
-// import { useSendbirdChat, createOpenChannelParticipantsFragment, UserActionBar } from '@sendbird/uikit-react-native';
-// import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
+// import { useSendbirdChat, createOpenChannelParticipantsFragment, UserActionBar } from '@gathertown/uikit-react-native';
+// import { useBottomSheet } from '@gathertown/uikit-react-native-foundation';
 
 const OpenChannelParticipantsFragment2 = createOpenChannelParticipantsFragment();
 const OpenChannelParticipantsScreen2 = ({ route: { params } }: any) => {

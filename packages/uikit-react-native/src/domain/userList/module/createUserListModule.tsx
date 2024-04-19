@@ -1,4 +1,4 @@
-import type { UserStruct } from '@sendbird/uikit-utils';
+import type { UserStruct } from '@gathertown/uikit-utils';
 
 import UserListHeader from '../component/UserListHeader';
 import UserListList from '../component/UserListList';

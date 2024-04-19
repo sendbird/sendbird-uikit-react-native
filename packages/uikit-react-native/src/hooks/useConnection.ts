@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { useUIKitConfig } from '@sendbird/uikit-tools';
-import { Logger, SendbirdChatSDK, SendbirdError, SendbirdUser } from '@sendbird/uikit-utils';
+import { Logger, SendbirdChatSDK, SendbirdError, SendbirdUser } from '@gathertown/uikit-utils';
 
 import type EmojiManager from '../libs/EmojiManager';
 import { useSendbirdChat } from './useContext';

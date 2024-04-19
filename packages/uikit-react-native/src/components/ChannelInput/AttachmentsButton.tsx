@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import { Icon, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { Icon, createStyleSheet, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
 
 export type AttachmentsButtonProps = {
   onPress: () => void;

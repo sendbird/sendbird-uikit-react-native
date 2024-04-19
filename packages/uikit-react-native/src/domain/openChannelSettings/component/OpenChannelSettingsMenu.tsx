@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { View } from 'react-native';
 
-import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
-import type { MenuBarProps } from '@sendbird/uikit-react-native-foundation';
-import { Icon, MenuBar, useAlert, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { SendbirdBaseChannel, isDifferentChannel, useForceUpdate, useUniqHandlerId } from '@sendbird/uikit-utils';
+import { useChannelHandler } from '@gathertown/uikit-chat-hooks';
+import type { MenuBarProps } from '@gathertown/uikit-react-native-foundation';
+import { Icon, MenuBar, useAlert, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
+import { SendbirdBaseChannel, isDifferentChannel, useForceUpdate, useUniqHandlerId } from '@gathertown/uikit-utils';
 
 import { UNKNOWN_USER_ID } from '../../../constants';
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';

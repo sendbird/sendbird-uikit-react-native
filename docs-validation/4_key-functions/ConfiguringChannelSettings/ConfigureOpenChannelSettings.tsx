@@ -1,12 +1,12 @@
-import type { OpenChannelSettingsContextsType } from '@sendbird/uikit-react-native';
+import type { OpenChannelSettingsContextsType } from '@gathertown/uikit-react-native';
 
 /**
  * Usage
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/configuring-channel-settings/configure-open-channel-settings#2-usage}
  * */
 import React, { useState } from 'react';
-import { useSendbirdChat, createOpenChannelSettingsFragment } from '@sendbird/uikit-react-native';
-import { useOpenChannel } from "@sendbird/uikit-chat-hooks";
+import { useSendbirdChat, createOpenChannelSettingsFragment } from '@gathertown/uikit-react-native';
+import { useOpenChannel } from "@gathertown/uikit-chat-hooks";
 
 const OpenChannelSettingsFragment = createOpenChannelSettingsFragment();
 const OpenChannelSettingsScreen = ({ route: { params } }: any) => {
@@ -51,7 +51,7 @@ function _context(_: OpenChannelSettingsContextsType) {
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/configuring-channel-settings/configure-open-channel-settings#2-context-3-fragment}
  * */
 import { useContext } from 'react';
-import { OpenChannelSettingsContexts } from '@sendbird/uikit-react-native';
+import { OpenChannelSettingsContexts } from '@gathertown/uikit-react-native';
 
 const Component = () => {
   const { channel, headerTitle, headerRight, onPressHeaderRight } = useContext(OpenChannelSettingsContexts.Fragment);
@@ -64,9 +64,9 @@ const Component = () => {
  * */
 import { Share } from 'react-native';
 
-// import { useSendbirdChat, createOpenChannelSettingsFragment } from '@sendbird/uikit-react-native';
-import { Icon } from '@sendbird/uikit-react-native-foundation';
-// import { useOpenChannel } from "@sendbird/uikit-chat-hooks";
+// import { useSendbirdChat, createOpenChannelSettingsFragment } from '@gathertown/uikit-react-native';
+import { Icon } from '@gathertown/uikit-react-native-foundation';
+// import { useOpenChannel } from "@gathertown/uikit-chat-hooks";
 
 const OpenChannelSettingsFragment2 = createOpenChannelSettingsFragment();
 const OpenChannelSettingsScreen2 = ({ route: { params } }: any) => {

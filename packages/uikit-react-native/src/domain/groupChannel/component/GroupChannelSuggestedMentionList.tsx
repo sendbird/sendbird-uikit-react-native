@@ -10,8 +10,8 @@ import {
   createStyleSheet,
   useHeaderStyle,
   useUIKitTheme,
-} from '@sendbird/uikit-react-native-foundation';
-import { conditionChaining } from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-react-native-foundation';
+import { conditionChaining } from '@gathertown/uikit-utils';
 
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import useKeyboardStatus from '../../../hooks/useKeyboardStatus';

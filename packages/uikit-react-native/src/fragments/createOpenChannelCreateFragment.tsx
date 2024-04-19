@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { Box, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { NOOP, PASS, SendbirdOpenChannelCreateParams } from '@sendbird/uikit-utils';
+import { Box, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
+import { NOOP, PASS, SendbirdOpenChannelCreateParams } from '@gathertown/uikit-utils';
 
 import { createOpenChannelCreateModule } from '../domain/openChannelCreate';
 import type { OpenChannelCreateFragment, OpenChannelCreateModule } from '../domain/openChannelCreate/types';

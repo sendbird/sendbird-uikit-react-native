@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SendbirdUserMessage, urlRegexStrict } from '@sendbird/uikit-utils';
+import { SendbirdUserMessage, urlRegexStrict } from '@gathertown/uikit-utils';
 
 import Box from '../../components/Box';
 import RegexText, { RegexTextPattern } from '../../components/RegexText';

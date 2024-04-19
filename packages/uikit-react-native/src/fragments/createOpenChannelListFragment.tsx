@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { useOpenChannelList } from '@sendbird/uikit-chat-hooks';
-import { OpenChannelPreview, PressBox } from '@sendbird/uikit-react-native-foundation';
-import { NOOP } from '@sendbird/uikit-utils';
+import { useOpenChannelList } from '@gathertown/uikit-chat-hooks';
+import { OpenChannelPreview, PressBox } from '@gathertown/uikit-react-native-foundation';
+import { NOOP } from '@gathertown/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import { createOpenChannelListModule } from '../domain/openChannelList';

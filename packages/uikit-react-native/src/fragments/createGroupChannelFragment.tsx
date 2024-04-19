@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
 import { ReplyType } from '@sendbird/chat/message';
-import { useGroupChannelMessages } from '@sendbird/uikit-chat-hooks';
+import { useGroupChannelMessages } from '@gathertown/uikit-chat-hooks';
 import {
   NOOP,
   PASS,
@@ -12,7 +12,7 @@ import {
   useFreshCallback,
   useIIFE,
   useRefTracker,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import GroupChannelMessageRenderer from '../components/GroupChannelMessageRenderer';
 import NewMessagesButton from '../components/NewMessagesButton';

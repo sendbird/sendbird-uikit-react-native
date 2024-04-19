@@ -1,5 +1,5 @@
-import type { UseUserListOptions } from '@sendbird/uikit-chat-hooks';
-import type { SendbirdOpenChannel, SendbirdParticipant, SendbirdUser } from '@sendbird/uikit-utils';
+import type { UseUserListOptions } from '@gathertown/uikit-chat-hooks';
+import type { SendbirdOpenChannel, SendbirdParticipant, SendbirdUser } from '@gathertown/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 import type { UserListProps } from '../userList/types';

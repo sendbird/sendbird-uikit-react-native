@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Pressable } from 'react-native';
 
-import { useChannelHandler, useMessageOutgoingStatus } from '@sendbird/uikit-chat-hooks';
+import { useChannelHandler, useMessageOutgoingStatus } from '@gathertown/uikit-chat-hooks';
 import {
   GroupChannelPreview,
   Icon,
   LoadingSpinner,
   createStyleSheet,
   useUIKitTheme,
-} from '@sendbird/uikit-react-native-foundation';
+} from '@gathertown/uikit-react-native-foundation';
 import {
   SendbirdGroupChannel,
   SendbirdUser,
@@ -19,7 +19,7 @@ import {
   isMyMessage,
   useIIFE,
   useUniqHandlerId,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import ChannelCover from '../components/ChannelCover';
 import { DEFAULT_LONG_PRESS_DELAY } from '../constants';

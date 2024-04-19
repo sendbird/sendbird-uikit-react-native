@@ -6,8 +6,8 @@ const MyHeader = () => null;
  * */
 import React from 'react';
 
-import { useGroupChannel } from '@sendbird/uikit-chat-hooks';
-import { createGroupChannelOperatorsFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
+import { useGroupChannel } from '@gathertown/uikit-chat-hooks';
+import { createGroupChannelOperatorsFragment, useSendbirdChat } from '@gathertown/uikit-react-native';
 
 const GroupChannelOperatorsFragment = createGroupChannelOperatorsFragment();
 const GroupChannelOperatorsScreen = ({ route: { params } }: any) => {

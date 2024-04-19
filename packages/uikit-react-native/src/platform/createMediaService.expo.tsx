@@ -4,7 +4,7 @@ import type * as ExpoImageManipulator from 'expo-image-manipulator';
 import type * as ExpoVideoThumbnail from 'expo-video-thumbnails';
 import React from 'react';
 
-import { getDownscaleSize } from '@sendbird/uikit-utils';
+import { getDownscaleSize } from '@gathertown/uikit-utils';
 
 import SBUUtils from '../libs/SBUUtils';
 import expoBackwardUtils from '../utils/expoBackwardUtils';

@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 
-import type { SendbirdBaseChannel, SendbirdChatSDK, SendbirdOpenChannelListQuery } from '@sendbird/uikit-utils';
-import { useAsyncEffect, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
+import type { SendbirdBaseChannel, SendbirdChatSDK, SendbirdOpenChannelListQuery } from '@gathertown/uikit-utils';
+import { useAsyncEffect, useFreshCallback, useUniqHandlerId } from '@gathertown/uikit-utils';
 
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseOpenChannelList, UseOpenChannelListOptions } from '../../types';

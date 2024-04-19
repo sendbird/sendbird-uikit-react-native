@@ -1,4 +1,4 @@
-import type { GroupChannelContextsType } from '@sendbird/uikit-react-native';
+import type { GroupChannelContextsType } from '@gathertown/uikit-react-native';
 
 const AdvertiseMessage = (_:object) => <></>
 
@@ -6,8 +6,8 @@ const AdvertiseMessage = (_:object) => <></>
  * Usage
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-usage}
  * */
-import { useSendbirdChat, createGroupChannelFragment } from "@sendbird/uikit-react-native";
-import { useGroupChannel } from "@sendbird/uikit-chat-hooks";
+import { useSendbirdChat, createGroupChannelFragment } from "@gathertown/uikit-react-native";
+import { useGroupChannel } from "@gathertown/uikit-chat-hooks";
 
 const GroupChannelFragment = createGroupChannelFragment();
 
@@ -86,8 +86,8 @@ import { Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/elements';
 
-import { GroupChannelContexts, GroupChannelModule, GroupChannelMessageRenderer } from '@sendbird/uikit-react-native';
-import { Icon } from '@sendbird/uikit-react-native-foundation';
+import { GroupChannelContexts, GroupChannelModule, GroupChannelMessageRenderer } from '@gathertown/uikit-react-native';
+import { Icon } from '@gathertown/uikit-react-native-foundation';
 
 const UseReactNavigationHeader: GroupChannelModule['Header'] = ({ onPressHeaderRight, onPressHeaderLeft }) => {
   const navigation = useNavigation();

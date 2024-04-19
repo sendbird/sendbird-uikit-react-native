@@ -1,7 +1,7 @@
 import React, { createContext, useState } from 'react';
 
-import type { SendbirdOpenChannel } from '@sendbird/uikit-utils';
-import { NOOP, SendbirdFileMessage, SendbirdUserMessage } from '@sendbird/uikit-utils';
+import type { SendbirdOpenChannel } from '@gathertown/uikit-utils';
+import { NOOP, SendbirdFileMessage, SendbirdUserMessage } from '@gathertown/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization } from '../../../hooks/useContext';

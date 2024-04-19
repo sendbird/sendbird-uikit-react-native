@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react';
 
 import { SendbirdError } from '@sendbird/chat';
-import { useOpenChannelMessages } from '@sendbird/uikit-chat-hooks';
-import { useToast } from '@sendbird/uikit-react-native-foundation';
+import { useOpenChannelMessages } from '@gathertown/uikit-chat-hooks';
+import { useToast } from '@gathertown/uikit-react-native-foundation';
 import {
   NOOP,
   PASS,
@@ -11,7 +11,7 @@ import {
   SendbirdUserMessage,
   messageComparator,
   useFreshCallback,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import OpenChannelMessageRenderer from '../components/OpenChannelMessageRenderer';
 import ScrollToBottomButton from '../components/ScrollToBottomButton';

@@ -3,7 +3,7 @@ import React from 'react';
 import type * as RNCreateThumbnail from 'react-native-create-thumbnail';
 import type RNVideo from 'react-native-video';
 
-import { getDownscaleSize, getFileExtension, hash } from '@sendbird/uikit-utils';
+import { getDownscaleSize, getFileExtension, hash } from '@gathertown/uikit-utils';
 
 import SBUUtils from '../libs/SBUUtils';
 import type { MediaServiceInterface } from './types';

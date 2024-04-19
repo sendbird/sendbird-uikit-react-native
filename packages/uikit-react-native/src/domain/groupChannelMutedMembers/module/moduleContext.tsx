@@ -1,6 +1,6 @@
 import React, { createContext } from 'react';
 
-import type { SendbirdGroupChannel } from '@sendbird/uikit-utils';
+import type { SendbirdGroupChannel } from '@gathertown/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization } from '../../../hooks/useContext';

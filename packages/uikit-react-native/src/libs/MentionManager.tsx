@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Text, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdFileMessage, SendbirdUser, SendbirdUserMessage } from '@sendbird/uikit-utils';
-import { createMentionTemplateRegex, replaceWithRegex } from '@sendbird/uikit-utils';
+import { Text, createStyleSheet } from '@gathertown/uikit-react-native-foundation';
+import type { SendbirdFileMessage, SendbirdUser, SendbirdUserMessage } from '@gathertown/uikit-utils';
+import { createMentionTemplateRegex, replaceWithRegex } from '@gathertown/uikit-utils';
 
 import type { MentionedUser, Range } from '../types';
 import type { MentionConfigInterface } from './MentionConfig';

@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import type { UseGroupChannelMessagesOptions } from '@sendbird/uikit-chat-hooks';
+import type { UseGroupChannelMessagesOptions } from '@gathertown/uikit-chat-hooks';
 import type {
   OnBeforeHandler,
   SendbirdFileMessage,
@@ -12,7 +12,7 @@ import type {
   SendbirdUserMessage,
   SendbirdUserMessageCreateParams,
   SendbirdUserMessageUpdateParams,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import type { ChannelInputProps, SuggestedMentionListProps } from '../../components/ChannelInput';
 import type { ChannelMessageListProps } from '../../components/ChannelMessageList';

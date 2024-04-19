@@ -1,7 +1,7 @@
 import { useReducer } from 'react';
 
-import type { SendbirdChannel } from '@sendbird/uikit-utils';
-import { SendbirdGroupChannel, getGroupChannels, mergeObjectArrays } from '@sendbird/uikit-utils';
+import type { SendbirdChannel } from '@gathertown/uikit-utils';
+import { SendbirdGroupChannel, getGroupChannels, mergeObjectArrays } from '@gathertown/uikit-utils';
 
 type Order = 'latest_last_message' | 'chronological' | 'channel_name_alphabetical' | 'metadata_value_alphabetical';
 

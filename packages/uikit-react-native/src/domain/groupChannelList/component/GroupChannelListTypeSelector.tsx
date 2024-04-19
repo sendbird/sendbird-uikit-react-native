@@ -8,7 +8,7 @@ import {
   createStyleSheet,
   useHeaderStyle,
   useUIKitTheme,
-} from '@sendbird/uikit-react-native-foundation';
+} from '@gathertown/uikit-react-native-foundation';
 
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelListContexts } from '../module/moduleContext';

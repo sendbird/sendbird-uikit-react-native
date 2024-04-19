@@ -1,8 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { Avatar, Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { conditionChaining } from '@sendbird/uikit-utils';
+import { Avatar, Icon, Text, createStyleSheet, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
+import { conditionChaining } from '@gathertown/uikit-utils';
 
 type Props = {
   uri: string;

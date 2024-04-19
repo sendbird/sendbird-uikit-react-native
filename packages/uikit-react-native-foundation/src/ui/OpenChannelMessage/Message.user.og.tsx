@@ -1,7 +1,7 @@
 import React from 'react';
 
-import type { SendbirdUserMessage } from '@sendbird/uikit-utils';
-import { urlRegexRough } from '@sendbird/uikit-utils';
+import type { SendbirdUserMessage } from '@gathertown/uikit-utils';
+import { urlRegexRough } from '@gathertown/uikit-utils';
 
 import Box from '../../components/Box';
 import ImageWithPlaceholder from '../../components/ImageWithPlaceholder';

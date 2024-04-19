@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 
-import { Icon, Image, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { truncatedCount } from '@sendbird/uikit-utils';
+import { Icon, Image, Text, createStyleSheet, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
+import { truncatedCount } from '@gathertown/uikit-utils';
 
 type Props = {
   url: string;

@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react-native';
 
-import { createMockSendbirdChat } from '@sendbird/uikit-testing-tools';
+import { createMockSendbirdChat } from '@gathertown/uikit-testing-tools';
 
 import { useChannelHandler } from '../../handler/useChannelHandler';
 

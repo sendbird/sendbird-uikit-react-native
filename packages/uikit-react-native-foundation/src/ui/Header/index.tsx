@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { conditionChaining } from '@sendbird/uikit-utils';
+import { conditionChaining } from '@gathertown/uikit-utils';
 
 import Text, { TextProps } from '../../components/Text';
 import type { BaseHeaderProps } from '../../index';

@@ -17,7 +17,7 @@ import type {
   SendbirdUserMessageCreateParams,
   SendbirdUserMessageUpdateParams,
   UserStruct,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 export interface CustomQueryInterface<Data> {
   isLoading: boolean;

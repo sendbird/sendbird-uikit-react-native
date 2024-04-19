@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-native';
 
 import { UserEventHandler } from '@sendbird/chat';
-import { createMockSendbirdChat } from '@sendbird/uikit-testing-tools';
+import { createMockSendbirdChat } from '@gathertown/uikit-testing-tools';
 
 import { useUserEventHandler } from '../../handler/useUserEventHandler';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { NOOP } from '@sendbird/uikit-utils';
+import { NOOP } from '@gathertown/uikit-utils';
 
 import { createGroupChannelNotificationsModule } from '../domain/groupChannelNotifications';
 import type {

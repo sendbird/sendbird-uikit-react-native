@@ -14,9 +14,9 @@ const createMyAppUserQuery = () => ({
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/creating-a-channel/create-a-group-channel#2-usage}
  * */
 import { useState } from 'react';
-import { useSendbirdChat, createGroupChannelInviteFragment } from "@sendbird/uikit-react-native";
-import type { SendbirdUser } from "@sendbird/uikit-utils";
-import { useGroupChannel } from "@sendbird/uikit-chat-hooks";
+import { useSendbirdChat, createGroupChannelInviteFragment } from "@gathertown/uikit-react-native";
+import type { SendbirdUser } from "@gathertown/uikit-utils";
+import { useGroupChannel } from "@gathertown/uikit-chat-hooks";
 
 const GroupChannelInviteFragment = createGroupChannelInviteFragment<SendbirdUser>();
 const GroupChannelInviteScreen = ({ route: { params } }: any) => {
@@ -41,7 +41,7 @@ const GroupChannelInviteScreen = ({ route: { params } }: any) => {
  * Context
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/creating-a-channel/create-a-group-channel#2-context}
  * */
-import type { UserListContextsType } from "@sendbird/uikit-react-native";
+import type { UserListContextsType } from "@gathertown/uikit-react-native";
 
 function _context<T>(_: UserListContextsType<T>) {
   const fragment = useContext(_.Fragment);
@@ -59,7 +59,7 @@ function _context<T>(_: UserListContextsType<T>) {
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/creating-a-channel/create-a-group-channel#2-context-3-fragment}
  * */
 import { useContext } from 'react';
-import { UserListContexts } from "@sendbird/uikit-react-native";
+import { UserListContexts } from "@gathertown/uikit-react-native";
 
 const Component = () => {
   const { headerTitle, headerRight } = useContext(UserListContexts.Fragment);
@@ -71,7 +71,7 @@ const Component = () => {
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/creating-a-channel/create-a-group-channel#2-context-3-list}
  * */
 // import { useContext } from 'react';
-// import { UserListContexts } from "@sendbird/uikit-react-native";
+// import { UserListContexts } from "@gathertown/uikit-react-native";
 
 const Component2 = () => {
   const { selectedUsers, setSelectedUsers } = useContext(UserListContexts.List);
@@ -82,10 +82,10 @@ const Component2 = () => {
  * Customization
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/creating-a-channel/create-a-group-channel#2-customization}
  * */
-import type { UserStruct } from '@sendbird/uikit-utils';
-import { CustomQuery } from '@sendbird/uikit-chat-hooks';
-// import { useSendbirdChat, createGroupChannelInviteFragment } from '@sendbird/uikit-react-native';
-// import { useGroupChannel } from '@sendbird/uikit-chat-hooks';
+import type { UserStruct } from '@gathertown/uikit-utils';
+import { CustomQuery } from '@gathertown/uikit-chat-hooks';
+// import { useSendbirdChat, createGroupChannelInviteFragment } from '@gathertown/uikit-react-native';
+// import { useGroupChannel } from '@gathertown/uikit-chat-hooks';
 
 interface MyAppUser extends UserStruct {
   userId: string;

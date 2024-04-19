@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, ImageStyle, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
-import { FileType, convertFileTypeToMessageType, getFileIconFromMessageType } from '@sendbird/uikit-utils';
+import { FileType, convertFileTypeToMessageType, getFileIconFromMessageType } from '@gathertown/uikit-utils';
 
 import IconAssets from '../../assets/icon';
 import createStyleSheet from '../../styles/createStyleSheet';

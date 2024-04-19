@@ -8,8 +8,8 @@ const Navigations = () => <></>;
  * */
 import { View } from 'react-native';
 import dateLocale from 'date-fns/locale/ko';
-import { StringSetEn, createBaseStringSet, SendbirdUIKitContainer, useLocalization } from '@sendbird/uikit-react-native';
-import { Text, Button } from '@sendbird/uikit-react-native-foundation';
+import { StringSetEn, createBaseStringSet, SendbirdUIKitContainer, useLocalization } from '@gathertown/uikit-react-native';
+import { Text, Button } from '@gathertown/uikit-react-native-foundation';
 
 const StringSetKo = createBaseStringSet({
   dateLocale,

@@ -2,8 +2,8 @@ import React from 'react';
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { useConnection } from '@sendbird/uikit-react-native';
-import { Button, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { useConnection } from '@gathertown/uikit-react-native';
+import { Button, Text, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
 
 import HomeListItem from '../components/HomeListItem';
 import Versions from '../components/Versions';

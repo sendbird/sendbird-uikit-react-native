@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { View } from 'react-native';
 
-import { Header, Icon, createStyleSheet, useHeaderStyle } from '@sendbird/uikit-react-native-foundation';
+import { Header, Icon, createStyleSheet, useHeaderStyle } from '@gathertown/uikit-react-native-foundation';
 
 import ChannelCover from '../../../components/ChannelCover';
 import { useLocalization } from '../../../hooks/useContext';

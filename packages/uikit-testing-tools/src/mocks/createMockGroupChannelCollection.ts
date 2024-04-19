@@ -6,7 +6,7 @@ import {
   GroupChannelFilter,
   GroupChannelListOrder,
 } from '@sendbird/chat/groupChannel';
-import type { SendbirdGroupChannelCollection } from '@sendbird/uikit-utils';
+import type { SendbirdGroupChannelCollection } from '@gathertown/uikit-utils';
 
 import type { GetMockParams, GetMockProps } from '../types';
 import { createTestContext } from '../utils/createTestContext';

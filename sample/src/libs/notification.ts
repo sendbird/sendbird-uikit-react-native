@@ -3,7 +3,7 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
 import { Platform } from 'react-native';
 
-import { SendbirdDataPayload, isSendbirdNotification, parseSendbirdNotification } from '@sendbird/uikit-utils';
+import { SendbirdDataPayload, isSendbirdNotification, parseSendbirdNotification } from '@gathertown/uikit-utils';
 
 import { Routes, navigationRef, runAfterAppReady } from './navigation';
 

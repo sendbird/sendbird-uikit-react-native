@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { useAppFeatures } from '@sendbird/uikit-chat-hooks';
+import { useAppFeatures } from '@gathertown/uikit-chat-hooks';
 import { SBUConfig, useUIKitConfig } from '@sendbird/uikit-tools';
 import type {
   SendbirdChatSDK,
   SendbirdGroupChannel,
   SendbirdUser,
   SendbirdUserUpdateParams,
-} from '@sendbird/uikit-utils';
-import { confirmAndMarkAsDelivered, useAppState, useForceUpdate } from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
+import { confirmAndMarkAsDelivered, useAppState, useForceUpdate } from '@gathertown/uikit-utils';
 
 import type EmojiManager from '../libs/EmojiManager';
 import type ImageCompressionConfig from '../libs/ImageCompressionConfig';

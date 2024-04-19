@@ -3,7 +3,7 @@ import { useState } from 'react';
 import type { GestureResponderEvent, StyleProp, ViewProps, ViewStyle } from 'react-native';
 import { Pressable, TouchableOpacity } from 'react-native';
 
-import { isFunction } from '@sendbird/uikit-utils';
+import { isFunction } from '@gathertown/uikit-utils';
 
 type PressBoxStateParams = {
   pressed: boolean;

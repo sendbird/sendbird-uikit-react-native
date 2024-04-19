@@ -1,8 +1,8 @@
 import { Route, StackActions, createNavigationContainerRef } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import type { GroupChannelType } from '@sendbird/uikit-react-native';
-import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
+import type { GroupChannelType } from '@gathertown/uikit-react-native';
+import type { SendbirdChatSDK } from '@gathertown/uikit-utils';
 
 import { GetSendbirdSDK } from '../factory';
 import { authManager } from './authentication';

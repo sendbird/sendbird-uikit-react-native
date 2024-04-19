@@ -1,7 +1,7 @@
 import type React from 'react';
 
-import type { UseOpenChannelMessagesOptions } from '@sendbird/uikit-chat-hooks';
-import type { Icon } from '@sendbird/uikit-react-native-foundation';
+import type { UseOpenChannelMessagesOptions } from '@gathertown/uikit-chat-hooks';
+import type { Icon } from '@gathertown/uikit-react-native-foundation';
 import type {
   OnBeforeHandler,
   SendbirdFileMessage,
@@ -12,7 +12,7 @@ import type {
   SendbirdUserMessage,
   SendbirdUserMessageCreateParams,
   SendbirdUserMessageUpdateParams,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import type { ChannelInputProps } from '../../components/ChannelInput';
 import type { ChannelMessageListProps } from '../../components/ChannelMessageList';

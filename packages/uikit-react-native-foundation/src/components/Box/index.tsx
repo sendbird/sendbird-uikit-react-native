@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleProp, View, ViewProps, ViewStyle } from 'react-native';
 
-import { isFunction } from '@sendbird/uikit-utils';
+import { isFunction } from '@gathertown/uikit-utils';
 
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import type { UIKitColors, UIKitPalette } from '../../types';

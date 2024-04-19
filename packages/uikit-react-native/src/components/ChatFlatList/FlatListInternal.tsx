@@ -2,7 +2,7 @@ import type { ForwardedRef, ReactElement } from 'react';
 import type { FlatListProps, FlatList as RNFlatList, ScrollViewProps } from 'react-native';
 import { Platform } from 'react-native';
 
-import type { SendbirdMessage } from '@sendbird/uikit-utils';
+import type { SendbirdMessage } from '@gathertown/uikit-utils';
 
 type FlatListBidirectional<T = SendbirdMessage> = (props: FlatListProps<T> & BidirectionalProps<T>) => ReactElement;
 type BidirectionalProps<T> = {

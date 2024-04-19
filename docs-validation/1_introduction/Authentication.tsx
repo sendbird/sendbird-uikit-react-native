@@ -1,13 +1,13 @@
 import React from 'react';
 
-import type { FileType } from '@sendbird/uikit-react-native';
+import type { FileType } from '@gathertown/uikit-react-native';
 const PROFILE_FILE: FileType = { name: '', size: 0, type: '', uri: '' };
 
 /**
  * Connect to the Sendbird server
  * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/authentication#2-connect-to-the-sendbird-server}
  * */
-import { useConnection } from '@sendbird/uikit-react-native';
+import { useConnection } from '@gathertown/uikit-react-native';
 
 const Component = () => {
   const { connect } = useConnection();
@@ -39,7 +39,7 @@ const Component2 = () => {
  * Retrieve online status of current user
  * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/authentication#2-retrieve-online-status-of-current-user}
  * */
-import { useSendbirdChat } from '@sendbird/uikit-react-native';
+import { useSendbirdChat } from '@gathertown/uikit-react-native';
 
 const Component3 = () => {
   const { currentUser } = useSendbirdChat();
@@ -58,7 +58,7 @@ const Component3 = () => {
  * */
 import RNFBMessaging from '@react-native-firebase/messaging';
 import * as Permissions from 'react-native-permissions';
-import { SendbirdUIKitContainer, createNativeNotificationService } from '@sendbird/uikit-react-native';
+import { SendbirdUIKitContainer, createNativeNotificationService } from '@gathertown/uikit-react-native';
 
 const NotificationService = createNativeNotificationService({
   messagingModule: RNFBMessaging,

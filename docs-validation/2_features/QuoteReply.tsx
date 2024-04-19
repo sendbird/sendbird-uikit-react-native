@@ -2,7 +2,7 @@
  * How to use
  * {@link }
  * */
-import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
+import { SendbirdUIKitContainer } from '@gathertown/uikit-react-native';
 
 const App = () => {
   return (
@@ -23,7 +23,7 @@ const App = () => {
  * String resource
  * {@link }
  * */
-import { StringSet } from '@sendbird/uikit-react-native';
+import { StringSet } from '@gathertown/uikit-react-native';
 function _stringResource(str: StringSet) {
   str.LABELS.REPLY_FROM_SENDER_TO_RECEIVER;
   str.LABELS.CHANNEL_MESSAGE_REPLY;
@@ -40,7 +40,7 @@ function _stringResource(str: StringSet) {
  * Icon resource
  * {@link }
  * */
-import { Icon } from '@sendbird/uikit-react-native-foundation';
+import { Icon } from '@gathertown/uikit-react-native-foundation';
 
 Icon.Assets['reply'] = require('your_icons/reply_icon.png');
 /** ------------------ **/

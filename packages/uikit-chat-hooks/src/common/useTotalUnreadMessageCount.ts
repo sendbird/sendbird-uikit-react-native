@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
 import { SuperChannelFilter, TotalUnreadMessageCountParams } from '@sendbird/chat/groupChannel';
-import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
-import { truncatedCount, useAsyncEffect, useUniqHandlerId } from '@sendbird/uikit-utils';
+import type { SendbirdChatSDK } from '@gathertown/uikit-utils';
+import { truncatedCount, useAsyncEffect, useUniqHandlerId } from '@gathertown/uikit-utils';
 
 import { useUserEventHandler } from '../handler/useUserEventHandler';
 

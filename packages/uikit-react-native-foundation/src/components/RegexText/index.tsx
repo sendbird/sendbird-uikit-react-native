@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { replaceWithRegex } from '@sendbird/uikit-utils';
+import { replaceWithRegex } from '@gathertown/uikit-utils';
 
 import Text, { TextProps } from '../Text';
 

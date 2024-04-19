@@ -5,7 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Sendbird, { DeviceOsPlatform, SendbirdPlatform, SendbirdProduct } from '@sendbird/chat';
 import { GroupChannelModule } from '@sendbird/chat/groupChannel';
 import { OpenChannelModule } from '@sendbird/chat/openChannel';
-import type { HeaderStyleContextType, UIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import type { HeaderStyleContextType, UIKitTheme } from '@gathertown/uikit-react-native-foundation';
 import {
   DialogProvider,
   Header,
@@ -13,7 +13,7 @@ import {
   LightUIKitTheme,
   ToastProvider,
   UIKitThemeProvider,
-} from '@sendbird/uikit-react-native-foundation';
+} from '@gathertown/uikit-react-native-foundation';
 import { SBUConfig, UIKitConfigProvider } from '@sendbird/uikit-tools';
 import type {
   PartialDeep,
@@ -23,8 +23,8 @@ import type {
   SendbirdGroupChannelCreateParams,
   SendbirdMember,
   SendbirdUser,
-} from '@sendbird/uikit-utils';
-import { NOOP, useIsFirstMount } from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
+import { NOOP, useIsFirstMount } from '@gathertown/uikit-utils';
 
 import { LocalizationContext, LocalizationProvider } from '../contexts/LocalizationCtx';
 import { PlatformServiceProvider } from '../contexts/PlatformServiceCtx';

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import type { SendbirdFileMessage } from '@sendbird/uikit-utils';
-import { getThumbnailUriFromFileMessage } from '@sendbird/uikit-utils';
+import type { SendbirdFileMessage } from '@gathertown/uikit-utils';
+import { getThumbnailUriFromFileMessage } from '@gathertown/uikit-utils';
 
 import Box from '../../components/Box';
 import ImageWithPlaceholder from '../../components/ImageWithPlaceholder';

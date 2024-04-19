@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import { useUserList } from '@sendbird/uikit-chat-hooks';
-import type { SendbirdGroupChannel, SendbirdUser, UserStruct } from '@sendbird/uikit-utils';
+import { useUserList } from '@gathertown/uikit-chat-hooks';
+import type { SendbirdGroupChannel, SendbirdUser, UserStruct } from '@gathertown/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import UserSelectableBar from '../components/UserSelectableBar';

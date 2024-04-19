@@ -2,7 +2,7 @@ import React, { MutableRefObject, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { createStyleSheet, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
 import {
   SendbirdBaseChannel,
   SendbirdBaseMessage,
@@ -15,7 +15,7 @@ import {
   SendbirdUserMessageUpdateParams,
   replace,
   useIIFE,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import { useSendbirdChat } from '../../hooks/useContext';
 import useMentionTextInput from '../../hooks/useMentionTextInput';

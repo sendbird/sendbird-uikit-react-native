@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, createTheme } from '@sendbird/uikit-react-native-foundation';
+import { Text, createTheme } from '@gathertown/uikit-react-native-foundation';
 
 /**
  * Text component
@@ -23,7 +23,7 @@ const TextList = () => {
  * Typography property
  * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/typography-resource#2-how-to-use-3-typography-property}
  * */
-import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
 // import { Text } from 'react-native';
 
 const Component = () => {
@@ -37,7 +37,7 @@ const Component = () => {
  * Customize with default themes
  * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/typography-resource#2-customize-the-typography-3-customize-with-default-themes}
  * */
-import { LightUIKitTheme, createTypography } from '@sendbird/uikit-react-native-foundation';
+import { LightUIKitTheme, createTypography } from '@gathertown/uikit-react-native-foundation';
 
 // Override typography.
 LightUIKitTheme.typography = createTypography({
@@ -65,7 +65,7 @@ LightUIKitTheme.typography.h1 = {};
  * Customize with createTheme()
  * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/typography-resource#2-customize-the-typography-3-customize-with-createtheme-}
  * */
-// import { createTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+// import { createTheme, LightUIKitTheme } from '@gathertown/uikit-react-native-foundation';
 
 const CustomTheme = createTheme({
   colorScheme: 'light',

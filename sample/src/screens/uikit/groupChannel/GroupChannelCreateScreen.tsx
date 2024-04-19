@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { createGroupChannelCreateFragment } from '@sendbird/uikit-react-native';
-import type { SendbirdUser } from '@sendbird/uikit-utils';
+import { createGroupChannelCreateFragment } from '@gathertown/uikit-react-native';
+import type { SendbirdUser } from '@gathertown/uikit-utils';
 
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
 import { Routes } from '../../../libs/navigation';

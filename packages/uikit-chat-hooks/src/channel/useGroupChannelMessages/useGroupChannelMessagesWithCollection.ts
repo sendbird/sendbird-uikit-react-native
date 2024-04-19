@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 import { CollectionEventSource } from '@sendbird/chat';
 import { MessageCollectionInitPolicy, MessageFilter } from '@sendbird/chat/groupChannel';
-import type { SendbirdFileMessage, SendbirdGroupChannel, SendbirdMessageCollection } from '@sendbird/uikit-utils';
+import type { SendbirdFileMessage, SendbirdGroupChannel, SendbirdMessageCollection } from '@gathertown/uikit-utils';
 import {
   Logger,
   SendbirdBaseMessage,
@@ -13,7 +13,7 @@ import {
   useForceUpdate,
   useFreshCallback,
   useUniqHandlerId,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';

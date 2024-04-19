@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import { FileViewer, useSendbirdChat } from '@sendbird/uikit-react-native';
-import type { SendbirdFileMessage } from '@sendbird/uikit-utils';
+import { FileViewer, useSendbirdChat } from '@gathertown/uikit-react-native';
+import type { SendbirdFileMessage } from '@gathertown/uikit-utils';
 
 import { useAppNavigation } from '../../hooks/useAppNavigation';
 import type { Routes } from '../../libs/navigation';

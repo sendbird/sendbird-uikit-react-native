@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { conditionChaining, truncatedCount } from '@sendbird/uikit-utils';
+import { conditionChaining, truncatedCount } from '@gathertown/uikit-utils';
 
 import Box from '../../components/Box';
 import Icon from '../../components/Icon';

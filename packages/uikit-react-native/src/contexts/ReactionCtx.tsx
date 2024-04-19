@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useReducer, useRef, useState } from 'react';
 
-import type { SendbirdBaseChannel, SendbirdBaseMessage } from '@sendbird/uikit-utils';
-import { NOOP } from '@sendbird/uikit-utils';
+import type { SendbirdBaseChannel, SendbirdBaseMessage } from '@gathertown/uikit-utils';
+import { NOOP } from '@gathertown/uikit-utils';
 
 import { ReactionBottomSheets } from '../components/ReactionBottomSheets';
 import { LocalizationContext } from '../contexts/LocalizationCtx';

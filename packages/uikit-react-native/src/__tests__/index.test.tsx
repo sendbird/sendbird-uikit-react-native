@@ -1,1 +1,1 @@
-it.todo('@sendbird/uikit-react-native');
+it.todo('@gathertown/uikit-react-native');

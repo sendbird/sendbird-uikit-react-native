@@ -1,7 +1,7 @@
 import type React from 'react';
 
-import type { UseUserListOptions } from '@sendbird/uikit-chat-hooks';
-import type { SendbirdOpenChannel, SendbirdRestrictedUser } from '@sendbird/uikit-utils';
+import type { UseUserListOptions } from '@gathertown/uikit-chat-hooks';
+import type { SendbirdOpenChannel, SendbirdRestrictedUser } from '@gathertown/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 

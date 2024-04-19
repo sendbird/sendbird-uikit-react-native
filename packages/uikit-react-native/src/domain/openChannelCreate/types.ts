@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import type { OnBeforeHandler, SendbirdOpenChannel, SendbirdOpenChannelCreateParams } from '@sendbird/uikit-utils';
+import type { OnBeforeHandler, SendbirdOpenChannel, SendbirdOpenChannelCreateParams } from '@gathertown/uikit-utils';
 
 import type { FileType } from '../../platform/types';
 import type { CommonComponent } from '../../types';

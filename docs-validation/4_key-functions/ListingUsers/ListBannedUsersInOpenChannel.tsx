@@ -6,8 +6,8 @@ const MyHeader = () => null;
  * */
 import React from 'react';
 
-import { useOpenChannel } from '@sendbird/uikit-chat-hooks';
-import { createOpenChannelBannedUsersFragment, useSendbirdChat } from "@sendbird/uikit-react-native";
+import { useOpenChannel } from '@gathertown/uikit-chat-hooks';
+import { createOpenChannelBannedUsersFragment, useSendbirdChat } from "@gathertown/uikit-react-native";
 
 const OpenChannelBannedUsersFragment = createOpenChannelBannedUsersFragment();
 const OpenChannelBannedUsersScreen = ({ route: { params } }: any) => {

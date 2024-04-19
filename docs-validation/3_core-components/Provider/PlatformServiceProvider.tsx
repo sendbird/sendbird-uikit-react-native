@@ -1,4 +1,4 @@
-import type { MediaServiceInterface } from '@sendbird/uikit-react-native';
+import type { MediaServiceInterface } from '@gathertown/uikit-react-native';
 
 const isMediaFile = (_: string) => 0;
 const MyDocumentPickerModule = {
@@ -51,7 +51,7 @@ async function mediaServiceInterface(service: MediaServiceInterface) {
  * Usage
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/provider/platformserviceprovider#2-usage}
  * */
-import { usePlatformService } from '@sendbird/uikit-react-native';
+import { usePlatformService } from '@gathertown/uikit-react-native';
 
 const Component = () => {
   const { clipboardService } = usePlatformService();
@@ -70,7 +70,7 @@ import {
   OpenMediaLibraryOptions,
   SaveOptions,
   SBUError,
-} from '@sendbird/uikit-react-native';
+} from '@gathertown/uikit-react-native';
 
 class MyFileService implements FileServiceInterface {
   // @ts-ignore

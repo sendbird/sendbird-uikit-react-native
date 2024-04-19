@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
-import { conditionChaining } from '@sendbird/uikit-utils';
+import { conditionChaining } from '@gathertown/uikit-utils';
 
 import Icon from '../../components/Icon';
 import Image from '../../components/Image';

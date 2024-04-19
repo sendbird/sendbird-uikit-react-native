@@ -1,7 +1,7 @@
 import React, { createContext, useCallback } from 'react';
 
-import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
-import { useActionMenu, useAlert, useBottomSheet, usePrompt, useToast } from '@sendbird/uikit-react-native-foundation';
+import { useChannelHandler } from '@gathertown/uikit-chat-hooks';
+import { useActionMenu, useAlert, useBottomSheet, usePrompt, useToast } from '@gathertown/uikit-react-native-foundation';
 import {
   NOOP,
   SendbirdBaseChannel,
@@ -10,7 +10,7 @@ import {
   isDifferentChannel,
   useForceUpdate,
   useUniqHandlerId,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../../hooks/useContext';

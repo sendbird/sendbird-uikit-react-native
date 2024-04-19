@@ -1,14 +1,14 @@
 import React, { useCallback, useContext, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Modal, OutlinedButton, ProfileCard, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
+import { Modal, OutlinedButton, ProfileCard, createStyleSheet } from '@gathertown/uikit-react-native-foundation';
 import type {
   SendbirdGroupChannel,
   SendbirdGroupChannelCreateParams,
   SendbirdMember,
   SendbirdUser,
-} from '@sendbird/uikit-utils';
-import { Logger, PASS, getDefaultGroupChannelCreateParams, useIIFE } from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
+import { Logger, PASS, getDefaultGroupChannelCreateParams, useIIFE } from '@gathertown/uikit-utils';
 
 import { LocalizationContext } from '../contexts/LocalizationCtx';
 import { SendbirdChatContext } from '../contexts/SendbirdChatCtx';

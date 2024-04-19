@@ -1,7 +1,7 @@
 import React from 'react';
 
-import type { GroupChannelMessageProps, RegexTextPattern } from '@sendbird/uikit-react-native-foundation';
-import { Box, GroupChannelMessage, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import type { GroupChannelMessageProps, RegexTextPattern } from '@gathertown/uikit-react-native-foundation';
+import { Box, GroupChannelMessage, Text, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
 import {
   SendbirdAdminMessage,
   SendbirdFileMessage,
@@ -13,7 +13,7 @@ import {
   shouldRenderParentMessage,
   shouldRenderReaction,
   useIIFE,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import type { GroupChannelProps } from '../../domain/groupChannel/types';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';

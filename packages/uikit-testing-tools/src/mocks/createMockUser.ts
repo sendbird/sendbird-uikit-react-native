@@ -6,7 +6,7 @@ import type {
   SendbirdParticipant,
   SendbirdUser,
   SendbirdUserMessage,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import type { GetMockParams } from '../types';
 import { createTestContext } from '../utils/createTestContext';

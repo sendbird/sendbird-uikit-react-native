@@ -12,7 +12,7 @@ import type {
   SendbirdGroupChannel,
   SendbirdMessageCollection,
   SendbirdSendableMessage,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import type { GetMockParams, GetMockProps } from '../types';
 import { createTestContext } from '../utils/createTestContext';

@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
 
-import { Logger } from '@sendbird/uikit-utils';
+import { Logger } from '@gathertown/uikit-utils';
 
 /** Components **/
 export { default as ChannelInput } from './components/ChannelInput';

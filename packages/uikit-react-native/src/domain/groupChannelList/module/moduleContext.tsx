@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useState } from 'react';
 
-import { NOOP } from '@sendbird/uikit-utils';
+import { NOOP } from '@gathertown/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization } from '../../../hooks/useContext';

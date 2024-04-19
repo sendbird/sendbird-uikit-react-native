@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
-import { Text } from '@sendbird/uikit-react-native-foundation';
+import { Text } from '@gathertown/uikit-react-native-foundation';
 
 import useVersions from '../hooks/useVersions';
 

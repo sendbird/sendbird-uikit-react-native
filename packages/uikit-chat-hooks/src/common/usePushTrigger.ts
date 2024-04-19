@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react';
 
 import { PushTriggerOption } from '@sendbird/chat';
-import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
-import { Logger, useAsyncEffect } from '@sendbird/uikit-utils';
+import type { SendbirdChatSDK } from '@gathertown/uikit-utils';
+import { Logger, useAsyncEffect } from '@gathertown/uikit-utils';
 
 const PushTriggerMap = {
   'all': PushTriggerOption.ALL,

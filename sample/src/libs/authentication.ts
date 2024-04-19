@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
 
-import { useAsyncLayoutEffect } from '@sendbird/uikit-utils';
+import { useAsyncLayoutEffect } from '@gathertown/uikit-utils';
 
 interface SimpleCredential {
   userId: string;

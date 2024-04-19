@@ -12,8 +12,8 @@ import {
   useHeaderStyle,
   useToast,
   useUIKitTheme,
-} from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdFileMessage } from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-react-native-foundation';
+import type { SendbirdFileMessage } from '@gathertown/uikit-utils';
 import {
   Logger,
   getFileExtension,
@@ -22,7 +22,7 @@ import {
   toMegabyte,
   truncate,
   useIIFE,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import { useLocalization, usePlatformService, useSendbirdChat } from '../hooks/useContext';
 

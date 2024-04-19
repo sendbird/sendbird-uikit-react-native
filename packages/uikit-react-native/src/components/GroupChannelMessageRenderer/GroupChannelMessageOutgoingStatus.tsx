@@ -1,9 +1,9 @@
 import React from 'react';
 import type { ImageStyle, StyleProp } from 'react-native';
 
-import { useMessageOutgoingStatus } from '@sendbird/uikit-chat-hooks';
-import { Icon, LoadingSpinner, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdGroupChannel, SendbirdMessage } from '@sendbird/uikit-utils';
+import { useMessageOutgoingStatus } from '@gathertown/uikit-chat-hooks';
+import { Icon, LoadingSpinner, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
+import type { SendbirdGroupChannel, SendbirdMessage } from '@gathertown/uikit-utils';
 
 import { useSendbirdChat } from '../../hooks/useContext';
 

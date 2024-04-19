@@ -1,8 +1,8 @@
 import { renderHook } from '@testing-library/react-native';
 
-import { useAppFeatures } from '@sendbird/uikit-chat-hooks';
-import { createMockSendbirdChat } from '@sendbird/uikit-testing-tools';
-import { ApplicationAttributes, PremiumFeatures } from '@sendbird/uikit-utils';
+import { useAppFeatures } from '@gathertown/uikit-chat-hooks';
+import { createMockSendbirdChat } from '@gathertown/uikit-testing-tools';
+import { ApplicationAttributes, PremiumFeatures } from '@gathertown/uikit-utils';
 
 describe('useAppFeatures', () => {
   it('should return app features', () => {

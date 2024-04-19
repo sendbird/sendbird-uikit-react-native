@@ -6,13 +6,13 @@ import {
   Palette as CustomPalette,
   UIKitColors,
   createTheme,
-} from '@sendbird/uikit-react-native-foundation';
+} from '@gathertown/uikit-react-native-foundation';
 
 /**
  * UIKitPalette
  * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/color-resource#2-uikitpalette}
  * */
-import type { UIKitPalette } from '@sendbird/uikit-react-native-foundation';
+import type { UIKitPalette } from '@gathertown/uikit-react-native-foundation';
 
 const Palette: UIKitPalette = {
   primary100: '#DBD1FF',
@@ -89,7 +89,7 @@ function uikitColors(_: UIKitColors) {
 
 // --------
 
-import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
 
 const Component = () => {
   const { colors } = useUIKitTheme();
@@ -101,7 +101,7 @@ const Component = () => {
  * How to use
  * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/color-resource#2-how-to-use}
  * */
-// import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+// import { useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
 // import { View, Text } from 'react-native';
 
 const Component2 = () => {
@@ -119,7 +119,7 @@ const Component2 = () => {
  * Customize with default themes
  * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/color-resource#2-customize-the-colors-3-customize-with-default-themes}
  * */
-// import { LightUIKitTheme, Palette } from '@sendbird/uikit-react-native-foundation';
+// import { LightUIKitTheme, Palette } from '@gathertown/uikit-react-native-foundation';
 
 LightUIKitTheme.palette = {
   ...Palette,
@@ -150,8 +150,8 @@ LightUIKitTheme.colors.ui.button.contained = {
  * Customize the createTheme()
  * {@link https://sendbird.com/docs/uikit/v3/react-native/resources/color-resource#2-customize-the-colors-3-customize-with-createtheme-}
  * */
-import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
-// import { createTheme } from '@sendbird/uikit-react-native-foundation';
+import { SendbirdUIKitContainer } from '@gathertown/uikit-react-native';
+// import { createTheme } from '@gathertown/uikit-react-native-foundation';
 
 const CustomTheme = createTheme({
   colorScheme: 'light',

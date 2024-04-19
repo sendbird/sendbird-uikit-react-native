@@ -1,7 +1,7 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
 import React, { useState } from 'react';
 
-import { Switch as SwitchComponent } from '@sendbird/uikit-react-native-foundation';
+import { Switch as SwitchComponent } from '@gathertown/uikit-react-native-foundation';
 
 const SwitchMeta: ComponentMeta<typeof SwitchComponent> = {
   title: 'Switch',

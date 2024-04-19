@@ -9,7 +9,7 @@ import {
   createStyleSheet,
   useHeaderStyle,
   useUIKitTheme,
-} from '@sendbird/uikit-react-native-foundation';
+} from '@gathertown/uikit-react-native-foundation';
 
 import { useLocalization } from '../../../hooks/useContext';
 import type { MessageSearchProps } from '../types';

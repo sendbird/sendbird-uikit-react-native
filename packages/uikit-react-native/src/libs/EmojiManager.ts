@@ -1,4 +1,4 @@
-import type { SendbirdEmoji, SendbirdEmojiCategory, SendbirdEmojiContainer } from '@sendbird/uikit-utils';
+import type { SendbirdEmoji, SendbirdEmojiCategory, SendbirdEmojiContainer } from '@gathertown/uikit-utils';
 
 import type { LocalCacheStorage } from '../types';
 import InternalLocalCacheStorage from './InternalLocalCacheStorage';

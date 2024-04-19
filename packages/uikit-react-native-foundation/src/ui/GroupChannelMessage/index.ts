@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import type { SendbirdGroupChannel, SendbirdMessage, SendbirdUser } from '@sendbird/uikit-utils';
+import type { SendbirdGroupChannel, SendbirdMessage, SendbirdUser } from '@gathertown/uikit-utils';
 
 import AdminMessage from './Message.admin';
 import FileMessage from './Message.file';

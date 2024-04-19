@@ -2,7 +2,7 @@ import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
 import React from 'react';
 import { View } from 'react-native';
 
-import { Button as ButtonComponent } from '@sendbird/uikit-react-native-foundation';
+import { Button as ButtonComponent } from '@gathertown/uikit-react-native-foundation';
 
 const ButtonMeta: ComponentMeta<typeof ButtonComponent> = {
   title: 'Button',

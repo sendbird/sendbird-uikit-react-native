@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { Icon, useHeaderStyle } from '@sendbird/uikit-react-native-foundation';
+import { Icon, useHeaderStyle } from '@gathertown/uikit-react-native-foundation';
 
 import { OpenChannelMutedParticipantsContexts } from '../module/moduleContext';
 import type { OpenChannelMutedParticipantsProps } from '../types';

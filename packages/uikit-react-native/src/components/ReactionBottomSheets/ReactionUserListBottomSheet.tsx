@@ -10,8 +10,8 @@ import {
   Text,
   createStyleSheet,
   useUIKitTheme,
-} from '@sendbird/uikit-react-native-foundation';
-import { SendbirdReaction, getReactionCount, truncatedCount } from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-react-native-foundation';
+import { SendbirdReaction, getReactionCount, truncatedCount } from '@gathertown/uikit-utils';
 
 import type { ReactionBottomSheetProps } from './index';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 
-import type { StringSet } from '@sendbird/uikit-react-native';
-import { Icon } from '@sendbird/uikit-react-native-foundation';
-import type { UIKitColors } from '@sendbird/uikit-react-native-foundation';
+import type { StringSet } from '@gathertown/uikit-react-native';
+import { Icon } from '@gathertown/uikit-react-native-foundation';
+import type { UIKitColors } from '@gathertown/uikit-react-native-foundation';
 
 const CustomFileMessage = (_: object) => <React.Fragment />;
 const isImageFile = (x: string) => x;
@@ -11,7 +11,7 @@ const isImageFile = (x: string) => x;
  * Customize the UI for file sharing
  * {@link https://sendbird.com/docs/uikit/v3/react-native/features/file-sharing#2-customize-the-ui-for-file-sharing}
  * */
-import { createGroupChannelFragment, GroupChannelMessageRenderer } from '@sendbird/uikit-react-native';
+import { createGroupChannelFragment, GroupChannelMessageRenderer } from '@gathertown/uikit-react-native';
 
 const GroupChannelFragment = createGroupChannelFragment();
 
@@ -85,7 +85,7 @@ function _stringResource(str: StringSet) {
  * Image compression
  * {@link https://sendbird.com/docs/uikit/v3/react-native/features/file-sharing#2-image-compression}
  * */
-import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
+import { SendbirdUIKitContainer } from '@gathertown/uikit-react-native';
 
 const App = () => {
   return (

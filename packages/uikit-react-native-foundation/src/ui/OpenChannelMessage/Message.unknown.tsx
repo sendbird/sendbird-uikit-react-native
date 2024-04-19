@@ -1,6 +1,6 @@
 import React from 'react';
 
-import type { SendbirdMessage } from '@sendbird/uikit-utils';
+import type { SendbirdMessage } from '@gathertown/uikit-utils';
 
 import PressBox from '../../components/PressBox';
 import Text from '../../components/Text';

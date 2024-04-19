@@ -2,9 +2,9 @@ import React from 'react';
 import { Pressable } from 'react-native';
 
 import type { Emoji } from '@sendbird/chat';
-import { createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdBaseChannel, SendbirdBaseMessage, SendbirdReaction } from '@sendbird/uikit-utils';
-import { getReactionCount } from '@sendbird/uikit-utils';
+import { createStyleSheet, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
+import type { SendbirdBaseChannel, SendbirdBaseMessage, SendbirdReaction } from '@gathertown/uikit-utils';
+import { getReactionCount } from '@gathertown/uikit-utils';
 
 import { DEFAULT_LONG_PRESS_DELAY, UNKNOWN_USER_ID } from '../../constants';
 import { useReaction, useSendbirdChat } from '../../hooks/useContext';

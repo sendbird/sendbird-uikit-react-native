@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import type { ContextValue } from '@sendbird/uikit-utils';
+import type { ContextValue } from '@gathertown/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 

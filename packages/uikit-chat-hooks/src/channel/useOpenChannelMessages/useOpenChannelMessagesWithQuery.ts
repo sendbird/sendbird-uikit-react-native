@@ -6,7 +6,7 @@ import type {
   SendbirdBaseMessage,
   SendbirdOpenChannel,
   SendbirdPreviousMessageListQuery,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 import {
   ASYNC_NOOP,
   NOOP,
@@ -16,7 +16,7 @@ import {
   useForceUpdate,
   useFreshCallback,
   useUniqHandlerId,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import { useConnectionHandler } from '../../handler/useConnectionHandler';

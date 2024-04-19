@@ -2,8 +2,8 @@ import React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { View } from 'react-native';
 
-import { Avatar, Icon, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { SendbirdBaseChannel, getMembersExcludeMe, isDefaultCoverImage } from '@sendbird/uikit-utils';
+import { Avatar, Icon, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
+import { SendbirdBaseChannel, getMembersExcludeMe, isDefaultCoverImage } from '@gathertown/uikit-utils';
 
 import { useSendbirdChat } from '../hooks/useContext';
 

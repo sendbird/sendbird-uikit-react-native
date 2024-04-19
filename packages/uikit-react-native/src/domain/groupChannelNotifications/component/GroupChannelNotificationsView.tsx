@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 
 import { PushTriggerOption } from '@sendbird/chat';
-import { Divider, Icon, Switch, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { useForceUpdate } from '@sendbird/uikit-utils';
+import { Divider, Icon, Switch, Text, createStyleSheet, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
+import { useForceUpdate } from '@gathertown/uikit-utils';
 
 import { useLocalization } from '../../../hooks/useContext';
 import { GroupChannelNotificationsContexts } from '../module/moduleContext';

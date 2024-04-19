@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef } from 'react';
 
 import { ConnectionHandler } from '@sendbird/chat';
-import { Logger, SendbirdChatSDK } from '@sendbird/uikit-utils';
+import { Logger, SendbirdChatSDK } from '@gathertown/uikit-utils';
 
 export const useConnectionHandler = (
   sdk: SendbirdChatSDK,

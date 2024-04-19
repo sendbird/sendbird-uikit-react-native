@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
-import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
-import { SendbirdBaseChannel, getOpenChannelChatAvailableState, useUniqHandlerId } from '@sendbird/uikit-utils';
+import { useChannelHandler } from '@gathertown/uikit-chat-hooks';
+import { SendbirdBaseChannel, getOpenChannelChatAvailableState, useUniqHandlerId } from '@gathertown/uikit-utils';
 
 import ChannelInput from '../../../components/ChannelInput';
 import { UNKNOWN_USER_ID } from '../../../constants';

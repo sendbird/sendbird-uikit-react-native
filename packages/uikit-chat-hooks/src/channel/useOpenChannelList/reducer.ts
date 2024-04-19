@@ -1,7 +1,7 @@
 import { useReducer } from 'react';
 
-import type { SendbirdChannel, SendbirdOpenChannel } from '@sendbird/uikit-utils';
-import { getOpenChannels, mergeObjectArrays } from '@sendbird/uikit-utils';
+import type { SendbirdChannel, SendbirdOpenChannel } from '@gathertown/uikit-utils';
+import { getOpenChannels, mergeObjectArrays } from '@gathertown/uikit-utils';
 
 type Action =
   | {

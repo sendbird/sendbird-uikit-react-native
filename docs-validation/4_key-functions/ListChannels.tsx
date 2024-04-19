@@ -1,11 +1,11 @@
-import type { GroupChannelListContextsType, GroupChannelListModule } from '@sendbird/uikit-react-native';
+import type { GroupChannelListContextsType, GroupChannelListModule } from '@gathertown/uikit-react-native';
 import React, { useContext, useLayoutEffect } from 'react';
 
 /**
  * Usage
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/list-channels#2-usage}
  * */
-import { createGroupChannelListFragment } from '@sendbird/uikit-react-native';
+import { createGroupChannelListFragment } from '@gathertown/uikit-react-native';
 
 const GroupChannelListFragment = createGroupChannelListFragment();
 const GroupChannelListScreen = () => {
@@ -42,7 +42,7 @@ function _context(_: GroupChannelListContextsType) {
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/list-channels#2-context-3-fragment}
  * */
 // import { useContext } from 'react';
-import { GroupChannelListContexts } from '@sendbird/uikit-react-native';
+import { GroupChannelListContexts } from '@gathertown/uikit-react-native';
 
 const Component = () => {
   const { headerTitle } = useContext(GroupChannelListContexts.Fragment);
@@ -54,7 +54,7 @@ const Component = () => {
  * {@link https://sendbird.com/docs/uikit/v3/react-native/key-functions/list-channels#2-context-3-typeselector}
  * */
 // import { useContext } from 'react';
-// import { GroupChannelListContexts } from '@sendbird/uikit-react-native';
+// import { GroupChannelListContexts } from '@gathertown/uikit-react-native';
 
 const Component2 = () => {
   const { headerTitle, visible, show, hide } = useContext(GroupChannelListContexts.TypeSelector);
@@ -70,8 +70,8 @@ import { Pressable } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
-// import { createGroupChannelListFragment, GroupChannelListContexts, GroupChannelListModule } from '@sendbird/uikit-react-native';
-import { Icon } from '@sendbird/uikit-react-native-foundation';
+// import { createGroupChannelListFragment, GroupChannelListContexts, GroupChannelListModule } from '@gathertown/uikit-react-native';
+import { Icon } from '@gathertown/uikit-react-native-foundation';
 
 const UseReactNavigationHeader: GroupChannelListModule['Header'] = () => {
   const navigation = useNavigation();
@@ -91,7 +91,7 @@ const UseReactNavigationHeader: GroupChannelListModule['Header'] = () => {
     });
   }, []);
 
-  // Hide @sendbird/uikit-react-native header.
+  // Hide @gathertown/uikit-react-native header.
   return null;
 };
 

@@ -2,7 +2,7 @@ import { useReducer } from 'react';
 
 import { SendableMessage } from '@sendbird/chat/lib/__definition';
 import { SendingStatus } from '@sendbird/chat/message';
-import type { SendbirdBaseMessage } from '@sendbird/uikit-utils';
+import type { SendbirdBaseMessage } from '@gathertown/uikit-utils';
 import {
   SendbirdMessage,
   arrayToMapWithGetter,
@@ -11,7 +11,7 @@ import {
   isNewMessage,
   isSendableMessage,
   useIIFE,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 type Options = {
   sortComparator?: (a: SendbirdMessage, b: SendbirdMessage) => number;

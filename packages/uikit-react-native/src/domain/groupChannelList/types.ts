@@ -1,9 +1,9 @@
 import type React from 'react';
 import type { FlatListProps } from 'react-native';
 
-import type { UseGroupChannelListOptions } from '@sendbird/uikit-chat-hooks';
-import type { ActionMenuItem } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdGroupChannel } from '@sendbird/uikit-utils';
+import type { UseGroupChannelListOptions } from '@gathertown/uikit-chat-hooks';
+import type { ActionMenuItem } from '@gathertown/uikit-react-native-foundation';
+import type { SendbirdGroupChannel } from '@gathertown/uikit-utils';
 
 import type { CommonComponent } from '../../types';
 

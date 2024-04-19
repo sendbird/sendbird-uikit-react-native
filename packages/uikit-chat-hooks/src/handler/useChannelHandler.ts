@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef } from 'react';
 
 import { GroupChannelHandler } from '@sendbird/chat/groupChannel';
 import { OpenChannelHandler } from '@sendbird/chat/openChannel';
-import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
+import type { SendbirdChatSDK } from '@gathertown/uikit-utils';
 
 type ChannelType = 'open' | 'group';
 

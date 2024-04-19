@@ -1,6 +1,6 @@
 import { Image, Linking, Platform } from 'react-native';
 
-import { Logger } from '@sendbird/uikit-utils';
+import { Logger } from '@gathertown/uikit-utils';
 
 export default class SBUUtils {
   static openSettings() {

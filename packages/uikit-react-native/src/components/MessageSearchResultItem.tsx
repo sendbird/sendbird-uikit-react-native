@@ -8,9 +8,9 @@ import {
   Text,
   createStyleSheet,
   useUIKitTheme,
-} from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdBaseMessage } from '@sendbird/uikit-utils';
-import { getFileIconFromMessage, useIIFE } from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-react-native-foundation';
+import type { SendbirdBaseMessage } from '@gathertown/uikit-utils';
+import { getFileIconFromMessage, useIIFE } from '@gathertown/uikit-utils';
 
 import type { MessageSearchProps } from '../domain/messageSearch/types';
 import { useLocalization } from '../hooks/useContext';

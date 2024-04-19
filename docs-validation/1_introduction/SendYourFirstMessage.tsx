@@ -9,7 +9,7 @@ import {
   createNativeFileService,
   createNativeMediaService,
   createNativeNotificationService,
-} from '@sendbird/uikit-react-native';
+} from '@gathertown/uikit-react-native';
 
 import Clipboard from '@react-native-clipboard/clipboard';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
@@ -45,7 +45,7 @@ const MediaService = createNativeMediaService({
  * Wrap your app in SendbirdUIKitContainer
  * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-5-wrap-your-app-in-sendbirduikitcontainer}
  * */
-import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
+import { SendbirdUIKitContainer } from '@gathertown/uikit-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const App = () => {
@@ -71,13 +71,13 @@ const App = () => {
  * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-7-create-a-fragment-and-module-components}
  * */
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useGroupChannel } from '@sendbird/uikit-chat-hooks';
+import { useGroupChannel } from '@gathertown/uikit-chat-hooks';
 import {
   useSendbirdChat,
   createGroupChannelListFragment,
   createGroupChannelCreateFragment,
   createGroupChannelFragment,
-} from '@sendbird/uikit-react-native';
+} from '@gathertown/uikit-react-native';
 
 const GroupChannelListFragment = createGroupChannelListFragment();
 const GroupChannelCreateFragment = createGroupChannelCreateFragment();
@@ -195,7 +195,7 @@ const App2 = () => {
  * {@link https://sendbird.com/docs/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-9-connect-to-the-sendbird-server}
  * */
 import { Pressable, Text, View } from 'react-native';
-import { useConnection } from '@sendbird/uikit-react-native';
+import { useConnection } from '@gathertown/uikit-react-native';
 
 const SignInScreen = () => {
   const { connect } = useConnection();

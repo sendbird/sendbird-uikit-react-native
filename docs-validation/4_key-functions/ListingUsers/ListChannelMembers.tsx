@@ -3,16 +3,16 @@
 import {
   UserActionBar,
   UserListContextsType,
-} from '@sendbird/uikit-react-native';
-import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
+} from '@gathertown/uikit-react-native';
+import { useBottomSheet } from '@gathertown/uikit-react-native-foundation';
 
 /**
  *
  * {@link }
  * */
 import React, { useState } from 'react';
-import { useSendbirdChat, createGroupChannelMembersFragment } from '@sendbird/uikit-react-native';
-import { useGroupChannel } from "@sendbird/uikit-chat-hooks";
+import { useSendbirdChat, createGroupChannelMembersFragment } from '@gathertown/uikit-react-native';
+import { useGroupChannel } from "@gathertown/uikit-chat-hooks";
 
 const GroupChannelMembersFragment = createGroupChannelMembersFragment();
 const GroupChannelMembersScreen = ({ route: { params } }: any) => {
@@ -53,7 +53,7 @@ function _context<T>(_: UserListContextsType<T>) {
  * {@link }
  * */
 import { useContext } from 'react';
-import { UserListContexts } from "@sendbird/uikit-react-native";
+import { UserListContexts } from "@gathertown/uikit-react-native";
 
 const Component = () => {
   const { headerTitle, headerRight } = useContext(UserListContexts.Fragment);
@@ -65,7 +65,7 @@ const Component = () => {
  * {@link }
  * */
 // import { useContext } from 'react';
-// import { UserListContexts } from "@sendbird/uikit-react-native";
+// import { UserListContexts } from "@gathertown/uikit-react-native";
 
 const Component2 = () => {
   const { selectedUsers, setSelectedUsers } = useContext(UserListContexts.List);
@@ -77,8 +77,8 @@ const Component2 = () => {
  * {@link }
  * */
 // import React, { useState } from 'react';
-// import { useSendbirdChat, createGroupChannelMembersFragment, UserActionBar } from '@sendbird/uikit-react-native';
-// import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
+// import { useSendbirdChat, createGroupChannelMembersFragment, UserActionBar } from '@gathertown/uikit-react-native';
+// import { useBottomSheet } from '@gathertown/uikit-react-native-foundation';
 
 const GroupChannelMembersFragment2 = createGroupChannelMembersFragment();
 const GroupChannelMembersScreen2 = ({ route: { params } }: any) => {

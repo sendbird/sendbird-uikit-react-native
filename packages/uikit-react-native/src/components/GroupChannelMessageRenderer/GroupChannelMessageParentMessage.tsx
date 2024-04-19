@@ -9,7 +9,7 @@ import {
   VideoThumbnail,
   createStyleSheet,
   useUIKitTheme,
-} from '@sendbird/uikit-react-native-foundation';
+} from '@gathertown/uikit-react-native-foundation';
 import {
   SendbirdFileMessage,
   SendbirdMessage,
@@ -19,7 +19,7 @@ import {
   getThumbnailUriFromFileMessage,
   truncate,
   useIIFE,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import { GroupChannelContexts } from '../../domain/groupChannel/module/moduleContext';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SendbirdFileMessage, getFileTypeFromMessage } from '@sendbird/uikit-utils';
+import { SendbirdFileMessage, getFileTypeFromMessage } from '@gathertown/uikit-utils';
 
 import Box from '../../components/Box';
 import Icon from '../../components/Icon';

@@ -2,7 +2,7 @@ import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
 import React from 'react';
 import { View } from 'react-native';
 
-import { Badge as BadgeComponent } from '@sendbird/uikit-react-native-foundation';
+import { Badge as BadgeComponent } from '@gathertown/uikit-react-native-foundation';
 
 const BadgeMeta: ComponentMeta<typeof BadgeComponent> = {
   title: 'Badge',

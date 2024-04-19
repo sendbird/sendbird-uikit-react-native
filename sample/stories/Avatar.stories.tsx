@@ -1,7 +1,7 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
 import React, { useMemo } from 'react';
 
-import { Avatar as AvatarComponent, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { Avatar as AvatarComponent, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
 
 import { getMockImage } from './constant';
 

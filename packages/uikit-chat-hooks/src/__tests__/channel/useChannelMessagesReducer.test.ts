@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react-native';
 
 import { MessageType, SendingStatus } from '@sendbird/chat/message';
-import { createMockMessage, createMockUser } from '@sendbird/uikit-testing-tools';
+import { createMockMessage, createMockUser } from '@gathertown/uikit-testing-tools';
 
 import { useChannelMessagesReducer } from '../../channel/useChannelMessagesReducer';
 

@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { View } from 'react-native';
 
-import { Divider, Text, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
-import { getGroupChannelTitle } from '@sendbird/uikit-utils';
+import { Divider, Text, createStyleSheet } from '@gathertown/uikit-react-native-foundation';
+import { getGroupChannelTitle } from '@gathertown/uikit-utils';
 
 import ChannelCover from '../../../components/ChannelCover';
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';

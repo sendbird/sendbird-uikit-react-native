@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, Easing } from 'react-native';
 
-import { useIsFirstMount } from '@sendbird/uikit-utils';
+import { useIsFirstMount } from '@gathertown/uikit-utils';
 
 import { MESSAGE_FOCUS_ANIMATION_DELAY, MESSAGE_SEARCH_SAFE_SCROLL_DELAY } from '../../constants';
 

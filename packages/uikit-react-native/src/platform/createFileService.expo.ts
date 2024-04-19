@@ -3,7 +3,7 @@ import type * as ExpoFs from 'expo-file-system';
 import type * as ExpoImagePicker from 'expo-image-picker';
 import type * as ExpoMediaLibrary from 'expo-media-library';
 
-import { getFileType } from '@sendbird/uikit-utils';
+import { getFileType } from '@gathertown/uikit-utils';
 
 import SBUError from '../libs/SBUError';
 import expoBackwardUtils from '../utils/expoBackwardUtils';

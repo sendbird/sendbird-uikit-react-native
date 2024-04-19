@@ -3,8 +3,8 @@ import { FlatList, ListRenderItem } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { PushTriggerOption } from '@sendbird/chat';
-import { useActionMenu, useToast } from '@sendbird/uikit-react-native-foundation';
-import { NOOP, PASS, SendbirdGroupChannel, getChannelUniqId, useFreshCallback } from '@sendbird/uikit-utils';
+import { useActionMenu, useToast } from '@gathertown/uikit-react-native-foundation';
+import { NOOP, PASS, SendbirdGroupChannel, getChannelUniqId, useFreshCallback } from '@gathertown/uikit-utils';
 
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import type { GroupChannelListProps } from '../types';

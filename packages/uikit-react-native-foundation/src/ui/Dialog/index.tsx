@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useRef } from 'react';
 
-import { useForceUpdate } from '@sendbird/uikit-utils';
+import { useForceUpdate } from '@gathertown/uikit-utils';
 
 import type { ActionMenuItem } from '../ActionMenu';
 import ActionMenu from '../ActionMenu';

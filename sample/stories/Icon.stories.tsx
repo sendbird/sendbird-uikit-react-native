@@ -1,7 +1,7 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
 import React from 'react';
 
-import { Icon as IconComponent, Palette } from '@sendbird/uikit-react-native-foundation';
+import { Icon as IconComponent, Palette } from '@gathertown/uikit-react-native-foundation';
 
 const IconMeta: ComponentMeta<typeof IconComponent> = {
   title: 'Icon',

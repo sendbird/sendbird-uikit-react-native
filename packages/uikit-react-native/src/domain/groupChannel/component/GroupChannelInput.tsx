@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { getGroupChannelChatAvailableState } from '@sendbird/uikit-utils';
+import { getGroupChannelChatAvailableState } from '@gathertown/uikit-utils';
 
 import ChannelInput from '../../../components/ChannelInput';
 import { GroupChannelContexts } from '../module/moduleContext';

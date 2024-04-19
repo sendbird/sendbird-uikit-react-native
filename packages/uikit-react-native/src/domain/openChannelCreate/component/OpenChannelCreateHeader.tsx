@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
-import { Icon, Text, useHeaderStyle, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { ifThenOr } from '@sendbird/uikit-utils';
+import { Icon, Text, useHeaderStyle, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
+import { ifThenOr } from '@gathertown/uikit-utils';
 
 import { OpenChannelCreateContexts } from '../module/moduleContext';
 import type { OpenChannelCreateProps } from '../types';

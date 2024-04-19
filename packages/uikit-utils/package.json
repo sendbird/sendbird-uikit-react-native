@@ -1,6 +1,6 @@
 {
-  "name": "@sendbird/uikit-utils",
-  "version": "3.1.2",
+  "name": "@gathertown/uikit-utils",
+  "version": "0.0.1",
   "description": "A collection of utility functions and constants for building chat UI components with Sendbird UIKit.",
   "keywords": [
     "sendbird",
@@ -84,6 +84,6 @@
   "typedoc": {
     "entryPoint": "./src/index.ts",
     "readmeFile": "./README.md",
-    "displayName": "@sendbird/uikit-utils"
+    "displayName": "@gathertown/uikit-utils"
   }
 }

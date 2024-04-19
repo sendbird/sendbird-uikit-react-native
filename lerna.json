@@ -2,11 +2,10 @@
   "packages": ["packages/*", "sample", "docs-validation"],
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "version": "3.1.2",
+  "version": "0.0.1",
   "command": {
     "publish": {
       "conventionalCommits": true,
-      "createRelease": "github",
       "message": "chore(release): publish %v"
     },
     "version": {

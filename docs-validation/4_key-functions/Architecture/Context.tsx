@@ -4,7 +4,7 @@
  * */
 import React, { useContext } from 'react';
 import { Text } from 'react-native';
-import { GroupChannelContexts } from '@sendbird/uikit-react-native';
+import { GroupChannelContexts } from '@gathertown/uikit-react-native';
 
 const CustomTypingUsersComponent = () => {
   const { typingUsers } = useContext(GroupChannelContexts.TypingIndicator);

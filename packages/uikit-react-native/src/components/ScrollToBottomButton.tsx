@@ -1,7 +1,7 @@
 import React from 'react';
 import { Platform, TouchableOpacity } from 'react-native';
 
-import { Icon, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { Icon, createStyleSheet, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
 
 type Props = {
   visible: boolean;

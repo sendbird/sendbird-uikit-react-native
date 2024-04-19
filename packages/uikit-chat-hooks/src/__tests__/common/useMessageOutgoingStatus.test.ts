@@ -2,14 +2,14 @@ import { act, renderHook, waitFor } from '@testing-library/react-native';
 
 import { ChannelType } from '@sendbird/chat';
 import { SendingStatus } from '@sendbird/chat/message';
-import { createMockChannel, createMockMessage, createMockSendbirdChat } from '@sendbird/uikit-testing-tools';
-import { PremiumFeatures } from '@sendbird/uikit-utils';
+import { createMockChannel, createMockMessage, createMockSendbirdChat } from '@gathertown/uikit-testing-tools';
+import { PremiumFeatures } from '@gathertown/uikit-utils';
 
 import { useMessageOutgoingStatus } from '../../common/useMessageOutgoingStatus';
 
 let forceUpdate: jest.Mock;
-jest.mock('@sendbird/uikit-utils', () => {
-  const originalModule = jest.requireActual('@sendbird/uikit-utils');
+jest.mock('@gathertown/uikit-utils', () => {
+  const originalModule = jest.requireActual('@gathertown/uikit-utils');
 
   return {
     ...originalModule,

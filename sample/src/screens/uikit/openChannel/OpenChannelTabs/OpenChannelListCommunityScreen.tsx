@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { createOpenChannelListFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
-import { Icon, useHeaderStyle } from '@sendbird/uikit-react-native-foundation';
+import { createOpenChannelListFragment, useSendbirdChat } from '@gathertown/uikit-react-native';
+import { Icon, useHeaderStyle } from '@gathertown/uikit-react-native-foundation';
 
 import { useAppNavigation } from '../../../../hooks/useAppNavigation';
 import { Routes } from '../../../../libs/navigation';

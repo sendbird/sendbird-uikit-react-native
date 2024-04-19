@@ -8,7 +8,7 @@ import {
   useAlert,
   useBottomSheet,
   usePrompt,
-} from '@sendbird/uikit-react-native-foundation';
+} from '@gathertown/uikit-react-native-foundation';
 
 import { loremIpsum } from './constant';
 

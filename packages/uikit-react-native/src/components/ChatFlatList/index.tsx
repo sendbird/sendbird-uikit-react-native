@@ -1,8 +1,8 @@
 import React, { forwardRef, useRef } from 'react';
 import { FlatListProps, Platform, FlatList as RNFlatList, StyleSheet } from 'react-native';
 
-import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { NOOP, SendbirdMessage, getMessageUniqId, useFreshCallback } from '@sendbird/uikit-utils';
+import { useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
+import { NOOP, SendbirdMessage, getMessageUniqId, useFreshCallback } from '@gathertown/uikit-utils';
 
 import FlatListInternal from './FlatListInternal';
 

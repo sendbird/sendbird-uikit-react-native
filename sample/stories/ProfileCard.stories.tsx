@@ -1,7 +1,7 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
 import React from 'react';
 
-import { OutlinedButton, ProfileCard as ProfileCardComponent } from '@sendbird/uikit-react-native-foundation';
+import { OutlinedButton, ProfileCard as ProfileCardComponent } from '@gathertown/uikit-react-native-foundation';
 
 const ProfileCardMeta: ComponentMeta<typeof ProfileCardComponent> = {
   title: 'ProfileCard',

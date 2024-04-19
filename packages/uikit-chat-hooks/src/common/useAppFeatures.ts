@@ -1,4 +1,4 @@
-import { ApplicationAttributes, PremiumFeatures, SendbirdChatSDK } from '@sendbird/uikit-utils';
+import { ApplicationAttributes, PremiumFeatures, SendbirdChatSDK } from '@gathertown/uikit-utils';
 
 export const useAppFeatures = (sdk: SendbirdChatSDK) => {
   const { premiumFeatureList = [], applicationAttributes = [] } = sdk.appInfo ?? {};

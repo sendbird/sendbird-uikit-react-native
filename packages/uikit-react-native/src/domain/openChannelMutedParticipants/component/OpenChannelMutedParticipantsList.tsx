@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, ListRenderItem } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { SendbirdRestrictedUser, getUserUniqId, useFreshCallback } from '@sendbird/uikit-utils';
+import { SendbirdRestrictedUser, getUserUniqId, useFreshCallback } from '@gathertown/uikit-utils';
 
 import type { OpenChannelMutedParticipantsProps } from '../types';
 

@@ -1,4 +1,4 @@
-import type { UIKitPalette } from '@sendbird/uikit-react-native-foundation';
+import type { UIKitPalette } from '@gathertown/uikit-react-native-foundation';
 
 export const getContrastColor = (
   color:

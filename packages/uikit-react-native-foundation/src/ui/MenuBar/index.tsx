@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
 
-import { conditionChaining } from '@sendbird/uikit-utils';
+import { conditionChaining } from '@gathertown/uikit-utils';
 
 import Divider from '../../components/Divider';
 import Icon from '../../components/Icon';

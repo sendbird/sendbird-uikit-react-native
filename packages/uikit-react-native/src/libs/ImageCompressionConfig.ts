@@ -1,4 +1,4 @@
-import { Logger } from '@sendbird/uikit-utils';
+import { Logger } from '@gathertown/uikit-utils';
 
 export interface ImageCompressionConfigInterface {
   compressionRate: number;

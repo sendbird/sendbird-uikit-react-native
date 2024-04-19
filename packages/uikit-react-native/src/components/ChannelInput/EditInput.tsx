@@ -8,8 +8,8 @@ import {
 } from 'react-native';
 
 import { MentionType } from '@sendbird/chat/message';
-import { Button, TextInput, createStyleSheet, useToast } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdFileMessage, SendbirdUserMessage } from '@sendbird/uikit-utils';
+import { Button, TextInput, createStyleSheet, useToast } from '@gathertown/uikit-react-native-foundation';
+import type { SendbirdFileMessage, SendbirdUserMessage } from '@gathertown/uikit-utils';
 
 import { useLocalization, useSendbirdChat } from '../../hooks/useContext';
 import type { MentionedUser } from '../../types';

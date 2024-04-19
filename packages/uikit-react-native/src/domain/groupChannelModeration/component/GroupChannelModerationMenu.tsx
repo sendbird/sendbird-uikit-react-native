@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { View } from 'react-native';
 
-import type { MenuBarProps } from '@sendbird/uikit-react-native-foundation';
-import { Icon, MenuBar, Switch, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import type { MenuBarProps } from '@gathertown/uikit-react-native-foundation';
+import { Icon, MenuBar, Switch, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
 
 import { useLocalization } from '../../../hooks/useContext';
 import { GroupChannelModerationContexts } from '../module/moduleContext';

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import type { FlatList } from 'react-native';
 
-import { SendbirdMessage, useFreshCallback } from '@sendbird/uikit-utils';
+import { SendbirdMessage, useFreshCallback } from '@gathertown/uikit-utils';
 
 import ChannelMessageList from '../../../components/ChannelMessageList';
 import { OpenChannelContexts } from '../module/moduleContext';

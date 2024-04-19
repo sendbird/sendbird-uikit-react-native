@@ -6,8 +6,8 @@ const MyHeader = () => null;
  * */
 import React from 'react';
 
-import { useOpenChannel } from '@sendbird/uikit-chat-hooks';
-import { createOpenChannelModerationFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
+import { useOpenChannel } from '@gathertown/uikit-chat-hooks';
+import { createOpenChannelModerationFragment, useSendbirdChat } from '@gathertown/uikit-react-native';
 
 const OpenChannelModerationFragment = createOpenChannelModerationFragment();
 const OpenChannelModerationScreen = ({ route: { params } }: any) => {

@@ -2,8 +2,8 @@ import React from 'react';
 import { FlatList, ListRenderItem } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import type { SendbirdUser } from '@sendbird/uikit-utils';
-import { getUserUniqId, useFreshCallback } from '@sendbird/uikit-utils';
+import type { SendbirdUser } from '@gathertown/uikit-utils';
+import { getUserUniqId, useFreshCallback } from '@gathertown/uikit-utils';
 
 import type { GroupChannelOperatorsProps } from '../types';
 

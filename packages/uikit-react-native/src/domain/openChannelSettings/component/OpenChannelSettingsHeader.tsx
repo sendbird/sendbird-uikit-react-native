@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { Icon, Text, useHeaderStyle, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { Icon, Text, useHeaderStyle, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
 
 import { OpenChannelSettingsContexts } from '../module/moduleContext';
 import type { OpenChannelSettingsProps } from '../types';

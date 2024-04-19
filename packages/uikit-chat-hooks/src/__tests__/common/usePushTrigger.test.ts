@@ -1,7 +1,7 @@
 import { act, renderHook, waitFor } from '@testing-library/react-native';
 
 import { PushTriggerOption } from '@sendbird/chat';
-import { createMockSendbirdChat } from '@sendbird/uikit-testing-tools';
+import { createMockSendbirdChat } from '@gathertown/uikit-testing-tools';
 
 import { usePushTrigger } from '../../common/usePushTrigger';
 

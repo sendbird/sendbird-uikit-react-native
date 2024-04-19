@@ -1,8 +1,8 @@
 import React from 'react';
 import { Pressable } from 'react-native';
 
-import type { SendbirdMessage } from '@sendbird/uikit-utils';
-import { getMessageTimeFormat } from '@sendbird/uikit-utils';
+import type { SendbirdMessage } from '@gathertown/uikit-utils';
+import { getMessageTimeFormat } from '@gathertown/uikit-utils';
 
 import Box from '../../components/Box';
 import Text from '../../components/Text';

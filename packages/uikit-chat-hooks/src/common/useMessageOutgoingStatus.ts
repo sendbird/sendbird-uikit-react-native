@@ -1,5 +1,5 @@
-import type { SendbirdChatSDK, SendbirdGroupChannel, SendbirdMessage } from '@sendbird/uikit-utils';
-import { isDifferentChannel, isMyMessage, useForceUpdate, useUniqHandlerId } from '@sendbird/uikit-utils';
+import type { SendbirdChatSDK, SendbirdGroupChannel, SendbirdMessage } from '@gathertown/uikit-utils';
+import { isDifferentChannel, isMyMessage, useForceUpdate, useUniqHandlerId } from '@gathertown/uikit-utils';
 
 import { useChannelHandler } from '../handler/useChannelHandler';
 import { useAppFeatures } from './useAppFeatures';

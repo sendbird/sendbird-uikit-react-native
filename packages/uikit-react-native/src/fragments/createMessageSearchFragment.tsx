@@ -10,7 +10,7 @@ import {
   SendbirdMessageSearchQuery,
   useFreshCallback,
   useSafeAreaPadding,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import MessageSearchResultItem from '../components/MessageSearchResultItem';
 import StatusComposition from '../components/StatusComposition';

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { Icon, useHeaderStyle } from '@sendbird/uikit-react-native-foundation';
+import { Icon, useHeaderStyle } from '@gathertown/uikit-react-native-foundation';
 
 import { GroupChannelListContexts } from '../module/moduleContext';
 import type { GroupChannelListProps } from '../types';

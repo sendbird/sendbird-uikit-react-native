@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import type { FlatList } from 'react-native';
 
-import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
-import { useToast } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdMessage } from '@sendbird/uikit-utils';
-import { isDifferentChannel, useFreshCallback, useIsFirstMount, useUniqHandlerId } from '@sendbird/uikit-utils';
+import { useChannelHandler } from '@gathertown/uikit-chat-hooks';
+import { useToast } from '@gathertown/uikit-react-native-foundation';
+import type { SendbirdMessage } from '@gathertown/uikit-utils';
+import { isDifferentChannel, useFreshCallback, useIsFirstMount, useUniqHandlerId } from '@gathertown/uikit-utils';
 
 import ChannelMessageList from '../../../components/ChannelMessageList';
 import { MESSAGE_FOCUS_ANIMATION_DELAY, MESSAGE_SEARCH_SAFE_SCROLL_DELAY } from '../../../constants';

@@ -5,7 +5,7 @@ import type {
   SendbirdBaseChannel,
   SendbirdGroupChannel,
   SendbirdPreviousMessageListQuery,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 import {
   ASYNC_NOOP,
   Logger,
@@ -16,7 +16,7 @@ import {
   useForceUpdate,
   useFreshCallback,
   useUniqHandlerId,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import { useChannelHandler } from '../../handler/useChannelHandler';
 import type { UseGroupChannelMessages, UseGroupChannelMessagesOptions } from '../../types';

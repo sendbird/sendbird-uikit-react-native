@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { useOpenChannel } from '@sendbird/uikit-chat-hooks';
-import { useSendbirdChat } from '@sendbird/uikit-react-native';
-import { createOpenChannelOperatorsFragment } from '@sendbird/uikit-react-native';
+import { useOpenChannel } from '@gathertown/uikit-chat-hooks';
+import { useSendbirdChat } from '@gathertown/uikit-react-native';
+import { createOpenChannelOperatorsFragment } from '@gathertown/uikit-react-native';
 
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
 import { Routes } from '../../../libs/navigation';

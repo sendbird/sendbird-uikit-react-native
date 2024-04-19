@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Keyboard, Platform, TextInput as RNTextInput, View, useWindowDimensions } from 'react-native';
 
-import { NOOP } from '@sendbird/uikit-utils';
+import { NOOP } from '@gathertown/uikit-utils';
 
 import Modal from '../../components/Modal';
 import Text from '../../components/Text';

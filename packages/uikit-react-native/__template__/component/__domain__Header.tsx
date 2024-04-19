@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { useHeaderStyle } from '@sendbird/uikit-react-native-foundation';
+import { useHeaderStyle } from '@gathertown/uikit-react-native-foundation';
 
 import { __domain__Contexts } from '../module/moduleContext';
 import type { __domain__Props } from '../types';

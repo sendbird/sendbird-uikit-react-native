@@ -1,7 +1,7 @@
 import React from 'react';
 
-import type { OpenChannelMessageProps } from '@sendbird/uikit-react-native-foundation';
-import { Box, OpenChannelMessage } from '@sendbird/uikit-react-native-foundation';
+import type { OpenChannelMessageProps } from '@gathertown/uikit-react-native-foundation';
+import { Box, OpenChannelMessage } from '@gathertown/uikit-react-native-foundation';
 import {
   SendbirdAdminMessage,
   SendbirdFileMessage,
@@ -9,7 +9,7 @@ import {
   SendbirdUserMessage,
   calcMessageGrouping,
   getMessageType,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import type { OpenChannelProps } from '../../domain/openChannel/types';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';

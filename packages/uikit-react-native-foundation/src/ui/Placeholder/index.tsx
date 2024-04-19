@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { conditionChaining } from '@sendbird/uikit-utils';
+import { conditionChaining } from '@gathertown/uikit-utils';
 
 import Icon from '../../components/Icon';
 import Text from '../../components/Text';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 
-import { Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { Text, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
 
 type Props = React.PropsWithChildren<{
   onPress: () => void;

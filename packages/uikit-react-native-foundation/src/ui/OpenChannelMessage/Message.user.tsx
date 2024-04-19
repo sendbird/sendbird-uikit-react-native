@@ -1,7 +1,7 @@
 import React from 'react';
 
-import type { SendbirdUserMessage } from '@sendbird/uikit-utils';
-import { urlRegexStrict } from '@sendbird/uikit-utils';
+import type { SendbirdUserMessage } from '@gathertown/uikit-utils';
+import { urlRegexStrict } from '@gathertown/uikit-utils';
 
 import PressBox from '../../components/PressBox';
 import RegexText from '../../components/RegexText';

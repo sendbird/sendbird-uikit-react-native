@@ -1,10 +1,10 @@
-import type { StringSet } from '@sendbird/uikit-react-native';
+import type { StringSet } from '@gathertown/uikit-react-native';
 
 /**
  * How to use
  * {@link https://sendbird.com/docs/uikit/v3/react-native/features/typing-indicator#2-how-to-use}
  * */
-import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
+import { SendbirdUIKitContainer } from '@gathertown/uikit-react-native';
 const App = () => {
   // @ts-ignore
   return <SendbirdUIKitContainer uikitOptions={{ groupChannelList: { enableTypingIndicator: true } }} />;

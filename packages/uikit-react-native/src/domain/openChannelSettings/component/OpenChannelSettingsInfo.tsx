@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
-import { Box, Divider, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { getOpenChannelTitle } from '@sendbird/uikit-utils';
+import { Box, Divider, Text, createStyleSheet, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
+import { getOpenChannelTitle } from '@gathertown/uikit-utils';
 
 import ChannelCover from '../../../components/ChannelCover';
 import { useLocalization } from '../../../hooks/useContext';

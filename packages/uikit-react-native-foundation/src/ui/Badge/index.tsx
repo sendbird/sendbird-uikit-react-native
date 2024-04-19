@@ -1,7 +1,7 @@
 import React from 'react';
 import { Platform, StyleProp, View, ViewStyle } from 'react-native';
 
-import { truncatedCount } from '@sendbird/uikit-utils';
+import { truncatedCount } from '@gathertown/uikit-utils';
 
 import Text from '../../components/Text';
 import createStyleSheet from '../../styles/createStyleSheet';

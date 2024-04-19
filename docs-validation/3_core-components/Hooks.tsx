@@ -2,7 +2,7 @@
  * useSendbirdChat
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-usesendbirdchat-}
  * */
-import { useSendbirdChat } from '@sendbird/uikit-react-native';
+import { useSendbirdChat } from '@gathertown/uikit-react-native';
 
 const Component = () => {
   const { sdk, currentUser, updateCurrentUserInfo } = useSendbirdChat();
@@ -17,7 +17,7 @@ const Component = () => {
  * useConnection
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-useconnection-}
  * */
-import { useConnection, SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
+import { useConnection, SendbirdUIKitContainer } from '@gathertown/uikit-react-native';
 
 const Component2 = () => {
   const { connect, disconnect } = useConnection();
@@ -40,7 +40,7 @@ const App = () => {
  * useUIKitTheme
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-useuikittheme-}
  * */
-import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
 
 const Component3 = () => {
   const { colors, palette, colorScheme, typography, select } = useUIKitTheme();
@@ -54,7 +54,7 @@ const Component3 = () => {
  * usePlatformService
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-useplatformservice-}
  * */
-import { usePlatformService } from '@sendbird/uikit-react-native';
+import { usePlatformService } from '@gathertown/uikit-react-native';
 
 const Component4 = () => {
   const { fileService, notificationService, clipboardService } = usePlatformService();
@@ -72,7 +72,7 @@ const Component4 = () => {
  * useLocalization
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-uselocalization-}
  * */
-import { useLocalization } from '@sendbird/uikit-react-native';
+import { useLocalization } from '@gathertown/uikit-react-native';
 
 const Component5 = () => {
   const { STRINGS } = useLocalization();
@@ -83,7 +83,7 @@ const Component5 = () => {
  * useToast
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-usetoast-}
  * */
-import { useToast } from '@sendbird/uikit-react-native-foundation';
+import { useToast } from '@gathertown/uikit-react-native-foundation';
 
 const Component6 = () => {
   const toast = useToast();
@@ -95,7 +95,7 @@ const Component6 = () => {
  * usePrompt
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-useprompt-}
  * */
-import { usePrompt } from '@sendbird/uikit-react-native-foundation';
+import { usePrompt } from '@gathertown/uikit-react-native-foundation';
 
 const Component7 = () => {
   const { openPrompt } = usePrompt();
@@ -111,7 +111,7 @@ const Component7 = () => {
  * useBottomSheet
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-usebottomsheet-}
  * */
-import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
+import { useBottomSheet } from '@gathertown/uikit-react-native-foundation';
 
 const Component8 = () => {
   const { openSheet } = useBottomSheet();
@@ -130,7 +130,7 @@ const Component8 = () => {
  * useActionMenu
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-useactionmenu-}
  * */
-import { useActionMenu } from '@sendbird/uikit-react-native-foundation';
+import { useActionMenu } from '@gathertown/uikit-react-native-foundation';
 
 const Component9 = () => {
   const { openMenu } = useActionMenu();
@@ -149,7 +149,7 @@ const Component9 = () => {
  * useAlert
  * {@link https://sendbird.com/docs/uikit/v3/react-native/core-components/hooks#-3-usealert-}
  * */
-import { useAlert } from '@sendbird/uikit-react-native-foundation';
+import { useAlert } from '@gathertown/uikit-react-native-foundation';
 
 const Component10 = () => {
   const { alert } = useAlert();

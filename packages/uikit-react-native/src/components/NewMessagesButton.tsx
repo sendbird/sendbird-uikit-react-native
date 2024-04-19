@@ -1,8 +1,8 @@
 import React from 'react';
 import { Platform, TouchableOpacity } from 'react-native';
 
-import { Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdMessage } from '@sendbird/uikit-utils';
+import { Text, createStyleSheet, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
+import type { SendbirdMessage } from '@gathertown/uikit-utils';
 
 import { useLocalization } from '../hooks/useContext';
 

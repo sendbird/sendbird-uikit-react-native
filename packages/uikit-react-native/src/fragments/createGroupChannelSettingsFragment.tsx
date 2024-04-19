@@ -2,8 +2,8 @@ import React from 'react';
 import { ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { NOOP } from '@sendbird/uikit-utils';
+import { createStyleSheet, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
+import { NOOP } from '@gathertown/uikit-utils';
 
 import createGroupChannelSettingsModule from '../domain/groupChannelSettings/module/createGroupChannelSettingsModule';
 import type { GroupChannelSettingsFragment, GroupChannelSettingsModule } from '../domain/groupChannelSettings/types';

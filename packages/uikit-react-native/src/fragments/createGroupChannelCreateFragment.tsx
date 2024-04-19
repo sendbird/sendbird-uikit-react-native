@@ -1,14 +1,14 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import { useUserList } from '@sendbird/uikit-chat-hooks';
+import { useUserList } from '@gathertown/uikit-chat-hooks';
 import {
   PASS,
   SendbirdUser,
   UserStruct,
   getDefaultGroupChannelCreateParams,
   useFreshCallback,
-} from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import UserSelectableBar from '../components/UserSelectableBar';

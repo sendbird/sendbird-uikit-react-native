@@ -2,8 +2,8 @@ import React from 'react';
 import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { usePushTrigger } from '@sendbird/uikit-chat-hooks';
-import { SBUError, SBUUtils, useLocalization, usePlatformService, useSendbirdChat } from '@sendbird/uikit-react-native';
+import { usePushTrigger } from '@gathertown/uikit-chat-hooks';
+import { SBUError, SBUUtils, useLocalization, usePlatformService, useSendbirdChat } from '@gathertown/uikit-react-native';
 import {
   Avatar,
   Divider,
@@ -18,7 +18,7 @@ import {
   usePrompt,
   useToast,
   useUIKitTheme,
-} from '@sendbird/uikit-react-native-foundation';
+} from '@gathertown/uikit-react-native-foundation';
 
 import { useAppNavigation } from '../../hooks/useAppNavigation';
 import useAppearance from '../../hooks/useAppearance';

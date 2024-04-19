@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { createGroupChannelListFragment } from '@sendbird/uikit-react-native';
+import { createGroupChannelListFragment } from '@gathertown/uikit-react-native';
 
 import { useAppNavigation } from '../../../../hooks/useAppNavigation';
 import { Routes } from '../../../../libs/navigation';

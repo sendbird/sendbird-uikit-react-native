@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { StyleSheet, useWindowDimensions } from 'react-native';
 
-import { useChannelHandler, useOpenChannel } from '@sendbird/uikit-chat-hooks';
-import { OpenChannelContexts, createOpenChannelFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
+import { useChannelHandler, useOpenChannel } from '@gathertown/uikit-chat-hooks';
+import { OpenChannelContexts, createOpenChannelFragment, useSendbirdChat } from '@gathertown/uikit-react-native';
 import {
   Avatar,
   Box,
@@ -14,9 +14,9 @@ import {
   createStyleSheet,
   useHeaderStyle,
   useUIKitTheme,
-} from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdOpenChannel } from '@sendbird/uikit-utils';
-import { useForceUpdate } from '@sendbird/uikit-utils';
+} from '@gathertown/uikit-react-native-foundation';
+import type { SendbirdOpenChannel } from '@gathertown/uikit-utils';
+import { useForceUpdate } from '@gathertown/uikit-utils';
 
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
 import { Routes } from '../../../libs/navigation';
