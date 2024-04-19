@@ -1,6 +1,6 @@
 {
   "name": "@gathertown/uikit-react-native",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Sendbird UIKit for React Native: A feature-rich and customizable chat UI kit with messaging, channel management, and user authentication.",
   "keywords": [
     "sendbird",
@@ -58,9 +58,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@gathertown/uikit-chat-hooks": "0.0.3",
-    "@gathertown/uikit-react-native-foundation": "0.0.3",
-    "@gathertown/uikit-utils": "0.0.3",
+    "@gathertown/uikit-chat-hooks": "0.0.4",
+    "@gathertown/uikit-react-native-foundation": "0.0.4",
+    "@gathertown/uikit-utils": "0.0.4",
     "@sendbird/uikit-tools": "^0.0.1-alpha.38"
   },
   "devDependencies": {
@@ -203,5 +203,6 @@
     "entryPoint": "./src/index.ts",
     "readmeFile": "./README.md",
     "displayName": "@gathertown/uikit-react-native"
-  }
+  },
+  "gitHead": "4e23352d1084b215fa2af5d9558e9159c83fa032"
 }
