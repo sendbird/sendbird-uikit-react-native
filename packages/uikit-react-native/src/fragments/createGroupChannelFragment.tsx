@@ -46,6 +46,11 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     onBeforeSendFileMessage = PASS,
     onBeforeUpdateUserMessage = PASS,
     onBeforeUpdateFileMessage = PASS,
+    onAfterSendUserMessage = PASS,
+    onAfterSendFileMessage = PASS,
+    onAfterUpdateUserMessage = PASS,
+    onAfterUpdateFileMessage = PASS,
+    onAfterDeleteMessage = PASS,
     channel,
     keyboardAvoidOffset,
     collectionCreator,
@@ -138,6 +143,8 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       async (params) => {
         const processedParams = await onBeforeSendUserMessage(params);
         const message = await sendUserMessage(processedParams, onPending);
+        await onAfterSendUserMessage(message);
+
         onSent(message);
       },
     );
@@ -145,6 +152,8 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       async (params) => {
         const processedParams = await onBeforeSendFileMessage(params);
         const message = await sendFileMessage(processedParams, onPending);
+        await onAfterSendFileMessage(message);
+
         onSent(message);
       },
     );
@@ -152,12 +161,15 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       async (message, params) => {
         const processedParams = await onBeforeUpdateUserMessage(params);
         await updateUserMessage(message.messageId, processedParams);
+        await onAfterUpdateUserMessage(message);
       },
     );
     const onPressUpdateFileMessage: GroupChannelProps['Input']['onPressUpdateFileMessage'] = useFreshCallback(
       async (message, params) => {
         const processedParams = await onBeforeUpdateFileMessage(params);
         await updateFileMessage(message.messageId, processedParams);
+        await onAfterUpdateFileMessage(message);
+
       },
     );
     const onScrolledAwayFromBottom = useFreshCallback((value: boolean) => {
@@ -197,7 +209,10 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             renderNewMessagesButton={renderNewMessagesButton}
             renderScrollToBottomButton={renderScrollToBottomButton}
             onResendFailedMessage={resendMessage}
-            onDeleteMessage={deleteMessage}
+            onDeleteMessage={async (message) => {
+              await deleteMessage(message);
+              await onAfterDeleteMessage(message);
+            }}
             onPressMediaMessage={onPressMediaMessage}
             flatListProps={memoizedFlatListProps}
           />
