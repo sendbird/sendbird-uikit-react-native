@@ -1,6 +1,6 @@
 {
   "name": "@gathertown/uikit-testing-tools",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "description": "UIKit testing tools",
   "keywords": [
@@ -38,8 +38,8 @@
     "access": "public"
   },
   "devDependencies": {
+    "@gathertown/uikit-utils": "0.0.2",
     "@sendbird/chat": "^4.9.8",
-    "@gathertown/uikit-utils": "~0.0.1",
     "@types/jest": "^29.4.0",
     "@types/react": "*",
     "@types/react-native": "*",
