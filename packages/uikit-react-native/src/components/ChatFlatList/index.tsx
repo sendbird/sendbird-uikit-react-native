@@ -63,7 +63,6 @@ const ChatFlatList = forwardRef<RNFlatList, Props>(function ChatFlatList(
   return (
     <FlatListInternal
       bounces={false}
-      removeClippedSubviews
       keyboardDismissMode={'on-drag'}
       keyboardShouldPersistTaps={'handled'}
       indicatorStyle={select({ light: 'black', dark: 'white' })}
