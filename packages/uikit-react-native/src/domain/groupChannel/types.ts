@@ -32,6 +32,12 @@ export interface GroupChannelProps {
     onBeforeUpdateUserMessage?: OnBeforeHandler<SendbirdUserMessageUpdateParams>;
     onBeforeUpdateFileMessage?: OnBeforeHandler<SendbirdFileMessageUpdateParams>;
 
+    onAfterSendUserMessage?: (message: SendbirdUserMessage) => Promise<void>;
+    onAfterSendFileMessage?: (message: SendbirdFileMessage) => Promise<void>;
+    onAfterUpdateUserMessage?: (message: SendbirdUserMessage) => Promise<void>;
+    onAfterUpdateFileMessage?: (message: SendbirdFileMessage) => Promise<void>;
+    onAfterDeleteMessage?: (message: SendbirdUserMessage | SendbirdFileMessage) => Promise<void>;
+
     renderMessage?: GroupChannelProps['MessageList']['renderMessage'];
     renderNewMessagesButton?: GroupChannelProps['MessageList']['renderNewMessagesButton'];
     renderScrollToBottomButton?: GroupChannelProps['MessageList']['renderScrollToBottomButton'];
