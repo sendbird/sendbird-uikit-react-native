@@ -1,29 +1,25 @@
+## Description
 
-## External Contributions
+Linear: https://linear.app/gather-town/issue/ENG-XXXX
 
-This project is not yet set up to accept pull requests from external contributors.
+[Description of changes]
 
-If you have a pull request that you believe should be accepted, please contact
-the Developer Relations team <developer-advocates@sendbird.com> with details
-and we'll evaluate if we can setup a [CLA](https://en.wikipedia.org/wiki/Contributor_License_Agreement) to allow for the contribution.
+## Release Safety (remove me once you review this section)
 
-## For Internal Contributors
+Review release safety documentation in Gather's Notion.
 
-[TICKET_ID]
+Address relevant safety mechanisms in the Test Plan.
 
-## Description Of Changes
+## Test Plan
 
-Add a brief description of the changes that you have involved in this PR
+- [ ] Mark this box if automated tests would suffice for the test plan
 
-## Types Of Changes
+Or, if you can't be 100% confident through automated checks, delete ☝️the line above and write out a manual test plan:
 
-What types of changes does your code introduce to this project?
-Put an `x` in the boxes that apply_
+- [x] Step that is already finished
+- [ ] Step that still needs to be done
+- [ ] ...
 
-- [ ] Bugfix
-- [ ] New feature
-- [ ] Documentation (correction or otherwise)
-- [ ] Cosmetics (whitespace, appearance (ex) Prettier)
-- [ ] Build configuration
-- [ ] Improvement (refactor code)
-- [ ] Test
+### CC
+
+Tag people here who you want to keep in the loop but whose review isn't required for merging.
