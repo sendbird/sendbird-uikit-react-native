@@ -50,6 +50,7 @@ import type {
 import type { ErrorBoundaryProps, LocalCacheStorage } from '../types';
 import VERSION from '../version';
 import InternalErrorBoundaryContainer from './InternalErrorBoundaryContainer';
+import type { BottomSheetRenderPropProps } from '@gathertown/uikit-react-native-foundation/src/ui/Dialog';
 
 const NetInfo = SBUDynamicModule.get('@react-native-community/netinfo', 'warn');
 type UnimplementedFeatures = 'enableVoiceMessage' | 'threadReplySelectType' | 'replyType';
@@ -112,6 +113,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   };
   userMention?: Pick<Partial<MentionConfigInterface>, 'mentionLimit' | 'suggestionLimit' | 'debounceMills'>;
   imageCompression?: Partial<ImageCompressionConfigInterface>;
+  renderBottomSheet?: (props: BottomSheetRenderPropProps) => React.ReactElement;
 }>;
 
 const SendbirdUIKitContainer = ({
@@ -127,6 +129,7 @@ const SendbirdUIKitContainer = ({
   userProfile,
   userMention,
   imageCompression,
+  renderBottomSheet,
 }: SendbirdUIKitContainerProps) => {
   if (!chatOptions.localCacheStorage) {
     throw new Error('SendbirdUIKitContainer: chatOptions.localCacheStorage is required');
@@ -243,6 +246,7 @@ const SendbirdUIKitContainer = ({
                             const STRINGS = value?.STRINGS || defaultStringSet;
                             return (
                               <DialogProvider
+                                renderBottomSheet={renderBottomSheet}
                                 defaultLabels={{
                                   alert: { ok: STRINGS.DIALOG.ALERT_DEFAULT_OK },
                                   prompt: {

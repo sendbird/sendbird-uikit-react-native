@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useRef } from 'react';
+import React, { ComponentProps, useCallback, useContext, useRef } from 'react';
 
 import { useForceUpdate } from '@gathertown/uikit-utils';
 
@@ -45,14 +45,17 @@ const ActionMenuContext = React.createContext<Pick<DialogContextType, 'openMenu'
 const PromptContext = React.createContext<Pick<DialogContextType, 'openPrompt'> | null>(null);
 const BottomSheetContext = React.createContext<Pick<DialogContextType, 'openSheet'> | null>(null);
 
+export type BottomSheetRenderPropProps = Pick<ComponentProps<typeof BottomSheet>, 'onDismiss' | 'onHide' | 'sheetItems' | 'visible'>;
+
 type Props = React.PropsWithChildren<{
   defaultLabels?: {
     alert?: { ok?: string };
     prompt?: { placeholder?: string; ok?: string; cancel?: string };
   };
+  renderBottomSheet?: (props: BottomSheetRenderPropProps) => React.ReactElement;
 }>;
 const DISMISS_TIMEOUT = 3000;
-export const DialogProvider = ({ defaultLabels, children }: Props) => {
+export const DialogProvider = ({ defaultLabels, renderBottomSheet, children }: Props) => {
   const waitDismissTimeout = useRef<NodeJS.Timeout>();
   const waitDismissPromise = useRef<() => void>();
   const waitDismiss = useCallback((resolver: () => void) => {
@@ -148,14 +151,19 @@ export const DialogProvider = ({ defaultLabels, children }: Props) => {
                 placeholder={workingDialogJob.current.props.placeholder ?? defaultLabels?.prompt?.placeholder}
               />
             )}
-            {workingDialogJob.current?.type === 'BottomSheet' && (
+            {workingDialogJob.current?.type === 'BottomSheet' && (renderBottomSheet ? renderBottomSheet({
+              onHide: updateToHide,
+              onDismiss: consumeQueue,
+              visible: visibleState.current,
+              sheetItems: workingDialogJob.current.props.sheetItems,
+            }) : (
               <BottomSheet
                 onHide={updateToHide}
                 onDismiss={consumeQueue}
                 visible={visibleState.current}
                 sheetItems={workingDialogJob.current.props.sheetItems}
                 HeaderComponent={workingDialogJob.current.props.HeaderComponent}
-              />
+              />)
             )}
           </BottomSheetContext.Provider>
         </PromptContext.Provider>
