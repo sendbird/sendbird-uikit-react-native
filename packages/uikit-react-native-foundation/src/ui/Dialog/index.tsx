@@ -52,10 +52,9 @@ type Props = React.PropsWithChildren<{
     alert?: { ok?: string };
     prompt?: { placeholder?: string; ok?: string; cancel?: string };
   };
-  renderBottomSheet?: (props: BottomSheetRenderPropProps) => React.ReactElement;
 }>;
 const DISMISS_TIMEOUT = 3000;
-export const DialogProvider = ({ defaultLabels, renderBottomSheet, children }: Props) => {
+export const DialogProvider = ({ defaultLabels, children }: Props) => {
   const waitDismissTimeout = useRef<NodeJS.Timeout>();
   const waitDismissPromise = useRef<() => void>();
   const waitDismiss = useCallback((resolver: () => void) => {
@@ -151,19 +150,14 @@ export const DialogProvider = ({ defaultLabels, renderBottomSheet, children }: P
                 placeholder={workingDialogJob.current.props.placeholder ?? defaultLabels?.prompt?.placeholder}
               />
             )}
-            {workingDialogJob.current?.type === 'BottomSheet' && (renderBottomSheet ? renderBottomSheet({
-              onHide: updateToHide,
-              onDismiss: consumeQueue,
-              visible: visibleState.current,
-              sheetItems: workingDialogJob.current.props.sheetItems,
-            }) : (
+            {workingDialogJob.current?.type === 'BottomSheet' && (
               <BottomSheet
                 onHide={updateToHide}
                 onDismiss={consumeQueue}
                 visible={visibleState.current}
                 sheetItems={workingDialogJob.current.props.sheetItems}
                 HeaderComponent={workingDialogJob.current.props.HeaderComponent}
-              />)
+              />
             )}
           </BottomSheetContext.Provider>
         </PromptContext.Provider>

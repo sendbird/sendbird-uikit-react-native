@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Pressable } from 'react-native';
 
 import type { SendbirdMessage } from '@gathertown/uikit-utils';
-import { getMessageTimeFormat } from '@gathertown/uikit-utils';
+import { getMessageTimeFormat, isSendableMessage } from '@gathertown/uikit-utils';
 
 import Box from '../../components/Box';
 import Text from '../../components/Text';
@@ -10,14 +10,32 @@ import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import Avatar from '../Avatar';
 import type { GroupChannelMessageProps } from './index';
+import { CustomComponentContext } from '../../context/CustomComponentCtx';
+
+export type IncomingMessageContainerRenderProp = (props: {
+    content: React.ReactNode,
+    groupedWithNext: boolean;
+    groupedWithPrev: boolean;
+    playerId: string;
+    displayedTime: string; 
+  }) => React.ReactElement;
+
+export type OutgoingMessageContainerRenderProp = (props: {
+    content: React.ReactNode;
+    groupedWithNext: boolean;
+    groupedWithPrev: boolean;
+    displayedTime: string;
+  }) => React.ReactElement;
+
 
 type Props = GroupChannelMessageProps<SendbirdMessage>;
 
 const MessageContainer = (props: Props) => {
+  const ctx = useContext(CustomComponentContext);
   if (props.variant === 'incoming') {
-    return <MessageContainer.Incoming {...props} />;
+    return <MessageContainer.Incoming {...props} renderMessageContainer={ctx?.renderIncomingMessageContainer} />;
   } else {
-    return <MessageContainer.Outgoing {...props} />;
+    return <MessageContainer.Outgoing {...props} renderMessageContainer={ctx?.renderOutgoingMessageContainer} />;
   }
 };
 
@@ -29,9 +47,20 @@ MessageContainer.Incoming = function MessageContainerIncoming({
   onPressAvatar,
   strings,
   parentMessage,
-}: Props) {
+  renderMessageContainer,
+}: Props & { renderMessageContainer?: IncomingMessageContainerRenderProp}) {
   const { colors } = useUIKitTheme();
   const color = colors.ui.groupChannelMessage.incoming;
+
+  if (renderMessageContainer) {
+    return renderMessageContainer?.({ 
+      content: children,
+      groupedWithNext,
+      groupedWithPrev,
+      playerId: isSendableMessage(message) ? message.sender.userId : '',
+      displayedTime: strings?.sentDate ?? getMessageTimeFormat(new Date(message.createdAt)),
+    });
+  }
 
   return (
     <Box flexDirection={'row'} justifyContent={'flex-start'} alignItems={'flex-end'}>
@@ -73,12 +102,18 @@ MessageContainer.Outgoing = function MessageContainerOutgoing({
   children,
   message,
   groupedWithNext,
+  groupedWithPrev,
   strings,
   sendingStatus,
   parentMessage,
-}: Props) {
+  renderMessageContainer,
+}: Props & { renderMessageContainer?: OutgoingMessageContainerRenderProp}) {
   const { colors } = useUIKitTheme();
   const color = colors.ui.groupChannelMessage.outgoing;
+
+  if (renderMessageContainer) {
+    return renderMessageContainer({ content: children, groupedWithNext, groupedWithPrev, displayedTime: strings?.sentDate ?? getMessageTimeFormat(new Date(message.createdAt))  });
+  }
 
   return (
     <Box>

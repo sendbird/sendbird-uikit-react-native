@@ -60,6 +60,9 @@ export { default as UIKitThemeContext } from './theme/UIKitThemeContext';
 export { default as UIKitThemeProvider } from './theme/UIKitThemeProvider';
 export { default as useUIKitTheme } from './theme/useUIKitTheme';
 
+/** Context **/
+export { CustomComponentProvider, CustomComponentContext } from './context/CustomComponentCtx';
+
 /** Types **/
 export type {
   TypoName,
@@ -81,3 +84,4 @@ export type { ActionMenuItem } from './ui/ActionMenu';
 export type { BottomSheetItem } from './ui/BottomSheet';
 export type { UIKitTypographyOverrides } from './styles/createTypography';
 export type { HeaderStyleContextType } from './styles/HeaderStyleContext';
+export type { CustomComponentContextType } from './context/CustomComponentCtx';

@@ -5,8 +5,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Sendbird, { DeviceOsPlatform, SendbirdPlatform, SendbirdProduct } from '@sendbird/chat';
 import { GroupChannelModule } from '@sendbird/chat/groupChannel';
 import { OpenChannelModule } from '@sendbird/chat/openChannel';
-import type { HeaderStyleContextType, UIKitTheme } from '@gathertown/uikit-react-native-foundation';
+import type { CustomComponentContextType, HeaderStyleContextType, UIKitTheme } from '@gathertown/uikit-react-native-foundation';
 import {
+  CustomComponentProvider,
   DialogProvider,
   Header,
   HeaderStyleProvider,
@@ -50,8 +51,6 @@ import type {
 import type { ErrorBoundaryProps, LocalCacheStorage } from '../types';
 import VERSION from '../version';
 import InternalErrorBoundaryContainer from './InternalErrorBoundaryContainer';
-import type { BottomSheetRenderPropProps } from '@gathertown/uikit-react-native-foundation/src/ui/Dialog';
-import { CustomComponentProvider } from '../contexts/CustomComponentCtx';
 
 const NetInfo = SBUDynamicModule.get('@react-native-community/netinfo', 'warn');
 type UnimplementedFeatures = 'enableVoiceMessage' | 'threadReplySelectType' | 'replyType';
@@ -114,7 +113,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   };
   userMention?: Pick<Partial<MentionConfigInterface>, 'mentionLimit' | 'suggestionLimit' | 'debounceMills'>;
   imageCompression?: Partial<ImageCompressionConfigInterface>;
-  renderBottomSheet?: (props: BottomSheetRenderPropProps) => React.ReactElement;
+  customRenderProps?: CustomComponentContextType;
 }>;
 
 const SendbirdUIKitContainer = ({
@@ -130,7 +129,7 @@ const SendbirdUIKitContainer = ({
   userProfile,
   userMention,
   imageCompression,
-  renderBottomSheet,
+  customRenderProps,
 }: SendbirdUIKitContainerProps) => {
   if (!chatOptions.localCacheStorage) {
     throw new Error('SendbirdUIKitContainer: chatOptions.localCacheStorage is required');
@@ -223,7 +222,9 @@ const SendbirdUIKitContainer = ({
           enableImageCompression={chatOptions.enableImageCompression ?? SendbirdUIKit.DEFAULT.IMAGE_COMPRESSION}
         >
           <LocalizationProvider stringSet={defaultStringSet}>
-            <CustomComponentProvider>
+            <CustomComponentProvider
+              {...customRenderProps}
+            >
               <PlatformServiceProvider
                 fileService={platformServices.file}
                 notificationService={platformServices.notification}
@@ -248,7 +249,6 @@ const SendbirdUIKitContainer = ({
                               const STRINGS = value?.STRINGS || defaultStringSet;
                               return (
                                 <DialogProvider
-                                  renderBottomSheet={renderBottomSheet}
                                   defaultLabels={{
                                     alert: { ok: STRINGS.DIALOG.ALERT_DEFAULT_OK },
                                     prompt: {
