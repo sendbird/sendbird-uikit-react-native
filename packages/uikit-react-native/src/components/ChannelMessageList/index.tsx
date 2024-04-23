@@ -34,6 +34,7 @@ import SBUUtils from '../../libs/SBUUtils';
 import type { CommonComponent } from '../../types';
 import ChatFlatList from '../ChatFlatList';
 import { ReactionAddons } from '../ReactionAddons';
+import { UserMessage } from '@sendbird/chat/message';
 
 type PressActions = { onPress?: () => void; onLongPress?: () => void };
 type HandleableMessage = SendbirdUserMessage | SendbirdFileMessage;
@@ -267,8 +268,9 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
       onPress: undefined,
       onLongPress: undefined,
     };
+    const isCurrentUserSuccessfulMessage = isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded';
 
-    if (msg.isUserMessage()) {
+    const pushCopySheetItem = (msg: UserMessage) => {
       sheetItems.push({
         icon: 'copy',
         title: STRINGS.LABELS.CHANNEL_MESSAGE_COPY,
@@ -277,6 +279,10 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
           toast.show(STRINGS.TOAST.COPY_OK, 'success');
         },
       });
+    };
+
+    if (msg.isUserMessage() && !(!channel.isEphemeral && isCurrentUserSuccessfulMessage)) {
+      pushCopySheetItem(msg);
     }
     if (msg.isFileMessage()) {
       sheetItems.push({
@@ -301,19 +307,23 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
       });
     }
     if (!channel.isEphemeral) {
-      if (isMyMessage(msg, currentUserId) && msg.sendingStatus === 'succeeded') {
+      if (isCurrentUserSuccessfulMessage) {
         if (msg.isUserMessage()) {
           sheetItems.push({
             icon: 'edit',
             title: STRINGS.LABELS.CHANNEL_MESSAGE_EDIT,
             onPress: () => onEditMessage(msg),
           });
+
+          pushCopySheetItem(msg);
         }
+        
         sheetItems.push({
           disabled: msg.threadInfo ? msg.threadInfo.replyCount > 0 : undefined,
           icon: 'delete',
           title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
           onPress: () => confirmDelete(msg),
+          style: 'destructive',
         });
       }
       if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
