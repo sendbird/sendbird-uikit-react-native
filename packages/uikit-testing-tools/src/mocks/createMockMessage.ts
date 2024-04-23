@@ -134,6 +134,12 @@ class MockMessage implements GetMockProps<Params, SendbirdBaseMessage> {
   updateFeedback(_: Feedback): Promise<void> {
     return Promise.resolve(undefined);
   }
+  markThreadAsRead(): Promise<void> {
+    return Promise.resolve();
+  }
+  setPushNotificationEnabled(_: boolean): Promise<void> {
+    return Promise.resolve();
+  }
 
   asFileMessage(): SendbirdFileMessage {
     return this as unknown as SendbirdFileMessage;

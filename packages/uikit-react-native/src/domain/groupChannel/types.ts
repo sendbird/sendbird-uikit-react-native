@@ -5,6 +5,7 @@ import type { MessageCollectionParams, MessageFilterParams } from '@sendbird/cha
 import type { UseGroupChannelMessagesOptions } from '@sendbird/uikit-chat-hooks';
 import type {
   OnBeforeHandler,
+  PickPartial,
   SendbirdFileMessage,
   SendbirdFileMessageCreateParams,
   SendbirdFileMessageUpdateParams,
@@ -91,7 +92,7 @@ export interface GroupChannelProps {
     // Changing the search item will trigger the focus animation on messages.
     onUpdateSearchItem: (searchItem?: GroupChannelProps['MessageList']['searchItem']) => void;
   };
-  Input: Pick<
+  Input: PickPartial<
     ChannelInputProps,
     | 'shouldRenderInput'
     | 'onPressSendUserMessage'
@@ -99,7 +100,8 @@ export interface GroupChannelProps {
     | 'onPressUpdateUserMessage'
     | 'onPressUpdateFileMessage'
     | 'SuggestedMentionList'
-    | 'AttachmentsButton'
+    | 'AttachmentsButton',
+    'inputDisabled'
   >;
 
   SuggestedMentionList: SuggestedMentionListProps;

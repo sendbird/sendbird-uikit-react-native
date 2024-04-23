@@ -121,6 +121,7 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
   pinnedMessageIds = [];
   unreadMentionCount = 0;
   unreadMessageCount = 0;
+  totalUnreadReplyCount = 0;
 
   serialize(): object {
     throw new Error('Method not implemented.');
@@ -637,6 +638,9 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
     throw new Error('Method not implemented.');
   }
 
+  createThreadedParentMessageListQuery(): PreviousMessageListQuery {
+    throw new Error('Method not implemented.');
+  }
   createPinnedMessageListQuery(_params?: PinnedMessageListQueryParams | undefined): PinnedMessageListQuery {
     throw new Error('Method not implemented.');
   }

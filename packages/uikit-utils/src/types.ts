@@ -70,6 +70,8 @@ export type PartialNullable<T> = {
   [P in keyof T]?: T[P] | null;
 };
 
+export type PickPartial<T, PK extends keyof T, PPK extends keyof T> = Pick<T, PK> & Partial<Pick<T, PPK>>;
+
 export type Optional<T> = T | undefined;
 
 export type ContextValue<T extends React.Context<any>> = T extends React.Context<infer V> ? V : never;
