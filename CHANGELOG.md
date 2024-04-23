@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.5.1...v3.5.2) (2024-04-23)
+
+### Features
+
+- inputDisabled prop opened as public ([6eb4ad0](https://github.com/sendbird/sendbird-uikit-react-native/commit/6eb4ad0d35447183a697c2c8c5064a003c1e6f9a))
+
 ## [3.5.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.5.0...v3.5.1) (2024-04-08)
 
 ### Bug Fixes
