@@ -62,6 +62,15 @@ export { default as useUIKitTheme } from './theme/useUIKitTheme';
 
 /** Context **/
 export { CustomComponentProvider, CustomComponentContext } from './context/CustomComponentCtx';
+export type {
+  UnknownMessageRenderProp,
+  GenericMessageRenderProp,
+  FileMessageRenderProp,
+  UserMessageRenderProp,
+  IncomingMessageContainerRenderProp,
+  OutgoingMessageContainerRenderProp,
+  AdminMessageRenderProp,
+} from './context/CustomComponentCtx';
 
 /** Types **/
 export type {

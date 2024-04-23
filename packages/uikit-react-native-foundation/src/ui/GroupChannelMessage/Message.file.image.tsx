@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import type { SendbirdFileMessage } from '@gathertown/uikit-utils';
 import { getThumbnailUriFromFileMessage } from '@gathertown/uikit-utils';
@@ -10,20 +10,30 @@ import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import MessageContainer from './MessageContainer';
 import type { GroupChannelMessageProps } from './index';
+import { CustomComponentContext } from '../../context/CustomComponentCtx';
 
 const ImageFileMessage = (props: GroupChannelMessageProps<SendbirdFileMessage>) => {
   const { onPress, onLongPress, variant = 'incoming' } = props;
+  const ctx = useContext(CustomComponentContext);
 
   const { colors } = useUIKitTheme();
 
+  const content = (
+    <ImageWithPlaceholder source={{ uri: getThumbnailUriFromFileMessage(props.message) }} style={styles.image} />
+  );
+
   return (
     <MessageContainer {...props}>
-      <Box style={styles.container} backgroundColor={colors.ui.groupChannelMessage[variant].enabled.background}>
-        <PressBox activeOpacity={0.8} onPress={onPress} onLongPress={onLongPress}>
-          <ImageWithPlaceholder source={{ uri: getThumbnailUriFromFileMessage(props.message) }} style={styles.image} />
-        </PressBox>
-        {props.children}
-      </Box>
+      <PressBox activeOpacity={0.8} onPress={onPress} onLongPress={onLongPress}>
+        {
+          ctx?.renderGenericMessage ? ctx.renderGenericMessage({ content }) : (
+            <Box style={styles.container} backgroundColor={colors.ui.groupChannelMessage[variant].enabled.background}>
+              {content}
+            </Box>
+          )
+        }
+      </PressBox>
+      {props.children}
     </MessageContainer>
   );
 };
