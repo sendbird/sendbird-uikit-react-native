@@ -1,10 +1,11 @@
-import React from 'react';
+import { CustomComponentContext, createStyleSheet, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
+import type { SendbirdBaseChannel, SendbirdBaseMessage, SendbirdReaction } from '@gathertown/uikit-utils';
+import { getReactionCount } from '@gathertown/uikit-utils';
+import React, { useContext } from 'react';
 import { Pressable } from 'react-native';
 
 import type { Emoji } from '@sendbird/chat';
-import { createStyleSheet, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
-import type { SendbirdBaseChannel, SendbirdBaseMessage, SendbirdReaction } from '@gathertown/uikit-utils';
-import { getReactionCount } from '@gathertown/uikit-utils';
+import { Reaction } from '@sendbird/chat/message';
 
 import { DEFAULT_LONG_PRESS_DELAY, UNKNOWN_USER_ID } from '../../constants';
 import { useReaction, useSendbirdChat } from '../../hooks/useContext';
@@ -78,8 +79,20 @@ const MessageReactionAddon = ({ channel, message }: { channel: SendbirdBaseChann
   const { colors } = useUIKitTheme();
   const { emojiManager, currentUser } = useSendbirdChat();
   const { openReactionList, openReactionUserList } = useReaction();
+  const ctx = useContext(CustomComponentContext);
 
   if (!message.reactions?.length) return null;
+
+  if (ctx?.renderMessageReactionsRenderProp) {
+    return ctx.renderMessageReactionsRenderProp({
+      message,
+      getEmoji: (key) => emojiManager.allEmojiMap[key],
+      currentUserId: currentUser?.userId,
+      openReactionUserList: (focusIndex: number) => openReactionUserList({ channel, message, focusIndex }),
+      onReactionPress: (reaction: Reaction) =>
+        createOnPressReaction(reaction, channel, message, getUserReacted(reaction, currentUser?.userId))(),
+    });
+  }
 
   const reactionButtons = createReactionButtons(
     channel,
