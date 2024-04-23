@@ -241,13 +241,14 @@ const useGetMessagePressActions = <T extends SendbirdGroupChannel | SendbirdOpen
   const confirmDelete = (message: HandleableMessage) => {
     alert({
       title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE,
+      message: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_DESCRIPTION,
       buttons: [
         {
           text: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_CANCEL,
+          style: 'cancel',
         },
         {
           text: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_OK,
-          style: 'destructive',
           onPress: () => {
             onDeleteMessage(message).catch(() => toast.show(STRINGS.TOAST.DELETE_MSG_ERROR, 'error'));
           },

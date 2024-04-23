@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { AlertButton, View } from 'react-native';
 
 import Modal from '../../components/Modal';
@@ -8,6 +8,7 @@ import useHeaderStyle from '../../styles/useHeaderStyle';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import Button from '../Button';
 import DialogBox from '../Dialog/DialogBox';
+import { CustomComponentContext } from '../../context/CustomComponentCtx';
 
 export type AlertItem = {
   title?: string;
@@ -20,9 +21,17 @@ type Props = {
   onHide: () => void;
   onDismiss?: () => void;
 } & AlertItem;
+
+export type AlertRenderProp = (props: Props) => React.ReactElement;
+
 const Alert = ({ onDismiss, visible, onHide, title = '', message = '', buttons = [{ text: 'OK' }] }: Props) => {
   const { statusBarTranslucent } = useHeaderStyle();
   const { colors } = useUIKitTheme();
+  const ctx = useContext(CustomComponentContext);
+  
+  if (ctx?.renderAlert) {
+    return ctx.renderAlert({ onDismiss, visible, onHide, title, message, buttons });
+  }
 
   return (
     <Modal
