@@ -1,10 +1,12 @@
 import React from 'react';
 import { IncomingMessageContainerRenderProp, OutgoingMessageContainerRenderProp } from '../ui/GroupChannelMessage/MessageContainer';
+import { AlertRenderProp } from '../ui/Alert';
 
 
 export type CustomComponentContextType = {
   renderIncomingMessageContainer?: IncomingMessageContainerRenderProp;
   renderOutgoingMessageContainer?: OutgoingMessageContainerRenderProp;
+  renderAlert?: AlertRenderProp;
 };
 
 type Props = React.PropsWithChildren<CustomComponentContextType>;

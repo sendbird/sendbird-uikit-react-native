@@ -286,6 +286,7 @@ export interface StringSet {
     CHANNEL_MESSAGE_REPLY: string;
     /** Channel > Message > Delete confirm **/
     CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE: string;
+    CHANNEL_MESSAGE_DELETE_CONFIRM_DESCRIPTION: string;
     CHANNEL_MESSAGE_DELETE_CONFIRM_OK: string;
     CHANNEL_MESSAGE_DELETE_CONFIRM_CANCEL: string;
     /** Channel > Message > Failed **/
