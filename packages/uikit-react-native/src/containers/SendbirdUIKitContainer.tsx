@@ -5,8 +5,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Sendbird, { DeviceOsPlatform, SendbirdPlatform, SendbirdProduct } from '@sendbird/chat';
 import { GroupChannelModule } from '@sendbird/chat/groupChannel';
 import { OpenChannelModule } from '@sendbird/chat/openChannel';
-import type { HeaderStyleContextType, UIKitTheme } from '@gathertown/uikit-react-native-foundation';
+import type { CustomComponentContextType, HeaderStyleContextType, UIKitTheme } from '@gathertown/uikit-react-native-foundation';
 import {
+  CustomComponentProvider,
   DialogProvider,
   Header,
   HeaderStyleProvider,
@@ -112,6 +113,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   };
   userMention?: Pick<Partial<MentionConfigInterface>, 'mentionLimit' | 'suggestionLimit' | 'debounceMills'>;
   imageCompression?: Partial<ImageCompressionConfigInterface>;
+  customRenderProps?: CustomComponentContextType;
 }>;
 
 const SendbirdUIKitContainer = ({
@@ -127,6 +129,7 @@ const SendbirdUIKitContainer = ({
   userProfile,
   userMention,
   imageCompression,
+  customRenderProps,
 }: SendbirdUIKitContainerProps) => {
   if (!chatOptions.localCacheStorage) {
     throw new Error('SendbirdUIKitContainer: chatOptions.localCacheStorage is required');
@@ -219,50 +222,54 @@ const SendbirdUIKitContainer = ({
           enableImageCompression={chatOptions.enableImageCompression ?? SendbirdUIKit.DEFAULT.IMAGE_COMPRESSION}
         >
           <LocalizationProvider stringSet={defaultStringSet}>
-            <PlatformServiceProvider
-              fileService={platformServices.file}
-              notificationService={platformServices.notification}
-              clipboardService={platformServices.clipboard}
-              mediaService={platformServices.media}
+            <CustomComponentProvider
+              {...customRenderProps}
             >
-              <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
-                <HeaderStyleProvider
-                  HeaderComponent={styles?.HeaderComponent ?? Header}
-                  defaultTitleAlign={styles?.defaultHeaderTitleAlign ?? 'left'}
-                  statusBarTranslucent={styles?.statusBarTranslucent ?? true}
-                >
-                  <ToastProvider dismissTimeout={toast?.dismissTimeout}>
-                    <UserProfileProvider
-                      onCreateChannel={userProfile?.onCreateChannel}
-                      onBeforeCreateChannel={userProfile?.onBeforeCreateChannel}
-                      statusBarTranslucent={styles?.statusBarTranslucent ?? true}
-                    >
-                      <ReactionProvider>
-                        <LocalizationContext.Consumer>
-                          {(value) => {
-                            const STRINGS = value?.STRINGS || defaultStringSet;
-                            return (
-                              <DialogProvider
-                                defaultLabels={{
-                                  alert: { ok: STRINGS.DIALOG.ALERT_DEFAULT_OK },
-                                  prompt: {
-                                    ok: STRINGS.DIALOG.PROMPT_DEFAULT_OK,
-                                    cancel: STRINGS.DIALOG.PROMPT_DEFAULT_CANCEL,
-                                    placeholder: STRINGS.DIALOG.PROMPT_DEFAULT_PLACEHOLDER,
-                                  },
-                                }}
-                              >
-                                {renderChildren()}
-                              </DialogProvider>
-                            );
-                          }}
-                        </LocalizationContext.Consumer>
-                      </ReactionProvider>
-                    </UserProfileProvider>
-                  </ToastProvider>
-                </HeaderStyleProvider>
-              </UIKitThemeProvider>
-            </PlatformServiceProvider>
+              <PlatformServiceProvider
+                fileService={platformServices.file}
+                notificationService={platformServices.notification}
+                clipboardService={platformServices.clipboard}
+                mediaService={platformServices.media}
+              >
+                <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
+                  <HeaderStyleProvider
+                    HeaderComponent={styles?.HeaderComponent ?? Header}
+                    defaultTitleAlign={styles?.defaultHeaderTitleAlign ?? 'left'}
+                    statusBarTranslucent={styles?.statusBarTranslucent ?? true}
+                  >
+                    <ToastProvider dismissTimeout={toast?.dismissTimeout}>
+                      <UserProfileProvider
+                        onCreateChannel={userProfile?.onCreateChannel}
+                        onBeforeCreateChannel={userProfile?.onBeforeCreateChannel}
+                        statusBarTranslucent={styles?.statusBarTranslucent ?? true}
+                      >
+                        <ReactionProvider>
+                          <LocalizationContext.Consumer>
+                            {(value) => {
+                              const STRINGS = value?.STRINGS || defaultStringSet;
+                              return (
+                                <DialogProvider
+                                  defaultLabels={{
+                                    alert: { ok: STRINGS.DIALOG.ALERT_DEFAULT_OK },
+                                    prompt: {
+                                      ok: STRINGS.DIALOG.PROMPT_DEFAULT_OK,
+                                      cancel: STRINGS.DIALOG.PROMPT_DEFAULT_CANCEL,
+                                      placeholder: STRINGS.DIALOG.PROMPT_DEFAULT_PLACEHOLDER,
+                                    },
+                                  }}
+                                >
+                                  {renderChildren()}
+                                </DialogProvider>
+                              );
+                            }}
+                          </LocalizationContext.Consumer>
+                        </ReactionProvider>
+                      </UserProfileProvider>
+                    </ToastProvider>
+                  </HeaderStyleProvider>
+                </UIKitThemeProvider>
+              </PlatformServiceProvider>
+            </CustomComponentProvider>
           </LocalizationProvider>
         </SendbirdChatProvider>
       </UIKitConfigProvider>

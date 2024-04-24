@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useRef } from 'react';
+import React, { ComponentProps, useCallback, useContext, useRef } from 'react';
 
 import { useForceUpdate } from '@gathertown/uikit-utils';
 
@@ -44,6 +44,8 @@ const AlertContext = React.createContext<Pick<DialogContextType, 'alert'> | null
 const ActionMenuContext = React.createContext<Pick<DialogContextType, 'openMenu'> | null>(null);
 const PromptContext = React.createContext<Pick<DialogContextType, 'openPrompt'> | null>(null);
 const BottomSheetContext = React.createContext<Pick<DialogContextType, 'openSheet'> | null>(null);
+
+export type BottomSheetRenderPropProps = Pick<ComponentProps<typeof BottomSheet>, 'onDismiss' | 'onHide' | 'sheetItems' | 'visible'>;
 
 type Props = React.PropsWithChildren<{
   defaultLabels?: {
