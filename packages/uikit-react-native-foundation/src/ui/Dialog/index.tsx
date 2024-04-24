@@ -1,6 +1,5 @@
-import React, { ComponentProps, useCallback, useContext, useRef } from 'react';
-
 import { useForceUpdate } from '@gathertown/uikit-utils';
+import React, { ComponentProps, useCallback, useContext, useRef } from 'react';
 
 import type { ActionMenuItem } from '../ActionMenu';
 import ActionMenu from '../ActionMenu';
@@ -45,7 +44,10 @@ const ActionMenuContext = React.createContext<Pick<DialogContextType, 'openMenu'
 const PromptContext = React.createContext<Pick<DialogContextType, 'openPrompt'> | null>(null);
 const BottomSheetContext = React.createContext<Pick<DialogContextType, 'openSheet'> | null>(null);
 
-export type BottomSheetRenderPropProps = Pick<ComponentProps<typeof BottomSheet>, 'onDismiss' | 'onHide' | 'sheetItems' | 'visible'>;
+export type BottomSheetRenderPropProps = Pick<
+  ComponentProps<typeof BottomSheet>,
+  'onDismiss' | 'onHide' | 'sheetItems' | 'visible'
+>;
 
 type Props = React.PropsWithChildren<{
   defaultLabels?: {

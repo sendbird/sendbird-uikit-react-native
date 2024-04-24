@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { TouchableOpacity, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type Icon from '../../components/Icon';
 import Modal from '../../components/Modal';
+import { CustomComponentContext } from '../../context/CustomComponentCtx';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import DialogSheet from '../Dialog/DialogSheet';
 
@@ -16,6 +17,7 @@ export type BottomSheetItem = {
     titleColor?: string;
     disabled?: boolean;
     onPress: () => void;
+    style?: 'default' | 'destructive';
   }[];
   HeaderComponent?: (props: HeaderProps) => JSX.Element;
 };
@@ -25,10 +27,19 @@ type Props = {
   onError?: (error: unknown) => void;
   onDismiss?: () => void;
 } & BottomSheetItem;
+
+export type BottomSheetRenderProp = (props: Props) => React.ReactElement;
+
 const BottomSheet = ({ onDismiss, onHide, visible, sheetItems, HeaderComponent }: Props) => {
   const { statusBarTranslucent } = useHeaderStyle();
   const { width } = useWindowDimensions();
   const { bottom, left, right } = useSafeAreaInsets();
+  const ctx = useContext(CustomComponentContext);
+
+  if (ctx?.renderBottomSheet) {
+    return ctx.renderBottomSheet({ onDismiss, onHide, visible, sheetItems, HeaderComponent });
+  }
+
   return (
     <Modal
       type={'slide'}
