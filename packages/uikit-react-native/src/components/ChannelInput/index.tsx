@@ -1,8 +1,4 @@
-import React, { MutableRefObject, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, TextInput, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-import { createStyleSheet, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
+import { CustomComponentContext, createStyleSheet, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
 import {
   SendbirdBaseChannel,
   SendbirdBaseMessage,
@@ -16,6 +12,9 @@ import {
   replace,
   useIIFE,
 } from '@gathertown/uikit-utils';
+import React, { MutableRefObject, useContext, useEffect, useState } from 'react';
+import { KeyboardAvoidingView, Platform, TextInput, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useSendbirdChat } from '../../hooks/useContext';
 import useMentionTextInput from '../../hooks/useMentionTextInput';
@@ -78,6 +77,7 @@ const GET_INPUT_KEY = (shouldReset: boolean) => (shouldReset ? 'uikit-input-clea
 // TODO: Refactor 'Edit' mode to clearly
 const ChannelInput = (props: ChannelInputProps) => {
   const { channel, keyboardAvoidOffset, messageToEdit, setMessageToEdit } = props;
+  const ctx = useContext(CustomComponentContext);
 
   const { top, left, right, bottom } = useSafeAreaInsets();
   const { colors } = useUIKitTheme();
@@ -112,43 +112,59 @@ const ChannelInput = (props: ChannelInputProps) => {
     return <SafeAreaBottom height={bottom} />;
   }
 
+  const content = (
+    <>
+      {inputMode === 'send' && (
+        <SendInput
+          {...props}
+          key={inputKeyToRemount}
+          ref={textInputRef as never}
+          text={text}
+          onChangeText={onChangeText}
+          onSelectionChange={onSelectionChange}
+          mentionedUsers={mentionedUsers}
+          AttachmentsButton={props.AttachmentsButton ?? AttachmentsButton}
+        />
+      )}
+      {inputMode === 'edit' && messageToEdit && (
+        <EditInput
+          {...props}
+          key={inputKeyToRemount}
+          ref={textInputRef as never}
+          text={text}
+          onChangeText={onChangeText}
+          autoFocus={AUTO_FOCUS}
+          onSelectionChange={onSelectionChange}
+          mentionedUsers={mentionedUsers}
+          messageToEdit={messageToEdit}
+          setMessageToEdit={setMessageToEdit}
+        />
+      )}
+    </>
+  );
+
   return (
     <>
       <KeyboardAvoidingView
         keyboardVerticalOffset={-bottom + keyboardAvoidOffset}
         behavior={KEYBOARD_AVOID_VIEW_BEHAVIOR}
       >
-        <View style={{ paddingLeft: left, paddingRight: right, backgroundColor: colors.background }}>
-          <View onLayout={(e) => setInputHeight(e.nativeEvent.layout.height)} style={styles.inputContainer}>
-            {inputMode === 'send' && (
-              <SendInput
-                {...props}
-                key={inputKeyToRemount}
-                ref={textInputRef as never}
-                text={text}
-                onChangeText={onChangeText}
-                onSelectionChange={onSelectionChange}
-                mentionedUsers={mentionedUsers}
-                AttachmentsButton={props.AttachmentsButton ?? AttachmentsButton}
-              />
-            )}
-            {inputMode === 'edit' && messageToEdit && (
-              <EditInput
-                {...props}
-                key={inputKeyToRemount}
-                ref={textInputRef as never}
-                text={text}
-                onChangeText={onChangeText}
-                autoFocus={AUTO_FOCUS}
-                onSelectionChange={onSelectionChange}
-                mentionedUsers={mentionedUsers}
-                messageToEdit={messageToEdit}
-                setMessageToEdit={setMessageToEdit}
-              />
-            )}
-          </View>
-          <SafeAreaBottom height={bottom} />
-        </View>
+        {
+          // remove styling if a render prop has been provided for message input
+          ctx?.messageInput ? (
+            <View>
+              {content}
+              <SafeAreaBottom height={bottom} />
+            </View>
+          ) : (
+            <View style={{ paddingLeft: left, paddingRight: right, backgroundColor: colors.background }}>
+              <View onLayout={(e) => setInputHeight(e.nativeEvent.layout.height)} style={styles.inputContainer}>
+                {content}
+              </View>
+              <SafeAreaBottom height={bottom} />
+            </View>
+          )
+        }
       </KeyboardAvoidingView>
       {mentionAvailable && props.SuggestedMentionList && (
         <props.SuggestedMentionList

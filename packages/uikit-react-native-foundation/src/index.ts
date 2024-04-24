@@ -99,4 +99,6 @@ export type {
   EmojiSelectorRenderProp,
   MessageReactionsRenderProp,
   ReactionBottomSheetUserListRenderProp,
+  EditInputRenderProp,
+  SendInputRenderProp,
 } from './context/CustomComponentCtx';
