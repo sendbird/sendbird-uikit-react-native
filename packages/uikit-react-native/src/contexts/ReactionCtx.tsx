@@ -1,7 +1,7 @@
-import React, { useCallback, useContext, useReducer, useRef, useState } from 'react';
-
+import { CustomComponentContext } from '@gathertown/uikit-react-native-foundation';
 import type { SendbirdBaseChannel, SendbirdBaseMessage } from '@gathertown/uikit-utils';
 import { NOOP } from '@gathertown/uikit-utils';
+import React, { useCallback, useContext, useReducer, useRef, useState } from 'react';
 
 import { ReactionBottomSheets } from '../components/ReactionBottomSheets';
 import { LocalizationContext } from '../contexts/LocalizationCtx';
@@ -26,6 +26,7 @@ export const ReactionProvider = ({ children }: Props) => {
   const chatCtx = useContext(SendbirdChatContext);
   const localizationCtx = useContext(LocalizationContext);
   const userProfileCtx = useContext(UserProfileContext);
+  const ctx = useContext(CustomComponentContext);
   if (!chatCtx) throw new Error('SendbirdChatContext is not provided');
   if (!localizationCtx) throw new Error('LocalizationContext is not provided');
   if (!userProfileCtx) throw new Error('UserProfileContext is not provided');
@@ -83,15 +84,23 @@ export const ReactionProvider = ({ children }: Props) => {
       closeResolver.current?.();
     },
   };
+  const onClose = createOnCloseWithResolver(() => setReactionUserListVisible(false));
 
   return (
     <ReactionContext.Provider value={reactionCtx}>
       {children}
-      <ReactionBottomSheets.UserList
-        {...sheetProps}
-        visible={reactionUserListVisible}
-        onClose={createOnCloseWithResolver(() => setReactionUserListVisible(false))}
-      />
+      {ctx?.renderReactionBottomSheetUserListRenderProp ? (
+        ctx.renderReactionBottomSheetUserListRenderProp({
+          message: sheetProps.reactionCtx.message,
+          onDismiss: sheetProps.onDismiss,
+          onClose,
+          visible: reactionUserListVisible,
+          getEmoji: (key: string) => chatCtx.emojiManager.allEmojiMap[key],
+          initialFocusIndex: reactionUserListFocusIndex,
+        })
+      ) : (
+        <ReactionBottomSheets.UserList {...sheetProps} visible={reactionUserListVisible} onClose={onClose} />
+      )}
       <ReactionBottomSheets.ReactionList
         {...sheetProps}
         visible={reactionListVisible}

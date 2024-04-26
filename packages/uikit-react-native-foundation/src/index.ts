@@ -98,4 +98,5 @@ export type {
   BottomSheetRenderProp,
   EmojiSelectorRenderProp,
   MessageReactionsRenderProp,
+  ReactionBottomSheetUserListRenderProp,
 } from './context/CustomComponentCtx';

@@ -27,6 +27,15 @@ export type MessageReactionsRenderProp = (props: {
   onReactionPress: (reaction: SendbirdReaction) => void;
 }) => React.ReactElement;
 
+export type ReactionBottomSheetUserListRenderProp = (props: {
+  onClose: () => Promise<void>;
+  onDismiss: VoidFunction;
+  visible: boolean;
+  message?: SendbirdBaseMessage;
+  getEmoji: (key: string) => SendbirdEmoji;
+  initialFocusIndex: number;
+}) => React.ReactElement;
+
 export type CustomComponentContextType = {
   renderIncomingMessageContainer?: IncomingMessageContainerRenderProp;
   renderOutgoingMessageContainer?: OutgoingMessageContainerRenderProp;
@@ -39,6 +48,7 @@ export type CustomComponentContextType = {
   renderUnknownMessage?: UnknownMessageRenderProp;
   renderEmojiSelector?: EmojiSelectorRenderProp;
   renderMessageReactionsRenderProp?: MessageReactionsRenderProp;
+  renderReactionBottomSheetUserListRenderProp?: ReactionBottomSheetUserListRenderProp;
 };
 
 type Props = React.PropsWithChildren<CustomComponentContextType>;
