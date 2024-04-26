@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { SendbirdFileMessage, getFileExtension, getFileType, truncate } from '@gathertown/uikit-utils';
 
@@ -10,27 +10,48 @@ import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import MessageContainer from './MessageContainer';
 import type { GroupChannelMessageProps } from './index';
+import { CustomComponentContext } from '../../context/CustomComponentCtx';
+
+export type FileMessageRenderProp = (props: { 
+  children: React.ReactNode;
+  message: SendbirdFileMessage;
+  pressed: boolean;
+  fileType: 'video' | 'audio' | 'image' | 'file';
+  fileName: string;
+  defaultIcon?: React.ReactNode;
+}) => React.ReactElement;
 
 type Props = GroupChannelMessageProps<SendbirdFileMessage>;
 
 const FileMessage = (props: Props) => {
-  const { variant = 'incoming' } = props;
+  const { variant = 'incoming', message, children } = props;
   const { colors } = useUIKitTheme();
+  const ctx = useContext(CustomComponentContext);
 
   const fileType = getFileType(props.message.type || getFileExtension(props.message.name));
   const color = colors.ui.groupChannelMessage[variant];
+  const icon = (
+    <Icon.File
+      fileType={fileType}
+      size={24}
+      containerStyle={{ backgroundColor: colors.background, padding: 2, borderRadius: 8, marginRight: 8 }}
+    />
+  );
 
   return (
     <MessageContainer {...props}>
       <PressBox onPress={props.onPress} onLongPress={props.onLongPress}>
-        {({ pressed }) => (
+        {({ pressed }) => ctx?.renderFileMessage ? ctx.renderFileMessage({
+          message,
+          pressed,
+          fileType,
+          fileName: props.strings?.fileName || props.message.name,
+          children,
+          defaultIcon: icon,
+        }) : (
           <Box backgroundColor={pressed ? color.pressed.background : color.enabled.background} style={styles.container}>
             <Box style={styles.bubble}>
-              <Icon.File
-                fileType={fileType}
-                size={24}
-                containerStyle={{ backgroundColor: colors.background, padding: 2, borderRadius: 8, marginRight: 8 }}
-              />
+              {icon}
               <Text
                 body3
                 ellipsizeMode={'middle'}

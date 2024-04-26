@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import type { SendbirdAdminMessage } from '@gathertown/uikit-utils';
 
@@ -7,9 +7,17 @@ import Text from '../../components/Text';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import type { GroupChannelMessageProps } from './index';
+import { CustomComponentContext } from '../../context/CustomComponentCtx';
+
+export type AdminMessageRenderProp = (props: { message: string }) => React.ReactElement;
 
 const AdminMessage = (props: GroupChannelMessageProps<SendbirdAdminMessage>) => {
   const { colors } = useUIKitTheme();
+  const ctx = useContext(CustomComponentContext);
+
+  if (ctx?.renderAdminMessage) {
+    return ctx.renderAdminMessage({ message: props.message.message });
+  }
 
   return (
     <Box style={styles.container}>

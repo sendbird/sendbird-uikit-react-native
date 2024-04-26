@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import type { SendbirdFileMessage } from '@gathertown/uikit-utils';
 import { getThumbnailUriFromFileMessage } from '@gathertown/uikit-utils';
@@ -10,6 +10,7 @@ import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import MessageContainer from './MessageContainer';
 import type { GroupChannelMessageProps } from './index';
+import { CustomComponentContext } from '../../context/CustomComponentCtx';
 
 type Props = GroupChannelMessageProps<
   SendbirdFileMessage,
@@ -18,22 +19,33 @@ type Props = GroupChannelMessageProps<
 
 const VideoFileMessage = (props: Props) => {
   const { onPress, onLongPress, variant = 'incoming' } = props;
+  const ctx = useContext(CustomComponentContext);
 
   const { colors } = useUIKitTheme();
   const uri = getThumbnailUriFromFileMessage(props.message);
+  
+  const content = (
+    <>
+      <VideoThumbnail
+        style={styles.image}
+        source={uri}
+        fetchThumbnailFromVideoSource={props.fetchThumbnailFromVideoSource}
+      />
+      {props.children}
+    </>
+  );
 
   return (
     <MessageContainer {...props}>
-      <Box style={styles.container} backgroundColor={colors.ui.groupChannelMessage[variant].enabled.background}>
-        <PressBox activeOpacity={0.8} onPress={onPress} onLongPress={onLongPress}>
-          <VideoThumbnail
-            style={styles.image}
-            source={uri}
-            fetchThumbnailFromVideoSource={props.fetchThumbnailFromVideoSource}
-          />
-        </PressBox>
-        {props.children}
-      </Box>
+      <PressBox activeOpacity={0.8} onPress={onPress} onLongPress={onLongPress}>
+      {
+        ctx?.renderGenericMessage ? ctx.renderGenericMessage({ content }) : (
+          <Box style={styles.container} backgroundColor={colors.ui.groupChannelMessage[variant].enabled.background}>
+            {content}
+          </Box>
+        )
+      }
+      </PressBox>
     </MessageContainer>
   );
 };

@@ -1,32 +1,30 @@
+import type { SendbirdMessage } from '@gathertown/uikit-utils';
+import { getMessageTimeFormat, isSendableMessage } from '@gathertown/uikit-utils';
 import React, { useContext } from 'react';
 import { Pressable } from 'react-native';
 
-import type { SendbirdMessage } from '@gathertown/uikit-utils';
-import { getMessageTimeFormat, isSendableMessage } from '@gathertown/uikit-utils';
-
 import Box from '../../components/Box';
 import Text from '../../components/Text';
+import { CustomComponentContext } from '../../context/CustomComponentCtx';
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import Avatar from '../Avatar';
 import type { GroupChannelMessageProps } from './index';
-import { CustomComponentContext } from '../../context/CustomComponentCtx';
 
 export type IncomingMessageContainerRenderProp = (props: {
-    content: React.ReactNode,
-    groupedWithNext: boolean;
-    groupedWithPrev: boolean;
-    playerId: string;
-    displayedTime: string; 
-  }) => React.ReactElement;
+  content: React.ReactNode;
+  groupedWithNext: boolean;
+  groupedWithPrev: boolean;
+  playerId: string;
+  displayedTime: string;
+}) => React.ReactElement;
 
 export type OutgoingMessageContainerRenderProp = (props: {
-    content: React.ReactNode;
-    groupedWithNext: boolean;
-    groupedWithPrev: boolean;
-    displayedTime: string;
-  }) => React.ReactElement;
-
+  content: React.ReactNode;
+  groupedWithNext: boolean;
+  groupedWithPrev: boolean;
+  displayedTime: string;
+}) => React.ReactElement;
 
 type Props = GroupChannelMessageProps<SendbirdMessage>;
 
@@ -48,12 +46,12 @@ MessageContainer.Incoming = function MessageContainerIncoming({
   strings,
   parentMessage,
   renderMessageContainer,
-}: Props & { renderMessageContainer?: IncomingMessageContainerRenderProp}) {
+}: Props & { renderMessageContainer?: IncomingMessageContainerRenderProp }) {
   const { colors } = useUIKitTheme();
   const color = colors.ui.groupChannelMessage.incoming;
 
   if (renderMessageContainer) {
-    return renderMessageContainer?.({ 
+    return renderMessageContainer?.({
       content: children,
       groupedWithNext,
       groupedWithPrev,
@@ -107,12 +105,17 @@ MessageContainer.Outgoing = function MessageContainerOutgoing({
   sendingStatus,
   parentMessage,
   renderMessageContainer,
-}: Props & { renderMessageContainer?: OutgoingMessageContainerRenderProp}) {
+}: Props & { renderMessageContainer?: OutgoingMessageContainerRenderProp }) {
   const { colors } = useUIKitTheme();
   const color = colors.ui.groupChannelMessage.outgoing;
 
   if (renderMessageContainer) {
-    return renderMessageContainer({ content: children, groupedWithNext, groupedWithPrev, displayedTime: strings?.sentDate ?? getMessageTimeFormat(new Date(message.createdAt))  });
+    return renderMessageContainer({
+      content: children,
+      groupedWithNext,
+      groupedWithPrev,
+      displayedTime: strings?.sentDate ?? getMessageTimeFormat(new Date(message.createdAt)),
+    });
   }
 
   return (
