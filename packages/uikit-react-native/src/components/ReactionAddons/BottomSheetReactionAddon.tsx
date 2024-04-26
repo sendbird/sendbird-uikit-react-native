@@ -1,10 +1,15 @@
-import React from 'react';
+import { useChannelHandler } from '@gathertown/uikit-chat-hooks';
+import {
+  CustomComponentContext,
+  Icon,
+  Image,
+  createStyleSheet,
+  useUIKitTheme,
+} from '@gathertown/uikit-react-native-foundation';
+import { SendbirdBaseChannel, SendbirdBaseMessage, useUniqHandlerId } from '@gathertown/uikit-utils';
+import React, { useCallback, useContext } from 'react';
 import { Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-import { useChannelHandler } from '@gathertown/uikit-chat-hooks';
-import { Icon, Image, createStyleSheet, useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
-import { SendbirdBaseChannel, SendbirdBaseMessage, useUniqHandlerId } from '@gathertown/uikit-utils';
 
 import { UNKNOWN_USER_ID } from '../../constants';
 import { useReaction, useSendbirdChat } from '../../hooks/useContext';
@@ -14,12 +19,14 @@ type Props = {
   channel: SendbirdBaseChannel;
   message: SendbirdBaseMessage;
 };
+
 const BottomSheetReactionAddon = ({ onClose, message, channel }: Props) => {
   const { emojiManager, currentUser, sdk } = useSendbirdChat();
   const { updateReactionFocusedItem, openReactionList } = useReaction();
   const { colors } = useUIKitTheme();
   const handlerId = useUniqHandlerId('BottomSheetReactionAddon');
   const { left, right } = useSafeAreaInsets();
+  const ctx = useContext(CustomComponentContext);
 
   useChannelHandler(sdk, handlerId, {
     async onReactionUpdated(eventChannel, event) {
@@ -37,6 +44,18 @@ const BottomSheetReactionAddon = ({ onClose, message, channel }: Props) => {
 
   const emojiAll = emojiManager.allEmoji.slice(0, 5);
   const color = colors.ui.reaction.default;
+  const onPress = useCallback(
+    (key: string, reacted: boolean) => {
+      if (!reacted) channel.deleteReaction(message, key);
+      else channel.addReaction(message, key);
+      onClose();
+    },
+    [channel, onClose],
+  );
+
+  if (ctx?.renderEmojiSelector) {
+    return ctx.renderEmojiSelector({ emojis: emojiManager.allEmoji, message, onPress });
+  }
 
   return (
     <View style={[styles.container, { marginRight: right, marginLeft: left }]}>
@@ -45,16 +64,10 @@ const BottomSheetReactionAddon = ({ onClose, message, channel }: Props) => {
         const currentUserIdx = reactionUserIds.indexOf(currentUser?.userId ?? UNKNOWN_USER_ID);
         const reacted = currentUserIdx > -1;
 
-        const onPress = () => {
-          if (reacted) channel.deleteReaction(message, key);
-          else channel.addReaction(message, key);
-          onClose();
-        };
-
         return (
           <Pressable
             key={key}
-            onPress={onPress}
+            onPress={() => onPress(key, !reacted)}
             style={({ pressed }) => [
               styles.button,
               { backgroundColor: reacted || pressed ? color.selected.background : color.enabled.background },

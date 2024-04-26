@@ -1,18 +1,31 @@
+import { SendbirdBaseMessage, SendbirdEmoji, SendbirdReaction } from '@gathertown/uikit-utils';
 import React from 'react';
-import { AlertRenderProp } from '../ui/Alert';
 
+import { AlertRenderProp } from '../ui/Alert';
 import { BottomSheetRenderProp } from '../ui/BottomSheet';
-import {
-  IncomingMessageContainerRenderProp,
-  OutgoingMessageContainerRenderProp,
-} from '../ui/GroupChannelMessage/MessageContainer';
 import { AdminMessageRenderProp } from '../ui/GroupChannelMessage/Message.admin';
 import { FileMessageRenderProp } from '../ui/GroupChannelMessage/Message.file';
 import { UnknownMessageRenderProp } from '../ui/GroupChannelMessage/Message.unknown';
 import { UserMessageRenderProp } from '../ui/GroupChannelMessage/Message.user';
-
+import {
+  IncomingMessageContainerRenderProp,
+  OutgoingMessageContainerRenderProp,
+} from '../ui/GroupChannelMessage/MessageContainer';
 
 type GenericMessageRenderProp = (props: { content: React.ReactNode }) => React.ReactElement;
+
+export type EmojiSelectorRenderProp = (props: {
+  emojis: SendbirdEmoji[];
+  message: SendbirdBaseMessage;
+  onPress: (key: string, react: boolean) => void;
+}) => React.ReactElement;
+export type MessageReactionsRenderProp = (props: {
+  getEmoji: (key: string) => SendbirdEmoji;
+  message: SendbirdBaseMessage;
+  currentUserId?: string;
+  openReactionUserList: (idx: number) => void;
+  onReactionPress: (reaction: SendbirdReaction) => void;
+}) => React.ReactElement;
 
 export type CustomComponentContextType = {
   renderIncomingMessageContainer?: IncomingMessageContainerRenderProp;
@@ -24,6 +37,8 @@ export type CustomComponentContextType = {
   renderGenericMessage?: GenericMessageRenderProp;
   renderAdminMessage?: AdminMessageRenderProp;
   renderUnknownMessage?: UnknownMessageRenderProp;
+  renderEmojiSelector?: EmojiSelectorRenderProp;
+  renderMessageReactionsRenderProp?: MessageReactionsRenderProp;
 };
 
 type Props = React.PropsWithChildren<CustomComponentContextType>;
@@ -34,7 +49,7 @@ export const CustomComponentProvider = ({ children, ...rest }: Props) => {
 };
 export type { BottomSheetRenderProp } from '../ui/BottomSheet';
 
-export type{
+export type {
   UnknownMessageRenderProp,
   GenericMessageRenderProp,
   FileMessageRenderProp,

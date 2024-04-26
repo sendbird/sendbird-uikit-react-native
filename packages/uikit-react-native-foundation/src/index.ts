@@ -93,4 +93,9 @@ export type { ActionMenuItem } from './ui/ActionMenu';
 export type { BottomSheetItem } from './ui/BottomSheet';
 export type { UIKitTypographyOverrides } from './styles/createTypography';
 export type { HeaderStyleContextType } from './styles/HeaderStyleContext';
-export type { CustomComponentContextType, BottomSheetRenderProp } from './context/CustomComponentCtx';
+export type {
+  CustomComponentContextType,
+  BottomSheetRenderProp,
+  EmojiSelectorRenderProp,
+  MessageReactionsRenderProp,
+} from './context/CustomComponentCtx';

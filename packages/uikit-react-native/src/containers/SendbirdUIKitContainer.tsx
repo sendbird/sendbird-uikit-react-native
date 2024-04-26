@@ -1,11 +1,8 @@
-import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { Platform } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-
-import Sendbird, { DeviceOsPlatform, SendbirdPlatform, SendbirdProduct } from '@sendbird/chat';
-import { GroupChannelModule } from '@sendbird/chat/groupChannel';
-import { OpenChannelModule } from '@sendbird/chat/openChannel';
-import type { CustomComponentContextType, HeaderStyleContextType, UIKitTheme } from '@gathertown/uikit-react-native-foundation';
+import type {
+  CustomComponentContextType,
+  HeaderStyleContextType,
+  UIKitTheme,
+} from '@gathertown/uikit-react-native-foundation';
 import {
   CustomComponentProvider,
   DialogProvider,
@@ -15,7 +12,6 @@ import {
   ToastProvider,
   UIKitThemeProvider,
 } from '@gathertown/uikit-react-native-foundation';
-import { SBUConfig, UIKitConfigProvider } from '@sendbird/uikit-tools';
 import type {
   PartialDeep,
   SendbirdChatSDK,
@@ -26,6 +22,14 @@ import type {
   SendbirdUser,
 } from '@gathertown/uikit-utils';
 import { NOOP, useIsFirstMount } from '@gathertown/uikit-utils';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { Platform } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+import Sendbird, { DeviceOsPlatform, SendbirdPlatform, SendbirdProduct } from '@sendbird/chat';
+import { GroupChannelModule } from '@sendbird/chat/groupChannel';
+import { OpenChannelModule } from '@sendbird/chat/openChannel';
+import { SBUConfig, UIKitConfigProvider } from '@sendbird/uikit-tools';
 
 import { LocalizationContext, LocalizationProvider } from '../contexts/LocalizationCtx';
 import { PlatformServiceProvider } from '../contexts/PlatformServiceCtx';
@@ -222,9 +226,7 @@ const SendbirdUIKitContainer = ({
           enableImageCompression={chatOptions.enableImageCompression ?? SendbirdUIKit.DEFAULT.IMAGE_COMPRESSION}
         >
           <LocalizationProvider stringSet={defaultStringSet}>
-            <CustomComponentProvider
-              {...customRenderProps}
-            >
+            <CustomComponentProvider {...customRenderProps}>
               <PlatformServiceProvider
                 fileService={platformServices.file}
                 notificationService={platformServices.notification}
