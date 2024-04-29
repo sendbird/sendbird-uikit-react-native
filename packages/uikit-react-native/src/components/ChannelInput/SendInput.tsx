@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useContext } from 'react';
 import {
   NativeSyntheticEvent,
   Platform,
@@ -11,6 +11,7 @@ import {
 import { MentionType } from '@sendbird/chat/message';
 import type { BottomSheetItem } from '@gathertown/uikit-react-native-foundation';
 import {
+  CustomComponentContext,
   Icon,
   ImageWithPlaceholder,
   Text,
@@ -69,6 +70,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
 ) {
   const { mentionManager, sbOptions } = useSendbirdChat();
   const { select, colors, palette } = useUIKitTheme();
+  const ctx = useContext(CustomComponentContext);
   const { STRINGS } = useLocalization();
   const { openSheet } = useBottomSheet();
   const toast = useToast();
@@ -184,6 +186,16 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     }
     return null;
   };
+
+  if (ctx?.messageInput) {
+    return ctx.messageInput.renderSendInput({
+      onPressAttachment,
+      isDisabled: inputDisabled,
+      onSend: sendUserMessage,
+      ref,
+      onChangeText,
+    });
+  }
 
   return (
     <View>

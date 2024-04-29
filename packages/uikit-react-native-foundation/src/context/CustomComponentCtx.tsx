@@ -1,5 +1,12 @@
-import { SendbirdBaseMessage, SendbirdEmoji, SendbirdReaction } from '@gathertown/uikit-utils';
+import {
+  SendbirdBaseMessage,
+  SendbirdEmoji,
+  SendbirdFileMessage,
+  SendbirdReaction,
+  SendbirdUserMessage,
+} from '@gathertown/uikit-utils';
 import React from 'react';
+import { TextInput } from 'react-native';
 
 import { AlertRenderProp } from '../ui/Alert';
 import { BottomSheetRenderProp } from '../ui/BottomSheet';
@@ -19,6 +26,7 @@ export type EmojiSelectorRenderProp = (props: {
   message: SendbirdBaseMessage;
   onPress: (key: string, react: boolean) => void;
 }) => React.ReactElement;
+
 export type MessageReactionsRenderProp = (props: {
   getEmoji: (key: string) => SendbirdEmoji;
   message: SendbirdBaseMessage;
@@ -36,6 +44,23 @@ export type ReactionBottomSheetUserListRenderProp = (props: {
   initialFocusIndex: number;
 }) => React.ReactElement;
 
+export type EditInputRenderProp = (props: {
+  onSave: VoidFunction;
+  onCancel: VoidFunction;
+  onChangeText: (val: string) => void;
+  isDisabled: boolean;
+  messageToEdit: SendbirdUserMessage | SendbirdFileMessage;
+  ref: React.Ref<TextInput>;
+}) => React.ReactElement;
+
+export type SendInputRenderProp = (props: {
+  onSend: VoidFunction;
+  onPressAttachment: VoidFunction;
+  onChangeText: (val: string) => void;
+  isDisabled: boolean;
+  ref: React.Ref<TextInput>;
+}) => React.ReactElement;
+
 export type CustomComponentContextType = {
   renderIncomingMessageContainer?: IncomingMessageContainerRenderProp;
   renderOutgoingMessageContainer?: OutgoingMessageContainerRenderProp;
@@ -49,6 +74,10 @@ export type CustomComponentContextType = {
   renderEmojiSelector?: EmojiSelectorRenderProp;
   renderMessageReactionsRenderProp?: MessageReactionsRenderProp;
   renderReactionBottomSheetUserListRenderProp?: ReactionBottomSheetUserListRenderProp;
+  messageInput?: {
+    renderEditInput: EditInputRenderProp;
+    renderSendInput: SendInputRenderProp;
+  };
 };
 
 type Props = React.PropsWithChildren<CustomComponentContextType>;

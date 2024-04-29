@@ -28,7 +28,7 @@ type Props = GroupChannelMessageProps<
 
 const UserMessage = (props: Props) => {
   const ctx = useContext(CustomComponentContext);
-  const { variant = 'incoming', message, children } = props;
+  const { variant = 'incoming', children } = props;
 
   const { colors } = useUIKitTheme();
   const color = colors.ui.groupChannelMessage[variant];
@@ -40,8 +40,8 @@ const UserMessage = (props: Props) => {
           ctx?.renderUserMessage ? (
             ctx.renderUserMessage({
               pressed,
-              isEdited: Boolean(message.updatedAt) && !!props.strings?.edited,
-              message,
+              isEdited: Boolean(props.message.updatedAt) && !!props.strings?.edited,
+              message: props.message,
               children,
             })
           ) : (

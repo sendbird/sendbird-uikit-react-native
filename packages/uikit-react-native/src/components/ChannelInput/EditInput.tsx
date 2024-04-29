@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useContext } from 'react';
 import {
   NativeSyntheticEvent,
   Platform,
@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import { MentionType } from '@sendbird/chat/message';
-import { Button, TextInput, createStyleSheet, useToast } from '@gathertown/uikit-react-native-foundation';
+import { Button, CustomComponentContext, TextInput, createStyleSheet, useToast } from '@gathertown/uikit-react-native-foundation';
 import type { SendbirdFileMessage, SendbirdUserMessage } from '@gathertown/uikit-utils';
 
 import { useLocalization, useSendbirdChat } from '../../hooks/useContext';
@@ -42,6 +42,7 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
   const { mentionManager, sbOptions } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const toast = useToast();
+  const ctx = useContext(CustomComponentContext);
 
   const onPressCancel = () => {
     setMessageToEdit();
@@ -70,6 +71,17 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
   };
 
   const onFailureToUpdate = () => toast.show(STRINGS.TOAST.UPDATE_MSG_ERROR, 'error');
+
+  if (ctx?.messageInput) {
+    return ctx.messageInput.renderEditInput({
+      onSave: onPressSave,
+      onCancel: onPressCancel,
+      onChangeText,
+      isDisabled: inputDisabled,
+      ref,
+      messageToEdit,
+    });
+  }
 
   return (
     <View style={styles.editInputContainer}>
