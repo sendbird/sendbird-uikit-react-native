@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef } from 'react';
+import React, { forwardRef, useEffect, useRef } from 'react';
 import { FlatListProps, Platform, FlatList as RNFlatList, StyleSheet } from 'react-native';
 
 import { useUIKitTheme } from '@gathertown/uikit-react-native-foundation';
@@ -27,11 +27,12 @@ type Props = Omit<FlatListProps<SendbirdMessage>, 'onEndReached'> & {
   onScrolledAwayFromBottom: (value: boolean) => void;
 };
 const ChatFlatList = forwardRef<RNFlatList, Props>(function ChatFlatList(
-  { onTopReached, onBottomReached, onScrolledAwayFromBottom, onScroll, ...props },
+  { onTopReached, onBottomReached, onScrolledAwayFromBottom, onScroll, data, ...props },
   ref,
 ) {
   const { select } = useUIKitTheme();
   const contentOffsetY = useRef(0);
+  const prevDataLength = useRef(0);
 
   const _onScroll = useFreshCallback<NonNullable<Props['onScroll']>>((event) => {
     onScroll?.(event);
@@ -50,6 +51,15 @@ const ChatFlatList = forwardRef<RNFlatList, Props>(function ChatFlatList(
     contentOffsetY.current = contentOffset.y;
   });
 
+  useEffect(() => {
+    if (data && data.length < prevDataLength.current) {
+      if (contentOffsetY.current === 0) {
+        setTimeout(()=> { ref?.current?.scrollToIndex({index: 0}); }, 0);
+      }
+    }
+    prevDataLength.current = data?.length ?? 0;
+  }, [data]);
+
   if (__DEV__ && !ANDROID_BUG_ALERT_SHOWED) {
     ANDROID_BUG_ALERT_SHOWED = true;
     // eslint-disable-next-line no-console
@@ -66,9 +76,10 @@ const ChatFlatList = forwardRef<RNFlatList, Props>(function ChatFlatList(
       keyboardDismissMode={'on-drag'}
       keyboardShouldPersistTaps={'handled'}
       indicatorStyle={select({ light: 'black', dark: 'white' })}
+      data={data}
       {...props}
       // FIXME: inverted list of ListEmptyComponent is reversed {@link https://github.com/facebook/react-native/issues/21196#issuecomment-836937743}
-      inverted={Boolean(props.data?.length)}
+      inverted={Boolean(data?.length)}
       ref={ref}
       onEndReached={onTopReached}
       onScrollToIndexFailed={NOOP}
