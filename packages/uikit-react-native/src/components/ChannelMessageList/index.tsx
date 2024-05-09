@@ -57,9 +57,10 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
 
   onEditMessage: (message: HandleableMessage) => void;
   onReplyMessage?: (message: HandleableMessage) => void; // only available on group channel
+  onReplyInThreadMessage?: (message: HandleableMessage) => void; // only available on group channel
   onDeleteMessage: (message: HandleableMessage) => Promise<void>;
   onResendFailedMessage: (failedMessage: HandleableMessage) => Promise<HandleableMessage | void>;
-  onPressParentMessage?: (parentMessage: SendbirdMessage) => void;
+  onPressParentMessage?: (parentMessage: SendbirdMessage, childMessage: HandleableMessage) => void;
   onPressMediaMessage?: (message: SendbirdFileMessage, deleteMessage: () => Promise<void>, uri: string) => void;
 
   renderMessage: (props: {
@@ -70,12 +71,14 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
     onPress?: () => void;
     onLongPress?: () => void;
     onPressParentMessage?: ChannelMessageListProps<T>['onPressParentMessage'];
+    onReplyInThreadMessage?: ChannelMessageListProps<T>['onReplyInThreadMessage'];
     onShowUserProfile?: UserProfileContextType['show'];
     channel: T;
     currentUserId?: ChannelMessageListProps<T>['currentUserId'];
     enableMessageGrouping: ChannelMessageListProps<T>['enableMessageGrouping'];
     bottomSheetItem?: BottomSheetItem;
     isFirstItem: boolean;
+    hideParentMessage?: boolean;
   }) => React.ReactElement | null;
   renderNewMessagesButton:
     | null
@@ -93,6 +96,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
     channel,
     onEditMessage,
     onReplyMessage,
+    onReplyInThreadMessage,
     onDeleteMessage,
     onResendFailedMessage,
     onPressMediaMessage,
@@ -123,6 +127,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
     currentUserId,
     onEditMessage,
     onReplyMessage,
+    onReplyInThreadMessage,
     onDeleteMessage,
     onResendFailedMessage,
     onPressMediaMessage,
@@ -139,6 +144,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
       onPress,
       onLongPress,
       onPressParentMessage,
+      onReplyInThreadMessage,
       onShowUserProfile: show,
       enableMessageGrouping,
       channel,
@@ -196,6 +202,7 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
   onResendFailedMessage,
   onEditMessage,
   onReplyMessage,
+  onReplyInThreadMessage,
   onDeleteMessage,
   onPressMediaMessage,
 }: Pick<
@@ -204,6 +211,7 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
   | 'currentUserId'
   | 'onEditMessage'
   | 'onReplyMessage'
+  | 'onReplyInThreadMessage'
   | 'onDeleteMessage'
   | 'onResendFailedMessage'
   | 'onPressMediaMessage'
@@ -322,6 +330,12 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
         title: STRINGS.LABELS.CHANNEL_MESSAGE_REPLY,
         onPress: () => onReplyMessage?.(message),
       }),
+      replyInThread: (message: HandleableMessage) => ({
+        disabled: Boolean(message.parentMessageId),
+        icon: 'thread' as const,
+        title: STRINGS.LABELS.CHANNEL_MESSAGE_THREAD,
+        onPress: () => onReplyInThreadMessage?.(message),
+      }),
       download: (message: HandleableMessage) => ({
         icon: 'download' as const,
         title: STRINGS.LABELS.CHANNEL_MESSAGE_SAVE,
@@ -336,8 +350,12 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
           sheetItems.push(menu.edit(message));
           sheetItems.push(menu.delete(message));
         }
-        if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
-          sheetItems.push(menu.reply(message));
+        if (channel.isGroupChannel()) {
+          if (sbOptions.uikit.groupChannel.channel.replyType === 'thread' && onReplyInThreadMessage !== undefined) {
+            sheetItems.push(menu.replyInThread(message));
+          } else if (sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
+            sheetItems.push(menu.reply(message));
+          }
         }
       }
     }
@@ -350,8 +368,14 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
         if (isMyMessage(message, currentUserId) && message.sendingStatus === 'succeeded') {
           sheetItems.push(menu.delete(message));
         }
-        if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
-          sheetItems.push(menu.reply(message));
+        if (channel.isGroupChannel()) {
+          if (channel.isGroupChannel()) {
+            if (sbOptions.uikit.groupChannel.channel.replyType === 'thread' && onReplyInThreadMessage !== undefined) {
+              sheetItems.push(menu.replyInThread(message));
+            } else if (sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
+              sheetItems.push(menu.reply(message));
+            }
+          }
         }
       }
     }

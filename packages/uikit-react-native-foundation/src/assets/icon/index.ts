@@ -64,6 +64,7 @@ const IconAssets = {
   'streaming': require('./icon-streaming.png'),
   'supergroup': require('./icon-supergroup.png'),
   'theme': require('./icon-theme.png'),
+  'thread': require('./icon-thread.png'),
   'thumbnail-none': require('./icon-thumbnail-none.png'),
   'unarchive': require('./icon-unarchive.png'),
   'user': require('./icon-user.png'),

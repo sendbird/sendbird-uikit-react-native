@@ -152,3 +152,18 @@ export const millsToMSS = (mills: number) => {
 
   return `${minutes}:${ss}`;
 };
+
+/**
+ * Message reply count format
+ * If reply count is 1: 1 'reply'
+ * If the reply count is greater than 1 : '{count} replies'
+ * */
+export const getReplyCountFormat = (replyCount: number) => {
+  if (replyCount === 1) {
+    return `${replyCount} reply`;
+  } else if (replyCount > 1) {
+    return `${replyCount} replies`;
+  }
+  
+  return '';
+};

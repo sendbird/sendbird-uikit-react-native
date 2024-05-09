@@ -64,7 +64,6 @@ export const SendbirdUIKit = Object.freeze({
   },
 });
 
-type UnimplementedFeatures = 'threadReplySelectType' | 'replyType';
 export type ChatOmittedInitParams = Omit<
   SendbirdChatParams<[GroupChannelModule, OpenChannelModule]>,
   (typeof chatOmitKeys)[number]
@@ -102,9 +101,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
     Partial<ChatRelatedFeaturesInUIKit>;
   uikitOptions?: PartialDeep<{
     common: SBUConfig['common'];
-    groupChannel: Omit<SBUConfig['groupChannel']['channel'], UnimplementedFeatures> & {
-      replyType: Extract<SBUConfig['groupChannel']['channel']['replyType'], 'none' | 'quote_reply'>;
-    };
+    groupChannel: SBUConfig['groupChannel']['channel'];
     groupChannelList: SBUConfig['groupChannel']['channelList'];
     groupChannelSettings: SBUConfig['groupChannel']['setting'];
     openChannel: SBUConfig['openChannel']['channel'];
