@@ -40,6 +40,7 @@ export enum Routes {
   GroupChannelRegisterOperator = 'GroupChannelRegisterOperator',
   GroupChannelMutedMembers = 'GroupChannelMutedMembers',
   GroupChannelBannedUsers = 'GroupChannelBannedUsers',
+  GroupChannelThread = 'GroupChannelThread',
 
   GroupChannelCreate = 'GroupChannelCreate',
   GroupChannelInvite = 'GroupChannelInvite',
@@ -144,6 +145,13 @@ export type RouteParamsUnion =
   | {
       route: Routes.MessageSearch;
       params: ChannelUrlParams;
+    }
+  | {
+  route: Routes.GroupChannelThread;
+  params: {
+    channelUrl: string;
+    searchItem?: { startingPoint: number };
+  };
     }
   /** OpenChannel screens **/
   | {

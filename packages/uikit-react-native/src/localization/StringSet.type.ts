@@ -127,6 +127,24 @@ export interface StringSet {
     /** GroupChannel > Suggested mention list */
     MENTION_LIMITED: (mentionLimit: number) => string;
   };
+  GROUP_CHANNEL_THREAD: {
+    /** GroupChannelThread > Header */
+    HEADER_TITLE: string;
+    
+    /** GroupChannelThread > List */
+    LIST_DATE_SEPARATOR: (date: Date, locale?: Locale) => string;
+    LIST_BUTTON_NEW_MSG: (newMessages: SendbirdMessage[]) => string;
+    
+    /** GroupChannelThread > Message bubble */
+    MESSAGE_BUBBLE_TIME: (message: SendbirdMessage, locale?: Locale) => string;
+    MESSAGE_BUBBLE_FILE_TITLE: (message: SendbirdFileMessage) => string;
+    MESSAGE_BUBBLE_EDITED_POSTFIX: string;
+    MESSAGE_BUBBLE_UNKNOWN_TITLE: (message: SendbirdMessage) => string;
+    MESSAGE_BUBBLE_UNKNOWN_DESC: (message: SendbirdMessage) => string;
+    
+    /** GroupChannelThread > Suggested mention list */
+    MENTION_LIMITED: (mentionLimit: number) => string;
+  };
   GROUP_CHANNEL_SETTINGS: {
     /** GroupChannelSettings > Header */
     HEADER_TITLE: string;

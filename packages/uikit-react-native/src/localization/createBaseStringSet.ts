@@ -127,6 +127,20 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       MENTION_LIMITED: (mentionLimit) => `You can have up to ${mentionLimit} mentions per message.`,
       ...overrides?.GROUP_CHANNEL,
     },
+    GROUP_CHANNEL_THREAD: {
+      HEADER_TITLE: 'Thread',
+      LIST_DATE_SEPARATOR: (date, locale) => getDateSeparatorFormat(date, locale ?? dateLocale),
+      LIST_BUTTON_NEW_MSG: (newMessages) => `${newMessages.length} new messages`,
+      
+      MESSAGE_BUBBLE_TIME: (message, locale) => getMessageTimeFormat(new Date(message.createdAt), locale ?? dateLocale),
+      MESSAGE_BUBBLE_FILE_TITLE: (message) => message.name,
+      MESSAGE_BUBBLE_EDITED_POSTFIX: ' (edited)',
+      MESSAGE_BUBBLE_UNKNOWN_TITLE: () => '(Unknown message type)',
+      MESSAGE_BUBBLE_UNKNOWN_DESC: () => 'Cannot read this message.',
+      
+      MENTION_LIMITED: (mentionLimit) => `You can have up to ${mentionLimit} mentions per message.`,
+      ...overrides?.GROUP_CHANNEL_THREAD,
+    },
     GROUP_CHANNEL_SETTINGS: {
       HEADER_TITLE: 'Channel information',
       HEADER_RIGHT: 'Edit',
