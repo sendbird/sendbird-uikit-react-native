@@ -12,6 +12,7 @@ import ReactionRoundedButton from './ReactionRoundedButton';
 
 const NUM_COL = 4;
 const REACTION_MORE_KEY = 'reaction-more-button';
+type ReactionAddonType = 'default' | 'thread_parent_message';
 
 const getUserReacted = (reaction: SendbirdReaction, userId = UNKNOWN_USER_ID) => {
   return reaction.userIds.indexOf(userId) > -1;
@@ -74,13 +75,13 @@ const createReactionButtons = (
   return buttons;
 };
 
-const MessageReactionAddon = ({ channel, message }: { channel: SendbirdBaseChannel; message: SendbirdBaseMessage }) => {
+const MessageReactionAddon = ({ channel, message, reactionAddonType = 'default'}: { channel: SendbirdBaseChannel; message: SendbirdBaseMessage, reactionAddonType?: ReactionAddonType }) => {
   const { colors } = useUIKitTheme();
   const { emojiManager, currentUser } = useSendbirdChat();
   const { openReactionList, openReactionUserList } = useReaction();
-
-  if (!message.reactions?.length) return null;
-
+  
+  if (reactionAddonType === 'default' && !message.reactions?.length) return null;
+  
   const reactionButtons = createReactionButtons(
     channel,
     message,
@@ -90,11 +91,13 @@ const MessageReactionAddon = ({ channel, message }: { channel: SendbirdBaseChann
     (focusIndex) => openReactionUserList({ channel, message, focusIndex }),
     currentUser?.userId,
   );
-
+  
+  const containerStyle = reactionAddonType === 'default' ? styles.reactionContainer : styles.reactionThreadParentMessageContainer;
+  
   return (
     <Pressable
       style={[
-        styles.reactionContainer,
+        containerStyle,
         { backgroundColor: colors.background, borderColor: colors.ui.reaction.rounded.enabled.background },
       ]}
     >
@@ -112,6 +115,13 @@ const styles = createStyleSheet({
     borderRadius: 16,
     borderWidth: 1,
   },
+  reactionThreadParentMessageContainer: {
+    alignItems: 'stretch',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    padding: 8,
+    borderRadius: 16,
+  },
   marginRight: {
     marginRight: 4.5,
   },
@@ -121,3 +131,4 @@ const styles = createStyleSheet({
 });
 
 export default MessageReactionAddon;
+export { ReactionAddonType };

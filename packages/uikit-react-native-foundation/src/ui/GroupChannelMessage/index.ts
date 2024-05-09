@@ -28,6 +28,7 @@ export type GroupChannelMessageProps<T extends SendbirdMessage, AdditionalProps 
   children?: React.ReactNode;
   sendingStatus?: React.ReactNode;
   parentMessage?: React.ReactNode;
+  replyInfo?: React.ReactNode;
 
   groupedWithPrev: boolean;
   groupedWithNext: boolean;

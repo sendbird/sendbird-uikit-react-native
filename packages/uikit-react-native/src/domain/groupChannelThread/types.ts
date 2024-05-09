@@ -10,8 +10,7 @@ import type {
   SendbirdFileMessageCreateParams,
   SendbirdFileMessageUpdateParams,
   SendbirdGroupChannel,
-  SendbirdMessage, SendbirdSendableMessage,
-  SendbirdUser,
+  SendbirdMessage,
   SendbirdUserMessage,
   SendbirdUserMessageCreateParams,
   SendbirdUserMessageUpdateParams,
@@ -23,38 +22,38 @@ import type { CommonComponent } from '../../types';
 import type { PubSub } from '../../utils/pubsub';
 
 export type MessageListQueryParamsType = Omit<MessageCollectionParams, 'filter'> & MessageFilterParams;
-export interface GroupChannelProps {
+
+export interface GroupChannelThreadProps {
   Fragment: {
     channel: SendbirdGroupChannel;
+    parentMessage: SendbirdUserMessage | SendbirdFileMessage;
+    startingPoint?: number;
+    onParentMessageDeleted: () => void;
     onChannelDeleted: () => void;
-    onPressHeaderLeft: GroupChannelProps['Header']['onPressHeaderLeft'];
-    onPressHeaderRight: GroupChannelProps['Header']['onPressHeaderRight'];
-    onPressMediaMessage?: GroupChannelProps['MessageList']['onPressMediaMessage'];
-    onPressReplyMessageInThread?: GroupChannelProps['Provider']['onPressReplyMessageInThread'];
-
+    onPressHeaderLeft: GroupChannelThreadProps['Header']['onPressHeaderLeft'];
+    onPressMediaMessage?: GroupChannelThreadProps['MessageList']['onPressMediaMessage'];
+    
     onBeforeSendUserMessage?: OnBeforeHandler<SendbirdUserMessageCreateParams>;
     onBeforeSendFileMessage?: OnBeforeHandler<SendbirdFileMessageCreateParams>;
     onBeforeUpdateUserMessage?: OnBeforeHandler<SendbirdUserMessageUpdateParams>;
     onBeforeUpdateFileMessage?: OnBeforeHandler<SendbirdFileMessageUpdateParams>;
-
-    renderMessage?: GroupChannelProps['MessageList']['renderMessage'];
-    renderNewMessagesButton?: GroupChannelProps['MessageList']['renderNewMessagesButton'];
-    renderScrollToBottomButton?: GroupChannelProps['MessageList']['renderScrollToBottomButton'];
-
-    enableTypingIndicator?: GroupChannelProps['Provider']['enableTypingIndicator'];
-    enableMessageGrouping?: GroupChannelProps['MessageList']['enableMessageGrouping'];
-
-    keyboardAvoidOffset?: GroupChannelProps['Provider']['keyboardAvoidOffset'];
-    flatListProps?: GroupChannelProps['MessageList']['flatListProps'];
+    
+    renderMessage?: GroupChannelThreadProps['MessageList']['renderMessage'];
+    renderNewMessagesButton?: GroupChannelThreadProps['MessageList']['renderNewMessagesButton'];
+    renderScrollToBottomButton?: GroupChannelThreadProps['MessageList']['renderScrollToBottomButton'];
+    
+    enableMessageGrouping?: GroupChannelThreadProps['MessageList']['enableMessageGrouping'];
+    
+    keyboardAvoidOffset?: GroupChannelThreadProps['Provider']['keyboardAvoidOffset'];
+    flatListProps?: GroupChannelThreadProps['MessageList']['flatListProps'];
     sortComparator?: UseGroupChannelMessagesOptions['sortComparator'];
-
-    searchItem?: GroupChannelProps['MessageList']['searchItem'];
-
+    searchItem?: GroupChannelThreadProps['MessageList']['searchItem'];
+    
     /**
      * @description You can specify the query parameters for the message list.
      * @example
      * ```
-     * <GroupChannelFragment messageListQueryParams={{ prevResultLimit: 20, customTypesFilter: ['filter'] }} />
+     * <GroupChannelThreadFragment messageListQueryParams={{ prevResultLimit: 20, customTypesFilter: ['filter'] }} />
      * ```
      * */
     messageListQueryParams?: MessageListQueryParamsType;
@@ -62,9 +61,14 @@ export interface GroupChannelProps {
     collectionCreator?: UseGroupChannelMessagesOptions['collectionCreator'];
   };
   Header: {
-    shouldHideRight: () => boolean;
     onPressHeaderLeft: () => void;
-    onPressHeaderRight: () => void;
+  };
+  ParentMessageInfo: {
+    channel: SendbirdGroupChannel,
+    currentUserId?: string;
+    onPressContextMenu?: () => void;
+    onDeleteMessage: (message: SendbirdUserMessage | SendbirdFileMessage) => Promise<void>;
+    onPressMediaMessage?: (message: SendbirdFileMessage, deleteMessage: () => Promise<void>, uri: string) => void;
   };
   MessageList: Pick<
     ChannelMessageListProps<SendbirdGroupChannel>,
@@ -89,9 +93,7 @@ export interface GroupChannelProps {
   > & {
     onResetMessageList: () => Promise<void>;
     onResetMessageListWithStartingPoint: (startingPoint: number) => Promise<void>;
-
-    // Changing the search item will trigger the focus animation on messages.
-    onUpdateSearchItem: (searchItem?: GroupChannelProps['MessageList']['searchItem']) => void;
+    startingPoint?: number;
   };
   Input: PickPartial<
     ChannelInputProps,
@@ -104,40 +106,32 @@ export interface GroupChannelProps {
     | 'AttachmentsButton',
     'inputDisabled'
   >;
-
+  
   SuggestedMentionList: SuggestedMentionListProps;
   Provider: {
     channel: SendbirdGroupChannel;
-    enableTypingIndicator: boolean;
     keyboardAvoidOffset?: number;
-    groupChannelPubSub: PubSub<GroupChannelPubSubContextPayload>;
-
-    messages: SendbirdMessage[];
-    // Changing the search item will trigger the focus animation on messages.
-    onUpdateSearchItem: (searchItem?: GroupChannelProps['MessageList']['searchItem']) => void;
-    onPressReplyMessageInThread: (parentMessage: SendbirdSendableMessage, startingPoint?: number) => void;
+    groupChannelThreadPubSub: PubSub<GroupChannelThreadPubSubContextPayload>;
+    parentMessage: SendbirdUserMessage | SendbirdFileMessage;
+    threadedMessages: SendbirdMessage[];
   };
 }
 
 /**
- * Internal context for GroupChannel
+ * Internal context for GroupChannelThread
  * For example, the developer can create a custom header
  * with getting data from the domain context
  * */
-export interface GroupChannelContextsType {
+export interface GroupChannelThreadContextsType {
   Fragment: React.Context<{
     headerTitle: string;
     keyboardAvoidOffset?: number;
     channel: SendbirdGroupChannel;
+    parentMessage: SendbirdUserMessage | SendbirdFileMessage;
     messageToEdit?: SendbirdUserMessage | SendbirdFileMessage;
     setMessageToEdit: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
-    messageToReply?: SendbirdUserMessage | SendbirdFileMessage;
-    setMessageToReply: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
   }>;
-  TypingIndicator: React.Context<{
-    typingUsers: SendbirdUser[];
-  }>;
-  PubSub: React.Context<PubSub<GroupChannelPubSubContextPayload>>;
+  PubSub: React.Context<PubSub<GroupChannelThreadPubSubContextPayload>>;
   MessageList: React.Context<{
     /**
      * ref object for FlatList of MessageList
@@ -152,7 +146,7 @@ export interface GroupChannelContextsType {
      *
      * @example
      * ```
-     *   const { scrollToMessage } = useContext(GroupChannelContexts.MessageList);
+     *   const { scrollToMessage } = useContext(GroupChannelThreadContexts.MessageList);
      *   const messageIncludedInMessageList = scrollToMessage(lastMessage.messageId, { focusAnimated: true, viewPosition: 1 });
      *   if (!messageIncludedInMessageList) console.warn('Message not found in the message list.');
      * ```
@@ -173,36 +167,36 @@ export interface GroupChannelContextsType {
       timeout?: number;
       viewPosition?: number;
     }) => void;
-    
-    onPressReplyMessageInThread?: (parentMessage: SendbirdSendableMessage, startingPoint?: number) => void;
   }>;
 }
-export interface GroupChannelModule {
-  Provider: CommonComponent<GroupChannelProps['Provider']>;
-  Header: CommonComponent<GroupChannelProps['Header']>;
-  MessageList: CommonComponent<GroupChannelProps['MessageList']>;
-  Input: CommonComponent<GroupChannelProps['Input']>;
-  SuggestedMentionList: CommonComponent<GroupChannelProps['SuggestedMentionList']>;
+
+export interface GroupChannelThreadModule {
+  Provider: CommonComponent<GroupChannelThreadProps['Provider']>;
+  Header: CommonComponent<GroupChannelThreadProps['Header']>;
+  ParentMessageInfo: CommonComponent<GroupChannelThreadProps['ParentMessageInfo']>;
+  MessageList: CommonComponent<GroupChannelThreadProps['MessageList']>;
+  Input: CommonComponent<GroupChannelThreadProps['Input']>;
+  SuggestedMentionList: CommonComponent<GroupChannelThreadProps['SuggestedMentionList']>;
   StatusEmpty: CommonComponent;
   StatusLoading: CommonComponent;
 }
 
-export type GroupChannelFragment = React.FC<GroupChannelProps['Fragment']>;
+export type GroupChannelThreadFragment = React.FC<GroupChannelThreadProps['Fragment']>;
 
-export type GroupChannelPubSubContextPayload =
+export type GroupChannelThreadPubSubContextPayload =
   | {
-      type: 'MESSAGE_SENT_PENDING' | 'MESSAGE_SENT_SUCCESS';
-      data: {
-        message: SendbirdUserMessage | SendbirdFileMessage;
-      };
-    }
+  type: 'MESSAGE_SENT_PENDING' | 'MESSAGE_SENT_SUCCESS';
+  data: {
+    message: SendbirdUserMessage | SendbirdFileMessage;
+  };
+}
   | {
-      type: 'MESSAGES_RECEIVED' | 'MESSAGES_UPDATED';
-      data: {
-        messages: SendbirdMessage[];
-      };
-    }
+  type: 'MESSAGES_RECEIVED' | 'MESSAGES_UPDATED';
+  data: {
+    messages: SendbirdMessage[];
+  };
+}
   | {
-      type: 'TYPING_BUBBLE_RENDERED';
-      data?: undefined;
-    };
+  type: 'TYPING_BUBBLE_RENDERED';
+  data?: undefined;
+};
