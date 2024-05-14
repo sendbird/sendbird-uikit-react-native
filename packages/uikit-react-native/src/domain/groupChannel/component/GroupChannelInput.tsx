@@ -6,7 +6,7 @@ import ChannelInput from '../../../components/ChannelInput';
 import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
 
-const GroupChannelInput = ({ inputDisabled, ...props }: GroupChannelProps['Input']) => {
+const GroupChannelInput = ({ inputDisabled = false, ...props }: GroupChannelProps['Input']) => {
   const {
     channel,
     keyboardAvoidOffset = 0,
@@ -28,7 +28,7 @@ const GroupChannelInput = ({ inputDisabled, ...props }: GroupChannelProps['Input
       keyboardAvoidOffset={keyboardAvoidOffset}
       inputMuted={chatAvailableState.muted}
       inputFrozen={chatAvailableState.frozen}
-      inputDisabled={inputDisabled ?? chatAvailableState.disabled}
+      inputDisabled={chatAvailableState.disabled ? true : inputDisabled}
       {...props}
     />
   );

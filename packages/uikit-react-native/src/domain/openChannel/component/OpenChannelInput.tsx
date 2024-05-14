@@ -9,7 +9,7 @@ import { useSendbirdChat } from '../../../hooks/useContext';
 import { OpenChannelContexts } from '../module/moduleContext';
 import type { OpenChannelProps } from '../types';
 
-const OpenChannelInput = ({ inputDisabled, ...props }: OpenChannelProps['Input']) => {
+const OpenChannelInput = ({ inputDisabled = false, ...props }: OpenChannelProps['Input']) => {
   const { sdk, currentUser } = useSendbirdChat();
 
   const {
@@ -66,8 +66,8 @@ const OpenChannelInput = ({ inputDisabled, ...props }: OpenChannelProps['Input']
       setMessageToEdit={setMessageToEdit}
       keyboardAvoidOffset={keyboardAvoidOffset}
       inputMuted={chatAvailableState.muted}
-      inputFrozen={channel.isFrozen}
-      inputDisabled={inputDisabled ?? chatAvailableState.disabled}
+      inputFrozen={chatAvailableState.frozen}
+      inputDisabled={chatAvailableState.disabled ? true : inputDisabled}
       {...props}
     />
   );
