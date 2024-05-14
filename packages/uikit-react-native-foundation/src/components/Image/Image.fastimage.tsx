@@ -63,7 +63,7 @@ const Image_FastImage: SendbirdImageComponent = ({
   onError,
   style,
   tintColor,
-  disableFastImage,
+  disableFastImage = false,
   ...props
 }) => {
   if (disableFastImage) {

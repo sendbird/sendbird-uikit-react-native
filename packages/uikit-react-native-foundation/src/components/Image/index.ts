@@ -25,8 +25,4 @@ function getImageModule(): SendbirdImageComponent {
 
 const Image = getImageModule();
 
-Image.defaultProps = {
-  disableFastImage: false,
-};
-
 export default Image;
