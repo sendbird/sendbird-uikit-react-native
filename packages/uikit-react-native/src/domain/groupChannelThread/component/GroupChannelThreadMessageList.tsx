@@ -3,10 +3,9 @@ import React, { useContext, useEffect } from 'react';
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { useToast } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdMessage } from '@sendbird/uikit-utils';
-import { isDifferentChannel, useFreshCallback, useIsFirstMount, useUniqHandlerId } from '@sendbird/uikit-utils';
+import { isDifferentChannel, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import ChannelMessageList from '../../../components/ChannelMessageList';
-import { MESSAGE_FOCUS_ANIMATION_DELAY, MESSAGE_SEARCH_SAFE_SCROLL_DELAY } from '../../../constants';
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelThreadContexts } from '../module/moduleContext';
 import type { GroupChannelThreadProps } from '../types';
@@ -15,28 +14,21 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
   const toast = useToast();
   const { STRINGS } = useLocalization();
   const { sdk } = useSendbirdChat();
-  const { setMessageToEdit, setMessageToReply } = useContext(GroupChannelThreadContexts.Fragment);
+  const { setMessageToEdit } = useContext(GroupChannelThreadContexts.Fragment);
   const { subscribe } = useContext(GroupChannelThreadContexts.PubSub);
   const { flatListRef, lazyScrollToBottom, lazyScrollToIndex } = useContext(GroupChannelThreadContexts.MessageList);
   
   const id = useUniqHandlerId('GroupChannelThreadMessageList');
-  const isFirstMount = useIsFirstMount();
   
   const scrollToMessageWithCreatedAt = useFreshCallback(
-    (createdAt: number, focusAnimated: boolean, timeout: number): boolean => {
+    (createdAt: number, timeout: number): boolean => {
       const foundMessageIndex = props.messages.findIndex((it) => it.createdAt === createdAt);
       const isIncludedInList = foundMessageIndex > -1;
       
       if (isIncludedInList) {
-        if (focusAnimated) {
-          setTimeout(() => props.onUpdateSearchItem({ startingPoint: createdAt }), MESSAGE_FOCUS_ANIMATION_DELAY);
-        }
         lazyScrollToIndex({ index: foundMessageIndex, animated: true, timeout });
       } else {
         if (props.channel.messageOffsetTimestamp <= createdAt) {
-          if (focusAnimated) {
-            props.onUpdateSearchItem({ startingPoint: createdAt });
-          }
           props.onResetMessageListWithStartingPoint(createdAt);
         } else {
           return false;
@@ -48,7 +40,6 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
   
   const scrollToBottom = useFreshCallback(async (animated = false) => {
     if (props.hasNext()) {
-      props.onUpdateSearchItem(undefined);
       props.onScrolledAwayFromBottom(false);
       
       await props.onResetMessageList();
@@ -90,17 +81,8 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
     });
   }, [props.scrolledAwayFromBottom]);
   
-  useEffect(() => {
-    // Only trigger once when message list mount with initial props.searchItem
-    // - Search screen + searchItem > mount message list
-    // - Reset message list + searchItem > re-mount message list
-    if (isFirstMount && props.searchItem) {
-      scrollToMessageWithCreatedAt(props.searchItem.startingPoint, false, MESSAGE_SEARCH_SAFE_SCROLL_DELAY);
-    }
-  }, [isFirstMount]);
-  
   const onPressParentMessage = useFreshCallback((message: SendbirdMessage) => {
-    const canScrollToParent = scrollToMessageWithCreatedAt(message.createdAt, true, 0);
+    const canScrollToParent = scrollToMessageWithCreatedAt(message.createdAt, 0);
     if (!canScrollToParent) toast.show(STRINGS.TOAST.FIND_PARENT_MSG_ERROR, 'error');
   });
   
@@ -108,7 +90,6 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
     <ChannelMessageList
       {...props}
       ref={flatListRef}
-      onReplyMessage={setMessageToReply}
       onEditMessage={setMessageToEdit}
       onPressParentMessage={onPressParentMessage}
       onPressNewMessagesButton={scrollToBottom}

@@ -35,14 +35,11 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
   const GroupChannelThreadModule = createGroupChannelThreadModule(initModule);
   
   return ({
-            searchItem,
             renderNewMessagesButton = (props) => <NewMessagesButton {...props} />,
             renderScrollToBottomButton = (props) => <ScrollToBottomButton {...props} />,
             renderMessage,
             enableMessageGrouping = true,
-            enableTypingIndicator,
             onPressHeaderLeft = NOOP,
-            onPressHeaderRight = NOOP,
             onPressMediaMessage = NOOP,
             onChannelDeleted = NOOP,
             onBeforeSendUserMessage = PASS,
@@ -50,6 +47,7 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
             onBeforeUpdateUserMessage = PASS,
             onBeforeUpdateFileMessage = PASS,
             channel,
+            parentMessage,
             keyboardAvoidOffset,
             sortComparator = messageComparator,
             flatListProps,
@@ -57,9 +55,6 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
           }) => {
     const { playerService, recorderService } = usePlatformService();
     const { sdk, currentUser, sbOptions } = useSendbirdChat();
-    
-    const [internalSearchItem, setInternalSearchItem] = useState(searchItem);
-    const navigateFromMessageSearch = useCallback(() => Boolean(searchItem), []);
     
     const [groupChannelPubSub] = useState(() => pubsub<GroupChannelThreadPubSubContextPayload>());
     const [scrolledAwayFromBottom, setScrolledAwayFromBottom] = useState(false);
@@ -88,10 +83,16 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
     } = useGroupChannelMessages(sdk, channel, {
       shouldCountNewMessages: () => scrolledAwayFromBottomRef.current,
       onMessagesReceived(messages) {
-        groupChannelPubSub.publish({ type: 'MESSAGES_RECEIVED', data: { messages } });
+        const filteredMessages = messages.filter((message) => message.parentMessageId === parentMessage.messageId);
+        if (filteredMessages.length > 0) {
+          groupChannelPubSub.publish({ type: 'MESSAGES_RECEIVED', data: { messages: filteredMessages } });
+        }
       },
       onMessagesUpdated(messages) {
-        groupChannelPubSub.publish({ type: 'MESSAGES_UPDATED', data: { messages } });
+        const filteredMessages = messages.filter((message) => message.parentMessageId === parentMessage.messageId);
+        if (filteredMessages.length > 0) {
+          groupChannelPubSub.publish({ type: 'MESSAGES_UPDATED', data: { messages: filteredMessages } });
+        }
       },
       onChannelDeleted,
       onCurrentUserBanned: onChannelDeleted,
@@ -99,19 +100,16 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
       sortComparator,
       markAsRead: confirmAndMarkAsRead,
       replyType,
-      startingPoint: internalSearchItem?.startingPoint,
+      startingPoint: parentMessage.createdAt,
     });
     
+    const threadedMessages = messages.filter((message) => message.parentMessageId === parentMessage.messageId);
     const onBlurFragment = () => {
       return Promise.allSettled([playerService.reset(), recorderService.reset()]);
     };
     const _onPressHeaderLeft = useFreshCallback(async () => {
       await onBlurFragment();
       onPressHeaderLeft();
-    });
-    const _onPressHeaderRight = useFreshCallback(async () => {
-      await onBlurFragment();
-      onPressHeaderRight();
     });
     const _onPressMediaMessage: NonNullable<GroupChannelThreadProps['MessageList']['onPressMediaMessage']> = useFreshCallback(
       async (message, deleteMessage, uri) => {
@@ -151,13 +149,6 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
     
     const onResetMessageListWithStartingPoint = useCallback(async (startingPoint: number) => {
       return await resetWithStartingPoint(startingPoint);
-    }, []);
-    
-    // Changing the search item will trigger the focus animation on messages.
-    const onUpdateSearchItem: GroupChannelThreadProps['MessageList']['onUpdateSearchItem'] = useCallback((searchItem) => {
-      // Clean up for animation trigger with useEffect
-      setInternalSearchItem(undefined);
-      setInternalSearchItem(searchItem);
     }, []);
     
     const onPending = (message: SendbirdFileMessage | SendbirdUserMessage) => {
@@ -202,28 +193,23 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
     return (
       <GroupChannelThreadModule.Provider
         channel={channel}
+        parentMessage={parentMessage}
         groupChannelThreadPubSub={groupChannelPubSub}
-        enableTypingIndicator={enableTypingIndicator ?? sbOptions.uikit.groupChannel.channel.enableTypingIndicator}
         keyboardAvoidOffset={keyboardAvoidOffset}
-        messages={messages}
-        onUpdateSearchItem={onUpdateSearchItem}
+        threadedMessages={threadedMessages}
       >
         <GroupChannelThreadModule.Header
-          shouldHideRight={navigateFromMessageSearch}
           onPressHeaderLeft={_onPressHeaderLeft}
-          onPressHeaderRight={_onPressHeaderRight}
         />
         <StatusComposition loading={loading} LoadingComponent={<GroupChannelThreadModule.StatusLoading />}>
           <GroupChannelThreadModule.MessageList
             channel={channel}
-            searchItem={internalSearchItem}
             onResetMessageList={onResetMessageList}
             onResetMessageListWithStartingPoint={onResetMessageListWithStartingPoint}
-            onUpdateSearchItem={onUpdateSearchItem}
             enableMessageGrouping={enableMessageGrouping}
             currentUserId={currentUser?.userId}
             renderMessage={renderItem}
-            messages={messages}
+            messages={threadedMessages}
             newMessages={newMessages}
             onTopReached={loadPrevious}
             onBottomReached={loadNext}

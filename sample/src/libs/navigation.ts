@@ -150,7 +150,7 @@ export type RouteParamsUnion =
   route: Routes.GroupChannelThread;
   params: {
     channelUrl: string;
-    searchItem?: { startingPoint: number };
+    serializedMessage: object;
   };
     }
   /** OpenChannel screens **/

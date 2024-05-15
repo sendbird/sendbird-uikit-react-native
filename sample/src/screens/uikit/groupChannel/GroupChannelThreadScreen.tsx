@@ -1,25 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useGroupChannel } from '@sendbird/uikit-chat-hooks';
 import { createGroupChannelThreadFragment, useSendbirdChat } from '@sendbird/uikit-react-native';
 
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
 import { Routes } from '../../../libs/navigation';
-
+import type { SendbirdSendableMessage } from '@sendbird/uikit-utils';
 
 const GroupChannelThreadFragment = createGroupChannelThreadFragment();
 
-const GroupChannelScreen = () => {
-  const { navigation, params } = useAppNavigation<Routes.GroupChannel>();
-
+const GroupChannelThreadScreen = () => {
+  const { navigation, params } = useAppNavigation<Routes.GroupChannelThread>();
+  
   const { sdk } = useSendbirdChat();
   const { channel } = useGroupChannel(sdk, params.channelUrl);
-  if (!channel) return null;
-
+  const [parentMessage] = useState(() => sdk.message.buildMessageFromSerializedData(params.serializedMessage) as SendbirdSendableMessage);
+  if (!channel || !parentMessage) return null;
+  
   return (
     <GroupChannelThreadFragment
       channel={channel}
-      searchItem={params.searchItem}
+      parentMessage={parentMessage}
       onPressMediaMessage={(fileMessage, deleteMessage) => {
         // Navigate to media viewer
         navigation.navigate(Routes.FileViewer, {
@@ -35,12 +36,8 @@ const GroupChannelScreen = () => {
         // Navigate back
         navigation.goBack();
       }}
-      onPressHeaderRight={() => {
-        // Navigate to group channel settings
-        navigation.push(Routes.GroupChannelSettings, params);
-      }}
     />
   );
 };
 
-export default GroupChannelScreen;
+export default GroupChannelThreadScreen;

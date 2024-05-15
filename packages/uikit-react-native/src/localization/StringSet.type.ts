@@ -130,6 +130,7 @@ export interface StringSet {
   GROUP_CHANNEL_THREAD: {
     /** GroupChannelThread > Header */
     HEADER_TITLE: string;
+    HEADER_SUBTITLE: (currentUserId: string, channel: SendbirdGroupChannel) => string;
     
     /** GroupChannelThread > List */
     LIST_DATE_SEPARATOR: (date: Date, locale?: Locale) => string;
@@ -288,6 +289,7 @@ export interface StringSet {
     CHANNEL_INPUT_PLACEHOLDER_DISABLED: string;
     CHANNEL_INPUT_PLACEHOLDER_MUTED: string;
     CHANNEL_INPUT_PLACEHOLDER_REPLY: string;
+    CHANNEL_INPUT_PLACEHOLDER_THREAD: string;
     CHANNEL_INPUT_EDIT_OK: string;
     CHANNEL_INPUT_EDIT_CANCEL: string;
     /** ChannelInput > Attachments **/

@@ -97,6 +97,13 @@ const GroupChannelScreen = () => {
         // Navigate to group channel settings
         navigation.push(Routes.GroupChannelSettings, params);
       }}
+      onPressReplyMessageWithThread={(message) => {
+        // Navigate to thread
+        if (message) {
+          navigation.push(Routes.GroupChannelThread, { channelUrl: params.channelUrl, serializedMessage: message.serialize() });
+        }
+      }
+      }
       // messageListQueryParams={{
       //   prevResultLimit: 20,
       //   customTypesFilter: ['filter'],

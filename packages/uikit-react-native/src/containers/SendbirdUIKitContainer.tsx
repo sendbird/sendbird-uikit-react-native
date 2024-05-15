@@ -103,7 +103,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   uikitOptions?: PartialDeep<{
     common: SBUConfig['common'];
     groupChannel: Omit<SBUConfig['groupChannel']['channel'], UnimplementedFeatures> & {
-      replyType: Extract<SBUConfig['groupChannel']['channel']['replyType'], 'none' | 'quote_reply'>;
+      replyType: Extract<SBUConfig['groupChannel']['channel']['replyType'], 'none' | 'quote_reply' | 'thread'>;
     };
     groupChannelList: SBUConfig['groupChannel']['channelList'];
     groupChannelSettings: SBUConfig['groupChannel']['setting'];

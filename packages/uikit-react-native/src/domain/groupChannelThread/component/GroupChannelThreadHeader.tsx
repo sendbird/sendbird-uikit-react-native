@@ -3,41 +3,30 @@ import { View } from 'react-native';
 
 import { Header, Icon, createStyleSheet, useHeaderStyle } from '@sendbird/uikit-react-native-foundation';
 
-import ChannelCover from '../../../components/ChannelCover';
-import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
-import { TypingIndicatorType } from '../../../types';
 import { GroupChannelThreadContexts } from '../module/moduleContext';
 import type { GroupChannelThreadProps } from '../types';
+import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 
 const GroupChannelThreadHeader = ({
-                              shouldHideRight,
                               onPressHeaderLeft,
-                              onPressHeaderRight,
                             }: GroupChannelThreadProps['Header']) => {
-  const { sbOptions } = useSendbirdChat();
   const { headerTitle, channel } = useContext(GroupChannelThreadContexts.Fragment);
-  const { typingUsers } = useContext(GroupChannelThreadContexts.TypingIndicator);
-  const { STRINGS } = useLocalization();
   const { HeaderComponent } = useHeaderStyle();
+  const { STRINGS } = useLocalization();
+  const { currentUser } = useSendbirdChat();
   
   const renderSubtitle = () => {
-    const subtitle = STRINGS.LABELS.TYPING_INDICATOR_TYPINGS(typingUsers);
+    if(!currentUser) return null;
     
-    if (!subtitle) return null;
-    if (!sbOptions.uikit.groupChannel.channel.enableTypingIndicator) return null;
-    if (!sbOptions.uikit.groupChannel.channel.typingIndicatorTypes.has(TypingIndicatorType.Text)) return null;
-    
-    return <Header.Subtitle style={styles.subtitle}>{subtitle}</Header.Subtitle>;
+    return <Header.Subtitle style={styles.subtitle}>{STRINGS.GROUP_CHANNEL_THREAD.HEADER_SUBTITLE(currentUser.userId, channel)}</Header.Subtitle>;
   };
-  
-  const isHidden = shouldHideRight();
   
   return (
     <HeaderComponent
+      titleAlign={'center'}
       clearTitleMargin
       title={
         <View style={styles.titleContainer}>
-          <ChannelCover channel={channel} size={34} containerStyle={styles.avatarGroup} />
           <View style={{ flexShrink: 1 }}>
             <Header.Title h2>{headerTitle}</Header.Title>
             {renderSubtitle()}
@@ -46,8 +35,6 @@ const GroupChannelThreadHeader = ({
       }
       left={<Icon icon={'arrow-left'} />}
       onPressLeft={onPressHeaderLeft}
-      right={isHidden ? null : <Icon icon={'info'} />}
-      onPressRight={isHidden ? undefined : onPressHeaderRight}
     />
   );
 };
@@ -56,10 +43,8 @@ const styles = createStyleSheet({
   titleContainer: {
     maxWidth: '100%',
     flexDirection: 'row',
-    alignItems: 'center',
-  },
-  avatarGroup: {
-    marginRight: 8,
+    justifyContent: 'center',
+    width: '100%',
   },
   subtitle: {
     marginTop: 2,

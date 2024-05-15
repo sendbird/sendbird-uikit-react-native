@@ -336,7 +336,7 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
           sheetItems.push(menu.edit(message));
           sheetItems.push(menu.delete(message));
         }
-        if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
+        if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType !== 'none') {
           sheetItems.push(menu.reply(message));
         }
       }
@@ -350,7 +350,7 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
         if (isMyMessage(message, currentUserId) && message.sendingStatus === 'succeeded') {
           sheetItems.push(menu.delete(message));
         }
-        if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
+        if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.replyType !== 'none') {
           sheetItems.push(menu.reply(message));
         }
       }

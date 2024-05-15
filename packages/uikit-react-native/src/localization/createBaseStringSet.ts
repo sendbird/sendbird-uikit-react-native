@@ -129,6 +129,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     },
     GROUP_CHANNEL_THREAD: {
       HEADER_TITLE: 'Thread',
+      HEADER_SUBTITLE: (uid, channel) => getGroupChannelTitle(uid, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       LIST_DATE_SEPARATOR: (date, locale) => getDateSeparatorFormat(date, locale ?? dateLocale),
       LIST_BUTTON_NEW_MSG: (newMessages) => `${newMessages.length} new messages`,
       
@@ -307,6 +308,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       CHANNEL_INPUT_PLACEHOLDER_DISABLED: 'Chat not available in this channel.',
       CHANNEL_INPUT_PLACEHOLDER_MUTED: "You're muted by the operator.",
       CHANNEL_INPUT_PLACEHOLDER_REPLY: 'Reply to message',
+      CHANNEL_INPUT_PLACEHOLDER_THREAD: 'Reply in thread',
       CHANNEL_INPUT_EDIT_OK: 'Save',
       CHANNEL_INPUT_EDIT_CANCEL: 'Cancel',
       CHANNEL_INPUT_REPLY_PREVIEW_TITLE: (user) => `Reply to ${user.nickname || USER_NO_NAME}`,

@@ -45,6 +45,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     onPressHeaderRight = NOOP,
     onPressMediaMessage = NOOP,
     onChannelDeleted = NOOP,
+    onPressReplyMessageWithThread = NOOP,
     onBeforeSendUserMessage = PASS,
     onBeforeSendFileMessage = PASS,
     onBeforeUpdateUserMessage = PASS,
@@ -70,7 +71,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       if (sbOptions.uikit.groupChannel.channel.replyType === 'none') return ReplyType.NONE;
       else return ReplyType.ONLY_REPLY_TO_CHANNEL;
     });
-
+    
     const {
       loading,
       messages,
@@ -120,6 +121,10 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
         onPressMediaMessage(message, deleteMessage, uri);
       },
     );
+    const _onPressReplyMessageWithThread = useFreshCallback(async (message: SendbirdUserMessage | SendbirdFileMessage) => {
+      await onBlurFragment();
+      onPressReplyMessageWithThread(message);
+    });
 
     useEffect(() => {
       return () => {
@@ -208,6 +213,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
         keyboardAvoidOffset={keyboardAvoidOffset}
         messages={messages}
         onUpdateSearchItem={onUpdateSearchItem}
+        onPressReplyMessageWithThread={_onPressReplyMessageWithThread}
       >
         <GroupChannelModule.Header
           shouldHideRight={navigateFromMessageSearch}

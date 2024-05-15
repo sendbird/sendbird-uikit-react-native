@@ -11,7 +11,7 @@ import type {
   SendbirdFileMessageUpdateParams,
   SendbirdGroupChannel,
   SendbirdMessage,
-  SendbirdUser,
+  SendbirdSendableMessage,
   SendbirdUserMessage,
   SendbirdUserMessageCreateParams,
   SendbirdUserMessageUpdateParams,
@@ -26,9 +26,9 @@ export type MessageListQueryParamsType = Omit<MessageCollectionParams, 'filter'>
 export interface GroupChannelThreadProps {
   Fragment: {
     channel: SendbirdGroupChannel;
+    parentMessage: SendbirdSendableMessage;
     onChannelDeleted: () => void;
     onPressHeaderLeft: GroupChannelThreadProps['Header']['onPressHeaderLeft'];
-    onPressHeaderRight: GroupChannelThreadProps['Header']['onPressHeaderRight'];
     onPressMediaMessage?: GroupChannelThreadProps['MessageList']['onPressMediaMessage'];
     
     onBeforeSendUserMessage?: OnBeforeHandler<SendbirdUserMessageCreateParams>;
@@ -40,14 +40,11 @@ export interface GroupChannelThreadProps {
     renderNewMessagesButton?: GroupChannelThreadProps['MessageList']['renderNewMessagesButton'];
     renderScrollToBottomButton?: GroupChannelThreadProps['MessageList']['renderScrollToBottomButton'];
     
-    enableTypingIndicator?: GroupChannelThreadProps['Provider']['enableTypingIndicator'];
     enableMessageGrouping?: GroupChannelThreadProps['MessageList']['enableMessageGrouping'];
     
     keyboardAvoidOffset?: GroupChannelThreadProps['Provider']['keyboardAvoidOffset'];
     flatListProps?: GroupChannelThreadProps['MessageList']['flatListProps'];
     sortComparator?: UseGroupChannelMessagesOptions['sortComparator'];
-    
-    searchItem?: GroupChannelThreadProps['MessageList']['searchItem'];
     
     /**
      * @description You can specify the query parameters for the message list.
@@ -61,9 +58,7 @@ export interface GroupChannelThreadProps {
     collectionCreator?: UseGroupChannelMessagesOptions['collectionCreator'];
   };
   Header: {
-    shouldHideRight: () => boolean;
     onPressHeaderLeft: () => void;
-    onPressHeaderRight: () => void;
   };
   MessageList: Pick<
     ChannelMessageListProps<SendbirdGroupChannel>,
@@ -84,13 +79,9 @@ export interface GroupChannelThreadProps {
     | 'renderScrollToBottomButton'
     | 'flatListProps'
     | 'hasNext'
-    | 'searchItem'
   > & {
     onResetMessageList: () => Promise<void>;
     onResetMessageListWithStartingPoint: (startingPoint: number) => Promise<void>;
-    
-    // Changing the search item will trigger the focus animation on messages.
-    onUpdateSearchItem: (searchItem?: GroupChannelThreadProps['MessageList']['searchItem']) => void;
   };
   Input: PickPartial<
     ChannelInputProps,
@@ -107,13 +98,10 @@ export interface GroupChannelThreadProps {
   SuggestedMentionList: SuggestedMentionListProps;
   Provider: {
     channel: SendbirdGroupChannel;
-    enableTypingIndicator: boolean;
     keyboardAvoidOffset?: number;
     groupChannelThreadPubSub: PubSub<GroupChannelThreadPubSubContextPayload>;
-    
-    messages: SendbirdMessage[];
-    // Changing the search item will trigger the focus animation on messages.
-    onUpdateSearchItem: (searchItem?: GroupChannelThreadProps['MessageList']['searchItem']) => void;
+    parentMessage: SendbirdSendableMessage;
+    threadedMessages: SendbirdMessage[];
   };
 }
 
@@ -127,13 +115,10 @@ export interface GroupChannelThreadContextsType {
     headerTitle: string;
     keyboardAvoidOffset?: number;
     channel: SendbirdGroupChannel;
+    parentMessage: SendbirdSendableMessage;
     messageToEdit?: SendbirdUserMessage | SendbirdFileMessage;
     setMessageToEdit: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
-    messageToReply?: SendbirdUserMessage | SendbirdFileMessage;
-    setMessageToReply: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
-  }>;
-  TypingIndicator: React.Context<{
-    typingUsers: SendbirdUser[];
+    messageToThread?: SendbirdUserMessage | SendbirdFileMessage;
   }>;
   PubSub: React.Context<PubSub<GroupChannelThreadPubSubContextPayload>>;
   MessageList: React.Context<{
