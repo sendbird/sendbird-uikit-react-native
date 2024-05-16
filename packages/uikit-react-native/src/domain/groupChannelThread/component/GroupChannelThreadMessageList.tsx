@@ -1,42 +1,20 @@
 import React, { useContext, useEffect } from 'react';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
-import { useToast } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdMessage } from '@sendbird/uikit-utils';
 import { isDifferentChannel, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import ChannelMessageList from '../../../components/ChannelMessageList';
-import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
+import { useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelThreadContexts } from '../module/moduleContext';
 import type { GroupChannelThreadProps } from '../types';
 
 const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageList']) => {
-  const toast = useToast();
-  const { STRINGS } = useLocalization();
   const { sdk } = useSendbirdChat();
   const { setMessageToEdit } = useContext(GroupChannelThreadContexts.Fragment);
   const { subscribe } = useContext(GroupChannelThreadContexts.PubSub);
-  const { flatListRef, lazyScrollToBottom, lazyScrollToIndex } = useContext(GroupChannelThreadContexts.MessageList);
+  const { flatListRef, lazyScrollToBottom } = useContext(GroupChannelThreadContexts.MessageList);
   
   const id = useUniqHandlerId('GroupChannelThreadMessageList');
-  
-  const scrollToMessageWithCreatedAt = useFreshCallback(
-    (createdAt: number, timeout: number): boolean => {
-      const foundMessageIndex = props.messages.findIndex((it) => it.createdAt === createdAt);
-      const isIncludedInList = foundMessageIndex > -1;
-      
-      if (isIncludedInList) {
-        lazyScrollToIndex({ index: foundMessageIndex, animated: true, timeout });
-      } else {
-        if (props.channel.messageOffsetTimestamp <= createdAt) {
-          props.onResetMessageListWithStartingPoint(createdAt);
-        } else {
-          return false;
-        }
-      }
-      return true;
-    },
-  );
   
   const scrollToBottom = useFreshCallback(async (animated = false) => {
     if (props.hasNext()) {
@@ -81,17 +59,11 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
     });
   }, [props.scrolledAwayFromBottom]);
   
-  const onPressParentMessage = useFreshCallback((message: SendbirdMessage) => {
-    const canScrollToParent = scrollToMessageWithCreatedAt(message.createdAt, 0);
-    if (!canScrollToParent) toast.show(STRINGS.TOAST.FIND_PARENT_MSG_ERROR, 'error');
-  });
-  
   return (
     <ChannelMessageList
       {...props}
       ref={flatListRef}
       onEditMessage={setMessageToEdit}
-      onPressParentMessage={onPressParentMessage}
       onPressNewMessagesButton={scrollToBottom}
       onPressScrollToBottomButton={scrollToBottom}
     />

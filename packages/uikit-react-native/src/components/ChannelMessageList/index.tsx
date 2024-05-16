@@ -348,9 +348,9 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
           sheetItems.push(menu.delete(message));
         }
         if (channel.isGroupChannel()) {
-          if (sbOptions.uikit.groupChannel.channel.replyType === 'thread') {
+          if (sbOptions.uikit.groupChannel.channel.replyType === 'thread' && onReplyInThreadMessage !== undefined) {
             sheetItems.push(menu.replyInThread(message));
-          } else if (sbOptions.uikit.groupChannel.channel.replyType !== 'none') {
+          } else if (sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
             sheetItems.push(menu.reply(message));
           }
         }
@@ -366,10 +366,12 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
           sheetItems.push(menu.delete(message));
         }
         if (channel.isGroupChannel()) {
-          if (sbOptions.uikit.groupChannel.channel.replyType === 'thread') {
-            sheetItems.push(menu.replyInThread(message));
-          } else if (sbOptions.uikit.groupChannel.channel.replyType !== 'none') {
-            sheetItems.push(menu.reply(message));
+          if (channel.isGroupChannel()) {
+            if (sbOptions.uikit.groupChannel.channel.replyType === 'thread' && onReplyInThreadMessage !== undefined) {
+              sheetItems.push(menu.replyInThread(message));
+            } else if (sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
+              sheetItems.push(menu.reply(message));
+            }
           }
         }
       }

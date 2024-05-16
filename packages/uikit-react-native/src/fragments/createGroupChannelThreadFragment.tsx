@@ -15,9 +15,6 @@ import {
   useRefTracker,
 } from '@sendbird/uikit-utils';
 
-import GroupChannelMessageRenderer, {
-  GroupChannelTypingIndicatorBubble,
-} from '../components/GroupChannelMessageRenderer';
 import NewMessagesButton from '../components/NewMessagesButton';
 import ScrollToBottomButton from '../components/ScrollToBottomButton';
 import StatusComposition from '../components/StatusComposition';
@@ -30,6 +27,7 @@ import type {
 } from '../domain/groupChannelThread/types';
 import { usePlatformService, useSendbirdChat } from '../hooks/useContext';
 import pubsub from '../utils/pubsub';
+import GroupChannelThreadMessageRenderer from '../components/GroupChannelThreadMessageRenderer';
 
 const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThreadModule>): GroupChannelThreadFragment => {
   const GroupChannelThreadModule = createGroupChannelThreadModule(initModule);
@@ -125,11 +123,10 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
     }, []);
     
     const renderItem: GroupChannelThreadProps['MessageList']['renderMessage'] = useFreshCallback((props) => {
-      const content = renderMessage ? renderMessage(props) : <GroupChannelMessageRenderer {...props} />;
+      const content = renderMessage ? renderMessage(props) : <GroupChannelThreadMessageRenderer {...props} />;
       return (
         <Box>
           {content}
-          {props.isFirstItem && !hasNext() && <GroupChannelTypingIndicatorBubble />}
         </Box>
       );
     });
