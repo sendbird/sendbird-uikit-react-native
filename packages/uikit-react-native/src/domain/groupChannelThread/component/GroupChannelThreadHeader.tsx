@@ -17,7 +17,6 @@ const GroupChannelThreadHeader = ({
   
   const renderSubtitle = () => {
     if(!currentUser) return null;
-    
     return <Header.Subtitle style={styles.subtitle}>{STRINGS.GROUP_CHANNEL_THREAD.HEADER_SUBTITLE(currentUser.userId, channel)}</Header.Subtitle>;
   };
   
@@ -43,7 +42,6 @@ const styles = createStyleSheet({
   titleContainer: {
     maxWidth: '100%',
     flexDirection: 'row',
-    justifyContent: 'center',
     width: '100%',
   },
   subtitle: {

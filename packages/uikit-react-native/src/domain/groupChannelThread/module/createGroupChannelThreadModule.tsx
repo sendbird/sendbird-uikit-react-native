@@ -6,9 +6,11 @@ import GroupChannelThreadStatusLoading from '../component/GroupChannelThreadStat
 import GroupChannelThreadSuggestedMentionList from '../component/GroupChannelThreadSuggestedMentionList';
 import type { GroupChannelThreadModule } from '../types';
 import { GroupChannelThreadContextsProvider } from './moduleContext';
+import GroupChannelThreadParentMessageInfo from '../component/GroupChannelThreadParentMessageInfo';
 
 const createGroupChannelThreadModule = ({
                                     Header = GroupChannelThreadHeader,
+                                    ParentMessageInfo = GroupChannelThreadParentMessageInfo,
                                     MessageList = GroupChannelThreadMessageList,
                                     Input = GroupChannelThreadInput,
                                     SuggestedMentionList = GroupChannelThreadSuggestedMentionList,
@@ -19,6 +21,7 @@ const createGroupChannelThreadModule = ({
                                   }: Partial<GroupChannelThreadModule> = {}): GroupChannelThreadModule => {
   return {
     Header,
+    ParentMessageInfo,
     MessageList,
     Input,
     SuggestedMentionList,

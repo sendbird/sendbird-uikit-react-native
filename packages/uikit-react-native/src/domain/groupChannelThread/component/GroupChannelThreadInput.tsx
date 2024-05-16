@@ -12,7 +12,7 @@ const GroupChannelThreadInput = ({ inputDisabled, ...props }: GroupChannelThread
     keyboardAvoidOffset = 0,
     messageToEdit,
     setMessageToEdit,
-    messageToThread,
+    parentMessage,
   } = useContext(GroupChannelThreadContexts.Fragment);
 
   const chatAvailableState = getGroupChannelChatAvailableState(channel);
@@ -22,7 +22,7 @@ const GroupChannelThreadInput = ({ inputDisabled, ...props }: GroupChannelThread
       channel={channel}
       messageToEdit={messageToEdit}
       setMessageToEdit={setMessageToEdit}
-      messageToReply={messageToThread}
+      messageToThread={parentMessage}
       keyboardAvoidOffset={keyboardAvoidOffset}
       inputMuted={chatAvailableState.muted}
       inputFrozen={chatAvailableState.frozen}

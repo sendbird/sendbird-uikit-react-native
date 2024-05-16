@@ -7,7 +7,7 @@ import {
   NOOP,
   SendbirdFileMessage,
   SendbirdGroupChannel,
-  SendbirdMessage, type SendbirdSendableMessage,
+  SendbirdMessage,
   SendbirdUserMessage,
   useFreshCallback,
 } from '@sendbird/uikit-utils';
@@ -22,7 +22,7 @@ export const GroupChannelThreadContexts: GroupChannelThreadContextsType = {
   Fragment: createContext({
     headerTitle: '',
     channel: {} as SendbirdGroupChannel,
-    parentMessage: {} as SendbirdSendableMessage,
+    parentMessage: {} as SendbirdUserMessage | SendbirdFileMessage,
     setMessageToEdit: NOOP,
   }),
   PubSub: createContext({
@@ -67,7 +67,6 @@ export const GroupChannelThreadContextsProvider: GroupChannelThreadModule['Provi
           keyboardAvoidOffset,
           messageToEdit: messageToEdit,
           setMessageToEdit: useCallback((message) => setMessageToEdit(message), []),
-          messageToThread: parentMessage as SendbirdUserMessage | SendbirdFileMessage,
         }}
       >
         <GroupChannelThreadContexts.PubSub.Provider value={groupChannelThreadPubSub}>
@@ -100,7 +99,9 @@ const useScrollActions = (params: Pick<GroupChannelThreadProps['Provider'], 'thr
     }
     
     setTimeout(() => {
-      flatListRef.current?.scrollToOffset({ offset: 0, animated: params?.animated ?? false });
+      if (flatListRef.current) {
+        flatListRef.current.scrollToOffset({ offset: 0, animated: params?.animated ?? false });
+      }
     }, params?.timeout ?? 0);
   });
   
@@ -112,11 +113,13 @@ const useScrollActions = (params: Pick<GroupChannelThreadProps['Provider'], 'thr
     }
     
     setTimeout(() => {
-      flatListRef.current?.scrollToIndex({
-        index: params?.index ?? 0,
-        animated: params?.animated ?? false,
-        viewPosition: params?.viewPosition ?? 0.5,
-      });
+      if (flatListRef.current) {
+        flatListRef.current.scrollToIndex({
+          index: params?.index ?? 0,
+          animated: params?.animated ?? false,
+          viewPosition: params?.viewPosition ?? 0.5,
+        });
+      }
     }, params?.timeout ?? 0);
   });
   

@@ -11,7 +11,6 @@ import type {
   SendbirdFileMessageUpdateParams,
   SendbirdGroupChannel,
   SendbirdMessage,
-  SendbirdSendableMessage,
   SendbirdUserMessage,
   SendbirdUserMessageCreateParams,
   SendbirdUserMessageUpdateParams,
@@ -26,7 +25,7 @@ export type MessageListQueryParamsType = Omit<MessageCollectionParams, 'filter'>
 export interface GroupChannelThreadProps {
   Fragment: {
     channel: SendbirdGroupChannel;
-    parentMessage: SendbirdSendableMessage;
+    parentMessage: SendbirdUserMessage | SendbirdFileMessage;
     onChannelDeleted: () => void;
     onPressHeaderLeft: GroupChannelThreadProps['Header']['onPressHeaderLeft'];
     onPressMediaMessage?: GroupChannelThreadProps['MessageList']['onPressMediaMessage'];
@@ -58,6 +57,9 @@ export interface GroupChannelThreadProps {
     collectionCreator?: UseGroupChannelMessagesOptions['collectionCreator'];
   };
   Header: {
+    onPressHeaderLeft: () => void;
+  };
+  ParentMessageInfo: {
     onPressHeaderLeft: () => void;
   };
   MessageList: Pick<
@@ -100,7 +102,7 @@ export interface GroupChannelThreadProps {
     channel: SendbirdGroupChannel;
     keyboardAvoidOffset?: number;
     groupChannelThreadPubSub: PubSub<GroupChannelThreadPubSubContextPayload>;
-    parentMessage: SendbirdSendableMessage;
+    parentMessage: SendbirdUserMessage | SendbirdFileMessage;
     threadedMessages: SendbirdMessage[];
   };
 }
@@ -115,10 +117,9 @@ export interface GroupChannelThreadContextsType {
     headerTitle: string;
     keyboardAvoidOffset?: number;
     channel: SendbirdGroupChannel;
-    parentMessage: SendbirdSendableMessage;
+    parentMessage: SendbirdUserMessage | SendbirdFileMessage;
     messageToEdit?: SendbirdUserMessage | SendbirdFileMessage;
     setMessageToEdit: (msg?: SendbirdUserMessage | SendbirdFileMessage) => void;
-    messageToThread?: SendbirdUserMessage | SendbirdFileMessage;
   }>;
   PubSub: React.Context<PubSub<GroupChannelThreadPubSubContextPayload>>;
   MessageList: React.Context<{
@@ -161,6 +162,7 @@ export interface GroupChannelThreadContextsType {
 export interface GroupChannelThreadModule {
   Provider: CommonComponent<GroupChannelThreadProps['Provider']>;
   Header: CommonComponent<GroupChannelThreadProps['Header']>;
+  ParentMessageInfo: CommonComponent<GroupChannelThreadProps['ParentMessageInfo']>;
   MessageList: CommonComponent<GroupChannelThreadProps['MessageList']>;
   Input: CommonComponent<GroupChannelThreadProps['Input']>;
   SuggestedMentionList: CommonComponent<GroupChannelThreadProps['SuggestedMentionList']>;

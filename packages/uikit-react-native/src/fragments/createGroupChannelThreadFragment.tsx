@@ -201,6 +201,9 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
         <GroupChannelThreadModule.Header
           onPressHeaderLeft={_onPressHeaderLeft}
         />
+        <GroupChannelThreadModule.ParentMessageInfo
+          onPressHeaderLeft={_onPressHeaderLeft}
+        />
         <StatusComposition loading={loading} LoadingComponent={<GroupChannelThreadModule.StatusLoading />}>
           <GroupChannelThreadModule.MessageList
             channel={channel}

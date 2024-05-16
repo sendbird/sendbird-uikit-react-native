@@ -109,6 +109,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
       {...props}
       ref={flatListRef}
       onReplyMessage={setMessageToReply}
+      onReplyInThreadMessage={setMessageToReply}
       onEditMessage={setMessageToEdit}
       onPressParentMessage={onPressParentMessage}
       onPressNewMessagesButton={scrollToBottom}
