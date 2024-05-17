@@ -45,6 +45,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   focused,
   prevMessage,
   nextMessage,
+  hideParentMessage,
 }) => {
   const playerUnsubscribes = useRef<(() => void)[]>([]);
   const { palette } = useUIKitTheme();
@@ -149,7 +150,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     sendingStatus: isMyMessage(message, currentUser?.userId) ? (
       <GroupChannelMessageOutgoingStatus channel={channel} message={message} />
     ) : null,
-    parentMessage: shouldRenderParentMessage(message) ? (
+    parentMessage: (!hideParentMessage && shouldRenderParentMessage(message)) ? (
       <GroupChannelMessageParentMessage
         channel={channel}
         message={message.parentMessage}

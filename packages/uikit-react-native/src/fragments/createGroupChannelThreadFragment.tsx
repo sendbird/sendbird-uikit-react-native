@@ -18,6 +18,7 @@ import {
 import NewMessagesButton from '../components/NewMessagesButton';
 import ScrollToBottomButton from '../components/ScrollToBottomButton';
 import StatusComposition from '../components/StatusComposition';
+import GroupChannelMessageRenderer from '../components/GroupChannelMessageRenderer';
 import createGroupChannelThreadModule from '../domain/groupChannelThread/module/createGroupChannelThreadModule';
 import type {
   GroupChannelThreadFragment,
@@ -27,7 +28,6 @@ import type {
 } from '../domain/groupChannelThread/types';
 import { usePlatformService, useSendbirdChat } from '../hooks/useContext';
 import pubsub from '../utils/pubsub';
-import GroupChannelThreadMessageRenderer from '../components/GroupChannelThreadMessageRenderer';
 
 const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThreadModule>): GroupChannelThreadFragment => {
   const GroupChannelThreadModule = createGroupChannelThreadModule(initModule);
@@ -123,7 +123,7 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
     }, []);
     
     const renderItem: GroupChannelThreadProps['MessageList']['renderMessage'] = useFreshCallback((props) => {
-      const content = renderMessage ? renderMessage(props) : <GroupChannelThreadMessageRenderer {...props} />;
+      const content = renderMessage ? renderMessage(props) : <GroupChannelMessageRenderer hideParentMessage={true} {...props} />;
       return (
         <Box>
           {content}

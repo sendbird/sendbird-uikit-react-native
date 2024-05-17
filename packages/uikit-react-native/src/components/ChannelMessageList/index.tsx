@@ -77,6 +77,7 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
     enableMessageGrouping: ChannelMessageListProps<T>['enableMessageGrouping'];
     bottomSheetItem?: BottomSheetItem;
     isFirstItem: boolean;
+    hideParentMessage?: boolean;
   }) => React.ReactElement | null;
   renderNewMessagesButton:
     | null
