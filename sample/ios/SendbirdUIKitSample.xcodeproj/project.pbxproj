@@ -344,7 +344,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\nexport ENTRY_FILE=$(pwd)/../index.js\nexport NODE_BINARY=node\n../../node_modules/react-native/scripts/react-native-xcode.sh\n";
+			shellScript = "set -e\n\nNODE_VERSION=$(node -v | cut -d. -f1 | tr -d 'v')\nif [[ \"$NODE_VERSION\" -ge 18 ]]; then\n  export NODE_OPTIONS=--openssl-legacy-provider\nfi\n\nexport ENTRY_FILE=$(pwd)/../index.js\nexport NODE_BINARY=node\n../../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		0BC6049FD9DFF84AD29163EF /* [CP-User] [RNFB] Core Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
