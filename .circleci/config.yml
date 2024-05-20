@@ -45,14 +45,14 @@ parameters:
 jobs:
   deploy-ios:
     macos:
-      xcode: 14.3.1
+      xcode: 15.3.0
     resource_class: macos.m1.medium.gen1
     environment:
       APP_VERSION: << pipeline.parameters.version >>
     steps:
       - checkout
       - macos/switch-ruby:
-          version: '2.7'
+          version: '3.0.6'
       - ruby/install-deps:
           key: v{{ .Environment.CACHE_VERSION }}-gems-ios
           app-dir: ./sample/ios
