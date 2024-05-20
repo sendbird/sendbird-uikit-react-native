@@ -5,7 +5,7 @@ import { createGroupChannelThreadFragment, useSendbirdChat } from '@sendbird/uik
 
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
 import { Routes } from '../../../libs/navigation';
-import type { SendbirdSendableMessage } from '@sendbird/uikit-utils';
+import type { SendbirdFileMessage, SendbirdUserMessage } from '@sendbird/uikit-utils';
 
 const GroupChannelThreadFragment = createGroupChannelThreadFragment();
 
@@ -14,7 +14,7 @@ const GroupChannelThreadScreen = () => {
   
   const { sdk } = useSendbirdChat();
   const { channel } = useGroupChannel(sdk, params.channelUrl);
-  const [parentMessage] = useState(() => sdk.message.buildMessageFromSerializedData(params.serializedMessage) as SendbirdSendableMessage);
+  const [parentMessage] = useState(() => sdk.message.buildMessageFromSerializedData(params.serializedMessage) as SendbirdUserMessage | SendbirdFileMessage);
   if (!channel || !parentMessage) return null;
   
   return (

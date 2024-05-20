@@ -10,14 +10,15 @@ import { MESSAGE_FOCUS_ANIMATION_DELAY, MESSAGE_SEARCH_SAFE_SCROLL_DELAY } from 
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
+import { FileMessage, UserMessage } from '@sendbird/chat/message';
 
 const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   const toast = useToast();
   const { STRINGS } = useLocalization();
-  const { sdk } = useSendbirdChat();
+  const { sdk, sbOptions } = useSendbirdChat();
   const { setMessageToEdit, setMessageToReply } = useContext(GroupChannelContexts.Fragment);
   const { subscribe } = useContext(GroupChannelContexts.PubSub);
-  const { flatListRef, lazyScrollToBottom, lazyScrollToIndex } = useContext(GroupChannelContexts.MessageList);
+  const { flatListRef, lazyScrollToBottom, lazyScrollToIndex, onPressReplyMessageInThread } = useContext(GroupChannelContexts.MessageList);
 
   const id = useUniqHandlerId('GroupChannelMessageList');
   const isFirstMount = useIsFirstMount();
@@ -98,10 +99,15 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
       scrollToMessageWithCreatedAt(props.searchItem.startingPoint, false, MESSAGE_SEARCH_SAFE_SCROLL_DELAY);
     }
   }, [isFirstMount]);
-
+  
   const onPressParentMessage = useFreshCallback((message: SendbirdMessage) => {
-    const canScrollToParent = scrollToMessageWithCreatedAt(message.createdAt, true, 0);
-    if (!canScrollToParent) toast.show(STRINGS.TOAST.FIND_PARENT_MSG_ERROR, 'error');
+    if (onPressReplyMessageInThread && sbOptions.uikit.groupChannel.channel.replyType === 'thread'
+      && sbOptions.uikit.groupChannel.channel.threadReplySelectType === 'thread') {
+      onPressReplyMessageInThread(message as FileMessage | UserMessage);
+    } else {
+      const canScrollToParent = scrollToMessageWithCreatedAt(message.createdAt, true, 0);
+      if (!canScrollToParent) toast.show(STRINGS.TOAST.FIND_PARENT_MSG_ERROR, 'error');
+    }
   });
 
   return (

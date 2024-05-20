@@ -30,7 +30,7 @@ export interface GroupChannelProps {
     onPressHeaderLeft: GroupChannelProps['Header']['onPressHeaderLeft'];
     onPressHeaderRight: GroupChannelProps['Header']['onPressHeaderRight'];
     onPressMediaMessage?: GroupChannelProps['MessageList']['onPressMediaMessage'];
-    onPressReplyMessageWithThread?: GroupChannelProps['Provider']['onPressReplyMessageWithThread'];
+    onPressReplyMessageInThread?: GroupChannelProps['Provider']['onPressReplyMessageInThread'];
 
     onBeforeSendUserMessage?: OnBeforeHandler<SendbirdUserMessageCreateParams>;
     onBeforeSendFileMessage?: OnBeforeHandler<SendbirdFileMessageCreateParams>;
@@ -115,7 +115,7 @@ export interface GroupChannelProps {
     messages: SendbirdMessage[];
     // Changing the search item will trigger the focus animation on messages.
     onUpdateSearchItem: (searchItem?: GroupChannelProps['MessageList']['searchItem']) => void;
-    onPressReplyMessageWithThread: (message: SendbirdUserMessage | SendbirdFileMessage) => void;
+    onPressReplyMessageInThread: (message: SendbirdUserMessage | SendbirdFileMessage) => void;
   };
 }
 
@@ -173,6 +173,8 @@ export interface GroupChannelContextsType {
       timeout?: number;
       viewPosition?: number;
     }) => void;
+    
+    onPressReplyMessageInThread?: (message: SendbirdUserMessage | SendbirdFileMessage) => void;
   }>;
 }
 export interface GroupChannelModule {

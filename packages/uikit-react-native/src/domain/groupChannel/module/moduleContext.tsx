@@ -58,7 +58,7 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
   groupChannelPubSub,
   messages,
   onUpdateSearchItem,
-  onPressReplyMessageWithThread,
+  onPressReplyMessageInThread,
 }) => {
   if (!channel) throw new Error('GroupChannel is not provided to GroupChannelModule');
 
@@ -93,7 +93,7 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
   
   const onPressMessageToReply = (message?: SendbirdUserMessage | SendbirdFileMessage) => {
     if (sbOptions.uikit.groupChannel.channel.replyType === 'thread' && message) {
-      onPressReplyMessageWithThread?.(message);
+      onPressReplyMessageInThread?.(message);
     } else if (sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
       updateInputMode('reply', message);
     }
@@ -145,6 +145,7 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
                 scrollToMessage,
                 lazyScrollToIndex,
                 lazyScrollToBottom,
+                onPressReplyMessageInThread: onPressReplyMessageInThread,
               }}
             >
               {children}

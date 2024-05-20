@@ -97,7 +97,7 @@ const GroupChannelScreen = () => {
         // Navigate to group channel settings
         navigation.push(Routes.GroupChannelSettings, params);
       }}
-      onPressReplyMessageWithThread={(message) => {
+      onPressReplyMessageInThread={(message) => {
         // Navigate to thread
         if (message) {
           navigation.push(Routes.GroupChannelThread, { channelUrl: params.channelUrl, serializedMessage: message.serialize() });

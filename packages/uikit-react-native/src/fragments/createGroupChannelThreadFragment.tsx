@@ -11,7 +11,6 @@ import {
   confirmAndMarkAsRead,
   messageComparator,
   useFreshCallback,
-  useIIFE,
   useRefTracker,
 } from '@sendbird/uikit-utils';
 
@@ -52,16 +51,11 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
             messageListQueryParams,
           }) => {
     const { playerService, recorderService } = usePlatformService();
-    const { sdk, currentUser, sbOptions } = useSendbirdChat();
+    const { sdk, currentUser } = useSendbirdChat();
     
     const [groupChannelPubSub] = useState(() => pubsub<GroupChannelThreadPubSubContextPayload>());
     const [scrolledAwayFromBottom, setScrolledAwayFromBottom] = useState(false);
     const scrolledAwayFromBottomRef = useRefTracker(scrolledAwayFromBottom);
-    
-    const replyType = useIIFE(() => {
-      if (sbOptions.uikit.groupChannel.channel.replyType === 'none') return ReplyType.NONE;
-      else return ReplyType.ONLY_REPLY_TO_CHANNEL;
-    });
     
     const {
       loading,
@@ -97,7 +91,7 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
       collectionCreator: getCollectionCreator(channel, messageListQueryParams),
       sortComparator,
       markAsRead: confirmAndMarkAsRead,
-      replyType,
+      replyType: ReplyType.ALL,
       startingPoint: parentMessage.createdAt,
     });
     

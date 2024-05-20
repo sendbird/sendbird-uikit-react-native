@@ -45,7 +45,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     onPressHeaderRight = NOOP,
     onPressMediaMessage = NOOP,
     onChannelDeleted = NOOP,
-    onPressReplyMessageWithThread = NOOP,
+    onPressReplyMessageInThread = NOOP,
     onBeforeSendUserMessage = PASS,
     onBeforeSendFileMessage = PASS,
     onBeforeUpdateUserMessage = PASS,
@@ -121,9 +121,9 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
         onPressMediaMessage(message, deleteMessage, uri);
       },
     );
-    const _onPressReplyMessageWithThread = useFreshCallback(async (message: SendbirdUserMessage | SendbirdFileMessage) => {
+    const _onPressReplyMessageInThread = useFreshCallback(async (message: SendbirdUserMessage | SendbirdFileMessage) => {
       await onBlurFragment();
-      onPressReplyMessageWithThread(message);
+      onPressReplyMessageInThread(message);
     });
 
     useEffect(() => {
@@ -213,7 +213,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
         keyboardAvoidOffset={keyboardAvoidOffset}
         messages={messages}
         onUpdateSearchItem={onUpdateSearchItem}
-        onPressReplyMessageWithThread={_onPressReplyMessageWithThread}
+        onPressReplyMessageInThread={_onPressReplyMessageInThread}
       >
         <GroupChannelModule.Header
           shouldHideRight={navigateFromMessageSearch}
