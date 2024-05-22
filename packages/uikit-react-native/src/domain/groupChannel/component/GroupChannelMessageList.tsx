@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { useToast } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdMessage } from '@sendbird/uikit-utils';
+import { SendbirdMessage, SendbirdSendableMessage } from '@sendbird/uikit-utils';
 import { isDifferentChannel, useFreshCallback, useIsFirstMount, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import ChannelMessageList from '../../../components/ChannelMessageList';
@@ -10,7 +10,6 @@ import { MESSAGE_FOCUS_ANIMATION_DELAY, MESSAGE_SEARCH_SAFE_SCROLL_DELAY } from 
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
-import { FileMessage, UserMessage } from '@sendbird/chat/message';
 
 const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   const toast = useToast();
@@ -100,12 +99,12 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
     }
   }, [isFirstMount]);
   
-  const onPressParentMessage = useFreshCallback((message: SendbirdMessage) => {
+  const onPressParentMessage = useFreshCallback((parentMessage: SendbirdMessage, childMessage: SendbirdSendableMessage) => {
     if (onPressReplyMessageInThread && sbOptions.uikit.groupChannel.channel.replyType === 'thread'
       && sbOptions.uikit.groupChannel.channel.threadReplySelectType === 'thread') {
-      onPressReplyMessageInThread(message as FileMessage | UserMessage);
+      onPressReplyMessageInThread(parentMessage as SendbirdSendableMessage, childMessage.createdAt);
     } else {
-      const canScrollToParent = scrollToMessageWithCreatedAt(message.createdAt, true, 0);
+      const canScrollToParent = scrollToMessageWithCreatedAt(parentMessage.createdAt, true, 0);
       if (!canScrollToParent) toast.show(STRINGS.TOAST.FIND_PARENT_MSG_ERROR, 'error');
     }
   });

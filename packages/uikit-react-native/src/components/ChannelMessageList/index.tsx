@@ -60,7 +60,7 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
   onReplyInThreadMessage?: (message: HandleableMessage) => void; // only available on group channel
   onDeleteMessage: (message: HandleableMessage) => Promise<void>;
   onResendFailedMessage: (failedMessage: HandleableMessage) => Promise<HandleableMessage | void>;
-  onPressParentMessage?: (parentMessage: SendbirdMessage) => void;
+  onPressParentMessage?: (parentMessage: SendbirdMessage, childMessage: HandleableMessage) => void;
   onPressMediaMessage?: (message: SendbirdFileMessage, deleteMessage: () => Promise<void>, uri: string) => void;
 
   renderMessage: (props: {

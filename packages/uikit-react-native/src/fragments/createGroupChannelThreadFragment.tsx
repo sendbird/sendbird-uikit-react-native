@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { MessageCollection, MessageFilter } from '@sendbird/chat/groupChannel';
-import { ReplyType } from '@sendbird/chat/message';
 import { Box } from '@sendbird/uikit-react-native-foundation';
-import { useGroupChannelMessages } from '@sendbird/uikit-tools';
+import { useGroupChannelThreadMessages } from '../hooks/useGroupChannelThreadMessages';
 import type { SendbirdFileMessage, SendbirdGroupChannel, SendbirdUserMessage } from '@sendbird/uikit-utils';
 import {
   NOOP,
@@ -45,6 +44,7 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
             onBeforeUpdateFileMessage = PASS,
             channel,
             parentMessage,
+            startingPoint,
             keyboardAvoidOffset,
             sortComparator = messageComparator,
             flatListProps,
@@ -72,30 +72,23 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
       resendMessage,
       deleteMessage,
       resetWithStartingPoint,
-    } = useGroupChannelMessages(sdk, channel, {
+    } = useGroupChannelThreadMessages(sdk, channel, parentMessage,{
       shouldCountNewMessages: () => scrolledAwayFromBottomRef.current,
       onMessagesReceived(messages) {
-        const filteredMessages = messages.filter((message) => message.parentMessageId === parentMessage.messageId);
-        if (filteredMessages.length > 0) {
-          groupChannelPubSub.publish({ type: 'MESSAGES_RECEIVED', data: { messages: filteredMessages } });
-        }
+        groupChannelPubSub.publish({ type: 'MESSAGES_RECEIVED', data: { messages } });
       },
       onMessagesUpdated(messages) {
-        const filteredMessages = messages.filter((message) => message.parentMessageId === parentMessage.messageId);
-        if (filteredMessages.length > 0) {
-          groupChannelPubSub.publish({ type: 'MESSAGES_UPDATED', data: { messages: filteredMessages } });
-        }
+        groupChannelPubSub.publish({ type: 'MESSAGES_UPDATED', data: { messages } });
       },
       onChannelDeleted,
       onCurrentUserBanned: onChannelDeleted,
       collectionCreator: getCollectionCreator(channel, messageListQueryParams),
       sortComparator,
       markAsRead: confirmAndMarkAsRead,
-      replyType: ReplyType.ALL,
-      startingPoint: parentMessage.createdAt,
+      //isReactionEnabled: sbOptions?.uikit?.groupChannel.channel?.enableReactions,
+      startingPoint,
     });
     
-    const threadedMessages = messages.filter((message) => message.parentMessageId === parentMessage.messageId);
     const onBlurFragment = () => {
       return Promise.allSettled([playerService.reset(), recorderService.reset()]);
     };
@@ -187,7 +180,7 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
         parentMessage={parentMessage}
         groupChannelThreadPubSub={groupChannelPubSub}
         keyboardAvoidOffset={keyboardAvoidOffset}
-        threadedMessages={threadedMessages}
+        threadedMessages={messages}
       >
         <GroupChannelThreadModule.Header
           onPressHeaderLeft={_onPressHeaderLeft}
@@ -203,7 +196,7 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
             enableMessageGrouping={enableMessageGrouping}
             currentUserId={currentUser?.userId}
             renderMessage={renderItem}
-            messages={threadedMessages}
+            messages={messages}
             newMessages={newMessages}
             onTopReached={loadPrevious}
             onBottomReached={loadNext}

@@ -4,7 +4,7 @@ import { MessageCollection, MessageFilter } from '@sendbird/chat/groupChannel';
 import { ReplyType } from '@sendbird/chat/message';
 import { Box } from '@sendbird/uikit-react-native-foundation';
 import { useGroupChannelMessages } from '@sendbird/uikit-tools';
-import type { SendbirdFileMessage, SendbirdGroupChannel, SendbirdUserMessage } from '@sendbird/uikit-utils';
+import type { SendbirdFileMessage, SendbirdGroupChannel, SendbirdSendableMessage, SendbirdUserMessage } from '@sendbird/uikit-utils';
 import {
   NOOP,
   PASS,
@@ -121,7 +121,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
         onPressMediaMessage(message, deleteMessage, uri);
       },
     );
-    const _onPressReplyMessageInThread = useFreshCallback(async (message: SendbirdUserMessage | SendbirdFileMessage) => {
+    const _onPressReplyMessageInThread = useFreshCallback(async (message: SendbirdSendableMessage) => {
       await onBlurFragment();
       onPressReplyMessageInThread(message);
     });

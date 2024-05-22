@@ -91,11 +91,11 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
     }
   };
   
-  const onPressMessageToReply = (message?: SendbirdUserMessage | SendbirdFileMessage) => {
-    if (sbOptions.uikit.groupChannel.channel.replyType === 'thread' && message) {
-      onPressReplyMessageInThread?.(message);
+  const onPressMessageToReply = (parentMessage?: SendbirdUserMessage | SendbirdFileMessage) => {
+    if (sbOptions.uikit.groupChannel.channel.replyType === 'thread' && parentMessage) {
+      onPressReplyMessageInThread?.(parentMessage, Number.MAX_SAFE_INTEGER);
     } else if (sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
-      updateInputMode('reply', message);
+      updateInputMode('reply', parentMessage);
     }
   };
 

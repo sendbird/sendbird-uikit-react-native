@@ -151,6 +151,7 @@ export type RouteParamsUnion =
   params: {
     channelUrl: string;
     serializedMessage: object;
+    startingPoint?: number;
   };
     }
   /** OpenChannel screens **/

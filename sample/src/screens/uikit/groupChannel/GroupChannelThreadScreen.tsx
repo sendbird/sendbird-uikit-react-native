@@ -21,6 +21,7 @@ const GroupChannelThreadScreen = () => {
     <GroupChannelThreadFragment
       channel={channel}
       parentMessage={parentMessage}
+      startingPoint={params.startingPoint}
       onPressMediaMessage={(fileMessage, deleteMessage) => {
         // Navigate to media viewer
         navigation.navigate(Routes.FileViewer, {

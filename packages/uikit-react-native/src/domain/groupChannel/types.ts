@@ -10,7 +10,7 @@ import type {
   SendbirdFileMessageCreateParams,
   SendbirdFileMessageUpdateParams,
   SendbirdGroupChannel,
-  SendbirdMessage,
+  SendbirdMessage, SendbirdSendableMessage,
   SendbirdUser,
   SendbirdUserMessage,
   SendbirdUserMessageCreateParams,
@@ -115,7 +115,7 @@ export interface GroupChannelProps {
     messages: SendbirdMessage[];
     // Changing the search item will trigger the focus animation on messages.
     onUpdateSearchItem: (searchItem?: GroupChannelProps['MessageList']['searchItem']) => void;
-    onPressReplyMessageInThread: (message: SendbirdUserMessage | SendbirdFileMessage) => void;
+    onPressReplyMessageInThread: (parentMessage: SendbirdSendableMessage, startingPoint?: number) => void;
   };
 }
 
@@ -174,7 +174,7 @@ export interface GroupChannelContextsType {
       viewPosition?: number;
     }) => void;
     
-    onPressReplyMessageInThread?: (message: SendbirdUserMessage | SendbirdFileMessage) => void;
+    onPressReplyMessageInThread?: (parentMessage: SendbirdSendableMessage, startingPoint?: number) => void;
   }>;
 }
 export interface GroupChannelModule {

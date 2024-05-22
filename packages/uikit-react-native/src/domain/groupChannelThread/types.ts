@@ -26,6 +26,7 @@ export interface GroupChannelThreadProps {
   Fragment: {
     channel: SendbirdGroupChannel;
     parentMessage: SendbirdUserMessage | SendbirdFileMessage;
+    startingPoint?: number;
     onChannelDeleted: () => void;
     onPressHeaderLeft: GroupChannelThreadProps['Header']['onPressHeaderLeft'];
     onPressMediaMessage?: GroupChannelThreadProps['MessageList']['onPressMediaMessage'];
