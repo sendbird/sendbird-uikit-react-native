@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { MessageCollection, MessageFilter } from '@sendbird/chat/groupChannel';
 import { Box } from '@sendbird/uikit-react-native-foundation';
-import { useGroupChannelThreadMessages } from '../hooks/useGroupChannelThreadMessages';
 import type { SendbirdFileMessage, SendbirdGroupChannel, SendbirdUserMessage } from '@sendbird/uikit-utils';
 import {
   NOOP,
@@ -26,6 +25,7 @@ import type {
 } from '../domain/groupChannelThread/types';
 import { usePlatformService, useSendbirdChat } from '../hooks/useContext';
 import pubsub from '../utils/pubsub';
+import { useGroupChannelThreadMessages} from '../hooks/useGroupChannelThreadMessages';
 
 const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThreadModule>): GroupChannelThreadFragment => {
   const GroupChannelThreadModule = createGroupChannelThreadModule(initModule);
