@@ -207,6 +207,10 @@ export function isImage(filePath: string, mimeType?: string) {
 }
 
 export function shouldCompressImage(mime: string, compressionEnabled = true) {
-  const extension = getFileExtensionFromMime(mime);
+  const extension = isJPG(mime) ? 'jpg' : getFileExtensionFromMime(mime);
   return Boolean(extension.match(/jpg|jpeg|png/i) && compressionEnabled);
+}
+
+function isJPG(mime: string) {
+  return mime === 'image/jpg';
 }
