@@ -7,6 +7,7 @@ import {
   getMimeFromFileExtension,
   normalizeFileName,
   parseMimeType,
+  shouldCompressImage,
 } from '../../shared/file';
 
 describe('getFileType', function () {
@@ -267,5 +268,26 @@ describe('getFileExtensionFromUri', () => {
         'https://user-images.githubusercontent.com/26326015/253041558-3028125e-a016-402c-a9bd-d30b1831d19b.jpg',
       ),
     ).resolves.toEqual('.jpg');
+  });
+});
+
+describe('shouldCompressImage', () => {
+  it('should allow image compression for jpg, jpeg, png', () => {
+    expect(shouldCompressImage('image/jpeg')).toBe(true);
+    expect(shouldCompressImage('image/png')).toBe(true);
+  });
+  it('should accept edge cases for jpg', () => {
+    expect(shouldCompressImage('image/jpg')).toBe(true);
+  });
+  it('should not allow image compression for other MIME types', () => {
+    expect(shouldCompressImage('image/gif')).toBe(false);
+    expect(shouldCompressImage('video/mp4')).toBe(false);
+    expect(shouldCompressImage('audio/mpeg')).toBe(false);
+    expect(shouldCompressImage('application/pdf')).toBe(false);
+  });
+  it('should return false with compression disabled', () => {
+    expect(shouldCompressImage('image/jpeg', false)).not.toBe(true);
+    expect(shouldCompressImage('image/jpg', false)).not.toBe(true);
+    expect(shouldCompressImage('image/png', false)).not.toBe(true);
   });
 });

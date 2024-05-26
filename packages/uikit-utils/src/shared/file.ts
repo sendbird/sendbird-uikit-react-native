@@ -207,6 +207,17 @@ export function isImage(filePath: string, mimeType?: string) {
 }
 
 export function shouldCompressImage(mime: string, compressionEnabled = true) {
-  const extension = getFileExtensionFromMime(mime);
+  const extension = isJPG(mime) ? 'jpg' : getFileExtensionFromMime(mime);
   return Boolean(extension.match(/jpg|jpeg|png/i) && compressionEnabled);
+}
+
+/**
+ * https://github.com/gathertown/sendbird-uikit-react-native/pull/29
+ * This function is used solely for the purpose of classifying `image/jpg`.
+ *
+ * We only use it to determine whether image compression is applied because `image/jpg` is not a MIME type standard.
+ * Therefore, it is not reflected in `EXTENSION_MIME_MAP`, which extracts MIME types uploaded to the server. (to comply standard)
+ * */
+function isJPG(mime: string) {
+  return mime === 'image/jpg';
 }
