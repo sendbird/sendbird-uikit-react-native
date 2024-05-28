@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.5.2...v3.5.3) (2024-05-28)
+
+### Bug Fixes
+
+- when frozen or muted, input should be disabled ([712ae97](https://github.com/sendbird/sendbird-uikit-react-native/commit/712ae97bdff6f4ed3d77562d6a2537d40d85e059))
+
 ## [3.5.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.5.1...v3.5.2) (2024-04-23)
 
 ### Features
