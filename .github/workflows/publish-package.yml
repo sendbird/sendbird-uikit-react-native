@@ -54,8 +54,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          lerna version ${{ github.event.inputs.version }} --yes
-          lerna publish from-git --yes
+          yarn lerna version ${{ github.event.inputs.version }} --yes
+          yarn lerna publish from-git --yes
       - name: 'approve a pull request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
