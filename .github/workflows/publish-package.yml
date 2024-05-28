@@ -1,0 +1,63 @@
+name: publish package to npm
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'version'
+        required: true
+        type: string
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+      - name: 'validation'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const permission = await github.repos.getCollaboratorPermissionLevel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              username: context.actor
+            });
+            if (permission.data.permission !== 'admin' && permission.data.permission !== 'write') {
+              core.setFailed(`User ${context.actor} does not have write or admin permissions to this repository.`);
+            }
+            const currentBranch = context.ref.replace('refs/heads/', '');
+            if (currentBranch !== `release/${{ github.event.inputs.version }}`) {
+              core.setFailed(`Current branch ${currentBranch} does not match release/${{ github.event.inputs.version }}`);
+            }
+            const pullRequests = await github.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              sort: 'created',
+              direction: 'desc',
+            });
+            const pr = pullRequests.data.find(pr => pr.head.ref === currentBranch && pr.base.ref === 'main');
+            if (!pr) {
+              core.setFailed(`No open pull request found for ${currentBranch} to main`);
+            }
+            core.exportVariable('PR_NUMBER', pr.number);
+      - run: yarn install --frozen-lockfile
+      - name: 'set environments'
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.npm_token }}" >> .npmrc
+          git config --global user.email "sha.sdk_deployment@sendbird.com"
+          git config --global user.name "sendbird-sdk-deployment"
+      - name: 'publish to npm'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          lerna version ${{ github.event.inputs.version }} --yes
+          lerna publish from-git --yes
+      - name: 'approve a pull request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr review ${{ env.PR_NUMBER }} --approve --body "approved by automation"

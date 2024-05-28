@@ -19,9 +19,9 @@ jobs:
       matrix:
         node-version: [16.x]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -31,14 +31,14 @@ jobs:
 
       - name: Check cached node_modules
         id: check_cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ env.CACHE_NODE_MODULES_PATH }}
           key: ${{ steps.lockfile_hash.outputs.hash }}
 
       - name: Install dependencies
         if: steps.check_cache.outputs.cache-hit == ''
-        run: yarn install --immutable
+        run: yarn install --frozen-lockfile
     outputs:
       cache_node_modules_key: ${{ steps.lockfile_hash.outputs.hash }}
 
@@ -49,14 +49,14 @@ jobs:
       matrix:
         node-version: [16.x]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Check cached node_modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ env.CACHE_NODE_MODULES_PATH }}
           key: ${{ needs.prepare.outputs.cache_node_modules_key }}
@@ -71,14 +71,14 @@ jobs:
       matrix:
         node-version: [16.x, 18.x]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Check cached node_modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ env.CACHE_NODE_MODULES_PATH }}
           key: ${{ needs.prepare.outputs.cache_node_modules_key }}
@@ -93,14 +93,14 @@ jobs:
       matrix:
         node-version: [16.x]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Check cached node_modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ env.CACHE_NODE_MODULES_PATH }}
           key: ${{ needs.prepare.outputs.cache_node_modules_key }}
@@ -109,7 +109,7 @@ jobs:
         run: yarn test --collect-coverage
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
@@ -121,14 +121,14 @@ jobs:
       matrix:
         node-version: [16.x]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Check cached node_modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ env.CACHE_NODE_MODULES_PATH }}
           key: ${{ needs.prepare.outputs.cache_node_modules_key }}
