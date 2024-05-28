@@ -20,7 +20,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const permission = await github.repos.getCollaboratorPermissionLevel({
+            const permission = await github.rest.repos.getCollaboratorPermissionLevel({
               owner: context.repo.owner,
               repo: context.repo.repo,
               username: context.actor
@@ -32,7 +32,7 @@ jobs:
             if (currentBranch !== `release/${{ github.event.inputs.version }}`) {
               core.setFailed(`Current branch ${currentBranch} does not match release/${{ github.event.inputs.version }}`);
             }
-            const pullRequests = await github.pulls.list({
+            const pullRequests = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: 'open',
@@ -54,8 +54,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          lerna version ${{ github.event.inputs.version }} --yes
-          lerna publish from-git --yes
+          yarn lerna version ${{ github.event.inputs.version }} --yes
+          yarn lerna publish from-git --yes
       - name: 'approve a pull request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

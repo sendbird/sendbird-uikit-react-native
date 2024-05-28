@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.5.2...v3.5.3) (2024-05-28)
+
+### Bug Fixes
+
+- handle image/jpg mime type to determine image compress properly ([37f346d](https://github.com/sendbird/sendbird-uikit-react-native/commit/37f346d2483245c4653cde098537b50c974b4241))
+
 ## [3.5.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.5.1...v3.5.2) (2024-04-23)
 
 **Note:** Version bump only for package @sendbird/uikit-utils
