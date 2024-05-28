@@ -1,4 +1,4 @@
-name: deployment trigger
+name: publish sample application
 
 on:
   workflow_dispatch:
@@ -64,7 +64,7 @@ jobs:
 #          key: ${{ steps.lockfile_hash.outputs.hash }}
 #      - name: Install dependencies
 #        if: steps.check_cache.outputs.cache-hit == ''
-#        run: yarn install --immutable
+#        run: yarn install --frozen-lockfile
 #      - name: Create env.ts
 #        run:
 #          echo "export const APP_ID = '${{ secrets.sendbird_app_id }}';" >> sample/src/env.ts
@@ -117,7 +117,7 @@ jobs:
 #      - name: Install dependencies
 #        if: steps.check_cache.outputs.cache-hit == ''
 #        run:
-#          yarn install --immutable
+#          yarn install --frozen-lockfile
 #      - name: Install pods
 #        run: cd sample/ios && pod install
 #      - name: Create env.ts
