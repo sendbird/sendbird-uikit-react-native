@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, useToast } from '@sendbird/uikit-react-native-foundation';
-import { useGroupChannelThreadMessages } from '../hooks/useGroupChannelThreadMessages/useGroupChannelThreadMessages';
+import { useGroupChannelThreadMessages } from '@sendbird/uikit-tools';
 import type { SendbirdFileMessage, SendbirdGroupChannel, SendbirdUserMessage } from '@sendbird/uikit-utils';
 import { confirmAndMarkAsRead, messageComparator, NOOP, PASS, useFreshCallback, useRefTracker } from '@sendbird/uikit-utils';
 
