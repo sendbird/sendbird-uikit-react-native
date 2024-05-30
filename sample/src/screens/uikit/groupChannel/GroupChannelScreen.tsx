@@ -97,7 +97,7 @@ const GroupChannelScreen = () => {
         // Navigate to group channel settings
         navigation.push(Routes.GroupChannelSettings, params);
       }}
-      onPressReplyMessageInThread={(message,startingPoint) => {
+      onPressReplyMessageInThread={(message, startingPoint) => {
         // Navigate to thread
         if (message) {
           navigation.push(Routes.GroupChannelThread, {
@@ -106,8 +106,7 @@ const GroupChannelScreen = () => {
             startingPoint: startingPoint,
           });
         }
-      }
-      }
+      }}
       // messageListQueryParams={{
       //   prevResultLimit: 20,
       //   customTypesFilter: ['filter'],

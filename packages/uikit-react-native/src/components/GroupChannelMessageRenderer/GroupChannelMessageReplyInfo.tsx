@@ -1,6 +1,15 @@
 import React from 'react';
+
 import { User } from '@sendbird/chat';
-import { Avatar, Box, createStyleSheet, Icon, PressBox, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import {
+  Avatar,
+  Box,
+  Icon,
+  PressBox,
+  Text,
+  createStyleSheet,
+  useUIKitTheme,
+} from '@sendbird/uikit-react-native-foundation';
 import { SendbirdFileMessage, SendbirdGroupChannel, SendbirdMessage, SendbirdUserMessage } from '@sendbird/uikit-utils';
 
 import { useLocalization } from '../../hooks/useContext';
@@ -15,21 +24,25 @@ type Props = {
 
 const createRepliedUserAvatars = (mostRepliedUsers: User[]) => {
   if (!mostRepliedUsers || mostRepliedUsers.length === 0) return null;
-  
+
   const { palette } = useUIKitTheme();
-  
+
   return mostRepliedUsers.slice(0, AVATAR_LIMIT).map((user, index) => {
     if (index < AVATAR_LIMIT - 1) {
-      return <Box style={styles.avatarContainer} key={index}>
-        <Avatar size={20} uri={user?.profileUrl} containerStyle={styles.avatar}></Avatar>
-      </Box>;
-    } else {
-      return <Box style={styles.avatarContainer} key={index}>
-        <Avatar size={20} uri={user?.profileUrl} containerStyle={styles.avatar}></Avatar>
-        <Box style={styles.avatarOverlay} backgroundColor={palette.overlay01}>
-          <Icon icon={'plus'} size={14} style={styles.plusIcon} color={'white'} />
+      return (
+        <Box style={styles.avatarContainer} key={index}>
+          <Avatar size={20} uri={user?.profileUrl} containerStyle={styles.avatar}></Avatar>
         </Box>
-      </Box>;
+      );
+    } else {
+      return (
+        <Box style={styles.avatarContainer} key={index}>
+          <Avatar size={20} uri={user?.profileUrl} containerStyle={styles.avatar}></Avatar>
+          <Box style={styles.avatarOverlay} backgroundColor={palette.overlay01}>
+            <Icon icon={'plus'} size={14} style={styles.plusIcon} color={'white'} />
+          </Box>
+        </Box>
+      );
     }
   });
 };
@@ -37,22 +50,24 @@ const createRepliedUserAvatars = (mostRepliedUsers: User[]) => {
 const GroupChannelMessageReplyInfo = ({ channel, message, onPress }: Props) => {
   const { STRINGS } = useLocalization();
   const { select, palette } = useUIKitTheme();
-  
+
   if (!channel || !message.threadInfo || !message.threadInfo.replyCount) return null;
-  
+
   const replyCountText = STRINGS.GROUP_CHANNEL_THREAD.REPLAY_POSTFIX(message.threadInfo.replyCount || 0);
   const onPressReply = () => {
     onPress?.(message as SendbirdUserMessage | SendbirdFileMessage);
   };
-  
+
   const renderAvatars = createRepliedUserAvatars(message.threadInfo.mostRepliedUsers);
-  
-  return <PressBox onPress={onPressReply} style={styles.messageContainer}>
-    {renderAvatars}
-    <Text caption3 color={select({ light: palette.primary300, dark: palette.primary200 })} style={styles.message}>
-      {replyCountText}
-    </Text>
-  </PressBox>;
+
+  return (
+    <PressBox onPress={onPressReply} style={styles.messageContainer}>
+      {renderAvatars}
+      <Text caption3 color={select({ light: palette.primary300, dark: palette.primary200 })} style={styles.message}>
+        {replyCountText}
+      </Text>
+    </PressBox>
+  );
 };
 
 const styles = createStyleSheet({

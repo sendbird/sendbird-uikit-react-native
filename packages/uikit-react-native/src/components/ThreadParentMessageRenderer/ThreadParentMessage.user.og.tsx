@@ -1,39 +1,46 @@
 import React from 'react';
-import { Box, createStyleSheet, ImageWithPlaceholder, PressBox, RegexText, type RegexTextPattern, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+
+import {
+  Box,
+  ImageWithPlaceholder,
+  PressBox,
+  RegexText,
+  type RegexTextPattern,
+  Text,
+  createStyleSheet,
+  useUIKitTheme,
+} from '@sendbird/uikit-react-native-foundation';
 import { SendbirdUserMessage, urlRegexStrict, useFreshCallback } from '@sendbird/uikit-utils';
+
 import { useSendbirdChat } from './../../hooks/useContext';
 import { ThreadParentMessageRendererProps } from './index';
 
-type Props = ThreadParentMessageRendererProps<
-  {
-    regexTextPatterns?: RegexTextPattern[];
-    renderRegexTextChildren?: (message: SendbirdUserMessage) => string;
-  }
->;
+type Props = ThreadParentMessageRendererProps<{
+  regexTextPatterns?: RegexTextPattern[];
+  renderRegexTextChildren?: (message: SendbirdUserMessage) => string;
+}>;
 
 const ThreadParentMessageUserOg = (props: Props) => {
   const userMessage: SendbirdUserMessage = props.parentMessage as SendbirdUserMessage;
   if (!userMessage) return null;
-  
+
   const { sbOptions } = useSendbirdChat();
   const { select, colors, palette } = useUIKitTheme();
   const enableOgtag = sbOptions.uikitWithAppInfo.groupChannel.channel.enableOgtag;
-  const onPressMessage = (userMessage: SendbirdUserMessage) => useFreshCallback(() => {
-    typeof userMessage.ogMetaData?.url === 'string' && props.onPressURL?.(userMessage.ogMetaData.url);
-  });
-  
+  const onPressMessage = (userMessage: SendbirdUserMessage) =>
+    useFreshCallback(() => {
+      typeof userMessage.ogMetaData?.url === 'string' && props.onPressURL?.(userMessage.ogMetaData.url);
+    });
+
   return (
     <Box>
-      <PressBox
-        activeOpacity={0.85}
-        onPress={onPressMessage(userMessage)}
-      >
+      <PressBox activeOpacity={0.85} onPress={onPressMessage(userMessage)}>
         <Text body3 color={colors.onBackground01} suppressHighlighting>
           <RegexText
             body3
             color={colors.onBackground01}
             patterns={[
-              ...props.regexTextPatterns ?? [],
+              ...(props.regexTextPatterns ?? []),
               {
                 regex: urlRegexStrict,
                 replacer({ match, parentProps, keyPrefix, index }) {
@@ -60,32 +67,31 @@ const ThreadParentMessageUserOg = (props: Props) => {
           )}
         </Text>
       </PressBox>
-      {userMessage.ogMetaData && enableOgtag && <PressBox
-        activeOpacity={0.85}
-        onPress={onPressMessage(userMessage)}
-      >
-        <Box>
-          {!!userMessage.ogMetaData.defaultImage && (
-            <ImageWithPlaceholder style={styles.ogImage} source={{ uri: userMessage.ogMetaData.defaultImage.url }} />
-          )}
-          <Box
-            style={styles.ogContainer}
-            backgroundColor={select({ dark: palette.background400, light: palette.background100 })}
-          >
-            <Text numberOfLines={3} body2 color={colors.onBackground01} style={styles.ogTitle}>
-              {userMessage.ogMetaData.title}
-            </Text>
-            {!!userMessage.ogMetaData.description && (
-              <Text numberOfLines={1} caption2 color={colors.onBackground01} style={styles.ogDesc}>
-                {userMessage.ogMetaData.description}
-              </Text>
+      {userMessage.ogMetaData && enableOgtag && (
+        <PressBox activeOpacity={0.85} onPress={onPressMessage(userMessage)}>
+          <Box>
+            {!!userMessage.ogMetaData.defaultImage && (
+              <ImageWithPlaceholder style={styles.ogImage} source={{ uri: userMessage.ogMetaData.defaultImage.url }} />
             )}
-            <Text numberOfLines={1} caption2 color={colors.onBackground02}>
-              {userMessage.ogMetaData.url}
-            </Text>
+            <Box
+              style={styles.ogContainer}
+              backgroundColor={select({ dark: palette.background400, light: palette.background100 })}
+            >
+              <Text numberOfLines={3} body2 color={colors.onBackground01} style={styles.ogTitle}>
+                {userMessage.ogMetaData.title}
+              </Text>
+              {!!userMessage.ogMetaData.description && (
+                <Text numberOfLines={1} caption2 color={colors.onBackground01} style={styles.ogDesc}>
+                  {userMessage.ogMetaData.description}
+                </Text>
+              )}
+              <Text numberOfLines={1} caption2 color={colors.onBackground02}>
+                {userMessage.ogMetaData.url}
+              </Text>
+            </Box>
           </Box>
-        </Box>
-      </PressBox>}
+        </PressBox>
+      )}
     </Box>
   );
 };

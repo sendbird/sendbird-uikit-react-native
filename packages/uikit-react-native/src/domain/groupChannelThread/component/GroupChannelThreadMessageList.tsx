@@ -1,6 +1,7 @@
+import React, { useContext, useEffect, useLayoutEffect } from 'react';
+
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { isDifferentChannel, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
-import React, { useContext, useEffect, useLayoutEffect } from 'react';
 
 import ChannelMessageList from '../../../components/ChannelMessageList';
 import { useSendbirdChat } from '../../../hooks/useContext';
@@ -12,13 +13,13 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
   const { setMessageToEdit } = useContext(GroupChannelThreadContexts.Fragment);
   const { subscribe } = useContext(GroupChannelThreadContexts.PubSub);
   const { flatListRef, lazyScrollToBottom, lazyScrollToIndex } = useContext(GroupChannelThreadContexts.MessageList);
-  
+
   const id = useUniqHandlerId('GroupChannelThreadMessageList');
-  
+
   const scrollToBottom = useFreshCallback(async (animated = false) => {
     if (props.hasNext()) {
       props.onScrolledAwayFromBottom(false);
-      
+
       await props.onResetMessageList();
       props.onScrolledAwayFromBottom(false);
       lazyScrollToBottom({ animated });
@@ -26,7 +27,7 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
       lazyScrollToBottom({ animated });
     }
   });
-  
+
   useLayoutEffect(() => {
     if (props.startingPoint) {
       const foundMessageIndex = props.messages.findIndex((it) => it.createdAt === props.startingPoint);
@@ -36,7 +37,7 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
       }
     }
   }, [props.startingPoint]);
-  
+
   useChannelHandler(sdk, id, {
     onReactionUpdated(channel, event) {
       if (isDifferentChannel(channel, props.channel)) return;
@@ -48,7 +49,7 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
       }
     },
   });
-  
+
   useEffect(() => {
     return subscribe(({ type }) => {
       switch (type) {
@@ -67,7 +68,7 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
       }
     });
   }, [props.scrolledAwayFromBottom]);
-  
+
   return (
     <ChannelMessageList
       {...props}

@@ -61,7 +61,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     nextMessage,
   );
   const variant = isMyMessage(message, currentUser?.userId) ? 'outgoing' : 'incoming';
-  
+
   const reactionChildren = useIIFE(() => {
     const configs = sbOptions.uikitWithAppInfo.groupChannel.channel;
     if (
@@ -73,13 +73,13 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     }
     return null;
   });
-  
+
   const renderReplyInfo = useIIFE(() => {
     if (sbOptions.uikit.groupChannel.channel.replyType !== 'thread') return null;
     if (!channel || !message.threadInfo || !message.threadInfo.replyCount) return null;
     return <GroupChannelMessageReplyInfo channel={channel} message={message} onPress={onReplyInThreadMessage} />;
   });
-  
+
   const resetPlayer = async () => {
     playerUnsubscribes.current.forEach((unsubscribe) => {
       try {
@@ -158,15 +158,16 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     sendingStatus: isMyMessage(message, currentUser?.userId) ? (
       <GroupChannelMessageOutgoingStatus channel={channel} message={message} />
     ) : null,
-    parentMessage: (!hideParentMessage && shouldRenderParentMessage(message)) ? (
-      <GroupChannelMessageParentMessage
-        channel={channel}
-        message={message.parentMessage}
-        variant={variant}
-        childMessage={message}
-        onPress={onPressParentMessage}
-      />
-    ) : null,
+    parentMessage:
+      !hideParentMessage && shouldRenderParentMessage(message) ? (
+        <GroupChannelMessageParentMessage
+          channel={channel}
+          message={message.parentMessage}
+          variant={variant}
+          childMessage={message}
+          onPress={onPressParentMessage}
+        />
+      ) : null,
     strings: {
       edited: STRINGS.GROUP_CHANNEL.MESSAGE_BUBBLE_EDITED_POSTFIX,
       senderName: ('sender' in message && message.sender.nickname) || STRINGS.LABELS.USER_NO_NAME,

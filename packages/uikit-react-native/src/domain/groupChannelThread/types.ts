@@ -32,23 +32,23 @@ export interface GroupChannelThreadProps {
     onChannelDeleted: () => void;
     onPressHeaderLeft: GroupChannelThreadProps['Header']['onPressHeaderLeft'];
     onPressMediaMessage?: GroupChannelThreadProps['MessageList']['onPressMediaMessage'];
-    
+
     onBeforeSendUserMessage?: OnBeforeHandler<SendbirdUserMessageCreateParams>;
     onBeforeSendFileMessage?: OnBeforeHandler<SendbirdFileMessageCreateParams>;
     onBeforeUpdateUserMessage?: OnBeforeHandler<SendbirdUserMessageUpdateParams>;
     onBeforeUpdateFileMessage?: OnBeforeHandler<SendbirdFileMessageUpdateParams>;
-    
+
     renderMessage?: GroupChannelThreadProps['MessageList']['renderMessage'];
     renderNewMessagesButton?: GroupChannelThreadProps['MessageList']['renderNewMessagesButton'];
     renderScrollToBottomButton?: GroupChannelThreadProps['MessageList']['renderScrollToBottomButton'];
-    
+
     enableMessageGrouping?: GroupChannelThreadProps['MessageList']['enableMessageGrouping'];
-    
+
     keyboardAvoidOffset?: GroupChannelThreadProps['Provider']['keyboardAvoidOffset'];
     flatListProps?: GroupChannelThreadProps['MessageList']['flatListProps'];
     sortComparator?: UseGroupChannelMessagesOptions['sortComparator'];
     searchItem?: GroupChannelThreadProps['MessageList']['searchItem'];
-    
+
     /**
      * @description You can specify the query parameters for the message list.
      * @example
@@ -64,7 +64,7 @@ export interface GroupChannelThreadProps {
     onPressHeaderLeft: () => void;
   };
   ParentMessageInfo: {
-    channel: SendbirdGroupChannel,
+    channel: SendbirdGroupChannel;
     currentUserId?: string;
     onPressContextMenu?: () => void;
     onDeleteMessage: (message: SendbirdUserMessage | SendbirdFileMessage) => Promise<void>;
@@ -106,7 +106,7 @@ export interface GroupChannelThreadProps {
     | 'AttachmentsButton',
     'inputDisabled'
   >;
-  
+
   SuggestedMentionList: SuggestedMentionListProps;
   Provider: {
     channel: SendbirdGroupChannel;
@@ -185,18 +185,18 @@ export type GroupChannelThreadFragment = React.FC<GroupChannelThreadProps['Fragm
 
 export type GroupChannelThreadPubSubContextPayload =
   | {
-  type: 'MESSAGE_SENT_PENDING' | 'MESSAGE_SENT_SUCCESS';
-  data: {
-    message: SendbirdUserMessage | SendbirdFileMessage;
-  };
-}
+      type: 'MESSAGE_SENT_PENDING' | 'MESSAGE_SENT_SUCCESS';
+      data: {
+        message: SendbirdUserMessage | SendbirdFileMessage;
+      };
+    }
   | {
-  type: 'MESSAGES_RECEIVED' | 'MESSAGES_UPDATED';
-  data: {
-    messages: SendbirdMessage[];
-  };
-}
+      type: 'MESSAGES_RECEIVED' | 'MESSAGES_UPDATED';
+      data: {
+        messages: SendbirdMessage[];
+      };
+    }
   | {
-  type: 'TYPING_BUBBLE_RENDERED';
-  data?: undefined;
-};
+      type: 'TYPING_BUBBLE_RENDERED';
+      data?: undefined;
+    };

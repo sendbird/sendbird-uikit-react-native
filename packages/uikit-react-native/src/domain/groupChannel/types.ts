@@ -10,7 +10,8 @@ import type {
   SendbirdFileMessageCreateParams,
   SendbirdFileMessageUpdateParams,
   SendbirdGroupChannel,
-  SendbirdMessage, SendbirdSendableMessage,
+  SendbirdMessage,
+  SendbirdSendableMessage,
   SendbirdUser,
   SendbirdUserMessage,
   SendbirdUserMessageCreateParams,
@@ -173,7 +174,7 @@ export interface GroupChannelContextsType {
       timeout?: number;
       viewPosition?: number;
     }) => void;
-    
+
     onPressReplyMessageInThread?: (parentMessage: SendbirdSendableMessage, startingPoint?: number) => void;
   }>;
 }

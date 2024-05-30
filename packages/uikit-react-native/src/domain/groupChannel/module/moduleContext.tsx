@@ -90,7 +90,7 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
       return;
     }
   };
-  
+
   const onPressMessageToReply = (parentMessage?: SendbirdUserMessage | SendbirdFileMessage) => {
     if (sbOptions.uikit.groupChannel.channel.replyType === 'thread' && parentMessage) {
       onPressReplyMessageInThread?.(parentMessage, Number.MAX_SAFE_INTEGER);

@@ -75,13 +75,21 @@ const createReactionButtons = (
   return buttons;
 };
 
-const MessageReactionAddon = ({ channel, message, reactionAddonType = 'default'}: { channel: SendbirdBaseChannel; message: SendbirdBaseMessage, reactionAddonType?: ReactionAddonType }) => {
+const MessageReactionAddon = ({
+  channel,
+  message,
+  reactionAddonType = 'default',
+}: {
+  channel: SendbirdBaseChannel;
+  message: SendbirdBaseMessage;
+  reactionAddonType?: ReactionAddonType;
+}) => {
   const { colors } = useUIKitTheme();
   const { emojiManager, currentUser } = useSendbirdChat();
   const { openReactionList, openReactionUserList } = useReaction();
-  
+
   if (reactionAddonType === 'default' && !message.reactions?.length) return null;
-  
+
   const reactionButtons = createReactionButtons(
     channel,
     message,
@@ -91,9 +99,10 @@ const MessageReactionAddon = ({ channel, message, reactionAddonType = 'default'}
     (focusIndex) => openReactionUserList({ channel, message, focusIndex }),
     currentUser?.userId,
   );
-  
-  const containerStyle = reactionAddonType === 'default' ? styles.reactionContainer : styles.reactionThreadParentMessageContainer;
-  
+
+  const containerStyle =
+    reactionAddonType === 'default' ? styles.reactionContainer : styles.reactionThreadParentMessageContainer;
+
   return (
     <Pressable
       style={[

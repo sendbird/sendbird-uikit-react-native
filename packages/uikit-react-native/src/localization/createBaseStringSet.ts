@@ -12,8 +12,8 @@ import {
   getMessageType,
   getOpenChannelParticipants,
   getOpenChannelTitle,
-  isVoiceMessage,
   getReplyCountFormat,
+  isVoiceMessage,
 } from '@sendbird/uikit-utils';
 
 import { UNKNOWN_USER_ID } from '../constants';
@@ -133,15 +133,15 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       HEADER_SUBTITLE: (uid, channel) => getGroupChannelTitle(uid, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       LIST_DATE_SEPARATOR: (date, locale) => getDateSeparatorFormat(date, locale ?? dateLocale),
       LIST_BUTTON_NEW_MSG: (newMessages) => `${newMessages.length} new messages`,
-      
+
       MESSAGE_BUBBLE_TIME: (message, locale) => getMessageTimeFormat(new Date(message.createdAt), locale ?? dateLocale),
       MESSAGE_BUBBLE_FILE_TITLE: (message) => message.name,
       MESSAGE_BUBBLE_EDITED_POSTFIX: ' (edited)',
       MESSAGE_BUBBLE_UNKNOWN_TITLE: () => '(Unknown message type)',
       MESSAGE_BUBBLE_UNKNOWN_DESC: () => 'Cannot read this message.',
-      
-      REPLAY_POSTFIX: (replyCount:number) => getReplyCountFormat(replyCount),
-      
+
+      REPLAY_POSTFIX: (replyCount: number) => getReplyCountFormat(replyCount),
+
       MENTION_LIMITED: (mentionLimit) => `You can have up to ${mentionLimit} mentions per message.`,
       ...overrides?.GROUP_CHANNEL_THREAD,
     },

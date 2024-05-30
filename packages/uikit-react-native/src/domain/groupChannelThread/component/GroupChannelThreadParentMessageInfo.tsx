@@ -1,14 +1,40 @@
+import { format } from 'date-fns';
 import React, { useContext } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
-import { Avatar, BottomSheetItem, createStyleSheet, Divider, Icon, Text, useAlert, useBottomSheet, useToast, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import {
+  Avatar,
+  BottomSheetItem,
+  Divider,
+  Icon,
+  Text,
+  createStyleSheet,
+  useAlert,
+  useBottomSheet,
+  useToast,
+  useUIKitTheme,
+} from '@sendbird/uikit-react-native-foundation';
+import {
+  Logger,
+  SendbirdFileMessage,
+  SendbirdMessage,
+  SendbirdUserMessage,
+  getAvailableUriFromFileMessage,
+  getFileExtension,
+  getFileType,
+  isMyMessage,
+  isVoiceMessage,
+  shouldRenderReaction,
+  toMegabyte,
+} from '@sendbird/uikit-utils';
+
+import ThreadParentMessageRenderer, {
+  ThreadParentMessageRendererProps,
+} from '../../../components/ThreadParentMessageRenderer';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../../hooks/useContext';
-import type { GroupChannelThreadProps } from '../types';
-import { GroupChannelThreadContexts } from '../module/moduleContext';
-import { format } from 'date-fns';
-import ThreadParentMessageRenderer, { ThreadParentMessageRendererProps } from '../../../components/ThreadParentMessageRenderer';
-import { getAvailableUriFromFileMessage, getFileExtension, getFileType, isMyMessage, isVoiceMessage, Logger, SendbirdFileMessage, SendbirdMessage, SendbirdUserMessage, shouldRenderReaction, toMegabyte } from '@sendbird/uikit-utils';
 import SBUUtils from '../../../libs/SBUUtils';
+import { GroupChannelThreadContexts } from '../module/moduleContext';
+import type { GroupChannelThreadProps } from '../types';
 import { ReactionAddons } from './../../../components/ReactionAddons';
 
 type PressActions = { onPress?: () => void; onLongPress?: () => void; bottomSheetItem?: BottomSheetItem };
@@ -20,9 +46,9 @@ const GroupChannelThreadParentMessageInfo = (props: GroupChannelThreadProps['Par
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
   const { sbOptions } = useSendbirdChat();
-  
+
   const nickName = parentMessage.sender?.nickname || STRINGS.LABELS.USER_NO_NAME;
-  const messageTimestamp = format(new Date(parentMessage.updatedAt), 'MMM dd \'at\' h:mm a');
+  const messageTimestamp = format(new Date(parentMessage.updatedAt), "MMM dd 'at' h:mm a");
   const replyCountText = STRINGS.GROUP_CHANNEL_THREAD.REPLAY_POSTFIX(parentMessage.threadInfo?.replyCount || 0);
   const createMessagePressActions = useCreateMessagePressActions({
     channel: props.channel,
@@ -32,24 +58,26 @@ const GroupChannelThreadParentMessageInfo = (props: GroupChannelThreadProps['Par
     onEditMessage: setMessageToEdit,
   });
   const { onPress, onLongPress, bottomSheetItem } = createMessagePressActions({ message: parentMessage });
-  
+
   const renderMessageInfoAndMenu = () => {
     return (
       <View style={styles.infoAndMenuContainer}>
         <Avatar size={34} uri={parentMessage.sender?.profileUrl} />
         <View style={styles.userNickAndTimeContainer}>
-          <Text h2 color={colors.onBackground01} numberOfLines={1} style={styles.userNickname}>{nickName}</Text>
-          <Text caption2 color={colors.onBackground03} style={styles.messageTime}>{messageTimestamp}</Text>
+          <Text h2 color={colors.onBackground01} numberOfLines={1} style={styles.userNickname}>
+            {nickName}
+          </Text>
+          <Text caption2 color={colors.onBackground03} style={styles.messageTime}>
+            {messageTimestamp}
+          </Text>
         </View>
-        <TouchableOpacity
-          activeOpacity={0.7} onPress={bottomSheetItem ? onLongPress : undefined}
-        >
+        <TouchableOpacity activeOpacity={0.7} onPress={bottomSheetItem ? onLongPress : undefined}>
           <Icon icon={'more'} />
         </TouchableOpacity>
       </View>
     );
   };
-  
+
   const renderReplyCount = (replyCountText: string) => {
     if (replyCountText) {
       return (
@@ -64,29 +92,33 @@ const GroupChannelThreadParentMessageInfo = (props: GroupChannelThreadProps['Par
       return null;
     }
   };
-  
+
   const renderReactionAddons = () => {
     const configs = sbOptions.uikitWithAppInfo.groupChannel.channel;
     if (shouldRenderReaction(channel, channel.isSuper ? configs.enableReactionsSupergroup : configs.enableReactions)) {
-      return <View style={styles.reactionButtonContainer}>
-        <ReactionAddons.Message channel={props.channel} message={parentMessage} reactionAddonType={'thread_parent_message'}></ReactionAddons.Message>
-      </View>;
+      return (
+        <View style={styles.reactionButtonContainer}>
+          <ReactionAddons.Message
+            channel={props.channel}
+            message={parentMessage}
+            reactionAddonType={'thread_parent_message'}
+          ></ReactionAddons.Message>
+        </View>
+      );
     } else {
       return null;
     }
   };
-  
+
   const messageProps: ThreadParentMessageRendererProps = {
     parentMessage,
     onPress,
     onLongPress,
   };
-  
+
   return (
     <View>
-      <View style={styles.container}>
-        {renderMessageInfoAndMenu()}
-      </View>
+      <View style={styles.container}>{renderMessageInfoAndMenu()}</View>
       <View style={styles.messageContainer}>
         <ThreadParentMessageRenderer {...messageProps}></ThreadParentMessageRenderer>
       </View>
@@ -142,43 +174,40 @@ const styles = createStyleSheet({
 });
 
 const useCreateMessagePressActions = ({
-                                        channel,
-                                        currentUserId,
-                                        onDeleteMessage,
-                                        onPressMediaMessage,
-                                        onEditMessage,
-                                      }: Pick<
+  channel,
+  currentUserId,
+  onDeleteMessage,
+  onPressMediaMessage,
+  onEditMessage,
+}: Pick<
   GroupChannelThreadProps['ParentMessageInfo'],
-  | 'channel'
-  | 'currentUserId'
-  | 'onDeleteMessage'
-  | 'onPressMediaMessage'
-> & { onEditMessage: (message: HandleableMessage) => void; }): CreateMessagePressActions => {
+  'channel' | 'currentUserId' | 'onDeleteMessage' | 'onPressMediaMessage'
+> & { onEditMessage: (message: HandleableMessage) => void }): CreateMessagePressActions => {
   const { STRINGS } = useLocalization();
   const toast = useToast();
   const { openSheet } = useBottomSheet();
   const { alert } = useAlert();
   const { clipboardService, fileService } = usePlatformService();
   const { sbOptions } = useSendbirdChat();
-  
+
   const onDeleteFailure = (error: Error) => {
     toast.show(STRINGS.TOAST.DELETE_MSG_ERROR, 'error');
     Logger.error(STRINGS.TOAST.DELETE_MSG_ERROR, error);
   };
-  
+
   const onCopyText = (message: HandleableMessage) => {
     if (message.isUserMessage()) {
       clipboardService.setString(message.message || '');
       toast.show(STRINGS.TOAST.COPY_OK, 'success');
     }
   };
-  
+
   const onDownloadFile = (message: HandleableMessage) => {
     if (message.isFileMessage()) {
       if (toMegabyte(message.size) > 4) {
         toast.show(STRINGS.TOAST.DOWNLOAD_START, 'success');
       }
-      
+
       fileService
         .save({ fileUrl: message.url, fileName: message.name, fileType: message.type })
         .then((response) => {
@@ -191,7 +220,7 @@ const useCreateMessagePressActions = ({
         });
     }
   };
-  
+
   const onOpenFile = (message: HandleableMessage) => {
     if (message.isFileMessage()) {
       const fileType = getFileType(message.type || getFileExtension(message.name));
@@ -202,7 +231,7 @@ const useCreateMessagePressActions = ({
       }
     }
   };
-  
+
   const alertForMessageDelete = (message: HandleableMessage) => {
     alert({
       title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE,
@@ -218,10 +247,10 @@ const useCreateMessagePressActions = ({
       ],
     });
   };
-  
+
   return ({ message }) => {
     if (!message.isUserMessage() && !message.isFileMessage()) return {};
-    
+
     const sheetItems: BottomSheetItem['sheetItems'] = [];
     const menu = {
       copy: (message: HandleableMessage) => ({
@@ -246,7 +275,7 @@ const useCreateMessagePressActions = ({
         onPress: () => onDownloadFile(message),
       }),
     };
-    
+
     if (message.isUserMessage()) {
       sheetItems.push(menu.copy(message));
       if (!channel.isEphemeral) {
@@ -256,7 +285,7 @@ const useCreateMessagePressActions = ({
         }
       }
     }
-    
+
     if (message.isFileMessage()) {
       if (!isVoiceMessage(message)) {
         sheetItems.push(menu.download(message));
@@ -267,7 +296,7 @@ const useCreateMessagePressActions = ({
         }
       }
     }
-    
+
     const configs = sbOptions.uikitWithAppInfo.groupChannel.channel;
     const bottomSheetItem: BottomSheetItem = {
       sheetItems,
@@ -278,7 +307,7 @@ const useCreateMessagePressActions = ({
         ? ({ onClose }) => <ReactionAddons.BottomSheet message={message} channel={channel} onClose={onClose} />
         : undefined,
     };
-    
+
     if (message.isFileMessage()) {
       return {
         onPress: () => onOpenFile(message),

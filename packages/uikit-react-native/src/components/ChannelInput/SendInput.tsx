@@ -69,21 +69,24 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     visible: voiceMessageInputVisible,
     setVisible: setVoiceMessageInputVisible,
   } = useDeferredModalState();
-  
+
   const messageReplyParams = useIIFE(() => {
     const { groupChannel } = sbOptions.uikit;
-    if (!channel.isGroupChannel() || groupChannel.channel.replyType === 'none'
-      || (groupChannel.channel.replyType === 'quote_reply' && !messageToReply)
-      || (groupChannel.channel.replyType === 'thread' && !messageToThread)) {
+    if (
+      !channel.isGroupChannel() ||
+      groupChannel.channel.replyType === 'none' ||
+      (groupChannel.channel.replyType === 'quote_reply' && !messageToReply) ||
+      (groupChannel.channel.replyType === 'thread' && !messageToThread)
+    ) {
       return {};
     }
-    
+
     return {
       parentMessageId: messageToReply?.messageId ?? messageToThread?.messageId,
       isReplyToChannel: true,
     };
   });
-  
+
   const messageMentionParams = useIIFE(() => {
     const { groupChannel } = sbOptions.uikit;
     if (!channel.isGroupChannel() || !groupChannel.channel.enableMention) return {};

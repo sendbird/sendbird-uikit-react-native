@@ -3,51 +3,65 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, useToast } from '@sendbird/uikit-react-native-foundation';
 import { useGroupChannelThreadMessages } from '@sendbird/uikit-tools';
 import type { SendbirdFileMessage, SendbirdGroupChannel, SendbirdUserMessage } from '@sendbird/uikit-utils';
-import { confirmAndMarkAsRead, messageComparator, NOOP, PASS, useFreshCallback, useRefTracker } from '@sendbird/uikit-utils';
+import {
+  NOOP,
+  PASS,
+  confirmAndMarkAsRead,
+  messageComparator,
+  useFreshCallback,
+  useRefTracker,
+} from '@sendbird/uikit-utils';
 
+import GroupChannelMessageRenderer from '../components/GroupChannelMessageRenderer';
 import NewMessagesButton from '../components/NewMessagesButton';
 import ScrollToBottomButton from '../components/ScrollToBottomButton';
 import StatusComposition from '../components/StatusComposition';
-import GroupChannelMessageRenderer from '../components/GroupChannelMessageRenderer';
 import createGroupChannelThreadModule from '../domain/groupChannelThread/module/createGroupChannelThreadModule';
-import type { GroupChannelThreadFragment, GroupChannelThreadModule, GroupChannelThreadProps, GroupChannelThreadPubSubContextPayload } from '../domain/groupChannelThread/types';
+import type {
+  GroupChannelThreadFragment,
+  GroupChannelThreadModule,
+  GroupChannelThreadProps,
+  GroupChannelThreadPubSubContextPayload,
+} from '../domain/groupChannelThread/types';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../hooks/useContext';
 import pubsub from '../utils/pubsub';
 
-const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThreadModule>): GroupChannelThreadFragment => {
+const createGroupChannelThreadFragment = (
+  initModule?: Partial<GroupChannelThreadModule>,
+): GroupChannelThreadFragment => {
   const GroupChannelThreadModule = createGroupChannelThreadModule(initModule);
-  
+
   return ({
-            renderNewMessagesButton = (props) => <NewMessagesButton {...props} />,
-            renderScrollToBottomButton = (props) => <ScrollToBottomButton {...props} />,
-            renderMessage,
-            enableMessageGrouping = true,
-            onPressHeaderLeft = NOOP,
-            onPressMediaMessage = NOOP,
-            onParentMessageDeleted = NOOP,
-            onChannelDeleted = NOOP,
-            onBeforeSendUserMessage = PASS,
-            onBeforeSendFileMessage = PASS,
-            onBeforeUpdateUserMessage = PASS,
-            onBeforeUpdateFileMessage = PASS,
-            channel,
-            parentMessage,
-            startingPoint,
-            keyboardAvoidOffset,
-            sortComparator = messageComparator,
-            flatListProps,
-          }) => {
+    renderNewMessagesButton = (props) => <NewMessagesButton {...props} />,
+    renderScrollToBottomButton = (props) => <ScrollToBottomButton {...props} />,
+    renderMessage,
+    enableMessageGrouping = true,
+    onPressHeaderLeft = NOOP,
+    onPressMediaMessage = NOOP,
+    onParentMessageDeleted = NOOP,
+    onChannelDeleted = NOOP,
+    onBeforeSendUserMessage = PASS,
+    onBeforeSendFileMessage = PASS,
+    onBeforeUpdateUserMessage = PASS,
+    onBeforeUpdateFileMessage = PASS,
+    channel,
+    parentMessage,
+    startingPoint,
+    keyboardAvoidOffset,
+    sortComparator = messageComparator,
+    flatListProps,
+  }) => {
     const { playerService, recorderService } = usePlatformService();
     const { sdk, currentUser, sbOptions } = useSendbirdChat();
-    
+
     const [groupChannelThreadPubSub] = useState(() => pubsub<GroupChannelThreadPubSubContextPayload>());
     const [scrolledAwayFromBottom, setScrolledAwayFromBottom] = useState(false);
     const scrolledAwayFromBottomRef = useRefTracker(scrolledAwayFromBottom);
-    
+
     const toast = useToast();
     const { STRINGS } = useLocalization();
     const [_parentMessage, setParentMessage] = useState(parentMessage);
-    
+
     const {
       loading,
       messages,
@@ -85,7 +99,7 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
       isReactionEnabled: sbOptions.uikit.groupChannel.channel.enableReactions,
       startingPoint,
     });
-    
+
     const onBlurFragment = () => {
       return Promise.allSettled([playerService.reset(), recorderService.reset()]);
     };
@@ -93,28 +107,27 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
       await onBlurFragment();
       onPressHeaderLeft();
     });
-    const _onPressMediaMessage: NonNullable<GroupChannelThreadProps['MessageList']['onPressMediaMessage']> = useFreshCallback(
-      async (message, deleteMessage, uri) => {
+    const _onPressMediaMessage: NonNullable<GroupChannelThreadProps['MessageList']['onPressMediaMessage']> =
+      useFreshCallback(async (message, deleteMessage, uri) => {
         await onBlurFragment();
         onPressMediaMessage(message, deleteMessage, uri);
-      },
-    );
-    
+      });
+
     useEffect(() => {
       return () => {
         onBlurFragment();
       };
     }, []);
-    
+
     const renderItem: GroupChannelThreadProps['MessageList']['renderMessage'] = useFreshCallback((props) => {
-      const content = renderMessage ? renderMessage(props) : <GroupChannelMessageRenderer hideParentMessage={true} {...props} />;
-      return (
-        <Box>
-          {content}
-        </Box>
+      const content = renderMessage ? (
+        renderMessage(props)
+      ) : (
+        <GroupChannelMessageRenderer hideParentMessage={true} {...props} />
       );
+      return <Box>{content}</Box>;
     });
-    
+
     const memoizedFlatListProps = useMemo(
       () => ({
         ListEmptyComponent: <GroupChannelThreadModule.StatusEmpty />,
@@ -123,24 +136,23 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
       }),
       [flatListProps],
     );
-    
+
     const onResetMessageList = useCallback(async () => {
       return await resetWithStartingPoint(Number.MAX_SAFE_INTEGER);
     }, []);
-    
+
     const onResetMessageListWithStartingPoint = useCallback(async (startingPoint: number) => {
       return await resetWithStartingPoint(startingPoint);
     }, []);
-    
-    
+
     const onPending = (message: SendbirdFileMessage | SendbirdUserMessage) => {
       groupChannelThreadPubSub.publish({ type: 'MESSAGE_SENT_PENDING', data: { message } });
     };
-    
+
     const onSent = (message: SendbirdFileMessage | SendbirdUserMessage) => {
       groupChannelThreadPubSub.publish({ type: 'MESSAGE_SENT_SUCCESS', data: { message } });
     };
-    
+
     const onPressSendUserMessage: GroupChannelThreadProps['Input']['onPressSendUserMessage'] = useFreshCallback(
       async (params) => {
         const processedParams = await onBeforeSendUserMessage(params);
@@ -171,7 +183,7 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
       if (!value) resetNewMessages();
       setScrolledAwayFromBottom(value);
     });
-    
+
     return (
       <GroupChannelThreadModule.Provider
         channel={channel}
@@ -180,9 +192,7 @@ const createGroupChannelThreadFragment = (initModule?: Partial<GroupChannelThrea
         keyboardAvoidOffset={keyboardAvoidOffset}
         threadedMessages={messages}
       >
-        <GroupChannelThreadModule.Header
-          onPressHeaderLeft={_onPressHeaderLeft}
-        />
+        <GroupChannelThreadModule.Header onPressHeaderLeft={_onPressHeaderLeft} />
         <GroupChannelThreadModule.ParentMessageInfo
           channel={channel}
           currentUserId={currentUser?.userId}
@@ -230,7 +240,7 @@ function shouldRenderInput(channel: SendbirdGroupChannel) {
   if (channel.isBroadcast) {
     return channel.myRole === 'operator';
   }
-  
+
   return true;
 }
 
