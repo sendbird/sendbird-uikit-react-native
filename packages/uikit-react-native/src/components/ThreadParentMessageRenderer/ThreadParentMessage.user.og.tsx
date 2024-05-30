@@ -68,7 +68,7 @@ const ThreadParentMessageUserOg = (props: Props) => {
         </Text>
       </PressBox>
       {userMessage.ogMetaData && enableOgtag && (
-        <PressBox activeOpacity={0.85} onPress={onPressMessage(userMessage)}>
+        <PressBox onPress={onPressMessage(userMessage)} style={styles.container}>
           <Box>
             {!!userMessage.ogMetaData.defaultImage && (
               <ImageWithPlaceholder style={styles.ogImage} source={{ uri: userMessage.ogMetaData.defaultImage.url }} />
@@ -97,16 +97,23 @@ const ThreadParentMessageUserOg = (props: Props) => {
 };
 
 const styles = createStyleSheet({
-  ogContainer: {
+  container: {
+    borderRadius: 16,
     overflow: 'hidden',
+  },
+  ogContainer: {
     paddingHorizontal: 12,
     paddingTop: 8,
     paddingBottom: 12,
     maxWidth: 240,
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
   },
   ogImage: {
     width: 240,
     height: 136,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
   },
   ogUrl: {
     marginBottom: 4,
