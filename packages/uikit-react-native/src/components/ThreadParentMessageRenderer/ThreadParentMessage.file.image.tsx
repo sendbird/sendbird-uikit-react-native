@@ -1,14 +1,15 @@
 import React from 'react';
-import { getThumbnailUriFromFileMessage, SendbirdFileMessage } from '@sendbird/uikit-utils';
-import { Box, createStyleSheet, PressBox } from '@sendbird/uikit-react-native-foundation';
+
+import { Box, PressBox, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
+import { ImageWithPlaceholder } from '@sendbird/uikit-react-native-foundation';
+import { SendbirdFileMessage, getThumbnailUriFromFileMessage } from '@sendbird/uikit-utils';
 
 import { ThreadParentMessageRendererProps } from './index';
-import { ImageWithPlaceholder } from '@sendbird/uikit-react-native-foundation';
 
 const ThreadParentMessageFileImage = (props: ThreadParentMessageRendererProps) => {
   const fileMessage: SendbirdFileMessage = props.parentMessage as SendbirdFileMessage;
   if (!fileMessage) return null;
-  
+
   return (
     <Box style={styles.container}>
       <PressBox onPress={props.onPress} onLongPress={props.onLongPress}>

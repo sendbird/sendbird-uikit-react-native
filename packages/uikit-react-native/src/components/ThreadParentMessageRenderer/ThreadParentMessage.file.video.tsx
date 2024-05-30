@@ -1,19 +1,20 @@
 import React from 'react';
-import { getThumbnailUriFromFileMessage, SendbirdFileMessage } from '@sendbird/uikit-utils';
-import { Box, createStyleSheet, PressBox, VideoThumbnail } from '@sendbird/uikit-react-native-foundation';
+
+import { Box, PressBox, VideoThumbnail, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
+import { SendbirdFileMessage, getThumbnailUriFromFileMessage } from '@sendbird/uikit-utils';
 
 import { ThreadParentMessageRendererProps } from './index';
 
-type Props = ThreadParentMessageRendererProps<
-  { fetchThumbnailFromVideoSource: (uri: string) => Promise<{ path: string } | null> }
->;
+type Props = ThreadParentMessageRendererProps<{
+  fetchThumbnailFromVideoSource: (uri: string) => Promise<{ path: string } | null>;
+}>;
 
 const ThreadParentMessageFileVideo = (props: Props) => {
   const fileMessage: SendbirdFileMessage = props.parentMessage as SendbirdFileMessage;
   if (!fileMessage) return null;
-  
+
   const uri = getThumbnailUriFromFileMessage(fileMessage);
-  
+
   return (
     <Box style={styles.container}>
       <PressBox activeOpacity={0.8} onPress={props.onPress} onLongPress={props.onLongPress}>

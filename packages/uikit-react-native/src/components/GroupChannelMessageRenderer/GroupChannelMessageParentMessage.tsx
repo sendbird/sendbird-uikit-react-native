@@ -30,7 +30,7 @@ type Props = {
   channel: SendbirdGroupChannel;
   message: SendbirdUserMessage | SendbirdFileMessage;
   childMessage: SendbirdUserMessage | SendbirdFileMessage;
-  onPress?:  (parentMessage: SendbirdMessage, childMessage: SendbirdUserMessage | SendbirdFileMessage) => void;
+  onPress?: (parentMessage: SendbirdMessage, childMessage: SendbirdUserMessage | SendbirdFileMessage) => void;
 };
 
 const GroupChannelMessageParentMessage = ({ variant, channel, message, childMessage, onPress }: Props) => {

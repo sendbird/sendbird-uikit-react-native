@@ -15,7 +15,11 @@ import {
 import ProviderLayout from '../../../components/ProviderLayout';
 import { useLocalization } from '../../../hooks/useContext';
 import type { PubSub } from '../../../utils/pubsub';
-import type { GroupChannelThreadContextsType, GroupChannelThreadModule, GroupChannelThreadPubSubContextPayload } from '../types';
+import type {
+  GroupChannelThreadContextsType,
+  GroupChannelThreadModule,
+  GroupChannelThreadPubSubContextPayload,
+} from '../types';
 import { GroupChannelThreadProps } from '../types';
 
 export const GroupChannelThreadContexts: GroupChannelThreadContextsType = {
@@ -42,21 +46,21 @@ export const GroupChannelThreadContexts: GroupChannelThreadContextsType = {
 };
 
 export const GroupChannelThreadContextsProvider: GroupChannelThreadModule['Provider'] = ({
-                                                                                           children,
-                                                                                           channel,
-                                                                                           parentMessage,
-                                                                                           keyboardAvoidOffset = 0,
-                                                                                           groupChannelThreadPubSub,
-                                                                                           threadedMessages,
-                                                                                         }) => {
+  children,
+  channel,
+  parentMessage,
+  keyboardAvoidOffset = 0,
+  groupChannelThreadPubSub,
+  threadedMessages,
+}) => {
   if (!channel) throw new Error('GroupChannel is not provided to GroupChannelThreadModule');
-  
+
   const { STRINGS } = useLocalization();
   const [messageToEdit, setMessageToEdit] = useState<SendbirdUserMessage | SendbirdFileMessage>();
   const { flatListRef, lazyScrollToIndex, lazyScrollToBottom, scrollToMessage } = useScrollActions({
     threadedMessages: threadedMessages,
   });
-  
+
   return (
     <ProviderLayout>
       <GroupChannelThreadContexts.Fragment.Provider
@@ -90,28 +94,28 @@ type MessageListContextValue = ContextValue<GroupChannelThreadContextsType['Mess
 const useScrollActions = (params: Pick<GroupChannelThreadProps['Provider'], 'threadedMessages'>) => {
   const { threadedMessages } = params;
   const flatListRef = useRef<FlatList<SendbirdMessage>>(null);
-  
+
   // FIXME: Workaround, should run after data has been applied to UI.
   const lazyScrollToBottom = useFreshCallback<MessageListContextValue['lazyScrollToIndex']>((params) => {
     if (!flatListRef.current) {
       logFlatListRefWarning();
       return;
     }
-    
+
     setTimeout(() => {
       if (flatListRef.current) {
         flatListRef.current.scrollToOffset({ offset: 0, animated: params?.animated ?? false });
       }
     }, params?.timeout ?? 0);
   });
-  
+
   // FIXME: Workaround, should run after data has been applied to UI.
   const lazyScrollToIndex = useFreshCallback<MessageListContextValue['lazyScrollToIndex']>((params) => {
     if (!flatListRef.current) {
       logFlatListRefWarning();
       return;
     }
-    
+
     setTimeout(() => {
       if (flatListRef.current) {
         flatListRef.current.scrollToIndex({
@@ -122,16 +126,16 @@ const useScrollActions = (params: Pick<GroupChannelThreadProps['Provider'], 'thr
       }
     }, params?.timeout ?? 0);
   });
-  
+
   const scrollToMessage = useFreshCallback<MessageListContextValue['scrollToMessage']>((messageId, options) => {
     if (!flatListRef.current) {
       logFlatListRefWarning();
       return false;
     }
-    
+
     const foundMessageIndex = threadedMessages.findIndex((it) => it.messageId === messageId);
     const isIncludedInList = foundMessageIndex > -1;
-    
+
     if (isIncludedInList) {
       lazyScrollToIndex({
         index: foundMessageIndex,
@@ -144,7 +148,7 @@ const useScrollActions = (params: Pick<GroupChannelThreadProps['Provider'], 'thr
       return false;
     }
   });
-  
+
   return {
     flatListRef,
     lazyScrollToIndex,
@@ -156,6 +160,6 @@ const useScrollActions = (params: Pick<GroupChannelThreadProps['Provider'], 'thr
 const logFlatListRefWarning = () => {
   Logger.warn(
     'Cannot find flatListRef.current, please render FlatList and pass the flatListRef' +
-    'or please try again after FlatList has been rendered.',
+      'or please try again after FlatList has been rendered.',
   );
 };

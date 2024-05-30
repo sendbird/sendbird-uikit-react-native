@@ -27,7 +27,9 @@ const GroupChannelThreadInput = ({ inputDisabled, ...props }: GroupChannelThread
       inputMuted={chatAvailableState.muted}
       inputFrozen={chatAvailableState.frozen}
       inputDisabled={inputDisabled ?? chatAvailableState.disabled}
-      MessageToReplyPreview={()=>{return null;}}
+      MessageToReplyPreview={() => {
+        return null;
+      }}
       {...props}
     />
   );

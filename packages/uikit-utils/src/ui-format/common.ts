@@ -164,6 +164,6 @@ export const getReplyCountFormat = (replyCount: number) => {
   } else if (replyCount > 1) {
     return `${replyCount} replies`;
   }
-  
+
   return '';
 };

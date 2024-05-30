@@ -17,7 +17,9 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   const { sdk, sbOptions } = useSendbirdChat();
   const { setMessageToEdit, setMessageToReply } = useContext(GroupChannelContexts.Fragment);
   const { subscribe } = useContext(GroupChannelContexts.PubSub);
-  const { flatListRef, lazyScrollToBottom, lazyScrollToIndex, onPressReplyMessageInThread } = useContext(GroupChannelContexts.MessageList);
+  const { flatListRef, lazyScrollToBottom, lazyScrollToIndex, onPressReplyMessageInThread } = useContext(
+    GroupChannelContexts.MessageList,
+  );
 
   const id = useUniqHandlerId('GroupChannelMessageList');
   const isFirstMount = useIsFirstMount();
@@ -98,16 +100,21 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
       scrollToMessageWithCreatedAt(props.searchItem.startingPoint, false, MESSAGE_SEARCH_SAFE_SCROLL_DELAY);
     }
   }, [isFirstMount]);
-  
-  const onPressParentMessage = useFreshCallback((parentMessage: SendbirdMessage, childMessage: SendbirdSendableMessage) => {
-    if (onPressReplyMessageInThread && sbOptions.uikit.groupChannel.channel.replyType === 'thread'
-      && sbOptions.uikit.groupChannel.channel.threadReplySelectType === 'thread') {
-      onPressReplyMessageInThread(parentMessage as SendbirdSendableMessage, childMessage.createdAt);
-    } else {
-      const canScrollToParent = scrollToMessageWithCreatedAt(parentMessage.createdAt, true, 0);
-      if (!canScrollToParent) toast.show(STRINGS.TOAST.FIND_PARENT_MSG_ERROR, 'error');
-    }
-  });
+
+  const onPressParentMessage = useFreshCallback(
+    (parentMessage: SendbirdMessage, childMessage: SendbirdSendableMessage) => {
+      if (
+        onPressReplyMessageInThread &&
+        sbOptions.uikit.groupChannel.channel.replyType === 'thread' &&
+        sbOptions.uikit.groupChannel.channel.threadReplySelectType === 'thread'
+      ) {
+        onPressReplyMessageInThread(parentMessage as SendbirdSendableMessage, childMessage.createdAt);
+      } else {
+        const canScrollToParent = scrollToMessageWithCreatedAt(parentMessage.createdAt, true, 0);
+        if (!canScrollToParent) toast.show(STRINGS.TOAST.FIND_PARENT_MSG_ERROR, 'error');
+      }
+    },
+  );
 
   return (
     <ChannelMessageList

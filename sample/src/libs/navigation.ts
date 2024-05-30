@@ -147,12 +147,12 @@ export type RouteParamsUnion =
       params: ChannelUrlParams;
     }
   | {
-  route: Routes.GroupChannelThread;
-  params: {
-    channelUrl: string;
-    serializedMessage: object;
-    startingPoint?: number;
-  };
+      route: Routes.GroupChannelThread;
+      params: {
+        channelUrl: string;
+        serializedMessage: object;
+        startingPoint?: number;
+      };
     }
   /** OpenChannel screens **/
   | {

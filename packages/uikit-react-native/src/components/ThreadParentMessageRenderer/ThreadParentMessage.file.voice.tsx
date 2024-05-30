@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { millsToMSS, SendbirdFileMessage } from '@sendbird/uikit-utils';
+
 import { Box, Icon, PressBox, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { LoadingSpinner, ProgressBar } from '@sendbird/uikit-react-native-foundation';
+import { createStyleSheet } from '@sendbird/uikit-react-native-foundation';
+import { SendbirdFileMessage, millsToMSS } from '@sendbird/uikit-utils';
 
 import { ThreadParentMessageRendererProps } from './index';
-import { ProgressBar, LoadingSpinner } from '@sendbird/uikit-react-native-foundation';
-import { createStyleSheet } from '@sendbird/uikit-react-native-foundation';
 
 export type VoiceFileMessageState = {
   status: 'preparing' | 'playing' | 'paused';
@@ -12,12 +13,10 @@ export type VoiceFileMessageState = {
   duration: number;
 };
 
-type Props = ThreadParentMessageRendererProps<
-  {
-    durationMetaArrayKey?: string;
-    onUnmount: () => void;
-  }
->;
+type Props = ThreadParentMessageRendererProps<{
+  durationMetaArrayKey?: string;
+  onUnmount: () => void;
+}>;
 
 const ThreadParentMessageFileVoice = (props: Props) => {
   const {
@@ -27,12 +26,12 @@ const ThreadParentMessageFileVoice = (props: Props) => {
     durationMetaArrayKey = 'KEY_VOICE_MESSAGE_DURATION',
     onUnmount,
   } = props;
-  
+
   const fileMessage: SendbirdFileMessage = parentMessage as SendbirdFileMessage;
   if (!fileMessage) return null;
-  
+
   const { colors } = useUIKitTheme();
-  
+
   const [state, setState] = useState<VoiceFileMessageState>(() => {
     const meta = fileMessage.metaArrays.find((it) => it.key === durationMetaArrayKey);
     const value = meta?.value?.[0];
@@ -43,16 +42,16 @@ const ThreadParentMessageFileVoice = (props: Props) => {
       duration: initialDuration,
     };
   });
-  
+
   useEffect(() => {
     return () => {
       onUnmount();
     };
   }, []);
-  
+
   const uiColors = colors.ui.groupChannelMessage['incoming'];
   const remainingTime = state.duration - state.currentTime;
-  
+
   return (
     <Box style={styles.container} backgroundColor={uiColors.enabled.background}>
       <PressBox onPress={() => onToggleVoiceMessage?.(state, setState)} onLongPress={onLongPress}>
@@ -72,17 +71,20 @@ const ThreadParentMessageFileVoice = (props: Props) => {
               {state.status === 'preparing' ? (
                 <LoadingSpinner size={24} color={uiColors.enabled.voiceSpinner} />
               ) : (
-                <Icon size={16} containerStyle={{
-                  backgroundColor: uiColors.enabled.voiceActionIconBackground,
-                  padding: 6,
-                  borderRadius: 16,
-                }}
-                      icon={state.status === 'paused' ? 'play' : 'pause'}
+                <Icon
+                  size={16}
+                  containerStyle={{
+                    backgroundColor: uiColors.enabled.voiceActionIconBackground,
+                    padding: 6,
+                    borderRadius: 16,
+                  }}
+                  icon={state.status === 'paused' ? 'play' : 'pause'}
                 />
               )}
-              <Text body3
-                    style={{ lineHeight: undefined, marginLeft: 6, opacity: 0.88 }}
-                    color={uiColors.enabled.textVoicePlaytime}
+              <Text
+                body3
+                style={{ lineHeight: undefined, marginLeft: 6, opacity: 0.88 }}
+                color={uiColors.enabled.textVoicePlaytime}
               >
                 {millsToMSS(state.currentTime === 0 ? state.duration : remainingTime)}
               </Text>
