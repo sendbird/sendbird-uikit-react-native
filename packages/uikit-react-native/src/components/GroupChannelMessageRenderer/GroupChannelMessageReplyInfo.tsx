@@ -85,12 +85,12 @@ const styles = createStyleSheet({
     justifyContent: 'flex-end',
   },
   replyContainer: {
-    marginLeft: 40,
+    marginLeft: 36,
     flexDirection: 'row',
     alignItems: 'center',
   },
   replyText: {
-    marginHorizontal: 4,
+    marginRight: 4,
   },
   avatarContainer: {
     marginRight: 4,
