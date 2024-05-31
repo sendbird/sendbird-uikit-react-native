@@ -32,13 +32,13 @@ const createRepliedUserAvatars = (mostRepliedUsers: User[]) => {
     if (index < AVATAR_LIMIT - 1) {
       return (
         <Box style={styles.avatarContainer} key={index}>
-          <Avatar size={20} uri={user?.profileUrl} containerStyle={styles.avatar}></Avatar>
+          <Avatar size={20} uri={user?.profileUrl}></Avatar>
         </Box>
       );
     } else {
       return (
         <Box style={styles.avatarContainer} key={index}>
-          <Avatar size={20} uri={user?.profileUrl} containerStyle={styles.avatar}></Avatar>
+          <Avatar size={20} uri={user?.profileUrl}></Avatar>
           <Box style={styles.avatarOverlay} backgroundColor={palette.overlay01}>
             <Icon icon={'plus'} size={14} style={styles.plusIcon} color={'white'} />
           </Box>
@@ -65,7 +65,7 @@ const GroupChannelMessageReplyInfo = ({ channel, message, variant, onPress }: Pr
     <Box style={containerStyle}>
       <PressBox onPress={onPressReply} style={styles.replyContainer}>
         {renderAvatars}
-        <Text caption3 color={select({ light: palette.primary300, dark: palette.primary200 })} style={styles.replyText}>
+        <Text caption3 color={select({ light: palette.primary300, dark: palette.primary200 })}>
           {replyCountText}
         </Text>
       </PressBox>
@@ -89,16 +89,8 @@ const styles = createStyleSheet({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  replyText: {
-    marginRight: 4,
-  },
   avatarContainer: {
     marginRight: 4,
-  },
-  avatar: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
   },
   avatarOverlay: {
     position: 'absolute',
