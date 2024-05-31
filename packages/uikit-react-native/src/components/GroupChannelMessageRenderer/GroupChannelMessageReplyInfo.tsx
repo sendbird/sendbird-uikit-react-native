@@ -63,12 +63,12 @@ const GroupChannelMessageReplyInfo = ({ channel, message, variant, onPress }: Pr
   const containerStyle = variant === 'incoming' ? styles.incomingContainer : styles.outgoingContainer;
   return (
     <Box style={containerStyle}>
-    <PressBox onPress={onPressReply} style={styles.replyContainer}>
-      {renderAvatars}
-      <Text caption3 color={select({ light: palette.primary300, dark: palette.primary200 })} style={styles.replyText}>
-        {replyCountText}
-      </Text>
-    </PressBox>
+      <PressBox onPress={onPressReply} style={styles.replyContainer}>
+        {renderAvatars}
+        <Text caption3 color={select({ light: palette.primary300, dark: palette.primary200 })} style={styles.replyText}>
+          {replyCountText}
+        </Text>
+      </PressBox>
     </Box>
   );
 };

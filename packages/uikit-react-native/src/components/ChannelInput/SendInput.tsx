@@ -69,10 +69,10 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     visible: voiceMessageInputVisible,
     setVisible: setVoiceMessageInputVisible,
   } = useDeferredModalState();
-  
+
   const messageReplyParams = useIIFE(() => {
     const { groupChannel } = sbOptions.uikit;
-    
+
     if (channel.isGroupChannel()) {
       if (groupChannel.channel.replyType === 'quote_reply' && messageToReply) {
         return {
@@ -86,7 +86,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
         };
       }
     }
-    
+
     return {};
   });
 
