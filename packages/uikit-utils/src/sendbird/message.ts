@@ -66,12 +66,14 @@ export function calcMessageGrouping(
   curr: SendbirdMessage,
   prev?: SendbirdMessage,
   next?: SendbirdMessage,
+  isReplyThreadType?: boolean,
 ) {
   const getPrev = () => {
     if (!groupEnabled) return false;
     if (!prev) return false;
     if (curr.isAdminMessage()) return false;
     if (!hasSameSender(curr, prev)) return false;
+    if (curr.parentMessageId || (isReplyThreadType && curr.threadInfo)) return false;
     if (getMessageTimeFormat(new Date(curr.createdAt)) !== getMessageTimeFormat(new Date(prev.createdAt))) return false;
     return true;
   };
@@ -81,6 +83,7 @@ export function calcMessageGrouping(
     if (!next) return false;
     if (curr.isAdminMessage()) return false;
     if (!hasSameSender(curr, next)) return false;
+    if (curr.parentMessageId || (isReplyThreadType && curr.threadInfo)) return false;
     if (getMessageTimeFormat(new Date(curr.createdAt)) !== getMessageTimeFormat(new Date(next.createdAt))) return false;
     return true;
   };
