@@ -76,15 +76,13 @@ const GroupChannelMessageReplyInfo = ({ channel, message, variant, onPress }: Pr
 const styles = createStyleSheet({
   incomingContainer: {
     marginTop: 4,
-    justifyContent: 'flex-start',
     flexDirection: 'row',
-    height: 20,
+    justifyContent: 'flex-start',
   },
   outgoingContainer: {
     marginTop: 4,
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    height: 20,
   },
   replyContainer: {
     marginLeft: 40,
@@ -96,8 +94,6 @@ const styles = createStyleSheet({
   },
   avatarContainer: {
     marginRight: 4,
-    width: 20,
-    height: 20,
   },
   avatar: {
     width: 20,
