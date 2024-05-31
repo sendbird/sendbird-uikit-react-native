@@ -159,8 +159,8 @@ const styles = createStyleSheet({
     paddingVertical: 8,
   },
   reactionButtonContainer: {
-    flexDirection: 'row',
-    height: 50,
+    paddingLeft: 16,
+    marginBottom: 16,
   },
   replyContainer: {
     flexDirection: 'column',
