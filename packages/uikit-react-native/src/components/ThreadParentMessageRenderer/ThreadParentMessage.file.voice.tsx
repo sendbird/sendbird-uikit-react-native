@@ -100,6 +100,7 @@ const styles = createStyleSheet({
   container: {
     borderRadius: 16,
     overflow: 'hidden',
+    maxWidth: 136,
   },
 });
 
