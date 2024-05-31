@@ -153,6 +153,12 @@ const createGroupChannelThreadFragment = (
       groupChannelThreadPubSub.publish({ type: 'MESSAGE_SENT_SUCCESS', data: { message } });
     };
 
+    const updateIfParentMessage = (message: SendbirdFileMessage | SendbirdUserMessage) => {
+      if (message.messageId === parentMessage.parentMessageId) {
+        setParentMessage(message);
+      }
+    };
+
     const onPressSendUserMessage: GroupChannelThreadProps['Input']['onPressSendUserMessage'] = useFreshCallback(
       async (params) => {
         const processedParams = await onBeforeSendUserMessage(params);
@@ -170,13 +176,15 @@ const createGroupChannelThreadFragment = (
     const onPressUpdateUserMessage: GroupChannelThreadProps['Input']['onPressUpdateUserMessage'] = useFreshCallback(
       async (message, params) => {
         const processedParams = await onBeforeUpdateUserMessage(params);
-        await updateUserMessage(message.messageId, processedParams);
+        const updatedMessage = await updateUserMessage(message.messageId, processedParams);
+        updateIfParentMessage(updatedMessage);
       },
     );
     const onPressUpdateFileMessage: GroupChannelThreadProps['Input']['onPressUpdateFileMessage'] = useFreshCallback(
       async (message, params) => {
         const processedParams = await onBeforeUpdateFileMessage(params);
-        await updateFileMessage(message.messageId, processedParams);
+        const updatedMessage = await updateFileMessage(message.messageId, processedParams);
+        updateIfParentMessage(updatedMessage);
       },
     );
     const onScrolledAwayFromBottom = useFreshCallback((value: boolean) => {
