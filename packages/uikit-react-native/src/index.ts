@@ -103,6 +103,9 @@ export * from './domain/groupChannelUserList/types';
 
 export * from './domain/messageSearch/types';
 
+export * from './domain/groupChannelThread';
+export * from './domain/groupChannelThread/types';
+
 /** Feature - open channels **/
 export * from './domain/openChannel';
 export * from './domain/openChannel/types';
