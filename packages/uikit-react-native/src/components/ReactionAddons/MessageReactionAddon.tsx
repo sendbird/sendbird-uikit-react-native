@@ -41,6 +41,7 @@ const createReactionButtons = (
   onOpenReactionList: () => void,
   onOpenReactionUserList: (focusIndex: number) => void,
   currentUserId?: string,
+  reactionAddonType?: ReactionAddonType,
 ) => {
   const reactions = message.reactions ?? [];
   const buttons = reactions.map((reaction, index) => {
@@ -58,7 +59,11 @@ const createReactionButtons = (
             url={getEmoji(reaction.key).url}
             count={getReactionCount(reaction)}
             reacted={pressed || getUserReacted(reaction, currentUserId)}
-            style={[isNotLastOfRow && styles.marginRight, isNotLastOfCol && styles.marginBottom]}
+            style={
+              reactionAddonType === 'default'
+                ? [isNotLastOfRow && styles.marginRight, isNotLastOfCol && styles.marginBottom]
+                : [styles.marginRight, styles.marginBottom]
+            }
           />
         )}
       </Pressable>
@@ -98,6 +103,7 @@ const MessageReactionAddon = ({
     () => openReactionList({ channel, message }),
     (focusIndex) => openReactionUserList({ channel, message, focusIndex }),
     currentUser?.userId,
+    reactionAddonType,
   );
 
   const containerStyle =
@@ -125,11 +131,8 @@ const styles = createStyleSheet({
     borderWidth: 1,
   },
   reactionThreadParentMessageContainer: {
-    alignItems: 'stretch',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    padding: 8,
-    borderRadius: 16,
   },
   marginRight: {
     marginRight: 4.5,
