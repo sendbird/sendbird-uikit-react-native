@@ -74,10 +74,10 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     return null;
   });
 
-  const renderReplyInfo = useIIFE(() => {
+  const replyInfo = useIIFE(() => {
     if (sbOptions.uikit.groupChannel.channel.replyType !== 'thread') return null;
     if (!channel || !message.threadInfo || !message.threadInfo.replyCount) return null;
-    return <GroupChannelMessageReplyInfo channel={channel} message={message} onPress={onReplyInThreadMessage} />;
+    return <GroupChannelMessageReplyInfo channel={channel} message={message} variant={variant} onPress={onReplyInThreadMessage} />;
   });
 
   const resetPlayer = async () => {
@@ -154,7 +154,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     groupedWithPrev: groupWithPrev,
     groupedWithNext: groupWithNext,
     children: reactionChildren,
-    replyInfo: renderReplyInfo,
+    replyInfo: replyInfo,
     sendingStatus: isMyMessage(message, currentUser?.userId) ? (
       <GroupChannelMessageOutgoingStatus channel={channel} message={message} />
     ) : null,

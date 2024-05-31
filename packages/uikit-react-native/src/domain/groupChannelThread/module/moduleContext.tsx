@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useRef, useState } from 'react';
+import React, { createContext, useRef, useState } from 'react';
 import type { FlatList } from 'react-native';
 
 import {
@@ -70,7 +70,7 @@ export const GroupChannelThreadContextsProvider: GroupChannelThreadModule['Provi
           parentMessage,
           keyboardAvoidOffset,
           messageToEdit: messageToEdit,
-          setMessageToEdit: useCallback((message) => setMessageToEdit(message), []),
+          setMessageToEdit,
         }}
       >
         <GroupChannelThreadContexts.PubSub.Provider value={groupChannelThreadPubSub}>

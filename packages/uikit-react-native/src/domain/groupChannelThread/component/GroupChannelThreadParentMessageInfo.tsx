@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import React, { useContext } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
@@ -48,8 +47,8 @@ const GroupChannelThreadParentMessageInfo = (props: GroupChannelThreadProps['Par
   const { sbOptions } = useSendbirdChat();
 
   const nickName = parentMessage.sender?.nickname || STRINGS.LABELS.USER_NO_NAME;
-  const messageTimestamp = format(new Date(parentMessage.updatedAt), "MMM dd 'at' h:mm a");
-  const replyCountText = STRINGS.GROUP_CHANNEL_THREAD.REPLAY_POSTFIX(parentMessage.threadInfo?.replyCount || 0);
+  const messageTimestamp = STRINGS.GROUP_CHANNEL_THREAD.PARENT_MESSAGE_TIME(parentMessage);
+  const replyCountText = STRINGS.GROUP_CHANNEL_THREAD.REPLAY_COUNT(parentMessage.threadInfo?.replyCount || 0);
   const createMessagePressActions = useCreateMessagePressActions({
     channel: props.channel,
     currentUserId: props.currentUserId,
@@ -102,7 +101,7 @@ const GroupChannelThreadParentMessageInfo = (props: GroupChannelThreadProps['Par
             channel={props.channel}
             message={parentMessage}
             reactionAddonType={'thread_parent_message'}
-          ></ReactionAddons.Message>
+          />
         </View>
       );
     } else {

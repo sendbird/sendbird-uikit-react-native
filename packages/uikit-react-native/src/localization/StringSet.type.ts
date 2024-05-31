@@ -142,8 +142,9 @@ export interface StringSet {
     MESSAGE_BUBBLE_EDITED_POSTFIX: string;
     MESSAGE_BUBBLE_UNKNOWN_TITLE: (message: SendbirdMessage) => string;
     MESSAGE_BUBBLE_UNKNOWN_DESC: (message: SendbirdMessage) => string;
-
-    REPLAY_POSTFIX: (replyCount: number) => string;
+    
+    PARENT_MESSAGE_TIME: (message: SendbirdMessage, locale?: Locale) => string;
+    REPLAY_COUNT: (replyCount: number) => string;
 
     /** GroupChannelThread > Suggested mention list */
     MENTION_LIMITED: (mentionLimit: number) => string;

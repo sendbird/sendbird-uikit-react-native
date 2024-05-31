@@ -167,3 +167,14 @@ export const getReplyCountFormat = (replyCount: number) => {
 
   return '';
 };
+
+/**
+ * Thread parent message time format
+ *
+ * @param {Date} date
+ * @param {Locale} [locale]
+ * @returns {string}
+ * */
+export const getThreadParentMessageTimeFormat = (date: Date, locale?: Locale): string => {
+  return format(date, "MMM dd 'at' h:mm a", { locale });
+};

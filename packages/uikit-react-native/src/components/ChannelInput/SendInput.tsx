@@ -53,7 +53,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     channel,
     messageToReply,
     setMessageToReply,
-    messageToThread,
+    messageForThread,
   },
   ref,
 ) {
@@ -69,22 +69,25 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     visible: voiceMessageInputVisible,
     setVisible: setVoiceMessageInputVisible,
   } = useDeferredModalState();
-
+  
   const messageReplyParams = useIIFE(() => {
     const { groupChannel } = sbOptions.uikit;
-    if (
-      !channel.isGroupChannel() ||
-      groupChannel.channel.replyType === 'none' ||
-      (groupChannel.channel.replyType === 'quote_reply' && !messageToReply) ||
-      (groupChannel.channel.replyType === 'thread' && !messageToThread)
-    ) {
-      return {};
+    
+    if (channel.isGroupChannel()) {
+      if (groupChannel.channel.replyType === 'quote_reply' && messageToReply) {
+        return {
+          parentMessageId: messageToReply.messageId,
+          isReplyToChannel: true,
+        };
+      } else if (groupChannel.channel.replyType === 'thread' && messageForThread) {
+        return {
+          parentMessageId: messageForThread.messageId,
+          isReplyToChannel: true,
+        };
+      }
     }
-
-    return {
-      parentMessageId: messageToReply?.messageId ?? messageToThread?.messageId,
-      isReplyToChannel: true,
-    };
+    
+    return {};
   });
 
   const messageMentionParams = useIIFE(() => {
@@ -161,7 +164,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     if (inputFrozen) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED;
     if (inputDisabled) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED;
     if (messageToReply) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_REPLY;
-    if (messageToThread) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_THREAD;
+    if (messageForThread) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_THREAD;
 
     return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_ACTIVE;
   };

@@ -65,7 +65,7 @@ export type ChannelInputProps = {
   // reply - only available on group channel
   messageToReply?: undefined | SendbirdUserMessage | SendbirdFileMessage;
   setMessageToReply?: (message?: undefined | SendbirdUserMessage | SendbirdFileMessage) => void;
-  messageToThread?: undefined | SendbirdUserMessage | SendbirdFileMessage;
+  messageForThread?: undefined | SendbirdUserMessage | SendbirdFileMessage;
 
   // mention
   SuggestedMentionList?: CommonComponent<SuggestedMentionListProps>;
