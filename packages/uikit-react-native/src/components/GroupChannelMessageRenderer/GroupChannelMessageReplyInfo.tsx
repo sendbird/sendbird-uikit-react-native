@@ -19,7 +19,6 @@ const AVATAR_LIMIT = 5;
 type Props = {
   channel: SendbirdGroupChannel;
   message: SendbirdMessage;
-  variant: 'outgoing' | 'incoming';
   onPress?: (message: SendbirdUserMessage | SendbirdFileMessage) => void;
 };
 
@@ -48,7 +47,7 @@ const createRepliedUserAvatars = (mostRepliedUsers: User[]) => {
   });
 };
 
-const GroupChannelMessageReplyInfo = ({ channel, message, variant, onPress }: Props) => {
+const GroupChannelMessageReplyInfo = ({ channel, message, onPress }: Props) => {
   const { STRINGS } = useLocalization();
   const { select, palette } = useUIKitTheme();
 
@@ -60,32 +59,18 @@ const GroupChannelMessageReplyInfo = ({ channel, message, variant, onPress }: Pr
   };
 
   const renderAvatars = createRepliedUserAvatars(message.threadInfo.mostRepliedUsers);
-  const containerStyle = variant === 'incoming' ? styles.incomingContainer : styles.outgoingContainer;
   return (
-    <Box style={containerStyle}>
-      <PressBox onPress={onPressReply} style={styles.replyContainer}>
-        {renderAvatars}
-        <Text caption3 color={select({ light: palette.primary300, dark: palette.primary200 })}>
-          {replyCountText}
-        </Text>
-      </PressBox>
-    </Box>
+    <PressBox onPress={onPressReply} style={styles.replyContainer}>
+      {renderAvatars}
+      <Text caption3 color={select({ light: palette.primary300, dark: palette.primary200 })}>
+        {replyCountText}
+      </Text>
+    </PressBox>
   );
 };
 
 const styles = createStyleSheet({
-  incomingContainer: {
-    marginTop: 4,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-  },
-  outgoingContainer: {
-    marginTop: 4,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
   replyContainer: {
-    marginLeft: 36,
     flexDirection: 'row',
     alignItems: 'center',
   },

@@ -67,7 +67,10 @@ MessageContainer.Incoming = function MessageContainerIncoming({
           </Box>
         </Box>
       </Box>
-      {replyInfo}
+      <Box flexDirection={'row'} marginTop={4}>
+        <Box width={26} marginRight={12} justifyContent={'flex-start'} />
+        {replyInfo}
+      </Box>
     </Box>
   );
 };
@@ -100,7 +103,9 @@ MessageContainer.Outgoing = function MessageContainerOutgoing({
         </Box>
         <Box style={styles.bubble}>{children}</Box>
       </Box>
-      {replyInfo}
+      <Box flexDirection={'row'} justifyContent={'flex-end'} marginTop={4}>
+        {replyInfo}
+      </Box>
     </Box>
   );
 };
