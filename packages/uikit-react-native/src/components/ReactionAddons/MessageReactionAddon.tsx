@@ -3,6 +3,7 @@ import { Pressable } from 'react-native';
 
 import type { Emoji } from '@sendbird/chat';
 import { createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { useForceUpdate, useGroupChannelHandler } from '@sendbird/uikit-tools';
 import type { SendbirdBaseChannel, SendbirdBaseMessage, SendbirdReaction } from '@sendbird/uikit-utils';
 import { getReactionCount } from '@sendbird/uikit-utils';
 
@@ -90,8 +91,18 @@ const MessageReactionAddon = ({
   reactionAddonType?: ReactionAddonType;
 }) => {
   const { colors } = useUIKitTheme();
-  const { emojiManager, currentUser } = useSendbirdChat();
+  const { sdk, emojiManager, currentUser } = useSendbirdChat();
   const { openReactionList, openReactionUserList } = useReaction();
+  const forceUpdate = useForceUpdate();
+
+  useGroupChannelHandler(sdk, {
+    async onReactionUpdated(_, event) {
+      if (event.messageId === message.messageId) {
+        message.applyReactionEvent(event);
+        forceUpdate();
+      }
+    },
+  });
 
   if (reactionAddonType === 'default' && !message.reactions?.length) return null;
 
