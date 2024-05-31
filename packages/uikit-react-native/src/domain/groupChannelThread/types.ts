@@ -1,7 +1,6 @@
 import type React from 'react';
 import type { FlatList } from 'react-native';
 
-import type { MessageCollectionParams, MessageFilterParams } from '@sendbird/chat/groupChannel';
 import type { UseGroupChannelMessagesOptions } from '@sendbird/uikit-chat-hooks';
 import type {
   OnBeforeHandler,
@@ -20,8 +19,6 @@ import type { ChannelInputProps, SuggestedMentionListProps } from '../../compone
 import type { ChannelMessageListProps } from '../../components/ChannelMessageList';
 import type { CommonComponent } from '../../types';
 import type { PubSub } from '../../utils/pubsub';
-
-export type MessageListQueryParamsType = Omit<MessageCollectionParams, 'filter'> & MessageFilterParams;
 
 export interface GroupChannelThreadProps {
   Fragment: {
@@ -47,18 +44,6 @@ export interface GroupChannelThreadProps {
     keyboardAvoidOffset?: GroupChannelThreadProps['Provider']['keyboardAvoidOffset'];
     flatListProps?: GroupChannelThreadProps['MessageList']['flatListProps'];
     sortComparator?: UseGroupChannelMessagesOptions['sortComparator'];
-    searchItem?: GroupChannelThreadProps['MessageList']['searchItem'];
-
-    /**
-     * @description You can specify the query parameters for the message list.
-     * @example
-     * ```
-     * <GroupChannelThreadFragment messageListQueryParams={{ prevResultLimit: 20, customTypesFilter: ['filter'] }} />
-     * ```
-     * */
-    messageListQueryParams?: MessageListQueryParamsType;
-    /** @deprecated Please use `messageListQueryParams` instead */
-    collectionCreator?: UseGroupChannelMessagesOptions['collectionCreator'];
   };
   Header: {
     onPressHeaderLeft: () => void;
@@ -66,7 +51,6 @@ export interface GroupChannelThreadProps {
   ParentMessageInfo: {
     channel: SendbirdGroupChannel;
     currentUserId?: string;
-    onPressContextMenu?: () => void;
     onDeleteMessage: (message: SendbirdUserMessage | SendbirdFileMessage) => Promise<void>;
     onPressMediaMessage?: (message: SendbirdFileMessage, deleteMessage: () => Promise<void>, uri: string) => void;
   };
