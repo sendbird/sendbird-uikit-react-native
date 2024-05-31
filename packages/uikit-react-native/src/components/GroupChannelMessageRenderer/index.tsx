@@ -60,6 +60,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     prevMessage,
     nextMessage,
     sbOptions.uikit.groupChannel.channel.replyType === 'thread',
+    shouldRenderParentMessage(message, hideParentMessage),
   );
   const variant = isMyMessage(message, currentUser?.userId) ? 'outgoing' : 'incoming';
 

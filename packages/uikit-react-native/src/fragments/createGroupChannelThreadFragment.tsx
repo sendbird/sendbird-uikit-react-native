@@ -123,7 +123,7 @@ const createGroupChannelThreadFragment = (
       const content = renderMessage ? (
         renderMessage(props)
       ) : (
-        <GroupChannelMessageRenderer hideParentMessage={true} {...props} />
+        <GroupChannelMessageRenderer hideParentMessage {...props} />
       );
       return <Box>{content}</Box>;
     });
