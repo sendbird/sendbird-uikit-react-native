@@ -125,12 +125,13 @@ export function parseSendbirdNotification(dataPayload: RawSendbirdDataPayload): 
   return typeof dataPayload.sendbird === 'string' ? JSON.parse(dataPayload.sendbird) : dataPayload.sendbird;
 }
 
-export function shouldRenderParentMessage(message: SendbirdMessage): message is (
-  | SendbirdUserMessage
-  | SendbirdFileMessage
-) & {
+export function shouldRenderParentMessage(
+  message: SendbirdMessage,
+  hide = false,
+): message is (SendbirdUserMessage | SendbirdFileMessage) & {
   parentMessage: SendbirdUserMessage | SendbirdFileMessage;
 } {
+  if (hide) return false;
   return !!(
     (message.isFileMessage() || message.isUserMessage()) &&
     (message.parentMessage?.isFileMessage() || message.parentMessage?.isUserMessage())
