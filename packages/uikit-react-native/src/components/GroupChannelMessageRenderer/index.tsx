@@ -77,7 +77,14 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   const replyInfo = useIIFE(() => {
     if (sbOptions.uikit.groupChannel.channel.replyType !== 'thread') return null;
     if (!channel || !message.threadInfo || !message.threadInfo.replyCount) return null;
-    return <GroupChannelMessageReplyInfo channel={channel} message={message} variant={variant} onPress={onReplyInThreadMessage} />;
+    return (
+      <GroupChannelMessageReplyInfo
+        channel={channel}
+        message={message}
+        variant={variant}
+        onPress={onReplyInThreadMessage}
+      />
+    );
   });
 
   const resetPlayer = async () => {
