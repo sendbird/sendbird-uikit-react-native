@@ -158,16 +158,15 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     sendingStatus: isMyMessage(message, currentUser?.userId) ? (
       <GroupChannelMessageOutgoingStatus channel={channel} message={message} />
     ) : null,
-    parentMessage:
-      !hideParentMessage && shouldRenderParentMessage(message) ? (
-        <GroupChannelMessageParentMessage
-          channel={channel}
-          message={message.parentMessage}
-          variant={variant}
-          childMessage={message}
-          onPress={onPressParentMessage}
-        />
-      ) : null,
+    parentMessage: shouldRenderParentMessage(message, hideParentMessage) ? (
+      <GroupChannelMessageParentMessage
+        channel={channel}
+        message={message.parentMessage}
+        variant={variant}
+        childMessage={message}
+        onPress={onPressParentMessage}
+      />
+    ) : null,
     strings: {
       edited: STRINGS.GROUP_CHANNEL.MESSAGE_BUBBLE_EDITED_POSTFIX,
       senderName: ('sender' in message && message.sender.nickname) || STRINGS.LABELS.USER_NO_NAME,
@@ -294,7 +293,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
       } else {
         return 16;
       }
-    } else if (nextMessage && shouldRenderParentMessage(nextMessage)) {
+    } else if (nextMessage && shouldRenderParentMessage(nextMessage, hideParentMessage)) {
       return 16;
     } else if (groupWithNext) {
       return 2;
