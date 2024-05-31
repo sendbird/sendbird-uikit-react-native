@@ -71,7 +71,7 @@ const GroupChannelThreadParentMessageInfo = (props: GroupChannelThreadProps['Par
           </Text>
         </View>
         <TouchableOpacity activeOpacity={0.7} onPress={bottomSheetItem ? onLongPress : undefined}>
-          <Icon icon={'more'} color={colors.onBackground02}/>
+          <Icon icon={'more'} color={colors.onBackground02} />
         </TouchableOpacity>
       </View>
     );
