@@ -1,6 +1,6 @@
 import type { Locale } from 'date-fns';
 
-import type { PartialDeep } from '@sendbird/uikit-utils';
+import { getThreadParentMessageTimeFormat, PartialDeep, SendbirdMessage } from '@sendbird/uikit-utils';
 import {
   getDateSeparatorFormat,
   getGroupChannelPreviewTime,
@@ -139,8 +139,9 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       MESSAGE_BUBBLE_EDITED_POSTFIX: ' (edited)',
       MESSAGE_BUBBLE_UNKNOWN_TITLE: () => '(Unknown message type)',
       MESSAGE_BUBBLE_UNKNOWN_DESC: () => 'Cannot read this message.',
-
-      REPLAY_POSTFIX: (replyCount: number) => getReplyCountFormat(replyCount),
+      
+      PARENT_MESSAGE_TIME: (message: SendbirdMessage, locale?: Locale) => getThreadParentMessageTimeFormat(new Date(message.createdAt), locale ?? dateLocale),
+      REPLAY_COUNT: (replyCount: number) => getReplyCountFormat(replyCount),
 
       MENTION_LIMITED: (mentionLimit) => `You can have up to ${mentionLimit} mentions per message.`,
       ...overrides?.GROUP_CHANNEL_THREAD,

@@ -19,6 +19,7 @@ const AVATAR_LIMIT = 5;
 type Props = {
   channel: SendbirdGroupChannel;
   message: SendbirdMessage;
+  variant: 'outgoing' | 'incoming';
   onPress?: (message: SendbirdUserMessage | SendbirdFileMessage) => void;
 };
 
@@ -47,38 +48,50 @@ const createRepliedUserAvatars = (mostRepliedUsers: User[]) => {
   });
 };
 
-const GroupChannelMessageReplyInfo = ({ channel, message, onPress }: Props) => {
+const GroupChannelMessageReplyInfo = ({ channel, message, variant, onPress }: Props) => {
   const { STRINGS } = useLocalization();
   const { select, palette } = useUIKitTheme();
 
   if (!channel || !message.threadInfo || !message.threadInfo.replyCount) return null;
 
-  const replyCountText = STRINGS.GROUP_CHANNEL_THREAD.REPLAY_POSTFIX(message.threadInfo.replyCount || 0);
+  const replyCountText = STRINGS.GROUP_CHANNEL_THREAD.REPLAY_COUNT(message.threadInfo.replyCount || 0);
   const onPressReply = () => {
     onPress?.(message as SendbirdUserMessage | SendbirdFileMessage);
   };
 
   const renderAvatars = createRepliedUserAvatars(message.threadInfo.mostRepliedUsers);
-
+  const containerStyle = variant === 'incoming' ? styles.incomingContainer : styles.outgoingContainer;
   return (
-    <PressBox onPress={onPressReply} style={styles.messageContainer}>
+    <Box style={containerStyle}>
+    <PressBox onPress={onPressReply} style={styles.replyContainer}>
       {renderAvatars}
-      <Text caption3 color={select({ light: palette.primary300, dark: palette.primary200 })} style={styles.message}>
+      <Text caption3 color={select({ light: palette.primary300, dark: palette.primary200 })} style={styles.replyText}>
         {replyCountText}
       </Text>
     </PressBox>
+    </Box>
   );
 };
 
 const styles = createStyleSheet({
-  container: {
+  incomingContainer: {
+    marginTop: 4,
+    justifyContent: 'flex-start',
     flexDirection: 'row',
+    height: 20,
   },
-  messageContainer: {
+  outgoingContainer: {
+    marginTop: 4,
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    height: 20,
   },
-  message: {
+  replyContainer: {
+    marginLeft: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  replyText: {
     marginHorizontal: 4,
   },
   avatarContainer: {
@@ -87,8 +100,9 @@ const styles = createStyleSheet({
     height: 20,
   },
   avatar: {
-    width: '100%',
-    height: '100%',
+    width: 20,
+    height: 20,
+    borderRadius: 10,
   },
   avatarOverlay: {
     position: 'absolute',

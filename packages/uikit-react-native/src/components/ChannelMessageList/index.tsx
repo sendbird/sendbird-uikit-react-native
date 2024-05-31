@@ -369,12 +369,10 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
           sheetItems.push(menu.delete(message));
         }
         if (channel.isGroupChannel()) {
-          if (channel.isGroupChannel()) {
-            if (sbOptions.uikit.groupChannel.channel.replyType === 'thread' && onReplyInThreadMessage !== undefined) {
-              sheetItems.push(menu.replyInThread(message));
-            } else if (sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
-              sheetItems.push(menu.reply(message));
-            }
+          if (sbOptions.uikit.groupChannel.channel.replyType === 'thread' && onReplyInThreadMessage !== undefined) {
+            sheetItems.push(menu.replyInThread(message));
+          } else if (sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
+            sheetItems.push(menu.reply(message));
           }
         }
       }
