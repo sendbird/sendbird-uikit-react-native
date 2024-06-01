@@ -32,6 +32,7 @@ const ChatFlatList = forwardRef<RNFlatList, Props>(function ChatFlatList(
 ) {
   const { select } = useUIKitTheme();
   const contentOffsetY = useRef(0);
+  // FIXME: inverted list of ListEmptyComponent is reversed {@link https://github.com/facebook/react-native/issues/21196#issuecomment-836937743}
   const inverted = useRef(props.inverted ?? Boolean(props.data?.length));
 
   const _onScroll = useFreshCallback<NonNullable<Props['onScroll']>>((event) => {
@@ -78,7 +79,6 @@ const ChatFlatList = forwardRef<RNFlatList, Props>(function ChatFlatList(
       keyboardShouldPersistTaps={'handled'}
       indicatorStyle={select({ light: 'black', dark: 'white' })}
       {...props}
-      // FIXME: inverted list of ListEmptyComponent is reversed {@link https://github.com/facebook/react-native/issues/21196#issuecomment-836937743}
       inverted={inverted.current}
       ref={ref}
       onEndReached={onTopReached}
