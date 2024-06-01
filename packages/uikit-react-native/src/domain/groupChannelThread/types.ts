@@ -16,7 +16,7 @@ import type {
 } from '@sendbird/uikit-utils';
 
 import type { ChannelInputProps, SuggestedMentionListProps } from '../../components/ChannelInput';
-import type { ChannelMessageListProps } from '../../components/ChannelMessageList';
+import type { ChannelThreadMessageListProps } from '../../components/ChannelThreadMessageList';
 import type { CommonComponent } from '../../types';
 import type { PubSub } from '../../utils/pubsub';
 
@@ -55,7 +55,7 @@ export interface GroupChannelThreadProps {
     onPressMediaMessage?: (message: SendbirdFileMessage, deleteMessage: () => Promise<void>, uri: string) => void;
   };
   MessageList: Pick<
-    ChannelMessageListProps<SendbirdGroupChannel>,
+    ChannelThreadMessageListProps<SendbirdGroupChannel>,
     | 'enableMessageGrouping'
     | 'currentUserId'
     | 'channel'

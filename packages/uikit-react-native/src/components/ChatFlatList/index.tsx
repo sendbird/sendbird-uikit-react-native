@@ -32,19 +32,29 @@ const ChatFlatList = forwardRef<RNFlatList, Props>(function ChatFlatList(
 ) {
   const { select } = useUIKitTheme();
   const contentOffsetY = useRef(0);
+  const inverted = useRef(props.inverted ?? Boolean(props.data?.length));
 
   const _onScroll = useFreshCallback<NonNullable<Props['onScroll']>>((event) => {
     onScroll?.(event);
 
-    const { contentOffset } = event.nativeEvent;
+    const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
 
     const prevOffsetY = contentOffsetY.current;
     const currOffsetY = contentOffset.y;
 
-    if (BOTTOM_DETECT_THRESHOLD < prevOffsetY && currOffsetY <= BOTTOM_DETECT_THRESHOLD) {
-      onScrolledAwayFromBottom(false);
-    } else if (BOTTOM_DETECT_THRESHOLD < currOffsetY && prevOffsetY <= BOTTOM_DETECT_THRESHOLD) {
-      onScrolledAwayFromBottom(true);
+    if (inverted.current) {
+      if (BOTTOM_DETECT_THRESHOLD < prevOffsetY && currOffsetY <= BOTTOM_DETECT_THRESHOLD) {
+        onScrolledAwayFromBottom(false);
+      } else if (BOTTOM_DETECT_THRESHOLD < currOffsetY && prevOffsetY <= BOTTOM_DETECT_THRESHOLD) {
+        onScrolledAwayFromBottom(true);
+      }
+    } else {
+      const bottomDetectThreshold = contentSize.height - layoutMeasurement.height - BOTTOM_DETECT_THRESHOLD;
+      if (bottomDetectThreshold < prevOffsetY && currOffsetY <= bottomDetectThreshold) {
+        onScrolledAwayFromBottom(true);
+      } else if (bottomDetectThreshold < currOffsetY && prevOffsetY <= bottomDetectThreshold) {
+        onScrolledAwayFromBottom(false);
+      }
     }
 
     contentOffsetY.current = contentOffset.y;
@@ -69,7 +79,7 @@ const ChatFlatList = forwardRef<RNFlatList, Props>(function ChatFlatList(
       indicatorStyle={select({ light: 'black', dark: 'white' })}
       {...props}
       // FIXME: inverted list of ListEmptyComponent is reversed {@link https://github.com/facebook/react-native/issues/21196#issuecomment-836937743}
-      inverted={Boolean(props.data?.length)}
+      inverted={inverted.current}
       ref={ref}
       onEndReached={onTopReached}
       onScrollToIndexFailed={NOOP}
