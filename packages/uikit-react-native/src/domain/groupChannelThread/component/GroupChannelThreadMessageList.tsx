@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useLayoutEffect } from 'react';
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { isDifferentChannel, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
 
-import ChannelMessageList from '../../../components/ChannelMessageList';
+import ChannelThreadMessageList from '../../../components/ChannelThreadMessageList';
 import { useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelThreadContexts } from '../module/moduleContext';
 import type { GroupChannelThreadProps } from '../types';
@@ -33,7 +33,7 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
       const foundMessageIndex = props.messages.findIndex((it) => it.createdAt === props.startingPoint);
       const isIncludedInList = foundMessageIndex > -1;
       if (isIncludedInList) {
-        lazyScrollToIndex({ index: foundMessageIndex, animated: true, timeout: 100 });
+        lazyScrollToIndex({ index: foundMessageIndex, animated: true, timeout: 250 });
       }
     }
   }, [props.startingPoint]);
@@ -70,7 +70,7 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
   }, [props.scrolledAwayFromBottom]);
 
   return (
-    <ChannelMessageList
+    <ChannelThreadMessageList
       {...props}
       ref={flatListRef}
       onEditMessage={setMessageToEdit}

@@ -2,7 +2,12 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, useToast } from '@sendbird/uikit-react-native-foundation';
 import { useGroupChannelThreadMessages } from '@sendbird/uikit-tools';
-import type { SendbirdFileMessage, SendbirdGroupChannel, SendbirdUserMessage } from '@sendbird/uikit-utils';
+import {
+  SendbirdFileMessage,
+  SendbirdGroupChannel,
+  type SendbirdMessage,
+  SendbirdUserMessage,
+} from '@sendbird/uikit-utils';
 import {
   NOOP,
   PASS,
@@ -48,7 +53,7 @@ const createGroupChannelThreadFragment = (
     parentMessage,
     startingPoint,
     keyboardAvoidOffset,
-    sortComparator = messageComparator,
+    sortComparator = threadMessageComparator,
     flatListProps,
   }) => {
     const { playerService, recorderService } = usePlatformService();
@@ -130,7 +135,15 @@ const createGroupChannelThreadFragment = (
 
     const memoizedFlatListProps = useMemo(
       () => ({
-        ListEmptyComponent: <GroupChannelThreadModule.StatusEmpty />,
+        ListHeaderComponent: (
+          <GroupChannelThreadModule.ParentMessageInfo
+            channel={channel}
+            currentUserId={currentUser?.userId}
+            onDeleteMessage={deleteMessage}
+            onPressMediaMessage={_onPressMediaMessage}
+          />
+        ),
+        inverted: false,
         contentContainerStyle: { flexGrow: 1 },
         ...flatListProps,
       }),
@@ -193,12 +206,6 @@ const createGroupChannelThreadFragment = (
         threadedMessages={messages}
       >
         <GroupChannelThreadModule.Header onPressHeaderLeft={_onPressHeaderLeft} />
-        <GroupChannelThreadModule.ParentMessageInfo
-          channel={channel}
-          currentUserId={currentUser?.userId}
-          onDeleteMessage={deleteMessage}
-          onPressMediaMessage={_onPressMediaMessage}
-        />
         <StatusComposition loading={loading} LoadingComponent={<GroupChannelThreadModule.StatusLoading />}>
           <GroupChannelThreadModule.MessageList
             channel={channel}
@@ -242,6 +249,10 @@ function shouldRenderInput(channel: SendbirdGroupChannel) {
   }
 
   return true;
+}
+
+export function threadMessageComparator(a: SendbirdMessage, b: SendbirdMessage) {
+  return messageComparator(a, b) * -1;
 }
 
 export default createGroupChannelThreadFragment;

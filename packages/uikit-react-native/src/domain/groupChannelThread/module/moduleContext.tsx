@@ -104,7 +104,7 @@ const useScrollActions = (params: Pick<GroupChannelThreadProps['Provider'], 'thr
 
     setTimeout(() => {
       if (flatListRef.current) {
-        flatListRef.current.scrollToOffset({ offset: 0, animated: params?.animated ?? false });
+        flatListRef.current.scrollToEnd({ animated: params?.animated ?? false });
       }
     }, params?.timeout ?? 0);
   });
