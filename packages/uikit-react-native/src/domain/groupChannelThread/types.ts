@@ -27,7 +27,7 @@ export interface GroupChannelThreadProps {
     startingPoint?: number;
     onParentMessageDeleted: () => void;
     onChannelDeleted: () => void;
-    onPressHeaderLeft: GroupChannelThreadProps['Header']['onPressHeaderLeft'];
+    onPressHeader: GroupChannelThreadProps['Header']['onPressHeader'];
     onPressMediaMessage?: GroupChannelThreadProps['MessageList']['onPressMediaMessage'];
 
     onBeforeSendUserMessage?: OnBeforeHandler<SendbirdUserMessageCreateParams>;
@@ -46,7 +46,7 @@ export interface GroupChannelThreadProps {
     sortComparator?: UseGroupChannelMessagesOptions['sortComparator'];
   };
   Header: {
-    onPressHeaderLeft: () => void;
+    onPressHeader: () => void;
   };
   ParentMessageInfo: {
     channel: SendbirdGroupChannel;

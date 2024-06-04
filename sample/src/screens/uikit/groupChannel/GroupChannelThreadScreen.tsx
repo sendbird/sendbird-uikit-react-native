@@ -39,7 +39,7 @@ const GroupChannelThreadScreen = () => {
         // Should leave channel, navigate to channel list
         navigation.navigate(Routes.GroupChannelList);
       }}
-      onPressHeaderLeft={() => {
+      onPressHeader={() => {
         // Navigate back
         navigation.goBack();
       }}
