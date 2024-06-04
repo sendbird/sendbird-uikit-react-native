@@ -36,8 +36,6 @@ export interface GroupChannelThreadProps {
     onBeforeUpdateFileMessage?: OnBeforeHandler<SendbirdFileMessageUpdateParams>;
 
     renderMessage?: GroupChannelThreadProps['MessageList']['renderMessage'];
-    renderNewMessagesButton?: GroupChannelThreadProps['MessageList']['renderNewMessagesButton'];
-    renderScrollToBottomButton?: GroupChannelThreadProps['MessageList']['renderScrollToBottomButton'];
 
     enableMessageGrouping?: GroupChannelThreadProps['MessageList']['enableMessageGrouping'];
 
@@ -69,8 +67,6 @@ export interface GroupChannelThreadProps {
     | 'onDeleteMessage'
     | 'onPressMediaMessage'
     | 'renderMessage'
-    | 'renderNewMessagesButton'
-    | 'renderScrollToBottomButton'
     | 'flatListProps'
     | 'hasNext'
     | 'searchItem'

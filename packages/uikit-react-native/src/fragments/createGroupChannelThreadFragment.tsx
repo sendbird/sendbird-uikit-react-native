@@ -18,8 +18,6 @@ import {
 } from '@sendbird/uikit-utils';
 
 import GroupChannelMessageRenderer from '../components/GroupChannelMessageRenderer';
-import NewMessagesButton from '../components/NewMessagesButton';
-import ScrollToBottomButton from '../components/ScrollToBottomButton';
 import StatusComposition from '../components/StatusComposition';
 import createGroupChannelThreadModule from '../domain/groupChannelThread/module/createGroupChannelThreadModule';
 import type {
@@ -37,8 +35,6 @@ const createGroupChannelThreadFragment = (
   const GroupChannelThreadModule = createGroupChannelThreadModule(initModule);
 
   return ({
-    renderNewMessagesButton = (props) => <NewMessagesButton {...props} />,
-    renderScrollToBottomButton = (props) => <ScrollToBottomButton {...props} />,
     renderMessage,
     enableMessageGrouping = true,
     onPressHeader = NOOP,
@@ -229,8 +225,6 @@ const createGroupChannelThreadFragment = (
             hasNext={hasNext}
             scrolledAwayFromBottom={scrolledAwayFromBottom}
             onScrolledAwayFromBottom={onScrolledAwayFromBottom}
-            renderNewMessagesButton={renderNewMessagesButton}
-            renderScrollToBottomButton={renderScrollToBottomButton}
             onResendFailedMessage={resendMessage}
             onDeleteMessage={deleteMessage}
             onPressMediaMessage={_onPressMediaMessage}
