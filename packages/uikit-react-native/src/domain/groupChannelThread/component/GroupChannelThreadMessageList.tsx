@@ -76,6 +76,8 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
       onEditMessage={setMessageToEdit}
       onPressNewMessagesButton={scrollToBottom}
       onPressScrollToBottomButton={scrollToBottom}
+      renderNewMessagesButton={null}
+      renderScrollToBottomButton={null}
     />
   );
 };
