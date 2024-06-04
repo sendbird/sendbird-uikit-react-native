@@ -280,9 +280,11 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
         return 'Several people are typing...';
       },
       REPLY_FROM_SENDER_TO_RECEIVER: (reply, parent, currentUserId = UNKNOWN_USER_ID) => {
-        const senderNickname = reply.sender.nickname || USER_NO_NAME;
-        const receiverNickname = parent.sender.nickname || USER_NO_NAME;
-        return `${reply.sender.userId !== currentUserId ? senderNickname : 'You'} replied to ${receiverNickname}`;
+        const replySenderNickname =
+          reply.sender.userId === currentUserId ? 'You' : reply.sender.nickname || USER_NO_NAME;
+        const parentSenderNickname =
+          parent.sender.userId === currentUserId ? 'You' : parent.sender.nickname || USER_NO_NAME;
+        return `${replySenderNickname} replied to ${parentSenderNickname}`;
       },
       MESSAGE_UNAVAILABLE: 'Message unavailable',
 
