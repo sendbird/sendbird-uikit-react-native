@@ -62,7 +62,7 @@ const App = () => {
         groupChannel: {
           enableMention: true,
           typingIndicatorTypes: new Set([TypingIndicatorType.Text, TypingIndicatorType.Bubble]),
-          replyType: 'thread',
+          replyType: 'quote_reply',
           threadReplySelectType: 'thread',
         },
         groupChannelList: {
