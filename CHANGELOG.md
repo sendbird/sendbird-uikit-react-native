@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.5.3...v3.5.4) (2024-06-13)
+
+### ⚠ BREAKING CHANGES
+
+- deprecated enableReactionsSupergroup in SendbirdUIKitContainerProps
+
+### Features
+
+- deprecated enableReactionsSupergroup in SendbirdUIKitContainerProps ([b90d2e2](https://github.com/sendbird/sendbird-uikit-react-native/commit/b90d2e2ed8e13e35729a5c77775529e2380093da))
+
 ## [3.5.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.5.2...v3.5.3) (2024-05-28)
 
 ### Bug Fixes
