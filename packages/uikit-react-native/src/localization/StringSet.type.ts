@@ -144,7 +144,7 @@ export interface StringSet {
     MESSAGE_BUBBLE_UNKNOWN_DESC: (message: SendbirdMessage) => string;
 
     PARENT_MESSAGE_TIME: (message: SendbirdMessage, locale?: Locale) => string;
-    REPLAY_COUNT: (replyCount: number) => string;
+    REPLAY_COUNT: (replyCount: number, minRepliesForPlusFormat?: number) => string;
 
     /** GroupChannelThread > Suggested mention list */
     MENTION_LIMITED: (mentionLimit: number) => string;
