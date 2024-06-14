@@ -1,6 +1,6 @@
 import type { Locale } from 'date-fns';
 
-import type { PartialDeep } from '@sendbird/uikit-utils';
+import { PartialDeep, SendbirdMessage, getThreadParentMessageTimeFormat } from '@sendbird/uikit-utils';
 import {
   getDateSeparatorFormat,
   getGroupChannelPreviewTime,
@@ -12,6 +12,7 @@ import {
   getMessageType,
   getOpenChannelParticipants,
   getOpenChannelTitle,
+  getReplyCountFormat,
   isVoiceMessage,
 } from '@sendbird/uikit-utils';
 
@@ -126,6 +127,25 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
 
       MENTION_LIMITED: (mentionLimit) => `You can have up to ${mentionLimit} mentions per message.`,
       ...overrides?.GROUP_CHANNEL,
+    },
+    GROUP_CHANNEL_THREAD: {
+      HEADER_TITLE: 'Thread',
+      HEADER_SUBTITLE: (uid, channel) => getGroupChannelTitle(uid, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
+      LIST_DATE_SEPARATOR: (date, locale) => getDateSeparatorFormat(date, locale ?? dateLocale),
+      LIST_BUTTON_NEW_MSG: (newMessages) => `${newMessages.length} new messages`,
+
+      MESSAGE_BUBBLE_TIME: (message, locale) => getMessageTimeFormat(new Date(message.createdAt), locale ?? dateLocale),
+      MESSAGE_BUBBLE_FILE_TITLE: (message) => message.name,
+      MESSAGE_BUBBLE_EDITED_POSTFIX: ' (edited)',
+      MESSAGE_BUBBLE_UNKNOWN_TITLE: () => '(Unknown message type)',
+      MESSAGE_BUBBLE_UNKNOWN_DESC: () => 'Cannot read this message.',
+
+      PARENT_MESSAGE_TIME: (message: SendbirdMessage, locale?: Locale) =>
+        getThreadParentMessageTimeFormat(new Date(message.createdAt), locale ?? dateLocale),
+      REPLAY_COUNT: (replyCount: number) => getReplyCountFormat(replyCount),
+
+      MENTION_LIMITED: (mentionLimit) => `You can have up to ${mentionLimit} mentions per message.`,
+      ...overrides?.GROUP_CHANNEL_THREAD,
     },
     GROUP_CHANNEL_SETTINGS: {
       HEADER_TITLE: 'Channel information',
@@ -280,6 +300,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       CHANNEL_MESSAGE_SAVE: 'Save',
       CHANNEL_MESSAGE_DELETE: 'Delete',
       CHANNEL_MESSAGE_REPLY: 'Reply',
+      CHANNEL_MESSAGE_THREAD: 'Reply in thread',
       CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE: 'Delete message?',
       CHANNEL_MESSAGE_DELETE_CONFIRM_OK: 'Delete',
       CHANNEL_MESSAGE_DELETE_CONFIRM_CANCEL: 'Cancel',
@@ -293,6 +314,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       CHANNEL_INPUT_PLACEHOLDER_DISABLED: 'Chat not available in this channel.',
       CHANNEL_INPUT_PLACEHOLDER_MUTED: "You're muted by the operator.",
       CHANNEL_INPUT_PLACEHOLDER_REPLY: 'Reply to message',
+      CHANNEL_INPUT_PLACEHOLDER_THREAD: 'Reply in thread',
       CHANNEL_INPUT_EDIT_OK: 'Save',
       CHANNEL_INPUT_EDIT_CANCEL: 'Cancel',
       CHANNEL_INPUT_REPLY_PREVIEW_TITLE: (user) => `Reply to ${user.nickname || USER_NO_NAME}`,
@@ -371,6 +393,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       UNKNOWN_ERROR: 'Something went wrong.',
       GET_CHANNEL_ERROR: "Couldn't retrieve channel.",
       FIND_PARENT_MSG_ERROR: "Couldn't find the original message for this reply.",
+      THREAD_PARENT_MESSAGE_DELETED_ERROR: "The thread doesn't exist because the parent message was deleted.",
       ...overrides?.TOAST,
     },
     PROFILE_CARD: {

@@ -4,7 +4,12 @@ import { MessageCollection, MessageFilter } from '@sendbird/chat/groupChannel';
 import { ReplyType } from '@sendbird/chat/message';
 import { Box } from '@sendbird/uikit-react-native-foundation';
 import { useGroupChannelMessages } from '@sendbird/uikit-tools';
-import type { SendbirdFileMessage, SendbirdGroupChannel, SendbirdUserMessage } from '@sendbird/uikit-utils';
+import type {
+  SendbirdFileMessage,
+  SendbirdGroupChannel,
+  SendbirdSendableMessage,
+  SendbirdUserMessage,
+} from '@sendbird/uikit-utils';
 import {
   NOOP,
   PASS,
@@ -45,6 +50,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     onPressHeaderRight = NOOP,
     onPressMediaMessage = NOOP,
     onChannelDeleted = NOOP,
+    onPressReplyMessageInThread = NOOP,
     onBeforeSendUserMessage = PASS,
     onBeforeSendFileMessage = PASS,
     onBeforeUpdateUserMessage = PASS,
@@ -118,6 +124,12 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       async (message, deleteMessage, uri) => {
         await onBlurFragment();
         onPressMediaMessage(message, deleteMessage, uri);
+      },
+    );
+    const _onPressReplyMessageInThread = useFreshCallback(
+      async (message: SendbirdSendableMessage, startingPoint?: number) => {
+        await onBlurFragment();
+        onPressReplyMessageInThread(message, startingPoint);
       },
     );
 
@@ -208,6 +220,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
         keyboardAvoidOffset={keyboardAvoidOffset}
         messages={messages}
         onUpdateSearchItem={onUpdateSearchItem}
+        onPressReplyMessageInThread={_onPressReplyMessageInThread}
       >
         <GroupChannelModule.Header
           shouldHideRight={navigateFromMessageSearch}

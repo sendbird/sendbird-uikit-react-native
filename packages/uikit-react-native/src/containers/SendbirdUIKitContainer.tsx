@@ -64,7 +64,7 @@ export const SendbirdUIKit = Object.freeze({
   },
 });
 
-type UnimplementedFeatures = 'threadReplySelectType' | 'replyType' | 'enableReactionsSupergroup';
+type UnimplementedFeatures = 'enableReactionsSupergroup';
 export type ChatOmittedInitParams = Omit<
   SendbirdChatParams<[GroupChannelModule, OpenChannelModule]>,
   (typeof chatOmitKeys)[number]
@@ -103,7 +103,6 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   uikitOptions?: PartialDeep<{
     common: SBUConfig['common'];
     groupChannel: Omit<SBUConfig['groupChannel']['channel'], UnimplementedFeatures> & {
-      replyType: Extract<SBUConfig['groupChannel']['channel']['replyType'], 'none' | 'quote_reply'>;
       /**
        * @deprecated Currently, this feature is turned off by default. If you wish to use this feature, contact us: {@link https://dashboard.sendbird.com/settings/contact_us?category=feedback_and_feature_requests&product=UIKit}
        */

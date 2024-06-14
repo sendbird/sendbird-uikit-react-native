@@ -30,7 +30,7 @@ type Props = {
   channel: SendbirdGroupChannel;
   message: SendbirdUserMessage | SendbirdFileMessage;
   childMessage: SendbirdUserMessage | SendbirdFileMessage;
-  onPress?: (message: SendbirdMessage) => void;
+  onPress?: (parentMessage: SendbirdMessage, childMessage: SendbirdUserMessage | SendbirdFileMessage) => void;
 };
 
 const GroupChannelMessageParentMessage = ({ variant, channel, message, childMessage, onPress }: Props) => {
@@ -135,7 +135,7 @@ const GroupChannelMessageParentMessage = ({ variant, channel, message, childMess
         paddingLeft={variant === 'outgoing' ? 0 : 12}
         paddingRight={variant === 'outgoing' ? 12 : 0}
       >
-        <PressBox onPress={() => onPress?.(parentMessage)} style={styles.senderLabel}>
+        <PressBox onPress={() => onPress?.(parentMessage, childMessage)} style={styles.senderLabel}>
           <Icon icon={'reply-filled'} size={13} color={colors.onBackground03} containerStyle={{ marginRight: 4 }} />
           <Text caption1 color={colors.onBackground03}>
             {STRINGS.LABELS.REPLY_FROM_SENDER_TO_RECEIVER(childMessage, parentMessage, currentUser?.userId)}
@@ -147,7 +147,7 @@ const GroupChannelMessageParentMessage = ({ variant, channel, message, childMess
         justifyContent={variant === 'outgoing' ? 'flex-end' : 'flex-start'}
         style={styles.messageContainer}
       >
-        <PressBox onPress={() => onPress?.(parentMessage)}>{parentMessageComponent}</PressBox>
+        <PressBox onPress={() => onPress?.(parentMessage, childMessage)}>{parentMessageComponent}</PressBox>
       </Box>
     </Box>
   );
