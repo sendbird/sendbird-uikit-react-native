@@ -34,6 +34,7 @@ const ChatFlatList = forwardRef<RNFlatList, Props>(function ChatFlatList(
   const contentOffsetY = useRef(0);
   // FIXME: inverted list of ListEmptyComponent is reversed {@link https://github.com/facebook/react-native/issues/21196#issuecomment-836937743}
   const inverted = useRef(props.inverted ?? Boolean(props.data?.length));
+  inverted.current = props.inverted ?? Boolean(props.data?.length);
 
   const _onScroll = useFreshCallback<NonNullable<Props['onScroll']>>((event) => {
     onScroll?.(event);
