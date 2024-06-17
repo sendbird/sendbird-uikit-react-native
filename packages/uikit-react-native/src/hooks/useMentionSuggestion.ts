@@ -89,7 +89,7 @@ const useMentionSuggestion = (params: {
         .then((members) => members.slice(0, mentionManager.config.suggestionLimit));
     } else {
       return freshChannel.members
-        .sort((a, b) => a.nickname?.localeCompare(b.nickname))
+        .sort((a, b) => a.nickname?.toLowerCase().localeCompare(b.nickname.toLowerCase()))
         .filter(
           (member) =>
             member.nickname?.toLowerCase().startsWith(searchString.toLowerCase()) &&
