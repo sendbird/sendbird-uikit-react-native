@@ -7,6 +7,7 @@ import {
   SendbirdGroupChannel,
   type SendbirdMessage,
   SendbirdUserMessage,
+  getReadableFileSize,
 } from '@sendbird/uikit-utils';
 import {
   NOOP,
@@ -178,8 +179,17 @@ const createGroupChannelThreadFragment = (
     const onPressSendFileMessage: GroupChannelThreadProps['Input']['onPressSendFileMessage'] = useFreshCallback(
       async (params) => {
         const processedParams = await onBeforeSendFileMessage(params);
-        const message = await sendFileMessage(processedParams, onPending);
-        onSent(message);
+        const fileSize = (processedParams.file as File)?.size ?? processedParams.fileSize;
+        const uploadSizeLimit = sbOptions.appInfo.uploadSizeLimit;
+
+        if (fileSize && uploadSizeLimit && fileSize > uploadSizeLimit) {
+          const sizeLimitString = `${getReadableFileSize(uploadSizeLimit)} MB`;
+          toast.show(STRINGS.TOAST.FILE_UPLOAD_SIZE_LIMIT_EXCEEDED_ERROR(sizeLimitString), 'error');
+          return;
+        } else {
+          const message = await sendFileMessage(processedParams, onPending);
+          onSent(message);
+        }
       },
     );
     const onPressUpdateUserMessage: GroupChannelThreadProps['Input']['onPressUpdateUserMessage'] = useFreshCallback(

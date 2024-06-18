@@ -179,3 +179,18 @@ export const getReplyCountFormat = (replyCount: number, minRepliesForPlusFormat?
 export const getThreadParentMessageTimeFormat = (date: Date, locale?: Locale): string => {
   return format(date, "MMM dd 'at' h:mm a", { locale });
 };
+
+/**
+ * File size format
+ *
+ * @param {number} fileSize
+ * @returns {string}
+ * */
+export const getReadableFileSize = (fileSize: number): string => {
+  if (fileSize <= 0) {
+    return '0 B';
+  }
+  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const digitGroups = Math.floor(Math.log10(fileSize) / Math.log10(1024));
+  return `${(fileSize / Math.pow(1024, digitGroups)).toFixed(1)} ${units[digitGroups]}`;
+};

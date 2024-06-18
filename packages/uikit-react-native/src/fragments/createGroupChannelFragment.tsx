@@ -9,7 +9,7 @@ import {
   SendbirdGroupChannel,
   SendbirdSendableMessage,
   SendbirdUserMessage,
-  toMegabyte,
+  getReadableFileSize,
 } from '@sendbird/uikit-utils';
 import {
   NOOP,
@@ -201,7 +201,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
         const uploadSizeLimit = sbOptions.appInfo.uploadSizeLimit;
 
         if (fileSize && uploadSizeLimit && fileSize > uploadSizeLimit) {
-          const sizeLimitString = `${toMegabyte(uploadSizeLimit)} MB`;
+          const sizeLimitString = `${getReadableFileSize(uploadSizeLimit)} MB`;
           toast.show(STRINGS.TOAST.FILE_UPLOAD_SIZE_LIMIT_EXCEEDED_ERROR(sizeLimitString), 'error');
           return;
         } else {
