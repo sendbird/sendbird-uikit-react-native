@@ -80,6 +80,7 @@ export type SendbirdChatContextType = {
       broadcastChannelEnabled: boolean;
       superGroupChannelEnabled: boolean;
       reactionEnabled: boolean;
+      uploadSizeLimit: number | undefined;
     };
   };
 };

@@ -398,6 +398,9 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       GET_CHANNEL_ERROR: "Couldn't retrieve channel.",
       FIND_PARENT_MSG_ERROR: "Couldn't find the original message for this reply.",
       THREAD_PARENT_MESSAGE_DELETED_ERROR: "The thread doesn't exist because the parent message was deleted.",
+      FILE_UPLOAD_SIZE_LIMIT_EXCEEDED_ERROR: (uploadSizeLimit: string) => {
+        return `The maximum size per file is ${uploadSizeLimit}.`;
+      },
       ...overrides?.TOAST,
     },
     PROFILE_CARD: {

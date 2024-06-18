@@ -372,6 +372,7 @@ export interface StringSet {
     GET_CHANNEL_ERROR: string;
     FIND_PARENT_MSG_ERROR: string;
     THREAD_PARENT_MESSAGE_DELETED_ERROR: string;
+    FILE_UPLOAD_SIZE_LIMIT_EXCEEDED_ERROR: (uploadSizeLimit: string) => string;
   };
   PROFILE_CARD: {
     BUTTON_MESSAGE: string;
