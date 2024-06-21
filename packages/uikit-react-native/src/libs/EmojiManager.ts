@@ -1,9 +1,9 @@
 import type { SendbirdEmoji, SendbirdEmojiCategory, SendbirdEmojiContainer } from '@sendbird/uikit-utils';
 
-import type { LocalCacheStorage } from '../types';
+import type { AsyncLocalCacheStorage } from '../types';
 import InternalLocalCacheStorage from './InternalLocalCacheStorage';
 
-class MemoryStorage implements LocalCacheStorage {
+class MemoryStorage implements AsyncLocalCacheStorage {
   _data: Record<string, string> = {};
 
   async getAllKeys(): Promise<readonly string[] | string[]> {

@@ -80,6 +80,9 @@ PODS:
   - libwebp/sharpyuv (1.3.2)
   - libwebp/webp (1.3.2):
     - libwebp/sharpyuv
+  - MMKV (1.3.4):
+    - MMKVCore (~> 1.3.4)
+  - MMKVCore (1.3.4)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -305,6 +308,9 @@ PODS:
     - React-Core
   - react-native-image-resizer (3.0.5):
     - React-Core
+  - react-native-mmkv (2.5.1):
+    - MMKV (>= 1.2.13)
+    - React-Core
   - react-native-netinfo (9.3.9):
     - React-Core
   - react-native-safe-area-context (3.4.1):
@@ -383,7 +389,7 @@ PODS:
     - React-perflogger (= 0.67.5)
   - RNAudioRecorderPlayer (3.6.0):
     - React-Core
-  - RNCAsyncStorage (1.18.1):
+  - RNCAsyncStorage (1.23.1):
     - React-Core
   - RNCClipboard (1.11.2):
     - React-Core
@@ -452,6 +458,7 @@ DEPENDENCIES:
   - react-native-file-access (from `../../node_modules/react-native-file-access`)
   - react-native-image-picker (from `../../node_modules/react-native-image-picker`)
   - "react-native-image-resizer (from `../../node_modules/@bam.tech/react-native-image-resizer`)"
+  - react-native-mmkv (from `../../node_modules/react-native-mmkv`)
   - "react-native-netinfo (from `../../node_modules/@react-native-community/netinfo`)"
   - react-native-safe-area-context (from `../../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../../node_modules/@react-native-community/slider`)"
@@ -493,6 +500,8 @@ SPEC REPOS:
     - GoogleDataTransport
     - GoogleUtilities
     - libwebp
+    - MMKV
+    - MMKVCore
     - nanopb
     - PromisesObjC
     - SDWebImage
@@ -554,6 +563,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native-image-picker"
   react-native-image-resizer:
     :path: "../../node_modules/@bam.tech/react-native-image-resizer"
+  react-native-mmkv:
+    :path: "../../node_modules/react-native-mmkv"
   react-native-netinfo:
     :path: "../../node_modules/@react-native-community/netinfo"
   react-native-safe-area-context:
@@ -628,6 +639,8 @@ SPEC CHECKSUMS:
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
   GoogleUtilities: d053d902a8edaa9904e1bd00c37535385b8ed152
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
+  MMKV: ed58ad794b3f88c24d604a5b74f3fba17fcbaf74
+  MMKVCore: a67a1cede26175c413176f404a7cedec43f96a0b
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   Permission-Camera: e6d142d7d8b714afe0a83e5e6ae17eb949f1e3e9
   Permission-Microphone: 644b1de8bcc2afcaf934e09a22bee507a95796a7
@@ -652,6 +665,7 @@ SPEC CHECKSUMS:
   react-native-file-access: a4398950e02999b5ab97f3055feb7ee28e6615a3
   react-native-image-picker: 60f4246eb5bb7187fc15638a8c1f13abd3820695
   react-native-image-resizer: 00ceb0e05586c7aadf061eea676957a6c2ec60fa
+  react-native-mmkv: 69b9c003f10afdd01addf7c6ee784ce42ee2eff3
   react-native-netinfo: 22c082970cbd99071a4e5aa7a612ac20d66b08f0
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
   react-native-slider: 33b8d190b59d4f67a541061bb91775d53d617d9d
@@ -669,7 +683,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 434efc9e5b6d0f14f49867f130b39376c971c1aa
   ReactCommon: a30c2448e5a88bae6fcb0e3da124c14ae493dac1
   RNAudioRecorderPlayer: 4690a7cd9e4fd8e58d9671936a7bc3b686e59051
-  RNCAsyncStorage: b90b71f45b8b97be43bc4284e71a6af48ac9f547
+  RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
   RNCClipboard: 3f0451a8100393908bea5c5c5b16f96d45f30bfc
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
   RNDateTimePicker: 1dd15d7ed1ab7d999056bc77879a42920d139c12
