@@ -3570,10 +3570,10 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@sendbird/chat@4.11.3", "@sendbird/chat@^4.10.7":
-  version "4.11.3"
-  resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.11.3.tgz#f0f6b2c1da3c24fd27f49221ccfde02105b30951"
-  integrity sha512-I5OIWBL4jdVHvBn2UqJZJkcE+sXPOVVxZFtJfK3FrllkT9hDtCLzCi5GPWnh0X73vr+WBLY6KSw27y4dZfIPEg==
+"@sendbird/chat@4.12.8", "@sendbird/chat@^4.12.8":
+  version "4.12.8"
+  resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.12.8.tgz#e68a09e8b4c63186e6df3ebe7179f852ffed385d"
+  integrity sha512-wn1X1fbly8nj4rzViR+UQoPzgElHeFcSMlp/UfiPAUClvRTtnrf96Pf8KOW5woGCKCYWWMK/8rm5d9wL+iHa7A==
 
 "@sendbird/uikit-tools@0.0.1-alpha.77":
   version "0.0.1-alpha.77"
@@ -13409,6 +13409,11 @@ react-native-image-picker@^4.7.1, react-native-image-picker@^4.7.3:
   version "4.10.3"
   resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-4.10.3.tgz#cdc11d9836b4cfa57e658c0700201babf8fdca10"
   integrity sha512-gLX8J6jCBkUt6jogpSdA7YyaGVLGYywRzMEwBciXshihpFZjc/cRlKymAVlu6Q7HMw0j3vrho6pI8ZGC5O/FGg==
+
+react-native-mmkv@^2.0.0, react-native-mmkv@^2.12.2:
+  version "2.12.2"
+  resolved "https://registry.yarnpkg.com/react-native-mmkv/-/react-native-mmkv-2.12.2.tgz#4bba0f5f04e2cf222494cce3a9794ba6a4894dee"
+  integrity sha512-6058Aq0p57chPrUutLGe9fYoiDVDNMU2PKV+lLFUJ3GhoHvUrLdsS1PDSCLr00yqzL4WJQ7TTzH+V8cpyrNcfg==
 
 react-native-modal-datetime-picker@^14.0.0:
   version "14.0.1"
