@@ -38,6 +38,7 @@ import InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
 import MentionConfig, { MentionConfigInterface } from '../libs/MentionConfig';
 import MentionManager from '../libs/MentionManager';
 import VoiceMessageConfig, { VoiceMessageConfigInterface } from '../libs/VoiceMessageConfig';
+import VoiceMessageStatusManager from '../libs/VoiceMessageStatusManager';
 import StringSetEn from '../localization/StringSet.en';
 import type { StringSet } from '../localization/StringSet.type';
 import SBUDynamicModule from '../platform/dynamicModule';
@@ -179,6 +180,7 @@ const SendbirdUIKitContainer = (props: SendbirdUIKitContainerProps) => {
   const { imageCompressionConfig, voiceMessageConfig, mentionConfig } = useConfigInstance(props);
   const emojiManager = useMemo(() => new EmojiManager(internalStorage), [internalStorage]);
   const mentionManager = useMemo(() => new MentionManager(mentionConfig), [mentionConfig]);
+  const voiceMessageStatusManager = useMemo(() => new VoiceMessageStatusManager(), []);
 
   useLayoutEffect(() => {
     if (!isFirstMount) {
@@ -226,6 +228,7 @@ const SendbirdUIKitContainer = (props: SendbirdUIKitContainerProps) => {
           mentionManager={mentionManager}
           imageCompressionConfig={imageCompressionConfig}
           voiceMessageConfig={voiceMessageConfig}
+          voiceMessageStatusManager={voiceMessageStatusManager}
           enableAutoPushTokenRegistration={
             chatOptions.enableAutoPushTokenRegistration ?? SendbirdUIKit.DEFAULT.AUTO_PUSH_TOKEN_REGISTRATION
           }

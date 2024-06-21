@@ -51,7 +51,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
 }) => {
   const playerUnsubscribes = useRef<(() => void)[]>([]);
   const { palette } = useUIKitTheme();
-  const { sbOptions, currentUser, mentionManager } = useSendbirdChat();
+  const { sbOptions, currentUser, mentionManager, voiceMessageStatusManager } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { mediaService, playerService } = usePlatformService();
   const { groupWithPrev, groupWithNext } = calcMessageGrouping(
@@ -62,6 +62,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     sbOptions.uikit.groupChannel.channel.replyType === 'thread',
     shouldRenderParentMessage(message, hideParentMessage),
   );
+
   const variant = isMyMessage(message, currentUser?.userId) ? 'outgoing' : 'incoming';
 
   const reactionChildren = useIIFE(() => {
@@ -106,6 +107,8 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     },
     onToggleVoiceMessage: async (state, setState) => {
       if (isVoiceMessage(message) && message.sendingStatus === 'succeeded') {
+        voiceMessageStatusManager.setCurrentTime(message.channelUrl, message.messageId, state.currentTime);
+
         if (playerService.uri === message.url) {
           if (playerService.state === 'playing') {
             await playerService.pause();
@@ -226,6 +229,30 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     ],
   };
 
+  const renderVoiceMessage = () => {
+    const voiceMessageProps: {
+      durationMetaArrayKey?: string;
+      onUnmount: () => void;
+      initialCurrentTime?: number;
+    } = {
+      durationMetaArrayKey: VOICE_MESSAGE_META_ARRAY_DURATION_KEY,
+      initialCurrentTime: voiceMessageStatusManager.getCurrentTime(message.channelUrl, message.messageId),
+      onUnmount: () => {
+        if (isVoiceMessage(message) && playerService.uri === message.url) {
+          resetPlayer();
+        }
+      },
+    };
+
+    return (
+      <GroupChannelMessage.VoiceFile
+        message={message as SendbirdFileMessage}
+        {...voiceMessageProps}
+        {...messageProps}
+      />
+    );
+  };
+
   const renderMessage = () => {
     switch (getMessageType(message)) {
       case 'admin': {
@@ -268,18 +295,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
         );
       }
       case 'file.voice': {
-        return (
-          <GroupChannelMessage.VoiceFile
-            message={message as SendbirdFileMessage}
-            durationMetaArrayKey={VOICE_MESSAGE_META_ARRAY_DURATION_KEY}
-            onUnmount={() => {
-              if (isVoiceMessage(message) && playerService.uri === message.url) {
-                resetPlayer();
-              }
-            }}
-            {...messageProps}
-          />
-        );
+        return renderVoiceMessage();
       }
       case 'unknown':
       default: {

@@ -14,6 +14,7 @@ import type EmojiManager from '../libs/EmojiManager';
 import type ImageCompressionConfig from '../libs/ImageCompressionConfig';
 import type MentionManager from '../libs/MentionManager';
 import type VoiceMessageConfig from '../libs/VoiceMessageConfig';
+import VoiceMessageStatusManager from '../libs/VoiceMessageStatusManager';
 import type { FileType } from '../platform/types';
 
 export interface ChatRelatedFeaturesInUIKit {
@@ -27,6 +28,7 @@ interface Props extends ChatRelatedFeaturesInUIKit, React.PropsWithChildren {
 
   emojiManager: EmojiManager;
   mentionManager: MentionManager;
+  voiceMessageStatusManager: VoiceMessageStatusManager;
   imageCompressionConfig: ImageCompressionConfig;
   voiceMessageConfig: VoiceMessageConfig;
 }
@@ -39,6 +41,7 @@ export type SendbirdChatContextType = {
   // feature related instances
   emojiManager: EmojiManager;
   mentionManager: MentionManager;
+  voiceMessageStatusManager: VoiceMessageStatusManager;
   imageCompressionConfig: ImageCompressionConfig;
   voiceMessageConfig: VoiceMessageConfig;
 
@@ -91,6 +94,7 @@ export const SendbirdChatProvider = ({
   sdkInstance,
   emojiManager,
   mentionManager,
+  voiceMessageStatusManager,
   imageCompressionConfig,
   voiceMessageConfig,
   enableAutoPushTokenRegistration,
@@ -165,6 +169,7 @@ export const SendbirdChatProvider = ({
     mentionManager,
     imageCompressionConfig,
     voiceMessageConfig,
+    voiceMessageStatusManager,
     currentUser,
     setCurrentUser,
 
