@@ -72,6 +72,14 @@ const ChatFlatList = forwardRef<RNFlatList, Props>(function ChatFlatList(
     );
   }
 
+  const _onStartReached: () => void = () => {
+    inverted.current ? onBottomReached() : onTopReached();
+  };
+
+  const _onEndReached: () => void = () => {
+    inverted.current ? onTopReached() : onBottomReached();
+  };
+
   return (
     <FlatListInternal
       bounces={false}
@@ -82,9 +90,9 @@ const ChatFlatList = forwardRef<RNFlatList, Props>(function ChatFlatList(
       {...props}
       inverted={inverted.current}
       ref={ref}
-      onEndReached={onTopReached}
+      onEndReached={_onEndReached}
       onScrollToIndexFailed={NOOP}
-      onStartReached={onBottomReached}
+      onStartReached={_onStartReached}
       scrollEventThrottle={16}
       onScroll={_onScroll}
       keyExtractor={getMessageUniqId}
