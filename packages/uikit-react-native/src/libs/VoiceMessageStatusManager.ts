@@ -1,29 +1,49 @@
 interface VoiceMessageStatus {
   currentTime: number;
+  subscribers?: Set<(currentTime: number) => void>;
 }
 
 class VoiceMessageStatusManager {
   private statusMap: Map<string, VoiceMessageStatus> = new Map();
 
-  private generateKey(channelUrl: string, messageId: number): string {
+  private generateKey = (channelUrl: string, messageId: number): string => {
     return `${channelUrl}-${messageId}`;
-  }
+  };
 
-  getCurrentTime(channelUrl: string, messageId: number): number {
+  subscribe = (channelUrl: string, messageId: number, subscriber: (currentTime: number) => void) => {
     const key = this.generateKey(channelUrl, messageId);
-    console.log(`useVoiceMessageStatus key:${key} currentTime: ${this.statusMap.get(key)?.currentTime}`);
+    if (!this.statusMap.has(key)) {
+      this.statusMap.set(key, { currentTime: 0, subscribers: new Set() });
+    }
+
+    this.statusMap.get(key)!.subscribers?.add(subscriber);
+  };
+
+  publishAll = (): void => {
+    this.statusMap.forEach((status) => {
+      status.subscribers?.forEach((subscriber) => {
+        subscriber(status.currentTime);
+      });
+    });
+  };
+
+  getCurrentTime = (channelUrl: string, messageId: number): number => {
+    const key = this.generateKey(channelUrl, messageId);
     return this.statusMap.get(key)?.currentTime || 0;
-  }
+  };
 
-  setCurrentTime(channelUrl: string, messageId: number, currentTime: number): void {
+  setCurrentTime = (channelUrl: string, messageId: number, currentTime: number): void => {
     const key = this.generateKey(channelUrl, messageId);
-    console.log(`useVoiceMessageStatus updateCurrentTime key:${key} currentTime: ${currentTime}`);
     if (!this.statusMap.has(key)) {
       this.statusMap.set(key, { currentTime });
     } else {
       this.statusMap.get(key)!.currentTime = currentTime;
     }
-  }
+  };
+
+  clear = (): void => {
+    this.statusMap.clear();
+  };
 }
 
 export default VoiceMessageStatusManager;

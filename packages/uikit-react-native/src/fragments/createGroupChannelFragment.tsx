@@ -64,7 +64,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     collectionCreator,
   }) => {
     const { playerService, recorderService } = usePlatformService();
-    const { sdk, currentUser, sbOptions } = useSendbirdChat();
+    const { sdk, currentUser, sbOptions, voiceMessageStatusManager } = useSendbirdChat();
     const toast = useToast();
     const { STRINGS } = useLocalization();
 
@@ -120,6 +120,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     };
     const _onPressHeaderLeft = useFreshCallback(async () => {
       await onBlurFragment();
+      voiceMessageStatusManager.clear();
       onPressHeaderLeft();
     });
     const _onPressHeaderRight = useFreshCallback(async () => {

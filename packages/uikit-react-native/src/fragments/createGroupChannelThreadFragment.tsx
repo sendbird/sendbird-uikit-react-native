@@ -54,7 +54,7 @@ const createGroupChannelThreadFragment = (
     flatListProps,
   }) => {
     const { playerService, recorderService } = usePlatformService();
-    const { sdk, currentUser, sbOptions } = useSendbirdChat();
+    const { sdk, currentUser, sbOptions, voiceMessageStatusManager } = useSendbirdChat();
 
     const [groupChannelThreadPubSub] = useState(() => pubsub<GroupChannelThreadPubSubContextPayload>());
     const [scrolledAwayFromBottom, setScrolledAwayFromBottom] = useState(false);
@@ -107,6 +107,7 @@ const createGroupChannelThreadFragment = (
     };
     const _onPressHeader = useFreshCallback(async () => {
       await onBlurFragment();
+      voiceMessageStatusManager.publishAll();
       onPressHeader();
     });
     const _onPressMediaMessage: NonNullable<GroupChannelThreadProps['MessageList']['onPressMediaMessage']> =

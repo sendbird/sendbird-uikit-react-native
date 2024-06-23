@@ -107,8 +107,6 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     },
     onToggleVoiceMessage: async (state, setState) => {
       if (isVoiceMessage(message) && message.sendingStatus === 'succeeded') {
-        voiceMessageStatusManager.setCurrentTime(message.channelUrl, message.messageId, state.currentTime);
-
         if (playerService.uri === message.url) {
           if (playerService.state === 'playing') {
             await playerService.pause();
@@ -124,6 +122,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
           let seekFinished = !shouldSeekToTime;
 
           const forPlayback = playerService.addPlaybackListener(({ stopped, currentTime, duration }) => {
+            voiceMessageStatusManager.setCurrentTime(message.channelUrl, message.messageId, currentTime);
             if (seekFinished) {
               setState((prevState) => ({ ...prevState, currentTime: stopped ? 0 : currentTime, duration }));
             }
@@ -234,9 +233,11 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
       durationMetaArrayKey?: string;
       onUnmount: () => void;
       initialCurrentTime?: number;
+      onSubscribe?: (channelUrl: string, messageId: number, subscriber: (currentTime: number) => void) => void;
     } = {
       durationMetaArrayKey: VOICE_MESSAGE_META_ARRAY_DURATION_KEY,
       initialCurrentTime: voiceMessageStatusManager.getCurrentTime(message.channelUrl, message.messageId),
+      onSubscribe: voiceMessageStatusManager.subscribe,
       onUnmount: () => {
         if (isVoiceMessage(message) && playerService.uri === message.url) {
           resetPlayer();

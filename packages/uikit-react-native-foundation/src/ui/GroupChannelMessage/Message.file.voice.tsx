@@ -26,6 +26,7 @@ type Props = GroupChannelMessageProps<
     durationMetaArrayKey?: string;
     onUnmount: () => void;
     initialCurrentTime?: number;
+    onSubscribe?: (channelUrl: string, messageId: number, subscriber: (currentTime: number) => void) => void;
   }
 >;
 const VoiceFileMessage = (props: Props) => {
@@ -37,6 +38,7 @@ const VoiceFileMessage = (props: Props) => {
     durationMetaArrayKey = 'KEY_VOICE_MESSAGE_DURATION',
     onUnmount,
     initialCurrentTime,
+    onSubscribe,
   } = props;
 
   const { colors } = useUIKitTheme();
@@ -56,6 +58,12 @@ const VoiceFileMessage = (props: Props) => {
     return () => {
       onUnmount();
     };
+  }, []);
+
+  useEffect(() => {
+    onSubscribe?.(props.channel.url, props.message.messageId, (currentTime) => {
+      setState((prev) => ({ ...prev, currentTime }));
+    });
   }, []);
 
   const uiColors = colors.ui.groupChannelMessage[variant];
