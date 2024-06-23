@@ -33,7 +33,7 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
       const foundMessageIndex = props.messages.findIndex((it) => it.createdAt === props.startingPoint);
       const isIncludedInList = foundMessageIndex > -1;
       if (isIncludedInList) {
-        lazyScrollToIndex({ index: foundMessageIndex, animated: true, timeout: 250 });
+        lazyScrollToIndex({ index: foundMessageIndex, animated: true, timeout: 500 });
       }
     }
   }, [props.startingPoint]);
