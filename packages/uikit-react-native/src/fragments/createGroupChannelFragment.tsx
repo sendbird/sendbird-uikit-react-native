@@ -119,8 +119,8 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       return Promise.allSettled([playerService.reset(), recorderService.reset()]);
     };
     const _onPressHeaderLeft = useFreshCallback(async () => {
-      await onBlurFragment();
       voiceMessageStatusManager.clear();
+      await onBlurFragment();
       onPressHeaderLeft();
     });
     const _onPressHeaderRight = useFreshCallback(async () => {

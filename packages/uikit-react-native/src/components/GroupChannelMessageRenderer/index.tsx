@@ -27,6 +27,7 @@ import { GroupChannelContexts } from '../../domain/groupChannel/module/moduleCon
 import type { GroupChannelProps } from '../../domain/groupChannel/types';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
 import SBUUtils from '../../libs/SBUUtils';
+import VoiceMessageStatusManager from '../../libs/VoiceMessageStatusManager';
 import { TypingIndicatorType } from '../../types';
 import { ReactionAddons } from '../ReactionAddons';
 import GroupChannelMessageDateSeparator from './GroupChannelMessageDateSeparator';
@@ -233,11 +234,13 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
       durationMetaArrayKey?: string;
       onUnmount: () => void;
       initialCurrentTime?: number;
-      onSubscribe?: (channelUrl: string, messageId: number, subscriber: (currentTime: number) => void) => void;
+      onSubscribeStatus?: VoiceMessageStatusManager['subscribe'];
+      onUnsubscribeStatus?: VoiceMessageStatusManager['unsubscribe'];
     } = {
       durationMetaArrayKey: VOICE_MESSAGE_META_ARRAY_DURATION_KEY,
       initialCurrentTime: voiceMessageStatusManager.getCurrentTime(message.channelUrl, message.messageId),
-      onSubscribe: voiceMessageStatusManager.subscribe,
+      onSubscribeStatus: voiceMessageStatusManager.subscribe,
+      onUnsubscribeStatus: voiceMessageStatusManager.unsubscribe,
       onUnmount: () => {
         if (isVoiceMessage(message) && playerService.uri === message.url) {
           resetPlayer();

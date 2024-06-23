@@ -15,8 +15,12 @@ class VoiceMessageStatusManager {
     if (!this.statusMap.has(key)) {
       this.statusMap.set(key, { currentTime: 0, subscribers: new Set() });
     }
-
     this.statusMap.get(key)!.subscribers?.add(subscriber);
+  };
+
+  unsubscribe = (channelUrl: string, messageId: number, subscriber: (currentTime: number) => void) => {
+    const key = this.generateKey(channelUrl, messageId);
+    this.statusMap.get(key)?.subscribers?.delete(subscriber);
   };
 
   publishAll = (): void => {
@@ -42,6 +46,9 @@ class VoiceMessageStatusManager {
   };
 
   clear = (): void => {
+    this.statusMap.forEach((status) => {
+      status.subscribers?.clear();
+    });
     this.statusMap.clear();
   };
 }
