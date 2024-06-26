@@ -1,5 +1,7 @@
+import type { AsyncStorageStatic } from '@react-native-async-storage/async-storage';
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Platform } from 'react-native';
+import type { MMKV } from 'react-native-mmkv';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import SendbirdChat, { DeviceOsPlatform, SendbirdChatParams, SendbirdPlatform, SendbirdProduct } from '@sendbird/chat';
@@ -309,8 +311,8 @@ const initializeSendbird = (appId: string, options: InitOptions) => {
     newInstance: true,
     modules: [new GroupChannelModule(), new OpenChannelModule()],
     localCacheEnabled: true,
-    useMMKVStorageStore: isMMKVStorage ? (localCacheStorage as never) : undefined,
-    useAsyncStorageStore: !isMMKVStorage ? (localCacheStorage as never) : undefined,
+    useMMKVStorageStore: isMMKVStorage ? (localCacheStorage as MMKV) : undefined,
+    useAsyncStorageStore: !isMMKVStorage ? (localCacheStorage as AsyncStorageStatic) : undefined,
   });
 
   if (onInitialized) {
