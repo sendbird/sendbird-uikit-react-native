@@ -48,7 +48,7 @@ const GroupChannelThreadParentMessageInfo = (props: GroupChannelThreadProps['Par
 
   const nickName = parentMessage.sender?.nickname || STRINGS.LABELS.USER_NO_NAME;
   const messageTimestamp = STRINGS.GROUP_CHANNEL_THREAD.PARENT_MESSAGE_TIME(parentMessage);
-  const replyCountText = STRINGS.GROUP_CHANNEL_THREAD.REPLAY_COUNT(parentMessage.threadInfo?.replyCount || 0);
+  const replyCountText = STRINGS.GROUP_CHANNEL_THREAD.REPLY_COUNT(parentMessage.threadInfo?.replyCount || 0);
   const createMessagePressActions = useCreateMessagePressActions({
     channel: props.channel,
     currentUserId: props.currentUserId,

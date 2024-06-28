@@ -142,7 +142,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
 
       PARENT_MESSAGE_TIME: (message: SendbirdMessage, locale?: Locale) =>
         getThreadParentMessageTimeFormat(new Date(message.createdAt), locale ?? dateLocale),
-      REPLAY_COUNT: (replyCount: number) => getReplyCountFormat(replyCount),
+      REPLY_COUNT: (replyCount: number, maxReplyCount?: number) => getReplyCountFormat(replyCount, maxReplyCount),
 
       MENTION_LIMITED: (mentionLimit) => `You can have up to ${mentionLimit} mentions per message.`,
       ...overrides?.GROUP_CHANNEL_THREAD,
@@ -280,9 +280,11 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
         return 'Several people are typing...';
       },
       REPLY_FROM_SENDER_TO_RECEIVER: (reply, parent, currentUserId = UNKNOWN_USER_ID) => {
-        const senderNickname = reply.sender.nickname || USER_NO_NAME;
-        const receiverNickname = parent.sender.nickname || USER_NO_NAME;
-        return `${reply.sender.userId !== currentUserId ? senderNickname : 'You'} replied to ${receiverNickname}`;
+        const replySenderNickname =
+          reply.sender.userId === currentUserId ? 'You' : reply.sender.nickname || USER_NO_NAME;
+        const parentSenderNickname =
+          parent.sender.userId === currentUserId ? 'You' : parent.sender.nickname || USER_NO_NAME;
+        return `${replySenderNickname} replied to ${parentSenderNickname}`;
       },
       MESSAGE_UNAVAILABLE: 'Message unavailable',
 
@@ -314,7 +316,8 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       CHANNEL_INPUT_PLACEHOLDER_DISABLED: 'Chat not available in this channel.',
       CHANNEL_INPUT_PLACEHOLDER_MUTED: "You're muted by the operator.",
       CHANNEL_INPUT_PLACEHOLDER_REPLY: 'Reply to message',
-      CHANNEL_INPUT_PLACEHOLDER_THREAD: 'Reply in thread',
+      CHANNEL_INPUT_PLACEHOLDER_REPLY_IN_THREAD: 'Reply in thread',
+      CHANNEL_INPUT_PLACEHOLDER_REPLY_TO_THREAD: 'Reply to thread',
       CHANNEL_INPUT_EDIT_OK: 'Save',
       CHANNEL_INPUT_EDIT_CANCEL: 'Cancel',
       CHANNEL_INPUT_REPLY_PREVIEW_TITLE: (user) => `Reply to ${user.nickname || USER_NO_NAME}`,
@@ -394,6 +397,9 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       GET_CHANNEL_ERROR: "Couldn't retrieve channel.",
       FIND_PARENT_MSG_ERROR: "Couldn't find the original message for this reply.",
       THREAD_PARENT_MESSAGE_DELETED_ERROR: "The thread doesn't exist because the parent message was deleted.",
+      FILE_UPLOAD_SIZE_LIMIT_EXCEEDED_ERROR: (uploadSizeLimit: string) => {
+        return `The maximum size per file is ${uploadSizeLimit}.`;
+      },
       ...overrides?.TOAST,
     },
     PROFILE_CARD: {

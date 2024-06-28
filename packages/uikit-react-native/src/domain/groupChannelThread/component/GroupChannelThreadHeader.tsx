@@ -1,13 +1,20 @@
 import React, { useContext } from 'react';
 import { View } from 'react-native';
 
-import { Icon, Text, createStyleSheet, useHeaderStyle, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import {
+  Icon,
+  PressBox,
+  Text,
+  createStyleSheet,
+  useHeaderStyle,
+  useUIKitTheme,
+} from '@sendbird/uikit-react-native-foundation';
 
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelThreadContexts } from '../module/moduleContext';
 import type { GroupChannelThreadProps } from '../types';
 
-const GroupChannelThreadHeader = ({ onPressHeaderLeft }: GroupChannelThreadProps['Header']) => {
+const GroupChannelThreadHeader = ({ onPressHeader }: GroupChannelThreadProps['Header']) => {
   const { headerTitle, channel } = useContext(GroupChannelThreadContexts.Fragment);
   const { HeaderComponent } = useHeaderStyle();
   const { STRINGS } = useLocalization();
@@ -30,21 +37,22 @@ const GroupChannelThreadHeader = ({ onPressHeaderLeft }: GroupChannelThreadProps
   };
 
   return (
-    <HeaderComponent
-      clearTitleMargin
-      title={
-        <View style={styles.titleContainer}>
-          <View style={{ flexShrink: 1 }}>
-            <Text h2 color={colors.onBackground01} numberOfLines={1}>
-              {headerTitle}
-            </Text>
-            {renderSubtitle()}
+    <PressBox onPress={onPressHeader}>
+      <HeaderComponent
+        clearTitleMargin
+        title={
+          <View style={styles.titleContainer}>
+            <View style={{ flexShrink: 1 }}>
+              <Text h2 color={colors.onBackground01} numberOfLines={1}>
+                {headerTitle}
+              </Text>
+              {renderSubtitle()}
+            </View>
           </View>
-        </View>
-      }
-      left={<Icon icon={'arrow-left'} size={24} />}
-      onPressLeft={onPressHeaderLeft}
-    />
+        }
+        left={<Icon icon={'arrow-left'} size={24} />}
+      />
+    </PressBox>
   );
 };
 

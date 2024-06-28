@@ -46,7 +46,7 @@ MessageContainer.Incoming = function MessageContainerIncoming({
         </Box>
         <Box flexShrink={1}>
           {parentMessage}
-          {!groupedWithPrev && !message.parentMessage && (
+          {!groupedWithPrev && !parentMessage && (
             <Box marginLeft={12} marginBottom={4}>
               {(message.isFileMessage() || message.isUserMessage()) && (
                 <Text caption1 color={color.enabled.textSenderName} numberOfLines={1}>

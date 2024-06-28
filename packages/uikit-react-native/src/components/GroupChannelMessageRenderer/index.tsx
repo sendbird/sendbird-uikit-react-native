@@ -51,7 +51,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
 }) => {
   const playerUnsubscribes = useRef<(() => void)[]>([]);
   const { palette } = useUIKitTheme();
-  const { sbOptions, currentUser, mentionManager } = useSendbirdChat();
+  const { sbOptions, currentUser, mentionManager, voiceMessageStatusManager } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { mediaService, playerService } = usePlatformService();
   const { groupWithPrev, groupWithNext } = calcMessageGrouping(
@@ -62,6 +62,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     sbOptions.uikit.groupChannel.channel.replyType === 'thread',
     shouldRenderParentMessage(message, hideParentMessage),
   );
+
   const variant = isMyMessage(message, currentUser?.userId) ? 'outgoing' : 'incoming';
 
   const reactionChildren = useIIFE(() => {
@@ -121,6 +122,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
           let seekFinished = !shouldSeekToTime;
 
           const forPlayback = playerService.addPlaybackListener(({ stopped, currentTime, duration }) => {
+            voiceMessageStatusManager.setCurrentTime(message.channelUrl, message.messageId, currentTime);
             if (seekFinished) {
               setState((prevState) => ({ ...prevState, currentTime: stopped ? 0 : currentTime, duration }));
             }
@@ -272,6 +274,9 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
           <GroupChannelMessage.VoiceFile
             message={message as SendbirdFileMessage}
             durationMetaArrayKey={VOICE_MESSAGE_META_ARRAY_DURATION_KEY}
+            initialCurrentTime={voiceMessageStatusManager.getCurrentTime(message.channelUrl, message.messageId)}
+            onSubscribeStatus={voiceMessageStatusManager.subscribe}
+            onUnsubscribeStatus={voiceMessageStatusManager.unsubscribe}
             onUnmount={() => {
               if (isVoiceMessage(message) && playerService.uri === message.url) {
                 resetPlayer();
