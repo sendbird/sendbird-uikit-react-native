@@ -157,10 +157,11 @@ export const millsToMSS = (mills: number) => {
  * Message reply count format
  * If reply count is 1: 1 'reply'
  * If the reply count is greater than 1 : '{count} replies'
+ * If the reply count is greater than {maxReplyCount} : '{maxReplyCount}+ replies'
  * */
-export const getReplyCountFormat = (replyCount: number, minRepliesForPlusFormat?: number) => {
-  if (minRepliesForPlusFormat && replyCount > minRepliesForPlusFormat) {
-    return `${minRepliesForPlusFormat}+ replies`;
+export const getReplyCountFormat = (replyCount: number, maxReplyCount?: number) => {
+  if (maxReplyCount && replyCount > maxReplyCount) {
+    return `${maxReplyCount}+ replies`;
   } else if (replyCount === 1) {
     return `${replyCount} reply`;
   } else if (replyCount > 1) {
