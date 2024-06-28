@@ -90,8 +90,8 @@ const useMentionSuggestion = (params: {
     } else {
       return (
         freshChannel.members
-          //When using 'org.webkit:android-jsc', there is a problem with sorting lists that include words starting with uppercase and lowercase letters.
-          //To ensure consistent sorting regardless of the JSC, we compare the words in lowercase.
+          // NOTE: When using 'org.webkit:android-jsc', there is a problem with sorting lists that include words starting with uppercase and lowercase letters.
+          // To ensure consistent sorting regardless of the JSC, we compare the words in lowercase.
           .sort((a, b) => a.nickname?.toLowerCase().localeCompare(b.nickname.toLowerCase()))
           .filter(
             (member) =>
