@@ -35,6 +35,7 @@ import type {
   GroupChannelPubSubContextPayload,
 } from '../domain/groupChannel/types';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../hooks/useContext';
+import { FileType } from '../platform/types';
 import pubsub from '../utils/pubsub';
 
 const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): GroupChannelFragment => {
@@ -198,7 +199,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     const onPressSendFileMessage: GroupChannelProps['Input']['onPressSendFileMessage'] = useFreshCallback(
       async (params) => {
         const processedParams = await onBeforeSendFileMessage(params);
-        const fileSize = (processedParams.file as File)?.size ?? processedParams.fileSize;
+        const fileSize = (processedParams.file as FileType)?.size ?? processedParams.fileSize;
         const uploadSizeLimit = sbOptions.appInfo.uploadSizeLimit;
 
         if (fileSize && uploadSizeLimit && fileSize > uploadSizeLimit) {

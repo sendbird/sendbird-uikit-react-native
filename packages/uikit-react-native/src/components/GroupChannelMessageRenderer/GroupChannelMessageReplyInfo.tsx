@@ -53,7 +53,7 @@ const GroupChannelMessageReplyInfo = ({ channel, message, onPress }: Props) => {
 
   if (!channel || !message.threadInfo || !message.threadInfo.replyCount) return null;
 
-  const replyCountText = STRINGS.GROUP_CHANNEL_THREAD.REPLAY_COUNT(message.threadInfo.replyCount || 0, 99);
+  const replyCountText = STRINGS.GROUP_CHANNEL_THREAD.REPLY_COUNT(message.threadInfo.replyCount || 0, 99);
   const onPressReply = () => {
     onPress?.(message as SendbirdUserMessage | SendbirdFileMessage);
   };

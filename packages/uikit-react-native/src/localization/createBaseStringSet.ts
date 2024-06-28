@@ -142,7 +142,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
 
       PARENT_MESSAGE_TIME: (message: SendbirdMessage, locale?: Locale) =>
         getThreadParentMessageTimeFormat(new Date(message.createdAt), locale ?? dateLocale),
-      REPLAY_COUNT: (replyCount: number, minRepliesForPlusFormat?: number) =>
+      REPLY_COUNT: (replyCount: number, minRepliesForPlusFormat?: number) =>
         getReplyCountFormat(replyCount, minRepliesForPlusFormat),
 
       MENTION_LIMITED: (mentionLimit) => `You can have up to ${mentionLimit} mentions per message.`,

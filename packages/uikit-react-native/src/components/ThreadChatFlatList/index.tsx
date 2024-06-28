@@ -1,23 +1,11 @@
 import React, { forwardRef, useRef } from 'react';
-import { FlatListProps, Platform, FlatList as RNFlatList, StyleSheet } from 'react-native';
+import { FlatListProps, FlatList as RNFlatList, StyleSheet } from 'react-native';
 
 import { useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { NOOP, SendbirdMessage, getMessageUniqId, useFreshCallback } from '@sendbird/uikit-utils';
 
-import FlatListInternal from './FlatListInternal';
+import FlatListInternal from '../ChatFlatList/FlatListInternal';
 
-function isInvertedFlatListFixedVersion() {
-  if (Platform.constants.reactNativeVersion?.major < 1) {
-    if (Platform.constants.reactNativeVersion?.minor < 73) {
-      if (Platform.constants.reactNativeVersion?.patch < 4) {
-        return false;
-      }
-    }
-  }
-  return true;
-}
-
-let ANDROID_BUG_ALERT_SHOWED = Platform.OS !== 'android' || isInvertedFlatListFixedVersion();
 const BOTTOM_DETECT_THRESHOLD = 50;
 const UNREACHABLE_THRESHOLD = Number.MIN_SAFE_INTEGER;
 
@@ -26,7 +14,7 @@ type Props = Omit<FlatListProps<SendbirdMessage>, 'onEndReached'> & {
   onTopReached: () => void;
   onScrolledAwayFromBottom: (value: boolean) => void;
 };
-const ChatFlatList = forwardRef<RNFlatList, Props>(function ChatFlatList(
+const ThreadChatFlatList = forwardRef<RNFlatList, Props>(function ThreadChatFlatList(
   { onTopReached, onBottomReached, onScrolledAwayFromBottom, onScroll, ...props },
   ref,
 ) {
@@ -36,29 +24,20 @@ const ChatFlatList = forwardRef<RNFlatList, Props>(function ChatFlatList(
   const _onScroll = useFreshCallback<NonNullable<Props['onScroll']>>((event) => {
     onScroll?.(event);
 
-    const { contentOffset } = event.nativeEvent;
+    const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
 
     const prevOffsetY = contentOffsetY.current;
     const currOffsetY = contentOffset.y;
 
-    if (BOTTOM_DETECT_THRESHOLD < prevOffsetY && currOffsetY <= BOTTOM_DETECT_THRESHOLD) {
-      onScrolledAwayFromBottom(false);
-    } else if (BOTTOM_DETECT_THRESHOLD < currOffsetY && prevOffsetY <= BOTTOM_DETECT_THRESHOLD) {
+    const bottomDetectThreshold = contentSize.height - layoutMeasurement.height - BOTTOM_DETECT_THRESHOLD;
+    if (bottomDetectThreshold < prevOffsetY && currOffsetY <= bottomDetectThreshold) {
       onScrolledAwayFromBottom(true);
+    } else if (bottomDetectThreshold < currOffsetY && prevOffsetY <= bottomDetectThreshold) {
+      onScrolledAwayFromBottom(false);
     }
 
     contentOffsetY.current = contentOffset.y;
   });
-
-  if (__DEV__ && !ANDROID_BUG_ALERT_SHOWED) {
-    ANDROID_BUG_ALERT_SHOWED = true;
-    // eslint-disable-next-line no-console
-    console.warn(
-      'UIKit Warning: The Inverted FlatList had performance issues on Android.\n' +
-        'This issue was fixed in 0.72.4+\n' +
-        'Please refer to the link: https://github.com/facebook/react-native/issues/30034',
-    );
-  }
 
   return (
     <FlatListInternal
@@ -68,12 +47,10 @@ const ChatFlatList = forwardRef<RNFlatList, Props>(function ChatFlatList(
       keyboardShouldPersistTaps={'handled'}
       indicatorStyle={select({ light: 'black', dark: 'white' })}
       {...props}
-      // FIXME: inverted list of ListEmptyComponent is reversed {@link https://github.com/facebook/react-native/issues/21196#issuecomment-836937743}
-      inverted={Boolean(props.data?.length)}
       ref={ref}
-      onEndReached={onTopReached}
+      onEndReached={onBottomReached}
       onScrollToIndexFailed={NOOP}
-      onStartReached={onBottomReached}
+      onStartReached={onTopReached}
       scrollEventThrottle={16}
       onScroll={_onScroll}
       keyExtractor={getMessageUniqId}
@@ -83,4 +60,4 @@ const ChatFlatList = forwardRef<RNFlatList, Props>(function ChatFlatList(
   );
 });
 
-export default ChatFlatList;
+export default ThreadChatFlatList;

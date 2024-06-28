@@ -165,7 +165,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     if (inputDisabled) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED;
     if (messageToReply) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_REPLY;
     if (messageForThread) {
-      if (messageForThread?.threadInfo && messageForThread?.threadInfo.replyCount > 0) {
+      if (messageForThread.threadInfo && messageForThread.threadInfo.replyCount > 0) {
         return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_REPLY_TO_THREAD;
       } else {
         return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_REPLY_IN_THREAD;

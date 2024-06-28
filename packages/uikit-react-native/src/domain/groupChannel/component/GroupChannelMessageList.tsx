@@ -108,7 +108,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
         sbOptions.uikit.groupChannel.channel.replyType === 'thread' &&
         sbOptions.uikit.groupChannel.channel.threadReplySelectType === 'thread'
       ) {
-        if (parentMessage && parentMessage.createdAt >= props.channel?.messageOffsetTimestamp) {
+        if (parentMessage.createdAt >= props.channel.messageOffsetTimestamp) {
           onPressReplyMessageInThread(parentMessage as SendbirdSendableMessage, childMessage.createdAt);
         } else {
           toast.show(STRINGS.TOAST.FIND_PARENT_MSG_ERROR, 'error');

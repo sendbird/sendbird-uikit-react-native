@@ -141,7 +141,6 @@ const createGroupChannelThreadFragment = (
             onPressMediaMessage={_onPressMediaMessage}
           />
         ),
-        inverted: false,
         contentContainerStyle: { flexGrow: 1 },
         ...flatListProps,
       }),
