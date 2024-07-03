@@ -39,9 +39,16 @@ const GroupChannelThreadScreen = () => {
         // Should leave channel, navigate to channel list
         navigation.navigate(Routes.GroupChannelList);
       }}
-      onPressHeader={() => {
+      onPressHeaderLeft={() => {
         // Navigate back
         navigation.goBack();
+      }}
+      onPressHeaderSubtitle={() => {
+        // Navigate to parent message
+        navigation.navigate(Routes.GroupChannel, {
+          channelUrl: channel.url,
+          searchItem: { startingPoint: parentMessage.createdAt },
+        });
       }}
     />
   );

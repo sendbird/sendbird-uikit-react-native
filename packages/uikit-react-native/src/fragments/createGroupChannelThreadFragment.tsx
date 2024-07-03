@@ -38,7 +38,8 @@ const createGroupChannelThreadFragment = (
   return ({
     renderMessage,
     enableMessageGrouping = true,
-    onPressHeader = NOOP,
+    onPressHeaderLeft = NOOP,
+    onPressHeaderSubtitle = NOOP,
     onPressMediaMessage = NOOP,
     onParentMessageDeleted = NOOP,
     onChannelDeleted = NOOP,
@@ -105,10 +106,15 @@ const createGroupChannelThreadFragment = (
     const onBlurFragment = () => {
       return Promise.allSettled([playerService.reset(), recorderService.reset()]);
     };
-    const _onPressHeader = useFreshCallback(async () => {
+    const _onPressHeaderLeft = useFreshCallback(async () => {
       await onBlurFragment();
       voiceMessageStatusManager.publishAll();
-      onPressHeader();
+      onPressHeaderLeft();
+    });
+    const _onPressHeaderSubtitle = useFreshCallback(async () => {
+      await onBlurFragment();
+      voiceMessageStatusManager.publishAll();
+      onPressHeaderSubtitle();
     });
     const _onPressMediaMessage: NonNullable<GroupChannelThreadProps['MessageList']['onPressMediaMessage']> =
       useFreshCallback(async (message, deleteMessage, uri) => {
@@ -219,7 +225,7 @@ const createGroupChannelThreadFragment = (
         keyboardAvoidOffset={keyboardAvoidOffset}
         threadedMessages={messages}
       >
-        <GroupChannelThreadModule.Header onPressHeader={_onPressHeader} />
+        <GroupChannelThreadModule.Header onPressLeft={_onPressHeaderLeft} onPressSubtitle={_onPressHeaderSubtitle} />
         <StatusComposition loading={loading} LoadingComponent={<GroupChannelThreadModule.StatusLoading />}>
           <GroupChannelThreadModule.MessageList
             channel={channel}

@@ -1,20 +1,13 @@
 import React, { useContext } from 'react';
 import { View } from 'react-native';
 
-import {
-  Icon,
-  PressBox,
-  Text,
-  createStyleSheet,
-  useHeaderStyle,
-  useUIKitTheme,
-} from '@sendbird/uikit-react-native-foundation';
+import { Icon, Text, createStyleSheet, useHeaderStyle, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelThreadContexts } from '../module/moduleContext';
 import type { GroupChannelThreadProps } from '../types';
 
-const GroupChannelThreadHeader = ({ onPressHeader }: GroupChannelThreadProps['Header']) => {
+const GroupChannelThreadHeader = ({ onPressLeft, onPressSubtitle }: GroupChannelThreadProps['Header']) => {
   const { headerTitle, channel } = useContext(GroupChannelThreadContexts.Fragment);
   const { HeaderComponent } = useHeaderStyle();
   const { STRINGS } = useLocalization();
@@ -26,6 +19,7 @@ const GroupChannelThreadHeader = ({ onPressHeader }: GroupChannelThreadProps['He
 
     return (
       <Text
+        onPress={onPressSubtitle}
         caption2
         style={styles.subtitle}
         color={select({ light: palette.primary300, dark: palette.primary200 })}
@@ -37,22 +31,21 @@ const GroupChannelThreadHeader = ({ onPressHeader }: GroupChannelThreadProps['He
   };
 
   return (
-    <PressBox onPress={onPressHeader}>
-      <HeaderComponent
-        clearTitleMargin
-        title={
-          <View style={styles.titleContainer}>
-            <View style={{ flexShrink: 1 }}>
-              <Text h2 color={colors.onBackground01} numberOfLines={1}>
-                {headerTitle}
-              </Text>
-              {renderSubtitle()}
-            </View>
+    <HeaderComponent
+      clearTitleMargin
+      title={
+        <View style={styles.titleContainer}>
+          <View style={{ flexShrink: 1 }}>
+            <Text h2 color={colors.onBackground01} numberOfLines={1}>
+              {headerTitle}
+            </Text>
+            {renderSubtitle()}
           </View>
-        }
-        left={<Icon icon={'arrow-left'} size={24} />}
-      />
-    </PressBox>
+        </View>
+      }
+      left={<Icon icon={'arrow-left'} size={24} />}
+      onPressLeft={onPressLeft}
+    />
   );
 };
 

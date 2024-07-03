@@ -84,6 +84,10 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       }
     });
 
+    useEffect(() => {
+      setInternalSearchItem(searchItem);
+    }, [searchItem]);
+
     const {
       loading,
       messages,
