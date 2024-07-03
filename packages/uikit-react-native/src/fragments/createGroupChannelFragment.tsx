@@ -2,13 +2,14 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { MessageCollection, MessageFilter } from '@sendbird/chat/groupChannel';
 import { ReplyType } from '@sendbird/chat/message';
-import { Box } from '@sendbird/uikit-react-native-foundation';
+import { Box, useToast } from '@sendbird/uikit-react-native-foundation';
 import { useGroupChannelMessages } from '@sendbird/uikit-tools';
-import type {
+import {
   SendbirdFileMessage,
   SendbirdGroupChannel,
   SendbirdSendableMessage,
   SendbirdUserMessage,
+  getReadableFileSize,
 } from '@sendbird/uikit-utils';
 import {
   NOOP,
@@ -33,7 +34,8 @@ import type {
   GroupChannelProps,
   GroupChannelPubSubContextPayload,
 } from '../domain/groupChannel/types';
-import { usePlatformService, useSendbirdChat } from '../hooks/useContext';
+import { useLocalization, usePlatformService, useSendbirdChat } from '../hooks/useContext';
+import { FileType } from '../platform/types';
 import pubsub from '../utils/pubsub';
 
 const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): GroupChannelFragment => {
@@ -63,7 +65,9 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     collectionCreator,
   }) => {
     const { playerService, recorderService } = usePlatformService();
-    const { sdk, currentUser, sbOptions } = useSendbirdChat();
+    const { sdk, currentUser, sbOptions, voiceMessageStatusManager } = useSendbirdChat();
+    const toast = useToast();
+    const { STRINGS } = useLocalization();
 
     const [internalSearchItem, setInternalSearchItem] = useState(searchItem);
     const navigateFromMessageSearch = useCallback(() => Boolean(searchItem), []);
@@ -73,9 +77,16 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     const scrolledAwayFromBottomRef = useRefTracker(scrolledAwayFromBottom);
 
     const replyType = useIIFE(() => {
-      if (sbOptions.uikit.groupChannel.channel.replyType === 'none') return ReplyType.NONE;
-      else return ReplyType.ONLY_REPLY_TO_CHANNEL;
+      if (sbOptions.uikit.groupChannel.channel.replyType === 'none') {
+        return ReplyType.NONE;
+      } else {
+        return ReplyType.ONLY_REPLY_TO_CHANNEL;
+      }
     });
+
+    useEffect(() => {
+      setInternalSearchItem(searchItem);
+    }, [searchItem?.startingPoint]);
 
     const {
       loading,
@@ -113,6 +124,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       return Promise.allSettled([playerService.reset(), recorderService.reset()]);
     };
     const _onPressHeaderLeft = useFreshCallback(async () => {
+      voiceMessageStatusManager.clear();
       await onBlurFragment();
       onPressHeaderLeft();
     });
@@ -191,8 +203,17 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     const onPressSendFileMessage: GroupChannelProps['Input']['onPressSendFileMessage'] = useFreshCallback(
       async (params) => {
         const processedParams = await onBeforeSendFileMessage(params);
-        const message = await sendFileMessage(processedParams, onPending);
-        onSent(message);
+        const fileSize = (processedParams.file as FileType)?.size ?? processedParams.fileSize;
+        const uploadSizeLimit = sbOptions.appInfo.uploadSizeLimit;
+
+        if (fileSize && uploadSizeLimit && fileSize > uploadSizeLimit) {
+          const sizeLimitString = `${getReadableFileSize(uploadSizeLimit)} MB`;
+          toast.show(STRINGS.TOAST.FILE_UPLOAD_SIZE_LIMIT_EXCEEDED_ERROR(sizeLimitString), 'error');
+          return;
+        } else {
+          const message = await sendFileMessage(processedParams, onPending);
+          onSent(message);
+        }
       },
     );
     const onPressUpdateUserMessage: GroupChannelProps['Input']['onPressUpdateUserMessage'] = useFreshCallback(

@@ -27,7 +27,8 @@ export interface GroupChannelThreadProps {
     startingPoint?: number;
     onParentMessageDeleted: () => void;
     onChannelDeleted: () => void;
-    onPressHeaderLeft: GroupChannelThreadProps['Header']['onPressHeaderLeft'];
+    onPressHeaderLeft: GroupChannelThreadProps['Header']['onPressLeft'];
+    onPressHeaderSubtitle?: GroupChannelThreadProps['Header']['onPressSubtitle'];
     onPressMediaMessage?: GroupChannelThreadProps['MessageList']['onPressMediaMessage'];
 
     onBeforeSendUserMessage?: OnBeforeHandler<SendbirdUserMessageCreateParams>;
@@ -36,8 +37,6 @@ export interface GroupChannelThreadProps {
     onBeforeUpdateFileMessage?: OnBeforeHandler<SendbirdFileMessageUpdateParams>;
 
     renderMessage?: GroupChannelThreadProps['MessageList']['renderMessage'];
-    renderNewMessagesButton?: GroupChannelThreadProps['MessageList']['renderNewMessagesButton'];
-    renderScrollToBottomButton?: GroupChannelThreadProps['MessageList']['renderScrollToBottomButton'];
 
     enableMessageGrouping?: GroupChannelThreadProps['MessageList']['enableMessageGrouping'];
 
@@ -46,7 +45,8 @@ export interface GroupChannelThreadProps {
     sortComparator?: UseGroupChannelMessagesOptions['sortComparator'];
   };
   Header: {
-    onPressHeaderLeft: () => void;
+    onPressLeft: () => void;
+    onPressSubtitle: () => void;
   };
   ParentMessageInfo: {
     channel: SendbirdGroupChannel;
@@ -69,8 +69,6 @@ export interface GroupChannelThreadProps {
     | 'onDeleteMessage'
     | 'onPressMediaMessage'
     | 'renderMessage'
-    | 'renderNewMessagesButton'
-    | 'renderScrollToBottomButton'
     | 'flatListProps'
     | 'hasNext'
     | 'searchItem'

@@ -43,6 +43,13 @@ const GroupChannelThreadScreen = () => {
         // Navigate back
         navigation.goBack();
       }}
+      onPressHeaderSubtitle={() => {
+        // Navigate to parent message
+        navigation.navigate(Routes.GroupChannel, {
+          channelUrl: channel.url,
+          searchItem: { startingPoint: parentMessage.createdAt },
+        });
+      }}
     />
   );
 };

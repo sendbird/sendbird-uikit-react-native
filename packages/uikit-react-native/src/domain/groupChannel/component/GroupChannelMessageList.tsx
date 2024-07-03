@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { useToast } from '@sendbird/uikit-react-native-foundation';
 import { SendbirdMessage, SendbirdSendableMessage } from '@sendbird/uikit-utils';
-import { isDifferentChannel, useFreshCallback, useIsFirstMount, useUniqHandlerId } from '@sendbird/uikit-utils';
+import { isDifferentChannel, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import ChannelMessageList from '../../../components/ChannelMessageList';
 import { MESSAGE_FOCUS_ANIMATION_DELAY, MESSAGE_SEARCH_SAFE_SCROLL_DELAY } from '../../../constants';
@@ -22,7 +22,9 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   );
 
   const id = useUniqHandlerId('GroupChannelMessageList');
-  const isFirstMount = useIsFirstMount();
+  const isChangedSearchItem = useMemo(() => {
+    return !!props.searchItem;
+  }, [props.searchItem?.startingPoint]);
 
   const scrollToMessageWithCreatedAt = useFreshCallback(
     (createdAt: number, focusAnimated: boolean, timeout: number): boolean => {
@@ -93,13 +95,10 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   }, [props.scrolledAwayFromBottom]);
 
   useEffect(() => {
-    // Only trigger once when message list mount with initial props.searchItem
-    // - Search screen + searchItem > mount message list
-    // - Reset message list + searchItem > re-mount message list
-    if (isFirstMount && props.searchItem) {
+    if (isChangedSearchItem && props.searchItem) {
       scrollToMessageWithCreatedAt(props.searchItem.startingPoint, false, MESSAGE_SEARCH_SAFE_SCROLL_DELAY);
     }
-  }, [isFirstMount]);
+  }, [isChangedSearchItem]);
 
   const onPressParentMessage = useFreshCallback(
     (parentMessage: SendbirdMessage, childMessage: SendbirdSendableMessage) => {
@@ -108,7 +107,11 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
         sbOptions.uikit.groupChannel.channel.replyType === 'thread' &&
         sbOptions.uikit.groupChannel.channel.threadReplySelectType === 'thread'
       ) {
-        onPressReplyMessageInThread(parentMessage as SendbirdSendableMessage, childMessage.createdAt);
+        if (parentMessage.createdAt >= props.channel.messageOffsetTimestamp) {
+          onPressReplyMessageInThread(parentMessage as SendbirdSendableMessage, childMessage.createdAt);
+        } else {
+          toast.show(STRINGS.TOAST.FIND_PARENT_MSG_ERROR, 'error');
+        }
       } else {
         const canScrollToParent = scrollToMessageWithCreatedAt(parentMessage.createdAt, true, 0);
         if (!canScrollToParent) toast.show(STRINGS.TOAST.FIND_PARENT_MSG_ERROR, 'error');

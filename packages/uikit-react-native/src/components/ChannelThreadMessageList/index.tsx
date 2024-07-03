@@ -32,8 +32,8 @@ import {
 import type { UserProfileContextType } from '../../contexts/UserProfileCtx';
 import { useLocalization, usePlatformService, useSendbirdChat, useUserProfile } from '../../hooks/useContext';
 import SBUUtils from '../../libs/SBUUtils';
-import ChatFlatList from '../ChatFlatList';
 import { ReactionAddons } from '../ReactionAddons';
+import ThreadChatFlatList from '../ThreadChatFlatList';
 
 type PressActions = { onPress?: () => void; onLongPress?: () => void; bottomSheetItem?: BottomSheetItem };
 type HandleableMessage = SendbirdUserMessage | SendbirdFileMessage;
@@ -147,7 +147,7 @@ const ChannelThreadMessageList = <T extends SendbirdGroupChannel | SendbirdOpenC
       {channel.isFrozen && (
         <ChannelFrozenBanner style={styles.frozenBanner} text={STRINGS.LABELS.CHANNEL_MESSAGE_LIST_FROZEN} />
       )}
-      <ChatFlatList
+      <ThreadChatFlatList
         {...flatListProps}
         onTopReached={onTopReached}
         onBottomReached={onBottomReached}

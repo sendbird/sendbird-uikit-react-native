@@ -144,7 +144,7 @@ export interface StringSet {
     MESSAGE_BUBBLE_UNKNOWN_DESC: (message: SendbirdMessage) => string;
 
     PARENT_MESSAGE_TIME: (message: SendbirdMessage, locale?: Locale) => string;
-    REPLAY_COUNT: (replyCount: number) => string;
+    REPLY_COUNT: (replyCount: number, maxReplyCount?: number) => string;
 
     /** GroupChannelThread > Suggested mention list */
     MENTION_LIMITED: (mentionLimit: number) => string;
@@ -292,7 +292,8 @@ export interface StringSet {
     CHANNEL_INPUT_PLACEHOLDER_DISABLED: string;
     CHANNEL_INPUT_PLACEHOLDER_MUTED: string;
     CHANNEL_INPUT_PLACEHOLDER_REPLY: string;
-    CHANNEL_INPUT_PLACEHOLDER_THREAD: string;
+    CHANNEL_INPUT_PLACEHOLDER_REPLY_IN_THREAD: string;
+    CHANNEL_INPUT_PLACEHOLDER_REPLY_TO_THREAD: string;
     CHANNEL_INPUT_EDIT_OK: string;
     CHANNEL_INPUT_EDIT_CANCEL: string;
     /** ChannelInput > Attachments **/
@@ -371,6 +372,7 @@ export interface StringSet {
     GET_CHANNEL_ERROR: string;
     FIND_PARENT_MSG_ERROR: string;
     THREAD_PARENT_MESSAGE_DELETED_ERROR: string;
+    FILE_UPLOAD_SIZE_LIMIT_EXCEEDED_ERROR: (uploadSizeLimit: string) => string;
   };
   PROFILE_CARD: {
     BUTTON_MESSAGE: string;

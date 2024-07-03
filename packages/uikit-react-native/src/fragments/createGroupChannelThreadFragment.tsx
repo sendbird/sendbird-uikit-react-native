@@ -7,6 +7,7 @@ import {
   SendbirdGroupChannel,
   type SendbirdMessage,
   SendbirdUserMessage,
+  getReadableFileSize,
 } from '@sendbird/uikit-utils';
 import {
   NOOP,
@@ -18,8 +19,6 @@ import {
 } from '@sendbird/uikit-utils';
 
 import GroupChannelMessageRenderer from '../components/GroupChannelMessageRenderer';
-import NewMessagesButton from '../components/NewMessagesButton';
-import ScrollToBottomButton from '../components/ScrollToBottomButton';
 import StatusComposition from '../components/StatusComposition';
 import createGroupChannelThreadModule from '../domain/groupChannelThread/module/createGroupChannelThreadModule';
 import type {
@@ -37,11 +36,10 @@ const createGroupChannelThreadFragment = (
   const GroupChannelThreadModule = createGroupChannelThreadModule(initModule);
 
   return ({
-    renderNewMessagesButton = (props) => <NewMessagesButton {...props} />,
-    renderScrollToBottomButton = (props) => <ScrollToBottomButton {...props} />,
     renderMessage,
     enableMessageGrouping = true,
     onPressHeaderLeft = NOOP,
+    onPressHeaderSubtitle = NOOP,
     onPressMediaMessage = NOOP,
     onParentMessageDeleted = NOOP,
     onChannelDeleted = NOOP,
@@ -57,7 +55,7 @@ const createGroupChannelThreadFragment = (
     flatListProps,
   }) => {
     const { playerService, recorderService } = usePlatformService();
-    const { sdk, currentUser, sbOptions } = useSendbirdChat();
+    const { sdk, currentUser, sbOptions, voiceMessageStatusManager } = useSendbirdChat();
 
     const [groupChannelThreadPubSub] = useState(() => pubsub<GroupChannelThreadPubSubContextPayload>());
     const [scrolledAwayFromBottom, setScrolledAwayFromBottom] = useState(false);
@@ -110,7 +108,13 @@ const createGroupChannelThreadFragment = (
     };
     const _onPressHeaderLeft = useFreshCallback(async () => {
       await onBlurFragment();
+      voiceMessageStatusManager.publishAll();
       onPressHeaderLeft();
+    });
+    const _onPressHeaderSubtitle = useFreshCallback(async () => {
+      await onBlurFragment();
+      voiceMessageStatusManager.publishAll();
+      onPressHeaderSubtitle();
     });
     const _onPressMediaMessage: NonNullable<GroupChannelThreadProps['MessageList']['onPressMediaMessage']> =
       useFreshCallback(async (message, deleteMessage, uri) => {
@@ -143,7 +147,6 @@ const createGroupChannelThreadFragment = (
             onPressMediaMessage={_onPressMediaMessage}
           />
         ),
-        inverted: false,
         contentContainerStyle: { flexGrow: 1 },
         ...flatListProps,
       }),
@@ -182,8 +185,17 @@ const createGroupChannelThreadFragment = (
     const onPressSendFileMessage: GroupChannelThreadProps['Input']['onPressSendFileMessage'] = useFreshCallback(
       async (params) => {
         const processedParams = await onBeforeSendFileMessage(params);
-        const message = await sendFileMessage(processedParams, onPending);
-        onSent(message);
+        const fileSize = (processedParams.file as File)?.size ?? processedParams.fileSize;
+        const uploadSizeLimit = sbOptions.appInfo.uploadSizeLimit;
+
+        if (fileSize && uploadSizeLimit && fileSize > uploadSizeLimit) {
+          const sizeLimitString = `${getReadableFileSize(uploadSizeLimit)} MB`;
+          toast.show(STRINGS.TOAST.FILE_UPLOAD_SIZE_LIMIT_EXCEEDED_ERROR(sizeLimitString), 'error');
+          return;
+        } else {
+          const message = await sendFileMessage(processedParams, onPending);
+          onSent(message);
+        }
       },
     );
     const onPressUpdateUserMessage: GroupChannelThreadProps['Input']['onPressUpdateUserMessage'] = useFreshCallback(
@@ -213,7 +225,7 @@ const createGroupChannelThreadFragment = (
         keyboardAvoidOffset={keyboardAvoidOffset}
         threadedMessages={messages}
       >
-        <GroupChannelThreadModule.Header onPressHeaderLeft={_onPressHeaderLeft} />
+        <GroupChannelThreadModule.Header onPressLeft={_onPressHeaderLeft} onPressSubtitle={_onPressHeaderSubtitle} />
         <StatusComposition loading={loading} LoadingComponent={<GroupChannelThreadModule.StatusLoading />}>
           <GroupChannelThreadModule.MessageList
             channel={channel}
@@ -229,8 +241,6 @@ const createGroupChannelThreadFragment = (
             hasNext={hasNext}
             scrolledAwayFromBottom={scrolledAwayFromBottom}
             onScrolledAwayFromBottom={onScrolledAwayFromBottom}
-            renderNewMessagesButton={renderNewMessagesButton}
-            renderScrollToBottomButton={renderScrollToBottomButton}
             onResendFailedMessage={resendMessage}
             onDeleteMessage={deleteMessage}
             onPressMediaMessage={_onPressMediaMessage}

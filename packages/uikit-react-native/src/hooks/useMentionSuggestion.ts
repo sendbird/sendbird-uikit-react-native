@@ -88,15 +88,19 @@ const useMentionSuggestion = (params: {
         .then((members) => members.filter((member) => member.userId !== currentUser?.userId))
         .then((members) => members.slice(0, mentionManager.config.suggestionLimit));
     } else {
-      return freshChannel.members
-        .sort((a, b) => a.nickname?.localeCompare(b.nickname))
-        .filter(
-          (member) =>
-            member.nickname?.toLowerCase().startsWith(searchString.toLowerCase()) &&
-            member.userId !== currentUser?.userId &&
-            member.isActive,
-        )
-        .slice(0, mentionManager.config.suggestionLimit);
+      return (
+        freshChannel.members
+          // NOTE: When using 'org.webkit:android-jsc', there is a problem with sorting lists that include words starting with uppercase and lowercase letters.
+          // To ensure consistent sorting regardless of the JSC, we compare the words in lowercase.
+          .sort((a, b) => a.nickname?.toLowerCase().localeCompare(b.nickname.toLowerCase()))
+          .filter(
+            (member) =>
+              member.nickname?.toLowerCase().startsWith(searchString.toLowerCase()) &&
+              member.userId !== currentUser?.userId &&
+              member.isActive,
+          )
+          .slice(0, mentionManager.config.suggestionLimit)
+      );
     }
   };
 

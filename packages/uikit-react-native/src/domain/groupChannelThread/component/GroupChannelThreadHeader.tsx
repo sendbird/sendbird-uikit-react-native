@@ -7,7 +7,7 @@ import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelThreadContexts } from '../module/moduleContext';
 import type { GroupChannelThreadProps } from '../types';
 
-const GroupChannelThreadHeader = ({ onPressHeaderLeft }: GroupChannelThreadProps['Header']) => {
+const GroupChannelThreadHeader = ({ onPressLeft, onPressSubtitle }: GroupChannelThreadProps['Header']) => {
   const { headerTitle, channel } = useContext(GroupChannelThreadContexts.Fragment);
   const { HeaderComponent } = useHeaderStyle();
   const { STRINGS } = useLocalization();
@@ -19,6 +19,7 @@ const GroupChannelThreadHeader = ({ onPressHeaderLeft }: GroupChannelThreadProps
 
     return (
       <Text
+        onPress={onPressSubtitle}
         caption2
         style={styles.subtitle}
         color={select({ light: palette.primary300, dark: palette.primary200 })}
@@ -43,7 +44,7 @@ const GroupChannelThreadHeader = ({ onPressHeaderLeft }: GroupChannelThreadProps
         </View>
       }
       left={<Icon icon={'arrow-left'} size={24} />}
-      onPressLeft={onPressHeaderLeft}
+      onPressLeft={onPressLeft}
     />
   );
 };

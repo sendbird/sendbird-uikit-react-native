@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useLayoutEffect } from 'react';
+import React, { useContext, useEffect, useLayoutEffect, useRef } from 'react';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { isDifferentChannel, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
@@ -15,6 +15,19 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
   const { flatListRef, lazyScrollToBottom, lazyScrollToIndex } = useContext(GroupChannelThreadContexts.MessageList);
 
   const id = useUniqHandlerId('GroupChannelThreadMessageList');
+  const ignorePropReached = useRef(false);
+
+  const _onTopReached = () => {
+    if (!ignorePropReached.current) {
+      props.onTopReached();
+    }
+  };
+
+  const _onBottomReached = () => {
+    if (!ignorePropReached.current) {
+      props.onBottomReached();
+    }
+  };
 
   const scrollToBottom = useFreshCallback(async (animated = false) => {
     if (props.hasNext()) {
@@ -33,7 +46,12 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
       const foundMessageIndex = props.messages.findIndex((it) => it.createdAt === props.startingPoint);
       const isIncludedInList = foundMessageIndex > -1;
       if (isIncludedInList) {
-        lazyScrollToIndex({ index: foundMessageIndex, animated: true, timeout: 250 });
+        ignorePropReached.current = true;
+        const timeout = 300;
+        lazyScrollToIndex({ index: foundMessageIndex, animated: true, timeout: timeout });
+        setTimeout(() => {
+          ignorePropReached.current = false;
+        }, timeout + 50);
       }
     }
   }, [props.startingPoint]);
@@ -73,9 +91,13 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
     <ChannelThreadMessageList
       {...props}
       ref={flatListRef}
+      onTopReached={_onTopReached}
+      onBottomReached={_onBottomReached}
       onEditMessage={setMessageToEdit}
       onPressNewMessagesButton={scrollToBottom}
       onPressScrollToBottomButton={scrollToBottom}
+      renderNewMessagesButton={null}
+      renderScrollToBottomButton={null}
     />
   );
 };
