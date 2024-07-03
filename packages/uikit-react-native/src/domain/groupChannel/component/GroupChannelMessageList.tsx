@@ -24,7 +24,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   const id = useUniqHandlerId('GroupChannelMessageList');
   const isChangedSearchItem = useMemo(() => {
     return !!props.searchItem;
-  }, [props.searchItem]);
+  }, [props.searchItem?.startingPoint]);
 
   const scrollToMessageWithCreatedAt = useFreshCallback(
     (createdAt: number, focusAnimated: boolean, timeout: number): boolean => {
