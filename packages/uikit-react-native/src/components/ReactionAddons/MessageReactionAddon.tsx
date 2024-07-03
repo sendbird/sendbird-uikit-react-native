@@ -13,7 +13,7 @@ import ReactionRoundedButton from './ReactionRoundedButton';
 
 const NUM_COL = 4;
 const REACTION_MORE_KEY = 'reaction-more-button';
-type ReactionAddonType = 'default' | 'thread_parent_message';
+export type ReactionAddonType = 'default' | 'thread_parent_message';
 
 const getUserReacted = (reaction: SendbirdReaction, userId = UNKNOWN_USER_ID) => {
   return reaction.userIds.indexOf(userId) > -1;
@@ -154,4 +154,3 @@ const styles = createStyleSheet({
 });
 
 export default MessageReactionAddon;
-export { ReactionAddonType };

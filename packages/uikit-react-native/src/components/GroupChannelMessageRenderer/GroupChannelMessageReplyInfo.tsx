@@ -58,10 +58,9 @@ const GroupChannelMessageReplyInfo = ({ channel, message, onPress }: Props) => {
     onPress?.(message as SendbirdUserMessage | SendbirdFileMessage);
   };
 
-  const renderAvatars = createRepliedUserAvatars(message.threadInfo.mostRepliedUsers);
   return (
     <PressBox onPress={onPressReply} style={styles.replyContainer}>
-      {renderAvatars}
+      {createRepliedUserAvatars(message.threadInfo.mostRepliedUsers)}
       <Text caption3 color={select({ light: palette.primary300, dark: palette.primary200 })}>
         {replyCountText}
       </Text>

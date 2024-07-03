@@ -145,7 +145,7 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
                 scrollToMessage,
                 lazyScrollToIndex,
                 lazyScrollToBottom,
-                onPressReplyMessageInThread: onPressReplyMessageInThread,
+                onPressReplyMessageInThread,
               }}
             >
               {children}
