@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { useToast } from '@sendbird/uikit-react-native-foundation';
@@ -22,9 +22,6 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   );
 
   const id = useUniqHandlerId('GroupChannelMessageList');
-  const isChangedSearchItem = useMemo(() => {
-    return !!props.searchItem;
-  }, [props.searchItem?.startingPoint]);
 
   const scrollToMessageWithCreatedAt = useFreshCallback(
     (createdAt: number, focusAnimated: boolean, timeout: number): boolean => {
@@ -95,10 +92,10 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   }, [props.scrolledAwayFromBottom]);
 
   useEffect(() => {
-    if (isChangedSearchItem && props.searchItem) {
+    if (props.searchItem) {
       scrollToMessageWithCreatedAt(props.searchItem.startingPoint, false, MESSAGE_SEARCH_SAFE_SCROLL_DELAY);
     }
-  }, [isChangedSearchItem]);
+  }, [props.searchItem?.startingPoint]);
 
   const onPressParentMessage = useFreshCallback(
     (parentMessage: SendbirdMessage, childMessage: SendbirdSendableMessage) => {
