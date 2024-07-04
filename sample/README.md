@@ -3,6 +3,10 @@
 This sample is based on React-Native CLI. <br/>
 Sample for expo: https://github.com/sendbird/sendbird-uikit-sample-react-native-expo
 
+### Requirements
+
+- Nodejs 18.20 or newer
+
 ### Installation
 
 **Install node modules**

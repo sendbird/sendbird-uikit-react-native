@@ -3,6 +3,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <Firebase.h>
 #import "RNFBMessagingModule.h"
+#import <UserNotifications/UserNotifications.h>
 #import <RNCPushNotificationIOS.h>
 
 @implementation AppDelegate
@@ -10,7 +11,6 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   self.moduleName = @"RnDiffApp";
-Parts under RCT_NEW_ARCH_ENABLED are only required for the new architecture builds.
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};

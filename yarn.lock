@@ -5649,9 +5649,9 @@
     "@types/react-native" "*"
 
 "@types/react-native@*", "@types/react-native@^0.67":
-  version "0.67.23"
-  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.67.23.tgz#9d3983d8535294b28cd3ebfbf0acdd431e1ae576"
-  integrity sha512-lw/9H9hNWCQ5hQaCrmaxFDoRNQAQ6cWR5pD4rr6Fgz9w7U1Oa7S4MEa3BDENfQGVl7nnrwy6t9FXGY2AZgiqCA==
+  version "0.67.26"
+  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.67.26.tgz#68b873afe03695b7081b3ed102946b2e0cd0fc84"
+  integrity sha512-4UTZWwgJfHeBp0MqxmugfdA03mYrFRtZ8GXeV29ZyAlyNXpjs719WrrsGF7CcdacXDe+blG08wIEk0JxuZ+a5A==
   dependencies:
     "@types/react" "^17"
 
@@ -5663,18 +5663,12 @@
     "@types/react" "*"
 
 "@types/react@*", "@types/react@>=16.0.0", "@types/react@^17", "@types/react@^18", "@types/react@^18.2.6":
-  version "18.2.34"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.34.tgz#aed20f19473721ba328feb99d1ec3307ebc1a8dd"
-  integrity sha512-U6eW/alrRk37FU/MS2RYMjx0Va2JGIVXELTODaTIYgvWGCV4Y4TfTUzG8DdmpDNIT0Xpj/R7GfyHOJJrDttcvg==
+  version "18.3.3"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.3.3.tgz#9679020895318b0915d7a3ab004d92d33375c45f"
+  integrity sha512-hti/R0pS0q1/xx+TsI73XIqk26eBsISZ2R0wUijXIngRK9R/e7Xw/cXVxQK7R5JjW+SV4zGcn5hXjudkN/pLIw==
   dependencies:
     "@types/prop-types" "*"
-    "@types/scheduler" "*"
     csstype "^3.0.2"
-
-"@types/scheduler@*":
-  version "0.16.3"
-  resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.3.tgz#cef09e3ec9af1d63d2a6cc5b383a737e24e6dcf5"
-  integrity sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ==
 
 "@types/semver@^7.3.12":
   version "7.3.13"
@@ -13843,7 +13837,7 @@ metro-config@0.66.2, metro-config@^0.66.1:
     metro-core "0.66.2"
     metro-runtime "0.66.2"
 
-metro-config@0.80.9, metro-config@^0.80.3:
+metro-config@0.80.9, metro-config@^0.80.3, metro-config@^0.80.9:
   version "0.80.9"
   resolved "https://registry.yarnpkg.com/metro-config/-/metro-config-0.80.9.tgz#4eb6948b0ddc7c38d9d4ba8ddf22a67ca1c2bc06"
   integrity sha512-28wW7CqS3eJrunRGnsibWldqgwRP9ywBEf7kg+uzUHkSFJNKPM1K3UNSngHmH0EZjomizqQA2Zi6/y6VdZMolg==
@@ -14172,7 +14166,7 @@ metro@0.66.2, metro@^0.66.1:
     ws "^1.1.5"
     yargs "^15.3.1"
 
-metro@0.80.9, metro@^0.80.3:
+metro@0.80.9, metro@^0.80.3, metro@^0.80.9:
   version "0.80.9"
   resolved "https://registry.yarnpkg.com/metro/-/metro-0.80.9.tgz#de3c2011df62036520d51d040d2dde0d015aecb6"
   integrity sha512-Bc57Xf3GO2Xe4UWQsBj/oW6YfLPABEu8jfDVDiNmJvoQW4CO34oDPuYKe4KlXzXhcuNsqOtSxpbjCRRVjhhREg==
