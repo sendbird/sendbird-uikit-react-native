@@ -49,6 +49,9 @@ export type SendbirdChatContextType = {
   updateCurrentUserInfo: (nickname?: string, profile?: string | FileType) => Promise<SendbirdUser>;
   markAsDeliveredWithChannel: (channel: SendbirdGroupChannel) => void;
 
+  groupChannelFragmentOptions: {
+    overrideSearchItemStartingPoint?: number;
+  };
   sbOptions: {
     // UIKit options
     uikit: SBUConfig;
@@ -175,6 +178,7 @@ export const SendbirdChatProvider = ({
 
     updateCurrentUserInfo,
     markAsDeliveredWithChannel,
+    groupChannelFragmentOptions: {},
 
     // TODO: Options should be moved to the common area at the higher level to be passed to the context of each product.
     //  For example, common -> chat context, common -> calls context
