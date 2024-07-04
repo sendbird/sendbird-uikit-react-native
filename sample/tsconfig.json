@@ -1,5 +1,5 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "@react-native/typescript-config/tsconfig.json",
   "references": [
     {
       "path": "../packages/uikit-chat-hooks"
