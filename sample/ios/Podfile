@@ -18,11 +18,11 @@ end
 permissions_path = '../../node_modules/react-native-permissions/ios'
 notifee_path = '../../node_modules/@notifee/react-native/RNNotifeeCore.podspec'
 
-
-
 target 'SendbirdUIKitSample' do
   config = use_native_modules!
 
+  puts "React Native Path: #{config[:reactNativePath]}"
+  puts "App Path: #{Pod::Config.instance.installation_root}/.."
   use_react_native!(
     :path => config[:reactNativePath],
      # An absolute path to your application root.

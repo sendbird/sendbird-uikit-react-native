@@ -10,17 +10,18 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  self.moduleName = @"RnDiffApp";
+  self.moduleName = @"SendbirdUIKitSample";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
-  self.initialProps = @{};
-  
+  NSDictionary *appProperties = [RNFBMessagingModule addCustomPropsToUserProps:nil withLaunchOptions:launchOptions];
+  self.initialProps = appProperties;
+
   [FIRApp configure];
-  
+
   //Notification
   [UNUserNotificationCenter currentNotificationCenter].delegate = self;
-  
-  NSDictionary *appProperties = [RNFBMessagingModule addCustomPropsToUserProps:nil withLaunchOptions:launchOptions];
+
+
 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
