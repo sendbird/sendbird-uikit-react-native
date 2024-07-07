@@ -30,11 +30,7 @@ const customConfig = {
   watchFolders: [...monorepoMetroTools.watchFolders],
   resolver: {
     blockList: exclusionList(monorepoMetroTools.blockList),
-    extraNodeModules: {
-      'react': path.resolve(__dirname, 'node_modules/react'),
-      'react-native': path.resolve(__dirname, 'node_modules/react-native'),
-      ...monorepoMetroTools.extraNodeModules,
-    },
+    extraNodeModules: monorepoMetroTools.extraNodeModules,
     resolverMainFields: ['sbmodern', 'react-native', 'browser', 'main'],
   },
 };

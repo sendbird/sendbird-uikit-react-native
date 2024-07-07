@@ -27,7 +27,7 @@ const useIsLandscape = () => {
   return width > height;
 };
 
-const StreamView = (props: { channel: SendbirdOpenChannel; height: number | string }) => {
+const StreamView = (props: { channel: SendbirdOpenChannel; height: number | `${number}%` }) => {
   const { navigation } = useAppNavigation<Routes.OpenChannelLiveStream>();
   const { topInset } = useHeaderStyle();
   const { colors, palette } = useUIKitTheme();
