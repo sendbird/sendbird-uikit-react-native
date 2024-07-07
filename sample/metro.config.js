@@ -5,6 +5,7 @@
  * @type {import('metro-config').MetroConfig}
  */
 
+const path = require('path');
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const exclusionList = require('metro-config/src/defaults/exclusionList');
 const { getMetroTools, getMetroAndroidAssetsResolutionFix } = require('react-native-monorepo-tools');
@@ -29,7 +30,11 @@ const customConfig = {
   watchFolders: [...monorepoMetroTools.watchFolders],
   resolver: {
     blockList: exclusionList(monorepoMetroTools.blockList),
-    extraNodeModules: monorepoMetroTools.extraNodeModules,
+    extraNodeModules: {
+      'react': path.resolve(__dirname, 'node_modules/react'),
+      'react-native': path.resolve(__dirname, 'node_modules/react-native'),
+      ...monorepoMetroTools.extraNodeModules,
+    },
     resolverMainFields: ['sbmodern', 'react-native', 'browser', 'main'],
   },
 };
