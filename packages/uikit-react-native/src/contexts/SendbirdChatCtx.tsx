@@ -16,6 +16,7 @@ import type MentionManager from '../libs/MentionManager';
 import type VoiceMessageConfig from '../libs/VoiceMessageConfig';
 import VoiceMessageStatusManager from '../libs/VoiceMessageStatusManager';
 import type { FileType } from '../platform/types';
+import pubsub, { type PubSub } from '../utils/pubsub';
 
 export interface ChatRelatedFeaturesInUIKit {
   enableAutoPushTokenRegistration: boolean;
@@ -32,6 +33,13 @@ interface Props extends ChatRelatedFeaturesInUIKit, React.PropsWithChildren {
   imageCompressionConfig: ImageCompressionConfig;
   voiceMessageConfig: VoiceMessageConfig;
 }
+
+export type GroupChannelFragmentOptionsPubSubContextPayload = {
+  type: 'OVERRIDE_SEARCH_ITEM_STARTING_POINT';
+  data: {
+    startingPoint: number;
+  };
+};
 
 export type SendbirdChatContextType = {
   sdk: SendbirdChatSDK;
@@ -50,7 +58,7 @@ export type SendbirdChatContextType = {
   markAsDeliveredWithChannel: (channel: SendbirdGroupChannel) => void;
 
   groupChannelFragmentOptions: {
-    overrideSearchItemStartingPoint?: number;
+    pubsub: PubSub<GroupChannelFragmentOptionsPubSubContextPayload>;
   };
   sbOptions: {
     // UIKit options
@@ -178,7 +186,9 @@ export const SendbirdChatProvider = ({
 
     updateCurrentUserInfo,
     markAsDeliveredWithChannel,
-    groupChannelFragmentOptions: {},
+    groupChannelFragmentOptions: {
+      pubsub: pubsub<GroupChannelFragmentOptionsPubSubContextPayload>(),
+    },
 
     // TODO: Options should be moved to the common area at the higher level to be passed to the context of each product.
     //  For example, common -> chat context, common -> calls context

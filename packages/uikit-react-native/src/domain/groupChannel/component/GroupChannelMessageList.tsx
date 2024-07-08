@@ -93,12 +93,16 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
 
   const searchItemStartingPoint = useRef(props.searchItem?.startingPoint);
   useEffect(() => {
-    if (groupChannelFragmentOptions.overrideSearchItemStartingPoint) {
-      searchItemStartingPoint.current = groupChannelFragmentOptions.overrideSearchItemStartingPoint;
-      props.onUpdateSearchItem?.({ startingPoint: groupChannelFragmentOptions.overrideSearchItemStartingPoint });
-      groupChannelFragmentOptions.overrideSearchItemStartingPoint = undefined;
-    }
-  }, [groupChannelFragmentOptions.overrideSearchItemStartingPoint]);
+    groupChannelFragmentOptions.pubsub.subscribe(({ type, data }) => {
+      switch (type) {
+        case 'OVERRIDE_SEARCH_ITEM_STARTING_POINT': {
+          searchItemStartingPoint.current = data.startingPoint;
+          props.onUpdateSearchItem?.({ startingPoint: data.startingPoint });
+          break;
+        }
+      }
+    });
+  }, []);
 
   useEffect(() => {
     if (searchItemStartingPoint.current) {

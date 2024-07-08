@@ -12,7 +12,7 @@ const GroupChannelThreadFragment = createGroupChannelThreadFragment();
 const GroupChannelThreadScreen = () => {
   const { navigation, params } = useAppNavigation<Routes.GroupChannelThread>();
 
-  const { sdk, groupChannelFragmentOptions } = useSendbirdChat();
+  const { sdk } = useSendbirdChat();
   const { channel } = useGroupChannel(sdk, params.channelUrl);
   const [parentMessage] = useState(
     () =>
@@ -45,7 +45,6 @@ const GroupChannelThreadScreen = () => {
       }}
       onPressHeaderSubtitle={() => {
         // Navigate to parent message
-        groupChannelFragmentOptions.overrideSearchItemStartingPoint = parentMessage.createdAt;
         navigation.navigate(Routes.GroupChannel, {
           channelUrl: channel.url,
         });
