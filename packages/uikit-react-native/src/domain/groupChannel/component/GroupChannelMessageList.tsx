@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { useToast } from '@sendbird/uikit-react-native-foundation';
@@ -93,17 +93,15 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
     });
   }, [props.scrolledAwayFromBottom]);
 
-  const subscriber = useCallback((payload: GroupChannelFragmentOptionsPubSubContextPayload) => {
-    switch (payload.type) {
-      case 'OVERRIDE_SEARCH_ITEM_STARTING_POINT': {
-        scrollToMessageWithCreatedAt(payload.data.startingPoint, false, MESSAGE_SEARCH_SAFE_SCROLL_DELAY);
-        break;
-      }
-    }
-  }, []);
-
   useEffect(() => {
-    return groupChannelFragmentOptions.pubsub.subscribe(subscriber);
+    return groupChannelFragmentOptions.pubsub.subscribe((payload: GroupChannelFragmentOptionsPubSubContextPayload) => {
+      switch (payload.type) {
+        case 'OVERRIDE_SEARCH_ITEM_STARTING_POINT': {
+          scrollToMessageWithCreatedAt(payload.data.startingPoint, false, MESSAGE_SEARCH_SAFE_SCROLL_DELAY);
+          break;
+        }
+      }
+    });
   }, []);
 
   useEffect(() => {
