@@ -1,8 +1,8 @@
-import React, { useCallback, useContext, useEffect, useRef } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { useToast } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdMessage, SendbirdSendableMessage } from '@sendbird/uikit-utils';
+import { SendbirdMessage, SendbirdSendableMessage, useIsFirstMount } from '@sendbird/uikit-utils';
 import { isDifferentChannel, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import ChannelMessageList from '../../../components/ChannelMessageList';
@@ -23,6 +23,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   );
 
   const id = useUniqHandlerId('GroupChannelMessageList');
+  const isFirstMount = useIsFirstMount();
 
   const scrollToMessageWithCreatedAt = useFreshCallback(
     (createdAt: number, focusAnimated: boolean, timeout: number): boolean => {
@@ -95,26 +96,24 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   const subscriber = useCallback((payload: GroupChannelFragmentOptionsPubSubContextPayload) => {
     switch (payload.type) {
       case 'OVERRIDE_SEARCH_ITEM_STARTING_POINT': {
-        searchItemStartingPoint.current = payload.data.startingPoint;
-        props.onUpdateSearchItem?.({ startingPoint: payload.data.startingPoint });
+        scrollToMessageWithCreatedAt(payload.data.startingPoint, false, MESSAGE_SEARCH_SAFE_SCROLL_DELAY);
         break;
       }
     }
   }, []);
   
-  const searchItemStartingPoint = useRef(props.searchItem?.startingPoint);
   useEffect(() => {
     return groupChannelFragmentOptions.pubsub.subscribe(subscriber);
   }, []);
-
+  
   useEffect(() => {
-    if (searchItemStartingPoint.current) {
-      // - Search screen + searchItem > mount message list
-      // - Reset message list + searchItem > re-mount message list
-      scrollToMessageWithCreatedAt(searchItemStartingPoint.current, false, MESSAGE_SEARCH_SAFE_SCROLL_DELAY);
-      searchItemStartingPoint.current = undefined;
+    // Only trigger once when message list mount with initial props.searchItem
+    // - Search screen + searchItem > mount message list
+    // - Reset message list + searchItem > re-mount message list
+    if (isFirstMount && props.searchItem) {
+      scrollToMessageWithCreatedAt(props.searchItem.startingPoint, false, MESSAGE_SEARCH_SAFE_SCROLL_DELAY);
     }
-  }, [searchItemStartingPoint.current]);
+  }, [isFirstMount]);
 
   const onPressParentMessage = useFreshCallback(
     (parentMessage: SendbirdMessage, childMessage: SendbirdSendableMessage) => {
