@@ -40,8 +40,8 @@ const useRetry = (hasError: boolean, retryCount = 5) => {
 
 type Props = {
   source: number | { uri: string };
-  width?: number | string;
-  height?: number | string;
+  width?: number | `${number}%`;
+  height?: number | `${number}%`;
   style?: StyleProp<ViewStyle>;
 };
 const ImageWithPlaceholder = (props: Props) => {
