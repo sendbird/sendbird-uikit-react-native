@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useCallback, useContext, useEffect, useRef } from 'react';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { useToast } from '@sendbird/uikit-react-native-foundation';
@@ -10,6 +10,7 @@ import { MESSAGE_FOCUS_ANIMATION_DELAY, MESSAGE_SEARCH_SAFE_SCROLL_DELAY } from 
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
+import { GroupChannelFragmentOptionsPubSubContextPayload } from '../../../contexts/SendbirdChatCtx';
 
 const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   const toast = useToast();
@@ -91,17 +92,19 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
     });
   }, [props.scrolledAwayFromBottom]);
 
+  const subscriber = useCallback((payload: GroupChannelFragmentOptionsPubSubContextPayload) => {
+    switch (payload.type) {
+      case 'OVERRIDE_SEARCH_ITEM_STARTING_POINT': {
+        searchItemStartingPoint.current = payload.data.startingPoint;
+        props.onUpdateSearchItem?.({ startingPoint: payload.data.startingPoint });
+        break;
+      }
+    }
+  }, []);
+  
   const searchItemStartingPoint = useRef(props.searchItem?.startingPoint);
   useEffect(() => {
-    groupChannelFragmentOptions.pubsub.subscribe(({ type, data }) => {
-      switch (type) {
-        case 'OVERRIDE_SEARCH_ITEM_STARTING_POINT': {
-          searchItemStartingPoint.current = data.startingPoint;
-          props.onUpdateSearchItem?.({ startingPoint: data.startingPoint });
-          break;
-        }
-      }
-    });
+    return groupChannelFragmentOptions.pubsub.subscribe(subscriber);
   }, []);
 
   useEffect(() => {
