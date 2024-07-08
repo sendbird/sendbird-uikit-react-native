@@ -7,10 +7,10 @@ import { isDifferentChannel, useFreshCallback, useUniqHandlerId } from '@sendbir
 
 import ChannelMessageList from '../../../components/ChannelMessageList';
 import { MESSAGE_FOCUS_ANIMATION_DELAY, MESSAGE_SEARCH_SAFE_SCROLL_DELAY } from '../../../constants';
+import { GroupChannelFragmentOptionsPubSubContextPayload } from '../../../contexts/SendbirdChatCtx';
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
-import { GroupChannelFragmentOptionsPubSubContextPayload } from '../../../contexts/SendbirdChatCtx';
 
 const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   const toast = useToast();
@@ -101,11 +101,11 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
       }
     }
   }, []);
-  
+
   useEffect(() => {
     return groupChannelFragmentOptions.pubsub.subscribe(subscriber);
   }, []);
-  
+
   useEffect(() => {
     // Only trigger once when message list mount with initial props.searchItem
     // - Search screen + searchItem > mount message list
