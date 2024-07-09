@@ -3575,11 +3575,6 @@
   resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.11.3.tgz#f0f6b2c1da3c24fd27f49221ccfde02105b30951"
   integrity sha512-I5OIWBL4jdVHvBn2UqJZJkcE+sXPOVVxZFtJfK3FrllkT9hDtCLzCi5GPWnh0X73vr+WBLY6KSw27y4dZfIPEg==
 
-"@sendbird/react-native-scrollview-enhancer@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@sendbird/react-native-scrollview-enhancer/-/react-native-scrollview-enhancer-0.2.1.tgz#25de4af78293978a4c0ef6fddee25d822a364c46"
-  integrity sha512-LN+Tm+ZUkE2MBVreg/JI8SVr8SOKRteZN0YFpGzRtbKkP45+pKyPN4JQPf73eFx7qO8zDL+TUVyzz/1MOnIK7g==
-
 "@sendbird/uikit-tools@0.0.1-alpha.77":
   version "0.0.1-alpha.77"
   resolved "https://registry.yarnpkg.com/@sendbird/uikit-tools/-/uikit-tools-0.0.1-alpha.77.tgz#f305849dc767488b76853be653c2149ec240e558"
@@ -4279,7 +4274,7 @@
     "@types/react" "*"
     react-native "*"
 
-"@types/react-native@*", "@types/react-native@^0.67":
+"@types/react-native@*":
   version "0.67.26"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.67.26.tgz#68b873afe03695b7081b3ed102946b2e0cd0fc84"
   integrity sha512-4UTZWwgJfHeBp0MqxmugfdA03mYrFRtZ8GXeV29ZyAlyNXpjs719WrrsGF7CcdacXDe+blG08wIEk0JxuZ+a5A==
