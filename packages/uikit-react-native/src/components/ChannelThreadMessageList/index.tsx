@@ -32,13 +32,13 @@ import {
 import type { UserProfileContextType } from '../../contexts/UserProfileCtx';
 import { useLocalization, usePlatformService, useSendbirdChat, useUserProfile } from '../../hooks/useContext';
 import SBUUtils from '../../libs/SBUUtils';
-import ChatFlatList from '../ChatFlatList';
 import { ReactionAddons } from '../ReactionAddons';
+import ThreadChatFlatList from '../ThreadChatFlatList';
 
 type PressActions = { onPress?: () => void; onLongPress?: () => void; bottomSheetItem?: BottomSheetItem };
 type HandleableMessage = SendbirdUserMessage | SendbirdFileMessage;
 type CreateMessagePressActions = (params: { message: SendbirdMessage }) => PressActions;
-export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpenChannel> = {
+export type ChannelThreadMessageListProps<T extends SendbirdGroupChannel | SendbirdOpenChannel> = {
   enableMessageGrouping: boolean;
   currentUserId?: string;
   channel: T;
@@ -56,11 +56,8 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
   onPressScrollToBottomButton: (animated?: boolean) => void;
 
   onEditMessage: (message: HandleableMessage) => void;
-  onReplyMessage?: (message: HandleableMessage) => void; // only available on group channel
-  onReplyInThreadMessage?: (message: HandleableMessage) => void; // only available on group channel
   onDeleteMessage: (message: HandleableMessage) => Promise<void>;
   onResendFailedMessage: (failedMessage: HandleableMessage) => Promise<HandleableMessage | void>;
-  onPressParentMessage?: (parentMessage: SendbirdMessage, childMessage: HandleableMessage) => void;
   onPressMediaMessage?: (message: SendbirdFileMessage, deleteMessage: () => Promise<void>, uri: string) => void;
 
   renderMessage: (props: {
@@ -70,15 +67,12 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
     nextMessage?: SendbirdMessage;
     onPress?: () => void;
     onLongPress?: () => void;
-    onPressParentMessage?: ChannelMessageListProps<T>['onPressParentMessage'];
-    onReplyInThreadMessage?: ChannelMessageListProps<T>['onReplyInThreadMessage'];
     onShowUserProfile?: UserProfileContextType['show'];
     channel: T;
-    currentUserId?: ChannelMessageListProps<T>['currentUserId'];
-    enableMessageGrouping: ChannelMessageListProps<T>['enableMessageGrouping'];
+    currentUserId?: ChannelThreadMessageListProps<T>['currentUserId'];
+    enableMessageGrouping: ChannelThreadMessageListProps<T>['enableMessageGrouping'];
     bottomSheetItem?: BottomSheetItem;
     isFirstItem: boolean;
-    hideParentMessage?: boolean;
   }) => React.ReactElement | null;
   renderNewMessagesButton:
     | null
@@ -89,18 +83,15 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
   ref?: Ref<FlatList<SendbirdMessage>> | undefined;
 };
 
-const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel>(
+const ChannelThreadMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel>(
   {
     searchItem,
     hasNext,
     channel,
     onEditMessage,
-    onReplyMessage,
-    onReplyInThreadMessage,
     onDeleteMessage,
     onResendFailedMessage,
     onPressMediaMessage,
-    onPressParentMessage,
     currentUserId,
     renderNewMessagesButton,
     renderScrollToBottomButton,
@@ -115,7 +106,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
     flatListProps,
     onPressNewMessagesButton,
     onPressScrollToBottomButton,
-  }: ChannelMessageListProps<T>,
+  }: ChannelThreadMessageListProps<T>,
   ref: React.ForwardedRef<FlatList<SendbirdMessage>>,
 ) => {
   const { STRINGS } = useLocalization();
@@ -126,8 +117,6 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
     channel,
     currentUserId,
     onEditMessage,
-    onReplyMessage,
-    onReplyInThreadMessage,
     onDeleteMessage,
     onResendFailedMessage,
     onPressMediaMessage,
@@ -139,12 +128,10 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
     const { onPress, onLongPress, bottomSheetItem } = createMessagePressActions({ message: item });
     return renderMessage({
       message: item,
-      prevMessage: messages[index + 1],
-      nextMessage: messages[index - 1],
+      prevMessage: messages[index - 1],
+      nextMessage: messages[index + 1],
       onPress,
       onLongPress,
-      onPressParentMessage,
-      onReplyInThreadMessage,
       onShowUserProfile: show,
       enableMessageGrouping,
       channel,
@@ -160,7 +147,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
       {channel.isFrozen && (
         <ChannelFrozenBanner style={styles.frozenBanner} text={STRINGS.LABELS.CHANNEL_MESSAGE_LIST_FROZEN} />
       )}
-      <ChatFlatList
+      <ThreadChatFlatList
         {...flatListProps}
         onTopReached={onTopReached}
         onBottomReached={onBottomReached}
@@ -201,20 +188,11 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
   currentUserId,
   onResendFailedMessage,
   onEditMessage,
-  onReplyMessage,
-  onReplyInThreadMessage,
   onDeleteMessage,
   onPressMediaMessage,
 }: Pick<
-  ChannelMessageListProps<T>,
-  | 'channel'
-  | 'currentUserId'
-  | 'onEditMessage'
-  | 'onReplyMessage'
-  | 'onReplyInThreadMessage'
-  | 'onDeleteMessage'
-  | 'onResendFailedMessage'
-  | 'onPressMediaMessage'
+  ChannelThreadMessageListProps<T>,
+  'channel' | 'currentUserId' | 'onEditMessage' | 'onDeleteMessage' | 'onResendFailedMessage' | 'onPressMediaMessage'
 >): CreateMessagePressActions => {
   const { colors } = useUIKitTheme();
   const { STRINGS } = useLocalization();
@@ -324,18 +302,6 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
         title: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE,
         onPress: () => alertForMessageDelete(message),
       }),
-      reply: (message: HandleableMessage) => ({
-        disabled: Boolean(message.parentMessageId),
-        icon: 'reply' as const,
-        title: STRINGS.LABELS.CHANNEL_MESSAGE_REPLY,
-        onPress: () => onReplyMessage?.(message),
-      }),
-      replyInThread: (message: HandleableMessage) => ({
-        disabled: Boolean(message.parentMessageId),
-        icon: 'thread' as const,
-        title: STRINGS.LABELS.CHANNEL_MESSAGE_THREAD,
-        onPress: () => onReplyInThreadMessage?.(message),
-      }),
       download: (message: HandleableMessage) => ({
         icon: 'download' as const,
         title: STRINGS.LABELS.CHANNEL_MESSAGE_SAVE,
@@ -350,13 +316,6 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
           sheetItems.push(menu.edit(message));
           sheetItems.push(menu.delete(message));
         }
-        if (channel.isGroupChannel()) {
-          if (sbOptions.uikit.groupChannel.channel.replyType === 'thread' && onReplyInThreadMessage !== undefined) {
-            sheetItems.push(menu.replyInThread(message));
-          } else if (sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
-            sheetItems.push(menu.reply(message));
-          }
-        }
       }
     }
 
@@ -367,13 +326,6 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
       if (!channel.isEphemeral) {
         if (isMyMessage(message, currentUserId) && message.sendingStatus === 'succeeded') {
           sheetItems.push(menu.delete(message));
-        }
-        if (channel.isGroupChannel()) {
-          if (sbOptions.uikit.groupChannel.channel.replyType === 'thread' && onReplyInThreadMessage !== undefined) {
-            sheetItems.push(menu.replyInThread(message));
-          } else if (sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
-            sheetItems.push(menu.reply(message));
-          }
         }
       }
     }
@@ -451,4 +403,4 @@ const styles = createStyleSheet({
 });
 
 // NOTE: Due to Generic inference is not working on forwardRef, we need to cast it as typeof ChannelMessageList and implicit `ref` prop
-export default React.forwardRef(ChannelMessageList) as typeof ChannelMessageList;
+export default React.forwardRef(ChannelThreadMessageList) as typeof ChannelThreadMessageList;

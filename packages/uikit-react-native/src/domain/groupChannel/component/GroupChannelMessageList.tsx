@@ -2,11 +2,12 @@ import React, { useContext, useEffect } from 'react';
 
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { useToast } from '@sendbird/uikit-react-native-foundation';
-import type { SendbirdMessage } from '@sendbird/uikit-utils';
-import { isDifferentChannel, useFreshCallback, useIsFirstMount, useUniqHandlerId } from '@sendbird/uikit-utils';
+import { SendbirdMessage, SendbirdSendableMessage, useIsFirstMount } from '@sendbird/uikit-utils';
+import { isDifferentChannel, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import ChannelMessageList from '../../../components/ChannelMessageList';
 import { MESSAGE_FOCUS_ANIMATION_DELAY, MESSAGE_SEARCH_SAFE_SCROLL_DELAY } from '../../../constants';
+import { GroupChannelFragmentOptionsPubSubContextPayload } from '../../../contexts/SendbirdChatCtx';
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelContexts } from '../module/moduleContext';
 import type { GroupChannelProps } from '../types';
@@ -14,10 +15,12 @@ import type { GroupChannelProps } from '../types';
 const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   const toast = useToast();
   const { STRINGS } = useLocalization();
-  const { sdk } = useSendbirdChat();
+  const { sdk, sbOptions, groupChannelFragmentOptions } = useSendbirdChat();
   const { setMessageToEdit, setMessageToReply } = useContext(GroupChannelContexts.Fragment);
   const { subscribe } = useContext(GroupChannelContexts.PubSub);
-  const { flatListRef, lazyScrollToBottom, lazyScrollToIndex } = useContext(GroupChannelContexts.MessageList);
+  const { flatListRef, lazyScrollToBottom, lazyScrollToIndex, onPressReplyMessageInThread } = useContext(
+    GroupChannelContexts.MessageList,
+  );
 
   const id = useUniqHandlerId('GroupChannelMessageList');
   const isFirstMount = useIsFirstMount();
@@ -91,6 +94,17 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   }, [props.scrolledAwayFromBottom]);
 
   useEffect(() => {
+    return groupChannelFragmentOptions.pubsub.subscribe((payload: GroupChannelFragmentOptionsPubSubContextPayload) => {
+      switch (payload.type) {
+        case 'OVERRIDE_SEARCH_ITEM_STARTING_POINT': {
+          scrollToMessageWithCreatedAt(payload.data.startingPoint, false, MESSAGE_SEARCH_SAFE_SCROLL_DELAY);
+          break;
+        }
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     // Only trigger once when message list mount with initial props.searchItem
     // - Search screen + searchItem > mount message list
     // - Reset message list + searchItem > re-mount message list
@@ -99,16 +113,31 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
     }
   }, [isFirstMount]);
 
-  const onPressParentMessage = useFreshCallback((message: SendbirdMessage) => {
-    const canScrollToParent = scrollToMessageWithCreatedAt(message.createdAt, true, 0);
-    if (!canScrollToParent) toast.show(STRINGS.TOAST.FIND_PARENT_MSG_ERROR, 'error');
-  });
+  const onPressParentMessage = useFreshCallback(
+    (parentMessage: SendbirdMessage, childMessage: SendbirdSendableMessage) => {
+      if (
+        onPressReplyMessageInThread &&
+        sbOptions.uikit.groupChannel.channel.replyType === 'thread' &&
+        sbOptions.uikit.groupChannel.channel.threadReplySelectType === 'thread'
+      ) {
+        if (parentMessage.createdAt >= props.channel.messageOffsetTimestamp) {
+          onPressReplyMessageInThread(parentMessage as SendbirdSendableMessage, childMessage.createdAt);
+        } else {
+          toast.show(STRINGS.TOAST.FIND_PARENT_MSG_ERROR, 'error');
+        }
+      } else {
+        const canScrollToParent = scrollToMessageWithCreatedAt(parentMessage.createdAt, true, 0);
+        if (!canScrollToParent) toast.show(STRINGS.TOAST.FIND_PARENT_MSG_ERROR, 'error');
+      }
+    },
+  );
 
   return (
     <ChannelMessageList
       {...props}
       ref={flatListRef}
       onReplyMessage={setMessageToReply}
+      onReplyInThreadMessage={setMessageToReply}
       onEditMessage={setMessageToEdit}
       onPressParentMessage={onPressParentMessage}
       onPressNewMessagesButton={scrollToBottom}

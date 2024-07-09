@@ -14,7 +14,9 @@ import type EmojiManager from '../libs/EmojiManager';
 import type ImageCompressionConfig from '../libs/ImageCompressionConfig';
 import type MentionManager from '../libs/MentionManager';
 import type VoiceMessageConfig from '../libs/VoiceMessageConfig';
+import VoiceMessageStatusManager from '../libs/VoiceMessageStatusManager';
 import type { FileType } from '../platform/types';
+import pubsub, { type PubSub } from '../utils/pubsub';
 
 export interface ChatRelatedFeaturesInUIKit {
   enableAutoPushTokenRegistration: boolean;
@@ -27,9 +29,17 @@ interface Props extends ChatRelatedFeaturesInUIKit, React.PropsWithChildren {
 
   emojiManager: EmojiManager;
   mentionManager: MentionManager;
+  voiceMessageStatusManager: VoiceMessageStatusManager;
   imageCompressionConfig: ImageCompressionConfig;
   voiceMessageConfig: VoiceMessageConfig;
 }
+
+export type GroupChannelFragmentOptionsPubSubContextPayload = {
+  type: 'OVERRIDE_SEARCH_ITEM_STARTING_POINT';
+  data: {
+    startingPoint: number;
+  };
+};
 
 export type SendbirdChatContextType = {
   sdk: SendbirdChatSDK;
@@ -39,6 +49,7 @@ export type SendbirdChatContextType = {
   // feature related instances
   emojiManager: EmojiManager;
   mentionManager: MentionManager;
+  voiceMessageStatusManager: VoiceMessageStatusManager;
   imageCompressionConfig: ImageCompressionConfig;
   voiceMessageConfig: VoiceMessageConfig;
 
@@ -46,6 +57,9 @@ export type SendbirdChatContextType = {
   updateCurrentUserInfo: (nickname?: string, profile?: string | FileType) => Promise<SendbirdUser>;
   markAsDeliveredWithChannel: (channel: SendbirdGroupChannel) => void;
 
+  groupChannelFragmentOptions: {
+    pubsub: PubSub<GroupChannelFragmentOptionsPubSubContextPayload>;
+  };
   sbOptions: {
     // UIKit options
     uikit: SBUConfig;
@@ -80,6 +94,7 @@ export type SendbirdChatContextType = {
       broadcastChannelEnabled: boolean;
       superGroupChannelEnabled: boolean;
       reactionEnabled: boolean;
+      uploadSizeLimit: number | undefined;
     };
   };
 };
@@ -90,6 +105,7 @@ export const SendbirdChatProvider = ({
   sdkInstance,
   emojiManager,
   mentionManager,
+  voiceMessageStatusManager,
   imageCompressionConfig,
   voiceMessageConfig,
   enableAutoPushTokenRegistration,
@@ -164,11 +180,15 @@ export const SendbirdChatProvider = ({
     mentionManager,
     imageCompressionConfig,
     voiceMessageConfig,
+    voiceMessageStatusManager,
     currentUser,
     setCurrentUser,
 
     updateCurrentUserInfo,
     markAsDeliveredWithChannel,
+    groupChannelFragmentOptions: {
+      pubsub: pubsub<GroupChannelFragmentOptionsPubSubContextPayload>(),
+    },
 
     // TODO: Options should be moved to the common area at the higher level to be passed to the context of each product.
     //  For example, common -> chat context, common -> calls context

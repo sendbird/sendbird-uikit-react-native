@@ -53,6 +53,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     channel,
     messageToReply,
     setMessageToReply,
+    messageForThread,
   },
   ref,
 ) {
@@ -71,11 +72,22 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
 
   const messageReplyParams = useIIFE(() => {
     const { groupChannel } = sbOptions.uikit;
-    if (!channel.isGroupChannel() || groupChannel.channel.replyType === 'none' || !messageToReply) return {};
-    return {
-      parentMessageId: messageToReply.messageId,
-      isReplyToChannel: true,
-    };
+
+    if (channel.isGroupChannel()) {
+      if (groupChannel.channel.replyType === 'quote_reply' && messageToReply) {
+        return {
+          parentMessageId: messageToReply.messageId,
+          isReplyToChannel: true,
+        };
+      } else if (groupChannel.channel.replyType === 'thread' && messageForThread) {
+        return {
+          parentMessageId: messageForThread.messageId,
+          isReplyToChannel: true,
+        };
+      }
+    }
+
+    return {};
   });
 
   const messageMentionParams = useIIFE(() => {
@@ -152,6 +164,13 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     if (inputFrozen) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED;
     if (inputDisabled) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED;
     if (messageToReply) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_REPLY;
+    if (messageForThread) {
+      if (messageForThread.threadInfo && messageForThread.threadInfo.replyCount > 0) {
+        return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_REPLY_TO_THREAD;
+      } else {
+        return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_REPLY_IN_THREAD;
+      }
+    }
 
     return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_ACTIVE;
   };

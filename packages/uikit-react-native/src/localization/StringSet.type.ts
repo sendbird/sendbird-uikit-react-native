@@ -127,6 +127,28 @@ export interface StringSet {
     /** GroupChannel > Suggested mention list */
     MENTION_LIMITED: (mentionLimit: number) => string;
   };
+  GROUP_CHANNEL_THREAD: {
+    /** GroupChannelThread > Header */
+    HEADER_TITLE: string;
+    HEADER_SUBTITLE: (currentUserId: string, channel: SendbirdGroupChannel) => string;
+
+    /** GroupChannelThread > List */
+    LIST_DATE_SEPARATOR: (date: Date, locale?: Locale) => string;
+    LIST_BUTTON_NEW_MSG: (newMessages: SendbirdMessage[]) => string;
+
+    /** GroupChannelThread > Message bubble */
+    MESSAGE_BUBBLE_TIME: (message: SendbirdMessage, locale?: Locale) => string;
+    MESSAGE_BUBBLE_FILE_TITLE: (message: SendbirdFileMessage) => string;
+    MESSAGE_BUBBLE_EDITED_POSTFIX: string;
+    MESSAGE_BUBBLE_UNKNOWN_TITLE: (message: SendbirdMessage) => string;
+    MESSAGE_BUBBLE_UNKNOWN_DESC: (message: SendbirdMessage) => string;
+
+    PARENT_MESSAGE_TIME: (message: SendbirdMessage, locale?: Locale) => string;
+    REPLY_COUNT: (replyCount: number, maxReplyCount?: number) => string;
+
+    /** GroupChannelThread > Suggested mention list */
+    MENTION_LIMITED: (mentionLimit: number) => string;
+  };
   GROUP_CHANNEL_SETTINGS: {
     /** GroupChannelSettings > Header */
     HEADER_TITLE: string;
@@ -270,6 +292,8 @@ export interface StringSet {
     CHANNEL_INPUT_PLACEHOLDER_DISABLED: string;
     CHANNEL_INPUT_PLACEHOLDER_MUTED: string;
     CHANNEL_INPUT_PLACEHOLDER_REPLY: string;
+    CHANNEL_INPUT_PLACEHOLDER_REPLY_IN_THREAD: string;
+    CHANNEL_INPUT_PLACEHOLDER_REPLY_TO_THREAD: string;
     CHANNEL_INPUT_EDIT_OK: string;
     CHANNEL_INPUT_EDIT_CANCEL: string;
     /** ChannelInput > Attachments **/
@@ -286,6 +310,7 @@ export interface StringSet {
     CHANNEL_MESSAGE_SAVE: string;
     CHANNEL_MESSAGE_DELETE: string;
     CHANNEL_MESSAGE_REPLY: string;
+    CHANNEL_MESSAGE_THREAD: string;
     /** Channel > Message > Delete confirm **/
     CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE: string;
     CHANNEL_MESSAGE_DELETE_CONFIRM_OK: string;
@@ -346,6 +371,8 @@ export interface StringSet {
     UNKNOWN_ERROR: string;
     GET_CHANNEL_ERROR: string;
     FIND_PARENT_MSG_ERROR: string;
+    THREAD_PARENT_MESSAGE_DELETED_ERROR: string;
+    FILE_UPLOAD_SIZE_LIMIT_EXCEEDED_ERROR: (uploadSizeLimit: string) => string;
   };
   PROFILE_CARD: {
     BUTTON_MESSAGE: string;

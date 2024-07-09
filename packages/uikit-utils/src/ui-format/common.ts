@@ -152,3 +152,46 @@ export const millsToMSS = (mills: number) => {
 
   return `${minutes}:${ss}`;
 };
+
+/**
+ * Message reply count format
+ * If reply count is 1: 1 'reply'
+ * If the reply count is greater than 1 : '{count} replies'
+ * If the reply count is greater than {maxReplyCount} : '{maxReplyCount}+ replies'
+ * */
+export const getReplyCountFormat = (replyCount: number, maxReplyCount?: number) => {
+  if (maxReplyCount && replyCount > maxReplyCount) {
+    return `${maxReplyCount}+ replies`;
+  } else if (replyCount === 1) {
+    return `${replyCount} reply`;
+  } else if (replyCount > 1) {
+    return `${replyCount} replies`;
+  }
+  return '';
+};
+
+/**
+ * Thread parent message time format
+ *
+ * @param {Date} date
+ * @param {Locale} [locale]
+ * @returns {string}
+ * */
+export const getThreadParentMessageTimeFormat = (date: Date, locale?: Locale): string => {
+  return format(date, "MMM dd 'at' h:mm a", { locale });
+};
+
+/**
+ * File size format
+ *
+ * @param {number} fileSize
+ * @returns {string}
+ * */
+export const getReadableFileSize = (fileSize: number): string => {
+  if (fileSize <= 0) {
+    return '0 B';
+  }
+  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const digitGroups = Math.floor(Math.log10(fileSize) / Math.log10(1024));
+  return `${(fileSize / Math.pow(1024, digitGroups)).toFixed(1)} ${units[digitGroups]}`;
+};

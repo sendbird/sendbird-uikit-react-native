@@ -58,12 +58,13 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
   groupChannelPubSub,
   messages,
   onUpdateSearchItem,
+  onPressReplyMessageInThread,
 }) => {
   if (!channel) throw new Error('GroupChannel is not provided to GroupChannelModule');
 
   const handlerId = useUniqHandlerId('GroupChannelContextsProvider');
   const { STRINGS } = useLocalization();
-  const { currentUser, sdk } = useSendbirdChat();
+  const { currentUser, sdk, sbOptions } = useSendbirdChat();
 
   const [typingUsers, setTypingUsers] = useState<SendbirdUser[]>([]);
   const [messageToEdit, setMessageToEdit] = useState<SendbirdUserMessage | SendbirdFileMessage>();
@@ -87,6 +88,14 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
       setMessageToEdit(undefined);
       setMessageToReply(message);
       return;
+    }
+  };
+
+  const onPressMessageToReply = (parentMessage?: SendbirdUserMessage | SendbirdFileMessage) => {
+    if (sbOptions.uikit.groupChannel.channel.replyType === 'thread' && parentMessage) {
+      onPressReplyMessageInThread?.(parentMessage, Number.MAX_SAFE_INTEGER);
+    } else if (sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
+      updateInputMode('reply', parentMessage);
     }
   };
 
@@ -125,7 +134,7 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
           messageToEdit,
           setMessageToEdit: useCallback((message) => updateInputMode('edit', message), []),
           messageToReply,
-          setMessageToReply: useCallback((message) => updateInputMode('reply', message), []),
+          setMessageToReply: useCallback((message) => onPressMessageToReply(message), []),
         }}
       >
         <GroupChannelContexts.PubSub.Provider value={groupChannelPubSub}>
@@ -136,6 +145,7 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
                 scrollToMessage,
                 lazyScrollToIndex,
                 lazyScrollToBottom,
+                onPressReplyMessageInThread,
               }}
             >
               {children}

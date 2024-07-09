@@ -3,6 +3,7 @@ import { Pressable } from 'react-native';
 
 import type { Emoji } from '@sendbird/chat';
 import { createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { useForceUpdate, useGroupChannelHandler } from '@sendbird/uikit-tools';
 import type { SendbirdBaseChannel, SendbirdBaseMessage, SendbirdReaction } from '@sendbird/uikit-utils';
 import { getReactionCount } from '@sendbird/uikit-utils';
 
@@ -12,6 +13,7 @@ import ReactionRoundedButton from './ReactionRoundedButton';
 
 const NUM_COL = 4;
 const REACTION_MORE_KEY = 'reaction-more-button';
+export type ReactionAddonType = 'default' | 'thread_parent_message';
 
 const getUserReacted = (reaction: SendbirdReaction, userId = UNKNOWN_USER_ID) => {
   return reaction.userIds.indexOf(userId) > -1;
@@ -40,6 +42,7 @@ const createReactionButtons = (
   onOpenReactionList: () => void,
   onOpenReactionUserList: (focusIndex: number) => void,
   currentUserId?: string,
+  reactionAddonType?: ReactionAddonType,
 ) => {
   const reactions = message.reactions ?? [];
   const buttons = reactions.map((reaction, index) => {
@@ -57,7 +60,11 @@ const createReactionButtons = (
             url={getEmoji(reaction.key).url}
             count={getReactionCount(reaction)}
             reacted={pressed || getUserReacted(reaction, currentUserId)}
-            style={[isNotLastOfRow && styles.marginRight, isNotLastOfCol && styles.marginBottom]}
+            style={
+              reactionAddonType === 'default'
+                ? [isNotLastOfRow && styles.marginRight, isNotLastOfCol && styles.marginBottom]
+                : [styles.marginRight, styles.marginBottom]
+            }
           />
         )}
       </Pressable>
@@ -74,12 +81,30 @@ const createReactionButtons = (
   return buttons;
 };
 
-const MessageReactionAddon = ({ channel, message }: { channel: SendbirdBaseChannel; message: SendbirdBaseMessage }) => {
+const MessageReactionAddon = ({
+  channel,
+  message,
+  reactionAddonType = 'default',
+}: {
+  channel: SendbirdBaseChannel;
+  message: SendbirdBaseMessage;
+  reactionAddonType?: ReactionAddonType;
+}) => {
   const { colors } = useUIKitTheme();
-  const { emojiManager, currentUser } = useSendbirdChat();
+  const { sdk, emojiManager, currentUser } = useSendbirdChat();
   const { openReactionList, openReactionUserList } = useReaction();
+  const forceUpdate = useForceUpdate();
 
-  if (!message.reactions?.length) return null;
+  useGroupChannelHandler(sdk, {
+    async onReactionUpdated(_, event) {
+      if (event.messageId === message.messageId) {
+        message.applyReactionEvent(event);
+        forceUpdate();
+      }
+    },
+  });
+
+  if (reactionAddonType === 'default' && !message.reactions?.length) return null;
 
   const reactionButtons = createReactionButtons(
     channel,
@@ -89,12 +114,16 @@ const MessageReactionAddon = ({ channel, message }: { channel: SendbirdBaseChann
     () => openReactionList({ channel, message }),
     (focusIndex) => openReactionUserList({ channel, message, focusIndex }),
     currentUser?.userId,
+    reactionAddonType,
   );
+
+  const containerStyle =
+    reactionAddonType === 'default' ? styles.reactionContainer : styles.reactionThreadParentMessageContainer;
 
   return (
     <Pressable
       style={[
-        styles.reactionContainer,
+        containerStyle,
         { backgroundColor: colors.background, borderColor: colors.ui.reaction.rounded.enabled.background },
       ]}
     >
@@ -111,6 +140,10 @@ const styles = createStyleSheet({
     padding: 8,
     borderRadius: 16,
     borderWidth: 1,
+  },
+  reactionThreadParentMessageContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   marginRight: {
     marginRight: 4.5,

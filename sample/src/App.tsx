@@ -27,6 +27,7 @@ import {
   GroupChannelScreen,
   GroupChannelSettingsScreen,
   GroupChannelTabs,
+  GroupChannelThreadScreen,
   HomeScreen,
   MessageSearchScreen,
   OpenChannelBannedUsersScreen,
@@ -61,6 +62,8 @@ const App = () => {
         groupChannel: {
           enableMention: true,
           typingIndicatorTypes: new Set([TypingIndicatorType.Text, TypingIndicatorType.Bubble]),
+          replyType: 'thread',
+          threadReplySelectType: 'thread',
         },
         groupChannelList: {
           enableTypingIndicator: true,
@@ -147,6 +150,7 @@ const Navigations = () => {
                   name={Routes.GroupChannelRegisterOperator}
                   component={GroupChannelRegisterOperatorScreen}
                 />
+                <RootStack.Screen name={Routes.GroupChannelThread} component={GroupChannelThreadScreen} />
               </RootStack.Group>
               <RootStack.Screen name={Routes.GroupChannelCreate} component={GroupChannelCreateScreen} />
               <RootStack.Screen name={Routes.GroupChannelInvite} component={GroupChannelInviteScreen} />

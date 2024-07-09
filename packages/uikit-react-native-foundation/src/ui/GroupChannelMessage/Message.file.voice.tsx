@@ -25,6 +25,9 @@ type Props = GroupChannelMessageProps<
   {
     durationMetaArrayKey?: string;
     onUnmount: () => void;
+    initialCurrentTime?: number;
+    onSubscribeStatus?: (channelUrl: string, messageId: number, subscriber: (currentTime: number) => void) => void;
+    onUnsubscribeStatus?: (channelUrl: string, messageId: number, subscriber: (currentTime: number) => void) => void;
   }
 >;
 const VoiceFileMessage = (props: Props) => {
@@ -35,6 +38,9 @@ const VoiceFileMessage = (props: Props) => {
     message,
     durationMetaArrayKey = 'KEY_VOICE_MESSAGE_DURATION',
     onUnmount,
+    initialCurrentTime,
+    onSubscribeStatus,
+    onUnsubscribeStatus,
   } = props;
 
   const { colors } = useUIKitTheme();
@@ -45,7 +51,7 @@ const VoiceFileMessage = (props: Props) => {
     const initialDuration = value ? parseInt(value, 10) : 0;
     return {
       status: 'paused',
-      currentTime: 0,
+      currentTime: initialCurrentTime || 0,
       duration: initialDuration,
     };
   });
@@ -53,6 +59,16 @@ const VoiceFileMessage = (props: Props) => {
   useEffect(() => {
     return () => {
       onUnmount();
+    };
+  }, []);
+
+  useEffect(() => {
+    const updateCurrentTime = (currentTime: number) => {
+      setState((prev) => ({ ...prev, currentTime }));
+    };
+    onSubscribeStatus?.(props.channel.url, props.message.messageId, updateCurrentTime);
+    return () => {
+      onUnsubscribeStatus?.(props.channel.url, props.message.messageId, updateCurrentTime);
     };
   }, []);
 

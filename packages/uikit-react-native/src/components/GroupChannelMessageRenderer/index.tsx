@@ -33,6 +33,7 @@ import GroupChannelMessageDateSeparator from './GroupChannelMessageDateSeparator
 import GroupChannelMessageFocusAnimation from './GroupChannelMessageFocusAnimation';
 import GroupChannelMessageOutgoingStatus from './GroupChannelMessageOutgoingStatus';
 import GroupChannelMessageParentMessage from './GroupChannelMessageParentMessage';
+import GroupChannelMessageReplyInfo from './GroupChannelMessageReplyInfo';
 
 const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'] = ({
   channel,
@@ -41,14 +42,16 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   onLongPress,
   onPressParentMessage,
   onShowUserProfile,
+  onReplyInThreadMessage,
   enableMessageGrouping,
   focused,
   prevMessage,
   nextMessage,
+  hideParentMessage,
 }) => {
   const playerUnsubscribes = useRef<(() => void)[]>([]);
   const { palette } = useUIKitTheme();
-  const { sbOptions, currentUser, mentionManager } = useSendbirdChat();
+  const { sbOptions, currentUser, mentionManager, voiceMessageStatusManager } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { mediaService, playerService } = usePlatformService();
   const { groupWithPrev, groupWithNext } = calcMessageGrouping(
@@ -56,7 +59,11 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     message,
     prevMessage,
     nextMessage,
+    sbOptions.uikit.groupChannel.channel.replyType === 'thread',
+    shouldRenderParentMessage(message, hideParentMessage),
   );
+
+  const variant = isMyMessage(message, currentUser?.userId) ? 'outgoing' : 'incoming';
 
   const reactionChildren = useIIFE(() => {
     const configs = sbOptions.uikitWithAppInfo.groupChannel.channel;
@@ -70,6 +77,12 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     return null;
   });
 
+  const replyInfo = useIIFE(() => {
+    if (sbOptions.uikit.groupChannel.channel.replyType !== 'thread') return null;
+    if (!channel || !message.threadInfo || !message.threadInfo.replyCount) return null;
+    return <GroupChannelMessageReplyInfo channel={channel} message={message} onPress={onReplyInThreadMessage} />;
+  });
+
   const resetPlayer = async () => {
     playerUnsubscribes.current.forEach((unsubscribe) => {
       try {
@@ -79,8 +92,6 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     playerUnsubscribes.current.length = 0;
     await playerService.reset();
   };
-
-  const variant = isMyMessage(message, currentUser?.userId) ? 'outgoing' : 'incoming';
 
   const messageProps: Omit<GroupChannelMessageProps<SendbirdMessage>, 'message'> = {
     channel,
@@ -111,6 +122,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
           let seekFinished = !shouldSeekToTime;
 
           const forPlayback = playerService.addPlaybackListener(({ stopped, currentTime, duration }) => {
+            voiceMessageStatusManager.setCurrentTime(message.channelUrl, message.messageId, currentTime);
             if (seekFinished) {
               setState((prevState) => ({ ...prevState, currentTime: stopped ? 0 : currentTime, duration }));
             }
@@ -146,10 +158,11 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     groupedWithPrev: groupWithPrev,
     groupedWithNext: groupWithNext,
     children: reactionChildren,
+    replyInfo: replyInfo,
     sendingStatus: isMyMessage(message, currentUser?.userId) ? (
       <GroupChannelMessageOutgoingStatus channel={channel} message={message} />
     ) : null,
-    parentMessage: shouldRenderParentMessage(message) ? (
+    parentMessage: shouldRenderParentMessage(message, hideParentMessage) ? (
       <GroupChannelMessageParentMessage
         channel={channel}
         message={message.parentMessage}
@@ -261,6 +274,9 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
           <GroupChannelMessage.VoiceFile
             message={message as SendbirdFileMessage}
             durationMetaArrayKey={VOICE_MESSAGE_META_ARRAY_DURATION_KEY}
+            initialCurrentTime={voiceMessageStatusManager.getCurrentTime(message.channelUrl, message.messageId)}
+            onSubscribeStatus={voiceMessageStatusManager.subscribe}
+            onUnsubscribeStatus={voiceMessageStatusManager.unsubscribe}
             onUnmount={() => {
               if (isVoiceMessage(message) && playerService.uri === message.url) {
                 resetPlayer();
@@ -284,7 +300,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
       } else {
         return 16;
       }
-    } else if (nextMessage && shouldRenderParentMessage(nextMessage)) {
+    } else if (nextMessage && shouldRenderParentMessage(nextMessage, hideParentMessage)) {
       return 16;
     } else if (groupWithNext) {
       return 2;

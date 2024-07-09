@@ -66,12 +66,16 @@ export function calcMessageGrouping(
   curr: SendbirdMessage,
   prev?: SendbirdMessage,
   next?: SendbirdMessage,
+  isReplyThreadType?: boolean,
+  hasParentMessageUI?: boolean,
 ) {
   const getPrev = () => {
     if (!groupEnabled) return false;
     if (!prev) return false;
     if (curr.isAdminMessage()) return false;
     if (!hasSameSender(curr, prev)) return false;
+    if (hasParentMessageUI && curr.parentMessageId) return false;
+    if (isReplyThreadType && curr.threadInfo) return false;
     if (getMessageTimeFormat(new Date(curr.createdAt)) !== getMessageTimeFormat(new Date(prev.createdAt))) return false;
     return true;
   };
@@ -81,6 +85,8 @@ export function calcMessageGrouping(
     if (!next) return false;
     if (curr.isAdminMessage()) return false;
     if (!hasSameSender(curr, next)) return false;
+    if (hasParentMessageUI && curr.parentMessageId) return false;
+    if (isReplyThreadType && curr.threadInfo) return false;
     if (getMessageTimeFormat(new Date(curr.createdAt)) !== getMessageTimeFormat(new Date(next.createdAt))) return false;
     return true;
   };
@@ -125,12 +131,13 @@ export function parseSendbirdNotification(dataPayload: RawSendbirdDataPayload): 
   return typeof dataPayload.sendbird === 'string' ? JSON.parse(dataPayload.sendbird) : dataPayload.sendbird;
 }
 
-export function shouldRenderParentMessage(message: SendbirdMessage): message is (
-  | SendbirdUserMessage
-  | SendbirdFileMessage
-) & {
+export function shouldRenderParentMessage(
+  message: SendbirdMessage,
+  hide = false,
+): message is (SendbirdUserMessage | SendbirdFileMessage) & {
   parentMessage: SendbirdUserMessage | SendbirdFileMessage;
 } {
+  if (hide) return false;
   return !!(
     (message.isFileMessage() || message.isUserMessage()) &&
     (message.parentMessage?.isFileMessage() || message.parentMessage?.isUserMessage())

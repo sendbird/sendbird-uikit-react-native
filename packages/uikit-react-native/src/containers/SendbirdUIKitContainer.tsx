@@ -38,6 +38,7 @@ import InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
 import MentionConfig, { MentionConfigInterface } from '../libs/MentionConfig';
 import MentionManager from '../libs/MentionManager';
 import VoiceMessageConfig, { VoiceMessageConfigInterface } from '../libs/VoiceMessageConfig';
+import VoiceMessageStatusManager from '../libs/VoiceMessageStatusManager';
 import StringSetEn from '../localization/StringSet.en';
 import type { StringSet } from '../localization/StringSet.type';
 import SBUDynamicModule from '../platform/dynamicModule';
@@ -64,7 +65,6 @@ export const SendbirdUIKit = Object.freeze({
   },
 });
 
-type UnimplementedFeatures = 'threadReplySelectType' | 'replyType' | 'enableReactionsSupergroup';
 export type ChatOmittedInitParams = Omit<
   SendbirdChatParams<[GroupChannelModule, OpenChannelModule]>,
   (typeof chatOmitKeys)[number]
@@ -102,8 +102,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
     Partial<ChatRelatedFeaturesInUIKit>;
   uikitOptions?: PartialDeep<{
     common: SBUConfig['common'];
-    groupChannel: Omit<SBUConfig['groupChannel']['channel'], UnimplementedFeatures> & {
-      replyType: Extract<SBUConfig['groupChannel']['channel']['replyType'], 'none' | 'quote_reply'>;
+    groupChannel: Omit<SBUConfig['groupChannel']['channel'], 'enableReactionsSupergroup'> & {
       /**
        * @deprecated Currently, this feature is turned off by default. If you wish to use this feature, contact us: {@link https://dashboard.sendbird.com/settings/contact_us?category=feedback_and_feature_requests&product=UIKit}
        */
@@ -180,6 +179,7 @@ const SendbirdUIKitContainer = (props: SendbirdUIKitContainerProps) => {
   const { imageCompressionConfig, voiceMessageConfig, mentionConfig } = useConfigInstance(props);
   const emojiManager = useMemo(() => new EmojiManager(internalStorage), [internalStorage]);
   const mentionManager = useMemo(() => new MentionManager(mentionConfig), [mentionConfig]);
+  const voiceMessageStatusManager = useMemo(() => new VoiceMessageStatusManager(), []);
 
   useLayoutEffect(() => {
     if (!isFirstMount) {
@@ -227,6 +227,7 @@ const SendbirdUIKitContainer = (props: SendbirdUIKitContainerProps) => {
           mentionManager={mentionManager}
           imageCompressionConfig={imageCompressionConfig}
           voiceMessageConfig={voiceMessageConfig}
+          voiceMessageStatusManager={voiceMessageStatusManager}
           enableAutoPushTokenRegistration={
             chatOptions.enableAutoPushTokenRegistration ?? SendbirdUIKit.DEFAULT.AUTO_PUSH_TOKEN_REGISTRATION
           }
