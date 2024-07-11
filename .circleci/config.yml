@@ -95,6 +95,9 @@ jobs:
       APP_VERSION: << pipeline.parameters.version >>
     steps:
       - checkout
+      - run:
+          name: Install Ninja
+          command: sudo apt-get update && sudo apt-get install -y ninja-build
       - ruby/install:
           version: '2.7.6'
       - ruby/install-deps:

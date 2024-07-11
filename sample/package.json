@@ -47,7 +47,7 @@
     "react-native-image-picker": "^4.7.3",
     "react-native-permissions": "^3.6.0",
     "react-native-safe-area-context": "^3.3.2",
-    "react-native-screens": "3.32.0",
+    "react-native-screens": "^3.32.0",
     "react-native-touch-reload": "sendbird/react-native-touch-reload",
     "react-native-video": "^5.2.1"
   },
