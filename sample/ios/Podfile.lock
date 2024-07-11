@@ -84,13 +84,13 @@ PODS:
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
-  - Permission-Camera (3.8.0):
+  - Permission-Camera (3.10.1):
     - RNPermissions
-  - Permission-Microphone (3.8.0):
+  - Permission-Microphone (3.10.1):
     - RNPermissions
-  - Permission-PhotoLibrary (3.8.0):
+  - Permission-PhotoLibrary (3.10.1):
     - RNPermissions
-  - Permission-PhotoLibraryAddOnly (3.8.0):
+  - Permission-PhotoLibraryAddOnly (3.10.1):
     - RNPermissions
   - PromisesObjC (2.4.0)
   - RCT-Folly (2024.01.01.00):
@@ -1021,18 +1021,53 @@ PODS:
   - React-Mapbuffer (0.74.3):
     - glog
     - React-debug
-  - react-native-cameraroll (5.4.0):
+  - react-native-cameraroll (7.8.1):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
     - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-create-thumbnail (2.0.0):
     - React-Core
-  - react-native-document-picker (8.2.0):
+  - react-native-document-picker (9.3.0):
     - React-Core
-  - react-native-file-access (2.6.0):
+  - react-native-image-picker (7.1.2):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
     - React-Core
-    - ZIPFoundation (= 0.9.11)
-  - react-native-image-picker (4.10.3):
-    - React-Core
-  - react-native-image-resizer (3.0.5):
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - react-native-image-resizer (3.0.10):
     - React-Core
   - react-native-mmkv (2.12.2):
     - DoubleConversion
@@ -1056,17 +1091,55 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-netinfo (9.3.9):
+  - react-native-netinfo (11.3.2):
     - React-Core
-  - react-native-safe-area-context (3.4.1):
+  - react-native-safe-area-context (4.10.8):
     - React-Core
   - react-native-slider (4.4.2):
     - React-Core
-  - react-native-video (5.2.1):
+  - react-native-video (6.3.0):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
     - React-Core
-    - react-native-video/Video (= 5.2.1)
-  - react-native-video/Video (5.2.1):
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - react-native-video/Video (= 6.3.0)
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - react-native-video/Video (6.3.0):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
     - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - React-nativeconfig (0.74.3)
   - React-NativeModulesApple (0.74.3):
     - glog
@@ -1296,11 +1369,14 @@ PODS:
     - React-logger (= 0.74.3)
     - React-perflogger (= 0.74.3)
     - React-utils (= 0.74.3)
-  - RNAudioRecorderPlayer (3.6.0):
+  - ReactNativeFileAccess (3.1.0):
+    - React-Core
+    - ZIPFoundation
+  - RNAudioRecorderPlayer (3.6.10):
     - React-Core
   - RNCAsyncStorage (1.23.1):
     - React-Core
-  - RNCClipboard (1.11.2):
+  - RNCClipboard (1.14.1):
     - React-Core
   - RNCPushNotificationIOS (1.11.0):
     - React-Core
@@ -1323,7 +1399,7 @@ PODS:
   - RNNotifeeCore (5.7.0):
     - RNNotifeeCore/NotifeeCore (= 5.7.0)
   - RNNotifeeCore/NotifeeCore (5.7.0)
-  - RNPermissions (3.8.0):
+  - RNPermissions (3.10.1):
     - React-Core
   - RNScreens (3.32.0):
     - DoubleConversion
@@ -1355,7 +1431,7 @@ PODS:
     - SDWebImage/Core (~> 5.10)
   - SocketRocket (0.7.0)
   - Yoga (0.0.0)
-  - ZIPFoundation (0.9.11)
+  - ZIPFoundation (0.9.19)
 
 DEPENDENCIES:
   - boost (from `../../node_modules/react-native/third-party-podspecs/boost.podspec`)
@@ -1397,7 +1473,6 @@ DEPENDENCIES:
   - "react-native-cameraroll (from `../../node_modules/@react-native-camera-roll/camera-roll`)"
   - react-native-create-thumbnail (from `../../node_modules/react-native-create-thumbnail`)
   - react-native-document-picker (from `../../node_modules/react-native-document-picker`)
-  - react-native-file-access (from `../../node_modules/react-native-file-access`)
   - react-native-image-picker (from `../../node_modules/react-native-image-picker`)
   - "react-native-image-resizer (from `../../node_modules/@bam.tech/react-native-image-resizer`)"
   - react-native-mmkv (from `../../node_modules/react-native-mmkv`)
@@ -1428,6 +1503,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../../node_modules/react-native/ReactCommon`)
+  - ReactNativeFileAccess (from `../../node_modules/react-native-file-access`)
   - RNAudioRecorderPlayer (from `../../node_modules/react-native-audio-recorder-player`)
   - "RNCAsyncStorage (from `../../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCClipboard (from `../../node_modules/@react-native-clipboard/clipboard`)"
@@ -1537,8 +1613,6 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native-create-thumbnail"
   react-native-document-picker:
     :path: "../../node_modules/react-native-document-picker"
-  react-native-file-access:
-    :path: "../../node_modules/react-native-file-access"
   react-native-image-picker:
     :path: "../../node_modules/react-native-image-picker"
   react-native-image-resizer:
@@ -1599,6 +1673,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../../node_modules/react-native/ReactCommon"
+  ReactNativeFileAccess:
+    :path: "../../node_modules/react-native-file-access"
   RNAudioRecorderPlayer:
     :path: "../../node_modules/react-native-audio-recorder-player"
   RNCAsyncStorage:
@@ -1644,10 +1720,10 @@ SPEC CHECKSUMS:
   MMKV: 506311d0494023c2f7e0b62cc1f31b7370fa3cfb
   MMKVCore: 9e2e5fd529b64a9fe15f1a7afb3d73b2e27b4db9
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
-  Permission-Camera: e6d142d7d8b714afe0a83e5e6ae17eb949f1e3e9
-  Permission-Microphone: 644b1de8bcc2afcaf934e09a22bee507a95796a7
-  Permission-PhotoLibrary: 31787bbe77d0d3ae6a5267b8435e4a2e9ef78f1d
-  Permission-PhotoLibraryAddOnly: 16c92ad62b802514f3f788e00b298080be996337
+  Permission-Camera: 9b70902f34a83c10e198d2d01f0e453e58842776
+  Permission-Microphone: 8d045745c0c12aed0370ba89c36b6bc1ba54d7eb
+  Permission-PhotoLibrary: 03c52ed95dadfb0f2ba4c7663786cce0c4e0c978
+  Permission-PhotoLibraryAddOnly: c4fbf91806bbdc3ed877049bc09fbe58ad9a7c97
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RCT-Folly: 02617c592a293bd6d418e0a88ff4ee1f88329b47
   RCTDeprecation: 4c7eeb42be0b2e95195563c49be08d0b839d22b4
@@ -1673,17 +1749,16 @@ SPEC CHECKSUMS:
   React-jsitracing: 6b3c8c98313642140530f93c46f5a6ca4530b446
   React-logger: fa92ba4d3a5d39ac450f59be2a3cec7b099f0304
   React-Mapbuffer: 9f68550e7c6839d01411ac8896aea5c868eff63a
-  react-native-cameraroll: 8ffb0af7a5e5de225fd667610e2979fc1f0c2151
+  react-native-cameraroll: a9138c165c9975da773d26945591d313992c799b
   react-native-create-thumbnail: ab55d24aea01723cf386f18b0b542aabb1982f27
-  react-native-document-picker: 495c444c0c773c6e83a5d91165890ecb1c0a399a
-  react-native-file-access: a4398950e02999b5ab97f3055feb7ee28e6615a3
-  react-native-image-picker: 60f4246eb5bb7187fc15638a8c1f13abd3820695
-  react-native-image-resizer: 00ceb0e05586c7aadf061eea676957a6c2ec60fa
+  react-native-document-picker: 5b97e24a7f1a1e4a50a72c540a043f32d29a70a2
+  react-native-image-picker: c3afe5472ef870d98a4b28415fc0b928161ee5f7
+  react-native-image-resizer: fd0c333eca55147bd55c5e054cac95dcd0da6814
   react-native-mmkv: 8c9a677e64a1ac89b0c6cf240feea528318b3074
-  react-native-netinfo: 22c082970cbd99071a4e5aa7a612ac20d66b08f0
-  react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
+  react-native-netinfo: 076df4f9b07f6670acf4ce9a75aac8d34c2e2ccc
+  react-native-safe-area-context: b7daa1a8df36095a032dff095a1ea8963cb48371
   react-native-slider: 33b8d190b59d4f67a541061bb91775d53d617d9d
-  react-native-video: c26780b224543c62d5e1b2a7244a5cd1b50e8253
+  react-native-video: 449453bcc9e02d17f7d5dd55e07bafd4129cec5c
   React-nativeconfig: fa5de9d8f4dbd5917358f8ad3ad1e08762f01dcb
   React-NativeModulesApple: 585d1b78e0597de364d259cb56007052d0bda5e5
   React-perflogger: 7bb9ba49435ff66b666e7966ee10082508a203e8
@@ -1707,9 +1782,10 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 0c80752bceb80924cb8a4babc2a8e3ed70d41e87
   React-utils: a06061b3887c702235d2dac92dacbd93e1ea079e
   ReactCommon: f00e436b3925a7ae44dfa294b43ef360fbd8ccc4
-  RNAudioRecorderPlayer: 4690a7cd9e4fd8e58d9671936a7bc3b686e59051
+  ReactNativeFileAccess: e3b1a0a36b919d20279947aac31c2e939827c93b
+  RNAudioRecorderPlayer: f3b4f32d5581a44be0f9eb383dc87f98f941b08b
   RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
-  RNCClipboard: 3f0451a8100393908bea5c5c5b16f96d45f30bfc
+  RNCClipboard: 0a720adef5ec193aa0e3de24c3977222c7e52a37
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
   RNDateTimePicker: 1dd15d7ed1ab7d999056bc77879a42920d139c12
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
@@ -1717,13 +1793,13 @@ SPEC CHECKSUMS:
   RNFBMessaging: 40dac204b4197a2661dec5be964780c6ec39bf65
   RNNotifee: 40cc97ddc290e102894ea5381e90905f50598cfe
   RNNotifeeCore: 2d6233c6e9cf7755b8f460061c7811113043d2d3
-  RNPermissions: 215c54462104b3925b412b0fb3c9c497b21c358b
+  RNPermissions: 4e3714e18afe7141d000beae3755e5b5fb2f5e05
   RNScreens: 5aeecbb09aa7285379b6e9f3c8a3c859bb16401c
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 04f1db30bb810187397fa4c37dd1868a27af229c
-  ZIPFoundation: b1f0de4eed33e74a676f76e12559ab6b75990197
+  ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
 PODFILE CHECKSUM: 854e85b2bbfd7d0e442b6dea393d8c15cb83909e
 

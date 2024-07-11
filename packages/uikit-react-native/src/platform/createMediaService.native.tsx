@@ -21,7 +21,15 @@ const createNativeMediaService = ({
 }: Modules): MediaServiceInterface => {
   return {
     VideoComponent({ source, resizeMode, onLoad, ...props }) {
-      return <VideoComponent {...props} source={source} resizeMode={resizeMode} onLoad={onLoad} controls />;
+      return (
+        <VideoComponent
+          {...props}
+          source={source as { uri: string }}
+          resizeMode={resizeMode}
+          onLoad={onLoad}
+          controls
+        />
+      );
     },
     async getVideoThumbnail({ url, timeMills }) {
       try {
