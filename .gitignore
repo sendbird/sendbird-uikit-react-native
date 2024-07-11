@@ -4,6 +4,7 @@
 .classpath
 .project
 .DS_Store
+.watchman-cookie-*
 
 yarn-error.log
 node_modules

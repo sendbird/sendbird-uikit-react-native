@@ -1,17 +1,18 @@
 /**
- * Metro configuration for React Native
- * https://github.com/facebook/react-native
+ * Metro configuration
+ * https://reactnative.dev/docs/metro
  *
- * @format
+ * @type {import('metro-config').MetroConfig}
  */
 
 const path = require('path');
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const exclusionList = require('metro-config/src/defaults/exclusionList');
 const { getMetroTools, getMetroAndroidAssetsResolutionFix } = require('react-native-monorepo-tools');
 const monorepoMetroTools = getMetroTools();
 const androidAssetsResolutionFix = getMetroAndroidAssetsResolutionFix();
 
-module.exports = {
+const customConfig = {
   transformer: {
     publicPath: androidAssetsResolutionFix.publicPath,
     getTransformOptions: async () => ({
@@ -26,10 +27,12 @@ module.exports = {
       return androidAssetsResolutionFix.applyMiddleware(middleware);
     },
   },
-  watchFolders: [...monorepoMetroTools.watchFolders, path.resolve(__dirname, '../node_modules')],
+  watchFolders: [...monorepoMetroTools.watchFolders],
   resolver: {
     blockList: exclusionList(monorepoMetroTools.blockList),
     extraNodeModules: monorepoMetroTools.extraNodeModules,
     resolverMainFields: ['sbmodern', 'react-native', 'browser', 'main'],
   },
 };
+
+module.exports = mergeConfig(getDefaultConfig(__dirname), customConfig);

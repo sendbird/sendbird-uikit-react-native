@@ -27,9 +27,9 @@ function convertSource(source: SendbirdImageProps['source']): Source | number {
   }
 
   return {
-    uri: source.uri,
-    headers: source.headers,
-    cache: convertCache(source.cache), //'immutable' | 'web' | 'cacheOnly'
+    uri: source?.uri,
+    headers: source?.headers,
+    cache: convertCache(source?.cache), //'immutable' | 'web' | 'cacheOnly'
   };
 }
 function convertDefaultSource(source?: SendbirdImageProps['defaultSource']): number | undefined {

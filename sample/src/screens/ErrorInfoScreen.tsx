@@ -45,7 +45,7 @@ const ErrorInfoScreen = (props: ErrorBoundaryProps) => {
           },
           {
             title: 'Error info',
-            data: [props.errorInfo.componentStack],
+            data: [props.errorInfo.componentStack ?? undefined],
             renderItem,
           },
         ]}
