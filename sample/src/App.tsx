@@ -1,5 +1,4 @@
 import Notifee from '@notifee/react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import { AppState } from 'react-native';
@@ -10,6 +9,7 @@ import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-fo
 // import LogView from './components/LogView';
 import { APP_ID } from './env';
 import { GetTranslucent, RootStack, SetSendbirdSDK, platformServices } from './factory';
+import { mmkv } from './factory/mmkv';
 import useAppearance from './hooks/useAppearance';
 import { Routes, navigationActions, navigationRef } from './libs/navigation';
 import { notificationHandler } from './libs/notification';
@@ -74,7 +74,7 @@ const App = () => {
         },
       }}
       chatOptions={{
-        localCacheStorage: AsyncStorage,
+        localCacheStorage: mmkv,
         onInitialized: SetSendbirdSDK,
         enableAutoPushTokenRegistration: true,
       }}

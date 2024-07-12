@@ -1,5 +1,7 @@
+import type { AsyncStorageStatic } from '@react-native-async-storage/async-storage';
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Platform } from 'react-native';
+import type { MMKV } from 'react-native-mmkv';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import SendbirdChat, { DeviceOsPlatform, SendbirdChatParams, SendbirdPlatform, SendbirdProduct } from '@sendbird/chat';
@@ -15,15 +17,17 @@ import {
   UIKitThemeProvider,
 } from '@sendbird/uikit-react-native-foundation';
 import { SBUConfig, UIKitConfigProvider } from '@sendbird/uikit-tools';
-import type {
+import {
+  Logger,
+  NOOP,
   PartialDeep,
   SendbirdChatSDK,
   SendbirdGroupChannel,
   SendbirdGroupChannelCreateParams,
   SendbirdMember,
   SendbirdUser,
+  useIsFirstMount,
 } from '@sendbird/uikit-utils';
-import { NOOP, useIsFirstMount } from '@sendbird/uikit-utils';
 
 import { LocalizationContext, LocalizationProvider } from '../contexts/LocalizationCtx';
 import { PlatformServiceProvider } from '../contexts/PlatformServiceCtx';
@@ -50,7 +54,7 @@ import type {
   PlayerServiceInterface,
   RecorderServiceInterface,
 } from '../platform/types';
-import type { ErrorBoundaryProps, LocalCacheStorage } from '../types';
+import { ErrorBoundaryProps, LocalCacheStorage } from '../types';
 import VERSION from '../version';
 import InternalErrorBoundaryContainer from './InternalErrorBoundaryContainer';
 
@@ -78,13 +82,13 @@ const chatOmitKeys = [
   'appVersion',
   'localCacheEnabled',
   'useAsyncStorageStore',
+  'useMMKVStorageStore',
 ] as const;
 function sanitizeChatOptions<T extends Record<string, unknown>>(chatOptions: T): T {
   const opts = { ...chatOptions };
   chatOmitKeys.forEach((key) => delete opts[key]);
   return opts;
 }
-
 export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   appId: string;
   platformServices: {
@@ -95,11 +99,11 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
     player: PlayerServiceInterface;
     recorder: RecorderServiceInterface;
   };
-  chatOptions: {
-    localCacheStorage: LocalCacheStorage;
-    onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
-  } & Partial<ChatOmittedInitParams> &
-    Partial<ChatRelatedFeaturesInUIKit>;
+  chatOptions: Partial<ChatOmittedInitParams> &
+    Partial<ChatRelatedFeaturesInUIKit> & {
+      onInitialized?: (sdkInstance: SendbirdChatSDK) => SendbirdChatSDK;
+      localCacheStorage: LocalCacheStorage;
+    };
   uikitOptions?: PartialDeep<{
     common: SBUConfig['common'];
     groupChannel: Omit<SBUConfig['groupChannel']['channel'], 'enableReactionsSupergroup'> & {
@@ -162,6 +166,10 @@ const SendbirdUIKitContainer = (props: SendbirdUIKitContainerProps) => {
 
   if (!chatOptions.localCacheStorage) {
     throw new Error('SendbirdUIKitContainer: chatOptions.localCacheStorage is required');
+  } else if ('getItem' in chatOptions.localCacheStorage) {
+    Logger.warn(
+      'SendbirdUIKitContainer: localCacheStorage for `AsyncStorage` is deprecated. Please use `MMKV` instead.',
+    );
   }
 
   const defaultStringSet = localization?.stringSet ?? StringSetEn;
@@ -171,7 +179,7 @@ const SendbirdUIKitContainer = (props: SendbirdUIKitContainerProps) => {
 
   const [internalStorage] = useState(() => new InternalLocalCacheStorage(chatOptions.localCacheStorage));
   const [sdkInstance, setSdkInstance] = useState<SendbirdChatSDK>(() => {
-    const sendbird = initializeSendbird(appId, { internalStorage, ...sanitizeChatOptions(chatOptions) });
+    const sendbird = initializeSendbird(appId, sanitizeChatOptions(chatOptions));
     unsubscribes.current = sendbird.unsubscribes;
     return sendbird.chatSDK;
   });
@@ -183,7 +191,7 @@ const SendbirdUIKitContainer = (props: SendbirdUIKitContainerProps) => {
 
   useLayoutEffect(() => {
     if (!isFirstMount) {
-      const sendbird = initializeSendbird(appId, { internalStorage, ...sanitizeChatOptions(chatOptions) });
+      const sendbird = initializeSendbird(appId, sanitizeChatOptions(chatOptions));
       setSdkInstance(sendbird.chatSDK);
       unsubscribes.current = sendbird.unsubscribes;
     }
@@ -288,21 +296,23 @@ const SendbirdUIKitContainer = (props: SendbirdUIKitContainerProps) => {
 };
 
 interface InitOptions extends ChatOmittedInitParams {
-  internalStorage: InternalLocalCacheStorage;
+  localCacheStorage: LocalCacheStorage;
   onInitialized?: (sdk: SendbirdChatSDK) => SendbirdChatSDK;
 }
 const initializeSendbird = (appId: string, options: InitOptions) => {
   let chatSDK: SendbirdChatSDK;
   const unsubscribes: Array<() => void> = [];
-  const { internalStorage, onInitialized, ...chatInitParams } = options;
+  const { localCacheStorage, onInitialized, ...chatInitParams } = options;
 
+  const isMMKVStorage = 'getString' in localCacheStorage;
   chatSDK = SendbirdChat.init({
     ...chatInitParams,
     appId,
     newInstance: true,
     modules: [new GroupChannelModule(), new OpenChannelModule()],
     localCacheEnabled: true,
-    useAsyncStorageStore: internalStorage as never,
+    useMMKVStorageStore: isMMKVStorage ? (localCacheStorage as MMKV) : undefined,
+    useAsyncStorageStore: !isMMKVStorage ? (localCacheStorage as AsyncStorageStatic) : undefined,
   });
 
   if (onInitialized) {

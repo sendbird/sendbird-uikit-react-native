@@ -46,16 +46,15 @@ UIKit for React-Native can be installed through either `yarn` or `npm`
 
 **Install dependencies**
 
-> Note: If you are using `react-native` version `0.72` or higher, you don't need to install `@sendbird/react-native-scrollview-enhancer`.
+> Note: If you are using `react-native` version `0.71` or lower, you should install `@sendbird/react-native-scrollview-enhancer`.
 
 ```sh
 npm install @sendbird/uikit-react-native \
             @sendbird/chat \
-            @sendbird/react-native-scrollview-enhancer \
             date-fns \
             react-native-safe-area-context \
             @react-native-community/netinfo \
-            @react-native-async-storage/async-storage
+            react-native-mmkv
 ```
 
 **Linking native modules**
@@ -116,7 +115,7 @@ const App = () => {
     <SendbirdUIKitContainer
       appId={'APP_ID'}
       chatOptions={{
-        localCacheStorage: AsyncStorage,
+        localCacheStorage: MMKV,
       }}
       platformServices={{
         file: FileService,
@@ -257,45 +256,30 @@ const expoPlatformServices = {
 You can implement Local caching easily.
 
 ```shell
-npm i @react-native-async-storage/async-storage
+npm i react-native-mmkv
 npx pod-install
 ```
 
 ```tsx
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { MMKV } from 'react-native-mmkv';
+
+import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
+
+const mmkv = new MMKV();
+const App = () => {
+  return <SendbirdUIKitContainer chatOptions={{ localCacheStorage: mmkv }}>{/* ... */}</SendbirdUIKitContainer>;
+};
+```
+
+Or you can use `AsyncStorage` instead of `MMKV`, but it has been deprecated.
+
+```tsx
+import { AsyncStorage } from '@react-native-async-storage/async-storage';
 
 import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
 
 const App = () => {
   return <SendbirdUIKitContainer chatOptions={{ localCacheStorage: AsyncStorage }}>{/* ... */}</SendbirdUIKitContainer>;
-};
-```
-
-Or you can use storage you are using instead of `AsyncStorage` (e.g. [`react-native-mmkv`](https://github.com/mrousavy/react-native-mmkv))
-
-```tsx
-import { MMKV } from 'react-native-mmkv';
-
-import { LocalCacheStorage, SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
-
-const mmkvStorage = new MMKV();
-const localCacheStorage: LocalCacheStorage = {
-  async getAllKeys() {
-    return mmkvStorage.getAllKeys();
-  },
-  async setItem(key: string, value: string) {
-    return mmkvStorage.set(key, value);
-  },
-  async getItem(key: string) {
-    return mmkvStorage.getString(key) ?? null;
-  },
-  async removeItem(key: string) {
-    return mmkvStorage.delete(key);
-  },
-};
-
-const App = () => {
-  return <SendbirdUIKitContainer chatOptions={{ localCacheStorage }}>{/* ... */}</SendbirdUIKitContainer>;
 };
 ```
 

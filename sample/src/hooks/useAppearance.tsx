@@ -1,8 +1,9 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useContext, useState } from 'react';
 import { Appearance } from 'react-native';
 
 import { NOOP, useAsyncLayoutEffect } from '@sendbird/uikit-utils';
+
+import { mmkv } from '../factory/mmkv';
 
 const DEFAULT_APPEARANCE = 'light';
 
@@ -14,12 +15,10 @@ const AppearanceContext = createContext<{ scheme: 'light' | 'dark'; setScheme: (
 const SchemeManager = {
   KEY: 'sendbird@scheme',
   async get() {
-    return ((await AsyncStorage.getItem(SchemeManager.KEY)) ?? Appearance.getColorScheme() ?? DEFAULT_APPEARANCE) as
-      | 'light'
-      | 'dark';
+    return (mmkv.getString(SchemeManager.KEY) ?? Appearance.getColorScheme() ?? DEFAULT_APPEARANCE) as 'light' | 'dark';
   },
   async set(scheme: 'light' | 'dark') {
-    await AsyncStorage.setItem(SchemeManager.KEY, scheme);
+    mmkv.set(SchemeManager.KEY, scheme);
   },
 };
 

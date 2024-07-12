@@ -61,13 +61,15 @@ export const platformServices: SendbirdUIKitContainerProps['platformServices'] =
  * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-5-wrap-your-app-in-sendbirduikitcontainer}
  * */
 import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { MMKV } from 'react-native-mmkv';
+
+const mmkv = new MMKV();
 
 const App = () => {
   return (
     <SendbirdUIKitContainer
       appId={'APP_ID'}
-      chatOptions={{ localCacheStorage: AsyncStorage }}
+      chatOptions={{ localCacheStorage: mmkv }}
       platformServices={platformServices}
     >
       {/* Rest of your app */}
@@ -186,7 +188,7 @@ const App2 = () => {
   return (
     <SendbirdUIKitContainer
       appId={'APP_ID'}
-      chatOptions={{ localCacheStorage: AsyncStorage }}
+      chatOptions={{ localCacheStorage: mmkv }}
       platformServices={platformServices}
     >
       <Navigation />
