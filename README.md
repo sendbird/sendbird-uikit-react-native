@@ -25,10 +25,10 @@ If you need any help in resolving any issues or have questions, visit [our commu
 
 ## Requirements
 
-- Nodejs 14 or newer
+- Nodejs 18 or newer
 - [yarn v1](https://classic.yarnpkg.com/en/docs/install)
 - Watchman
-- JDK 11 or newer
+- JDK 17 or newer
 - XCode
 - Android Studio
 
