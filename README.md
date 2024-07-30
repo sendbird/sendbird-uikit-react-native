@@ -4,6 +4,7 @@
 [![Language TypeScript](https://img.shields.io/badge/Language-TypeScript-orange.svg)](https://www.typescriptlang.org/)
 
 > React-Native based UI kit based on sendbird javascript SDK
+> Fork the Sendbird UIKit repository to integrate custom business functionalities.
 
 ## Introduction
 
