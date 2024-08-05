@@ -7,12 +7,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-- **uikit:** added GroupChannelThreadFragment ([5e815ea](https://github.com/sendbird/sendbird-uikit-react-native/commit/5e815ea73efec563c50844ece052fae0fb0694b7))
-
-### Bug Fixes
-
-- fixed issue with mention suggestion list sorting ([5e815ea](https://github.com/sendbird/sendbird-uikit-react-native/commit/5e815ea73efec563c50844ece052fae0fb0694b7))
-- fixed issue with file upload size limit exceeded ([5e815ea](https://github.com/sendbird/sendbird-uikit-react-native/commit/5e815ea73efec563c50844ece052fae0fb0694b7))
+- added thread type in GroupChannel ([5e815ea](https://github.com/sendbird/sendbird-uikit-react-native/commit/5e815ea73efec563c50844ece052fae0fb0694b7))
 
 ## [3.5.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.5.3...v3.5.4) (2024-06-13)
 
