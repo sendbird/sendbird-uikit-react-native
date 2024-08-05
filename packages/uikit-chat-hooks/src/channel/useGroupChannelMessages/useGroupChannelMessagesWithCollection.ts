@@ -47,7 +47,7 @@ function shouldUseSearchLimit(startingPoint: number) {
 }
 
 /**
- * @deprecated This hook is deprecated and will be replaced by the 'uikit-tools' package.
+ * @deprecated This hook is deprecated and will be replaced by the '@sendbird/uikit-tools' package.
  * */
 export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (sdk, channel, userId, options) => {
   const initialStartingPoint = options?.startingPoint ?? Number.MAX_SAFE_INTEGER;

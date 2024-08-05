@@ -5,7 +5,7 @@ import { useGroupChannelMessagesWithCollection } from './useGroupChannelMessages
 import { useGroupChannelMessagesWithQuery } from './useGroupChannelMessagesWithQuery';
 
 /**
- * @deprecated This hook is deprecated and will be replaced by the 'uikit-tools' package.
+ * @deprecated This hook is deprecated and will be replaced by the '@sendbird/uikit-tools' package.
  * */
 export const useGroupChannelMessages: UseGroupChannelMessages = (sdk, channel, userId, options) => {
   if (sdk.isCacheEnabled || options?.enableCollectionWithoutLocalCache) {
