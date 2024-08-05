@@ -1,10 +1,9 @@
-## v3.6.0
+## v3.7.0
 
 ### Features
 
-- **uikit:** added GroupChannelThreadFragment
+- Added support for MMKV storage and deprecated AsyncStorage.
 
-### Bug Fixes
+### Chore
 
-- fixed issue with mention suggestion list sorting
-- fixed issue with file upload size limit exceeded
+- Updated sample React-Native version to 0.74.3
