@@ -31,6 +31,9 @@ const createMessageQuery = (channel: SendbirdGroupChannel, options?: UseGroupCha
   return channel.createPreviousMessageListQuery(params);
 };
 
+/**
+ * @deprecated This hook is deprecated and will be replaced by the '@sendbird/uikit-tools' package.
+ * */
 export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, channel, userId, options) => {
   const queryRef = useRef<SendbirdPreviousMessageListQuery>();
   const handlerId = useUniqHandlerId('useGroupChannelMessagesWithQuery');

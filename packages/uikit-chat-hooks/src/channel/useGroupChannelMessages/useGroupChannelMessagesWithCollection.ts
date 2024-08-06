@@ -46,6 +46,9 @@ function shouldUseSearchLimit(startingPoint: number) {
   return startingPoint < Date.now();
 }
 
+/**
+ * @deprecated This hook is deprecated and will be replaced by the '@sendbird/uikit-tools' package.
+ * */
 export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (sdk, channel, userId, options) => {
   const initialStartingPoint = options?.startingPoint ?? Number.MAX_SAFE_INTEGER;
   const initialLimit = shouldUseSearchLimit(initialStartingPoint) ? MESSAGE_LIMIT.SEARCH : MESSAGE_LIMIT.DEFAULT;

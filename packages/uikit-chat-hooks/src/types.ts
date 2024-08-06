@@ -33,7 +33,7 @@ export interface CustomBidirectionalQueryInterface<Data> {
 }
 
 /**
- * @deprecated This hook is deprecated and will be replaced by the 'uikit-tools' package.
+ * @deprecated This hook is deprecated and will be replaced by the '@sendbird/uikit-tools' package.
  *
  * @interface UseGroupChannelList
  * @description interface for group channel list hook
@@ -75,7 +75,7 @@ export type UseGroupChannelListOptions = {
 };
 
 /**
- * @deprecated This hook is deprecated and will be replaced by the 'uikit-tools' package.
+ * @deprecated This hook is deprecated and will be replaced by the '@sendbird/uikit-tools' package.
  *
  * @interface UseGroupChannelMessages
  * @description interface for group channel messages hook

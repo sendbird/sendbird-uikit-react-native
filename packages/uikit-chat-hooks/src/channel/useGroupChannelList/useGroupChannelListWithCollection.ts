@@ -26,6 +26,9 @@ const createGroupChannelListCollection = (
   });
 };
 
+/**
+ * @deprecated This hook is deprecated and will be replaced by the '@sendbird/uikit-tools' package.
+ * */
 export const useGroupChannelListWithCollection: UseGroupChannelList = (sdk, userId, options) => {
   const handlerId = useUniqHandlerId('useGroupChannelListWithCollection');
   const { deliveryReceiptEnabled } = useAppFeatures(sdk);
