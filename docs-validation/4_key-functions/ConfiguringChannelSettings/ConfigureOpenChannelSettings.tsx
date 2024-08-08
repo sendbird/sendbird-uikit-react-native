@@ -62,13 +62,17 @@ const Component = () => {
  * Customization
  * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/configuring-channel-settings/configure-open-channel-settings#2-customization}
  * */
-import { Share } from 'react-native';
+import { Text, Share } from 'react-native';
 
 // import { useSendbirdChat, createOpenChannelSettingsFragment } from '@sendbird/uikit-react-native';
 import { Icon } from '@sendbird/uikit-react-native-foundation';
 // import { useOpenChannel } from "@sendbird/uikit-chat-hooks";
 
-const OpenChannelSettingsFragment2 = createOpenChannelSettingsFragment();
+const OpenChannelSettingsFragment2 = createOpenChannelSettingsFragment({
+  Header: () => <Text>{'Custom Header'}</Text>,
+  Menu: () => <Text>{'Custom Menu'}</Text>,
+  Info: () => <Text>{'Custom Info'}</Text>,
+});
 const OpenChannelSettingsScreen2 = ({ route: { params } }: any) => {
   const { sdk } = useSendbirdChat();
   const { channel } = useOpenChannel(sdk, params.channelUrl);

@@ -76,6 +76,7 @@ import { Icon } from '@sendbird/uikit-react-native-foundation';
 const GroupChannelSettingsFragment2 = createGroupChannelSettingsFragment({
   Header: () => <Text>{'Custom Header'}</Text>,
   Menu: () => <Text>{'Custom Menu'}</Text>,
+  Info: () => <Text>{'Custom Info'}</Text>,
 });
 const GroupChannelSettingsScreen2 = ({ route: { params } }: any) => {
   const { sdk } = useSendbirdChat();
