@@ -52,6 +52,7 @@ function _context<T>(_: UserListContextsType<T>) {
  * */
 import { useContext } from 'react';
 import { UserListContexts } from "@sendbird/uikit-react-native";
+import { Text } from "react-native";
 
 const Component = () => {
   const { headerTitle, headerRight } = useContext(UserListContexts.Fragment);
@@ -74,11 +75,18 @@ const Component2 = () => {
  *
  * {@link }
  * */
+// import { Text } from 'react-native';
 // import React, { useState } from 'react';
 // import { useSendbirdChat, createOpenChannelParticipantsFragment, UserActionBar } from '@sendbird/uikit-react-native';
 // import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
 
-const OpenChannelParticipantsFragment2 = createOpenChannelParticipantsFragment();
+const OpenChannelParticipantsFragment2 = createOpenChannelParticipantsFragment({
+  Header: () => <Text>{'Custom Header'}</Text>,
+  List: () => <Text>{'Custom List'}</Text>,
+  StatusLoading: () => <Text>{'Custom Loading'}</Text>,
+  StatusEmpty: () => <Text>{'Custom Empty'}</Text>,
+  StatusError: () => <Text>{'Custom Error'}</Text>,
+});
 const OpenChannelParticipantsScreen2 = ({ route: { params } }: any) => {
   const { openSheet } = useBottomSheet();
 
