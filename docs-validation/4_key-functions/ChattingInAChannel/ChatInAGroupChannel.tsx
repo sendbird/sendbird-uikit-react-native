@@ -90,6 +90,9 @@ const CustomHeader: GroupChannelModule['Header'] = () => {
 const CustomMessageList: GroupChannelModule['MessageList'] = () => {
   return <Text>{'Custom MessageList'}</Text>;
 };
+const CustomInput: GroupChannelModule['Input'] = () => {
+  return <Text>{'Custom Input'}</Text>;
+};
 const CustomEmpty: GroupChannelModule['StatusEmpty'] = () => {
   return <Text>{'Custom Empty'}</Text>;
 };
@@ -99,6 +102,7 @@ const CustomLoading: GroupChannelModule['StatusLoading'] = () => {
 const GroupChannelFragment2 = createGroupChannelFragment({
   Header: CustomHeader,
   MessageList: CustomMessageList,
+  Input: CustomInput,
   StatusEmpty: CustomEmpty,
   StatusLoading: CustomLoading,
 });
