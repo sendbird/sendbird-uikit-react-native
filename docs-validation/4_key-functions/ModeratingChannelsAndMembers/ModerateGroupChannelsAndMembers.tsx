@@ -1,5 +1,3 @@
-const MyHeader = () => null;
-
 /**
  *
  * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/moderating-channels-and-members/moderate-group-channels-and-members}
@@ -35,8 +33,11 @@ const GroupChannelModerationScreen = ({ route: { params } }: any) => {
  *
  * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/moderating-channels-and-members/moderate-group-channels-and-members}
  * */
+import { Text } from 'react-native';
+
 const GroupChannelModerationFragment2 = createGroupChannelModerationFragment({
-  Header: () => <MyHeader />, // Use custom header
+  Header: () => <Text>{'Custom Header'}</Text>,
+  Menu: () => <Text>{'Custom Menu'}</Text>,
 });
 const GroupChannelModerationScreen2 = ({ route: { params } }: any) => {
   const { sdk } = useSendbirdChat();
@@ -49,23 +50,22 @@ const GroupChannelModerationScreen2 = ({ route: { params } }: any) => {
   const navigateToBack = () => {};
 
   return (
-      <GroupChannelModerationFragment
-          channel={channel}
-          onPressHeaderLeft={navigateToBack}
-          onPressMenuOperators={navigateToGroupChannelOperatorsScreen}
-          onPressMenuMutedMembers={navigateToGroupChannelMutedMembersScreen}
-          onPressMenuBannedUsers={navigateToGroupChannelBannedUsersScreen}
-          menuItemsCreator={(items) => {
-            // Add custom menu
-            items.push({
-              icon: 'edit',
-              name: 'Edit',
-              onPress: () => console.log('clicked'),
-            });
+    <GroupChannelModerationFragment
+      channel={channel}
+      onPressHeaderLeft={navigateToBack}
+      onPressMenuOperators={navigateToGroupChannelOperatorsScreen}
+      onPressMenuMutedMembers={navigateToGroupChannelMutedMembersScreen}
+      onPressMenuBannedUsers={navigateToGroupChannelBannedUsersScreen}
+      menuItemsCreator={(items) => {
+        // Add custom menu
+        items.push({
+          icon: 'edit',
+          name: 'Edit',
+          onPress: () => console.log('clicked'),
+        });
 
-            return items;
-          }}
-      />
+        return items;
+      }}
+    />
   );
 };
-

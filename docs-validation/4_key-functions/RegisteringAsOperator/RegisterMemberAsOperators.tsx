@@ -1,4 +1,3 @@
-const MyHeader = () => null;
 
 /**
  *
@@ -31,8 +30,14 @@ const GroupChannelRegisterOperatorScreen = ({ route: { params } }: any) => {
  *
  * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/registering-as-operator-register-member-as-operators}
  * */
+import { Text } from 'react-native';
+
 const GroupChannelRegisterOperatorFragment2 = createGroupChannelRegisterOperatorFragment({
-    Header: () => <MyHeader />, // Use custom header
+  Header: () => <Text>{'Custom Header'}</Text>,
+  List: () => <Text>{'Custom List'}</Text>,
+  StatusLoading: () => <Text>{'Custom Loading'}</Text>,
+  StatusEmpty: () => <Text>{'Custom Empty'}</Text>,
+  StatusError: () => <Text>{'Custom Error'}</Text>,
 });
 const GroupChannelRegisterOperatorScreen2 = ({ route: { params } }: any) => {
     const { sdk } = useSendbirdChat();

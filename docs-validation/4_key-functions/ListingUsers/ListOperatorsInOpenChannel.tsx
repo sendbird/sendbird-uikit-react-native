@@ -31,8 +31,13 @@ const OpenChannelOperatorsScreen = ({ route: { params } }: any) => {
  *
  * {@link }
  * */
+import { Text } from 'react-native';
 const OpenChannelOperatorsFragment2 = createOpenChannelOperatorsFragment({
-  Header: () => <MyHeader />, // Use custom header
+  Header: () => <Text>{'Custom Header'}</Text>,
+  List: () => <Text>{'Custom List'}</Text>,
+  StatusLoading: () => <Text>{'Custom Loading'}</Text>,
+  StatusEmpty: () => <Text>{'Custom Empty'}</Text>,
+  StatusError: () => <Text>{'Custom Error'}</Text>,
 });
 const OpenChannelOperatorsScreen2 = ({ route: { params } }: any) => {
   const { sdk } = useSendbirdChat();

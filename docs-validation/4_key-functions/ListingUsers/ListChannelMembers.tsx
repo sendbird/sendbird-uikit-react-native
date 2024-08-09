@@ -76,11 +76,18 @@ const Component2 = () => {
  *
  * {@link }
  * */
+import { Text } from 'react-native';
 // import React, { useState } from 'react';
 // import { useSendbirdChat, createGroupChannelMembersFragment, UserActionBar } from '@sendbird/uikit-react-native';
 // import { useBottomSheet } from '@sendbird/uikit-react-native-foundation';
 
-const GroupChannelMembersFragment2 = createGroupChannelMembersFragment();
+const GroupChannelMembersFragment2 = createGroupChannelMembersFragment({
+  Header: () => <Text>{'Custom Header'}</Text>,
+  List: () => <Text>{'Custom List'}</Text>,
+  StatusLoading: () => <Text>{'Custom Loading'}</Text>,
+  StatusEmpty: () => <Text>{'Custom Empty'}</Text>,
+  StatusError: () => <Text>{'Custom Error'}</Text>,
+});
 const GroupChannelMembersScreen2 = ({ route: { params } }: any) => {
   const { openSheet } = useBottomSheet();
 

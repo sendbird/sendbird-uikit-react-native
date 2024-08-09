@@ -31,22 +31,29 @@ const OpenChannelRegisterOperatorScreen = ({ route: { params } }: any) => {
  *
  * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/registering-as-operator-register-participants-as-operators}
  * */
+import { Text } from 'react-native';
+
 const OpenChannelRegisterOperatorFragment2 = createOpenChannelRegisterOperatorFragment({
-    Header: () => <MyHeader />, // Use custom header
+  Header: () => <Text>{'Custom Header'}</Text>,
+  List: () => <Text>{'Custom List'}</Text>,
+  StatusLoading: () => <Text>{'Custom Loading'}</Text>,
+  StatusEmpty: () => <Text>{'Custom Empty'}</Text>,
+  StatusError: () => <Text>{'Custom Error'}</Text>,
 });
+
 const OpenChannelRegisterOperatorScreen2 = ({ route: { params } }: any) => {
-    const { sdk } = useSendbirdChat();
-    const { channel } = useOpenChannel(sdk, params.channelUrl);
-    if (!channel) return null;
+  const { sdk } = useSendbirdChat();
+  const { channel } = useOpenChannel(sdk, params.channelUrl);
+  if (!channel) return null;
 
-    const navigateToBack = () => {};
-    const navigateToOpenChannelOperatorsScreen = () => {};
+  const navigateToBack = () => {};
+  const navigateToOpenChannelOperatorsScreen = () => {};
 
-    return (
-        <OpenChannelRegisterOperatorFragment
-            channel={channel}
-            onPressHeaderLeft={navigateToBack}
-            onPressHeaderRight={navigateToOpenChannelOperatorsScreen}
-        />
-    );
+  return (
+    <OpenChannelRegisterOperatorFragment
+      channel={channel}
+      onPressHeaderLeft={navigateToBack}
+      onPressHeaderRight={navigateToOpenChannelOperatorsScreen}
+    />
+  );
 };

@@ -1,5 +1,3 @@
-const MyHeader = () => null;
-
 /**
  *
  * {@link }
@@ -31,8 +29,13 @@ const GroupChannelOperatorsScreen = ({ route: { params } }: any) => {
  *
  * {@link }
  * */
+import { Text } from 'react-native';
 const GroupChannelOperatorsFragment2 = createGroupChannelOperatorsFragment({
-  Header: () => <MyHeader />, // Use custom header
+  Header: () => <Text>{'Custom Header'}</Text>,
+  List: () => <Text>{'Custom List'}</Text>,
+  StatusLoading: () => <Text>{'Custom Loading'}</Text>,
+  StatusEmpty: () => <Text>{'Custom Empty'}</Text>,
+  StatusError: () => <Text>{'Custom Error'}</Text>,
 });
 const GroupChannelOperatorsScreen2 = ({ route: { params } }: any) => {
   const { sdk } = useSendbirdChat();

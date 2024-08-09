@@ -24,8 +24,13 @@ const OpenChannelBannedUsersScreen = ({ route: { params } }: any) => {
  *
  * {@link }
  * */
+import { Text } from 'react-native';
 const OpenChannelBannedUsersFragment2 = createOpenChannelBannedUsersFragment({
-    Header: () => <MyHeader />, // Use custom header
+  Header: () => <Text>{'Custom Header'}</Text>,
+  List: () => <Text>{'Custom List'}</Text>,
+  StatusLoading: () => <Text>{'Custom Loading'}</Text>,
+  StatusEmpty: () => <Text>{'Custom Empty'}</Text>,
+  StatusError: () => <Text>{'Custom Error'}</Text>,
 });
 const OpenChannelBannedUsersScreen2 = ({ route: { params } }: any) => {
     const { sdk } = useSendbirdChat();
