@@ -24,8 +24,13 @@ const GroupChannelMutedMembersScreen = ({ route: { params } }: any) => {
  *
  * {@link }
  * */
+import { Text } from 'react-native';
 const GroupChannelMutedMembersFragment2 = createGroupChannelMutedMembersFragment({
-    Header: () => <MyHeader />, // Use custom header
+    Header: () => <Text>{'Custom Header'}</Text>,
+    List: () => <Text>{'Custom List'}</Text>,
+    StatusLoading: () => <Text>{'Custom Loading'}</Text>,
+    StatusEmpty: () => <Text>{'Custom Empty'}</Text>,
+    StatusError: () => <Text>{'Custom Error'}</Text>,
 });
 const GroupChannelMutedMembersScreen2 = ({ route: { params } }: any) => {
     const { sdk } = useSendbirdChat();

@@ -82,6 +82,7 @@ const Component2 = () => {
  * Customization
  * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/creating-a-channel/create-a-group-channel#2-customization}
  * */
+import { Text } from 'react-native';
 import type { UserStruct } from '@sendbird/uikit-utils';
 import { CustomQuery } from '@sendbird/uikit-chat-hooks';
 // import { useSendbirdChat, createGroupChannelInviteFragment } from '@sendbird/uikit-react-native';
@@ -108,7 +109,13 @@ const myAppUserQueryCreator = () => {
   });
 };
 
-const GroupChannelInviteFragment2 = createGroupChannelInviteFragment<MyAppUser>();
+const GroupChannelInviteFragment2 = createGroupChannelInviteFragment<MyAppUser>({
+  Header: () => <Text>{'Custom Header'}</Text>,
+  List: () => <Text>{'Custom List'}</Text>,
+  StatusLoading: () => <Text>{'Custom Loading'}</Text>,
+  StatusEmpty: () => <Text>{'Custom Empty'}</Text>,
+  StatusError: () => <Text>{'Custom Error'}</Text>,
+});
 const GroupChannelInviteScreen2 = ({ route: { params } }: any) => {
   const { sdk } = useSendbirdChat();
   const { channel } = useGroupChannel(sdk, params.channelUrl);

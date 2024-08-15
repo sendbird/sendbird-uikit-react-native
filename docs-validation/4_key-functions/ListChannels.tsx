@@ -67,38 +67,28 @@ const Component2 = () => {
  * Customization
  * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/list-channels#2-customization}
  * */
-// import React, { useContext, useLayoutEffect } from 'react';
-import { Pressable } from 'react-native';
+// import React from 'react';
+import { Text } from 'react-native';
+// import { GroupChannelListModule } from '@sendbird/uikit-react-native';
 
-import { useNavigation } from '@react-navigation/native';
-
-// import { createGroupChannelListFragment, GroupChannelListContexts, GroupChannelListModule } from '@sendbird/uikit-react-native';
-import { Icon } from '@sendbird/uikit-react-native-foundation';
-
-const UseReactNavigationHeader: GroupChannelListModule['Header'] = () => {
-  const navigation = useNavigation();
-  const fragment = useContext(GroupChannelListContexts.Fragment);
-  const typeSelector = useContext(GroupChannelListContexts.TypeSelector);
-
-  useLayoutEffect(() => {
-    // Show react-navigation header.
-    navigation.setOptions({
-      headerShown: true,
-      headerTitle: fragment.headerTitle,
-      headerLeft: () => (
-        <Pressable onPress={typeSelector.show}>
-          <Icon icon={'create'} />
-        </Pressable>
-      ),
-    });
-  }, []);
-
-  // Hide @sendbird/uikit-react-native header.
-  return null;
+const CustomHeader: GroupChannelListModule['Header'] = () => {
+  return <Text>{'Custom Header'}</Text>;
+};
+const CustomList: GroupChannelListModule['List'] = () => {
+  return <Text>{'Custom List'}</Text>;
+};
+const CustomEmpty: GroupChannelListModule['StatusEmpty'] = () => {
+  return <Text>{'Custom Empty'}</Text>;
+};
+const CustomLoading: GroupChannelListModule['StatusLoading'] = () => {
+  return <Text>{'Custom Loading'}</Text>;
 };
 
 const GroupChannelListFragment2 = createGroupChannelListFragment({
-  Header: UseReactNavigationHeader,
+  Header: CustomHeader,
+  List:CustomList,
+  StatusEmpty: CustomEmpty,
+  StatusLoading: CustomLoading,
 });
 
 const CustomGroupChannelListScreen2 = () => {

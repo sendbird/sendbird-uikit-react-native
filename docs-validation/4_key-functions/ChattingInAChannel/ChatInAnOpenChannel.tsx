@@ -1,4 +1,5 @@
-import type { OpenChannelContextsType } from '@sendbird/uikit-react-native';
+import { OpenChannelContextsType, OpenChannelContexts } from '@sendbird/uikit-react-native';
+import React, { useContext } from 'react';
 
 const DonationMessage = (_:object) => <></>
 
@@ -66,46 +67,34 @@ const Component = () => {
  * Customization
  * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/chatting-in-a-channel/chat-in-a-group-channel#2-customization}
  * */
-import React, { useContext, useLayoutEffect } from 'react';
-import { Pressable } from 'react-native';
-
-import { useNavigation } from '@react-navigation/native';
-import { useHeaderHeight } from '@react-navigation/elements';
-
-import { OpenChannelContexts, OpenChannelModule, OpenChannelMessageRenderer } from '@sendbird/uikit-react-native';
-import { Icon } from '@sendbird/uikit-react-native-foundation';
+import { Text } from 'react-native';
+import { OpenChannelModule, OpenChannelMessageRenderer } from '@sendbird/uikit-react-native';
 // import { useOpenChannel } from "@sendbird/uikit-chat-hooks";
 
-const UseReactNavigationHeader: OpenChannelModule['Header'] = ({ rightIconName, onPressHeaderRight, onPressHeaderLeft }) => {
-  const navigation = useNavigation();
-  const { headerTitle } = useContext(OpenChannelContexts.Fragment);
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: true,
-      title: headerTitle,
-      headerLeft: () => (
-        <Pressable onPress={onPressHeaderLeft}>
-          <Icon icon={'arrow-left'} />
-        </Pressable>
-      ),
-      headerRight: () => (
-        <Pressable onPress={onPressHeaderRight}>
-          <Icon icon={rightIconName} />
-        </Pressable>
-      ),
-    });
-  }, []);
-
-  return null;
+const CustomHeader: OpenChannelModule['Header'] = () => {
+  return <Text>{'Custom Header'}</Text>;
+};
+const CustomInput: OpenChannelModule['Input'] = () => {
+  return <Text>{'Custom Input'}</Text>;
+};
+const CustomMessageList: OpenChannelModule['MessageList'] = () => {
+  return <Text>{'Custom MessageList'}</Text>;
+};
+const CustomEmpty: OpenChannelModule['StatusEmpty'] = () => {
+  return <Text>{'Custom Empty'}</Text>;
+};
+const CustomLoading: OpenChannelModule['StatusLoading'] = () => {
+  return <Text>{'Custom Loading'}</Text>;
 };
 
 const OpenChannelFragment2 = createOpenChannelFragment({
-  Header: UseReactNavigationHeader, // Hide header and use react-navigation header
+  Header: CustomHeader,
+  Input: CustomInput,
+  MessageList: CustomMessageList,
+  StatusEmpty: CustomEmpty,
+  StatusLoading: CustomLoading,
 });
 const OpenChannelScreen2 = ({ route: { params } }: any) => {
-  const height = useHeaderHeight();
-
   const { sdk } = useSendbirdChat();
   const { channel } = useOpenChannel(sdk, params.channelUrl);
   if (!channel) return null;
@@ -117,7 +106,6 @@ const OpenChannelScreen2 = ({ route: { params } }: any) => {
 
   return (
     <OpenChannelFragment2
-      keyboardAvoidOffset={height}
       channel={channel}
       onPressHeaderLeft={navigateToBack}
       onPressHeaderRightWithSettings={navigateToOpenChannelSettings}

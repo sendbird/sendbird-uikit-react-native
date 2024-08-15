@@ -13,7 +13,7 @@ const createMyAppUserQuery = () => ({
  * Usage
  * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/creating-a-channel/create-a-group-channel#2-usage}
  * */
-import type { GroupChannelType, UserListContextsType } from "@sendbird/uikit-react-native";
+import type { GroupChannelType, UserListContextsType } from '@sendbird/uikit-react-native';
 import type { SendbirdUser } from '@sendbird/uikit-utils';
 
 const GroupChannelCreateFragment = createGroupChannelCreateFragment<SendbirdUser>();
@@ -51,7 +51,7 @@ function _context<T>(_: UserListContextsType<T>) {
  * Fragment
  * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/creating-a-channel/create-a-group-channel#2-context-3-fragment}
  * */
-import { UserListContexts } from "@sendbird/uikit-react-native";
+import { UserListContexts } from '@sendbird/uikit-react-native';
 const Component = () => {
   const { headerTitle, headerRight } = useContext(UserListContexts.Fragment);
 }
@@ -71,6 +71,7 @@ const Component2 = () => {
  * Customization
  * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/creating-a-channel/create-a-group-channel#2-customization}
  * */
+import { Text } from 'react-native';
 import type { UserStruct } from '@sendbird/uikit-utils';
 import { CustomQuery } from '@sendbird/uikit-chat-hooks';
 import { createGroupChannelCreateFragment } from '@sendbird/uikit-react-native';
@@ -96,7 +97,13 @@ const myAppUserQueryCreator = () => {
   });
 };
 
-const GroupChannelCreateFragment2 = createGroupChannelCreateFragment<MyAppUser>();
+const GroupChannelCreateFragment2 = createGroupChannelCreateFragment<MyAppUser>({
+  Header: () => <Text>{'Custom header'}</Text>,
+  List: () => <Text>{'Custom list'}</Text>,
+  StatusEmpty: () => <Text>{'Custom empty'}</Text>,
+  StatusLoading: () => <Text>{'Custom loading'}</Text>,
+  StatusError: () => <Text>{'Custom error'}</Text>,
+});
 const GroupChannelCreateScreen2 = ({ route: { params } }: any) => {
   const navigateToBack = () => {};
   const replaceToGroupChannelScreen = () => {};

@@ -6,6 +6,9 @@ import type { SendbirdChatSDK } from '@sendbird/uikit-utils';
 
 type ChannelType = 'open' | 'group';
 
+/**
+ * @deprecated This hook is deprecated and will be replaced by the '@sendbird/uikit-tools' package.
+ * */
 export const useChannelHandler = <T extends ChannelType = 'group'>(
   sdk: SendbirdChatSDK,
   handlerId: string,

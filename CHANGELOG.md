@@ -3,16 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.6.0...v3.7.0) (2024-08-08)
+
+### Features
+
+- support mmkv storage and deprecate a async storage ([ffbb8fc](https://github.com/sendbird/sendbird-uikit-react-native/commit/ffbb8fcc0434f914355cb28a9d522c6e276a6f7c))
+- updated sample React version to 0.74.3 ([0e32587](https://github.com/sendbird/sendbird-uikit-react-native/commit/0e32587b51b07b160c72d393e044fb6532867d1f))
+
 ## [3.6.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.5.4...v3.6.0) (2024-07-09)
 
 ### Features
 
-- **uikit:** added GroupChannelThreadFragment ([5e815ea](https://github.com/sendbird/sendbird-uikit-react-native/commit/5e815ea73efec563c50844ece052fae0fb0694b7))
-
-### Bug Fixes
-
-- fixed issue with mention suggestion list sorting ([5e815ea](https://github.com/sendbird/sendbird-uikit-react-native/commit/5e815ea73efec563c50844ece052fae0fb0694b7))
-- fixed issue with file upload size limit exceeded ([5e815ea](https://github.com/sendbird/sendbird-uikit-react-native/commit/5e815ea73efec563c50844ece052fae0fb0694b7))
+- added thread type in GroupChannel ([5e815ea](https://github.com/sendbird/sendbird-uikit-react-native/commit/5e815ea73efec563c50844ece052fae0fb0694b7))
 
 ## [3.5.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.5.3...v3.5.4) (2024-06-13)
 

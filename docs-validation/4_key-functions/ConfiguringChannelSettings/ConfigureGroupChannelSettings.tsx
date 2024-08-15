@@ -68,12 +68,16 @@ const Component = () => {
  * Customization
  * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/configuring-channel-settings/configure-group-channel-settings#2-customization}
  * */
-import { Share } from 'react-native';
+import { Text, Share } from 'react-native';
 
 import { Icon } from '@sendbird/uikit-react-native-foundation';
 // import { useGroupChannel } from "@sendbird/uikit-chat-hooks";
 
-const GroupChannelSettingsFragment2 = createGroupChannelSettingsFragment();
+const GroupChannelSettingsFragment2 = createGroupChannelSettingsFragment({
+  Header: () => <Text>{'Custom Header'}</Text>,
+  Menu: () => <Text>{'Custom Menu'}</Text>,
+  Info: () => <Text>{'Custom Info'}</Text>,
+});
 const GroupChannelSettingsScreen2 = ({ route: { params } }: any) => {
   const { sdk } = useSendbirdChat();
   const { channel } = useGroupChannel(sdk, params.channelUrl);

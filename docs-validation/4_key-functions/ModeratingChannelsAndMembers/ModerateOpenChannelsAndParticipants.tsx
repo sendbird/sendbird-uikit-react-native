@@ -1,5 +1,3 @@
-const MyHeader = () => null;
-
 /**
  *
  * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/moderating-channels-and-members/moderate-group-channels-and-members}
@@ -35,8 +33,10 @@ const OpenChannelModerationScreen = ({ route: { params } }: any) => {
  *
  * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/key-functions/moderating-channels-and-members/moderate-group-channels-and-members}
  * */
+import { Text } from 'react-native';
 const OpenChannelModerationFragment2 = createOpenChannelModerationFragment({
-  Header: () => <MyHeader />, // Use custom header
+  Header: () => <Text>{'Custom Header'}</Text>,
+  Menu: () => <Text>{'Custom Menu'}</Text>,
 });
 const OpenChannelModerationScreen2 = ({ route: { params } }: any) => {
   const { sdk } = useSendbirdChat();
@@ -49,23 +49,22 @@ const OpenChannelModerationScreen2 = ({ route: { params } }: any) => {
   const navigateToBack = () => {};
 
   return (
-      <OpenChannelModerationFragment
-          channel={channel}
-          onPressHeaderLeft={navigateToBack}
-          onPressMenuOperators={navigateToOpenChannelOperatorsScreen}
-          onPressMenuMutedParticipants={navigateToOpenChannelMutedParticipantsScreen}
-          onPressMenuBannedUsers={navigateToOpenChannelBannedUsersScreen}
-          menuItemsCreator={(items) => {
-            // Add custom menu
-            items.push({
-              icon: 'edit',
-              name: 'Edit',
-              onPress: () => console.log('clicked'),
-            });
+    <OpenChannelModerationFragment
+      channel={channel}
+      onPressHeaderLeft={navigateToBack}
+      onPressMenuOperators={navigateToOpenChannelOperatorsScreen}
+      onPressMenuMutedParticipants={navigateToOpenChannelMutedParticipantsScreen}
+      onPressMenuBannedUsers={navigateToOpenChannelBannedUsersScreen}
+      menuItemsCreator={(items) => {
+        // Add custom menu
+        items.push({
+          icon: 'edit',
+          name: 'Edit',
+          onPress: () => console.log('clicked'),
+        });
 
-            return items;
-          }}
-      />
+        return items;
+      }}
+    />
   );
 };
-

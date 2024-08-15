@@ -23,6 +23,9 @@ const createGroupChannelListQuery = (
   });
 };
 
+/**
+ * @deprecated This hook is deprecated and will be replaced by the '@sendbird/uikit-tools' package.
+ * */
 export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, options) => {
   const { deliveryReceiptEnabled } = useAppFeatures(sdk);
   const queryRef = useRef<SendbirdGroupChannelListQuery>();
