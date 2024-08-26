@@ -13,7 +13,12 @@ const DialogSheet: ((props: Props) => ReactNode) & { Item: typeof SheetItem } = 
   const { colors } = useUIKitTheme();
   return (
     <View style={[styles.container, { backgroundColor: colors.ui.dialog.default.none.background }, style]}>
-      {children}
+      <View style={styles.head} />
+
+      <View style={styles.contentContainer}>
+
+        {children}
+      </View>
     </View>
   );
 };
@@ -28,7 +33,7 @@ export type SheetItemProps = {
 const SheetItem = ({ icon, title, iconColor, titleColor, disabled = false }: SheetItemProps) => {
   const { colors } = useUIKitTheme();
   return (
-    <View style={[styles.sheetItemContainer, { backgroundColor: colors.ui.dialog.default.none.background }]}>
+    <View style={[styles.sheetItemContainer]}>
       {icon && (
         <Icon
           icon={icon}
@@ -52,16 +57,37 @@ const SheetItem = ({ icon, title, iconColor, titleColor, disabled = false }: She
 
 const styles = createStyleSheet({
   container: {
-    overflow: 'hidden',
+    // overflow: 'hidden',
     flexDirection: 'column',
     width: '100%',
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+
+    backgroundColor: '#F2F4F7',
+    paddingHorizontal: 16,
+    paddingBottom: 16,
   },
+  contentContainer: {
+    borderRadius: 16,
+    overflow: 'hidden'
+  },
+  head: {
+    alignSelf: 'center',
+    width: 36,
+    height: 6,
+    borderRadius: 6,
+    backgroundColor: '#00000033',
+    marginBottom: 16,
+    marginTop: 6,
+  },
+
   sheetItemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     height: 48,
+
+    overflow: 'hidden',
+    backgroundColor: '#F2F4F7',
   },
   sheetItemIcon: {
     marginLeft: 16,

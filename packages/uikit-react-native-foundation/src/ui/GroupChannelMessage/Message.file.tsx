@@ -24,18 +24,19 @@ const FileMessage = (props: Props) => {
     <MessageContainer {...props}>
       <PressBox onPress={props.onPress} onLongPress={props.onLongPress}>
         {({ pressed }) => (
-          <Box backgroundColor={pressed ? color.pressed.background : color.enabled.background} style={styles.container}>
+          <Box backgroundColor={'white'} style={[styles.container, variant === 'outgoing' ? styles.radiusOutComming : styles.radiusInComming]}>
             <Box style={styles.bubble}>
               <Icon.File
                 fileType={fileType}
                 size={24}
-                containerStyle={{ backgroundColor: colors.background, padding: 2, borderRadius: 8, marginRight: 8 }}
+                containerStyle={{ backgroundColor: 'transparent', padding: 2, borderRadius: 8, marginRight: 8 }}
+                style={{tintColor: '#000'}}
               />
               <Text
                 body3
                 ellipsizeMode={'middle'}
                 numberOfLines={1}
-                color={pressed ? color.pressed.textMsg : color.enabled.textMsg}
+                color={'#000'}
                 style={styles.name}
               >
                 {truncate(props.strings?.fileName || props.message.name, { mode: 'mid', maxLen: 20 })}
@@ -52,7 +53,7 @@ const FileMessage = (props: Props) => {
 const styles = createStyleSheet({
   container: {
     overflow: 'hidden',
-    borderRadius: 16,
+    // borderRadius: 12,
   },
   bubble: {
     flexDirection: 'row',
@@ -62,6 +63,14 @@ const styles = createStyleSheet({
   },
   name: {
     flexShrink: 1,
+  },
+  radiusInComming: {
+    borderRadius: 12,
+  },
+  radiusOutComming: {
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
+    borderBottomLeftRadius: 12,
   },
 });
 

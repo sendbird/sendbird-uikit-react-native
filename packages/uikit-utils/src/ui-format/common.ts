@@ -119,11 +119,16 @@ export const getMessagePreviewBody = (message: SendbirdBaseMessage, EMPTY_MESSAG
  * Message preview time format
  * */
 export const getMessagePreviewTime = (timestamp: number, locale?: Locale) => {
-  if (isToday(timestamp)) return format(timestamp, 'p', { locale });
-  if (isYesterday(timestamp)) return 'Yesterday';
-  if (isThisYear(timestamp)) return format(timestamp, 'MMM dd', { locale });
+  const inThisYearFormat = locale?.code === 'vi' ? 'dd MMM' : 'MMM dd';
+  const prevYearFormat = locale?.code === 'vi' ? 'dd MMM, yyyy' : 'yyyy/MM/dd';
 
-  return format(timestamp, 'yyyy/MM/dd', { locale });
+  if (isToday(timestamp)) return format(timestamp, 'p', { locale });
+  // if (isYesterday(timestamp)) return 'Yesterday';
+  // if (isThisYear(timestamp)) return format(timestamp, 'MMM dd', { locale });
+  if (isThisYear(timestamp)) return format(timestamp, inThisYearFormat, { locale });
+
+  // return format(timestamp, 'yyyy/MM/dd', { locale });
+  return format(timestamp, prevYearFormat, { locale });
 };
 
 /**

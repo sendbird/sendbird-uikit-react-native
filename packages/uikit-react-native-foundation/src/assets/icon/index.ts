@@ -68,5 +68,10 @@ const IconAssets = {
   'thumbnail-none': require('./icon-thumbnail-none.png'),
   'unarchive': require('./icon-unarchive.png'),
   'user': require('./icon-user.png'),
+  'customize-1': require('./icon-user.png'),
+  'customize-2': require('./icon-user.png'),
+  'customize-3': require('./icon-user.png'),
+  'customize-4': require('./icon-user.png'),
+  'customize-5': require('./icon-user.png'),
 };
 export default IconAssets;

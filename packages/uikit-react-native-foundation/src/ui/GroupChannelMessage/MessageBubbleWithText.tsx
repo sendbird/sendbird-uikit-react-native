@@ -31,8 +31,15 @@ const MessageBubbleWithText = ({
   const { colors } = useUIKitTheme();
   const color = colors.ui.groupChannelMessage[variant];
   return (
-    <Box backgroundColor={backgroundColor} style={styles.bubble}>
-      <Text body3 color={color.enabled.textMsg} suppressHighlighting>
+    <Box
+      backgroundColor={backgroundColor}
+      style={styles.bubble}
+    >
+      <Text
+        body3
+        color={color.enabled.textMsg}
+        suppressHighlighting
+      >
         <RegexText
           body3
           color={color.enabled.textMsg}
@@ -58,11 +65,11 @@ const MessageBubbleWithText = ({
         >
           {renderRegexTextChildren(message)}
         </RegexText>
-        {Boolean(message.updatedAt) && (
-          <Text body3 color={color.enabled.textEdited}>
-            {strings?.edited ?? ' (edited)'}
-          </Text>
-        )}
+        {/*{Boolean(message.updatedAt) && (*/}
+        {/*  <Text body3 color={color.enabled.textEdited}>*/}
+        {/*    {strings?.edited ?? ' (edited)'}*/}
+        {/*  </Text>*/}
+        {/*)}*/}
       </Text>
     </Box>
   );

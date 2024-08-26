@@ -24,12 +24,13 @@ const UserMessage = (props: Props) => {
 
   const { colors } = useUIKitTheme();
   const color = colors.ui.groupChannelMessage[variant];
+  const borderRadius = variant === 'incoming' ? styles.inComingRadius : styles.outComingRadius;
 
   return (
     <MessageContainer {...props}>
       <PressBox onPress={props.onPress} onLongPress={props.onLongPress}>
         {({ pressed }) => (
-          <Box backgroundColor={pressed ? color.pressed.background : color.enabled.background} style={styles.container}>
+          <Box backgroundColor={pressed ? color.pressed.background : color.enabled.background} style={[styles.container, borderRadius]}>
             <MessageBubbleWithText {...props} />
             {props.children}
           </Box>
@@ -42,7 +43,16 @@ const UserMessage = (props: Props) => {
 const styles = createStyleSheet({
   container: {
     overflow: 'hidden',
-    borderRadius: 16,
+  },
+  inComingRadius: {
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    borderBottomRightRadius: 12,
+  },
+  outComingRadius: {
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    borderBottomLeftRadius: 12,
   },
 });
 
