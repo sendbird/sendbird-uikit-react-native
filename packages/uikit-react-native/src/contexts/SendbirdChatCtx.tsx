@@ -170,7 +170,7 @@ export const SendbirdChatProvider = ({
 
   useEffect(() => {
     return () => {
-      sdkInstance.disconnect().then(() => _setCurrentUser(undefined));
+      sdkInstance.disconnectWebSocket().then(() => _setCurrentUser(undefined));
     };
   }, [sdkInstance]);
 
