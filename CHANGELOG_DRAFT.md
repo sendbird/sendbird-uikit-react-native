@@ -1,9 +1,5 @@
-## v3.7.0
+## v3.7.1
 
-### Features
+### Fix
 
-- Added support for MMKV storage and deprecated AsyncStorage.
-
-### Chore
-
-- Updated sample React-Native version to 0.74.3
+- Fixed the behavior to call `disconnectWebsocket()` instead of `disconnect()` on unmount container to avoid unintentionally clearing the cache.

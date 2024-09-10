@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.7.0...v3.7.1) (2024-09-10)
+
+### Bug Fixes
+
+- disconnect ws only on unmounted ([5f09729](https://github.com/sendbird/sendbird-uikit-react-native/commit/5f0972962d437f6a34c70698ef3aa2d9df6af69e))
+
 ## [3.7.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.6.0...v3.7.0) (2024-08-08)
 
 ### Features
