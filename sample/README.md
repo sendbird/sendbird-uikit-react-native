@@ -5,6 +5,7 @@ Sample for expo: https://github.com/sendbird/sendbird-uikit-sample-react-native-
 
 ### Requirements
 
+- A fully configured environment for React Native development. Please refer to the [React Native environment setup guide](https://reactnative.dev/docs/set-up-your-environment) to ensure your development environment is properly configured.
 - Nodejs 18.20 or newer
 
 ### Installation
