@@ -34,13 +34,13 @@ export const getOpenChannelChatAvailableState = async (channel: SendbirdOpenChan
   return { disabled, frozen, muted };
 };
 
-export const confirmAndMarkAsRead = async (channels: SendbirdBaseChannel[]) => {
+export const confirmAndMarkAsRead = (channels: SendbirdBaseChannel[]) => {
   channels
     .filter((it): it is SendbirdGroupChannel => it.isGroupChannel() && it.unreadMessageCount > 0)
     .forEach((it) => BufferedRequest.markAsRead.push(() => it.markAsRead(), it.url));
 };
 
-export const confirmAndMarkAsDelivered = async (channels: SendbirdBaseChannel[]) => {
+export const confirmAndMarkAsDelivered = (channels: SendbirdBaseChannel[]) => {
   channels
     .filter((it): it is SendbirdGroupChannel => it.isGroupChannel() && it.unreadMessageCount > 0)
     .forEach((it) => BufferedRequest.markAsDelivered.push(() => it.markAsDelivered(), it.url));

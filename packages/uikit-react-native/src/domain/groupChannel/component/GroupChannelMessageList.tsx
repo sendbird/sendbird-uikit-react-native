@@ -40,7 +40,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
           if (focusAnimated) {
             props.onUpdateSearchItem({ startingPoint: createdAt });
           }
-          props.onResetMessageListWithStartingPoint(createdAt);
+          props.onResetMessageListWithStartingPoint(createdAt).catch((_) => {});
         } else {
           return false;
         }
@@ -54,7 +54,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
       props.onUpdateSearchItem(undefined);
       props.onScrolledAwayFromBottom(false);
 
-      await props.onResetMessageList();
+      await props.onResetMessageList().catch((_) => {});
       props.onScrolledAwayFromBottom(false);
       lazyScrollToBottom({ animated });
     } else {

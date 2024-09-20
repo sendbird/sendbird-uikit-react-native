@@ -33,7 +33,7 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
     if (props.hasNext()) {
       props.onScrolledAwayFromBottom(false);
 
-      await props.onResetMessageList();
+      await props.onResetMessageList().catch((_) => {});
       props.onScrolledAwayFromBottom(false);
       lazyScrollToBottom({ animated });
     } else {

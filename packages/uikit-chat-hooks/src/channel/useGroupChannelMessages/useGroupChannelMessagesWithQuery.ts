@@ -53,17 +53,9 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
     updateRefreshing,
   } = useChannelMessagesReducer(options?.sortComparator);
 
-  const channelMarkAsRead = async () => {
-    try {
-      await confirmAndMarkAsRead([channel]);
-    } catch (e) {
-      Logger.warn('[useGroupChannelMessagesWithQuery/channelMarkAsRead]', e);
-    }
-  };
-
   const init = useFreshCallback(async (uid?: string) => {
     if (uid) {
-      channelMarkAsRead();
+      confirmAndMarkAsRead([channel]);
       updateNewMessages([], true, sdk.currentUser?.userId);
 
       queryRef.current = createMessageQuery(channel, options);
@@ -86,7 +78,7 @@ export const useGroupChannelMessagesWithQuery: UseGroupChannelMessages = (sdk, c
       if (isDifferentChannel(channel, eventChannel)) return;
       if (isMyMessage(message, sdk.currentUser?.userId)) return;
 
-      channelMarkAsRead();
+      confirmAndMarkAsRead([channel]);
 
       updateMessages([message], false, sdk.currentUser?.userId);
       if (options?.shouldCountNewMessages?.()) {
