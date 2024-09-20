@@ -32,6 +32,7 @@ import {
 import { LocalizationContext, LocalizationProvider } from '../contexts/LocalizationCtx';
 import { PlatformServiceProvider } from '../contexts/PlatformServiceCtx';
 import { ReactionProvider } from '../contexts/ReactionCtx';
+import { type SBUHandlers, SBUHandlersProvider } from '../contexts/SBUHandlersCtx';
 import type { ChatRelatedFeaturesInUIKit } from '../contexts/SendbirdChatCtx';
 import { SendbirdChatProvider } from '../contexts/SendbirdChatCtx';
 import { UserProfileProvider } from '../contexts/UserProfileCtx';
@@ -41,6 +42,7 @@ import ImageCompressionConfig from '../libs/ImageCompressionConfig';
 import InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
 import MentionConfig, { MentionConfigInterface } from '../libs/MentionConfig';
 import MentionManager from '../libs/MentionManager';
+import SBUUtils from '../libs/SBUUtils';
 import VoiceMessageConfig, { VoiceMessageConfigInterface } from '../libs/VoiceMessageConfig';
 import VoiceMessageStatusManager from '../libs/VoiceMessageStatusManager';
 import StringSetEn from '../localization/StringSet.en';
@@ -131,6 +133,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
     onError?: (props: ErrorBoundaryProps) => void;
     ErrorInfoComponent?: (props: ErrorBoundaryProps) => React.ReactNode;
   };
+  handlers?: Partial<SBUHandlers>;
   toast?: {
     dismissTimeout?: number;
   };
@@ -159,6 +162,7 @@ const SendbirdUIKitContainer = (props: SendbirdUIKitContainerProps) => {
     localization,
     styles,
     errorBoundary,
+    handlers,
     toast,
     userProfile,
     reaction,
@@ -213,85 +217,93 @@ const SendbirdUIKitContainer = (props: SendbirdUIKitContainerProps) => {
     }
   };
 
+  const sbuHandlers: SBUHandlers = {
+    onOpenURL: SBUUtils.openURL,
+    onOpenFileURL: SBUUtils.openURL,
+    ...handlers,
+  };
+
   return (
-    <SafeAreaProvider>
-      <UIKitConfigProvider
-        storage={internalStorage}
-        localConfigs={{
-          common: uikitOptions?.common,
-          groupChannel: {
-            channel: { ...uikitOptions?.groupChannel, enableReactionsSupergroup: undefined },
-            channelList: uikitOptions?.groupChannelList,
-            setting: uikitOptions?.groupChannelSettings,
-          },
-          openChannel: {
-            channel: uikitOptions?.openChannel,
-          },
-        }}
-      >
-        <SendbirdChatProvider
-          sdkInstance={sdkInstance}
-          emojiManager={emojiManager}
-          mentionManager={mentionManager}
-          imageCompressionConfig={imageCompressionConfig}
-          voiceMessageConfig={voiceMessageConfig}
-          voiceMessageStatusManager={voiceMessageStatusManager}
-          enableAutoPushTokenRegistration={
-            chatOptions.enableAutoPushTokenRegistration ?? SendbirdUIKit.DEFAULT.AUTO_PUSH_TOKEN_REGISTRATION
-          }
-          enableUseUserIdForNickname={
-            chatOptions.enableUseUserIdForNickname ?? SendbirdUIKit.DEFAULT.USE_USER_ID_FOR_NICKNAME
-          }
-          enableImageCompression={chatOptions.enableImageCompression ?? SendbirdUIKit.DEFAULT.IMAGE_COMPRESSION}
+    <SBUHandlersProvider {...sbuHandlers}>
+      <SafeAreaProvider>
+        <UIKitConfigProvider
+          storage={internalStorage}
+          localConfigs={{
+            common: uikitOptions?.common,
+            groupChannel: {
+              channel: { ...uikitOptions?.groupChannel, enableReactionsSupergroup: undefined },
+              channelList: uikitOptions?.groupChannelList,
+              setting: uikitOptions?.groupChannelSettings,
+            },
+            openChannel: {
+              channel: uikitOptions?.openChannel,
+            },
+          }}
         >
-          <LocalizationProvider stringSet={defaultStringSet}>
-            <PlatformServiceProvider
-              fileService={platformServices.file}
-              notificationService={platformServices.notification}
-              clipboardService={platformServices.clipboard}
-              mediaService={platformServices.media}
-              playerService={platformServices.player}
-              recorderService={platformServices.recorder}
-              voiceMessageConfig={voiceMessageConfig}
-            >
-              <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
-                <HeaderStyleProvider
-                  HeaderComponent={styles?.HeaderComponent ?? Header}
-                  defaultTitleAlign={styles?.defaultHeaderTitleAlign ?? 'left'}
-                  statusBarTranslucent={styles?.statusBarTranslucent ?? true}
-                >
-                  <ToastProvider dismissTimeout={toast?.dismissTimeout}>
-                    <UserProfileProvider {...userProfile} statusBarTranslucent={styles?.statusBarTranslucent ?? true}>
-                      <ReactionProvider {...reaction}>
-                        <LocalizationContext.Consumer>
-                          {(value) => {
-                            const STRINGS = value?.STRINGS || defaultStringSet;
-                            return (
-                              <DialogProvider
-                                defaultLabels={{
-                                  alert: { ok: STRINGS.DIALOG.ALERT_DEFAULT_OK },
-                                  prompt: {
-                                    ok: STRINGS.DIALOG.PROMPT_DEFAULT_OK,
-                                    cancel: STRINGS.DIALOG.PROMPT_DEFAULT_CANCEL,
-                                    placeholder: STRINGS.DIALOG.PROMPT_DEFAULT_PLACEHOLDER,
-                                  },
-                                }}
-                              >
-                                {renderChildren()}
-                              </DialogProvider>
-                            );
-                          }}
-                        </LocalizationContext.Consumer>
-                      </ReactionProvider>
-                    </UserProfileProvider>
-                  </ToastProvider>
-                </HeaderStyleProvider>
-              </UIKitThemeProvider>
-            </PlatformServiceProvider>
-          </LocalizationProvider>
-        </SendbirdChatProvider>
-      </UIKitConfigProvider>
-    </SafeAreaProvider>
+          <SendbirdChatProvider
+            sdkInstance={sdkInstance}
+            emojiManager={emojiManager}
+            mentionManager={mentionManager}
+            imageCompressionConfig={imageCompressionConfig}
+            voiceMessageConfig={voiceMessageConfig}
+            voiceMessageStatusManager={voiceMessageStatusManager}
+            enableAutoPushTokenRegistration={
+              chatOptions.enableAutoPushTokenRegistration ?? SendbirdUIKit.DEFAULT.AUTO_PUSH_TOKEN_REGISTRATION
+            }
+            enableUseUserIdForNickname={
+              chatOptions.enableUseUserIdForNickname ?? SendbirdUIKit.DEFAULT.USE_USER_ID_FOR_NICKNAME
+            }
+            enableImageCompression={chatOptions.enableImageCompression ?? SendbirdUIKit.DEFAULT.IMAGE_COMPRESSION}
+          >
+            <LocalizationProvider stringSet={defaultStringSet}>
+              <PlatformServiceProvider
+                fileService={platformServices.file}
+                notificationService={platformServices.notification}
+                clipboardService={platformServices.clipboard}
+                mediaService={platformServices.media}
+                playerService={platformServices.player}
+                recorderService={platformServices.recorder}
+                voiceMessageConfig={voiceMessageConfig}
+              >
+                <UIKitThemeProvider theme={styles?.theme ?? LightUIKitTheme}>
+                  <HeaderStyleProvider
+                    HeaderComponent={styles?.HeaderComponent ?? Header}
+                    defaultTitleAlign={styles?.defaultHeaderTitleAlign ?? 'left'}
+                    statusBarTranslucent={styles?.statusBarTranslucent ?? true}
+                  >
+                    <ToastProvider dismissTimeout={toast?.dismissTimeout}>
+                      <UserProfileProvider {...userProfile} statusBarTranslucent={styles?.statusBarTranslucent ?? true}>
+                        <ReactionProvider {...reaction}>
+                          <LocalizationContext.Consumer>
+                            {(value) => {
+                              const STRINGS = value?.STRINGS || defaultStringSet;
+                              return (
+                                <DialogProvider
+                                  defaultLabels={{
+                                    alert: { ok: STRINGS.DIALOG.ALERT_DEFAULT_OK },
+                                    prompt: {
+                                      ok: STRINGS.DIALOG.PROMPT_DEFAULT_OK,
+                                      cancel: STRINGS.DIALOG.PROMPT_DEFAULT_CANCEL,
+                                      placeholder: STRINGS.DIALOG.PROMPT_DEFAULT_PLACEHOLDER,
+                                    },
+                                  }}
+                                >
+                                  {renderChildren()}
+                                </DialogProvider>
+                              );
+                            }}
+                          </LocalizationContext.Consumer>
+                        </ReactionProvider>
+                      </UserProfileProvider>
+                    </ToastProvider>
+                  </HeaderStyleProvider>
+                </UIKitThemeProvider>
+              </PlatformServiceProvider>
+            </LocalizationProvider>
+          </SendbirdChatProvider>
+        </UIKitConfigProvider>
+      </SafeAreaProvider>
+    </SBUHandlersProvider>
   );
 };
 

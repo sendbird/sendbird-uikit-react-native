@@ -25,8 +25,7 @@ import {
 import { VOICE_MESSAGE_META_ARRAY_DURATION_KEY } from '../../constants';
 import { GroupChannelContexts } from '../../domain/groupChannel/module/moduleContext';
 import type { GroupChannelProps } from '../../domain/groupChannel/types';
-import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
-import SBUUtils from '../../libs/SBUUtils';
+import { useLocalization, usePlatformService, useSBUHandlers, useSendbirdChat } from '../../hooks/useContext';
 import { TypingIndicatorType } from '../../types';
 import { ReactionAddons } from '../ReactionAddons';
 import GroupChannelMessageDateSeparator from './GroupChannelMessageDateSeparator';
@@ -49,6 +48,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   nextMessage,
   hideParentMessage,
 }) => {
+  const handlers = useSBUHandlers();
   const playerUnsubscribes = useRef<(() => void)[]>([]);
   const { palette } = useUIKitTheme();
   const { sbOptions, currentUser, mentionManager, voiceMessageStatusManager } = useSendbirdChat();
@@ -98,7 +98,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     variant,
     onPress,
     onLongPress,
-    onPressURL: (url) => SBUUtils.openURL(url),
+    onPressURL: (url) => handlers.onOpenURL(url),
     onPressAvatar: () => {
       if ('sender' in message) onShowUserProfile?.(message.sender);
     },

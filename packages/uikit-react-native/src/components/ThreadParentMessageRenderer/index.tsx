@@ -11,8 +11,7 @@ import {
 } from '@sendbird/uikit-utils';
 
 import { VOICE_MESSAGE_META_ARRAY_DURATION_KEY } from '../../constants';
-import SBUUtils from '../../libs/SBUUtils';
-import { usePlatformService, useSendbirdChat } from './../../hooks/useContext';
+import { usePlatformService, useSBUHandlers, useSendbirdChat } from './../../hooks/useContext';
 import ThreadParentMessageFile from './ThreadParentMessage.file';
 import ThreadParentMessageFileImage from './ThreadParentMessage.file.image';
 import ThreadParentMessageFileVideo from './ThreadParentMessage.file.video';
@@ -33,6 +32,7 @@ export type ThreadParentMessageRendererProps<AdditionalProps = unknown> = {
 } & AdditionalProps;
 
 const ThreadParentMessageRenderer = (props: ThreadParentMessageRendererProps) => {
+  const handlers = useSBUHandlers();
   const playerUnsubscribes = useRef<(() => void)[]>([]);
   const { sbOptions, currentUser, mentionManager } = useSendbirdChat();
   const { palette } = useUIKitTheme();
@@ -50,7 +50,7 @@ const ThreadParentMessageRenderer = (props: ThreadParentMessageRendererProps) =>
   };
 
   const messageProps: ThreadParentMessageRendererProps = {
-    onPressURL: (url) => SBUUtils.openURL(url),
+    onPressURL: (url) => handlers.onOpenURL(url),
     onToggleVoiceMessage: async (state, setState) => {
       if (isVoiceMessage(parentMessage) && parentMessage.sendingStatus === 'succeeded') {
         if (playerService.uri === parentMessage.url) {

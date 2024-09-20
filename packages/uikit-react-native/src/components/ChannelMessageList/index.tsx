@@ -30,8 +30,13 @@ import {
 } from '@sendbird/uikit-utils';
 
 import type { UserProfileContextType } from '../../contexts/UserProfileCtx';
-import { useLocalization, usePlatformService, useSendbirdChat, useUserProfile } from '../../hooks/useContext';
-import SBUUtils from '../../libs/SBUUtils';
+import {
+  useLocalization,
+  usePlatformService,
+  useSBUHandlers,
+  useSendbirdChat,
+  useUserProfile,
+} from '../../hooks/useContext';
 import ChatFlatList from '../ChatFlatList';
 import { ReactionAddons } from '../ReactionAddons';
 
@@ -216,6 +221,7 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
   | 'onResendFailedMessage'
   | 'onPressMediaMessage'
 >): CreateMessagePressActions => {
+  const handlers = useSBUHandlers();
   const { colors } = useUIKitTheme();
   const { STRINGS } = useLocalization();
   const toast = useToast();
@@ -265,9 +271,8 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
       const fileType = getFileType(message.type || getFileExtension(message.name));
       if (['image', 'video', 'audio'].includes(fileType)) {
         onPressMediaMessage?.(message, () => onDeleteMessage(message), getAvailableUriFromFileMessage(message));
-      } else {
-        SBUUtils.openURL(message.url);
       }
+      handlers.onOpenFileURL(message.url);
     }
   };
 
