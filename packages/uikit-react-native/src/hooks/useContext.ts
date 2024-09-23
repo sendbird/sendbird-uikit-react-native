@@ -3,8 +3,15 @@ import { useContext } from 'react';
 import { LocalizationContext } from '../contexts/LocalizationCtx';
 import { PlatformServiceContext } from '../contexts/PlatformServiceCtx';
 import { ReactionContext } from '../contexts/ReactionCtx';
+import { SBUHandlersContext } from '../contexts/SBUHandlersCtx';
 import { SendbirdChatContext } from '../contexts/SendbirdChatCtx';
 import { UserProfileContext } from '../contexts/UserProfileCtx';
+
+export const useSBUHandlers = () => {
+  const value = useContext(SBUHandlersContext);
+  if (!value) throw new Error('SBUHandlersContext is not provided');
+  return value;
+};
 
 export const useLocalization = () => {
   const value = useContext(LocalizationContext);

@@ -12,8 +12,7 @@ import {
 } from '@sendbird/uikit-utils';
 
 import type { OpenChannelProps } from '../../domain/openChannel/types';
-import { useLocalization, usePlatformService, useSendbirdChat } from '../../hooks/useContext';
-import SBUUtils from '../../libs/SBUUtils';
+import { useLocalization, usePlatformService, useSBUHandlers, useSendbirdChat } from '../../hooks/useContext';
 import OpenChannelMessageDateSeparator from './OpenChannelMessageDateSeparator';
 
 const OpenChannelMessageRenderer: OpenChannelProps['Fragment']['renderMessage'] = ({
@@ -26,6 +25,7 @@ const OpenChannelMessageRenderer: OpenChannelProps['Fragment']['renderMessage'] 
   prevMessage,
   nextMessage,
 }) => {
+  const handlers = useSBUHandlers();
   const { sbOptions } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { mediaService } = usePlatformService();
@@ -35,7 +35,7 @@ const OpenChannelMessageRenderer: OpenChannelProps['Fragment']['renderMessage'] 
     channel,
     onPress,
     onLongPress,
-    onPressURL: (url) => SBUUtils.openURL(url),
+    onPressURL: (url) => handlers.onOpenURL(url),
     onPressAvatar: () => 'sender' in message && onShowUserProfile?.(message.sender, { hideMessageButton: true }),
     grouped: groupWithPrev,
     strings: {
