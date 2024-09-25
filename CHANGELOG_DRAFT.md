@@ -1,5 +1,18 @@
-## v3.7.1
+## v3.7.2
 
-### Fix
+### Feat
 
-- Fixed the behavior to call `disconnectWebsocket()` instead of `disconnect()` on unmount container to avoid unintentionally clearing the cache.
+- Added event handlers interface for `onOpenURL` and `onOpenFileURL` to `SendbirdUIKitContainer`.
+  ```tsx
+  <SendbirdUIKitContainer
+    appId={APP_ID}
+    handlers={{
+      onOpenURL: (url) => {
+        console.log('onOpenURL', url);
+      },
+      onOpenFileURL: (url) => {
+        console.log('onOpenFileURL', url);
+      },
+    }}
+  />
+  ```
