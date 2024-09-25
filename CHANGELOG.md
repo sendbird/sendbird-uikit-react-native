@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.7.1...v3.7.2) (2024-09-25)
+
+### Features
+
+- add sbu handlers interface ([0e75d81](https://github.com/sendbird/sendbird-uikit-react-native/commit/0e75d8101e718f560812a843f565d80875c44767))
+
 ## [3.7.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.7.0...v3.7.1) (2024-09-10)
 
 ### Bug Fixes
