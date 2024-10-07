@@ -38,24 +38,27 @@ const usePushTokenRegistration = () => {
       }
     }
 
-    // Register device token
+    // Register token refresh listener
+    refreshListener.current = notificationService.onTokenRefresh(registerToken);
+
+    // Register token
     const token = await getToken();
     if (token) {
       Logger.log('[usePushTokenRegistration]', 'registered token:', token);
-      registerToken(token);
+      await registerToken(token);
     }
-
-    // Remove listener
-    refreshListener.current = notificationService.onTokenRefresh(registerToken);
   });
 
   const unregisterPushTokenForCurrentUser = useFreshCallback(async () => {
+    // Unregister token refresh listener
+    refreshListener.current?.();
+
+    // Unregister token
     const token = await getToken();
     if (token) {
-      unregisterToken(token);
+      await unregisterToken(token);
       Logger.log('[usePushTokenRegistration]', 'unregistered token:', token);
     }
-    refreshListener.current?.();
   });
 
   return { registerPushTokenForCurrentUser, unregisterPushTokenForCurrentUser };
