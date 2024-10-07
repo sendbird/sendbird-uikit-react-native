@@ -10,7 +10,7 @@ import {
   createStyleSheet,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import { conditionChaining, millsToMMSS } from '@sendbird/uikit-utils';
+import { Logger, conditionChaining, millsToMMSS } from '@sendbird/uikit-utils';
 
 import { useLocalization } from '../../hooks/useContext';
 import useVoiceMessageInput from '../../hooks/useVoiceMessageInput';
@@ -32,34 +32,50 @@ const VoiceMessageInput = ({ onClose, onSend }: VoiceMessageInputProps) => {
   const uiColors = colors.ui.voiceMessageInput.default[state.status !== 'idle' ? 'active' : 'inactive'];
 
   const onPressCancel = async () => {
-    actions.cancel();
-    onClose();
+    await actions
+      .cancel()
+      .catch((error) => {
+        Logger.warn('Failed to cancel voice message input', error);
+      })
+      .finally(() => {
+        onClose();
+      });
   };
 
   const onPressSend = async () => {
-    actions.send();
-    onClose();
+    await actions
+      .send()
+      .catch((error) => {
+        Logger.warn('Failed to send voice message', error);
+      })
+      .finally(() => {
+        onClose();
+      });
   };
 
-  const onPressVoiceMessageAction = () => {
-    switch (state.status) {
-      case 'idle':
-        actions.startRecording();
-        break;
-      case 'recording':
-        if (lessThanMinimumDuration) {
-          actions.cancel();
-        } else {
-          actions.stopRecording();
-        }
-        break;
-      case 'recording_completed':
-      case 'playing_paused':
-        actions.playPlayer();
-        break;
-      case 'playing':
-        actions.pausePlayer();
-        break;
+  const onPressVoiceMessageAction = async () => {
+    try {
+      switch (state.status) {
+        case 'idle':
+          await actions.startRecording();
+          break;
+        case 'recording':
+          if (lessThanMinimumDuration) {
+            await actions.cancel();
+          } else {
+            await actions.stopRecording();
+          }
+          break;
+        case 'recording_completed':
+        case 'playing_paused':
+          await actions.playPlayer();
+          break;
+        case 'playing':
+          await actions.pausePlayer();
+          break;
+      }
+    } catch (error) {
+      Logger.warn('Failed to run voice message action.', state);
     }
   };
   const renderActionIcon = () => {

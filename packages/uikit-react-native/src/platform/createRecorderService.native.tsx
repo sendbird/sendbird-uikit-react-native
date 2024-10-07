@@ -3,7 +3,7 @@ import * as RNAudioRecorder from 'react-native-audio-recorder-player';
 import * as Permissions from 'react-native-permissions';
 import { Permission } from 'react-native-permissions/src/types';
 
-import { matchesOneOf, sleep } from '@sendbird/uikit-utils';
+import { Logger, matchesOneOf, sleep } from '@sendbird/uikit-utils';
 
 import VoiceMessageConfig from '../libs/VoiceMessageConfig';
 import nativePermissionGranted from '../utils/nativePermissionGranted';
@@ -64,11 +64,17 @@ const createNativeRecorderService = ({ audioRecorderModule, permissionModule }: 
     });
 
     constructor() {
-      module.setSubscriptionDuration(0.1);
+      module.setSubscriptionDuration(0.1).catch((error) => {
+        Logger.warn('[RecorderService.Native] Failed to set subscription duration', error);
+      });
       module.addRecordBackListener((data) => {
         const completed = data.currentPosition >= this.options.maxDuration;
 
-        if (completed) this.stop();
+        if (completed) {
+          this.stop().catch((error) => {
+            Logger.warn('[RecorderService.Native] Failed to stop in RecordBackListener', error);
+          });
+        }
         if (this.state === 'recording') {
           this.recordingSubscribers.forEach((callback) => {
             callback({ currentTime: data.currentPosition, completed });

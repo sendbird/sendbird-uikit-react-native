@@ -279,7 +279,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
             onUnsubscribeStatus={voiceMessageStatusManager.unsubscribe}
             onUnmount={() => {
               if (isVoiceMessage(message) && playerService.uri === message.url) {
-                resetPlayer();
+                resetPlayer().catch((_) => {});
               }
             }}
             {...messageProps}

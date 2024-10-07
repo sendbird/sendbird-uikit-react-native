@@ -86,7 +86,9 @@ export class BufferedRequest {
         const nextRequestBaseTimeout = timeoutMills / nextQueue.size;
         nextQueue.forEach((func) => {
           setTimeout(() => {
-            func();
+            func().catch((_) => {
+              // do nothing
+            });
             // TODO: Add retry
             //.catch(() => waitQueue.set(lane, func));
           }, nextRequestBaseTimeout * index);
@@ -94,7 +96,7 @@ export class BufferedRequest {
         });
         nextQueue.clear();
       },
-      async invoke() {
+      invoke() {
         this.shift();
 
         if (state === 'idle') {

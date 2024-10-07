@@ -71,18 +71,14 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     updateRefreshing,
   } = useChannelMessagesReducer(options?.sortComparator);
 
-  const channelMarkAsRead = async (source?: CollectionEventSource) => {
-    try {
-      switch (source) {
-        case CollectionEventSource.EVENT_MESSAGE_RECEIVED:
-        case CollectionEventSource.EVENT_MESSAGE_SENT_SUCCESS:
-        case CollectionEventSource.SYNC_MESSAGE_FILL:
-        case undefined:
-          await confirmAndMarkAsRead([channel]);
-          break;
-      }
-    } catch (e) {
-      Logger.warn('[useGroupChannelMessagesWithCollection/channelMarkAsRead]', e);
+  const channelMarkAsRead = (source?: CollectionEventSource) => {
+    switch (source) {
+      case CollectionEventSource.EVENT_MESSAGE_RECEIVED:
+      case CollectionEventSource.EVENT_MESSAGE_SENT_SUCCESS:
+      case CollectionEventSource.SYNC_MESSAGE_FILL:
+      case undefined:
+        confirmAndMarkAsRead([channel]);
+        break;
     }
   };
   const updateNewMessagesReceived = (source: CollectionEventSource, messages: SendbirdBaseMessage[]) => {
@@ -105,7 +101,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
     if (isNotEmpty(failedMessages)) updateMessages(failedMessages, false, sdk.currentUser?.userId);
   };
 
-  const init = useFreshCallback(async (startingPoint: number, limit: number, callback?: () => void) => {
+  const init = useFreshCallback((startingPoint: number, limit: number, callback?: () => void) => {
     if (collectionRef.current) collectionRef.current?.dispose();
 
     channelMarkAsRead();

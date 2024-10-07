@@ -178,7 +178,7 @@ const ThreadParentMessageRenderer = (props: ThreadParentMessageRendererProps) =>
           durationMetaArrayKey={VOICE_MESSAGE_META_ARRAY_DURATION_KEY}
           onUnmount={() => {
             if (isVoiceMessage(parentMessage) && playerService.uri === parentMessage.url) {
-              resetPlayer();
+              resetPlayer().catch((_) => {});
             }
           }}
           {...messageProps}

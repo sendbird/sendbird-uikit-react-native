@@ -39,13 +39,24 @@ const usePushTokenRegistration = () => {
     }
 
     // Register token refresh listener
-    refreshListener.current = notificationService.onTokenRefresh(registerToken);
+    refreshListener.current = notificationService.onTokenRefresh(async (token) => {
+      try {
+        await registerToken(token);
+        Logger.log('[usePushTokenRegistration]', 'registered token:', token);
+      } catch (error) {
+        Logger.error('[usePushTokenRegistration]', 'failed to register token:', error);
+      }
+    });
 
     // Register token
     const token = await getToken();
     if (token) {
-      Logger.log('[usePushTokenRegistration]', 'registered token:', token);
-      await registerToken(token);
+      try {
+        await registerToken(token);
+        Logger.log('[usePushTokenRegistration]', 'registered token:', token);
+      } catch (error) {
+        Logger.error('[usePushTokenRegistration]', 'failed to register token:', error);
+      }
     }
   });
 
@@ -56,8 +67,12 @@ const usePushTokenRegistration = () => {
     // Unregister token
     const token = await getToken();
     if (token) {
-      await unregisterToken(token);
-      Logger.log('[usePushTokenRegistration]', 'unregistered token:', token);
+      try {
+        await unregisterToken(token);
+        Logger.log('[usePushTokenRegistration]', 'unregistered token:', token);
+      } catch (error) {
+        Logger.error('[usePushTokenRegistration]', 'failed to unregister token:', error);
+      }
     }
   });
 

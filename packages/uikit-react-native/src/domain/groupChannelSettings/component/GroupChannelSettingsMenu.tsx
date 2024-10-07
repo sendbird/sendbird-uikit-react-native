@@ -47,10 +47,14 @@ const GroupChannelSettingsMenu = ({
   }
 
   const toggleNotification = async () => {
-    if (channel.myPushTriggerOption === 'off') {
-      await channel.setMyPushTriggerOption(PushTriggerOption.DEFAULT);
-    } else {
-      await channel.setMyPushTriggerOption(PushTriggerOption.OFF);
+    try {
+      if (channel.myPushTriggerOption === 'off') {
+        await channel.setMyPushTriggerOption(PushTriggerOption.DEFAULT);
+      } else {
+        await channel.setMyPushTriggerOption(PushTriggerOption.OFF);
+      }
+    } catch (error) {
+      Logger.warn('Failed to toggle notification', error);
     }
   };
 
