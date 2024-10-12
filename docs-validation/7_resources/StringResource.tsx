@@ -7,12 +7,12 @@ const Navigations = () => <></>;
  * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/resources/string-resource#2-customize-the-stringset}
  * */
 import { View } from 'react-native';
-import dateLocale from 'date-fns/locale/ko';
+import { ko } from 'date-fns/locale';
 import { StringSetEn, createBaseStringSet, SendbirdUIKitContainer, useLocalization } from '@sendbird/uikit-react-native';
 import { Text, Button } from '@sendbird/uikit-react-native-foundation';
 
 const StringSetKo = createBaseStringSet({
-  dateLocale,
+  dateLocale: ko,
   overrides: {
     LABELS: {
       USER_NO_NAME: '(이름없음)',
