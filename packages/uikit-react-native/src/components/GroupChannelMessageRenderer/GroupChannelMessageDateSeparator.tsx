@@ -1,4 +1,4 @@
-import isSameDay from 'date-fns/isSameDay';
+import { isSameDay } from 'date-fns';
 import React from 'react';
 import { View } from 'react-native';
 
