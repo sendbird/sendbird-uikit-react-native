@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { Avatar, Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { Avatar, Box, Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { conditionChaining } from '@sendbird/uikit-utils';
 
 type Props = {
@@ -22,9 +22,11 @@ const UserSelectableBar = ({ uri, name, selected, disabled }: Props) => {
     <View style={styles.container}>
       <Avatar size={36} uri={uri} containerStyle={styles.avatar} />
       <View style={[styles.infoContainer, { borderBottomColor: colors.onBackground04 }]}>
-        <Text subtitle2 numberOfLines={1} style={styles.name} color={colors.onBackground01}>
-          {name}
-        </Text>
+        <Box flex={1} alignItems={'flex-start'}>
+          <Text subtitle2 numberOfLines={1} style={styles.name} color={colors.onBackground01}>
+            {name}
+          </Text>
+        </Box>
         <Icon color={iconColor} size={24} icon={selected ? 'checkbox-on' : 'checkbox-off'} />
       </View>
     </View>
@@ -50,7 +52,6 @@ const styles = createStyleSheet({
     borderBottomWidth: 1,
   },
   name: {
-    flex: 1,
     marginEnd: 8,
   },
 });

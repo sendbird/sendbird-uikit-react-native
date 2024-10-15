@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
   infoText: {
     flex: 1,
     marginEnd: 16,
+    alignItems: 'flex-start',
   },
   infoImage: {
     width: 78,

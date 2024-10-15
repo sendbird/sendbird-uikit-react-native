@@ -84,7 +84,7 @@ const Prompt = ({
       <DialogBox style={styles.container}>
         {Boolean(title) && (
           <View style={styles.titleContainer}>
-            <Text h1 color={colors.ui.dialog.default.none.text} numberOfLines={1} style={{ flex: 1 }}>
+            <Text h1 color={colors.ui.dialog.default.none.text} numberOfLines={1}>
               {title}
             </Text>
           </View>
@@ -137,8 +137,7 @@ const styles = createStyleSheet({
     marginBottom: 12,
     paddingVertical: 12,
     paddingHorizontal: 24,
-    flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   inputContainer: {
     paddingHorizontal: 24,
