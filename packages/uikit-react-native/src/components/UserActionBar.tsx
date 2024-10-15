@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable, TouchableOpacity, View } from 'react-native';
 import type { GestureResponderEvent } from 'react-native';
 
-import { Avatar, Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { Avatar, Box, Icon, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { conditionChaining } from '@sendbird/uikit-utils';
 
 type Props = {
@@ -27,9 +27,11 @@ const UserActionBar = ({ muted, uri, name, disabled, label, onPressActionMenu, o
         <Avatar muted={muted} size={36} uri={uri} />
       </Pressable>
       <View style={[styles.infoContainer, { borderBottomColor: colors.onBackground04 }]}>
-        <Text subtitle2 numberOfLines={1} style={styles.name} color={colors.onBackground01}>
-          {name}
-        </Text>
+        <Box flex={1} alignItems={'flex-start'}>
+          <Text subtitle2 numberOfLines={1} style={styles.name} color={colors.onBackground01}>
+            {name}
+          </Text>
+        </Box>
         {Boolean(label) && (
           <Text body2 color={colors.onBackground02} style={styles.label}>
             {label}
@@ -71,7 +73,6 @@ const styles = createStyleSheet({
     padding: 4,
   },
   name: {
-    flex: 1,
     marginEnd: 8,
   },
 });

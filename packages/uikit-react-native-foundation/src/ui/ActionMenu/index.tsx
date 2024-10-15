@@ -110,8 +110,10 @@ const styles = createStyleSheet({
     paddingHorizontal: 24,
     paddingVertical: 20,
     alignItems: 'center',
+    justifyContent: 'flex-start',
   },
   buttonContainer: {
+    alignItems: 'flex-start',
     marginTop: 4,
     marginBottom: 8,
   },

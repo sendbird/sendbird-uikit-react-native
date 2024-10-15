@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(122,122,122,0.2)',
   },
   customSampleButton: {
+    alignItems: 'flex-start',
     paddingHorizontal: 24,
     paddingVertical: 22,
     elevation: 4,

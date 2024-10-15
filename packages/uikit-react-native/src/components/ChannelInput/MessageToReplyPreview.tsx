@@ -32,13 +32,13 @@ export const MessageToReplyPreview = ({ messageToReply, setMessageToReply }: Mes
   const { STRINGS } = useLocalization();
 
   const getFileIconAsImage = (url: string) => {
-    return <ImageWithPlaceholder source={{ uri: url }} style={styles.previewImage} />;
+    return <ImageWithPlaceholder source={{ uri: url }} style={styles.filePreview} />;
   };
 
   const getFileIconAsVideoThumbnail = (url: string) => {
     return (
       <VideoThumbnail
-        style={styles.previewImage}
+        style={styles.filePreview}
         iconSize={0}
         source={url}
         fetchThumbnailFromVideoSource={(uri) => mediaService.getVideoThumbnail({ url: uri, timeMills: 1000 })}
@@ -53,10 +53,8 @@ export const MessageToReplyPreview = ({ messageToReply, setMessageToReply }: Mes
         size={20}
         color={colors.onBackground02}
         containerStyle={[
-          styles.fileIcon,
-          {
-            backgroundColor: select({ light: palette.background100, dark: palette.background500 }),
-          },
+          styles.filePreview,
+          { backgroundColor: select({ light: palette.background100, dark: palette.background500 }) },
         ]}
       />
     );
@@ -83,51 +81,49 @@ export const MessageToReplyPreview = ({ messageToReply, setMessageToReply }: Mes
 
   return (
     <View style={[styles.messageToReplyContainer, { borderColor: colors.onBackground04 }]}>
-      <View style={{ flex: 1, flexDirection: 'row' }}>
+      <View style={styles.infoContainer}>
         {getFileIcon(messageToReply)}
-        <View style={{ flex: 1, flexDirection: 'column' }}>
-          <Text numberOfLines={1} style={{ fontSize: 13, fontWeight: '900', marginBottom: 4 }}>
+        <View style={styles.infoText}>
+          <Text caption1 numberOfLines={1}>
             {STRINGS.LABELS.CHANNEL_INPUT_REPLY_PREVIEW_TITLE(messageToReply.sender)}
           </Text>
-          <Text numberOfLines={1} style={{ fontSize: 13, color: colors.onBackground03 }}>
+          <Text caption2 numberOfLines={1} color={colors.onBackground03}>
             {STRINGS.LABELS.CHANNEL_INPUT_REPLY_PREVIEW_BODY(messageToReply)}
           </Text>
         </View>
       </View>
-      <TouchableOpacity onPress={() => setMessageToReply?.(undefined)}>
-        <Icon icon={'close'} size={24} color={colors.onBackground01} containerStyle={styles.closeIcon} />
+      <TouchableOpacity onPress={() => setMessageToReply?.(undefined)} style={{ marginStart: 16 }}>
+        <Icon icon={'close'} size={24} color={colors.onBackground01} />
       </TouchableOpacity>
     </View>
   );
 };
 
 const styles = createStyleSheet({
-  previewImage: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
-    marginTop: 2,
-    marginEnd: 10,
-    overflow: 'hidden',
-  },
   messageToReplyContainer: {
     flexDirection: 'row',
     paddingStart: 18,
     paddingEnd: 16,
-    paddingTop: 10,
-    paddingBottom: 8,
+    paddingVertical: 12,
     alignItems: 'center',
     borderTopWidth: 1,
   },
-  fileIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
-    marginEnd: 10,
-    marginTop: 2,
+  infoContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  closeIcon: {
-    marginStart: 4,
-    padding: 4,
+  infoText: {
+    flex: 1,
+    height: 32,
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  filePreview: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    marginEnd: 10,
+    overflow: 'hidden',
   },
 });
