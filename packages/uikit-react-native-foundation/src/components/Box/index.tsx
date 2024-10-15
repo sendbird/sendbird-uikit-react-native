@@ -6,6 +6,17 @@ import { isFunction } from '@sendbird/uikit-utils';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import type { UIKitColors, UIKitPalette } from '../../types';
 
+type DeprecatedBoxProps = {
+  /** @deprecated Please use `paddingStart` instead **/
+  paddingLeft?: ViewStyle['paddingLeft'];
+  /** @deprecated Please use `paddingEnd` instead **/
+  paddingRight?: ViewStyle['paddingRight'];
+  /** @deprecated Please use `marginStart` instead **/
+  marginLeft?: ViewStyle['marginLeft'];
+  /** @deprecated Please use `marginEnd` instead **/
+  marginRight?: ViewStyle['marginRight'];
+};
+
 type BaseBoxProps = Pick<
   ViewStyle,
   | 'flex'
@@ -40,7 +51,7 @@ type BaseBoxProps = Pick<
   backgroundColor?: string | ((theme: { colors: UIKitColors; palette: UIKitPalette }) => string);
 };
 
-type BoxProps = BaseBoxProps & ViewProps;
+type BoxProps = BaseBoxProps & DeprecatedBoxProps & ViewProps;
 const Box = ({ style, children, ...props }: BoxProps) => {
   const boxStyle = useBoxStyle(props);
 
