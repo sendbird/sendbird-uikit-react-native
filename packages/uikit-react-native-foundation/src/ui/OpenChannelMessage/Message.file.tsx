@@ -33,7 +33,7 @@ const FileMessage = (props: OpenChannelMessageProps<SendbirdFileMessage, Props>)
             >
               <Box
                 padding={4}
-                marginRight={8}
+                marginEnd={8}
                 borderRadius={8}
                 alignItems={'flex-start'}
                 backgroundColor={colors.background}

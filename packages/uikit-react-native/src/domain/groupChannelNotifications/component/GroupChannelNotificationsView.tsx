@@ -117,7 +117,7 @@ const styles = createStyleSheet({
   },
   title: {
     flex: 1,
-    marginRight: 8,
+    marginEnd: 8,
   },
   desc: {
     marginTop: 8,

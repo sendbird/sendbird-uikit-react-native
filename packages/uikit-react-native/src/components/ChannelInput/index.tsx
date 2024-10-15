@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { KeyboardAvoidingView, Platform, StyleProp, StyleSheet, TextInput, TextStyle, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import {
@@ -16,6 +15,7 @@ import {
   SendbirdUserMessageUpdateParams,
   replace,
   useIIFE,
+  useSafeAreaPadding,
 } from '@sendbird/uikit-utils';
 
 import { useSendbirdChat } from '../../hooks/useContext';
@@ -89,7 +89,7 @@ const GET_INPUT_KEY = (shouldReset: boolean) => (shouldReset ? 'uikit-input-clea
 const ChannelInput = (props: ChannelInputProps) => {
   const { channel, keyboardAvoidOffset, messageToEdit, setMessageToEdit } = props;
 
-  const { top, left, right, bottom } = useSafeAreaInsets();
+  const safeArea = useSafeAreaPadding(['top', 'left', 'right', 'bottom']);
   const { colors, typography } = useUIKitTheme();
   const { sbOptions, mentionManager } = useSendbirdChat();
 
@@ -127,16 +127,22 @@ const ChannelInput = (props: ChannelInputProps) => {
   };
 
   if (!props.shouldRenderInput) {
-    return <SafeAreaBottom height={bottom} />;
+    return <SafeAreaBottom height={safeArea.paddingBottom} />;
   }
 
   return (
     <>
       <KeyboardAvoidingView
-        keyboardVerticalOffset={-bottom + keyboardAvoidOffset}
+        keyboardVerticalOffset={-safeArea.paddingBottom + keyboardAvoidOffset}
         behavior={KEYBOARD_AVOID_VIEW_BEHAVIOR}
       >
-        <View style={{ paddingLeft: left, paddingRight: right, backgroundColor: colors.background }}>
+        <View
+          style={{
+            paddingStart: safeArea.paddingStart,
+            paddingEnd: safeArea.paddingEnd,
+            backgroundColor: colors.background,
+          }}
+        >
           <View onLayout={(e) => setInputHeight(e.nativeEvent.layout.height)} style={styles.inputContainer}>
             {inputMode === 'send' && (
               <SendInput
@@ -169,7 +175,7 @@ const ChannelInput = (props: ChannelInputProps) => {
               />
             )}
           </View>
-          <SafeAreaBottom height={bottom} />
+          <SafeAreaBottom height={safeArea.paddingBottom} />
         </View>
       </KeyboardAvoidingView>
       {mentionAvailable && props.SuggestedMentionList && (
@@ -177,8 +183,8 @@ const ChannelInput = (props: ChannelInputProps) => {
           text={text}
           selection={selection}
           inputHeight={inputHeight}
-          topInset={top}
-          bottomInset={bottom}
+          topInset={safeArea.paddingTop}
+          bottomInset={safeArea.paddingBottom}
           onPressToMention={onPressToMention}
           mentionedUsers={mentionedUsers}
         />
@@ -236,7 +242,7 @@ const styles = createStyleSheet({
   },
   input: {
     flex: 1,
-    marginRight: 4,
+    marginEnd: 4,
     borderRadius: 20,
     paddingTop: 8,
     paddingBottom: 8,

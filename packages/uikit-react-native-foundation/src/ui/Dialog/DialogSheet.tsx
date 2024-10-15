@@ -55,8 +55,8 @@ const styles = createStyleSheet({
     overflow: 'hidden',
     flexDirection: 'column',
     width: '100%',
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    borderTopStartRadius: 8,
+    borderTopEndRadius: 8,
   },
   sheetItemContainer: {
     flexDirection: 'row',
@@ -64,7 +64,7 @@ const styles = createStyleSheet({
     height: 48,
   },
   sheetItemIcon: {
-    marginLeft: 16,
+    marginStart: 16,
   },
   sheetItemText: {
     flex: 1,

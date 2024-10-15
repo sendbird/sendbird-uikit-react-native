@@ -305,7 +305,7 @@ const styles = createStyleSheet({
     flexDirection: 'row',
   },
   sendIcon: {
-    marginLeft: 4,
+    marginStart: 4,
     padding: 4,
   },
 });

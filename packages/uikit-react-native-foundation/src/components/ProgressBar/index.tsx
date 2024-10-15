@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useRef } from 'react';
-import { Animated, Easing, StyleSheet, ViewStyle } from 'react-native';
+import { Animated, Easing, I18nManager, StyleSheet, ViewStyle } from 'react-native';
 
 import { NOOP } from '@sendbird/uikit-utils';
 
@@ -42,6 +42,15 @@ const ProgressBar = ({ current = 100, total = 100, trackColor, barColor, overlay
     return NOOP;
   }, [percent]);
 
+  const progressBarPosition = (() => {
+    if (I18nManager.isRTL) {
+      if (I18nManager.doLeftAndRightSwapInRTL) {
+        return { right: 0 };
+      }
+    }
+    return { left: 0 };
+  })();
+
   return (
     <Box
       height={36}
@@ -52,17 +61,20 @@ const ProgressBar = ({ current = 100, total = 100, trackColor, barColor, overlay
       style={style}
     >
       <Animated.View
-        style={{
-          position: 'absolute',
-          width: progress.interpolate({
-            inputRange: [0, 1],
-            outputRange: ['0%', '100%'],
-            extrapolate: 'clamp',
-          }),
-          height: '100%',
-          opacity: 0.38,
-          backgroundColor: uiColors.bar,
-        }}
+        style={[
+          progressBarPosition,
+          {
+            position: 'absolute',
+            width: progress.interpolate({
+              inputRange: [0, 1],
+              outputRange: ['0%', '100%'],
+              extrapolate: 'clamp',
+            }),
+            height: '100%',
+            opacity: 0.38,
+            backgroundColor: uiColors.bar,
+          },
+        ]}
       />
       <Box style={StyleSheet.absoluteFill}>{overlay}</Box>
     </Box>

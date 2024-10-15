@@ -45,8 +45,8 @@ const styles = createStyleSheet({
     includeFontPadding: false,
     paddingTop: 8,
     paddingBottom: 8,
-    paddingLeft: 16,
-    paddingRight: 16,
+    paddingStart: 16,
+    paddingEnd: 16,
   },
 });
 

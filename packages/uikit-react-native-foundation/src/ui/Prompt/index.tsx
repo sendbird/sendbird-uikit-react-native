@@ -98,7 +98,7 @@ const Prompt = ({
             variant={'underline'}
             value={text}
             onChangeText={setText}
-            style={{ paddingLeft: 0, paddingRight: 0, paddingTop: 10, paddingBottom: 10 }}
+            style={{ paddingStart: 0, paddingEnd: 0, paddingTop: 10, paddingBottom: 10 }}
           />
         </View>
 
@@ -151,7 +151,7 @@ const styles = createStyleSheet({
     padding: 12,
   },
   button: {
-    marginLeft: 8,
+    marginStart: 8,
   },
 });
 

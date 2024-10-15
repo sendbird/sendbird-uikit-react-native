@@ -30,9 +30,9 @@ const MessageSearchResultItem: MessageSearchProps['List']['renderSearchResultIte
       <Box style={styles.container}>
         <Avatar size={styles.avatarSize.width} uri={getSenderProfile(message)} containerStyle={styles.avatar} />
 
-        <Box flex={1} paddingRight={16}>
+        <Box flex={1} paddingEnd={16}>
           <Box style={styles.titleLine}>
-            <Box flex={1} marginRight={4} justifyContent={'center'}>
+            <Box flex={1} marginEnd={4} justifyContent={'center'}>
               <Text subtitle2 color={colors.onBackground01} numberOfLines={1}>
                 {STRINGS.MESSAGE_SEARCH.SEARCH_RESULT_ITEM_TITLE(message)}
               </Text>
@@ -108,7 +108,7 @@ const styles = createStyleSheet({
     borderRadius: 8,
     width: 26,
     height: 26,
-    marginRight: 4,
+    marginEnd: 4,
   },
   bodyText: {
     flex: 1,
@@ -116,8 +116,8 @@ const styles = createStyleSheet({
   },
   separator: {
     position: 'absolute',
-    left: 0,
-    right: -16,
+    start: 0,
+    end: -16,
     bottom: 0,
     height: 1,
   },

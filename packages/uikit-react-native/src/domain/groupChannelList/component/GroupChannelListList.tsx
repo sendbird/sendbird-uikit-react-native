@@ -1,10 +1,16 @@
 import React from 'react';
 import { FlatList, ListRenderItem } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { PushTriggerOption } from '@sendbird/chat';
 import { useActionMenu, useToast } from '@sendbird/uikit-react-native-foundation';
-import { NOOP, PASS, SendbirdGroupChannel, getChannelUniqId, useFreshCallback } from '@sendbird/uikit-utils';
+import {
+  NOOP,
+  PASS,
+  SendbirdGroupChannel,
+  getChannelUniqId,
+  useFreshCallback,
+  useSafeAreaPadding,
+} from '@sendbird/uikit-utils';
 
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import type { GroupChannelListProps } from '../types';
@@ -64,7 +70,7 @@ const GroupChannelListList = ({
     }),
   );
 
-  const { left, right } = useSafeAreaInsets();
+  const safeArea = useSafeAreaPadding(['left', 'right']);
   return (
     <FlatList
       bounces={false}
@@ -72,7 +78,7 @@ const GroupChannelListList = ({
       renderItem={renderItem}
       onEndReached={onLoadNext}
       {...flatListProps}
-      contentContainerStyle={[flatListProps?.contentContainerStyle, { paddingLeft: left, paddingRight: right }]}
+      contentContainerStyle={[flatListProps?.contentContainerStyle, safeArea]}
       keyExtractor={getChannelUniqId}
     />
   );

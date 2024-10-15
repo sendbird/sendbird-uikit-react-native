@@ -54,7 +54,7 @@ const styles = createStyleSheet({
   },
   name: {
     flexShrink: 1,
-    marginLeft: 8,
+    marginStart: 8,
   },
 });
 

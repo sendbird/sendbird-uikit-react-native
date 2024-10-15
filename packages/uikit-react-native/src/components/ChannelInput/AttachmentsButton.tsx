@@ -24,7 +24,7 @@ const AttachmentsButton = ({ onPress, disabled }: AttachmentsButtonProps) => {
 
 const styles = createStyleSheet({
   container: {
-    marginRight: 8,
+    marginEnd: 8,
     padding: 4,
   },
 });

@@ -81,17 +81,17 @@ const styles = createStyleSheet({
   },
   name: {
     flex: 1,
-    marginRight: 8,
+    marginEnd: 8,
   },
   icon: {
-    marginRight: 16,
+    marginEnd: 16,
   },
   containedIcon: {
     borderRadius: 24,
     padding: 4,
   },
   actionLabel: {
-    marginRight: 4,
+    marginEnd: 4,
   },
 });
 

@@ -115,7 +115,7 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
 
 const styles = createStyleSheet({
   titleCaptionIcon: {
-    marginRight: 4,
+    marginEnd: 4,
   },
   broadcastCover: {
     padding: 12,

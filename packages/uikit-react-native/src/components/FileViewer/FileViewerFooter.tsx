@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
   Box,
@@ -9,6 +8,7 @@ import {
   useHeaderStyle,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
+import { useSafeAreaPadding } from '@sendbird/uikit-utils';
 
 type Props = {
   bottomInset: number;
@@ -20,15 +20,15 @@ type Props = {
 const FileViewerFooter = ({ bottomInset, deleteShown, onPressDelete, onPressDownload }: Props) => {
   const { palette } = useUIKitTheme();
   const { defaultHeight } = useHeaderStyle();
-  const { left, right } = useSafeAreaInsets();
+  const safeArea = useSafeAreaPadding(['left', 'right']);
 
   return (
     <Box
       style={[
         styles.container,
         {
-          paddingLeft: styles.container.paddingHorizontal + left,
-          paddingRight: styles.container.paddingHorizontal + right,
+          paddingStart: styles.container.paddingHorizontal + safeArea.paddingStart,
+          paddingEnd: styles.container.paddingHorizontal + safeArea.paddingEnd,
           paddingBottom: bottomInset,
           height: defaultHeight + bottomInset,
           backgroundColor: palette.overlay01,
@@ -50,8 +50,8 @@ const styles = createStyleSheet({
   container: {
     zIndex: 1,
     position: 'absolute',
-    left: 0,
-    right: 0,
+    start: 0,
+    end: 0,
     bottom: 0,
     flexDirection: 'row',
     alignItems: 'center',

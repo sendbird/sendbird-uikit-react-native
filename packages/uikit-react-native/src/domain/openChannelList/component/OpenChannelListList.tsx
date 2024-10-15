@@ -1,8 +1,7 @@
 import React from 'react';
 import { FlatList, ListRenderItem } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { SendbirdOpenChannel, getChannelUniqId, useFreshCallback } from '@sendbird/uikit-utils';
+import { SendbirdOpenChannel, getChannelUniqId, useFreshCallback, useSafeAreaPadding } from '@sendbird/uikit-utils';
 
 import type { OpenChannelListProps } from '../types';
 
@@ -19,7 +18,7 @@ const OpenChanelListList = ({
     renderOpenChannelPreview?.({ channel: item, onPress: () => onPressChannel(item) }),
   );
 
-  const { left, right } = useSafeAreaInsets();
+  const safeArea = useSafeAreaPadding(['left', 'right']);
 
   return (
     <FlatList
@@ -29,7 +28,7 @@ const OpenChanelListList = ({
       onEndReached={onLoadNext}
       onRefresh={onRefresh}
       {...flatListProps}
-      contentContainerStyle={[flatListProps?.contentContainerStyle, { paddingLeft: left, paddingRight: right }]}
+      contentContainerStyle={[flatListProps?.contentContainerStyle, safeArea]}
       keyExtractor={getChannelUniqId}
     />
   );

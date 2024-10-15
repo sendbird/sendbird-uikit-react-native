@@ -58,7 +58,7 @@ const ActionMenu = ({ visible, onHide, onError, onDismiss, title, menuItems }: P
             <LoadingSpinner
               size={20}
               color={colors.ui.dialog.default.none.highlight}
-              style={{ width: '10%', marginLeft: '4%' }}
+              style={{ width: '10%', marginStart: '4%' }}
             />
           )}
         </View>
