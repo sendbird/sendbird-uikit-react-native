@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.7.2...v3.7.3) (2024-10-15)
+
+### Bug Fixes
+
+- await token apis ([cdc1b4c](https://github.com/sendbird/sendbird-uikit-react-native/commit/cdc1b4cde6430f8c4f654edc918bb5ac7f07a22c))
+
 ## [3.7.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.7.1...v3.7.2) (2024-09-25)
 
 ### Features
