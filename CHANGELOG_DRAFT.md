@@ -1,18 +1,4 @@
-## v3.7.2
+## v3.7.3
 
-### Feat
-
-- Added event handlers interface for `onOpenURL` and `onOpenFileURL` to `SendbirdUIKitContainer`.
-  ```tsx
-  <SendbirdUIKitContainer
-    appId={APP_ID}
-    handlers={{
-      onOpenURL: (url) => {
-        console.log('onOpenURL', url);
-      },
-      onOpenFileURL: (url) => {
-        console.log('onOpenFileURL', url);
-      },
-    }}
-  />
-  ```
+- Enhanced Compatibility with `date-fns`: Updated internal code and dependencies to ensure better compatibility with the latest version of the `date-fns` library.
+- Fixed Token Deregistration Bug: Adjusted the code to ensure that token deregistration completes successfully before initiating a disconnect.
