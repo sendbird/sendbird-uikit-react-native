@@ -141,7 +141,7 @@ const styles = createStyleSheet({
   userNickAndTimeContainer: {
     flexDirection: 'column',
     flex: 1,
-    marginLeft: 8,
+    marginStart: 8,
   },
   userNickname: {
     marginBottom: 2,
@@ -159,7 +159,7 @@ const styles = createStyleSheet({
     paddingVertical: 8,
   },
   reactionButtonContainer: {
-    paddingLeft: 16,
+    paddingStart: 16,
     marginBottom: 16,
   },
   replyContainer: {

@@ -99,7 +99,7 @@ const styles = createStyleSheet({
     marginBottom: 12,
   },
   button: {
-    marginLeft: 8,
+    marginStart: 8,
   },
   buttonContainer: {
     flexDirection: 'row',

@@ -82,19 +82,19 @@ const MessageSearchHeader = ({
 
 const styles = createStyleSheet({
   searchIcon: {
-    marginRight: 8,
+    marginEnd: 8,
   },
   clearIcon: {
-    marginLeft: 8,
+    marginStart: 8,
   },
   input: {
     flex: 1,
     height: '100%',
     fontSize: 14,
-    paddingLeft: 0,
+    paddingStart: 0,
     paddingTop: 0,
     paddingBottom: 0,
-    paddingRight: 0,
+    paddingEnd: 0,
   },
 });
 

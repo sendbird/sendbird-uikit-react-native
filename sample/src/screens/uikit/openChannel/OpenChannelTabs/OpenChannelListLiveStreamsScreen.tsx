@@ -90,15 +90,15 @@ const LiveStreamPreview = ({ channel }: { channel: SendbirdOpenChannel }) => {
           width={10}
           height={10}
           borderRadius={5}
-          style={{ position: 'absolute', left: 4, bottom: 4 }}
+          style={{ position: 'absolute', start: 4, bottom: 4 }}
         />
-        <Text caption1 color={palette.onBackgroundDark01} style={{ position: 'absolute', left: 18, bottom: 1 }}>
+        <Text caption1 color={palette.onBackgroundDark01} style={{ position: 'absolute', start: 18, bottom: 1 }}>
           {channel.participantCount}
         </Text>
       </Box>
-      <Box marginLeft={16} flexShrink={1}>
+      <Box marginStart={16} flexShrink={1}>
         <Box flexDirection={'row'} marginBottom={6}>
-          <Avatar uri={streamData.thumbnail_url} size={22} containerStyle={{ marginRight: 8 }} />
+          <Avatar uri={streamData.thumbnail_url} size={22} containerStyle={{ marginEnd: 8 }} />
           <Text subtitle1 color={colors.onBackground01} numberOfLines={1} style={{ flexShrink: 1 }}>
             {streamData.name}
           </Text>
@@ -115,7 +115,7 @@ const LiveStreamPreview = ({ channel }: { channel: SendbirdOpenChannel }) => {
                 paddingHorizontal={8}
                 paddingVertical={4}
                 borderRadius={60}
-                marginRight={4}
+                marginEnd={4}
               >
                 <Text caption1 color={colors.onBackground02}>
                   {tag}

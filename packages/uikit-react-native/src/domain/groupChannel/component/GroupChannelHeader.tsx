@@ -59,7 +59,7 @@ const styles = createStyleSheet({
     alignItems: 'center',
   },
   avatarGroup: {
-    marginRight: 8,
+    marginEnd: 8,
   },
   subtitle: {
     marginTop: 2,

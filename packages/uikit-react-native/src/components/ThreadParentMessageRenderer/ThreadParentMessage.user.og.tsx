@@ -106,14 +106,14 @@ const styles = createStyleSheet({
     paddingTop: 8,
     paddingBottom: 12,
     maxWidth: 240,
-    borderBottomLeftRadius: 16,
-    borderBottomRightRadius: 16,
+    borderBottomStartRadius: 16,
+    borderBottomEndRadius: 16,
   },
   ogImage: {
     width: 240,
     height: 136,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    borderTopStartRadius: 16,
+    borderTopEndRadius: 16,
   },
   ogUrl: {
     marginBottom: 4,

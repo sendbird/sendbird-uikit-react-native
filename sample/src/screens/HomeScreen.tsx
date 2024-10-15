@@ -1,9 +1,9 @@
 import React from 'react';
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useConnection } from '@sendbird/uikit-react-native';
 import { Button, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { useSafeAreaPadding } from '@sendbird/uikit-utils';
 
 import HomeListItem from '../components/HomeListItem';
 import Versions from '../components/Versions';
@@ -45,7 +45,7 @@ const HomeItems = [
 ] as const;
 
 const HomeScreen = () => {
-  const { top, bottom, left, right } = useSafeAreaInsets();
+  const safeArea = useSafeAreaPadding(['top', 'bottom', 'left', 'right']);
   const { navigation } = useAppNavigation();
   const { signOut } = useAppAuth();
   const { disconnect } = useConnection();
@@ -53,12 +53,12 @@ const HomeScreen = () => {
 
   return (
     <FlatList
-      style={{ backgroundColor: select({ light: '#F0F0F0', dark: '#0F0F0F' }), marginTop: top }}
+      style={{ backgroundColor: select({ light: '#F0F0F0', dark: '#0F0F0F' }), marginTop: safeArea.paddingTop }}
       contentContainerStyle={{
         paddingTop: 32,
-        paddingBottom: 32 + bottom,
-        paddingLeft: 24 + left,
-        paddingRight: 24 + right,
+        paddingBottom: 32 + safeArea.paddingBottom,
+        paddingStart: 24 + safeArea.paddingStart,
+        paddingEnd: 24 + safeArea.paddingEnd,
       }}
       data={HomeItems}
       keyExtractor={(k) => k.title}

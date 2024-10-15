@@ -53,18 +53,18 @@ const styles = createStyleSheet({
     height: 56,
   },
   avatar: {
-    marginLeft: 16,
-    marginRight: 16,
+    marginStart: 16,
+    marginEnd: 16,
   },
   label: {
-    marginRight: 4,
+    marginEnd: 4,
   },
   infoContainer: {
     height: '100%',
     flex: 1,
     alignItems: 'center',
     flexDirection: 'row',
-    paddingRight: 12,
+    paddingEnd: 12,
     borderBottomWidth: 1,
   },
   iconContainer: {
@@ -72,7 +72,7 @@ const styles = createStyleSheet({
   },
   name: {
     flex: 1,
-    marginRight: 8,
+    marginEnd: 8,
   },
 });
 

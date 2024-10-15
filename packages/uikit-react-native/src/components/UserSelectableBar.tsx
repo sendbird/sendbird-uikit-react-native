@@ -40,7 +40,7 @@ const styles = createStyleSheet({
     paddingHorizontal: 16,
   },
   avatar: {
-    marginRight: 16,
+    marginEnd: 16,
   },
   infoContainer: {
     height: '100%',
@@ -51,7 +51,7 @@ const styles = createStyleSheet({
   },
   name: {
     flex: 1,
-    marginRight: 8,
+    marginEnd: 8,
   },
 });
 

@@ -152,8 +152,8 @@ const styles = createStyleSheet({
     justifyContent: 'center',
   },
   coverContainer: {
-    marginLeft: 16,
-    marginRight: 16,
+    marginStart: 16,
+    marginEnd: 16,
   },
   channelCover: {
     width: 56,
@@ -163,7 +163,7 @@ const styles = createStyleSheet({
   rightSection: {
     flex: 1,
     paddingTop: 10,
-    paddingRight: 16,
+    paddingEnd: 16,
   },
   rightTopSection: {
     flexDirection: 'row',
@@ -171,28 +171,28 @@ const styles = createStyleSheet({
   },
   channelInfoContainer: {
     flex: 1,
-    marginRight: 4,
+    marginEnd: 4,
     alignItems: 'center',
     flexDirection: 'row',
   },
   channelInfoBroadcast: {
-    marginRight: 4,
+    marginEnd: 4,
   },
   channelInfoTitle: {
     flexShrink: 1,
-    marginRight: 4,
+    marginEnd: 4,
   },
   channelInfoMemberCount: {
     paddingTop: 2,
-    marginRight: 4,
+    marginEnd: 4,
   },
   channelInfoFrozen: {
-    marginRight: 4,
+    marginEnd: 4,
   },
   titleCaptionContainer: {
     alignItems: 'flex-start',
     flexDirection: 'row',
-    marginLeft: 4,
+    marginStart: 4,
   },
   titleCaptionText: {
     marginTop: 2,
@@ -203,7 +203,7 @@ const styles = createStyleSheet({
     flexDirection: 'row',
   },
   body: {
-    marginRight: 4,
+    marginEnd: 4,
     flex: 1,
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -219,19 +219,19 @@ const styles = createStyleSheet({
     borderRadius: 8,
     width: 26,
     height: 26,
-    marginRight: 4,
+    marginEnd: 4,
   },
   unreadContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
   },
   unreadMention: {
-    marginRight: 4,
+    marginEnd: 4,
   },
   separator: {
     position: 'absolute',
-    left: 0,
-    right: -16,
+    start: 0,
+    end: -16,
     bottom: 0,
     height: 1,
   },

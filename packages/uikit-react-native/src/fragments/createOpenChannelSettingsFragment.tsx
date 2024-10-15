@@ -1,9 +1,8 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { NOOP } from '@sendbird/uikit-utils';
+import { NOOP, useSafeAreaPadding } from '@sendbird/uikit-utils';
 
 import { createOpenChannelSettingsModule } from '../domain/openChannelSettings';
 import type { OpenChannelSettingsFragment, OpenChannelSettingsModule } from '../domain/openChannelSettings/types';
@@ -23,7 +22,7 @@ const createOpenChannelSettingsFragment = (
     menuItemsCreator,
   }) => {
     const { colors } = useUIKitTheme();
-    const { left, right } = useSafeAreaInsets();
+    const safeArea = useSafeAreaPadding(['left', 'right']);
 
     return (
       <OpenChannelSettingsModule.Provider channel={channel} onNavigateToOpenChannel={onNavigateToOpenChannel}>
@@ -31,8 +30,8 @@ const createOpenChannelSettingsFragment = (
         <ScrollView
           style={{ backgroundColor: colors.background }}
           contentContainerStyle={{
-            paddingLeft: left + styles.viewContainer.paddingHorizontal,
-            paddingRight: right + styles.viewContainer.paddingHorizontal,
+            paddingStart: safeArea.paddingStart + styles.viewContainer.paddingHorizontal,
+            paddingEnd: safeArea.paddingEnd + styles.viewContainer.paddingHorizontal,
           }}
         >
           <OpenChannelSettingsModule.Info />

@@ -56,11 +56,11 @@ const MessageContainer = ({
     <Box
       flexDirection={'row'}
       paddingVertical={grouped ? 5 : 6}
-      paddingLeft={12}
-      paddingRight={12}
+      paddingStart={12}
+      paddingEnd={12}
       backgroundColor={pressed ? color.pressed.background : color.enabled.background}
     >
-      <Box marginRight={12}>
+      <Box marginEnd={12}>
         {!grouped && 'sender' in props.message ? (
           <PressBox onPress={props.onPressAvatar}>
             <Avatar size={styles.avatar.width} uri={props.message.sender.profileUrl} />
@@ -72,7 +72,7 @@ const MessageContainer = ({
       <Box flexShrink={1} flex={1} flexDirection={'column'} alignItems={'flex-start'}>
         {!grouped && 'sender' in props.message && (
           <Box flexDirection={'row'} alignItems={'center'} marginBottom={2}>
-            <Box marginRight={4} flexShrink={1}>
+            <Box marginEnd={4} flexShrink={1}>
               <Text
                 caption1
                 ellipsizeMode={'middle'}

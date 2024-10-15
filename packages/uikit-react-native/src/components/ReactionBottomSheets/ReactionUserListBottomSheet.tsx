@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Easing, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Animated, Easing, I18nManager, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
 
 import {
   Avatar,
@@ -11,7 +10,7 @@ import {
   createStyleSheet,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import { SendbirdReaction, getReactionCount, truncatedCount } from '@sendbird/uikit-utils';
+import { SendbirdReaction, getReactionCount, truncatedCount, useSafeAreaPadding } from '@sendbird/uikit-utils';
 
 import type { ReactionBottomSheetProps } from './index';
 
@@ -25,7 +24,7 @@ const ReactionUserListBottomSheet = ({
   onPressUserProfile,
 }: ReactionBottomSheetProps) => {
   const { width } = useWindowDimensions();
-  const { bottom, left, right } = useSafeAreaInsets();
+  const safeArea = useSafeAreaPadding(['left', 'right', 'bottom']);
   const { colors } = useUIKitTheme();
 
   const [tabIndex, setTabIndex] = useState(0);
@@ -42,8 +41,8 @@ const ReactionUserListBottomSheet = ({
   const reactions = message?.reactions ?? [];
   const focusedReaction = reactions[tabIndex] as SendbirdReaction | undefined;
   const containerSafeArea = {
-    paddingLeft: left + styles.layout.paddingHorizontal,
-    paddingRight: right + styles.layout.paddingHorizontal,
+    paddingStart: safeArea.paddingStart + styles.layout.paddingHorizontal,
+    paddingEnd: safeArea.paddingEnd + styles.layout.paddingHorizontal,
   };
 
   const focusTab = (index: number, animated = true) => {
@@ -64,7 +63,7 @@ const ReactionUserListBottomSheet = ({
   };
 
   const layoutCalculated = () => {
-    return tabIndicatorValue.current.length === reactions.length && tabIndicatorValue.current.every(Boolean);
+    return tabIndicatorValue.current.filter(Boolean).length === reactions.length;
   };
 
   useEffect(() => {
@@ -87,12 +86,14 @@ const ReactionUserListBottomSheet = ({
           return (
             <Pressable
               key={reaction.key}
-              style={[styles.tabItem, isLastItem && { marginRight: styles.layout.marginRight }]}
+              style={[styles.tabItem, isLastItem && { marginEnd: styles.layout.marginEnd }]}
               onPress={() => focusTab(index)}
               onLayout={(e) => {
-                tabIndicatorValue.current[index] = e.nativeEvent.layout;
+                const indexForLayout = I18nManager.isRTL ? reactions.length - 1 - index : index;
+                tabIndicatorValue.current[indexForLayout] = e.nativeEvent.layout;
                 if (layoutCalculated()) {
                   if (focusedWithLayoutCalculated.current) {
+                    // re-calculating layout when screen rotation
                     focusTab(tabIndex, false);
                   } else {
                     focusedWithLayoutCalculated.current = true;
@@ -112,7 +113,7 @@ const ReactionUserListBottomSheet = ({
           style={[
             styles.tabIndicator,
             {
-              left: tabIndicatorAnimated.x,
+              start: tabIndicatorAnimated.x,
               width: tabIndicatorAnimated.width,
               backgroundColor: color.selected.highlight,
             },
@@ -169,7 +170,7 @@ const ReactionUserListBottomSheet = ({
       <View
         style={[
           styles.container,
-          { width, paddingBottom: bottom, backgroundColor: colors.ui.dialog.default.none.background },
+          { width, paddingBottom: safeArea.paddingBottom, backgroundColor: colors.ui.dialog.default.none.background },
         ]}
       >
         <ScrollView
@@ -198,12 +199,12 @@ const ReactionUserListBottomSheet = ({
 const styles = createStyleSheet({
   layout: {
     paddingHorizontal: 16,
-    marginRight: 0,
+    marginEnd: 0,
   },
   container: {
     overflow: 'hidden',
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    borderTopStartRadius: 8,
+    borderTopEndRadius: 8,
     paddingTop: 16,
     alignItems: 'center',
   },
@@ -222,7 +223,7 @@ const styles = createStyleSheet({
     height: 44,
   },
   tabItem: {
-    marginRight: 16,
+    marginEnd: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -230,7 +231,7 @@ const styles = createStyleSheet({
   tabEmoji: {
     width: 28,
     height: 28,
-    marginRight: 4,
+    marginEnd: 4,
   },
   tabIndicator: {
     position: 'absolute',
@@ -248,7 +249,7 @@ const styles = createStyleSheet({
     alignItems: 'center',
   },
   avatar: {
-    marginRight: 16,
+    marginEnd: 16,
   },
 });
 
