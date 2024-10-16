@@ -94,7 +94,7 @@ const OpenChannelFragment = createOpenChannelFragment({
         title={
           <Box flexDirection={'row'} alignItems={'center'} style={styles.titleContainer}>
             <Avatar uri={streamData.thumbnail_url} size={34} containerStyle={styles.avatarGroup} />
-            <Box flexShrink={1}>
+            <Box flexShrink={1} alignItems={'flex-start'}>
               <Header.Title h2>{streamData.name}</Header.Title>
               <Header.Subtitle style={styles.subtitle}>{streamData.creator_info.name}</Header.Subtitle>
             </Box>
