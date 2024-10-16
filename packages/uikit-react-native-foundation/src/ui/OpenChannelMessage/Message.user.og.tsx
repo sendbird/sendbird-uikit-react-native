@@ -24,38 +24,51 @@ const OpenGraphUserMessage = (props: OpenChannelMessageProps<SendbirdUserMessage
       <PressBox onPress={onPress} onLongPress={onLongPress}>
         {({ pressed }) => (
           <MessageContainer pressed={pressed} {...rest}>
-            <Text body3 color={color.enabled.textMsg}>
-              <RegexText
+            <Box alignItems={'flex-start'}>
+              <Text
                 body3
                 color={color.enabled.textMsg}
-                patterns={[
-                  {
-                    regex: urlRegexRough,
-                    replacer({ match, parentProps, keyPrefix, index }) {
-                      return (
-                        <Text
-                          {...parentProps}
-                          key={`${keyPrefix}-${index}`}
-                          onPress={() => onPressURL?.(match)}
-                          onLongPress={onLongPress}
-                          color={colors.primary}
-                          style={parentProps?.style}
-                        >
-                          {match}
-                        </Text>
-                      );
-                    },
-                  },
-                ]}
+                suppressHighlighting
+                supportRTLAlign
+                originalText={props.message.message}
               >
-                {props.message.message}
-              </RegexText>
-              {Boolean(props.message.updatedAt) && (
-                <Text body3 color={color.enabled.textMsgPostfix}>
-                  {props.strings?.edited ?? ' (edited)'}
-                </Text>
-              )}
-            </Text>
+                <RegexText
+                  body3
+                  suppressHighlighting
+                  supportRTLAlign
+                  originalText={props.message.message}
+                  color={color.enabled.textMsg}
+                  patterns={[
+                    {
+                      regex: urlRegexRough,
+                      replacer({ match, parentProps, keyPrefix, index }) {
+                        return (
+                          <Text
+                            {...parentProps}
+                            key={`${keyPrefix}-${index}`}
+                            onPress={() => onPressURL?.(match)}
+                            onLongPress={onLongPress}
+                            color={colors.primary}
+                            style={parentProps?.style}
+                            supportRTLAlign
+                            originalText={match}
+                          >
+                            {match}
+                          </Text>
+                        );
+                      },
+                    },
+                  ]}
+                >
+                  {props.message.message}
+                </RegexText>
+                {Boolean(props.message.updatedAt) && (
+                  <Text body3 color={color.enabled.textMsgPostfix}>
+                    {props.strings?.edited ?? ' (edited)'}
+                  </Text>
+                )}
+              </Text>
+            </Box>
           </MessageContainer>
         )}
       </PressBox>
@@ -73,6 +86,7 @@ const OpenGraphUserMessage = (props: OpenChannelMessageProps<SendbirdUserMessage
                   borderRadius={8}
                   style={styles.ogContainer}
                   backgroundColor={pressed ? color.pressed.bubbleBackground : color.enabled.bubbleBackground}
+                  alignItems={'flex-start'}
                 >
                   <Text numberOfLines={1} caption2 color={colors.onBackground02} style={styles.ogUrl}>
                     {props.message.ogMetaData.url}
