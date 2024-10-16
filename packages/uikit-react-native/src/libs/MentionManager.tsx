@@ -1,4 +1,5 @@
 import React from 'react';
+import { I18nManager } from 'react-native';
 
 import { Text, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdFileMessage, SendbirdUser, SendbirdUserMessage } from '@sendbird/uikit-utils';
@@ -7,6 +8,11 @@ import { createMentionTemplateRegex, replaceWithRegex } from '@sendbird/uikit-ut
 import type { MentionedUser, Range } from '../types';
 import type { MentionConfigInterface } from './MentionConfig';
 
+const SPAN_DIRECTION = {
+  LRM: '\u200E',
+  RLM: '\u200F',
+};
+
 class MentionManager {
   private _invalidStartsKeywords: string[];
   private _templateRegex: RegExp;
@@ -14,6 +20,13 @@ class MentionManager {
   constructor(public config: MentionConfigInterface) {
     this._invalidStartsKeywords = [this.config.trigger, this.config.delimiter];
     this._templateRegex = createMentionTemplateRegex(this.config.trigger);
+  }
+
+  get triggerDirPrefixForDisplay() {
+    if (this.config.forceTriggerLeftInRTL) {
+      return SPAN_DIRECTION.LRM;
+    }
+    return I18nManager.isRTL ? SPAN_DIRECTION.RLM : SPAN_DIRECTION.LRM;
   }
 
   public rangeHelpers = {
@@ -107,14 +120,22 @@ class MentionManager {
    * @description User to @{user.id} template format
    * */
   public asMentionedMessageTemplate = (user: SendbirdUser, delimiter = false) => {
-    return `${this.config.trigger}{${user.userId}}` + (delimiter ? this.config.delimiter : '');
+    const prefix = ''; // Do not append anything to here in order to maintain backward compatibility.
+    const content = `${this.config.trigger}{${user.userId}}`;
+    const postfix = delimiter ? this.config.delimiter : '';
+
+    return prefix + content + postfix;
   };
 
   /**
    * @description User to @user.nickname text format
    * */
   public asMentionedMessageText = (user: SendbirdUser, delimiter = false) => {
-    return `${this.config.trigger}${user.nickname}` + (delimiter ? this.config.delimiter : '');
+    const prefix = this.triggerDirPrefixForDisplay;
+    const content = `${this.config.trigger}${user.nickname}`;
+    const postfix = delimiter ? this.config.delimiter : '';
+
+    return prefix + content + postfix;
   };
 
   /**

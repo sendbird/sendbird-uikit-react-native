@@ -79,6 +79,8 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
           style={style}
           placeholder={STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_ACTIVE}
           onSelectionChange={onSelectionChange}
+          originalText={text}
+          supportRTLAlign
         >
           {mentionManager.textToMentionedComponents(
             text,

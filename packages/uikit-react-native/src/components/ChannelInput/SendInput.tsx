@@ -194,6 +194,8 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
           onChangeText={onChangeText}
           style={style}
           placeholder={getPlaceholder()}
+          originalText={text}
+          supportRTLAlign
         >
           {mentionManager.textToMentionedComponents(
             text,

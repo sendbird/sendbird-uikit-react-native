@@ -1,13 +1,18 @@
 import React from 'react';
-import { TextInput as RNTextInput, TextInputProps } from 'react-native';
+import { I18nManager, TextInput as RNTextInput, StyleSheet, TextInputProps, TextStyle } from 'react-native';
 
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import type { UIKitTheme } from '../../types';
+import { isStartsWithRTL } from '../Text/isStartsWithRTL';
 
-type Props = { variant?: keyof UIKitTheme['colors']['ui']['input'] } & TextInputProps;
+type Props = {
+  variant?: keyof UIKitTheme['colors']['ui']['input'];
+  originalText?: string;
+  supportRTLAlign?: boolean;
+} & TextInputProps;
 const TextInput = React.forwardRef<RNTextInput, Props>(function TextInput(
-  { children, style, variant = 'default', editable = true, ...props },
+  { children, style, variant = 'default', editable = true, originalText, supportRTLAlign, ...props },
   ref,
 ) {
   const { typography, colors } = useUIKitTheme();
@@ -20,19 +25,34 @@ const TextInput = React.forwardRef<RNTextInput, Props>(function TextInput(
     lineHeight: typography.body3.fontSize ? typography.body3.fontSize * 1.2 : undefined,
   };
 
+  const textStyle = StyleSheet.flatten([
+    fontStyle,
+    styles.input,
+    { color: inputStyle.text, backgroundColor: inputStyle.background },
+    underlineStyle,
+    style,
+  ]) as TextStyle;
+
+  const textAlign = (() => {
+    if (I18nManager.isRTL && supportRTLAlign) {
+      // Note: TextInput is not affected by doLeftAndRightSwapInRTL
+      if (originalText) {
+        return isStartsWithRTL(originalText) ? 'right' : 'left';
+      } else if (props.placeholder) {
+        return isStartsWithRTL(props.placeholder) ? 'right' : 'left';
+      }
+    }
+
+    return textStyle.textAlign;
+  })();
+
   return (
     <RNTextInput
       ref={ref}
       editable={editable}
       selectionColor={inputStyle.highlight}
       placeholderTextColor={inputStyle.placeholder}
-      style={[
-        fontStyle,
-        styles.input,
-        { color: inputStyle.text, backgroundColor: inputStyle.background },
-        underlineStyle,
-        style,
-      ]}
+      style={[textStyle, { textAlign }]}
       {...props}
     >
       {children}
