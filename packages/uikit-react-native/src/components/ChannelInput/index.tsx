@@ -83,7 +83,9 @@ const KEYBOARD_AVOID_VIEW_BEHAVIOR = Platform.select({ ios: 'padding' as const, 
 // FIXME(iOS): Dynamic style does not work properly when typing the CJK. (https://github.com/facebook/react-native/issues/26107)
 //  To workaround temporarily, change the key for re-mount the component.
 //  -> This will affect to keyboard blur when add/remove first mentioned user.
-const GET_INPUT_KEY = (shouldReset: boolean) => (shouldReset ? 'uikit-input-clear' : 'uikit-input');
+// const GET_INPUT_KEY = (shouldReset: boolean) => {
+//   return Platform.OS === 'ios' && shouldReset ? 'uikit-input-clear' : 'uikit-input';
+// };
 
 // TODO: Refactor 'Edit' mode to clearly
 const ChannelInput = (props: ChannelInputProps) => {
@@ -103,7 +105,7 @@ const ChannelInput = (props: ChannelInputProps) => {
 
   const mentionAvailable =
     sbOptions.uikit.groupChannel.channel.enableMention && channel.isGroupChannel() && !channel.isBroadcast;
-  const inputKeyToRemount = GET_INPUT_KEY(mentionAvailable ? mentionedUsers.length === 0 : false);
+  const inputKeyToRemount = 'input'; //GET_INPUT_KEY(mentionAvailable ? mentionedUsers.length === 0 : false);
 
   const [inputHeight, setInputHeight] = useState(styles.inputDefault.height);
 

@@ -32,7 +32,7 @@ const MessageBubbleWithText = ({
   const color = colors.ui.groupChannelMessage[variant];
   return (
     <Box backgroundColor={backgroundColor} style={styles.bubble}>
-      <Text body3 color={color.enabled.textMsg} suppressHighlighting>
+      <Text body3 color={color.enabled.textMsg} suppressHighlighting supportRTLAlign originalText={message.message}>
         <RegexText
           body3
           color={color.enabled.textMsg}
@@ -48,6 +48,8 @@ const MessageBubbleWithText = ({
                     onPress={() => onPressURL?.(match)}
                     onLongPress={onLongPress}
                     style={[parentProps?.style, styles.urlText]}
+                    supportRTLAlign
+                    originalText={match}
                   >
                     {match}
                   </Text>
@@ -59,7 +61,7 @@ const MessageBubbleWithText = ({
           {renderRegexTextChildren(message)}
         </RegexText>
         {Boolean(message.updatedAt) && (
-          <Text body3 color={color.enabled.textEdited}>
+          <Text body3 color={color.enabled.textEdited} supportRTLAlign originalText={strings?.edited ?? ' (edited)'}>
             {strings?.edited ?? ' (edited)'}
           </Text>
         )}

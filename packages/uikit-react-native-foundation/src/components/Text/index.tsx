@@ -1,19 +1,41 @@
 import React from 'react';
-import { Text as RNText, TextProps as RNTextProps } from 'react-native';
+import { I18nManager, Text as RNText, TextProps as RNTextProps, StyleSheet, TextStyle } from 'react-native';
 
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import type { TypoName, UIKitTheme } from '../../types';
+import { isStartsWithRTL } from './isStartsWithRTL';
 
 type TypographyProps = Partial<Record<TypoName, boolean>>;
-export type TextProps = RNTextProps & TypographyProps & { color?: ((colors: UIKitTheme['colors']) => string) | string };
-const Text = ({ children, color, style, ...props }: TextProps) => {
+export type TextProps = RNTextProps &
+  TypographyProps & {
+    color?: ((colors: UIKitTheme['colors']) => string) | string;
+  } & {
+    supportRTLAlign?: boolean;
+    originalText?: string;
+  };
+
+const Text = ({ children, color, style, supportRTLAlign, originalText, ...props }: TextProps) => {
   const { colors } = useUIKitTheme();
   const typoStyle = useTypographyFilter(props);
+
+  const textStyle = StyleSheet.flatten([
+    { color: typeof color === 'string' ? color : color?.(colors) ?? colors.text },
+    typoStyle,
+    style,
+  ]) as TextStyle;
+
+  const textAlign = (() => {
+    if (I18nManager.isRTL && supportRTLAlign) {
+      if (originalText && isStartsWithRTL(originalText)) {
+        return I18nManager.doLeftAndRightSwapInRTL ? 'left' : 'right';
+      }
+    }
+    if (textStyle.textAlign) return textStyle.textAlign;
+    return undefined;
+  })();
+
   return (
-    <RNText
-      style={[{ color: typeof color === 'string' ? color : color?.(colors) ?? colors.text }, typoStyle, style]}
-      {...props}
-    >
+    <RNText style={[textStyle, { textAlign }]} {...props}>
       {children}
     </RNText>
   );
