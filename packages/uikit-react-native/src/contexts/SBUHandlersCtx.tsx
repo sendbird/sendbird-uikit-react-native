@@ -14,7 +14,7 @@ export interface SBUHandlers {
    * Note that this function is also called redundantly
    * when `onPressMediaMessage` handler is triggered by clicking on media messages containing images, videos, or audio.
    */
-  onOpenFileURL: (url: string) => void;
+  onOpenFileURL?: (url: string) => void;
 }
 
 type Props = React.PropsWithChildren<SBUHandlers>;

@@ -31,6 +31,7 @@ import ThreadParentMessageRenderer, {
   ThreadParentMessageRendererProps,
 } from '../../../components/ThreadParentMessageRenderer';
 import { useLocalization, usePlatformService, useSBUHandlers, useSendbirdChat } from '../../../hooks/useContext';
+import SBUUtils from '../../../libs/SBUUtils';
 import { GroupChannelThreadContexts } from '../module/moduleContext';
 import type { GroupChannelThreadProps } from '../types';
 import { ReactionAddons } from './../../../components/ReactionAddons';
@@ -224,9 +225,12 @@ const useCreateMessagePressActions = ({
     if (message.isFileMessage()) {
       const fileType = getFileType(message.type || getFileExtension(message.name));
       if (['image', 'video', 'audio'].includes(fileType)) {
-        onPressMediaMessage?.(message, () => onDeleteMessage?.(message), getAvailableUriFromFileMessage(message));
+        onPressMediaMessage?.(message, () => onDeleteMessage(message), getAvailableUriFromFileMessage(message));
+        handlers.onOpenFileURL?.(message.url);
+      } else {
+        const openFile = handlers.onOpenFileURL ?? SBUUtils.openURL;
+        openFile(message.url);
       }
-      handlers.onOpenFileURL(message.url);
     }
   };
 
@@ -239,7 +243,7 @@ const useCreateMessagePressActions = ({
           text: STRINGS.LABELS.CHANNEL_MESSAGE_DELETE_CONFIRM_OK,
           style: 'destructive',
           onPress: () => {
-            onDeleteMessage?.(message).catch(onDeleteFailure);
+            onDeleteMessage(message).catch(onDeleteFailure);
           },
         },
       ],
