@@ -96,7 +96,7 @@ const LiveStreamPreview = ({ channel }: { channel: SendbirdOpenChannel }) => {
           {channel.participantCount}
         </Text>
       </Box>
-      <Box marginStart={16} flexShrink={1}>
+      <Box marginStart={16} flexShrink={1} alignItems={'flex-start'}>
         <Box flexDirection={'row'} marginBottom={6}>
           <Avatar uri={streamData.thumbnail_url} size={22} containerStyle={{ marginEnd: 8 }} />
           <Text subtitle1 color={colors.onBackground01} numberOfLines={1} style={{ flexShrink: 1 }}>
