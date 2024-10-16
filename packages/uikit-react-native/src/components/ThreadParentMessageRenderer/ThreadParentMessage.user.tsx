@@ -18,9 +18,12 @@ const ThreadParentMessageUser = (props: Props) => {
   const { colors } = useUIKitTheme();
 
   return (
-    <Text body3 color={colors.onBackground01} suppressHighlighting>
+    <Text body3 color={colors.onBackground01} suppressHighlighting supportRTLAlign originalText={userMessage.message}>
       <RegexText
         body3
+        suppressHighlighting
+        supportRTLAlign
+        originalText={userMessage.message}
         color={colors.onBackground01}
         patterns={[
           ...(props.regexTextPatterns ?? []),

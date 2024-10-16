@@ -35,9 +35,18 @@ const ThreadParentMessageUserOg = (props: Props) => {
   return (
     <Box>
       <PressBox activeOpacity={0.85} onPress={onPressMessage(userMessage)}>
-        <Text body3 color={colors.onBackground01} suppressHighlighting>
+        <Text
+          body3
+          suppressHighlighting
+          supportRTLAlign
+          originalText={userMessage.message}
+          color={colors.onBackground01}
+        >
           <RegexText
             body3
+            suppressHighlighting
+            supportRTLAlign
+            originalText={userMessage.message}
             color={colors.onBackground01}
             patterns={[
               ...(props.regexTextPatterns ?? []),

@@ -35,6 +35,9 @@ const MessageBubbleWithText = ({
       <Text body3 color={color.enabled.textMsg} suppressHighlighting supportRTLAlign originalText={message.message}>
         <RegexText
           body3
+          suppressHighlighting
+          supportRTLAlign
+          originalText={message.message}
           color={color.enabled.textMsg}
           patterns={[
             ...regexTextPatterns,
@@ -48,8 +51,6 @@ const MessageBubbleWithText = ({
                     onPress={() => onPressURL?.(match)}
                     onLongPress={onLongPress}
                     style={[parentProps?.style, styles.urlText]}
-                    supportRTLAlign
-                    originalText={match}
                   >
                     {match}
                   </Text>
