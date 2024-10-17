@@ -5,16 +5,24 @@ import useUIKitTheme from '../../theme/useUIKitTheme';
 import type { TypoName, UIKitTheme } from '../../types';
 import { isStartsWithRTL } from './isStartsWithRTL';
 
+export interface RTLTextAlignSupportProps {
+  /**
+   * If `I18nManager.isRTL` is `true` and this value is enabled, the text will be aligned according to RTL if it starts in an RTL language.
+   * In the case of the `Text` component, the alignment value is calculated based on `I18nManager.doLeftAndRightSwapInRTL`.
+   * For the `TextInput` component, the alignment value is calculated as a physical alignment, unaffected by `I18nManager.doLeftAndRightSwapInRTL`.
+   */
+  supportRTLAlign?: boolean;
+  /**
+   * If you want to enable `supportRTLAlign` but are using nested `Text` components that are not simple text under the `Text` component, pass the original text here.
+   */
+  originalText?: string;
+}
+
 type TypographyProps = Partial<Record<TypoName, boolean>>;
 export type TextProps = RNTextProps &
-  TypographyProps & {
-    color?: ((colors: UIKitTheme['colors']) => string) | string;
-  } & {
-    supportRTLAlign?: boolean;
-    originalText?: string;
-  };
+  TypographyProps & { color?: ((colors: UIKitTheme['colors']) => string) | string } & RTLTextAlignSupportProps;
 
-const Text = ({ children, color, style, supportRTLAlign, originalText, ...props }: TextProps) => {
+const Text = ({ children, color, style, supportRTLAlign = true, originalText, ...props }: TextProps) => {
   const { colors } = useUIKitTheme();
   const typoStyle = useTypographyFilter(props);
 
@@ -26,7 +34,10 @@ const Text = ({ children, color, style, supportRTLAlign, originalText, ...props 
 
   const textAlign = (() => {
     if (I18nManager.isRTL && supportRTLAlign) {
-      if (originalText && isStartsWithRTL(originalText)) {
+      if (
+        (originalText && isStartsWithRTL(originalText)) ||
+        (typeof children === 'string' && isStartsWithRTL(children))
+      ) {
         return I18nManager.doLeftAndRightSwapInRTL ? 'left' : 'right';
       }
     }
