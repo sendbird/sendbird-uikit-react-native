@@ -1,11 +1,12 @@
 import React, { useEffect, useRef } from 'react';
-import { Platform, TextInput } from 'react-native';
+import { Platform } from 'react-native';
 
 import {
   Box,
   Icon,
   PressBox,
   Text,
+  TextInput,
   createStyleSheet,
   useHeaderStyle,
   useUIKitTheme,
@@ -60,6 +61,8 @@ const MessageSearchHeader = ({
             style={[styles.input, { color: inputColor.text }]}
             value={keyword}
             onChangeText={onChangeKeyword}
+            supportRTLAlign
+            originalText={keyword}
           />
           {searchEnabled && (
             <PressBox onPress={() => onChangeKeyword('')}>
