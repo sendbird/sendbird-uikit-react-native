@@ -1,7 +1,13 @@
 import React, { useContext } from 'react';
-import { View } from 'react-native';
 
-import { Icon, Text, createStyleSheet, useHeaderStyle, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import {
+  Box,
+  Icon,
+  Text,
+  createStyleSheet,
+  useHeaderStyle,
+  useUIKitTheme,
+} from '@sendbird/uikit-react-native-foundation';
 
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import { GroupChannelThreadContexts } from '../module/moduleContext';
@@ -34,14 +40,14 @@ const GroupChannelThreadHeader = ({ onPressLeft, onPressSubtitle }: GroupChannel
     <HeaderComponent
       clearTitleMargin
       title={
-        <View style={styles.titleContainer}>
-          <View style={{ flexShrink: 1 }}>
+        <Box style={styles.titleContainer}>
+          <Box flexShrink={1} alignItems={'flex-start'}>
             <Text h2 color={colors.onBackground01} numberOfLines={1}>
               {headerTitle}
             </Text>
             {renderSubtitle()}
-          </View>
-        </View>
+          </Box>
+        </Box>
       }
       left={<Icon icon={'arrow-left'} size={24} />}
       onPressLeft={onPressLeft}

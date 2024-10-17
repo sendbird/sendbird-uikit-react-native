@@ -75,7 +75,7 @@ const GroupChannelSuggestedMentionList = ({
               style={styles.userContainer}
             >
               <Avatar size={28} uri={member.profileUrl} containerStyle={styles.userAvatar} />
-              <Box style={styles.userInfo} >
+              <Box style={styles.userInfo}>
                 <Text body2 color={colors.onBackground01} numberOfLines={1} style={styles.userNickname}>
                   {member.nickname || STRINGS.LABELS.USER_NO_NAME}
                 </Text>

@@ -4,6 +4,7 @@ import { TouchableOpacity, View } from 'react-native';
 import {
   Avatar,
   BottomSheetItem,
+  Box,
   Divider,
   Icon,
   Text,
@@ -60,32 +61,32 @@ const GroupChannelThreadParentMessageInfo = (props: GroupChannelThreadProps['Par
 
   const renderMessageInfoAndMenu = () => {
     return (
-      <View style={styles.infoAndMenuContainer}>
+      <Box style={styles.infoAndMenuContainer}>
         <Avatar size={34} uri={parentMessage.sender?.profileUrl} />
-        <View style={styles.userNickAndTimeContainer}>
+        <Box style={styles.userNickAndTimeContainer} alignItems={'flex-start'}>
           <Text h2 color={colors.onBackground01} numberOfLines={1} style={styles.userNickname}>
             {nickName}
           </Text>
           <Text caption2 color={colors.onBackground03} style={styles.messageTime}>
             {messageTimestamp}
           </Text>
-        </View>
+        </Box>
         <TouchableOpacity activeOpacity={0.7} onPress={bottomSheetItem ? onLongPress : undefined}>
           <Icon icon={'more'} color={colors.onBackground02} />
         </TouchableOpacity>
-      </View>
+      </Box>
     );
   };
 
   const renderReplyCount = (replyCountText: string) => {
     if (replyCountText) {
       return (
-        <View style={styles.replyContainer}>
-          <Text caption3 color={colors.onBackground03} style={styles.replyText}>
+        <Box style={styles.replyContainer} alignItems={'flex-start'}>
+          <Text caption3 color={colors.onBackground03} style={styles.replyText} numberOfLines={1}>
             {replyCountText}
           </Text>
           <Divider />
-        </View>
+        </Box>
       );
     } else {
       return null;
@@ -119,7 +120,7 @@ const GroupChannelThreadParentMessageInfo = (props: GroupChannelThreadProps['Par
     <View>
       <View style={styles.container}>{renderMessageInfoAndMenu()}</View>
       <View style={styles.messageContainer}>
-        <ThreadParentMessageRenderer {...messageProps}></ThreadParentMessageRenderer>
+        <ThreadParentMessageRenderer {...messageProps} />
       </View>
       {renderReactionAddons()}
       <Divider />
