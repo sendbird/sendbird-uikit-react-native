@@ -33,7 +33,7 @@ const ThreadParentMessageUserOg = (props: Props) => {
     });
 
   return (
-    <Box>
+    <Box flex={1} alignItems={'flex-start'}>
       <PressBox activeOpacity={0.85} onPress={onPressMessage(userMessage)}>
         <Text
           body3
