@@ -32,7 +32,7 @@ const MessageSearchResultItem: MessageSearchProps['List']['renderSearchResultIte
 
         <Box flex={1} paddingEnd={16}>
           <Box style={styles.titleLine}>
-            <Box flex={1} marginEnd={4} justifyContent={'center'}>
+            <Box flex={1} marginEnd={4} justifyContent={'center'} alignItems={'flex-start'}>
               <Text subtitle2 color={colors.onBackground01} numberOfLines={1}>
                 {STRINGS.MESSAGE_SEARCH.SEARCH_RESULT_ITEM_TITLE(message)}
               </Text>
@@ -58,15 +58,18 @@ const MessageSearchResultItem: MessageSearchProps['List']['renderSearchResultIte
                 />
               )}
 
-              <Text
-                body3
-                numberOfLines={fileIcon ? 1 : 2}
-                ellipsizeMode={fileIcon ? 'middle' : 'tail'}
-                style={styles.bodyText}
-                color={colors.onBackground03}
-              >
-                {STRINGS.MESSAGE_SEARCH.SEARCH_RESULT_ITEM_BODY(message)}
-              </Text>
+              <Box flex={1} alignItems={'flex-start'}>
+                <Text
+                  body3
+                  numberOfLines={fileIcon ? 1 : 2}
+                  ellipsizeMode={fileIcon ? 'middle' : 'tail'}
+                  style={styles.bodyText}
+                  color={colors.onBackground03}
+                  supportRTLAlign
+                >
+                  {STRINGS.MESSAGE_SEARCH.SEARCH_RESULT_ITEM_BODY(message)}
+                </Text>
+              </Box>
             </Box>
           </Box>
 
@@ -111,7 +114,6 @@ const styles = createStyleSheet({
     marginEnd: 4,
   },
   bodyText: {
-    flex: 1,
     lineHeight: 16,
   },
   separator: {

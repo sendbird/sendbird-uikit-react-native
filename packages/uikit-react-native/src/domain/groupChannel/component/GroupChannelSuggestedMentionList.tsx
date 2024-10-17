@@ -3,6 +3,7 @@ import { Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
 
 import {
   Avatar,
+  Box,
   Divider,
   Icon,
   Text,
@@ -74,7 +75,7 @@ const GroupChannelSuggestedMentionList = ({
               style={styles.userContainer}
             >
               <Avatar size={28} uri={member.profileUrl} containerStyle={styles.userAvatar} />
-              <View style={styles.userInfo}>
+              <Box style={styles.userInfo} >
                 <Text body2 color={colors.onBackground01} numberOfLines={1} style={styles.userNickname}>
                   {member.nickname || STRINGS.LABELS.USER_NO_NAME}
                 </Text>
@@ -82,7 +83,7 @@ const GroupChannelSuggestedMentionList = ({
                   {member.userId}
                 </Text>
                 <Divider style={{ position: 'absolute', bottom: 0 }} />
-              </View>
+              </Box>
             </Pressable>
           );
         })}

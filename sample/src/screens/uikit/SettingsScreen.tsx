@@ -210,12 +210,26 @@ const SettingsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  viewContainer: { paddingHorizontal: 16 },
-  userInfoContainer: { paddingVertical: 24, alignItems: 'center' },
-  avatarContainer: { marginBottom: 12 },
-  userIdContainer: { paddingVertical: 16 },
-  userIdLabel: { marginBottom: 4 },
+  container: {
+    flex: 1,
+  },
+  viewContainer: {
+    paddingHorizontal: 16,
+  },
+  userInfoContainer: {
+    paddingVertical: 24,
+    alignItems: 'center',
+  },
+  avatarContainer: {
+    marginBottom: 12,
+  },
+  userIdContainer: {
+    paddingVertical: 16,
+    alignItems: 'flex-start',
+  },
+  userIdLabel: {
+    marginBottom: 4,
+  },
 });
 
 export default SettingsScreen;
