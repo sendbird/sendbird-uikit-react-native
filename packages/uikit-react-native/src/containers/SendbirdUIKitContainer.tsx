@@ -219,7 +219,6 @@ const SendbirdUIKitContainer = (props: SendbirdUIKitContainerProps) => {
 
   const sbuHandlers: SBUHandlers = {
     onOpenURL: SBUUtils.openURL,
-    onOpenFileURL: SBUUtils.openURL,
     ...handlers,
   };
 

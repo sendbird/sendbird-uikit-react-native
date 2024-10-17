@@ -37,6 +37,7 @@ import {
   useSendbirdChat,
   useUserProfile,
 } from '../../hooks/useContext';
+import SBUUtils from '../../libs/SBUUtils';
 import ChatFlatList from '../ChatFlatList';
 import { ReactionAddons } from '../ReactionAddons';
 
@@ -271,8 +272,11 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
       const fileType = getFileType(message.type || getFileExtension(message.name));
       if (['image', 'video', 'audio'].includes(fileType)) {
         onPressMediaMessage?.(message, () => onDeleteMessage(message), getAvailableUriFromFileMessage(message));
+        handlers.onOpenFileURL?.(message.url);
+      } else {
+        const openFile = handlers.onOpenFileURL ?? SBUUtils.openURL;
+        openFile(message.url);
       }
-      handlers.onOpenFileURL(message.url);
     }
   };
 
