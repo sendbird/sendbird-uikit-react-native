@@ -4,13 +4,13 @@ import { I18nManager, TextInput as RNTextInput, StyleSheet, TextInputProps, Text
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import type { UIKitTheme } from '../../types';
+import { RTLTextAlignSupportProps } from '../Text';
 import { isStartsWithRTL } from '../Text/isStartsWithRTL';
 
 type Props = {
   variant?: keyof UIKitTheme['colors']['ui']['input'];
-  originalText?: string;
-  supportRTLAlign?: boolean;
-} & TextInputProps;
+} & TextInputProps &
+  RTLTextAlignSupportProps;
 const TextInput = React.forwardRef<RNTextInput, Props>(function TextInput(
   { children, style, variant = 'default', editable = true, originalText, supportRTLAlign, ...props },
   ref,
