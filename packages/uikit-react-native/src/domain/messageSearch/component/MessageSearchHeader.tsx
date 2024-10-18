@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Platform } from 'react-native';
+import { Platform, type TextInput as RNTextInput } from 'react-native';
 
 import {
   Box,
@@ -25,7 +25,7 @@ const MessageSearchHeader = ({
   const { colors } = useUIKitTheme();
   const { STRINGS } = useLocalization();
 
-  const inputRef = useRef<TextInput>(null);
+  const inputRef = useRef<RNTextInput>(null);
   const inputColor = colors.ui.input.default.active;
   const searchEnabled = keyword.length > 0;
 
