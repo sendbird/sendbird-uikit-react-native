@@ -1,9 +1,14 @@
 import React, { useContext, useEffect } from 'react';
 
-import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { useToast } from '@sendbird/uikit-react-native-foundation';
-import { SendbirdMessage, SendbirdSendableMessage, useIsFirstMount } from '@sendbird/uikit-utils';
-import { isDifferentChannel, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
+import { useGroupChannelHandler } from '@sendbird/uikit-tools';
+import {
+  SendbirdMessage,
+  SendbirdSendableMessage,
+  isDifferentChannel,
+  useFreshCallback,
+  useIsFirstMount,
+} from '@sendbird/uikit-utils';
 
 import ChannelMessageList from '../../../components/ChannelMessageList';
 import { MESSAGE_FOCUS_ANIMATION_DELAY, MESSAGE_SEARCH_SAFE_SCROLL_DELAY } from '../../../constants';
@@ -22,7 +27,6 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
     GroupChannelContexts.MessageList,
   );
 
-  const id = useUniqHandlerId('GroupChannelMessageList');
   const isFirstMount = useIsFirstMount();
 
   const scrollToMessageWithCreatedAt = useFreshCallback(
@@ -62,7 +66,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
     }
   });
 
-  useChannelHandler(sdk, id, {
+  useGroupChannelHandler(sdk, {
     onReactionUpdated(channel, event) {
       if (isDifferentChannel(channel, props.channel)) return;
       const recentMessage = props.messages[0];
