@@ -216,7 +216,8 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
             onClose={onClose}
             onDismiss={() => {
               onDismiss();
-              Promise.allSettled([playerService.reset(), recorderService.reset()]);
+              playerService.reset().catch(() => {});
+              recorderService.reset().catch(() => {});
             }}
             backgroundStyle={{ justifyContent: 'flex-end' }}
             visible={voiceMessageInputVisible}

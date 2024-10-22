@@ -116,8 +116,9 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       startingPoint: internalSearchItem?.startingPoint,
     });
 
-    const onBlurFragment = () => {
-      return Promise.allSettled([playerService.reset(), recorderService.reset()]);
+    const onBlurFragment = async () => {
+      await playerService.reset().catch(() => {});
+      await recorderService.reset().catch(() => {});
     };
     const _onPressHeaderLeft = useFreshCallback(async () => {
       voiceMessageStatusManager.clear();

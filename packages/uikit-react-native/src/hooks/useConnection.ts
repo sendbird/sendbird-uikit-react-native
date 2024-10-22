@@ -52,7 +52,10 @@ const useConnection = () => {
           });
         }
 
-        await Promise.allSettled([initEmoji(sdk, emojiManager), initDashboardConfigs(sdk)]);
+        await Promise.all([
+          initEmoji(sdk, emojiManager).catch(() => Logger.info('[useConnection]', 'initEmoji failure')),
+          initDashboardConfigs(sdk).catch(() => Logger.info('[useConnection]', 'initDashboardConfigs failure')),
+        ]);
 
         Logger.debug('[useConnection]', 'connected! (online)');
         setCurrentUser(user);
@@ -67,7 +70,10 @@ const useConnection = () => {
             Logger.warn('[useConnection]', 'clear cached-data');
             await sdk.clearCachedData().catch((e) => Logger.warn('[useConnection]', 'clear cached-data failure', e));
           } else if (sdk.currentUser) {
-            await Promise.allSettled([initEmoji(sdk, emojiManager), initDashboardConfigs(sdk)]);
+            await Promise.all([
+              initEmoji(sdk, emojiManager).catch(() => Logger.info('[useConnection]', 'initEmoji failure')),
+              initDashboardConfigs(sdk).catch(() => Logger.info('[useConnection]', 'initDashboardConfigs failure')),
+            ]);
 
             Logger.debug('[useConnection]', 'connected! (offline)');
             setCurrentUser(sdk.currentUser);

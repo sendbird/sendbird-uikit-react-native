@@ -31,7 +31,8 @@ export const PlatformServiceProvider = ({ children, voiceMessageConfig, ...servi
 
   useAppState('change', (state) => {
     if (state !== 'active') {
-      Promise.allSettled([services.playerService.reset(), services.recorderService.reset()]);
+      services.playerService.reset().catch(() => {});
+      services.recorderService.reset().catch(() => {});
     }
   });
 
