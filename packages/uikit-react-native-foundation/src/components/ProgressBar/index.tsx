@@ -43,8 +43,8 @@ const ProgressBar = ({ current = 100, total = 100, trackColor, barColor, overlay
   }, [percent]);
 
   const progressBarPosition = (() => {
-    if (I18nManager.isRTL) {
-      if (I18nManager.doLeftAndRightSwapInRTL) return { right: 0 };
+    if (I18nManager.isRTL && I18nManager.doLeftAndRightSwapInRTL) {
+      return { right: 0 };
     }
 
     return { left: 0 };
