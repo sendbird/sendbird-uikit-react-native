@@ -1,6 +1,6 @@
 import type * as ExpoAV from 'expo-av';
 
-import { matchesOneOf } from '@sendbird/uikit-utils';
+import { Logger, matchesOneOf } from '@sendbird/uikit-utils';
 
 import expoPermissionGranted from '../utils/expoPermissionGranted';
 import type { PlayerServiceInterface, Unsubscribe } from './types';
@@ -28,10 +28,16 @@ const createExpoPlayerService = ({ avModule }: Modules): PlayerServiceInterface 
     };
 
     private setListener = () => {
-      sound.setProgressUpdateIntervalAsync(100);
+      sound.setProgressUpdateIntervalAsync(100).catch((error) => {
+        Logger.warn('[PlayerService.Expo] Failed to set progress update interval', error);
+      });
       sound.setOnPlaybackStatusUpdate((status) => {
         if (status.isLoaded) {
-          if (status.didJustFinish) this.stop();
+          if (status.didJustFinish) {
+            this.stop().catch((error) => {
+              Logger.warn('[PlayerService.Expo] Failed to stop in OnPlaybackStatusUpdate', error);
+            });
+          }
           if (status.isPlaying) {
             this.playbackSubscribers.forEach((callback) => {
               callback({

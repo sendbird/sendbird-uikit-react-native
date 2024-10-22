@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { BaseMessage } from '@sendbird/chat/message';
 import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { Icon, Image, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { SendbirdBaseChannel, SendbirdBaseMessage, useUniqHandlerId } from '@sendbird/uikit-utils';
+import { Logger, SendbirdBaseChannel, SendbirdBaseMessage, useUniqHandlerId } from '@sendbird/uikit-utils';
 
 import { UNKNOWN_USER_ID } from '../../constants';
 import { useReaction, useSendbirdChat } from '../../hooks/useContext';
@@ -46,10 +46,15 @@ const BottomSheetReactionAddon = ({ onClose, message, channel }: Props) => {
         const currentUserIdx = reactionUserIds.indexOf(currentUser?.userId ?? UNKNOWN_USER_ID);
         const reacted = currentUserIdx > -1;
 
-        const onPress = () => {
-          if (reacted) channel.deleteReaction(message, key);
-          else channel.addReaction(message, key);
-          onClose();
+        const onPress = async () => {
+          const action = reacted ? channel.deleteReaction : channel.addReaction;
+          await action(message, key)
+            .catch((error) => {
+              Logger.warn('Failed to reaction', error);
+            })
+            .finally(() => {
+              onClose();
+            });
         };
 
         return (

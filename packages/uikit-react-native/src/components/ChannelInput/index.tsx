@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import {
+  Logger,
   SendbirdBaseChannel,
   SendbirdBaseMessage,
   SendbirdFileMessage,
@@ -187,12 +188,21 @@ const ChannelInput = (props: ChannelInputProps) => {
 };
 
 const useTypingTrigger = (text: string, channel: SendbirdBaseChannel) => {
-  if (channel.isGroupChannel()) {
-    useEffect(() => {
-      if (text.length === 0) channel.endTyping();
-      else channel.startTyping();
-    }, [text]);
-  }
+  useEffect(
+    () => {
+      function triggerTyping() {
+        if (channel.isGroupChannel()) {
+          const action = text.length === 0 ? channel.endTyping : channel.startTyping;
+          action().catch((error) => {
+            Logger.debug('ChannelInput: Failed to trigger typing', error);
+          });
+        }
+      }
+
+      triggerTyping();
+    },
+    channel.isGroupChannel() ? [text] : [],
+  );
 };
 
 const useTextClearOnDisabled = (setText: (val: string) => void, chatDisabled: boolean) => {

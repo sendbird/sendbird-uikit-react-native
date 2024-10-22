@@ -3,6 +3,7 @@ import { FlatList, Pressable, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Image, Modal, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { Logger } from '@sendbird/uikit-utils';
 
 import { UNKNOWN_USER_ID } from '../../constants';
 import type { ReactionBottomSheetProps } from './index';
@@ -53,12 +54,14 @@ const ReactionListBottomSheet = ({ visible, onClose, onDismiss, reactionCtx, cha
               <View style={styles.emojiItem}>
                 <Pressable
                   key={key}
-                  onPress={() => {
+                  onPress={async () => {
                     if (message && channel) {
-                      if (reacted) channel.deleteReaction(message, key);
-                      else channel.addReaction(message, key);
+                      const action = reacted ? channel.deleteReaction : channel.addReaction;
+                      action(message, key).catch((error) => {
+                        Logger.warn('Failed to reaction', error);
+                      });
                     }
-                    onClose();
+                    await onClose();
                   }}
                   style={({ pressed }) => [
                     styles.button,
