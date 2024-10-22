@@ -35,15 +35,15 @@ const TextInput = React.forwardRef<RNTextInput, Props>(function TextInput(
 
   const textAlign = (() => {
     if (I18nManager.isRTL && supportRTLAlign) {
-      // Note: TextInput is not affected by doLeftAndRightSwapInRTL
-      if (originalText) {
-        return isStartsWithRTL(originalText) ? 'right' : 'left';
-      } else if (props.placeholder) {
-        return isStartsWithRTL(props.placeholder) ? 'right' : 'left';
+      const text = originalText || props.value || props.placeholder;
+      if (text && isStartsWithRTL(text)) {
+        // Note: TextInput is not affected by doLeftAndRightSwapInRTL
+        return 'right';
       }
     }
 
-    return textStyle.textAlign;
+    if (textStyle.textAlign) textStyle.textAlign;
+    return undefined;
   })();
 
   return (
