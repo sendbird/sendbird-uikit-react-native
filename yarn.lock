@@ -4703,10 +4703,10 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@sendbird/chat@4.12.9", "@sendbird/chat@^4.12.9":
-  version "4.12.9"
-  resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.12.9.tgz#7f1b8f70f647c35dd9e8729a9f772868593dc739"
-  integrity sha512-vHU18zfCmxxU65vNVz0URH/MUh+0nfz13uUaXOTrbw9ABw2KqiYko27O9c+ptc9Z9E+LhlhAhJIxB7LIdh+YCQ==
+"@sendbird/chat@4.13.3", "@sendbird/chat@^4.13.3":
+  version "4.13.3"
+  resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.13.3.tgz#d8cc7b58ea0562e3661303d73bc1a0722bae37d9"
+  integrity sha512-JRlhmyEMrHxoLNZIl+C94I9TzXOFVnWVz0NErcv8L/JD9ryzcgq6pJi0z8kOYCJZKs/YTpCISV9wHEUo6dI8xw==
 
 "@sendbird/uikit-tools@0.0.1-alpha.77":
   version "0.0.1-alpha.77"
