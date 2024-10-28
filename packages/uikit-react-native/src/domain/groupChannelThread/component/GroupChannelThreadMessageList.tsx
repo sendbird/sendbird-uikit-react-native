@@ -69,11 +69,26 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
   });
 
   useEffect(() => {
-    return subscribe(({ type }) => {
+    return subscribe(({ type, data }) => {
       switch (type) {
         case 'TYPING_BUBBLE_RENDERED':
         case 'MESSAGES_RECEIVED': {
           if (!props.scrolledAwayFromBottom) {
+            scrollToBottom(true);
+          }
+          break;
+        }
+        case 'MESSAGES_UPDATED': {
+          const lastMessage = props.channel.lastMessage;
+          const [updatedMessage] = data.messages;
+
+          const lastMessageUpdated =
+            updatedMessage && lastMessage && lastMessage.messageId === updatedMessage.messageId;
+          const isMaybeStreaming = props.channel.hasAiBot && lastMessageUpdated;
+
+          if (isMaybeStreaming) {
+            scrollToBottom(false);
+          } else if (!props.scrolledAwayFromBottom && lastMessageUpdated) {
             scrollToBottom(true);
           }
           break;
