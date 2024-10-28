@@ -47,7 +47,10 @@ const BottomSheetReactionAddon = ({ onClose, message, channel }: Props) => {
         const reacted = currentUserIdx > -1;
 
         const onPress = async () => {
-          const action = reacted ? channel.deleteReaction : channel.addReaction;
+          const action = (message: BaseMessage, key: string) => {
+            return reacted ? channel.deleteReaction(message, key) : channel.addReaction(message, key);
+          };
+
           await action(message, key)
             .catch((error) => {
               Logger.warn('Failed to reaction', error);
