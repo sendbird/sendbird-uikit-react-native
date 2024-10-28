@@ -2,6 +2,7 @@ import React from 'react';
 import { FlatList, Pressable, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import type { BaseMessage } from '@sendbird/chat/message';
 import { Image, Modal, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { Logger } from '@sendbird/uikit-utils';
 
@@ -56,7 +57,10 @@ const ReactionListBottomSheet = ({ visible, onClose, onDismiss, reactionCtx, cha
                   key={key}
                   onPress={async () => {
                     if (message && channel) {
-                      const action = reacted ? channel.deleteReaction : channel.addReaction;
+                      const action = (message: BaseMessage, key: string) => {
+                        return reacted ? channel.deleteReaction(message, key) : channel.addReaction(message, key);
+                      };
+
                       action(message, key).catch((error) => {
                         Logger.warn('Failed to reaction', error);
                       });

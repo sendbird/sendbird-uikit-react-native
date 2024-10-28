@@ -192,7 +192,7 @@ const useTypingTrigger = (text: string, channel: SendbirdBaseChannel) => {
     () => {
       function triggerTyping() {
         if (channel.isGroupChannel()) {
-          const action = text.length === 0 ? channel.endTyping : channel.startTyping;
+          const action = () => (text.length === 0 ? channel.endTyping() : channel.startTyping());
           action().catch((error) => {
             Logger.debug('ChannelInput: Failed to trigger typing', error);
           });

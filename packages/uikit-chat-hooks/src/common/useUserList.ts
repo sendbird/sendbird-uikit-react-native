@@ -119,7 +119,7 @@ export const useUserList = <
   });
 
   const next = useFreshCallback(async () => {
-    if (query.current && query.current?.hasNext) {
+    if (query.current && query.current?.hasNext && !query.current.isLoading) {
       const nextUsers = await query.current.next().catch((e) => {
         Logger.error(e);
         if (e.code === SBErrorCode.UNAUTHORIZED_REQUEST) Logger.warn(SBErrorMessage.ACL);

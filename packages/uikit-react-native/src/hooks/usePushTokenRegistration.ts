@@ -21,8 +21,8 @@ const usePushTokenRegistration = () => {
         default: (token: string) => sdk.unregisterFCMPushTokenForCurrentUser(token),
       }),
       Platform.select({
-        ios: notificationService.getAPNSToken,
-        default: notificationService.getFCMToken,
+        ios: () => notificationService.getAPNSToken(),
+        default: () => notificationService.getFCMToken(),
       }),
     ];
   });
