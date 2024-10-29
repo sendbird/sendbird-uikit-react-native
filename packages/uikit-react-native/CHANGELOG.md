@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.5](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.7.4...v3.7.5) (2024-10-29)
+
+### Features
+
+- add scrolling for streaming message update ([c4924bc](https://github.com/sendbird/sendbird-uikit-react-native/commit/c4924bcfacb0279a0b7542fce7d7ca8dda5bcc55))
+
+### Bug Fixes
+
+- ensure image visibility in file viewer on new architecture ([ec6834b](https://github.com/sendbird/sendbird-uikit-react-native/commit/ec6834bafd5b59d6797a5af6987cb13499e0c577))
+- remove non-required permissions from android ([4646e34](https://github.com/sendbird/sendbird-uikit-react-native/commit/4646e34df83272607326894f5e225b03cac91a6d))
+- resolve this binding issues ([c4561a0](https://github.com/sendbird/sendbird-uikit-react-native/commit/c4561a0c87b372cf69a53b6ecd7312ef3337ee95))
+
 ## [3.7.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.7.3...v3.7.4) (2024-10-22)
 
 ### Bug Fixes
