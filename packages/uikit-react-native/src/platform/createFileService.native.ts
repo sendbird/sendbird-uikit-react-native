@@ -31,11 +31,7 @@ function getAndroidStoragePermissionsByAPILevel(permissionModule: typeof Permiss
   if (Platform.OS !== 'android') return [];
 
   if (Platform.Version > 32) {
-    return [
-      permissionModule.PERMISSIONS.ANDROID.READ_MEDIA_AUDIO,
-      permissionModule.PERMISSIONS.ANDROID.READ_MEDIA_IMAGES,
-      permissionModule.PERMISSIONS.ANDROID.READ_MEDIA_VIDEO,
-    ];
+    return [];
   }
 
   if (Platform.Version > 28) {
@@ -63,7 +59,7 @@ const createNativeFileService = ({
 }): FileServiceInterface => {
   const cameraPermissions: Permission[] = Platform.select({
     ios: [permissionModule.PERMISSIONS.IOS.CAMERA, permissionModule.PERMISSIONS.IOS.MICROPHONE],
-    android: [permissionModule.PERMISSIONS.ANDROID.CAMERA],
+    android: [],
     default: [],
   });
   const mediaLibraryPermissions: Permission[] = Platform.select({
