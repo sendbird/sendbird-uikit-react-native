@@ -58,14 +58,15 @@ const createNativePlayerService = ({ audioRecorderModule, permissionModule }: Mo
 
     public requestPermission = async (): Promise<boolean> => {
       if (Platform.OS === 'android') {
-        const { READ_MEDIA_AUDIO, READ_EXTERNAL_STORAGE } = permissionModule.PERMISSIONS.ANDROID;
-        const permission = Platform.Version > 32 ? READ_MEDIA_AUDIO : READ_EXTERNAL_STORAGE;
+        if (Platform.Version > 32) return true;
 
-        const status = await permissionModule.check(permission);
+        const { READ_EXTERNAL_STORAGE } = permissionModule.PERMISSIONS.ANDROID;
+
+        const status = await permissionModule.check(READ_EXTERNAL_STORAGE);
         if (status === 'granted') {
           return true;
         } else {
-          const status = await permissionModule.request(permission);
+          const status = await permissionModule.request(READ_EXTERNAL_STORAGE);
           return status === 'granted';
         }
       } else {
