@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.5](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.7.4...v3.7.5) (2024-10-29)
+
+### Features
+
+- add scrolling for streaming message update ([c4924bc](https://github.com/sendbird/sendbird-uikit-react-native/commit/c4924bcfacb0279a0b7542fce7d7ca8dda5bcc55))
+
 ## [3.7.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.7.3...v3.7.4) (2024-10-22)
 
 **Note:** Version bump only for package @sendbird/uikit-testing-tools
