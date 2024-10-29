@@ -48,6 +48,7 @@ const FileViewerFooter = ({ bottomInset, deleteShown, onPressDelete, onPressDown
 
 const styles = createStyleSheet({
   container: {
+    zIndex: 1,
     position: 'absolute',
     left: 0,
     right: 0,

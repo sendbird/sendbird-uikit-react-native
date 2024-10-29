@@ -131,7 +131,7 @@ const ZoomableImageView = ({
 
 const styles = createStyleSheet({
   container: {
-    zIndex: -1,
+    zIndex: 0,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',

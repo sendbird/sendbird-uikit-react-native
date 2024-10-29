@@ -58,6 +58,7 @@ const FileViewerHeader = ({ headerShown = true, topInset, onClose, subtitle, tit
 
 const styles = createStyleSheet({
   container: {
+    zIndex: 1,
     top: 0,
     left: 0,
     right: 0,
