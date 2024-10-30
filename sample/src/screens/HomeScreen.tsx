@@ -26,6 +26,12 @@ const HomeItems = [
   },
   {
     image: undefined,
+    title: 'UIKit local configs',
+    desc: '',
+    route: Routes.UIKitConfigs,
+  },
+  {
+    image: undefined,
     title: 'Storybook',
     desc: '',
     route: Routes.Storybook,
@@ -128,7 +134,7 @@ const styles = StyleSheet.create({
   customSampleButton: {
     alignItems: 'flex-start',
     paddingHorizontal: 24,
-    paddingVertical: 22,
+    paddingVertical: 16,
     elevation: 4,
     shadowColor: 'black',
     shadowOpacity: 0.15,
