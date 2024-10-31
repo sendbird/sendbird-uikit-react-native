@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { I18nManager, Pressable, ScrollView, View } from 'react-native';
 
-import { Icon, Switch, Text } from '@sendbird/uikit-react-native-foundation';
+import { Icon, Switch, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
 import { UIKitLocalConfigsContext } from '../context/uikitLocalConfigs';
 
@@ -9,15 +9,16 @@ const Divider = () => <View style={{ height: 1, backgroundColor: '#dcdcdc' }} />
 
 const UIKitLocalConfigsScreen = () => {
   const { localConfigs, setLocalConfigs } = useContext(UIKitLocalConfigsContext);
+  const { colors } = useUIKitTheme();
   return (
     <ScrollView
-      style={{ backgroundColor: 'white' }}
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{
         flexGrow: 1,
         paddingHorizontal: 16,
         paddingVertical: 12,
         gap: 20,
-        backgroundColor: 'white',
+        backgroundColor: colors.background,
       }}
     >
       <Switchable
