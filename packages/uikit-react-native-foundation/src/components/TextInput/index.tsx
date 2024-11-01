@@ -12,7 +12,7 @@ type Props = {
 } & TextInputProps &
   RTLTextAlignSupportProps;
 const TextInput = React.forwardRef<RNTextInput, Props>(function TextInput(
-  { children, style, variant = 'default', editable = true, originalText, supportRTLAlign, ...props },
+  { children, style, variant = 'default', editable = true, originalText, supportRTLAlign = true, ...props },
   ref,
 ) {
   const { typography, colors } = useUIKitTheme();
@@ -36,9 +36,11 @@ const TextInput = React.forwardRef<RNTextInput, Props>(function TextInput(
   const textAlign = (() => {
     if (I18nManager.isRTL && supportRTLAlign) {
       const text = originalText || props.value || props.placeholder;
+      // Note: TextInput is not affected by doLeftAndRightSwapInRTL
       if (text && isStartsWithRTL(text)) {
-        // Note: TextInput is not affected by doLeftAndRightSwapInRTL
         return 'right';
+      } else {
+        return 'left';
       }
     }
 

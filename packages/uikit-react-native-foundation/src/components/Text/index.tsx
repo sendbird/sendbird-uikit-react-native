@@ -39,6 +39,8 @@ const Text = ({ children, color, style, supportRTLAlign = true, originalText, ..
         (typeof children === 'string' && isStartsWithRTL(children))
       ) {
         return I18nManager.doLeftAndRightSwapInRTL ? 'left' : 'right';
+      } else {
+        return I18nManager.doLeftAndRightSwapInRTL ? 'right' : 'left';
       }
     }
     if (textStyle.textAlign) return textStyle.textAlign;
