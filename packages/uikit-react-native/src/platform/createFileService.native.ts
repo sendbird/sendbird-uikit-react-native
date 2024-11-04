@@ -59,7 +59,7 @@ const createNativeFileService = ({
 }): FileServiceInterface => {
   const cameraPermissions: Permission[] = Platform.select({
     ios: [permissionModule.PERMISSIONS.IOS.CAMERA, permissionModule.PERMISSIONS.IOS.MICROPHONE],
-    android: [],
+    android: [permissionModule.PERMISSIONS.ANDROID.CAMERA],
     default: [],
   });
   const mediaLibraryPermissions: Permission[] = Platform.select({

@@ -79,11 +79,12 @@ Add the following permissions to your `android/app/src/main/AndroidManifest.xml`
     <!-- Permissions for voice message -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
-    <!-- Permissions for image attachments -->
+    <!-- Permissions for attachments -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
-    <!-- Permissions for notifications (Android 13) -->
+    <!-- Permissions for notifications (Android 13+) -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
 </manifest>
