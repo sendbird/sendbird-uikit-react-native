@@ -33,6 +33,10 @@ const Text = ({ children, color, style, supportRTLAlign = true, originalText, ..
   ]) as TextStyle;
 
   const textAlign = (() => {
+    if (textStyle.textAlign && textStyle.textAlign !== 'left' && textStyle.textAlign !== 'right') {
+      return textStyle.textAlign;
+    }
+
     if (I18nManager.isRTL && supportRTLAlign) {
       if (
         (originalText && isStartsWithRTL(originalText)) ||
@@ -43,6 +47,7 @@ const Text = ({ children, color, style, supportRTLAlign = true, originalText, ..
         return I18nManager.doLeftAndRightSwapInRTL ? 'right' : 'left';
       }
     }
+
     if (textStyle.textAlign) return textStyle.textAlign;
     return undefined;
   })();
