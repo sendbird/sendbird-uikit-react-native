@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/uikit-react-native-foundation",
-  "version": "3.7.5",
+  "version": "3.7.6",
   "description": "A foundational UI kit for building chat-enabled React Native apps.",
   "keywords": [
     "sendbird",
@@ -48,7 +48,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@sendbird/uikit-utils": "3.7.5"
+    "@sendbird/uikit-utils": "3.7.6"
   },
   "devDependencies": {
     "@types/react": "*",

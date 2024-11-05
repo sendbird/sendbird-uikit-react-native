@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/docs-validation",
-  "version": "3.7.5",
+  "version": "3.7.6",
   "private": true,
   "scripts": {
     "test": "tsc --project tsconfig.build.json",
