@@ -36,18 +36,18 @@ const AvatarGroup = ({ children, containerStyle, size = 56 }: Props) => {
         if (childAmount === 1) return React.cloneElement(child as ReactElement, { size, containerStyle });
 
         const top = getTopPoint(index, childAmount) * size;
-        const left = getLeftPoint(index) * size;
+        const start = getStartPoint(index) * size;
         const width = getWidthPoint(index, childAmount) * size;
         const height = getHeightPoint(index, childAmount) * size;
-        const innerLeft = -getInnerLeft(index, childAmount) * size;
+        const innerStart = -getInnerStart(index, childAmount) * size;
         const innerTop = -getInnerTop(childAmount) * size;
 
         return (
-          <View style={{ overflow: 'hidden', position: 'absolute', top, left, width, height }}>
+          <View style={{ overflow: 'hidden', position: 'absolute', top, start, width, height }}>
             {React.cloneElement(child as ReactElement, {
               size,
               square: true,
-              containerStyle: { left: innerLeft, top: innerTop },
+              containerStyle: { start: innerStart, top: innerTop },
             })}
           </View>
         );
@@ -77,11 +77,11 @@ const getTopPoint = (idx: number, total: number) => {
   if (idx === 0 || idx === 1) return -0.025;
   return 0.525;
 };
-const getLeftPoint = (idx: number) => {
+const getStartPoint = (idx: number) => {
   if (idx === 0 || idx === 2) return -0.025;
   return 0.525;
 };
-const getInnerLeft = (idx: number, total: number) => {
+const getInnerStart = (idx: number, total: number) => {
   if (total === 3 && idx === 0) return 0;
   return 0.25;
 };

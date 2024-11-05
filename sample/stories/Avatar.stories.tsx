@@ -19,6 +19,8 @@ export default AvatarMeta;
 
 export const Avatar: AvatarStory = () => <DefaultAvatar />;
 export const AvatarGroup: AvatarStory = () => <GroupedAvatar />;
+export const AvatarStack: AvatarStory = () => <StackedAvatar />;
+
 const DefaultAvatar = () => {
   const { colors } = useUIKitTheme();
 
@@ -58,6 +60,19 @@ const GroupedAvatar = () => {
         <AvatarComponent muted uri={img2} />
         <AvatarComponent uri={img3} />
       </AvatarComponent.Group>
+    </>
+  );
+};
+const StackedAvatar = () => {
+  const [img1, img2, img3] = useMemo(() => [getMockImage(), getMockImage(), getMockImage()], []);
+  return (
+    <>
+      <AvatarComponent.Stack containerStyle={margin} maxAvatar={3}>
+        <AvatarComponent />
+        <AvatarComponent uri={img1} />
+        <AvatarComponent muted uri={img3} />
+        <AvatarComponent uri={img2} />
+      </AvatarComponent.Stack>
     </>
   );
 };

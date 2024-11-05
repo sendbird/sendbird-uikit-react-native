@@ -102,8 +102,8 @@ const OpenChannelCreateProfileInput = ({
     <Box
       flexDirection={'row'}
       paddingVertical={16}
-      paddingLeft={16 + safeArea.paddingLeft}
-      paddingRight={16 + safeArea.paddingRight}
+      paddingStart={16 + safeArea.paddingStart}
+      paddingEnd={16 + safeArea.paddingEnd}
     >
       <PressBox onPress={onPressPhotoButton} style={styles.coverButton} activeOpacity={0.8}>
         {ifThenOr(
@@ -132,7 +132,7 @@ const OpenChannelCreateProfileInput = ({
 
 const styles = createStyleSheet({
   coverButton: {
-    marginRight: 20,
+    marginEnd: 20,
   },
   inputContainer: {
     flex: 1,
@@ -142,15 +142,15 @@ const styles = createStyleSheet({
   },
   input: {
     flex: 1,
-    paddingLeft: 0,
-    paddingRight: 0,
+    paddingStart: 0,
+    paddingEnd: 0,
     paddingTop: 0,
     paddingBottom: 0,
   },
   removeButtonContainer: {
     alignItems: 'flex-end',
     justifyContent: 'center',
-    marginLeft: 8,
+    marginStart: 8,
   },
 });
 

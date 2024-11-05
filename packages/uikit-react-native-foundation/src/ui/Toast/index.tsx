@@ -118,7 +118,7 @@ const styles = createStyleSheet({
     flexDirection: 'row',
   },
   icon: {
-    marginRight: 4,
+    marginEnd: 4,
   },
   text: {
     maxWidth: 240,

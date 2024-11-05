@@ -3,6 +3,7 @@ import { Pressable, View } from 'react-native';
 
 import { conditionChaining } from '@sendbird/uikit-utils';
 
+import Box from '../../components/Box';
 import Divider from '../../components/Divider';
 import Icon from '../../components/Icon';
 import Text from '../../components/Text';
@@ -58,9 +59,11 @@ const MenuBar = ({
             ]}
           />
         )}
-        <Text subtitle2 numberOfLines={1} style={styles.name}>
-          {name}
-        </Text>
+        <Box flex={1} alignItems={'flex-start'}>
+          <Text subtitle2 numberOfLines={1} style={styles.name}>
+            {name}
+          </Text>
+        </Box>
         {Boolean(actionLabel) && (
           <Text subtitle2 numberOfLines={1} color={colors.onBackground02} style={styles.actionLabel}>
             {actionLabel}
@@ -81,17 +84,17 @@ const styles = createStyleSheet({
   },
   name: {
     flex: 1,
-    marginRight: 8,
+    marginEnd: 8,
   },
   icon: {
-    marginRight: 16,
+    marginEnd: 16,
   },
   containedIcon: {
     borderRadius: 24,
     padding: 4,
   },
   actionLabel: {
-    marginRight: 4,
+    marginEnd: 4,
   },
 });
 

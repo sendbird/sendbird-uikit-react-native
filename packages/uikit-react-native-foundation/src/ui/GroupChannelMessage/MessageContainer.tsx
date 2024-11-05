@@ -37,17 +37,17 @@ MessageContainer.Incoming = function MessageContainerIncoming({
   return (
     <Box flexDirection={'column'} justifyContent={'flex-start'} alignItems={'flex-start'}>
       <Box flexDirection={'row'} justifyContent={'flex-start'} alignItems={'flex-end'}>
-        <Box width={26} marginRight={12}>
+        <Box width={26} marginEnd={12}>
           {(message.isFileMessage() || message.isUserMessage()) && !groupedWithNext && (
             <Pressable onPress={onPressAvatar}>
               <Avatar size={26} uri={message.sender?.profileUrl} />
             </Pressable>
           )}
         </Box>
-        <Box flexShrink={1}>
+        <Box flexShrink={1} alignItems={'flex-start'}>
           {parentMessage}
           {!groupedWithPrev && !parentMessage && (
-            <Box marginLeft={12} marginBottom={4}>
+            <Box marginStart={12} marginBottom={4}>
               {(message.isFileMessage() || message.isUserMessage()) && (
                 <Text caption1 color={color.enabled.textSenderName} numberOfLines={1}>
                   {strings?.senderName ?? message.sender.nickname}
@@ -58,7 +58,7 @@ MessageContainer.Incoming = function MessageContainerIncoming({
           <Box flexDirection={'row'} alignItems={'flex-end'}>
             <Box style={styles.bubble}>{children}</Box>
             {!groupedWithNext && (
-              <Box marginLeft={4}>
+              <Box marginStart={4}>
                 <Text caption4 color={color.enabled.textTime}>
                   {strings?.sentDate ?? getMessageTimeFormat(new Date(message.createdAt))}
                 </Text>
@@ -68,7 +68,7 @@ MessageContainer.Incoming = function MessageContainerIncoming({
         </Box>
       </Box>
       <Box flexDirection={'row'} marginTop={4}>
-        <Box width={26} marginRight={12} justifyContent={'flex-start'} />
+        <Box width={26} marginEnd={12} justifyContent={'flex-start'} />
         {replyInfo}
       </Box>
     </Box>
@@ -92,9 +92,9 @@ MessageContainer.Outgoing = function MessageContainerOutgoing({
       {parentMessage}
       <Box flexDirection={'row'} justifyContent={'flex-end'} alignItems={'flex-end'}>
         <Box flexDirection={'row'} alignItems={'flex-end'} justifyContent={'center'}>
-          {sendingStatus && <Box marginRight={4}>{sendingStatus}</Box>}
+          {sendingStatus && <Box marginEnd={4}>{sendingStatus}</Box>}
           {!groupedWithNext && (
-            <Box marginRight={4}>
+            <Box marginEnd={4}>
               <Text caption4 color={color.enabled.textTime}>
                 {strings?.sentDate ?? getMessageTimeFormat(new Date(message.createdAt))}
               </Text>

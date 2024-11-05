@@ -52,7 +52,7 @@ const AvatarStack = ({
       React.cloneElement(child as ReactElement, {
         size: actualSize,
         containerStyle: {
-          left: actualGap * index,
+          start: actualGap * index,
           borderWidth: avatarStyles.borderWidth,
           borderColor: avatarStyles.borderColor,
         },
@@ -67,7 +67,7 @@ const AvatarStack = ({
         style={[
           avatarStyles,
           {
-            left: actualGap * maxAvatar,
+            start: actualGap * maxAvatar,
             width: actualSize,
             height: actualSize,
             borderRadius: actualSize / 2,
@@ -93,7 +93,7 @@ const AvatarStack = ({
   };
 
   return (
-    <View style={[containerStyle, { left: -avatarStyles.borderWidth, flexDirection: 'row', width: calculateWidth() }]}>
+    <View style={[containerStyle, { start: -avatarStyles.borderWidth, flexDirection: 'row', width: calculateWidth() }]}>
       {renderAvatars()}
       {renderRemainsCount()}
     </View>

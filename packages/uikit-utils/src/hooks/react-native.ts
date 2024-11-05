@@ -1,18 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
-import { AppState, AppStateEvent, AppStateStatus } from 'react-native';
+import { AppState, AppStateEvent, AppStateStatus, I18nManager } from 'react-native';
 import { EdgeInsets, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type EdgePaddingMap = {
-  left: 'paddingLeft';
-  right: 'paddingRight';
+  left: 'paddingStart' | 'paddingEnd';
+  right: 'paddingStart' | 'paddingEnd';
   top: 'paddingTop';
   bottom: 'paddingBottom';
 };
-const edgePaddingMap: EdgePaddingMap = {
-  left: 'paddingLeft',
-  right: 'paddingRight',
-  top: 'paddingTop',
-  bottom: 'paddingBottom',
+
+const edgePaddingMap: Record<'ltr' | 'rtl', EdgePaddingMap> = {
+  ltr: {
+    left: 'paddingStart',
+    right: 'paddingEnd',
+    top: 'paddingTop',
+    bottom: 'paddingBottom',
+  },
+  rtl: {
+    left: 'paddingEnd',
+    right: 'paddingStart',
+    top: 'paddingTop',
+    bottom: 'paddingBottom',
+  },
 };
 
 export const useSafeAreaPadding = <
@@ -20,11 +29,21 @@ export const useSafeAreaPadding = <
   Result extends { [key in EdgePaddingMap[T]]: EdgeInsets[T] },
 >(
   edges: T[],
+  direction: 'ltr' | 'rtl' = I18nManager.isRTL ? 'rtl' : 'ltr',
 ): Result => {
   const safeAreaInsets = useSafeAreaInsets();
   return edges.reduce((map, edge) => {
-    const paddingKey = edgePaddingMap[edge];
+    const paddingKey = edgePaddingMap[direction][edge];
     map[paddingKey] = safeAreaInsets[edge];
+
+    if (edge === 'left') {
+      // @ts-expect-error backward compatibility
+      map['paddingLeft'] = safeAreaInsets[edge];
+    }
+    if (edge === 'right') {
+      // @ts-expect-error backward compatibility
+      map['paddingRight'] = safeAreaInsets[edge];
+    }
     return map;
   }, {} as { [key in EdgePaddingMap[T]]: EdgeInsets[T] }) as Result;
 };

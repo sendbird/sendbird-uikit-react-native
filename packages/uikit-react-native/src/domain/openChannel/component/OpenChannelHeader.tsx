@@ -37,7 +37,7 @@ const styles = createStyleSheet({
     maxWidth: '100%',
   },
   avatarGroup: {
-    marginRight: 8,
+    marginEnd: 8,
   },
   subtitle: {
     marginTop: 2,

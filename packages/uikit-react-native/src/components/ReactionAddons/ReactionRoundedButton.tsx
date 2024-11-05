@@ -60,7 +60,7 @@ const styles = createStyleSheet({
   emoji: {
     width: 20,
     height: 20,
-    marginRight: 4,
+    marginEnd: 4,
   },
   count: {
     width: 13,

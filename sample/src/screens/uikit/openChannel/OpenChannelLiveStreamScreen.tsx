@@ -58,17 +58,17 @@ const StreamView = (props: { channel: SendbirdOpenChannel; height: number | `${n
         activeOpacity={0.8}
         onPress={() => navigation.goBack()}
         hitSlop={{ top: 4, left: 4, bottom: 4, right: 4 }}
-        style={{ position: 'absolute', left: streamInfoPosition, top: streamInfoPosition + topInset }}
+        style={{ position: 'absolute', start: streamInfoPosition, top: streamInfoPosition + topInset }}
       >
         <Icon size={24} icon={'close'} color={'white'} />
       </PressBox>
       <Box
         flexDirection={'row'}
         alignItems={'center'}
-        style={{ position: 'absolute', left: streamInfoPosition, bottom: streamInfoPosition }}
+        style={{ position: 'absolute', start: streamInfoPosition, bottom: streamInfoPosition }}
       >
-        <Box backgroundColor={colors.error} width={10} height={10} borderRadius={5} marginRight={4} />
-        <Text button color={palette.onBackgroundDark01} style={{ marginRight: 16 }}>
+        <Box backgroundColor={colors.error} width={10} height={10} borderRadius={5} marginEnd={4} />
+        <Text button color={palette.onBackgroundDark01} style={{ marginEnd: 16 }}>
           {'Live'}
         </Text>
         <Text body3 color={palette.onBackgroundDark01}>
@@ -94,7 +94,7 @@ const OpenChannelFragment = createOpenChannelFragment({
         title={
           <Box flexDirection={'row'} alignItems={'center'} style={styles.titleContainer}>
             <Avatar uri={streamData.thumbnail_url} size={34} containerStyle={styles.avatarGroup} />
-            <Box flexShrink={1}>
+            <Box flexShrink={1} alignItems={'flex-start'}>
               <Header.Title h2>{streamData.name}</Header.Title>
               <Header.Subtitle style={styles.subtitle}>{streamData.creator_info.name}</Header.Subtitle>
             </Box>
@@ -165,7 +165,7 @@ const styles = createStyleSheet({
     maxWidth: '100%',
   },
   avatarGroup: {
-    marginRight: 8,
+    marginEnd: 8,
   },
   subtitle: {
     marginTop: 2,

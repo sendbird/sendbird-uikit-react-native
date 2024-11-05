@@ -11,6 +11,7 @@ export enum Routes {
   SignIn = 'SignIn',
   Home = 'Home',
 
+  UIKitConfigs = 'UIKitConfigs',
   Storybook = 'Storybook',
   Palette = 'Palette',
   ThemeColors = 'ThemeColors',
@@ -61,6 +62,10 @@ export type RouteParamsUnion =
     }
   | {
       route: Routes.Home;
+      params: undefined;
+    }
+  | {
+      route: Routes.UIKitConfigs;
       params: undefined;
     }
   | {

@@ -74,21 +74,21 @@ const styles = createStyleSheet({
     alignItems: 'center',
   },
   avatarContainer: {
-    marginRight: 4,
+    marginEnd: 4,
   },
   avatarOverlay: {
     position: 'absolute',
     top: 0,
-    left: 0,
-    right: 0,
+    start: 0,
+    end: 0,
     bottom: 0,
     borderRadius: 10,
   },
   plusIcon: {
     position: 'absolute',
     top: 3,
-    left: 3,
-    right: 0,
+    start: 3,
+    end: 0,
     bottom: 0,
   },
 });

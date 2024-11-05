@@ -1,8 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { conditionChaining } from '@sendbird/uikit-utils';
+import { conditionChaining, useSafeAreaPadding } from '@sendbird/uikit-utils';
 
 import Text, { TextProps } from '../../components/Text';
 import type { BaseHeaderProps, HeaderElement } from '../../index';
@@ -41,7 +40,7 @@ const Header = ({
   const { topInset, defaultTitleAlign, defaultHeight } = useHeaderStyle();
 
   const { colors } = useUIKitTheme();
-  const { left: paddingLeft, right: paddingRight } = useSafeAreaInsets();
+  const safeArea = useSafeAreaPadding(['left', 'right']);
 
   const actualTitleAlign = titleAlign ?? defaultTitleAlign;
   const actualTopInset = clearStatusBarTopInset ? 0 : topInset;
@@ -60,8 +59,8 @@ const Header = ({
         styles.container,
         {
           [statusBarTopInsetAs === 'padding' ? 'paddingTop' : 'marginTop']: actualTopInset,
-          paddingLeft: paddingLeft + styles.container.paddingHorizontal,
-          paddingRight: paddingRight + styles.container.paddingHorizontal,
+          paddingStart: safeArea.paddingStart + styles.container.paddingHorizontal,
+          paddingEnd: safeArea.paddingEnd + styles.container.paddingHorizontal,
           backgroundColor: colors.ui.header.nav.none.background,
           borderBottomColor: colors.ui.header.nav.none.borderBottom,
         },

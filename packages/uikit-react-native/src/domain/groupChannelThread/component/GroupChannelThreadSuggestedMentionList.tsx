@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
   Avatar,
@@ -11,7 +10,7 @@ import {
   useHeaderStyle,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import { conditionChaining } from '@sendbird/uikit-utils';
+import { conditionChaining, useSafeAreaPadding } from '@sendbird/uikit-utils';
 
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
 import useKeyboardStatus from '../../../hooks/useKeyboardStatus';
@@ -33,7 +32,7 @@ const GroupChannelThreadSuggestedMentionList = ({
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
   const { topInset } = useHeaderStyle();
-  const { left, right } = useSafeAreaInsets();
+  const safeArea = useSafeAreaPadding(['left', 'right']);
 
   const keyboard = useKeyboardStatus();
 
@@ -53,7 +52,7 @@ const GroupChannelThreadSuggestedMentionList = ({
   const renderLimitGuide = () => {
     return (
       <View style={[styles.searchLimited, { borderTopColor: colors.onBackground04 }]}>
-        <Icon icon={'info'} size={20} containerStyle={{ marginRight: 4 }} color={colors.onBackground02} />
+        <Icon icon={'info'} size={20} containerStyle={{ marginEnd: 4 }} color={colors.onBackground02} />
         <Text body3 color={colors.onBackground02}>
           {STRINGS.GROUP_CHANNEL_THREAD.MENTION_LIMITED(mentionManager.config.mentionLimit)}
         </Text>
@@ -113,7 +112,7 @@ const GroupChannelThreadSuggestedMentionList = ({
             borderTopColor: colors.onBackground04,
           },
         ]}
-        contentContainerStyle={{ paddingLeft: left, paddingRight: right }}
+        contentContainerStyle={safeArea}
       >
         {conditionChaining([searchLimited, canRenderMembers], [renderLimitGuide(), renderMembers(), null])}
       </ScrollView>
@@ -128,23 +127,23 @@ const styles = createStyleSheet({
   container: {
     position: 'absolute',
     top: 0,
-    right: 0,
-    left: 0,
+    start: 0,
+    end: 0,
   },
   scrollView: {
     position: 'absolute',
-    left: 0,
-    right: 0,
+    start: 0,
+    end: 0,
   },
   userContainer: {
-    paddingLeft: 16,
+    paddingStart: 16,
     flexDirection: 'row',
     height: 44,
     alignItems: 'center',
     justifyContent: 'center',
   },
   userAvatar: {
-    marginRight: 16,
+    marginEnd: 16,
   },
   userInfo: {
     flexDirection: 'row',
@@ -154,14 +153,14 @@ const styles = createStyleSheet({
     flexShrink: 1,
     lineHeight: 44,
     textAlignVertical: 'center',
-    marginRight: 6,
+    marginEnd: 6,
   },
   userId: {
     lineHeight: 44,
     textAlignVertical: 'center',
     minWidth: 32,
     flexShrink: 1,
-    marginRight: 16,
+    marginEnd: 16,
   },
   searchLimited: {
     borderTopWidth: 1,

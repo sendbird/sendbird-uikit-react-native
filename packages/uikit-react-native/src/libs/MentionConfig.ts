@@ -4,6 +4,13 @@ export interface MentionConfigInterface {
   debounceMills: number;
   delimiter: string;
   trigger: string;
+  /**
+   * This configuration keeps the trigger positioned to the left in RTL mode, instead of being placed after `username@`.
+   * @example
+   *  RTL: `@username`
+   *  LTR: `@username`
+   */
+  forceTriggerLeftInRTL: boolean;
 }
 
 class MentionConfig {
@@ -13,6 +20,7 @@ class MentionConfig {
     DEBOUNCE_MILLS: 300,
     DELIMITER: ' ',
     TRIGGER: '@',
+    FORCE_TRIGGER_LEFT_IN_RTL: true,
   };
   constructor(private _config: MentionConfigInterface) {}
 
@@ -34,6 +42,10 @@ class MentionConfig {
 
   get trigger() {
     return this._config.trigger;
+  }
+
+  get forceTriggerLeftInRTL() {
+    return this._config.forceTriggerLeftInRTL;
   }
 }
 

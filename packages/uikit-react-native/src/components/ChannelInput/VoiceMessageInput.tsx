@@ -108,9 +108,9 @@ const VoiceMessageInput = ({ onClose, onSend }: VoiceMessageInputProps) => {
         total={(isRecorderState ? state.recordingTime.maxDuration : state.playingTime.duration) || 1}
         trackColor={uiColors.progressTrack}
         overlay={
-          <Box flex={1} flexDirection={'row'} alignItems={'center'} justifyContent={'flex-end'} paddingRight={16}>
+          <Box flex={1} flexDirection={'row'} alignItems={'center'} justifyContent={'flex-end'} paddingEnd={16}>
             <RecordingLight visible={state.status === 'recording'} />
-            <Text caption1 style={{ lineHeight: undefined, marginLeft: 6 }} color={uiColors.textTime}>
+            <Text caption1 style={{ lineHeight: undefined, marginStart: 6 }} color={uiColors.textTime}>
               {millsToMMSS(isRecorderState ? state.recordingTime.currentTime : remainingTime)}
             </Text>
           </Box>
@@ -209,8 +209,8 @@ const SendButton = (props: { onPress: () => void; disabled: boolean }) => {
 
 const styles = createStyleSheet({
   container: {
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    borderTopStartRadius: 8,
+    borderTopEndRadius: 8,
   },
   progressBar: {
     height: 36,

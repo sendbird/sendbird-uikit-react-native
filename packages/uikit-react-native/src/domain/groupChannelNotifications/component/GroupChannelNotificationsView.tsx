@@ -1,8 +1,16 @@
 import React, { useContext } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { Pressable, ScrollView } from 'react-native';
 
 import { PushTriggerOption } from '@sendbird/chat';
-import { Divider, Icon, Switch, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import {
+  Box,
+  Divider,
+  Icon,
+  Switch,
+  Text,
+  createStyleSheet,
+  useUIKitTheme,
+} from '@sendbird/uikit-react-native-foundation';
 import { useForceUpdate } from '@sendbird/uikit-utils';
 
 import { useLocalization } from '../../../hooks/useContext';
@@ -89,14 +97,22 @@ const Bar = ({ title, onPress, description, component, subtitle2, body3 }: BarPr
   const { colors } = useUIKitTheme();
   return (
     <Pressable onPress={onPress} style={styles.barContainer}>
-      <View style={styles.titleContainer}>
-        <Text body3={body3} subtitle2={subtitle2} numberOfLines={1} color={colors.onBackground01} style={styles.title}>
-          {title}
-        </Text>
-        <View>{component}</View>
-      </View>
+      <Box style={styles.titleContainer}>
+        <Box flex={1} alignItems={'flex-start'}>
+          <Text
+            body3={body3}
+            subtitle2={subtitle2}
+            numberOfLines={1}
+            color={colors.onBackground01}
+            style={styles.title}
+          >
+            {title}
+          </Text>
+        </Box>
+        <Box>{component}</Box>
+      </Box>
       {Boolean(description) && (
-        <Text body3 color={colors.onBackground02} style={styles.desc}>
+        <Text body3 color={colors.onBackground02} style={styles.desc} supportRTLAlign>
           {description}
         </Text>
       )}
@@ -116,8 +132,7 @@ const styles = createStyleSheet({
     alignItems: 'center',
   },
   title: {
-    flex: 1,
-    marginRight: 8,
+    marginEnd: 8,
   },
   desc: {
     marginTop: 8,

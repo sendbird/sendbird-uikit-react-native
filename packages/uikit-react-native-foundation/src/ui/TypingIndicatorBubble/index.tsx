@@ -28,7 +28,7 @@ const TypingIndicatorBubble = ({ typingUsers, containerStyle, maxAvatar }: Props
           remainsTextColor: colors.onBackground02,
           remainsBackgroundColor: select({ light: palette.background100, dark: palette.background400 }),
         }}
-        containerStyle={{ marginRight: 12 }}
+        containerStyle={{ marginEnd: 12 }}
       >
         {typingUsers.map((user, index) => (
           <Avatar key={index} uri={user.profileUrl} />
@@ -78,7 +78,7 @@ const TypingDots = ({ dotColor, backgroundColor }: TypingDotsProps) => {
             style={[
               styles.dot,
               {
-                marginRight: index === dots.length - 1 ? 0 : 6,
+                marginEnd: index === dots.length - 1 ? 0 : 6,
                 opacity: opacity,
                 transform: [{ scale: scale }],
                 backgroundColor: backgroundColor,

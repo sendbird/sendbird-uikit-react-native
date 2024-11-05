@@ -7,6 +7,7 @@ import { SendbirdFileMessage, SendbirdUserMessage, replace, useFreshCallback } f
 import type { MentionedUser } from '../types';
 import { useSendbirdChat } from './useContext';
 
+// Note: The selection change with the keyboard cursor might not work properly with RTL languages
 const useMentionTextInput = (params: { messageToEdit?: SendbirdUserMessage | SendbirdFileMessage }) => {
   const { mentionManager, sbOptions } = useSendbirdChat();
 

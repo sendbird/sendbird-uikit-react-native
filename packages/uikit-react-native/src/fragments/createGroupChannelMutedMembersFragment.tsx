@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { useChannelHandler, useUserList } from '@sendbird/uikit-chat-hooks';
+import { useUserList } from '@sendbird/uikit-chat-hooks';
 import { useActionMenu } from '@sendbird/uikit-react-native-foundation';
-import { NOOP, isDifferentChannel, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
+import { useGroupChannelHandler } from '@sendbird/uikit-tools';
+import { NOOP, isDifferentChannel, useFreshCallback } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import UserActionBar from '../components/UserActionBar';
@@ -24,15 +25,13 @@ const createGroupChannelMutedMembersFragment = (
     renderUser,
     queryCreator = () => channel.createMutedUserListQuery({ limit: 20 }),
   }) => {
-    const handlerId = useUniqHandlerId('GroupChannelMutedMembersFragment');
-
     const { STRINGS } = useLocalization();
     const { sdk, currentUser } = useSendbirdChat();
     const { openMenu } = useActionMenu();
 
     const { users, deleteUser, upsertUser, loading, refresh, error, next } = useUserList(sdk, { queryCreator });
 
-    useChannelHandler(sdk, handlerId, {
+    useGroupChannelHandler(sdk, {
       onUserMuted(eventChannel, user) {
         if (isDifferentChannel(eventChannel, channel)) return;
         upsertUser(user);

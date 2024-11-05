@@ -1,11 +1,12 @@
 import React, { useEffect, useRef } from 'react';
-import { Platform, TextInput } from 'react-native';
+import { Platform, type TextInput as RNTextInput } from 'react-native';
 
 import {
   Box,
   Icon,
   PressBox,
   Text,
+  TextInput,
   createStyleSheet,
   useHeaderStyle,
   useUIKitTheme,
@@ -24,7 +25,7 @@ const MessageSearchHeader = ({
   const { colors } = useUIKitTheme();
   const { STRINGS } = useLocalization();
 
-  const inputRef = useRef<TextInput>(null);
+  const inputRef = useRef<RNTextInput>(null);
   const inputColor = colors.ui.input.default.active;
   const searchEnabled = keyword.length > 0;
 
@@ -60,6 +61,8 @@ const MessageSearchHeader = ({
             style={[styles.input, { color: inputColor.text }]}
             value={keyword}
             onChangeText={onChangeKeyword}
+            supportRTLAlign
+            originalText={keyword}
           />
           {searchEnabled && (
             <PressBox onPress={() => onChangeKeyword('')}>
@@ -82,19 +85,19 @@ const MessageSearchHeader = ({
 
 const styles = createStyleSheet({
   searchIcon: {
-    marginRight: 8,
+    marginEnd: 8,
   },
   clearIcon: {
-    marginLeft: 8,
+    marginStart: 8,
   },
   input: {
     flex: 1,
     height: '100%',
     fontSize: 14,
-    paddingLeft: 0,
+    paddingStart: 0,
     paddingTop: 0,
     paddingBottom: 0,
-    paddingRight: 0,
+    paddingEnd: 0,
   },
 });
 

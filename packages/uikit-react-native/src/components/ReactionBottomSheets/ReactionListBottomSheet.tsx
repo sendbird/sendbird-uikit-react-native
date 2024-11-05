@@ -1,10 +1,9 @@
 import React from 'react';
 import { FlatList, Pressable, View, useWindowDimensions } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { BaseMessage } from '@sendbird/chat/message';
 import { Image, Modal, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { Logger } from '@sendbird/uikit-utils';
+import { Logger, useSafeAreaPadding } from '@sendbird/uikit-utils';
 
 import { UNKNOWN_USER_ID } from '../../constants';
 import type { ReactionBottomSheetProps } from './index';
@@ -12,7 +11,7 @@ import type { ReactionBottomSheetProps } from './index';
 const NUM_COLUMN = 6;
 const ReactionListBottomSheet = ({ visible, onClose, onDismiss, reactionCtx, chatCtx }: ReactionBottomSheetProps) => {
   const { width } = useWindowDimensions();
-  const { bottom, left, right } = useSafeAreaInsets();
+  const safeArea = useSafeAreaPadding(['bottom', 'left', 'right']);
   const { colors } = useUIKitTheme();
 
   const { currentUser, emojiManager } = chatCtx;
@@ -32,10 +31,10 @@ const ReactionListBottomSheet = ({ visible, onClose, onDismiss, reactionCtx, cha
           styles.container,
           {
             width,
-            paddingBottom: bottom,
+            paddingBottom: safeArea.paddingBottom,
             backgroundColor: colors.ui.dialog.default.none.background,
-            paddingLeft: left + styles.container.paddingHorizontal,
-            paddingRight: right + styles.container.paddingHorizontal,
+            paddingStart: safeArea.paddingStart + styles.container.paddingHorizontal,
+            paddingEnd: safeArea.paddingEnd + styles.container.paddingHorizontal,
           },
         ]}
       >
@@ -86,8 +85,8 @@ const ReactionListBottomSheet = ({ visible, onClose, onDismiss, reactionCtx, cha
 const styles = createStyleSheet({
   container: {
     overflow: 'hidden',
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    borderTopStartRadius: 8,
+    borderTopEndRadius: 8,
     paddingTop: 16,
     paddingHorizontal: 18,
     flexDirection: 'row',

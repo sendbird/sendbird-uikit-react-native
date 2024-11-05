@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useLayoutEffect, useRef } from 'react';
 
-import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
-import { isDifferentChannel, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
+import { useGroupChannelHandler } from '@sendbird/uikit-tools';
+import { isDifferentChannel, useFreshCallback } from '@sendbird/uikit-utils';
 
 import ChannelThreadMessageList from '../../../components/ChannelThreadMessageList';
 import { useSendbirdChat } from '../../../hooks/useContext';
@@ -14,7 +14,6 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
   const { subscribe } = useContext(GroupChannelThreadContexts.PubSub);
   const { flatListRef, lazyScrollToBottom, lazyScrollToIndex } = useContext(GroupChannelThreadContexts.MessageList);
 
-  const id = useUniqHandlerId('GroupChannelThreadMessageList');
   const ignorePropReached = useRef(false);
 
   const _onTopReached = () => {
@@ -56,7 +55,7 @@ const GroupChannelThreadMessageList = (props: GroupChannelThreadProps['MessageLi
     }
   }, [props.startingPoint]);
 
-  useChannelHandler(sdk, id, {
+  useGroupChannelHandler(sdk, {
     onReactionUpdated(channel, event) {
       if (isDifferentChannel(channel, props.channel)) return;
       const recentMessage = props.messages[0];

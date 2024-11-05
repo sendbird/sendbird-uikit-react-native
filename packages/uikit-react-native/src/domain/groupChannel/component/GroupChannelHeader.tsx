@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
-import { View } from 'react-native';
 
-import { Header, Icon, createStyleSheet, useHeaderStyle } from '@sendbird/uikit-react-native-foundation';
+import { Box, Header, Icon, createStyleSheet, useHeaderStyle } from '@sendbird/uikit-react-native-foundation';
 
 import ChannelCover from '../../../components/ChannelCover';
 import { useLocalization, useSendbirdChat } from '../../../hooks/useContext';
@@ -36,13 +35,13 @@ const GroupChannelHeader = ({
     <HeaderComponent
       clearTitleMargin
       title={
-        <View style={styles.titleContainer}>
+        <Box style={styles.titleContainer}>
           <ChannelCover channel={channel} size={34} containerStyle={styles.avatarGroup} />
-          <View style={{ flexShrink: 1 }}>
+          <Box flexShrink={1} alignItems={'flex-start'}>
             <Header.Title h2>{headerTitle}</Header.Title>
             {renderSubtitle()}
-          </View>
-        </View>
+          </Box>
+        </Box>
       }
       left={<Icon icon={'arrow-left'} />}
       onPressLeft={onPressHeaderLeft}
@@ -59,7 +58,7 @@ const styles = createStyleSheet({
     alignItems: 'center',
   },
   avatarGroup: {
-    marginRight: 8,
+    marginEnd: 8,
   },
   subtitle: {
     marginTop: 2,

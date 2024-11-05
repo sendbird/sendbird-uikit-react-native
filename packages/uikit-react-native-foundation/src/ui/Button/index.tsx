@@ -69,7 +69,7 @@ const styles = createStyleSheet({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  icon: { marginVertical: -4, marginRight: 8 },
+  icon: { marginVertical: -4, marginEnd: 8 },
   text: {},
 });
 

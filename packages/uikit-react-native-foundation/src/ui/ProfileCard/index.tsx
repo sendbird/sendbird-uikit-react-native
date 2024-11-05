@@ -59,6 +59,7 @@ const styles = createStyleSheet({
     marginBottom: 8,
   },
   profileInfoContainer: {
+    alignItems: 'flex-start',
     padding: 16,
   },
   profileInfoBodyLabel: {

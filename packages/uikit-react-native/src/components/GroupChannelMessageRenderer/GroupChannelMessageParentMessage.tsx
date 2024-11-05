@@ -132,11 +132,11 @@ const GroupChannelMessageParentMessage = ({ variant, channel, message, childMess
     <Box>
       <Box
         alignItems={variant === 'outgoing' ? 'flex-end' : 'flex-start'}
-        paddingLeft={variant === 'outgoing' ? 0 : 12}
-        paddingRight={variant === 'outgoing' ? 12 : 0}
+        paddingStart={variant === 'outgoing' ? 0 : 12}
+        paddingEnd={variant === 'outgoing' ? 12 : 0}
       >
         <PressBox onPress={() => onPress?.(parentMessage, childMessage)} style={styles.senderLabel}>
-          <Icon icon={'reply-filled'} size={13} color={colors.onBackground03} containerStyle={{ marginRight: 4 }} />
+          <Icon icon={'reply-filled'} size={13} color={colors.onBackground03} containerStyle={{ marginEnd: 4 }} />
           <Text caption1 color={colors.onBackground03}>
             {STRINGS.LABELS.REPLY_FROM_SENDER_TO_RECEIVER(childMessage, parentMessage, currentUser?.userId)}
           </Text>
@@ -179,7 +179,7 @@ const styles = createStyleSheet({
     width: 16,
     height: 16,
     borderRadius: 10,
-    marginRight: 4,
+    marginEnd: 4,
     marginTop: 2,
   },
   senderLabel: {

@@ -1,9 +1,8 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { NOOP } from '@sendbird/uikit-utils';
+import { NOOP, useSafeAreaPadding } from '@sendbird/uikit-utils';
 
 import createGroupChannelSettingsModule from '../domain/groupChannelSettings/module/createGroupChannelSettingsModule';
 import type { GroupChannelSettingsFragment, GroupChannelSettingsModule } from '../domain/groupChannelSettings/types';
@@ -24,7 +23,7 @@ const createGroupChannelSettingsFragment = (
     menuItemsCreator,
   }) => {
     const { colors } = useUIKitTheme();
-    const { left, right } = useSafeAreaInsets();
+    const safeArea = useSafeAreaPadding(['left', 'right']);
 
     return (
       <GroupChannelSettingsModule.Provider channel={channel}>
@@ -32,8 +31,8 @@ const createGroupChannelSettingsFragment = (
         <ScrollView
           style={{ backgroundColor: colors.background }}
           contentContainerStyle={{
-            paddingLeft: left + styles.viewContainer.paddingHorizontal,
-            paddingRight: right + styles.viewContainer.paddingHorizontal,
+            paddingStart: safeArea.paddingStart + styles.viewContainer.paddingHorizontal,
+            paddingEnd: safeArea.paddingEnd + styles.viewContainer.paddingHorizontal,
           }}
         >
           <GroupChannelSettingsModule.Info />

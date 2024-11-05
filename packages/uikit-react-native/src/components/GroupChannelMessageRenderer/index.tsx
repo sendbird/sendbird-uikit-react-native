@@ -212,6 +212,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
                 color={mentionColor}
                 onPress={() => messageProps.onPressMentionedUser?.(user)}
                 onLongPress={messageProps.onLongPress}
+                suppressHighlighting
                 style={[
                   parentProps?.style,
                   { fontWeight: '700' },
