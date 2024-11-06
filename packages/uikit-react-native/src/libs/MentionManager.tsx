@@ -22,12 +22,15 @@ class MentionManager {
     this._templateRegex = createMentionTemplateRegex(this.config.trigger);
   }
 
-  get triggerDirPrefixForDisplay() {
-    if (this.config.forceTriggerLeftInRTL) {
-      return SPAN_DIRECTION.LRM;
-    }
-    return I18nManager.isRTL ? SPAN_DIRECTION.RLM : SPAN_DIRECTION.LRM;
-  }
+  // Note: When the input starts in LTR and a mentioned user's name is in RTL, it appears as "Hello @{cibarA}."
+  // If typing continues in RTL, the mention is rendered as: "Hello @{txeTlanoitiddA}{cibarA}."
+  //
+  // This appears natural in RTL, but the mention syntax becomes unclear.
+  // To address this, if RTL is active, we reset subsequent spans using the LRM(Left-To-Right-Mark) Unicode character.
+  // By applying this trick, the result will be "Hello @{cibarA} {txeTlanoitiddA}," where the mention block remains distinct.
+  getDirectionOfNextSpan = () => {
+    return I18nManager.isRTL ? SPAN_DIRECTION.LRM : '';
+  };
 
   public rangeHelpers = {
     inRangeUnderOver(start: number, num: number, end: number) {
@@ -131,9 +134,9 @@ class MentionManager {
    * @description User to @user.nickname text format
    * */
   public asMentionedMessageText = (user: SendbirdUser, delimiter = false) => {
-    const prefix = this.triggerDirPrefixForDisplay;
+    const prefix = '';
     const content = `${this.config.trigger}${user.nickname}`;
-    const postfix = delimiter ? this.config.delimiter : '';
+    const postfix = this.getDirectionOfNextSpan() + (delimiter ? this.config.delimiter : '');
 
     return prefix + content + postfix;
   };

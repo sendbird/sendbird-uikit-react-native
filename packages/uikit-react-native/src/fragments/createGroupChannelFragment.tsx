@@ -121,7 +121,6 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       await recorderService.reset().catch(() => {});
     };
     const _onPressHeaderLeft = useFreshCallback(async () => {
-      voiceMessageStatusManager.clear();
       await onBlurFragment();
       onPressHeaderLeft();
     });
@@ -144,6 +143,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
 
     useEffect(() => {
       return () => {
+        voiceMessageStatusManager.clear();
         onBlurFragment();
       };
     }, []);

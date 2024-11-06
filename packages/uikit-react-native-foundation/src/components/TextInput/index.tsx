@@ -34,6 +34,10 @@ const TextInput = React.forwardRef<RNTextInput, Props>(function TextInput(
   ]) as TextStyle;
 
   const textAlign = (() => {
+    if (textStyle.textAlign && textStyle.textAlign !== 'left' && textStyle.textAlign !== 'right') {
+      return textStyle.textAlign;
+    }
+
     if (I18nManager.isRTL && supportRTLAlign) {
       const text = originalText || props.value || props.placeholder;
       // Note: TextInput is not affected by doLeftAndRightSwapInRTL
@@ -44,7 +48,7 @@ const TextInput = React.forwardRef<RNTextInput, Props>(function TextInput(
       }
     }
 
-    if (textStyle.textAlign) textStyle.textAlign;
+    if (textStyle.textAlign) return textStyle.textAlign;
     return undefined;
   })();
 

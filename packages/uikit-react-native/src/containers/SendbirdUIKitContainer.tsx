@@ -411,7 +411,6 @@ const useConfigInstance = ({ imageCompression, userMention, voiceMessage }: Send
       debounceMills: userMention?.debounceMills ?? MentionConfig.DEFAULT.DEBOUNCE_MILLS,
       delimiter: MentionConfig.DEFAULT.DELIMITER,
       trigger: MentionConfig.DEFAULT.TRIGGER,
-      forceTriggerLeftInRTL: MentionConfig.DEFAULT.FORCE_TRIGGER_LEFT_IN_RTL,
     });
   }, [userMention?.mentionLimit, userMention?.suggestionLimit, userMention?.debounceMills]);
 
