@@ -42,6 +42,18 @@ class NotificationOpenHandler {
     const unsubscribes: Unsubscribe[] = [];
 
     if (Platform.OS === 'ios') {
+      // Note: In the latest version of Notifee, there's an issue that may prevent the localNotification event handler from working correctly.
+      // If you're having trouble, please use the following code with Notifee instead:
+      // https://github.com/invertase/notifee/issues/984
+      //
+      // unsubscribes.push(
+      //   Notifee.onForegroundEvent(async ({ type, detail }) => {
+      //     if (type === EventType.PRESS && detail.notification) {
+      //       const payload = parseSendbirdNotification(detail.notification.data as any);
+      //       this.handlers.onForeground(payload);
+      //     }
+      //   }),
+      // );
       PushNotificationIOS.addEventListener('localNotification', async (notification) => {
         const data = notification.getData();
         if (data.userInteraction === 1 && isSendbirdNotification(data)) {
