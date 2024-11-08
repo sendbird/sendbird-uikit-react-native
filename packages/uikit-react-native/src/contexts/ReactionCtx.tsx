@@ -46,7 +46,6 @@ export const ReactionProvider = ({ children, onPressUserProfile }: Props) => {
 
   const openReactionUserList: ReactionContextType['openReactionUserList'] = useCallback(
     ({ channel, message, focusIndex = 0 }) => {
-
       setState({ channel, message });
       setReactionUserListFocusIndex(focusIndex);
       setReactionUserListVisible(true);
