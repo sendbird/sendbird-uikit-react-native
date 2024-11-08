@@ -7,17 +7,13 @@ import { useForceUpdate, useGroupChannelHandler } from '@sendbird/uikit-tools';
 import type { SendbirdBaseChannel, SendbirdBaseMessage, SendbirdReaction } from '@sendbird/uikit-utils';
 import { getReactionCount } from '@sendbird/uikit-utils';
 
-import { DEFAULT_LONG_PRESS_DELAY, UNKNOWN_USER_ID } from '../../constants';
+import { DEFAULT_LONG_PRESS_DELAY } from '../../constants';
 import { useReaction, useSendbirdChat } from '../../hooks/useContext';
 import ReactionRoundedButton from './ReactionRoundedButton';
 
 const NUM_COL = 4;
 const REACTION_MORE_KEY = 'reaction-more-button';
 export type ReactionAddonType = 'default' | 'thread_parent_message';
-
-const getUserReacted = (reaction: SendbirdReaction, userId = UNKNOWN_USER_ID) => {
-  return reaction.userIds.indexOf(userId) > -1;
-};
 
 const createOnPressReaction = (
   reaction: SendbirdReaction,
@@ -41,7 +37,6 @@ const createReactionButtons = (
   emojiLimit: number,
   onOpenReactionList: () => void,
   onOpenReactionUserList: (focusIndex: number) => void,
-  currentUserId?: string,
   reactionAddonType?: ReactionAddonType,
 ) => {
   const reactions = message.reactions ?? [];
@@ -51,7 +46,7 @@ const createReactionButtons = (
     return (
       <Pressable
         key={reaction.key}
-        onPress={createOnPressReaction(reaction, channel, message, getUserReacted(reaction, currentUserId))}
+        onPress={createOnPressReaction(reaction, channel, message, reaction.hasCurrentUserReacted)}
         onLongPress={() => onOpenReactionUserList(index)}
         delayLongPress={DEFAULT_LONG_PRESS_DELAY}
       >
@@ -59,7 +54,7 @@ const createReactionButtons = (
           <ReactionRoundedButton
             url={getEmoji(reaction.key).url}
             count={getReactionCount(reaction)}
-            reacted={pressed || getUserReacted(reaction, currentUserId)}
+            reacted={pressed || reaction.hasCurrentUserReacted}
             style={
               reactionAddonType === 'default'
                 ? [isNotLastOfRow && styles.marginRight, isNotLastOfCol && styles.marginBottom]
@@ -91,7 +86,7 @@ const MessageReactionAddon = ({
   reactionAddonType?: ReactionAddonType;
 }) => {
   const { colors } = useUIKitTheme();
-  const { sdk, emojiManager, currentUser } = useSendbirdChat();
+  const { sdk, emojiManager } = useSendbirdChat();
   const { openReactionList, openReactionUserList } = useReaction();
   const forceUpdate = useForceUpdate();
 
@@ -113,7 +108,6 @@ const MessageReactionAddon = ({
     emojiManager.allEmoji.length,
     () => openReactionList({ channel, message }),
     (focusIndex) => openReactionUserList({ channel, message, focusIndex }),
-    currentUser?.userId,
     reactionAddonType,
   );
 

@@ -26,7 +26,7 @@ const ReactionUserListBottomSheet = ({
 }: ReactionBottomSheetProps) => {
   const { width } = useWindowDimensions();
   const { bottom, left, right } = useSafeAreaInsets();
-  const { colors } = useUIKitTheme();
+  const { colors, select, palette } = useUIKitTheme();
 
   const [tabIndex, setTabIndex] = useState(0);
   const scrollRef = useRef<ScrollView>();
@@ -123,9 +123,11 @@ const ReactionUserListBottomSheet = ({
   };
 
   const renderPage = () => {
+    const userCountDifference = (focusedReaction?.count || 0) - (focusedReaction?.sampledUserIds.length || 0);
+
     return (
       <>
-        {focusedReaction?.userIds.map((userId) => {
+        {focusedReaction?.sampledUserIds.map((userId) => {
           if (channel?.isGroupChannel()) {
             const user = channel.members.find((x) => x.userId === userId);
             return (
@@ -148,6 +150,13 @@ const ReactionUserListBottomSheet = ({
           }
           return null;
         })}
+        {userCountDifference > 0 && (
+          <View style={styles.pageItem}>
+            <Text body3 color={select({ dark: palette.onBackgroundDark02, light: palette.onBackgroundLight02 })}>
+              And {userCountDifference} others
+            </Text>
+          </View>
+        )}
       </>
     );
   };

@@ -94,7 +94,7 @@ const GroupChannelThreadParentMessageInfo = (props: GroupChannelThreadProps['Par
 
   const renderReactionAddons = () => {
     const configs = sbOptions.uikitWithAppInfo.groupChannel.channel;
-    if (shouldRenderReaction(channel, channel.isSuper ? configs.enableReactionsSupergroup : configs.enableReactions)) {
+    if (shouldRenderReaction(channel, configs.enableReactions)) {
       return (
         <View style={styles.reactionButtonContainer}>
           <ReactionAddons.Message
@@ -302,10 +302,7 @@ const useCreateMessagePressActions = ({
     const configs = sbOptions.uikitWithAppInfo.groupChannel.channel;
     const bottomSheetItem: BottomSheetItem = {
       sheetItems,
-      HeaderComponent: shouldRenderReaction(
-        channel,
-        channel.isGroupChannel() && (channel.isSuper ? configs.enableReactionsSupergroup : configs.enableReactions),
-      )
+      HeaderComponent: shouldRenderReaction(channel, channel.isGroupChannel() && configs.enableReactions)
         ? ({ onClose }) => <ReactionAddons.BottomSheet message={message} channel={channel} onClose={onClose} />
         : undefined,
     };

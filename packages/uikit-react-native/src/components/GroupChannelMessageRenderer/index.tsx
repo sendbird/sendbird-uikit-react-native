@@ -67,11 +67,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
 
   const reactionChildren = useIIFE(() => {
     const configs = sbOptions.uikitWithAppInfo.groupChannel.channel;
-    if (
-      shouldRenderReaction(channel, channel.isSuper ? configs.enableReactionsSupergroup : configs.enableReactions) &&
-      message.reactions &&
-      message.reactions.length > 0
-    ) {
+    if (shouldRenderReaction(channel, configs.enableReactions) && message.reactions && message.reactions.length > 0) {
       return <ReactionAddons.Message channel={channel} message={message} />;
     }
     return null;
