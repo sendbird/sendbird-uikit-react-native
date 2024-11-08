@@ -98,7 +98,7 @@
     ]
   },
   "resolutions": {
-    "@sendbird/chat": "4.13.3",
+    "@sendbird/chat": "4.15.0",
     "@types/react": "^18"
   }
 }
