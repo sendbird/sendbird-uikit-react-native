@@ -16,6 +16,7 @@ export type VoiceFileMessageState = {
 type Props = ThreadParentMessageRendererProps<{
   durationMetaArrayKey?: string;
   onUnmount: () => void;
+  initialCurrentTime?: number;
 }>;
 
 const ThreadParentMessageFileVoice = (props: Props) => {
@@ -25,6 +26,7 @@ const ThreadParentMessageFileVoice = (props: Props) => {
     parentMessage,
     durationMetaArrayKey = 'KEY_VOICE_MESSAGE_DURATION',
     onUnmount,
+    initialCurrentTime,
   } = props;
 
   const fileMessage: SendbirdFileMessage = parentMessage as SendbirdFileMessage;
@@ -38,7 +40,7 @@ const ThreadParentMessageFileVoice = (props: Props) => {
     const initialDuration = value ? parseInt(value, 10) : 0;
     return {
       status: 'paused',
-      currentTime: 0,
+      currentTime: initialCurrentTime || 0,
       duration: initialDuration,
     };
   });
