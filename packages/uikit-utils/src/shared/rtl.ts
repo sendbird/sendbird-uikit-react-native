@@ -1,4 +1,4 @@
-export const isStartsWithRTL = (str?: string): boolean => {
+const isRTLString = (dir: 'start' | 'end', str?: string) => {
   if (!str || str.length === 0) {
     return false;
   }
@@ -8,13 +8,21 @@ export const isStartsWithRTL = (str?: string): boolean => {
     return false;
   }
 
-  const firstChar = Array.from(trimmedStr)[0];
-  const point = firstChar.codePointAt(0);
+  const char = dir === 'start' ? Array.from(trimmedStr)[0] : Array.from(trimmedStr).pop();
+  const point = char?.codePointAt(0);
   if (point === undefined) {
     return false;
   }
 
   return isRTLCodePoint(point);
+};
+
+export const isStartsWithRTL = (str?: string): boolean => {
+  return isRTLString('start', str);
+};
+
+export const isEndsWithRTL = (str?: string): boolean => {
+  return isRTLString('end', str);
 };
 
 const isRTLCodePoint = (codePoint: number) => {
