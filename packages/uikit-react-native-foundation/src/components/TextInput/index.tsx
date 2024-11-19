@@ -1,11 +1,12 @@
 import React from 'react';
 import { I18nManager, TextInput as RNTextInput, StyleSheet, TextInputProps, TextStyle } from 'react-native';
 
+import { isStartsWithRTL } from '@sendbird/uikit-utils';
+
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import type { UIKitTheme } from '../../types';
 import { RTLTextAlignSupportProps } from '../Text';
-import { isStartsWithRTL } from '../Text/isStartsWithRTL';
 
 type Props = {
   variant?: keyof UIKitTheme['colors']['ui']['input'];

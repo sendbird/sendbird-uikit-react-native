@@ -1,9 +1,10 @@
 import React from 'react';
 import { I18nManager, Text as RNText, TextProps as RNTextProps, StyleSheet, TextStyle } from 'react-native';
 
+import { isStartsWithRTL } from '@sendbird/uikit-utils';
+
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import type { TypoName, UIKitTheme } from '../../types';
-import { isStartsWithRTL } from './isStartsWithRTL';
 
 export interface RTLTextAlignSupportProps {
   /**

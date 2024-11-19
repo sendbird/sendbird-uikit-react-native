@@ -1,9 +1,8 @@
 import React from 'react';
-import { I18nManager } from 'react-native';
 
 import { Text, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdFileMessage, SendbirdUser, SendbirdUserMessage } from '@sendbird/uikit-utils';
-import { createMentionTemplateRegex, replaceWithRegex } from '@sendbird/uikit-utils';
+import { createMentionTemplateRegex, isEndsWithRTL, replaceWithRegex } from '@sendbird/uikit-utils';
 
 import type { MentionedUser, Range } from '../types';
 import type { MentionConfigInterface } from './MentionConfig';
@@ -22,14 +21,17 @@ class MentionManager {
     this._templateRegex = createMentionTemplateRegex(this.config.trigger);
   }
 
-  // Note: When the input starts in LTR and a mentioned user's name is in RTL, it appears as "Hello @{cibarA}."
+  // Note: When the input starts in LTR and the mentioned user's name is in RTL, it appears as "Hello @{cibarA}."
   // If typing continues in RTL, the mention is rendered as: "Hello @{txeTlanoitiddA}{cibarA}."
   //
-  // This appears natural in RTL, but the mention syntax becomes unclear.
-  // To address this, if RTL is active, we reset subsequent spans using the LRM(Left-To-Right-Mark) Unicode character.
-  // By applying this trick, the result will be "Hello @{cibarA} {txeTlanoitiddA}," where the mention block remains distinct.
-  getDirectionOfNextSpan = () => {
-    return I18nManager.isRTL ? SPAN_DIRECTION.LRM : '';
+  // Conversely, if the input starts in RTL and the mentioned user's name is in LTR, it appears as "{Eng}@ cibarA."
+  // If typing continues, it is rendered as: "{Eng}{AdditionalText}@ cibarA."
+  //
+  // While this follows the natural text direction, it can make mentions harder to distinguish.
+  // To address this, we use the RLM or LRM Unicode characters to reset subsequent spans based on the last text string of the user's name.
+  // By applying this trick, the result will be displayed as "Hello @{cibarA} {txeTlanoitiddA}" or "{AdditionalText} {Eng}@ cibarA," ensuring the mention block remains clearly distinguishable.
+  getDirectionOfNextSpan = (name: string) => {
+    return isEndsWithRTL(name) ? SPAN_DIRECTION.LRM : SPAN_DIRECTION.RLM;
   };
 
   public rangeHelpers = {
@@ -136,7 +138,7 @@ class MentionManager {
   public asMentionedMessageText = (user: SendbirdUser, delimiter = false) => {
     const prefix = '';
     const content = `${this.config.trigger}${user.nickname}`;
-    const postfix = this.getDirectionOfNextSpan() + (delimiter ? this.config.delimiter : '');
+    const postfix = this.getDirectionOfNextSpan(user.nickname) + (delimiter ? this.config.delimiter : '');
 
     return prefix + content + postfix;
   };
