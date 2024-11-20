@@ -30,7 +30,7 @@ const OpenChannelListFragment = createOpenChannelListFragment({
   List: (props) => {
     const { colors } = useUIKitTheme();
     return (
-      <Box flex={1}>
+      <Box flex={1} alignItems={'flex-start'}>
         <Text body2 color={colors.onBackground02} style={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 4 }}>
           {'Preset channels developed by UIKit'}
         </Text>
