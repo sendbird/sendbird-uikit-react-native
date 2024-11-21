@@ -3698,10 +3698,10 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@sendbird/chat@4.15.0", "@sendbird/chat@^4.15.0":
-  version "4.15.0"
-  resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.15.0.tgz#8fa3ed5a97c4bafeefce5e88e1946e0949bda7f5"
-  integrity sha512-9IKswXB/3pgIsp0ovjOq85XC7ckP1qyvuG93VDvmcAgUgQnsPW1Acz7cC1Xv1NdJtzWARedBbYlWHKa2gh3EcA==
+"@sendbird/chat@4.16.0", "@sendbird/chat@^4.16.0":
+  version "4.16.0"
+  resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.16.0.tgz#3a133fb415735261fa5f6ef3fb646af99394c76e"
+  integrity sha512-Fe6CkQpviXhWjvrglq8ZVNfaFFVkh8wrKSErecbPz7nThqw6JzAx1nD1i1efpu0+ARid9dyuxmxYLAPWw4OAIg==
 
 "@sendbird/uikit-tools@0.0.1-alpha.77":
   version "0.0.1-alpha.77"

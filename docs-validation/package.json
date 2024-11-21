@@ -14,7 +14,7 @@
     "@react-native-firebase/messaging": "^14.7.0",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.10.0",
-    "@sendbird/chat": "^4.15.0",
+    "@sendbird/chat": "^4.16.0",
     "date-fns": "^4.1.0",
     "react": "18.2.0",
     "react-native": "0.74.3",
