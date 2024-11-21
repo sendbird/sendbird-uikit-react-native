@@ -111,7 +111,7 @@ const ThreadParentMessageRenderer = (props: ThreadParentMessageRendererProps) =>
       if (
         mentionManager.shouldUseMentionedMessageTemplate(message, sbOptions.uikit.groupChannel.channel.enableMention)
       ) {
-        return message.mentionedMessageTemplate;
+        return message.mentionedMessageTemplate ?? '';
       } else {
         return message.message;
       }
