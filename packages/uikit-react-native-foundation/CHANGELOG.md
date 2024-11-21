@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.7.6...v3.8.0) (2024-11-21)
+
+### Features
+
+- apply direction to text ui layout ([09f0bef](https://github.com/sendbird/sendbird-uikit-react-native/commit/09f0befbf31ff679bd67413673065e95328c3897))
+- apply rtl support to open channel fragments ([ed9b5b5](https://github.com/sendbird/sendbird-uikit-react-native/commit/ed9b5b5dfec38dd25f213d1251306cb3a29110e3))
+- apply rtl to channel preview component ([1e1e930](https://github.com/sendbird/sendbird-uikit-react-native/commit/1e1e930da7c5ef45c29ccca4a1f7d240c32b092b))
+- apply rtl to icon component ([56c2793](https://github.com/sendbird/sendbird-uikit-react-native/commit/56c2793653d549607c8e588c8a495b1505665297))
+- change left to start and right to end in styles ([6ffb896](https://github.com/sendbird/sendbird-uikit-react-native/commit/6ffb896894d5975a721a205c52df80ca6e42e1ba))
+- support rtl to text and text input ([ee4a0c8](https://github.com/sendbird/sendbird-uikit-react-native/commit/ee4a0c817ec206deca153b53535fc5125c6dddb6))
+
+### Bug Fixes
+
+- apply LRM,RLM properly for mention direction ([7c7a751](https://github.com/sendbird/sendbird-uikit-react-native/commit/7c7a7519e7c1d75ab23c437d9e411520c67210f4))
+- ensure text aligns center regardless of RTL setting ([89401bb](https://github.com/sendbird/sendbird-uikit-react-native/commit/89401bb73bcd7be60ad1f3ff12ca2172843ecca8))
+
 ## [3.7.6](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.7.5...v3.7.6) (2024-11-05)
 
 **Note:** Version bump only for package @sendbird/uikit-react-native-foundation
