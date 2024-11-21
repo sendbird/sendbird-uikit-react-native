@@ -150,7 +150,7 @@ const ReactionUserListBottomSheet = ({
         {userCountDifference > 0 && (
           <View style={styles.pageItem}>
             <Text body3 color={select({ dark: palette.onBackgroundDark02, light: palette.onBackgroundLight02 })}>
-              And {userCountDifference} others
+              {STRINGS.REACTION.MORE_USERS(userCountDifference)}
             </Text>
           </View>
         )}

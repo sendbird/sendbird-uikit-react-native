@@ -324,6 +324,9 @@ export interface StringSet {
     VOICE_MESSAGE: string;
     VOICE_MESSAGE_INPUT_CANCEL: string;
   };
+  REACTION: {
+    MORE_USERS: (userCountDifference: number) => string;
+  };
   FILE_VIEWER: {
     TITLE: (message: SendbirdFileMessage) => string;
     SUBTITLE: (message: SendbirdFileMessage) => string;

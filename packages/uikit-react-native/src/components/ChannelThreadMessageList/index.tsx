@@ -342,7 +342,10 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
     const configs = sbOptions.uikitWithAppInfo.groupChannel.channel;
     const bottomSheetItem: BottomSheetItem = {
       sheetItems,
-      HeaderComponent: shouldRenderReaction(channel, channel.isGroupChannel() && configs.enableReactions)
+      HeaderComponent: shouldRenderReaction(
+        channel,
+        channel.isGroupChannel() && (channel.isSuper ? configs.enableReactionsSupergroup : configs.enableReactions),
+      )
         ? ({ onClose }) => <ReactionAddons.BottomSheet message={message} channel={channel} onClose={onClose} />
         : undefined,
     };

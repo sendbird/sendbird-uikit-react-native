@@ -25,10 +25,9 @@ import type {
   Member,
   MessageCollection,
 } from '@sendbird/chat/groupChannel';
-import {
+import type {
   OpenChannelCreateParams,
   OpenChannelUpdateParams,
-  ReactedUserInfo,
   SendableMessage,
 } from '@sendbird/chat/lib/__definition';
 import type {
@@ -40,6 +39,7 @@ import type {
   MessageSearchQuery,
   MultipleFilesMessage,
   PreviousMessageListQuery,
+  ReactedUserInfo,
   Reaction,
   UserMessage,
   UserMessageCreateParams,
