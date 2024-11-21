@@ -39,6 +39,7 @@ import type {
   MessageSearchQuery,
   MultipleFilesMessage,
   PreviousMessageListQuery,
+  ReactedUserInfo,
   Reaction,
   UserMessage,
   UserMessageCreateParams,
@@ -112,6 +113,7 @@ export type SendbirdOpenChannel = OpenChannel;
 export type SendbirdFeedChannel = FeedChannel;
 
 export type SendbirdReaction = Reaction;
+export type SendbirdReactedUserInfo = ReactedUserInfo;
 export type SendbirdEmoji = Emoji;
 export type SendbirdEmojiCategory = EmojiCategory;
 export type SendbirdEmojiContainer = EmojiContainer;

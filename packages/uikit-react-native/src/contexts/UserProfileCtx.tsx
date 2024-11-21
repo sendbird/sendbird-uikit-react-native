@@ -6,6 +6,7 @@ import type {
   SendbirdGroupChannel,
   SendbirdGroupChannelCreateParams,
   SendbirdMember,
+  SendbirdReactedUserInfo,
   SendbirdUser,
 } from '@sendbird/uikit-utils';
 import { Logger, PASS, getDefaultGroupChannelCreateParams, useIIFE } from '@sendbird/uikit-utils';
@@ -16,7 +17,7 @@ import { SendbirdChatContext } from '../contexts/SendbirdChatCtx';
 type OnCreateChannel = (channel: SendbirdGroupChannel) => void;
 type OnBeforeCreateChannel = (
   channelParams: SendbirdGroupChannelCreateParams,
-  users: SendbirdUser[] | SendbirdMember[],
+  users: SendbirdUser[] | SendbirdMember[] | SendbirdReactedUserInfo[],
 ) => SendbirdGroupChannelCreateParams | Promise<SendbirdGroupChannelCreateParams>;
 
 type ShowOptions = {
@@ -24,7 +25,7 @@ type ShowOptions = {
 };
 
 export type UserProfileContextType = {
-  show(user: SendbirdUser | SendbirdMember, options?: ShowOptions): void;
+  show(user: SendbirdUser | SendbirdMember | SendbirdReactedUserInfo, options?: ShowOptions): void;
   hide(): void;
 };
 
@@ -58,7 +59,7 @@ export const UserProfileProvider = ({
 
   const { bottom, left, right } = useSafeAreaInsets();
 
-  const [user, setUser] = useState<SendbirdUser | SendbirdMember>();
+  const [user, setUser] = useState<SendbirdUser | SendbirdMember | SendbirdReactedUserInfo>();
   const [visible, setVisible] = useState(false);
   const [hideMessageButton, setHideMessageButton] = useState(false);
 

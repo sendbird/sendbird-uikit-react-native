@@ -46,9 +46,6 @@ export const ReactionProvider = ({ children, onPressUserProfile }: Props) => {
 
   const openReactionUserList: ReactionContextType['openReactionUserList'] = useCallback(
     ({ channel, message, focusIndex = 0 }) => {
-      // NOTE: We don't support reaction user list for supergroup channel
-      if (channel.isGroupChannel() && channel.isSuper) return;
-
       setState({ channel, message });
       setReactionUserListFocusIndex(focusIndex);
       setReactionUserListVisible(true);

@@ -1021,7 +1021,7 @@ PODS:
   - React-Mapbuffer (0.74.3):
     - glog
     - React-debug
-  - react-native-cameraroll (7.8.1):
+  - react-native-cameraroll (7.8.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1044,8 +1044,27 @@ PODS:
     - Yoga
   - react-native-create-thumbnail (2.0.0):
     - React-Core
-  - react-native-document-picker (9.3.0):
+  - react-native-document-picker (9.3.1):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
     - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-image-picker (7.1.2):
     - DoubleConversion
     - glog
@@ -1091,13 +1110,11 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-netinfo (11.3.2):
+  - react-native-netinfo (11.4.1):
     - React-Core
-  - react-native-safe-area-context (4.10.8):
+  - react-native-safe-area-context (4.14.0):
     - React-Core
-  - react-native-slider (4.4.2):
-    - React-Core
-  - react-native-video (6.3.0):
+  - react-native-slider (4.5.5):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1111,7 +1128,6 @@ PODS:
     - React-featureflags
     - React-graphics
     - React-ImageManager
-    - react-native-video/Video (= 6.3.0)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-rendererdebug
@@ -1119,7 +1135,29 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-video/Video (6.3.0):
+  - react-native-video (6.7.0):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - react-native-video/Video (= 6.7.0)
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - react-native-video/Video (6.7.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1369,14 +1407,14 @@ PODS:
     - React-logger (= 0.74.3)
     - React-perflogger (= 0.74.3)
     - React-utils (= 0.74.3)
-  - ReactNativeFileAccess (3.1.0):
+  - ReactNativeFileAccess (3.1.1):
     - React-Core
     - ZIPFoundation
-  - RNAudioRecorderPlayer (3.6.10):
+  - RNAudioRecorderPlayer (3.6.12):
     - React-Core
-  - RNCAsyncStorage (1.23.1):
+  - RNCAsyncStorage (1.24.0):
     - React-Core
-  - RNCClipboard (1.14.1):
+  - RNCClipboard (1.14.3):
     - React-Core
   - RNCPushNotificationIOS (1.11.0):
     - React-Core
@@ -1401,7 +1439,7 @@ PODS:
   - RNNotifeeCore/NotifeeCore (5.7.0)
   - RNPermissions (3.10.1):
     - React-Core
-  - RNScreens (3.32.0):
+  - RNScreens (3.35.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1749,16 +1787,16 @@ SPEC CHECKSUMS:
   React-jsitracing: 6b3c8c98313642140530f93c46f5a6ca4530b446
   React-logger: fa92ba4d3a5d39ac450f59be2a3cec7b099f0304
   React-Mapbuffer: 9f68550e7c6839d01411ac8896aea5c868eff63a
-  react-native-cameraroll: a9138c165c9975da773d26945591d313992c799b
+  react-native-cameraroll: 4f313ab09aeaf42ac5f72dec840641da7656f104
   react-native-create-thumbnail: ab55d24aea01723cf386f18b0b542aabb1982f27
-  react-native-document-picker: 5b97e24a7f1a1e4a50a72c540a043f32d29a70a2
+  react-native-document-picker: c4f197741c327270453aa9840932098e0064fd52
   react-native-image-picker: c3afe5472ef870d98a4b28415fc0b928161ee5f7
   react-native-image-resizer: fd0c333eca55147bd55c5e054cac95dcd0da6814
   react-native-mmkv: 8c9a677e64a1ac89b0c6cf240feea528318b3074
-  react-native-netinfo: 076df4f9b07f6670acf4ce9a75aac8d34c2e2ccc
-  react-native-safe-area-context: b7daa1a8df36095a032dff095a1ea8963cb48371
-  react-native-slider: 33b8d190b59d4f67a541061bb91775d53d617d9d
-  react-native-video: 449453bcc9e02d17f7d5dd55e07bafd4129cec5c
+  react-native-netinfo: f0a9899081c185db1de5bb2fdc1c88c202a059ac
+  react-native-safe-area-context: 4532f1a0c5d34a46b9324ccaaedcb5582a302b7d
+  react-native-slider: 646f6727b04b619ec62d6547fe90b8f561950036
+  react-native-video: d78e478668d5472aa28a2e612785f5605991da93
   React-nativeconfig: fa5de9d8f4dbd5917358f8ad3ad1e08762f01dcb
   React-NativeModulesApple: 585d1b78e0597de364d259cb56007052d0bda5e5
   React-perflogger: 7bb9ba49435ff66b666e7966ee10082508a203e8
@@ -1782,10 +1820,10 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 0c80752bceb80924cb8a4babc2a8e3ed70d41e87
   React-utils: a06061b3887c702235d2dac92dacbd93e1ea079e
   ReactCommon: f00e436b3925a7ae44dfa294b43ef360fbd8ccc4
-  ReactNativeFileAccess: e3b1a0a36b919d20279947aac31c2e939827c93b
-  RNAudioRecorderPlayer: f3b4f32d5581a44be0f9eb383dc87f98f941b08b
-  RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
-  RNCClipboard: 0a720adef5ec193aa0e3de24c3977222c7e52a37
+  ReactNativeFileAccess: 863c8952c05c0ea5f592ef3101169baaf66777bd
+  RNAudioRecorderPlayer: 224c7de87722938aedce04000d09baa633148f5b
+  RNCAsyncStorage: ec53e44dc3e75b44aa2a9f37618a49c3bc080a7a
+  RNCClipboard: 2821ac938ef46f736a8de0c8814845dde2dcbdfb
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
   RNDateTimePicker: 1dd15d7ed1ab7d999056bc77879a42920d139c12
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
@@ -1794,11 +1832,11 @@ SPEC CHECKSUMS:
   RNNotifee: 40cc97ddc290e102894ea5381e90905f50598cfe
   RNNotifeeCore: 2d6233c6e9cf7755b8f460061c7811113043d2d3
   RNPermissions: 4e3714e18afe7141d000beae3755e5b5fb2f5e05
-  RNScreens: 5aeecbb09aa7285379b6e9f3c8a3c859bb16401c
+  RNScreens: 6b641f232990a9d505a6d139fd18c3c759c9d290
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
-  Yoga: 04f1db30bb810187397fa4c37dd1868a27af229c
+  Yoga: 88480008ccacea6301ff7bf58726e27a72931c8d
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
 PODFILE CHECKSUM: 854e85b2bbfd7d0e442b6dea393d8c15cb83909e

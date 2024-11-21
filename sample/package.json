@@ -28,7 +28,7 @@
     "@react-navigation/bottom-tabs": "^6.6.0",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.10.0",
-    "@sendbird/chat": "^4.13.3",
+    "@sendbird/chat": "^4.16.0",
     "@storybook/addon-actions": "^6.4.19",
     "@storybook/addon-controls": "^6.4.19",
     "@storybook/addon-ondevice-actions": "^6.0.1-alpha.7",

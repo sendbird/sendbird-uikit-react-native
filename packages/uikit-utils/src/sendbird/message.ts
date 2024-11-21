@@ -159,7 +159,7 @@ export function shouldRenderReaction(channel: SendbirdBaseChannel, reactionEnabl
 }
 
 export function getReactionCount(reaction: SendbirdReaction) {
-  return reaction.userIds.length;
+  return reaction.count;
 }
 
 export type MessageType =

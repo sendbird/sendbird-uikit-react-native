@@ -345,6 +345,9 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       VOICE_MESSAGE_INPUT_CANCEL: 'Cancel',
       ...overrides?.LABELS,
     },
+    REACTION: {
+      MORE_USERS: (userCountDifference) => `And ${userCountDifference} others`,
+    },
     FILE_VIEWER: {
       TITLE: (message) => message.sender?.nickname || USER_NO_NAME,
       SUBTITLE: (message) => getMessageTimeFormat(new Date(message.createdAt), dateLocale),
