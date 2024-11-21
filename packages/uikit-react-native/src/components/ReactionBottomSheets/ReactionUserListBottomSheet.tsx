@@ -26,7 +26,7 @@ const ReactionUserListBottomSheet = ({
 }: ReactionBottomSheetProps) => {
   const { width } = useWindowDimensions();
   const { bottom, left, right } = useSafeAreaInsets();
-  const { colors, select, palette } = useUIKitTheme();
+  const { colors } = useUIKitTheme();
 
   const [tabIndex, setTabIndex] = useState(0);
   const scrollRef = useRef<ScrollView>();
