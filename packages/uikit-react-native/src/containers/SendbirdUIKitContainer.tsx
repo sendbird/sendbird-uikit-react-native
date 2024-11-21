@@ -25,6 +25,7 @@ import {
   SendbirdGroupChannel,
   SendbirdGroupChannelCreateParams,
   SendbirdMember,
+  SendbirdReactedUserInfo,
   SendbirdUser,
   useIsFirstMount,
 } from '@sendbird/uikit-utils';
@@ -141,11 +142,11 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
     onCreateChannel: (channel: SendbirdGroupChannel) => void;
     onBeforeCreateChannel?: (
       channelParams: SendbirdGroupChannelCreateParams,
-      users: SendbirdUser[] | SendbirdMember[],
+      users: SendbirdUser[] | SendbirdMember[] | SendbirdReactedUserInfo[],
     ) => SendbirdGroupChannelCreateParams | Promise<SendbirdGroupChannelCreateParams>;
   };
   reaction?: {
-    onPressUserProfile?: (user: SendbirdUser | SendbirdMember) => void;
+    onPressUserProfile?: (user: SendbirdUser | SendbirdMember | SendbirdReactedUserInfo) => void;
   };
   userMention?: Pick<Partial<MentionConfigInterface>, 'mentionLimit' | 'suggestionLimit' | 'debounceMills'>;
   imageCompression?: Partial<ImageCompressionConfigInterface>;

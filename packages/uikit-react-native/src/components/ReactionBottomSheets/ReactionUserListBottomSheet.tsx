@@ -123,27 +123,24 @@ const ReactionUserListBottomSheet = ({
   };
 
   const renderPage = () => {
-    const userCountDifference = (focusedReaction?.count || 0) - (focusedReaction?.sampledUserIds.length || 0);
+    const userCountDifference = (focusedReaction?.count || 0) - (focusedReaction?.sampledUserInfoList.length || 0);
 
     return (
       <>
-        {focusedReaction?.sampledUserIds.map((userId) => {
+        {focusedReaction?.sampledUserInfoList.map((reactedUserInfo) => {
           if (channel?.isGroupChannel()) {
-            const user = channel.members.find((x) => x.userId === userId);
             return (
               <Pressable
-                key={userId}
+                key={reactedUserInfo.userId}
                 onPress={async () => {
-                  if (user) {
-                    await onClose();
-                    onPressUserProfile(user);
-                  }
+                  await onClose();
+                  onPressUserProfile(reactedUserInfo);
                 }}
                 style={styles.pageItem}
               >
-                <Avatar size={36} uri={user?.profileUrl} containerStyle={styles.avatar} />
+                <Avatar size={36} uri={reactedUserInfo?.profileUrl} containerStyle={styles.avatar} />
                 <Text subtitle2 style={{ flex: 1 }}>
-                  {user?.nickname || STRINGS.LABELS.USER_NO_NAME}
+                  {reactedUserInfo?.nickname || STRINGS.LABELS.USER_NO_NAME}
                 </Text>
               </Pressable>
             );

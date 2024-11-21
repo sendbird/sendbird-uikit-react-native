@@ -8,6 +8,7 @@ import type {
   SendbirdMessage,
   SendbirdOpenChannel,
   SendbirdParticipant,
+  SendbirdReactedUserInfo,
   SendbirdUser,
   SendbirdUserMessage,
 } from '@sendbird/uikit-utils';
@@ -377,6 +378,6 @@ export interface StringSet {
   PROFILE_CARD: {
     BUTTON_MESSAGE: string;
     BODY_LABEL: string;
-    BODY: (user: SendbirdUser | SendbirdMember) => string;
+    BODY: (user: SendbirdUser | SendbirdMember | SendbirdReactedUserInfo) => string;
   };
 }

@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import type { SendbirdMember, SendbirdUser } from '@sendbird/uikit-utils';
+import { SendbirdMember, SendbirdReactedUserInfo, SendbirdUser } from '@sendbird/uikit-utils';
 
 import type { LocalizationContext } from '../../contexts/LocalizationCtx';
 import type { ReactionContext } from '../../contexts/ReactionCtx';
@@ -13,7 +13,7 @@ export type ReactionBottomSheetProps = {
   visible: boolean;
   onDismiss: () => void;
   onClose: () => Promise<void>;
-  onPressUserProfile: (user: SendbirdUser | SendbirdMember) => void;
+  onPressUserProfile: (user: SendbirdUser | SendbirdMember | SendbirdReactedUserInfo) => void;
   chatCtx: GetFromContext<typeof SendbirdChatContext>;
   reactionCtx: GetFromContext<typeof ReactionContext>;
   localizationCtx: GetFromContext<typeof LocalizationContext>;
