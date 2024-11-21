@@ -1,8 +1,8 @@
 import { useCallback, useRef, useState } from 'react';
 
-import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
+import { useGroupChannelHandler } from '@sendbird/uikit-tools';
 import type { SendbirdChatSDK, SendbirdGroupChannel, SendbirdMember, SendbirdUser } from '@sendbird/uikit-utils';
-import { isDifferentChannel, useAsyncEffect, useDebounceEffect, useUniqHandlerId } from '@sendbird/uikit-utils';
+import { isDifferentChannel, useAsyncEffect, useDebounceEffect } from '@sendbird/uikit-utils';
 
 import { useSendbirdChat } from '../hooks/useContext';
 import type { Range } from '../types';
@@ -22,9 +22,7 @@ const useMentionSuggestion = (params: {
     setFreshChannel(await channel.refresh());
   }, [channel.url]);
 
-  const id = useUniqHandlerId('useMentionSuggestion');
-
-  useChannelHandler(params.sdk, id, {
+  useGroupChannelHandler(params.sdk, {
     onUserJoined(eventChannel) {
       if (isDifferentChannel(eventChannel, channel)) return;
       setFreshChannel(eventChannel);

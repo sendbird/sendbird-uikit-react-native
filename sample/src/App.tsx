@@ -1,11 +1,12 @@
 import Notifee from '@notifee/react-native';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { AppState } from 'react-native';
 
 import { SendbirdUIKitContainer, TypingIndicatorType, useSendbirdChat } from '@sendbird/uikit-react-native';
 import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 
+import { UIKitLocalConfigsContext } from './context/uikitLocalConfigs';
 // import LogView from './components/LogView';
 import { APP_ID } from './env';
 import { GetTranslucent, RootStack, SetSendbirdSDK, platformServices } from './factory';
@@ -45,10 +46,12 @@ import {
   SignInScreen,
   StorybookScreen,
   ThemeColorsScreen,
+  UIKitConfigsScreen,
 } from './screens';
 import FileViewerScreen from './screens/uikit/FileViewerScreen';
 
 const App = () => {
+  const { localConfigs } = useContext(UIKitLocalConfigsContext);
   const { scheme } = useAppearance();
   const isLightTheme = scheme === 'light';
 
@@ -62,8 +65,8 @@ const App = () => {
         groupChannel: {
           enableMention: true,
           typingIndicatorTypes: new Set([TypingIndicatorType.Text, TypingIndicatorType.Bubble]),
-          replyType: 'thread',
-          threadReplySelectType: 'thread',
+          replyType: localConfigs.replyType,
+          threadReplySelectType: localConfigs.threadReplySelectType,
         },
         groupChannelList: {
           enableTypingIndicator: true,
@@ -185,6 +188,7 @@ const Navigations = () => {
             </RootStack.Group>
 
             <RootStack.Group screenOptions={{ headerShown: true }}>
+              <RootStack.Screen name={Routes.UIKitConfigs} component={UIKitConfigsScreen} />
               <RootStack.Screen name={Routes.ThemeColors} component={ThemeColorsScreen} />
               <RootStack.Screen name={Routes.Palette} component={PaletteScreen} />
               <RootStack.Screen name={Routes.Storybook} component={StorybookScreen} />

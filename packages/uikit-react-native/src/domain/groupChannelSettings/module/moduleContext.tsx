@@ -1,7 +1,7 @@
 import React, { createContext, useCallback } from 'react';
 
-import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { useActionMenu, useAlert, useBottomSheet, usePrompt, useToast } from '@sendbird/uikit-react-native-foundation';
+import { useGroupChannelHandler } from '@sendbird/uikit-tools';
 import {
   NOOP,
   SendbirdBaseChannel,
@@ -9,7 +9,6 @@ import {
   SendbirdGroupChannelUpdateParams,
   isDifferentChannel,
   useForceUpdate,
-  useUniqHandlerId,
 } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
@@ -28,7 +27,6 @@ export const GroupChannelSettingsContexts: GroupChannelSettingsContextsType = {
 };
 
 export const GroupChannelSettingsContextsProvider: GroupChannelSettingsModule['Provider'] = ({ children, channel }) => {
-  const handlerId = useUniqHandlerId('GroupChannelSettingsContextsProvider');
   const forceUpdate = useForceUpdate();
   const { STRINGS } = useLocalization();
   const { sdk } = useSendbirdChat();
@@ -40,7 +38,7 @@ export const GroupChannelSettingsContextsProvider: GroupChannelSettingsModule['P
     forceUpdate();
   };
 
-  useChannelHandler(sdk, handlerId, {
+  useGroupChannelHandler(sdk, {
     onChannelChanged: onChannelChanged,
     onChannelFrozen: onChannelChanged,
     onChannelUnfrozen: onChannelChanged,

@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 
+import Box from '../../components/Box';
 import Icon from '../../components/Icon';
 import Text from '../../components/Text';
 import createStyleSheet from '../../styles/createStyleSheet';
@@ -38,14 +39,16 @@ const SheetItem = ({ icon, title, iconColor, titleColor, disabled = false }: She
           containerStyle={styles.sheetItemIcon}
         />
       )}
-      <Text
-        subtitle1
-        numberOfLines={1}
-        color={titleColor ?? (disabled ? colors.ui.dialog.default.none.blurred : colors.ui.dialog.default.none.text)}
-        style={styles.sheetItemText}
-      >
-        {title}
-      </Text>
+      <Box flex={1} alignItems={'flex-start'}>
+        <Text
+          subtitle1
+          numberOfLines={1}
+          color={titleColor ?? (disabled ? colors.ui.dialog.default.none.blurred : colors.ui.dialog.default.none.text)}
+          style={styles.sheetItemText}
+        >
+          {title}
+        </Text>
+      </Box>
     </View>
   );
 };
@@ -55,19 +58,19 @@ const styles = createStyleSheet({
     overflow: 'hidden',
     flexDirection: 'column',
     width: '100%',
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    borderTopStartRadius: 8,
+    borderTopEndRadius: 8,
   },
   sheetItemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'flex-start',
     height: 48,
   },
   sheetItemIcon: {
-    marginLeft: 16,
+    marginStart: 16,
   },
   sheetItemText: {
-    flex: 1,
     marginHorizontal: 24,
   },
 });

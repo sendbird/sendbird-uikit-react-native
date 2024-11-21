@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { type RegexTextPattern, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { Box, type RegexTextPattern, Text, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { RegexText, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
 import { SendbirdUserMessage, urlRegexStrict } from '@sendbird/uikit-utils';
 
@@ -18,37 +18,43 @@ const ThreadParentMessageUser = (props: Props) => {
   const { colors } = useUIKitTheme();
 
   return (
-    <Text body3 color={colors.onBackground01} suppressHighlighting>
-      <RegexText
-        body3
-        color={colors.onBackground01}
-        patterns={[
-          ...(props.regexTextPatterns ?? []),
-          {
-            regex: urlRegexStrict,
-            replacer({ match, parentProps, keyPrefix, index }) {
-              return (
-                <Text
-                  {...parentProps}
-                  key={`${keyPrefix}-${index}`}
-                  onPress={() => props.onPressURL?.(match)}
-                  style={[parentProps?.style, styles.urlText]}
-                >
-                  {match}
-                </Text>
-              );
+    <Box flex={1} alignItems={'flex-start'}>
+      <Text body3 color={colors.onBackground01} suppressHighlighting supportRTLAlign originalText={userMessage.message}>
+        <RegexText
+          body3
+          suppressHighlighting
+          supportRTLAlign
+          originalText={userMessage.message}
+          color={colors.onBackground01}
+          patterns={[
+            ...(props.regexTextPatterns ?? []),
+            {
+              regex: urlRegexStrict,
+              replacer({ match, parentProps, keyPrefix, index }) {
+                return (
+                  <Text
+                    {...parentProps}
+                    key={`${keyPrefix}-${index}`}
+                    onPress={() => props.onPressURL?.(match)}
+                    style={[parentProps?.style, styles.urlText]}
+                  >
+                    {match}
+                  </Text>
+                );
+              },
             },
-          },
-        ]}
-      >
-        {props.renderRegexTextChildren?.(userMessage)}
-      </RegexText>
-      {Boolean(userMessage.updatedAt) && (
-        <Text body3 color={colors.onBackground02}>
-          {' (edited)'}
-        </Text>
-      )}
-    </Text>
+          ]}
+        >
+          {props.renderRegexTextChildren?.(userMessage)}
+        </RegexText>
+        {Boolean(userMessage.updatedAt) && (
+          <Text body3 color={colors.onBackground02}>
+            {/*FIXME: edited to string set*/}
+            {' (edited)'}
+          </Text>
+        )}
+      </Text>
+    </Box>
   );
 };
 

@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { TouchableOpacity, useWindowDimensions } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { useSafeAreaPadding } from '@sendbird/uikit-utils';
 
 import type Icon from '../../components/Icon';
 import Modal from '../../components/Modal';
@@ -28,7 +29,7 @@ type Props = {
 const BottomSheet = ({ onDismiss, onHide, visible, sheetItems, HeaderComponent }: Props) => {
   const { statusBarTranslucent } = useHeaderStyle();
   const { width } = useWindowDimensions();
-  const { bottom, left, right } = useSafeAreaInsets();
+  const safeArea = useSafeAreaPadding(['bottom', 'left', 'right']);
   return (
     <Modal
       type={'slide'}
@@ -38,13 +39,13 @@ const BottomSheet = ({ onDismiss, onHide, visible, sheetItems, HeaderComponent }
       visible={visible}
       backgroundStyle={{ alignItems: 'center', justifyContent: 'flex-end' }}
     >
-      <DialogSheet style={{ width, paddingBottom: bottom }}>
+      <DialogSheet style={{ width, paddingBottom: safeArea.paddingBottom }}>
         {HeaderComponent && <HeaderComponent onClose={onHide} />}
         {sheetItems.map(({ onPress, ...props }, idx) => (
           <TouchableOpacity
             activeOpacity={0.75}
             key={props.title + idx}
-            style={{ paddingLeft: left, paddingRight: right }}
+            style={{ paddingStart: safeArea.paddingStart, paddingEnd: safeArea.paddingEnd }}
             disabled={props.disabled}
             onPress={async () => {
               await onHide();

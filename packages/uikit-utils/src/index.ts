@@ -3,6 +3,7 @@ export { default as arrayToMap, arrayToMapWithGetter } from './shared/arrayToMap
 export * from './shared/regex';
 export * from './shared/bufferedRequest';
 export * from './shared/file';
+export * from './shared/rtl';
 export * from './shared';
 
 export * from './hooks';

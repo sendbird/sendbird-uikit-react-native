@@ -34,7 +34,7 @@ const OpenChannelPreview = ({ customCover, coverUrl, participantsCount = 0, titl
         height={styles.channelCover.height}
         borderRadius={styles.channelCover.width}
         overflow={'hidden'}
-        marginRight={16}
+        marginEnd={16}
       >
         {conditionChaining(
           [Boolean(customCover)],
@@ -53,11 +53,11 @@ const OpenChannelPreview = ({ customCover, coverUrl, participantsCount = 0, titl
           <Text subtitle1 style={styles.channelInfoTitle} numberOfLines={1} color={color.textTitle}>
             {title}
           </Text>
-          {frozen && <Icon size={16} icon={'freeze'} color={color.frozenIcon} containerStyle={styles.marginLeft} />}
+          {frozen && <Icon size={16} icon={'freeze'} color={color.frozenIcon} containerStyle={styles.marginStart} />}
         </Box>
         <Box flexDirection={'row'} flexShrink={1} alignItems={'center'} justifyContent={'flex-start'}>
           <Box flexDirection={'row'} alignItems={'center'}>
-            <Icon size={16} icon={'members'} color={color.participantsIcon} containerStyle={styles.marginRight} />
+            <Icon size={16} icon={'members'} color={color.participantsIcon} containerStyle={styles.marginEnd} />
             <Text caption2 color={color.textParticipants}>
               {truncatedCount(participantsCount, 999)}
             </Text>
@@ -79,16 +79,16 @@ const styles = createStyleSheet({
   channelInfoTitle: {
     flexShrink: 1,
   },
-  marginRight: {
-    marginRight: 4,
+  marginEnd: {
+    marginEnd: 4,
   },
-  marginLeft: {
-    marginLeft: 4,
+  marginStart: {
+    marginStart: 4,
   },
   separator: {
     position: 'absolute',
-    left: 0,
-    right: -16,
+    start: 0,
+    end: -16,
     bottom: 0,
     height: 1,
   },

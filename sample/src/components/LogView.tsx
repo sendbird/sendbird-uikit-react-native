@@ -1,4 +1,4 @@
-import format from 'date-fns/format';
+import { format } from 'date-fns';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Animated, ScrollView, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 
@@ -54,7 +54,7 @@ const LogView = () => {
         width: animated.interpolate({ extrapolate: 'clamp', inputRange: [0, 1], outputRange: [70, width] }),
         height: animated.interpolate({ extrapolate: 'clamp', inputRange: [0, 1], outputRange: [70, width] }),
         bottom: animated.interpolate({ extrapolate: 'clamp', inputRange: [0, 1], outputRange: [150, 0] }),
-        right: animated.interpolate({ extrapolate: 'clamp', inputRange: [0, 1], outputRange: [15, 0] }),
+        end: animated.interpolate({ extrapolate: 'clamp', inputRange: [0, 1], outputRange: [15, 0] }),
       }}
     >
       <TouchableOpacity

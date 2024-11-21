@@ -35,7 +35,7 @@ const Alert = ({ onDismiss, visible, onHide, title = '', message = '', buttons =
       <DialogBox style={styles.container}>
         {Boolean(title) && (
           <View style={styles.titleContainer}>
-            <Text h1 color={colors.ui.dialog.default.none.text} numberOfLines={1} style={{ flex: 1 }}>
+            <Text h1 color={colors.ui.dialog.default.none.text} numberOfLines={1}>
               {title}
             </Text>
           </View>
@@ -91,15 +91,15 @@ const styles = createStyleSheet({
   titleContainer: {
     paddingBottom: 16,
     paddingHorizontal: 24,
-    flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   messageContainer: {
     paddingHorizontal: 24,
     marginBottom: 12,
+    alignItems: 'flex-start',
   },
   button: {
-    marginLeft: 8,
+    marginStart: 8,
   },
   buttonContainer: {
     flexDirection: 'row',

@@ -1,6 +1,5 @@
 import React from 'react';
 import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { usePushTrigger } from '@sendbird/uikit-chat-hooks';
 import { SBUError, SBUUtils, useLocalization, usePlatformService, useSendbirdChat } from '@sendbird/uikit-react-native';
@@ -19,6 +18,7 @@ import {
   useToast,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
+import { useSafeAreaPadding } from '@sendbird/uikit-utils';
 
 import { useAppNavigation } from '../../hooks/useAppNavigation';
 import useAppearance from '../../hooks/useAppearance';
@@ -28,7 +28,7 @@ import { Routes } from '../../libs/navigation';
 const SettingsScreen = () => {
   const { navigation } = useAppNavigation<Routes.Settings>();
   const { scheme, setScheme } = useAppearance();
-  const { left, right } = useSafeAreaInsets();
+  const safeArea = useSafeAreaPadding(['left', 'right']);
 
   const { currentUser, sdk, updateCurrentUserInfo } = useSendbirdChat();
   const { option, updateOption } = usePushTrigger(sdk);
@@ -168,8 +168,8 @@ const SettingsScreen = () => {
       <ScrollView
         style={{ backgroundColor: colors.background }}
         contentContainerStyle={{
-          paddingLeft: left + styles.viewContainer.paddingHorizontal,
-          paddingRight: right + styles.viewContainer.paddingHorizontal,
+          paddingStart: safeArea.paddingStart + styles.viewContainer.paddingHorizontal,
+          paddingEnd: safeArea.paddingEnd + styles.viewContainer.paddingHorizontal,
         }}
       >
         <View style={styles.userInfoContainer}>
@@ -210,12 +210,26 @@ const SettingsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  viewContainer: { paddingHorizontal: 16 },
-  userInfoContainer: { paddingVertical: 24, alignItems: 'center' },
-  avatarContainer: { marginBottom: 12 },
-  userIdContainer: { paddingVertical: 16 },
-  userIdLabel: { marginBottom: 4 },
+  container: {
+    flex: 1,
+  },
+  viewContainer: {
+    paddingHorizontal: 16,
+  },
+  userInfoContainer: {
+    paddingVertical: 24,
+    alignItems: 'center',
+  },
+  avatarContainer: {
+    marginBottom: 12,
+  },
+  userIdContainer: {
+    paddingVertical: 16,
+    alignItems: 'flex-start',
+  },
+  userIdLabel: {
+    marginBottom: 4,
+  },
 });
 
 export default SettingsScreen;

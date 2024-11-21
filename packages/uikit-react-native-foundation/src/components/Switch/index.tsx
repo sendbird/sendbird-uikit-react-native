@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, Platform, Pressable } from 'react-native';
+import { Animated, I18nManager, Platform, Pressable } from 'react-native';
 
 import createStyleSheet from '../../styles/createStyleSheet';
 import useUIKitTheme from '../../theme/useUIKitTheme';
@@ -24,9 +24,12 @@ const Switch = ({
   const { select, palette, colors } = useUIKitTheme();
   const position = useRef(new Animated.Value(0)).current;
 
+  const start = I18nManager.isRTL ? styles.thumbOn.start : styles.thumbOff.start;
+  const end = I18nManager.isRTL ? styles.thumbOff.start : styles.thumbOn.start;
+
   useEffect(() => {
     const animation = Animated.timing(position, {
-      toValue: value ? styles.thumbOn.left : styles.thumbOff.left,
+      toValue: value ? end : start,
       duration: 150,
       useNativeDriver: false,
     });
@@ -36,11 +39,12 @@ const Switch = ({
 
   const createInterpolate = <T extends string>(offValue: T, onValue: T) => {
     return position.interpolate({
-      inputRange: [styles.thumbOff.left, styles.thumbOn.left],
-      outputRange: [offValue, onValue],
+      inputRange: [styles.thumbOff.start, styles.thumbOn.start],
+      outputRange: I18nManager.isRTL ? [onValue, offValue] : [offValue, onValue],
       extrapolate: 'clamp',
     });
   };
+
   const _trackColor = createInterpolate(inactiveTrackColor ?? colors.onBackground04, trackColor ?? palette.primary200);
   const _thumbColor = createInterpolate(
     inactiveThumbColor ?? palette.background300,
@@ -86,10 +90,10 @@ const styles = createStyleSheet({
     }),
   },
   thumbOn: {
-    left: OFFSET.H / 2,
+    start: OFFSET.H / 2,
   },
   thumbOff: {
-    left: -OFFSET.H / 2,
+    start: -OFFSET.H / 2,
   },
 });
 

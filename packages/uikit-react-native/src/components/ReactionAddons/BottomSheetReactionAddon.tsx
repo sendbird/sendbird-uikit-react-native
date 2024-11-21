@@ -1,11 +1,10 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { BaseMessage } from '@sendbird/chat/message';
-import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
 import { Icon, Image, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { Logger, SendbirdBaseChannel, SendbirdBaseMessage, useUniqHandlerId } from '@sendbird/uikit-utils';
+import { useGroupChannelHandler } from '@sendbird/uikit-tools';
+import { Logger, SendbirdBaseChannel, SendbirdBaseMessage, useSafeAreaPadding } from '@sendbird/uikit-utils';
 
 import { UNKNOWN_USER_ID } from '../../constants';
 import { useReaction, useSendbirdChat } from '../../hooks/useContext';
@@ -19,10 +18,9 @@ const BottomSheetReactionAddon = ({ onClose, message, channel }: Props) => {
   const { emojiManager, currentUser, sdk } = useSendbirdChat();
   const { updateReactionFocusedItem, openReactionList } = useReaction();
   const { colors } = useUIKitTheme();
-  const handlerId = useUniqHandlerId('BottomSheetReactionAddon');
-  const { left, right } = useSafeAreaInsets();
+  const safeArea = useSafeAreaPadding(['left', 'right']);
 
-  useChannelHandler(sdk, handlerId, {
+  useGroupChannelHandler(sdk, {
     async onReactionUpdated(eventChannel, event) {
       if (channel?.url === eventChannel.url && event.messageId === message?.messageId) {
         const msg = (await sdk.message.getMessage({
@@ -40,7 +38,7 @@ const BottomSheetReactionAddon = ({ onClose, message, channel }: Props) => {
   const color = colors.ui.reaction.default;
 
   return (
-    <View style={[styles.container, { marginRight: right, marginLeft: left }]}>
+    <View style={[styles.container, { marginStart: safeArea.paddingStart, marginEnd: safeArea.paddingEnd }]}>
       {emojiAll.map(({ key, url }) => {
         const reactionUserIds = message?.reactions?.find((it) => it.key === key)?.userIds ?? [];
         const currentUserIdx = reactionUserIds.indexOf(currentUser?.userId ?? UNKNOWN_USER_ID);

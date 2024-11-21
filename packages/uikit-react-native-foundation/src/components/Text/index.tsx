@@ -1,19 +1,60 @@
 import React from 'react';
-import { Text as RNText, TextProps as RNTextProps } from 'react-native';
+import { I18nManager, Text as RNText, TextProps as RNTextProps, StyleSheet, TextStyle } from 'react-native';
+
+import { isStartsWithRTL } from '@sendbird/uikit-utils';
 
 import useUIKitTheme from '../../theme/useUIKitTheme';
 import type { TypoName, UIKitTheme } from '../../types';
 
+export interface RTLTextAlignSupportProps {
+  /**
+   * If `I18nManager.isRTL` is `true` and this value is enabled, the text will be aligned according to RTL if it starts in an RTL language.
+   * In the case of the `Text` component, the alignment value is calculated based on `I18nManager.doLeftAndRightSwapInRTL`.
+   * For the `TextInput` component, the alignment value is calculated as a physical alignment, unaffected by `I18nManager.doLeftAndRightSwapInRTL`.
+   */
+  supportRTLAlign?: boolean;
+  /**
+   * If you want to enable `supportRTLAlign` but are using nested `Text` components that are not simple text under the `Text` component, pass the original text here.
+   */
+  originalText?: string;
+}
+
 type TypographyProps = Partial<Record<TypoName, boolean>>;
-export type TextProps = RNTextProps & TypographyProps & { color?: ((colors: UIKitTheme['colors']) => string) | string };
-const Text = ({ children, color, style, ...props }: TextProps) => {
+export type TextProps = RNTextProps &
+  TypographyProps & { color?: ((colors: UIKitTheme['colors']) => string) | string } & RTLTextAlignSupportProps;
+
+const Text = ({ children, color, style, supportRTLAlign = true, originalText, ...props }: TextProps) => {
   const { colors } = useUIKitTheme();
   const typoStyle = useTypographyFilter(props);
+
+  const textStyle = StyleSheet.flatten([
+    { color: typeof color === 'string' ? color : color?.(colors) ?? colors.text },
+    typoStyle,
+    style,
+  ]) as TextStyle;
+
+  const textAlign = (() => {
+    if (textStyle.textAlign && textStyle.textAlign !== 'left' && textStyle.textAlign !== 'right') {
+      return textStyle.textAlign;
+    }
+
+    if (I18nManager.isRTL && supportRTLAlign) {
+      if (
+        (originalText && isStartsWithRTL(originalText)) ||
+        (typeof children === 'string' && isStartsWithRTL(children))
+      ) {
+        return I18nManager.doLeftAndRightSwapInRTL ? 'left' : 'right';
+      } else {
+        return I18nManager.doLeftAndRightSwapInRTL ? 'right' : 'left';
+      }
+    }
+
+    if (textStyle.textAlign) return textStyle.textAlign;
+    return undefined;
+  })();
+
   return (
-    <RNText
-      style={[{ color: typeof color === 'string' ? color : color?.(colors) ?? colors.text }, typoStyle, style]}
-      {...props}
-    >
+    <RNText style={[textStyle, { textAlign }]} {...props}>
       {children}
     </RNText>
   );

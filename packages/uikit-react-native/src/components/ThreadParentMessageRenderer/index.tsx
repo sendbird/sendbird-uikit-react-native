@@ -34,7 +34,7 @@ export type ThreadParentMessageRendererProps<AdditionalProps = unknown> = {
 const ThreadParentMessageRenderer = (props: ThreadParentMessageRendererProps) => {
   const handlers = useSBUHandlers();
   const playerUnsubscribes = useRef<(() => void)[]>([]);
-  const { sbOptions, currentUser, mentionManager } = useSendbirdChat();
+  const { sbOptions, currentUser, mentionManager, voiceMessageStatusManager } = useSendbirdChat();
   const { palette } = useUIKitTheme();
   const { mediaService, playerService } = usePlatformService();
   const parentMessage = props.parentMessage;
@@ -68,6 +68,11 @@ const ThreadParentMessageRenderer = (props: ThreadParentMessageRendererProps) =>
           let seekFinished = !shouldSeekToTime;
 
           const forPlayback = playerService.addPlaybackListener(({ stopped, currentTime, duration }) => {
+            voiceMessageStatusManager.setCurrentTime(
+              parentMessage.channelUrl,
+              parentMessage.messageId,
+              stopped ? 0 : currentTime,
+            );
             if (seekFinished) {
               setState((prevState) => ({ ...prevState, currentTime: stopped ? 0 : currentTime, duration }));
             }
@@ -134,6 +139,7 @@ const ThreadParentMessageRenderer = (props: ThreadParentMessageRendererProps) =>
                 color={mentionColor}
                 onPress={() => messageProps.onPressMentionedUser?.(user)}
                 onLongPress={messageProps.onLongPress}
+                suppressHighlighting
                 style={[
                   parentProps?.style,
                   { fontWeight: '700' },
@@ -176,6 +182,10 @@ const ThreadParentMessageRenderer = (props: ThreadParentMessageRendererProps) =>
       return (
         <ThreadParentMessageFileVoice
           durationMetaArrayKey={VOICE_MESSAGE_META_ARRAY_DURATION_KEY}
+          initialCurrentTime={voiceMessageStatusManager.getCurrentTime(
+            parentMessage.channelUrl,
+            parentMessage.messageId,
+          )}
           onUnmount={() => {
             if (isVoiceMessage(parentMessage) && playerService.uri === parentMessage.url) {
               resetPlayer().catch((_) => {});

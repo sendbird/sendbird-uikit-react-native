@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
   },
   infoText: {
     flex: 1,
-    marginRight: 16,
+    marginEnd: 16,
+    alignItems: 'flex-start',
   },
   infoImage: {
     width: 78,
@@ -58,8 +59,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 20,
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
+    borderBottomStartRadius: 8,
+    borderBottomEndRadius: 8,
   },
 });
 

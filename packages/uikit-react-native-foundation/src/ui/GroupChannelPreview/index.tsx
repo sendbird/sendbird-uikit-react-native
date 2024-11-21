@@ -1,8 +1,8 @@
 import React from 'react';
-import { View } from 'react-native';
 
 import { conditionChaining } from '@sendbird/uikit-utils';
 
+import Box from '../../components/Box';
 import Icon from '../../components/Icon';
 import Image from '../../components/Image';
 import Text from '../../components/Text';
@@ -54,8 +54,8 @@ const GroupChannelPreview = ({
   const color = colors.ui.groupChannelPreview;
 
   return (
-    <View style={[styles.container, { backgroundColor: color.default.none.background }]}>
-      <View style={styles.coverContainer}>
+    <Box style={[styles.container, { backgroundColor: color.default.none.background }]}>
+      <Box style={styles.coverContainer}>
         {conditionChaining(
           [Boolean(customCover)],
           [
@@ -67,10 +67,10 @@ const GroupChannelPreview = ({
             />,
           ],
         )}
-      </View>
-      <View style={styles.rightSection}>
-        <View style={styles.rightTopSection}>
-          <View style={styles.channelInfoContainer}>
+      </Box>
+      <Box style={styles.rightSection}>
+        <Box style={styles.rightTopSection}>
+          <Box style={styles.channelInfoContainer}>
             {broadcast && (
               <Icon
                 size={16}
@@ -91,18 +91,18 @@ const GroupChannelPreview = ({
               <Icon size={16} icon={'freeze'} color={colors.primary} containerStyle={styles.channelInfoFrozen} />
             )}
             {notificationOff && <Icon size={16} icon={'notifications-off-filled'} color={colors.onBackground03} />}
-          </View>
-          <View style={styles.titleCaptionContainer}>
+          </Box>
+          <Box style={styles.titleCaptionContainer}>
             {titleCaptionLeft}
             <Text caption2 color={color.default.none.textTitleCaption} style={styles.titleCaptionText}>
               {titleCaption}
             </Text>
-          </View>
-        </View>
+          </Box>
+        </Box>
 
-        <View style={styles.rightBottomSection}>
-          <View style={styles.body}>
-            <View style={styles.bodyWrapper}>
+        <Box style={styles.rightBottomSection}>
+          <Box style={styles.body}>
+            <Box style={styles.bodyWrapper}>
               {bodyIcon && (
                 <Icon
                   size={18}
@@ -114,34 +114,35 @@ const GroupChannelPreview = ({
                   ]}
                 />
               )}
-              <Text
-                body3
-                numberOfLines={1}
-                ellipsizeMode={bodyIcon ? 'middle' : 'tail'}
-                style={styles.bodyText}
-                color={color.default.none.textBody}
-              >
-                {body}
-              </Text>
-            </View>
-          </View>
-          <View style={styles.unreadContainer}>
+              <Box flex={1} alignItems={'flex-start'}>
+                <Text
+                  body3
+                  numberOfLines={1}
+                  ellipsizeMode={bodyIcon ? 'middle' : 'tail'}
+                  color={color.default.none.textBody}
+                >
+                  {body}
+                </Text>
+              </Box>
+            </Box>
+          </Box>
+          <Box style={styles.unreadContainer}>
             {mentioned && (
               <Text h2 color={colors.ui.badge.default.none.background} style={styles.unreadMention}>
                 {mentionTrigger}
               </Text>
             )}
             {badgeCount > 0 && <Badge count={badgeCount} maxCount={maxBadgeCount} />}
-          </View>
-        </View>
+          </Box>
+        </Box>
         <Separator color={color.default.none.separator} />
-      </View>
-    </View>
+      </Box>
+    </Box>
   );
 };
 
 type SeparatorProps = { color: string };
-const Separator = ({ color }: SeparatorProps) => <View style={[styles.separator, { backgroundColor: color }]} />;
+const Separator = ({ color }: SeparatorProps) => <Box style={[styles.separator, { backgroundColor: color }]} />;
 
 const styles = createStyleSheet({
   container: {
@@ -152,8 +153,8 @@ const styles = createStyleSheet({
     justifyContent: 'center',
   },
   coverContainer: {
-    marginLeft: 16,
-    marginRight: 16,
+    marginStart: 16,
+    marginEnd: 16,
   },
   channelCover: {
     width: 56,
@@ -163,7 +164,7 @@ const styles = createStyleSheet({
   rightSection: {
     flex: 1,
     paddingTop: 10,
-    paddingRight: 16,
+    paddingEnd: 16,
   },
   rightTopSection: {
     flexDirection: 'row',
@@ -171,28 +172,28 @@ const styles = createStyleSheet({
   },
   channelInfoContainer: {
     flex: 1,
-    marginRight: 4,
+    marginEnd: 4,
     alignItems: 'center',
     flexDirection: 'row',
   },
   channelInfoBroadcast: {
-    marginRight: 4,
+    marginEnd: 4,
   },
   channelInfoTitle: {
     flexShrink: 1,
-    marginRight: 4,
+    marginEnd: 4,
   },
   channelInfoMemberCount: {
     paddingTop: 2,
-    marginRight: 4,
+    marginEnd: 4,
   },
   channelInfoFrozen: {
-    marginRight: 4,
+    marginEnd: 4,
   },
   titleCaptionContainer: {
     alignItems: 'flex-start',
     flexDirection: 'row',
-    marginLeft: 4,
+    marginStart: 4,
   },
   titleCaptionText: {
     marginTop: 2,
@@ -203,7 +204,7 @@ const styles = createStyleSheet({
     flexDirection: 'row',
   },
   body: {
-    marginRight: 4,
+    marginEnd: 4,
     flex: 1,
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -212,26 +213,23 @@ const styles = createStyleSheet({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  bodyText: {
-    flex: 1,
-  },
   bodyIcon: {
     borderRadius: 8,
     width: 26,
     height: 26,
-    marginRight: 4,
+    marginEnd: 4,
   },
   unreadContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
   },
   unreadMention: {
-    marginRight: 4,
+    marginEnd: 4,
   },
   separator: {
     position: 'absolute',
-    left: 0,
-    right: -16,
+    start: 0,
+    end: -16,
     bottom: 0,
     height: 1,
   },

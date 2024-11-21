@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useRef, useState } from 'react';
 import type { FlatList } from 'react-native';
 
-import { useChannelHandler } from '@sendbird/uikit-chat-hooks';
+import { useGroupChannelHandler } from '@sendbird/uikit-tools';
 import {
   ContextValue,
   Logger,
@@ -14,7 +14,6 @@ import {
   getGroupChannelChatAvailableState,
   isDifferentChannel,
   useFreshCallback,
-  useUniqHandlerId,
 } from '@sendbird/uikit-utils';
 
 import ProviderLayout from '../../../components/ProviderLayout';
@@ -62,7 +61,6 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
 }) => {
   if (!channel) throw new Error('GroupChannel is not provided to GroupChannelModule');
 
-  const handlerId = useUniqHandlerId('GroupChannelContextsProvider');
   const { STRINGS } = useLocalization();
   const { currentUser, sdk, sbOptions } = useSendbirdChat();
 
@@ -99,7 +97,7 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
     }
   };
 
-  useChannelHandler(sdk, handlerId, {
+  useGroupChannelHandler(sdk, {
     onMessageDeleted(_, messageId) {
       if (messageToReply?.messageId === messageId) {
         setMessageToReply(undefined);

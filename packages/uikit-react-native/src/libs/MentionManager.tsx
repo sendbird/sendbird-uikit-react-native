@@ -2,10 +2,15 @@ import React from 'react';
 
 import { Text, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdFileMessage, SendbirdUser, SendbirdUserMessage } from '@sendbird/uikit-utils';
-import { createMentionTemplateRegex, replaceWithRegex } from '@sendbird/uikit-utils';
+import { createMentionTemplateRegex, isEndsWithRTL, replaceWithRegex } from '@sendbird/uikit-utils';
 
 import type { MentionedUser, Range } from '../types';
 import type { MentionConfigInterface } from './MentionConfig';
+
+const SPAN_DIRECTION = {
+  LRM: '\u200E',
+  RLM: '\u200F',
+};
 
 class MentionManager {
   private _invalidStartsKeywords: string[];
@@ -15,6 +20,19 @@ class MentionManager {
     this._invalidStartsKeywords = [this.config.trigger, this.config.delimiter];
     this._templateRegex = createMentionTemplateRegex(this.config.trigger);
   }
+
+  // Note: When the input starts in LTR and the mentioned user's name is in RTL, it appears as "Hello @{cibarA}."
+  // If typing continues in RTL, the mention is rendered as: "Hello @{txeTlanoitiddA}{cibarA}."
+  //
+  // Conversely, if the input starts in RTL and the mentioned user's name is in LTR, it appears as "{Eng}@ cibarA."
+  // If typing continues, it is rendered as: "{Eng}{AdditionalText}@ cibarA."
+  //
+  // While this follows the natural text direction, it can make mentions harder to distinguish.
+  // To address this, we use the RLM or LRM Unicode characters to reset subsequent spans based on the last text string of the user's name.
+  // By applying this trick, the result will be displayed as "Hello @{cibarA} {txeTlanoitiddA}" or "{AdditionalText} {Eng}@ cibarA," ensuring the mention block remains clearly distinguishable.
+  getDirectionOfNextSpan = (name: string) => {
+    return isEndsWithRTL(name) ? SPAN_DIRECTION.LRM : SPAN_DIRECTION.RLM;
+  };
 
   public rangeHelpers = {
     inRangeUnderOver(start: number, num: number, end: number) {
@@ -107,14 +125,22 @@ class MentionManager {
    * @description User to @{user.id} template format
    * */
   public asMentionedMessageTemplate = (user: SendbirdUser, delimiter = false) => {
-    return `${this.config.trigger}{${user.userId}}` + (delimiter ? this.config.delimiter : '');
+    const prefix = ''; // Do not append anything to here in order to maintain backward compatibility.
+    const content = `${this.config.trigger}{${user.userId}}`;
+    const postfix = delimiter ? this.config.delimiter : '';
+
+    return prefix + content + postfix;
   };
 
   /**
    * @description User to @user.nickname text format
    * */
   public asMentionedMessageText = (user: SendbirdUser, delimiter = false) => {
-    return `${this.config.trigger}${user.nickname}` + (delimiter ? this.config.delimiter : '');
+    const prefix = '';
+    const content = `${this.config.trigger}${user.nickname}`;
+    const postfix = this.getDirectionOfNextSpan(user.nickname) + (delimiter ? this.config.delimiter : '');
+
+    return prefix + content + postfix;
   };
 
   /**

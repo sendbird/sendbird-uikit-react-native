@@ -1,10 +1,11 @@
 import React, { useRef } from 'react';
 
-import { useChannelHandler, useUserList } from '@sendbird/uikit-chat-hooks';
+import { useUserList } from '@sendbird/uikit-chat-hooks';
 import type { ActionMenuItem } from '@sendbird/uikit-react-native-foundation';
 import { Icon, useActionMenu } from '@sendbird/uikit-react-native-foundation';
+import { useGroupChannelHandler } from '@sendbird/uikit-tools';
 import type { SendbirdMember } from '@sendbird/uikit-utils';
-import { ifOperator, ifThenOr, isDifferentChannel, useFreshCallback, useUniqHandlerId } from '@sendbird/uikit-utils';
+import { ifOperator, ifThenOr, isDifferentChannel, useFreshCallback } from '@sendbird/uikit-utils';
 
 import StatusComposition from '../components/StatusComposition';
 import UserActionBar from '../components/UserActionBar';
@@ -28,8 +29,6 @@ const createGroupChannelMembersFragment = (
     sortComparator,
     queryCreator = () => channel.createMemberListQuery({ limit: 20 }),
   }) => {
-    const handlerId = useUniqHandlerId('GroupChannelMembersFragment');
-
     const refreshSchedule = useRef<NodeJS.Timeout>();
     const { STRINGS } = useLocalization();
     const { sdk, currentUser } = useSendbirdChat();
@@ -41,7 +40,7 @@ const createGroupChannelMembersFragment = (
       sortComparator,
     });
 
-    useChannelHandler(sdk, handlerId, {
+    useGroupChannelHandler(sdk, {
       onUserLeft(eventChannel, user) {
         if (isDifferentChannel(eventChannel, channel)) return;
         deleteUser(user.userId);

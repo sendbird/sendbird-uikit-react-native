@@ -1,8 +1,7 @@
 import React from 'react';
 import { FlatList, ListRenderItem } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { SendbirdRestrictedUser, getUserUniqId, useFreshCallback } from '@sendbird/uikit-utils';
+import { SendbirdRestrictedUser, getUserUniqId, useFreshCallback, useSafeAreaPadding } from '@sendbird/uikit-utils';
 
 import type { OpenChannelMutedParticipantsProps } from '../types';
 
@@ -15,13 +14,13 @@ const OpenChannelMutedParticipantsList = ({
   const renderItem: ListRenderItem<SendbirdRestrictedUser> = useFreshCallback(({ item }) =>
     renderUser?.({ user: item }),
   );
-  const { left, right } = useSafeAreaInsets();
+  const safeArea = useSafeAreaPadding(['left', 'right']);
 
   return (
     <FlatList
       data={mutedParticipants}
       renderItem={renderItem}
-      contentContainerStyle={{ paddingLeft: left, paddingRight: right, flexGrow: 1 }}
+      contentContainerStyle={{ ...safeArea, flexGrow: 1 }}
       ListEmptyComponent={ListEmptyComponent}
       bounces={false}
       keyExtractor={getUserUniqId}

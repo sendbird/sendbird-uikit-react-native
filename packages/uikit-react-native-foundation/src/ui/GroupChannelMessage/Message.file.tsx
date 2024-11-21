@@ -29,7 +29,7 @@ const FileMessage = (props: Props) => {
               <Icon.File
                 fileType={fileType}
                 size={24}
-                containerStyle={{ backgroundColor: colors.background, padding: 2, borderRadius: 8, marginRight: 8 }}
+                containerStyle={{ backgroundColor: colors.background, padding: 2, borderRadius: 8, marginEnd: 8 }}
               />
               <Text
                 body3

@@ -122,7 +122,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
           let seekFinished = !shouldSeekToTime;
 
           const forPlayback = playerService.addPlaybackListener(({ stopped, currentTime, duration }) => {
-            voiceMessageStatusManager.setCurrentTime(message.channelUrl, message.messageId, currentTime);
+            voiceMessageStatusManager.setCurrentTime(message.channelUrl, message.messageId, stopped ? 0 : currentTime);
             if (seekFinished) {
               setState((prevState) => ({ ...prevState, currentTime: stopped ? 0 : currentTime, duration }));
             }
@@ -212,6 +212,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
                 color={mentionColor}
                 onPress={() => messageProps.onPressMentionedUser?.(user)}
                 onLongPress={messageProps.onLongPress}
+                suppressHighlighting
                 style={[
                   parentProps?.style,
                   { fontWeight: '700' },

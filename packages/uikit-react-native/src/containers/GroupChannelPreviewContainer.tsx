@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Pressable } from 'react-native';
 
-import { useChannelHandler, useMessageOutgoingStatus } from '@sendbird/uikit-chat-hooks';
+import { useMessageOutgoingStatus } from '@sendbird/uikit-chat-hooks';
 import {
   GroupChannelPreview,
   Icon,
@@ -9,6 +9,7 @@ import {
   createStyleSheet,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
+import { useGroupChannelHandler } from '@sendbird/uikit-tools';
 import {
   SendbirdGroupChannel,
   SendbirdUser,
@@ -19,7 +20,6 @@ import {
   isMyMessage,
   isVoiceMessage,
   useIIFE,
-  useUniqHandlerId,
 } from '@sendbird/uikit-utils';
 
 import ChannelCover from '../components/ChannelCover';
@@ -38,8 +38,7 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
 
   const [typingUsers, setTypingUsers] = useState<SendbirdUser[]>([]);
 
-  const handlerId = useUniqHandlerId('GroupChannelPreviewContainer_TypingIndicator');
-  useChannelHandler(sdk, handlerId, {
+  useGroupChannelHandler(sdk, {
     onTypingStatusUpdated(eventChannel) {
       if (isDifferentChannel(channel, eventChannel)) return;
       if (!sbOptions.uikit.groupChannel.channelList.enableTypingIndicator) return;
@@ -115,7 +114,7 @@ const GroupChannelPreviewContainer = ({ onPress, onLongPress, channel }: Props) 
 
 const styles = createStyleSheet({
   titleCaptionIcon: {
-    marginRight: 4,
+    marginEnd: 4,
   },
   broadcastCover: {
     padding: 12,

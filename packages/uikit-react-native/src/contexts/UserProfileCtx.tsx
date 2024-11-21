@@ -1,15 +1,18 @@
 import React, { useCallback, useContext, useState } from 'react';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Modal, OutlinedButton, ProfileCard, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
-import type {
+import {
+  Logger,
+  PASS,
   SendbirdGroupChannel,
   SendbirdGroupChannelCreateParams,
   SendbirdMember,
   SendbirdReactedUserInfo,
   SendbirdUser,
+  getDefaultGroupChannelCreateParams,
+  useIIFE,
+  useSafeAreaPadding,
 } from '@sendbird/uikit-utils';
-import { Logger, PASS, getDefaultGroupChannelCreateParams, useIIFE } from '@sendbird/uikit-utils';
 
 import { LocalizationContext } from '../contexts/LocalizationCtx';
 import { SendbirdChatContext } from '../contexts/SendbirdChatCtx';
@@ -57,7 +60,7 @@ export const UserProfileProvider = ({
     WARN_onCreateChannel = true;
   }
 
-  const { bottom, left, right } = useSafeAreaInsets();
+  const safeArea = useSafeAreaPadding(['bottom', 'left', 'right']);
 
   const [user, setUser] = useState<SendbirdUser | SendbirdMember | SendbirdReactedUserInfo>();
   const [visible, setVisible] = useState(false);
@@ -129,10 +132,7 @@ export const UserProfileProvider = ({
       >
         {user && (
           <ProfileCard
-            containerStyle={[
-              styles.profileCardContainer,
-              { paddingLeft: left, paddingRight: right, paddingBottom: bottom },
-            ]}
+            containerStyle={[styles.profileCardContainer, safeArea]}
             uri={user.profileUrl}
             username={user.nickname || localizationContext.STRINGS.LABELS.USER_NO_NAME}
             bodyLabel={localizationContext.STRINGS.PROFILE_CARD.BODY_LABEL}
@@ -150,7 +150,7 @@ const styles = createStyleSheet({
     justifyContent: 'flex-end',
   },
   profileCardContainer: {
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    borderTopStartRadius: 8,
+    borderTopEndRadius: 8,
   },
 });

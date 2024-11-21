@@ -194,6 +194,8 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
           onChangeText={onChangeText}
           style={style}
           placeholder={getPlaceholder()}
+          originalText={text}
+          supportRTLAlign
         >
           {mentionManager.textToMentionedComponents(
             text,
@@ -305,7 +307,7 @@ const styles = createStyleSheet({
     flexDirection: 'row',
   },
   sendIcon: {
-    marginLeft: 4,
+    marginStart: 4,
     padding: 4,
   },
 });

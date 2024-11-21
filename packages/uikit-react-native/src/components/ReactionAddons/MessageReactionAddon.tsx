@@ -57,8 +57,8 @@ const createReactionButtons = (
             reacted={pressed || reaction.hasCurrentUserReacted}
             style={
               reactionAddonType === 'default'
-                ? [isNotLastOfRow && styles.marginRight, isNotLastOfCol && styles.marginBottom]
-                : [styles.marginRight, styles.marginBottom]
+                ? [isNotLastOfRow && styles.marginEnd, isNotLastOfCol && styles.marginBottom]
+                : [styles.marginEnd, styles.marginBottom]
             }
           />
         )}
@@ -139,8 +139,8 @@ const styles = createStyleSheet({
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
-  marginRight: {
-    marginRight: 4.5,
+  marginEnd: {
+    marginEnd: 4.5,
   },
   marginBottom: {
     marginBottom: 4,

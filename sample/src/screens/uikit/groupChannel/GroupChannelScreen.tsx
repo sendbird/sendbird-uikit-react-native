@@ -111,6 +111,11 @@ const GroupChannelScreen = () => {
       //   prevResultLimit: 20,
       //   customTypesFilter: ['filter'],
       // }}
+      // flatListProps={{
+      //   style: {
+      //     direction: 'ltr',
+      //   },
+      // }}
     />
   );
 };
