@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.7.6...v3.8.0) (2024-11-21)
+
+### Features
+
+- added visibility of users who reacted in SuperGroupChannel ([a79ac92](https://github.com/sendbird/sendbird-uikit-react-native/commit/a79ac92b5b8fbaa0da92575d7937eaf27bd3180a))
+- added visibility of users who reacted in SuperGroupChannel ([afa1c3d](https://github.com/sendbird/sendbird-uikit-react-native/commit/afa1c3d8b6979b06f6596c067fd8f88fd3003995))
+- apply direction to text ui layout ([09f0bef](https://github.com/sendbird/sendbird-uikit-react-native/commit/09f0befbf31ff679bd67413673065e95328c3897))
+- apply rtl to group channel header ([080b3f4](https://github.com/sendbird/sendbird-uikit-react-native/commit/080b3f4a6a73ad259c590db7a1559f9310fb1ec0))
+- apply rtl to thread ([3aee405](https://github.com/sendbird/sendbird-uikit-react-native/commit/3aee4054218b2e768ed84e7fb3fe632fd8ca1d92))
+- change left to start and right to end in styles ([6ffb896](https://github.com/sendbird/sendbird-uikit-react-native/commit/6ffb896894d5975a721a205c52df80ca6e42e1ba))
+- support rtl to text and text input ([ee4a0c8](https://github.com/sendbird/sendbird-uikit-react-native/commit/ee4a0c817ec206deca153b53535fc5125c6dddb6))
+- updated chat sdk version to 4.15.0 ([7cf3f47](https://github.com/sendbird/sendbird-uikit-react-native/commit/7cf3f47b53a444bc6af178a1c365c86c76f94d3e))
+- updated chat sdk version to 4.16.0 ([5500831](https://github.com/sendbird/sendbird-uikit-react-native/commit/5500831f0b896d02583a234b2ba6d1b0e29deb03))
+
+### Bug Fixes
+
+- apply LRM,RLM properly for mention direction ([7c7a751](https://github.com/sendbird/sendbird-uikit-react-native/commit/7c7a7519e7c1d75ab23c437d9e411520c67210f4))
+- clear voiceMessageStatusManager on unmount group channel fragment ([8c7a73a](https://github.com/sendbird/sendbird-uikit-react-native/commit/8c7a73a338b9b1543b26058bdbf8a173aea5529d))
+- metion block should be grouped ([662e6f8](https://github.com/sendbird/sendbird-uikit-react-native/commit/662e6f88f80effacc80dcbb03e9a0caf8aeec760))
+- reset currentTime when voice message stopped ([c91d7fd](https://github.com/sendbird/sendbird-uikit-react-native/commit/c91d7fdc19448cc231468796faebcf6af5957647))
+- sync voice status of thread parent message component ([d3c76d5](https://github.com/sendbird/sendbird-uikit-react-native/commit/d3c76d56774fb12b810194b03aa011d5ea5b7bf4))
+
 ## [3.7.6](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.7.5...v3.7.6) (2024-11-05)
 
 ### Bug Fixes

@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.7.6...v3.8.0) (2024-11-21)
+
+### Features
+
+- added visibility of users who reacted in SuperGroupChannel ([a79ac92](https://github.com/sendbird/sendbird-uikit-react-native/commit/a79ac92b5b8fbaa0da92575d7937eaf27bd3180a))
+- added visibility of users who reacted in SuperGroupChannel ([afa1c3d](https://github.com/sendbird/sendbird-uikit-react-native/commit/afa1c3d8b6979b06f6596c067fd8f88fd3003995))
+- change left to start and right to end in styles ([6ffb896](https://github.com/sendbird/sendbird-uikit-react-native/commit/6ffb896894d5975a721a205c52df80ca6e42e1ba))
+- updated chat sdk version to 4.15.0 ([7cf3f47](https://github.com/sendbird/sendbird-uikit-react-native/commit/7cf3f47b53a444bc6af178a1c365c86c76f94d3e))
+- updated chat sdk version to 4.16.0 ([5500831](https://github.com/sendbird/sendbird-uikit-react-native/commit/5500831f0b896d02583a234b2ba6d1b0e29deb03))
+
+### Bug Fixes
+
+- apply LRM,RLM properly for mention direction ([7c7a751](https://github.com/sendbird/sendbird-uikit-react-native/commit/7c7a7519e7c1d75ab23c437d9e411520c67210f4))
+
 ## [3.7.6](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.7.5...v3.7.6) (2024-11-05)
 
 **Note:** Version bump only for package @sendbird/uikit-utils
