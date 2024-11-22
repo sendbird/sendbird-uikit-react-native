@@ -10,7 +10,13 @@ import {
   createStyleSheet,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import { SendbirdReaction, getReactionCount, truncatedCount, useSafeAreaPadding } from '@sendbird/uikit-utils';
+import {
+  SendbirdEmoji,
+  SendbirdReaction,
+  getReactionCount,
+  truncatedCount,
+  useSafeAreaPadding,
+} from '@sendbird/uikit-utils';
 
 import type { ReactionBottomSheetProps } from './index';
 
@@ -81,7 +87,7 @@ const ReactionUserListBottomSheet = ({
         {reactions.map((reaction, index) => {
           const isFocused = focusedReaction?.key === reaction.key;
           const isLastItem = reactions.length - 1 === index;
-          const emoji = emojiManager.allEmojiMap[reaction.key];
+          const emoji = emojiManager.allEmojiMap[reaction.key] as SendbirdEmoji | undefined;
 
           return (
             <Pressable
@@ -102,7 +108,7 @@ const ReactionUserListBottomSheet = ({
                 }
               }}
             >
-              <Image source={{ uri: emoji.url }} style={styles.tabEmoji} />
+              <Image source={emojiManager.getEmojiIconSource(emoji)} style={styles.tabEmoji} />
               <Text button color={isFocused ? color.selected.highlight : color.enabled.highlight}>
                 {truncatedCount(getReactionCount(reaction))}
               </Text>
