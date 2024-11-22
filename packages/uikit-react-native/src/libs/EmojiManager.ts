@@ -1,3 +1,6 @@
+import { ImageProps } from 'react-native';
+
+import { Icon } from '@sendbird/uikit-react-native-foundation';
 import type { SendbirdEmoji, SendbirdEmojiCategory, SendbirdEmojiContainer } from '@sendbird/uikit-utils';
 
 import type { AsyncLocalCacheStorage } from '../types';
@@ -22,7 +25,8 @@ class MemoryStorage implements AsyncLocalCacheStorage {
     this._data[key] = value;
   }
 }
-
+type EmojiCategoryId = string;
+type EmojiKey = string;
 class EmojiManager {
   static key = 'sendbird-uikit@emoji-manager';
 
@@ -45,12 +49,12 @@ class EmojiManager {
     },
   };
 
-  private _emojiCategoryMap: Record<string, SendbirdEmojiCategory> = {};
+  private _emojiCategoryMap: Record<EmojiCategoryId, SendbirdEmojiCategory> = {};
   public get emojiCategoryMap() {
     return this._emojiCategoryMap;
   }
 
-  private _allEmojiMap: Record<string, SendbirdEmoji> = {};
+  private _allEmojiMap: Record<EmojiKey, SendbirdEmoji> = {};
   public get allEmojiMap() {
     return this._allEmojiMap;
   }
@@ -58,6 +62,10 @@ class EmojiManager {
   private _allEmoji: SendbirdEmoji[] = [];
   public get allEmoji() {
     return this._allEmoji;
+  }
+
+  public getEmojiIconSource(emoji?: SendbirdEmoji | null | undefined): ImageProps['source'] {
+    return emoji?.url ? { uri: emoji.url } : Icon.Assets.question;
   }
 
   public init = async (emojiContainer?: SendbirdEmojiContainer) => {

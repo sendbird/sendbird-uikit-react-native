@@ -1,17 +1,21 @@
 import React from 'react';
-import { StyleProp, View, ViewStyle } from 'react-native';
+import { ImageProps, StyleProp, View, ViewStyle } from 'react-native';
 
 import { Icon, Image, Text, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { truncatedCount } from '@sendbird/uikit-utils';
 
 type Props = {
-  url: string;
+  source: ImageProps['source'];
   count: number;
   reacted: boolean;
   style: StyleProp<ViewStyle>;
+  /**
+   * @deprecated Please use `source` instead
+   * */
+  url?: string;
 };
 
-const ReactionRoundedButton = ({ url, count, reacted, style }: Props) => {
+const ReactionRoundedButton = ({ source, count, reacted, style, url }: Props) => {
   const { colors } = useUIKitTheme();
   const color = colors.ui.reaction.rounded;
 
@@ -23,7 +27,7 @@ const ReactionRoundedButton = ({ url, count, reacted, style }: Props) => {
         style,
       ]}
     >
-      <Image source={{ uri: url }} style={styles.emoji} />
+      <Image source={source ? source : { uri: url }} style={styles.emoji} />
       <Text caption4 color={colors.onBackground01} numberOfLines={1} style={styles.count}>
         {truncatedCount(count, 99, '')}
       </Text>

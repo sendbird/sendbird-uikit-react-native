@@ -1,7 +1,6 @@
 import React from 'react';
-import { Pressable } from 'react-native';
+import { ImageProps, Pressable } from 'react-native';
 
-import type { Emoji } from '@sendbird/chat';
 import { createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { useForceUpdate, useGroupChannelHandler } from '@sendbird/uikit-tools';
 import type { SendbirdBaseChannel, SendbirdBaseMessage, SendbirdReaction } from '@sendbird/uikit-utils';
@@ -33,7 +32,7 @@ const createOnPressReaction = (
 const createReactionButtons = (
   channel: SendbirdBaseChannel,
   message: SendbirdBaseMessage,
-  getEmoji: (key: string) => Emoji,
+  getIconSource: (reactionKey: string) => ImageProps['source'],
   emojiLimit: number,
   onOpenReactionList: () => void,
   onOpenReactionUserList: (focusIndex: number) => void,
@@ -52,7 +51,7 @@ const createReactionButtons = (
       >
         {({ pressed }) => (
           <ReactionRoundedButton
-            url={getEmoji(reaction.key).url}
+            source={getIconSource(reaction.key)}
             count={getReactionCount(reaction)}
             reacted={pressed || reaction.hasCurrentUserReacted}
             style={
@@ -104,7 +103,10 @@ const MessageReactionAddon = ({
   const reactionButtons = createReactionButtons(
     channel,
     message,
-    (key) => emojiManager.allEmojiMap[key],
+    (reactionKey) => {
+      const emoji = emojiManager.allEmojiMap[reactionKey];
+      return emojiManager.getEmojiIconSource(emoji);
+    },
     emojiManager.allEmoji.length,
     () => openReactionList({ channel, message }),
     (focusIndex) => openReactionUserList({ channel, message, focusIndex }),
