@@ -25,6 +25,7 @@ const GroupChannelThreadSuggestedMentionList = ({
   bottomInset,
   onPressToMention,
   mentionedUsers,
+  showUserId = true,
 }: GroupChannelThreadProps['SuggestedMentionList']) => {
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
   const { channel } = useContext(GroupChannelThreadContexts.Fragment);
@@ -78,9 +79,11 @@ const GroupChannelThreadSuggestedMentionList = ({
                 <Text body2 color={colors.onBackground01} numberOfLines={1} style={styles.userNickname}>
                   {member.nickname || STRINGS.LABELS.USER_NO_NAME}
                 </Text>
-                <Text body3 color={colors.onBackground03} numberOfLines={1} style={styles.userId}>
-                  {member.userId}
-                </Text>
+                {!!showUserId && (
+                  <Text body3 color={colors.onBackground03} numberOfLines={1} style={styles.userId}>
+                    {member.userId}
+                  </Text>
+                )}
                 <Divider style={{ position: 'absolute', bottom: 0 }} />
               </View>
             </Pressable>

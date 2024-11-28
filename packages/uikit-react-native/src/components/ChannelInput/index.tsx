@@ -37,6 +37,10 @@ export type SuggestedMentionListProps = {
   inputHeight: number;
   onPressToMention: (user: SendbirdMember, searchStringRange: Range) => void;
   mentionedUsers: MentionedUser[];
+  /**
+   * Whether to show user id information on each item.
+   * */
+  showUserId?: boolean;
 };
 
 export type ChannelInputProps = {
