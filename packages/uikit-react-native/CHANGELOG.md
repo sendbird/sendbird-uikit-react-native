@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.8.0...v3.8.1) (2024-11-28)
+
+### Features
+
+- added showUserId config to suggested mention list ([5f7c6af](https://github.com/sendbird/sendbird-uikit-react-native/commit/5f7c6afbfa2b69ee2b8f8e21b9228fcae905c0c7))
+
+### Bug Fixes
+
+- add emoji fallback icon ([3d30123](https://github.com/sendbird/sendbird-uikit-react-native/commit/3d30123f5c1177a55aa417396dcaa3cb9112ab87))
+
 ## [3.8.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.7.6...v3.8.0) (2024-11-21)
 
 ### Features
