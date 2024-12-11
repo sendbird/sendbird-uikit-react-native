@@ -72,26 +72,8 @@ export const SendbirdUIKit = Object.freeze({
   },
 });
 
-export type ChatOmittedInitParams = Omit<
-  SendbirdChatParams<[GroupChannelModule, OpenChannelModule]>,
-  (typeof chatOmitKeys)[number]
->;
+export type ChatOmittedInitParams = SendbirdChatParams<[GroupChannelModule, OpenChannelModule]>;
 
-const chatOmitKeys = [
-  'appId',
-  'newInstance',
-  'modules',
-  'debugMode',
-  'appVersion',
-  'localCacheEnabled',
-  'useAsyncStorageStore',
-  'useMMKVStorageStore',
-] as const;
-function sanitizeChatOptions<T extends Record<string, unknown>>(chatOptions: T): T {
-  const opts = { ...chatOptions };
-  chatOmitKeys.forEach((key) => delete opts[key]);
-  return opts;
-}
 export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   appId: string;
   platformServices: {
@@ -184,7 +166,7 @@ const SendbirdUIKitContainer = (props: SendbirdUIKitContainerProps) => {
 
   const [internalStorage] = useState(() => new InternalLocalCacheStorage(chatOptions.localCacheStorage));
   const [sdkInstance, setSdkInstance] = useState<SendbirdChatSDK>(() => {
-    const sendbird = initializeSendbird(appId, sanitizeChatOptions(chatOptions));
+    const sendbird = initializeSendbird(appId, chatOptions);
     unsubscribes.current = sendbird.unsubscribes;
     return sendbird.chatSDK;
   });
@@ -196,7 +178,7 @@ const SendbirdUIKitContainer = (props: SendbirdUIKitContainerProps) => {
 
   useLayoutEffect(() => {
     if (!isFirstMount) {
-      const sendbird = initializeSendbird(appId, sanitizeChatOptions(chatOptions));
+      const sendbird = initializeSendbird(appId, chatOptions);
       setSdkInstance(sendbird.chatSDK);
       unsubscribes.current = sendbird.unsubscribes;
     }
@@ -307,10 +289,10 @@ const SendbirdUIKitContainer = (props: SendbirdUIKitContainerProps) => {
   );
 };
 
-interface InitOptions extends ChatOmittedInitParams {
+type InitOptions = Partial<ChatOmittedInitParams> & {
   localCacheStorage: LocalCacheStorage;
   onInitialized?: (sdk: SendbirdChatSDK) => SendbirdChatSDK;
-}
+};
 const initializeSendbird = (appId: string, options: InitOptions) => {
   let chatSDK: SendbirdChatSDK;
   const unsubscribes: Array<() => void> = [];
@@ -318,13 +300,13 @@ const initializeSendbird = (appId: string, options: InitOptions) => {
 
   const isMMKVStorage = 'getString' in localCacheStorage;
   chatSDK = SendbirdChat.init({
-    ...chatInitParams,
     appId,
     newInstance: true,
     modules: [new GroupChannelModule(), new OpenChannelModule()],
     localCacheEnabled: true,
     useMMKVStorageStore: isMMKVStorage ? (localCacheStorage as MMKV) : undefined,
     useAsyncStorageStore: !isMMKVStorage ? (localCacheStorage as AsyncStorageStatic) : undefined,
+    ...chatInitParams,
   });
 
   if (onInitialized) {
