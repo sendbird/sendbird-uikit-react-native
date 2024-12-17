@@ -127,7 +127,7 @@
     "react-native-document-picker": ">=8.0.0",
     "react-native-file-access": ">=2.4.3",
     "react-native-image-picker": ">=4.7.1",
-    "react-native-mmkv": "^2.0.0",
+    "react-native-mmkv": ">=2.0.0",
     "react-native-permissions": ">=3.6.0",
     "react-native-safe-area-context": ">=3.3.2",
     "react-native-video": ">=5.2.0"
