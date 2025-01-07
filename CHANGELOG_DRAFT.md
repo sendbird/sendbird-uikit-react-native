@@ -1,3 +1,3 @@
-## v3.8.2
+## v3.8.3
 
-- Enabled overriding all chat options
+- Update mmkv version range
