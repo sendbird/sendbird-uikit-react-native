@@ -194,7 +194,7 @@ const createGroupChannelThreadFragment = (
         const uploadSizeLimit = sbOptions.appInfo.uploadSizeLimit;
 
         if (fileSize && uploadSizeLimit && fileSize > uploadSizeLimit) {
-          const sizeLimitString = `${getReadableFileSize(uploadSizeLimit)} MB`;
+          const sizeLimitString = `${getReadableFileSize(uploadSizeLimit)}`;
           toast.show(STRINGS.TOAST.FILE_UPLOAD_SIZE_LIMIT_EXCEEDED_ERROR(sizeLimitString), 'error');
           return;
         } else {
