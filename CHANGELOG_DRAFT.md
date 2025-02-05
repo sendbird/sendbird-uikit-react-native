@@ -1,3 +1,3 @@
-## v3.8.3
+## v3.8.4
 
-- Update mmkv version range
+- Fixed duplicate MB text appearing when uploading files over 25MB
