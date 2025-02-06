@@ -57,9 +57,14 @@ const createNativeFileService = ({
   mediaLibraryModule: typeof CameraRoll;
   fsModule: typeof FileAccess;
 }): FileServiceInterface => {
-  const cameraPermissions: Permission[] = Platform.select({
-    ios: [permissionModule.PERMISSIONS.IOS.CAMERA, permissionModule.PERMISSIONS.IOS.MICROPHONE],
+  const requiredPermissions: Permission[] = Platform.select({
+    ios: [permissionModule.PERMISSIONS.IOS.CAMERA],
     android: [permissionModule.PERMISSIONS.ANDROID.CAMERA],
+    default: [],
+  });
+  const optionalPermissions: Permission[] = Platform.select({
+    ios: [permissionModule.PERMISSIONS.IOS.MICROPHONE],
+    android: [],
     default: [],
   });
   const mediaLibraryPermissions: Permission[] = Platform.select({
@@ -70,12 +75,15 @@ const createNativeFileService = ({
 
   class NativeFileService implements FileServiceInterface {
     async hasCameraPermission(): Promise<boolean> {
-      const status = await permissionModule.checkMultiple(cameraPermissions);
+      const status = await permissionModule.checkMultiple(requiredPermissions);
       return nativePermissionGranted(status);
     }
     async requestCameraPermission(): Promise<boolean> {
-      const status = await permissionModule.requestMultiple(cameraPermissions);
-      return nativePermissionGranted(status);
+      const requiredPermissionsStatus = await permissionModule.requestMultiple(requiredPermissions);
+      if (!nativePermissionGranted(requiredPermissionsStatus)) return false;
+
+      await permissionModule.requestMultiple(optionalPermissions);
+      return true;
     }
     async hasMediaLibraryPermission(): Promise<boolean> {
       const status = await permissionModule.checkMultiple(mediaLibraryPermissions);
