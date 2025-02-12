@@ -1,4 +1,4 @@
-## v3.8.4
+## v3.8.6
 
 ### Improvements
 
