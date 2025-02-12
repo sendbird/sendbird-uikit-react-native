@@ -1,5 +1,5 @@
 ## v3.8.4
 
-### Features
+### Improvements
 
 - require only camera permission when using camera
