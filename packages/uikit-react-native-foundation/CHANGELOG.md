@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.5](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.8.4...v3.8.5) (2025-02-12)
+
+**Note:** Version bump only for package @sendbird/uikit-react-native-foundation
+
 ## [3.8.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.8.3...v3.8.4) (2025-02-05)
 
 **Note:** Version bump only for package @sendbird/uikit-react-native-foundation
