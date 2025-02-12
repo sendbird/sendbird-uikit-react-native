@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.6](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.8.4...v3.8.6) (2025-02-12)
+
+### Features
+
+- require only camera permission when using camera feature ([2a10efb](https://github.com/sendbird/sendbird-uikit-react-native/commit/2a10efbbf2da55a2b05105343bcb8e57644e1de9))
+
 ## [3.8.5](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.8.4...v3.8.5) (2025-02-12)
 
 **Note:** Version bump only for package sendbird-uikit-react-native
