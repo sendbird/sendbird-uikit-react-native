@@ -9,15 +9,13 @@ function shouldUseScrollViewEnhancer() {
   return false;
 }
 
-let FlatListInternal;
+let FlatListInternal = require('react-native').FlatList;
 if (shouldUseScrollViewEnhancer()) {
   try {
     FlatListInternal = require('@sendbird/react-native-scrollview-enhancer').FlatList;
   } catch {
     FlatListInternal = require('react-native').FlatList;
   }
-} else {
-  FlatListInternal = require('react-native').FlatList;
 }
 
 export default FlatListInternal;
