@@ -13,7 +13,7 @@ async function openDocumentByOldDocumentPicker(
   documentPickerModule: typeof OldDocumentPicker,
   options?: OpenDocumentOptions,
 ): Promise<FilePickerResponse> {
-  Logger.log('called openDocumentByOldDocumentPicker');
+  Logger.warn('please update to @react-native-documents/picker');
   try {
     const { uri, size, name, type } = await documentPickerModule.pickSingle();
     return normalizeFile({ uri, size, name, type });
@@ -29,7 +29,6 @@ async function openDocumentByNewDocumentsPicker(
   documentPickerModule: typeof NewDocumentsPicker,
   options?: OpenDocumentOptions,
 ): Promise<FilePickerResponse> {
-  Logger.log('called openDocumentByNewDocumentsPicker');
   try {
     const results = await documentPickerModule.pick();
     const { uri, size, name, type } = results[0];
@@ -45,29 +44,16 @@ async function openDocumentByNewDocumentsPicker(
   }
 }
 
+function isOldModule(documentPicker: DocumentPicker): documentPicker is typeof OldDocumentPicker {
+  return typeof (documentPicker as typeof OldDocumentPicker).pickSingle === 'function';
+}
+
 export async function openDocument(
   documentPickerModule: DocumentPicker,
   options?: OpenDocumentOptions,
 ): Promise<FilePickerResponse> {
-  let oldDocumentPicker: typeof OldDocumentPicker | undefined;
-  let newDocumentsPicker: typeof NewDocumentsPicker | undefined;
-
-  try {
-    oldDocumentPicker = require('react-native-document-picker') as typeof OldDocumentPicker;
-  } catch {}
-
-  try {
-    newDocumentsPicker = require('@react-native-documents/picker') as typeof NewDocumentsPicker;
-  } catch {}
-
-  if (newDocumentsPicker && documentPickerModule === newDocumentsPicker) {
-    return await openDocumentByNewDocumentsPicker(documentPickerModule, options);
-  } else if (oldDocumentPicker && documentPickerModule === oldDocumentPicker) {
+  if (isOldModule(documentPickerModule)) {
     return await openDocumentByOldDocumentPicker(documentPickerModule, options);
-  } else {
-    const errorMessage =
-      'Document picker module not found. Please install either react-native-document-picker or @react-native-documents/picker.';
-    Logger.error(errorMessage);
-    throw new Error(errorMessage);
   }
+  return await openDocumentByNewDocumentsPicker(documentPickerModule, options);
 }
