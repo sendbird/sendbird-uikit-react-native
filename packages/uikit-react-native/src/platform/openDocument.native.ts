@@ -1,7 +1,7 @@
 import type * as NewDocumentsPicker from '@react-native-documents/picker';
 import type * as OldDocumentPicker from 'react-native-document-picker';
 
-import type { FilePickerResponse, OpenDocumentOptions } from '@sendbird/uikit-react-native';
+import type { FilePickerResponse, OpenDocumentOptions } from './types';
 import { Logger } from '@sendbird/uikit-utils';
 
 import SBUError from '../libs/SBUError';
