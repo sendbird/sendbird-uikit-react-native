@@ -1,11 +1,11 @@
 import type * as NewDocumentsPicker from '@react-native-documents/picker';
 import type * as OldDocumentPicker from 'react-native-document-picker';
 
-import type { FilePickerResponse, OpenDocumentOptions } from './types';
 import { Logger } from '@sendbird/uikit-utils';
 
 import SBUError from '../libs/SBUError';
 import normalizeFile from '../utils/normalizeFile';
+import type { FilePickerResponse, OpenDocumentOptions } from './types';
 
 export type DocumentPicker = typeof OldDocumentPicker | typeof NewDocumentsPicker;
 
