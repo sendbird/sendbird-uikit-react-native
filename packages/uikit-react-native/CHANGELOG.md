@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.8.6...v3.9.0) (2025-04-11)
+
+### Features
+
+- add optional support for @react-native-documents/picker ([2fd794e](https://github.com/sendbird/sendbird-uikit-react-native/commit/2fd794ea403bbce29be6eb62ab406675ded4f9f2))
+
+### Bug Fixes
+
+- resolve FlatList-related error on Metro 0.81.3 ([beaaefb](https://github.com/sendbird/sendbird-uikit-react-native/commit/beaaefb3bdb830ceceb0e83ebaa7cff4575fbe11))
+
 ## [3.8.6](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.8.4...v3.8.6) (2025-02-12)
 
 ### Features

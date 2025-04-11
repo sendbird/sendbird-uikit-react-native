@@ -2,7 +2,7 @@
   "packages": ["packages/*", "sample", "docs-validation"],
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "version": "3.8.6",
+  "version": "3.9.0",
   "command": {
     "publish": {
       "conventionalCommits": true,

@@ -1,5 +1,8 @@
-## v3.8.6
+## v3.9.0
 
-### Improvements
+### Features
+- add optional support for @react-native-documents/picker
+- support for react-native 0.77 or later
 
-- require only camera permission when using camera
+### Bug Fixes
+- resolve FlatList-related error on Metro 0.81.3
