@@ -1044,7 +1044,7 @@ PODS:
     - Yoga
   - react-native-create-thumbnail (2.0.0):
     - React-Core
-  - react-native-document-picker (9.3.1):
+  - react-native-document-picker (10.1.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1510,7 +1510,7 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../../node_modules/react-native/ReactCommon`)
   - "react-native-cameraroll (from `../../node_modules/@react-native-camera-roll/camera-roll`)"
   - react-native-create-thumbnail (from `../../node_modules/react-native-create-thumbnail`)
-  - react-native-document-picker (from `../../node_modules/react-native-document-picker`)
+  - "react-native-document-picker (from `../../node_modules/@react-native-documents/picker`)"
   - react-native-image-picker (from `../../node_modules/react-native-image-picker`)
   - "react-native-image-resizer (from `../../node_modules/@bam.tech/react-native-image-resizer`)"
   - react-native-mmkv (from `../../node_modules/react-native-mmkv`)
@@ -1650,7 +1650,7 @@ EXTERNAL SOURCES:
   react-native-create-thumbnail:
     :path: "../../node_modules/react-native-create-thumbnail"
   react-native-document-picker:
-    :path: "../../node_modules/react-native-document-picker"
+    :path: "../../node_modules/@react-native-documents/picker"
   react-native-image-picker:
     :path: "../../node_modules/react-native-image-picker"
   react-native-image-resizer:
@@ -1763,7 +1763,7 @@ SPEC CHECKSUMS:
   Permission-PhotoLibrary: 03c52ed95dadfb0f2ba4c7663786cce0c4e0c978
   Permission-PhotoLibraryAddOnly: c4fbf91806bbdc3ed877049bc09fbe58ad9a7c97
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
-  RCT-Folly: 5dc73daec3476616d19e8a53f0156176f7b55461
+  RCT-Folly: 02617c592a293bd6d418e0a88ff4ee1f88329b47
   RCTDeprecation: 4c7eeb42be0b2e95195563c49be08d0b839d22b4
   RCTRequired: d530a0f489699c8500e944fde963102c42dcd0c2
   RCTTypeSafety: b20878506b094fa3d9007d7b9e4be0faa3562499
@@ -1789,7 +1789,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 9f68550e7c6839d01411ac8896aea5c868eff63a
   react-native-cameraroll: 4f313ab09aeaf42ac5f72dec840641da7656f104
   react-native-create-thumbnail: ab55d24aea01723cf386f18b0b542aabb1982f27
-  react-native-document-picker: c4f197741c327270453aa9840932098e0064fd52
+  react-native-document-picker: 570a73e1d3a71d2b34e1c7d7d46c7f2e3c14b0cd
   react-native-image-picker: c3afe5472ef870d98a4b28415fc0b928161ee5f7
   react-native-image-resizer: fd0c333eca55147bd55c5e054cac95dcd0da6814
   react-native-mmkv: 8c9a677e64a1ac89b0c6cf240feea528318b3074
@@ -1839,6 +1839,6 @@ SPEC CHECKSUMS:
   Yoga: 04f1db30bb810187397fa4c37dd1868a27af229c
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
-PODFILE CHECKSUM: 854e85b2bbfd7d0e442b6dea393d8c15cb83909e
+PODFILE CHECKSUM: a7dd46320c0e4bc28bcdaa9f6fbf4caf6e4131d4
 
 COCOAPODS: 1.15.2

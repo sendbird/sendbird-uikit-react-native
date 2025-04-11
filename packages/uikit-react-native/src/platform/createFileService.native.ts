@@ -1,6 +1,5 @@
 import type { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import { Platform } from 'react-native';
-import type * as DocumentPicker from 'react-native-document-picker';
 import type * as FileAccess from 'react-native-file-access';
 import type * as ImagePicker from 'react-native-image-picker';
 import type * as Permissions from 'react-native-permissions';
@@ -18,6 +17,7 @@ import {
 import SBUError from '../libs/SBUError';
 import nativePermissionGranted from '../utils/nativePermissionGranted';
 import normalizeFile from '../utils/normalizeFile';
+import { DocumentPicker, openDocument } from './openDocument.native';
 import type {
   FilePickerResponse,
   FileServiceInterface,
@@ -52,7 +52,7 @@ const createNativeFileService = ({
   fsModule,
 }: {
   imagePickerModule: typeof ImagePicker;
-  documentPickerModule: typeof DocumentPicker;
+  documentPickerModule: DocumentPicker;
   permissionModule: typeof Permissions;
   mediaLibraryModule: typeof CameraRoll;
   fsModule: typeof FileAccess;
@@ -78,6 +78,7 @@ const createNativeFileService = ({
       const status = await permissionModule.checkMultiple(requiredPermissions);
       return nativePermissionGranted(status);
     }
+
     async requestCameraPermission(): Promise<boolean> {
       const requiredPermissionsStatus = await permissionModule.requestMultiple(requiredPermissions);
       if (!nativePermissionGranted(requiredPermissionsStatus)) return false;
@@ -85,10 +86,12 @@ const createNativeFileService = ({
       await permissionModule.requestMultiple(optionalPermissions);
       return true;
     }
+
     async hasMediaLibraryPermission(): Promise<boolean> {
       const status = await permissionModule.checkMultiple(mediaLibraryPermissions);
       return nativePermissionGranted(status);
     }
+
     async requestMediaLibraryPermission(): Promise<boolean> {
       const status = await permissionModule.requestMultiple(mediaLibraryPermissions);
       return nativePermissionGranted(status);
@@ -129,6 +132,7 @@ const createNativeFileService = ({
       const { fileName: name, fileSize: size, type, uri } = response.assets?.[0] ?? {};
       return normalizeFile({ uri, size, name, type });
     }
+
     async openMediaLibrary(options?: OpenMediaLibraryOptions): Promise<FilePickerResponse[] | null> {
       /**
        * NOTE: options.selectionLimit {@link https://github.com/react-native-image-picker/react-native-image-picker#options}
@@ -172,17 +176,11 @@ const createNativeFileService = ({
           .map(({ fileName: name, fileSize: size, type, uri }) => normalizeFile({ uri, size, name, type })),
       );
     }
+
     async openDocument(options?: OpenDocumentOptions): Promise<FilePickerResponse> {
-      try {
-        const { uri, size, name, type } = await documentPickerModule.pickSingle();
-        return normalizeFile({ uri, size, name, type });
-      } catch (e) {
-        if (!documentPickerModule.isCancel(e) && documentPickerModule.isInProgress(e)) {
-          options?.onOpenFailure?.(SBUError.UNKNOWN, e);
-        }
-        return null;
-      }
+      return await openDocument(documentPickerModule, options);
     }
+
     async save(options: SaveOptions): Promise<string> {
       const hasPermission = await this.hasMediaLibraryPermission();
       if (!hasPermission) {
