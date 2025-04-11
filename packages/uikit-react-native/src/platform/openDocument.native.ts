@@ -45,7 +45,7 @@ async function openDocumentByNewDocumentsPicker(
 }
 
 function isOldModule(documentPicker: DocumentPicker): documentPicker is typeof OldDocumentPicker {
-  return typeof (documentPicker as typeof OldDocumentPicker).pickSingle === 'function';
+  return 'pickSingle' in documentPicker && typeof documentPicker.pickSingle === 'function';
 }
 
 export async function openDocument(
