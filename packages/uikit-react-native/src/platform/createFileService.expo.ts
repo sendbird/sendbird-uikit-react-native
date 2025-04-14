@@ -34,20 +34,33 @@ const createExpoFileService = ({
       const res = (await imagePickerModule.getCameraPermissionsAsync()) as ExpoPermissionResponse;
       return expoPermissionGranted([res]);
     }
+
     async requestCameraPermission(): Promise<boolean> {
       const res = (await imagePickerModule.requestCameraPermissionsAsync()) as ExpoPermissionResponse;
       return expoPermissionGranted([res]);
     }
-    async hasMediaLibraryPermission(type: 'write' | 'read'): Promise<boolean> {
+
+    async hasMediaLibraryReadPermission(): Promise<boolean> {
       const perms = (await imagePickerModule.getMediaLibraryPermissionsAsync(
-        type === 'write',
+        false,
       )) as ExpoMediaLibraryPermissionResponse;
       return expoPermissionGranted([perms]);
     }
-    async requestMediaLibraryPermission(type: 'write' | 'read'): Promise<boolean> {
+
+    async requestMediaLibraryReadPermission(): Promise<boolean> {
       const perms = (await imagePickerModule.requestMediaLibraryPermissionsAsync(
-        type === 'write',
+        false,
       )) as ExpoMediaLibraryPermissionResponse;
+      return expoPermissionGranted([perms]);
+    }
+
+    async hasMediaLibraryWritePermission(): Promise<boolean> {
+      const perms = (await mediaLibraryModule.getPermissionsAsync(true, [])) as ExpoMediaLibraryPermissionResponse;
+      return expoPermissionGranted([perms]);
+    }
+
+    async requestMediaLibraryWritePermission(): Promise<boolean> {
+      const perms = (await mediaLibraryModule.requestPermissionsAsync(true, [])) as ExpoMediaLibraryPermissionResponse;
       return expoPermissionGranted([perms]);
     }
 
@@ -81,10 +94,11 @@ const createExpoFileService = ({
       const [file] = await expoBackwardUtils.imagePicker.toFilePickerResponses(response, fsModule);
       return file;
     }
+
     async openMediaLibrary(options: OpenMediaLibraryOptions) {
-      const hasPermission = await this.hasMediaLibraryPermission('read');
+      const hasPermission = await this.hasMediaLibraryReadPermission();
       if (!hasPermission) {
-        const granted = await this.requestMediaLibraryPermission('read');
+        const granted = await this.requestMediaLibraryReadPermission();
         if (!granted) {
           options?.onOpenFailure?.(SBUError.PERMISSIONS_DENIED);
           return null;
@@ -125,9 +139,9 @@ const createExpoFileService = ({
     }
 
     async save(options: SaveOptions): Promise<string> {
-      const hasPermission = await this.hasMediaLibraryPermission('write');
+      const hasPermission = await this.hasMediaLibraryWritePermission();
       if (!hasPermission) {
-        const granted = await this.requestMediaLibraryPermission('write');
+        const granted = await this.requestMediaLibraryWritePermission();
         if (!granted) throw new Error('Permission not granted');
       }
 
@@ -142,6 +156,7 @@ const createExpoFileService = ({
       }
       return response.uri;
     }
+
     createRecordFilePath(customExtension = 'm4a'): { recordFilePath: string; uri: string } {
       const basePath = fsModule.cacheDirectory;
       if (!basePath) throw new Error('Cannot determine directory');
