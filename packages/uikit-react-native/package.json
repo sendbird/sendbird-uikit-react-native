@@ -83,7 +83,7 @@
     "expo-file-system": "^15.2.2",
     "expo-image-manipulator": "^11.1.1",
     "expo-image-picker": "^14.1.1",
-    "expo-media-library": "^15.2.3",
+    "expo-media-library": "^16.0.0",
     "expo-notifications": "^0.18.1",
     "expo-video-thumbnails": "^7.2.1",
     "glob": "^7.2.0",
@@ -121,6 +121,7 @@
     "expo-image-manipulator": ">=11.0.0",
     "expo-image-picker": ">=12.0.2",
     "expo-notifications": ">=0.14.1",
+    "expo-media-library": ">=16.0.0",
     "expo-video-thumbnails": ">=6.4.0",
     "react": ">=17.0.2",
     "react-native": ">=0.65.0",
@@ -175,6 +176,9 @@
       "optional": true
     },
     "expo-notifications": {
+      "optional": true
+    },
+    "expo-media-library": {
       "optional": true
     },
     "expo-video-thumbnails": {
