@@ -1,8 +1,5 @@
-## v3.9.0
+## v3.9.1
 
-### Features
-- add optional support for @react-native-documents/picker
-- support for react-native 0.77 or later
+### Improvements
+- bump minimum expo-media-library version for android policy compliance
 
-### Bug Fixes
-- resolve FlatList-related error on Metro 0.81.3
