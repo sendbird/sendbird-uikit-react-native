@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.9.0...v3.9.1) (2025-04-15)
+
+### Improvements
+
+- bump minimum expo-media-library version for android policy compliance ([71fedf0](https://github.com/sendbird/sendbird-uikit-react-native/commit/71fedf03d6980cc9a7692b7e244453f30df809c3))
+
 ## [3.9.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.8.6...v3.9.0) (2025-04-11)
 
 ### Features
