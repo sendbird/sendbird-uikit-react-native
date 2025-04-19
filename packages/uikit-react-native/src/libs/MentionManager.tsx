@@ -246,9 +246,11 @@ class MentionManager {
   ): boolean => {
     return Boolean(
       mentionEnabled &&
-        message?.mentionedMessageTemplate &&
-        message?.mentionedUsers &&
-        message?.mentionedUsers.length > 0,
+        message &&
+        'mentionedMessageTemplate' in message &&
+        message.mentionedMessageTemplate &&
+        message.mentionedUsers &&
+        message.mentionedUsers.length > 0,
     );
   };
 }
