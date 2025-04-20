@@ -26,7 +26,9 @@ const useMentionTextInput = (params: { messageToEdit?: SendbirdUserMessage | Sen
       )
     ) {
       const result = mentionManager.templateToTextAndMentionedUsers(
-        params.messageToEdit?.mentionedMessageTemplate ?? '',
+        params.messageToEdit && 'mentionedMessageTemplate' in params.messageToEdit
+          ? params.messageToEdit.mentionedMessageTemplate ?? ''
+          : '',
         params.messageToEdit?.mentionedUsers ?? [],
       );
 
