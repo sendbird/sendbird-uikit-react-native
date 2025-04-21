@@ -1,5 +1,5 @@
-## v3.9.1
+## v3.9.2
 
-### Improvements
-- bump minimum expo-media-library version for android policy compliance
+### Bug Fixes
+- improve message validation related to mentionedMessageTemplate
 
