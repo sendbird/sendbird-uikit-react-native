@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.9.2...v3.9.3) (2025-04-28)
+
+### Features
+
+- update uikit-tools to 0.0.7 to support React Native 0.79 ([ba14d82](https://github.com/sendbird/sendbird-uikit-react-native/commit/ba14d82a7decfb61d55b490affeb43544f1c0f48))
+
 ## [3.9.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.9.1...v3.9.2) (2025-04-21)
 
 ### Bug Fixes
