@@ -1,5 +1,5 @@
-## v3.9.2
+## v3.9.3
 
-### Bug Fixes
-- improve message validation related to mentionedMessageTemplate
+### Features
+- update uikit-tools to 0.0.7 to support React Native 0.79
 
