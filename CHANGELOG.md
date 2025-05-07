@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.9.3...v3.9.4) (2025-05-07)
+
+### Bug Fixes
+
+- allow string values for borderRadius in StyleSheet ([8415fae](https://github.com/sendbird/sendbird-uikit-react-native/commit/8415fae29a68371b26eeadf96130e4ea78d4e542))
+
 ## [3.9.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.9.2...v3.9.3) (2025-04-28)
 
 ### Features
