@@ -1,5 +1,5 @@
-## v3.9.3
+## v3.9.4
 
-### Features
-- update uikit-tools to 0.0.7 to support React Native 0.79
+### Bug Fixes
+- allow string values for borderRadius in StyleSheet
 
