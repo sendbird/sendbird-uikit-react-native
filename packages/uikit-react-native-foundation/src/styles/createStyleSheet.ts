@@ -13,14 +13,15 @@ const SCALE_FACTOR_WITH_DIMENSION_VALUE = (
 };
 
 const DEFAULT_SCALE_FACTOR_WITH_NUMERIC_VALUE = (
-  val: NonNullable<AnimatableNumericValue | undefined>,
-): NonNullable<AnimatableNumericValue | undefined> => {
+  val: NonNullable<AnimatableNumericValue | string | undefined>,
+): NonNullable<AnimatableNumericValue | string | undefined> => {
   return typeof val === 'number' ? DEFAULT_SCALE_FACTOR(val) : val;
 };
 
 const preProcessor: Partial<StylePreprocessor> = {
   'fontSize': DEFAULT_SCALE_FACTOR,
   'lineHeight': DEFAULT_SCALE_FACTOR,
+  //@ts-ignore : Ensure compatibility with all supported React Native versions
   'borderRadius': DEFAULT_SCALE_FACTOR_WITH_NUMERIC_VALUE,
   'minWidth': SCALE_FACTOR_WITH_DIMENSION_VALUE,
   'maxWidth': SCALE_FACTOR_WITH_DIMENSION_VALUE,
