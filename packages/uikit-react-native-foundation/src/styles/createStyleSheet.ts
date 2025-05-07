@@ -21,7 +21,7 @@ const DEFAULT_SCALE_FACTOR_WITH_NUMERIC_VALUE = (
 const preProcessor: Partial<StylePreprocessor> = {
   'fontSize': DEFAULT_SCALE_FACTOR,
   'lineHeight': DEFAULT_SCALE_FACTOR,
-  //@ts-ignore
+  //@ts-ignore : Ensure compatibility with all supported React Native versions
   'borderRadius': DEFAULT_SCALE_FACTOR_WITH_NUMERIC_VALUE,
   'minWidth': SCALE_FACTOR_WITH_DIMENSION_VALUE,
   'maxWidth': SCALE_FACTOR_WITH_DIMENSION_VALUE,
