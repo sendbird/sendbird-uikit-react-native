@@ -60,6 +60,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     channel,
     keyboardAvoidOffset,
     sortComparator = messageComparator,
+    flatListComponent,
     flatListProps,
     messageListQueryParams,
     collectionCreator,
@@ -267,6 +268,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             onResendFailedMessage={resendMessage}
             onDeleteMessage={deleteMessage}
             onPressMediaMessage={_onPressMediaMessage}
+            flatListComponent={flatListComponent}
             flatListProps={memoizedFlatListProps}
           />
           <GroupChannelModule.Input

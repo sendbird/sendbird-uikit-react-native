@@ -25,9 +25,10 @@ type Props = Omit<FlatListProps<SendbirdMessage>, 'onEndReached'> & {
   onBottomReached: () => void;
   onTopReached: () => void;
   onScrolledAwayFromBottom: (value: boolean) => void;
+  flatListComponent?: React.ComponentType<FlatListProps<SendbirdMessage>>;
 };
 const ChatFlatList = forwardRef<RNFlatList, Props>(function ChatFlatList(
-  { onTopReached, onBottomReached, onScrolledAwayFromBottom, onScroll, ...props },
+  { onTopReached, onBottomReached, onScrolledAwayFromBottom, onScroll, flatListComponent, ...props },
   ref,
 ) {
   const { select } = useUIKitTheme();
@@ -60,8 +61,10 @@ const ChatFlatList = forwardRef<RNFlatList, Props>(function ChatFlatList(
     );
   }
 
+  const FlatList = flatListComponent ?? FlatListInternal;
+
   return (
-    <FlatListInternal
+    <FlatList
       bounces={false}
       removeClippedSubviews
       keyboardDismissMode={'on-drag'}

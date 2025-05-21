@@ -46,6 +46,7 @@ export interface GroupChannelProps {
     enableMessageGrouping?: GroupChannelProps['MessageList']['enableMessageGrouping'];
 
     keyboardAvoidOffset?: GroupChannelProps['Provider']['keyboardAvoidOffset'];
+    flatListComponent?: GroupChannelProps['MessageList']['flatListComponent'];
     flatListProps?: GroupChannelProps['MessageList']['flatListProps'];
     sortComparator?: UseGroupChannelMessagesOptions['sortComparator'];
 
@@ -84,6 +85,7 @@ export interface GroupChannelProps {
     | 'renderMessage'
     | 'renderNewMessagesButton'
     | 'renderScrollToBottomButton'
+    | 'flatListComponent'
     | 'flatListProps'
     | 'hasNext'
     | 'searchItem'

@@ -90,6 +90,7 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
     | null
     | ((props: { visible: boolean; onPress: () => void; newMessages: SendbirdMessage[] }) => React.ReactElement | null);
   renderScrollToBottomButton: null | ((props: { visible: boolean; onPress: () => void }) => React.ReactElement | null);
+  flatListComponent?: React.ComponentType<FlatListProps<SendbirdMessage>>;
   flatListProps?: Omit<FlatListProps<SendbirdMessage>, 'data' | 'renderItem'>;
 } & {
   ref?: Ref<FlatList<SendbirdMessage>> | undefined;
@@ -118,6 +119,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
     scrolledAwayFromBottom,
     onBottomReached,
     onTopReached,
+    flatListComponent,
     flatListProps,
     onPressNewMessagesButton,
     onPressScrollToBottomButton,
@@ -165,6 +167,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
         <ChannelFrozenBanner style={styles.frozenBanner} text={STRINGS.LABELS.CHANNEL_MESSAGE_LIST_FROZEN} />
       )}
       <ChatFlatList
+        flatListComponent={flatListComponent}
         {...flatListProps}
         onTopReached={onTopReached}
         onBottomReached={onBottomReached}
