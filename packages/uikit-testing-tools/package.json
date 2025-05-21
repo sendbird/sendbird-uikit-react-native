@@ -39,7 +39,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@sendbird/chat": "^4.16.0",
+    "@sendbird/chat": "^4.19.2",
     "@sendbird/uikit-utils": "3.9.5",
     "@types/jest": "^29.4.0",
     "@types/react": "*",

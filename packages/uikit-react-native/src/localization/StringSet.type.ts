@@ -117,6 +117,8 @@ export interface StringSet {
     /** GroupChannel > List */
     LIST_DATE_SEPARATOR: (date: Date, locale?: Locale) => string;
     LIST_BUTTON_NEW_MSG: (newMessages: SendbirdMessage[]) => string;
+    LIST_FLOATING_UNREAD_MSG: (unreadMessageCount: number) => string;
+    LIST_NEW_LINE: string;
 
     /** GroupChannel > Message bubble */
     MESSAGE_BUBBLE_TIME: (message: SendbirdMessage, locale?: Locale) => string;
@@ -312,6 +314,7 @@ export interface StringSet {
     CHANNEL_MESSAGE_DELETE: string;
     CHANNEL_MESSAGE_REPLY: string;
     CHANNEL_MESSAGE_THREAD: string;
+    CHANNEL_MESSAGE_MARK_AS_UNREAD: string;
     /** Channel > Message > Delete confirm **/
     CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE: string;
     CHANNEL_MESSAGE_DELETE_CONFIRM_OK: string;
