@@ -41,6 +41,7 @@ export interface GroupChannelProps {
     renderMessage?: GroupChannelProps['MessageList']['renderMessage'];
     renderNewMessagesButton?: GroupChannelProps['MessageList']['renderNewMessagesButton'];
     renderScrollToBottomButton?: GroupChannelProps['MessageList']['renderScrollToBottomButton'];
+    renderUnreadMessagesButton?: GroupChannelProps['MessageList']['renderUnreadMessagesButton'];
 
     enableTypingIndicator?: GroupChannelProps['Provider']['enableTypingIndicator'];
     enableMessageGrouping?: GroupChannelProps['MessageList']['enableMessageGrouping'];
@@ -85,6 +86,7 @@ export interface GroupChannelProps {
     | 'renderMessage'
     | 'renderNewMessagesButton'
     | 'renderScrollToBottomButton'
+    | 'renderUnreadMessagesButton'
     | 'flatListComponent'
     | 'flatListProps'
     | 'hasNext'

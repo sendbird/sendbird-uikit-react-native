@@ -50,6 +50,7 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
   channel: T;
   messages: SendbirdMessage[];
   newMessages: SendbirdMessage[];
+  unreadMessageCount: number;
   searchItem?: { startingPoint: number };
 
   scrolledAwayFromBottom: boolean;
@@ -60,6 +61,7 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
 
   onPressNewMessagesButton: (animated?: boolean) => void;
   onPressScrollToBottomButton: (animated?: boolean) => void;
+  onPressUnreadMessagesButton: (animated?: boolean) => void;
 
   onEditMessage: (message: HandleableMessage) => void;
   onReplyMessage?: (message: HandleableMessage) => void; // only available on group channel
@@ -90,6 +92,13 @@ export type ChannelMessageListProps<T extends SendbirdGroupChannel | SendbirdOpe
     | null
     | ((props: { visible: boolean; onPress: () => void; newMessages: SendbirdMessage[] }) => React.ReactElement | null);
   renderScrollToBottomButton: null | ((props: { visible: boolean; onPress: () => void }) => React.ReactElement | null);
+  renderUnreadMessagesButton:
+    | null
+    | ((props: {
+        visible: boolean;
+        onPress: () => void;
+        unreadMessageCount: number;
+      }) => React.ReactElement | null);
   flatListComponent?: React.ComponentType<FlatListProps<SendbirdMessage>>;
   flatListProps?: Omit<FlatListProps<SendbirdMessage>, 'data' | 'renderItem'>;
 } & {
@@ -109,11 +118,13 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
     onPressMediaMessage,
     onPressParentMessage,
     currentUserId,
+    renderUnreadMessagesButton,
     renderNewMessagesButton,
     renderScrollToBottomButton,
     renderMessage,
     messages,
     newMessages,
+    unreadMessageCount,
     enableMessageGrouping,
     onScrolledAwayFromBottom,
     scrolledAwayFromBottom,
@@ -123,6 +134,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
     flatListProps,
     onPressNewMessagesButton,
     onPressScrollToBottomButton,
+    onPressUnreadMessagesButton,
   }: ChannelMessageListProps<T>,
   ref: React.ForwardedRef<FlatList<SendbirdMessage>>,
 ) => {
@@ -163,8 +175,17 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
 
   return (
     <View style={[{ flex: 1, backgroundColor: colors.background }, safeAreaLayout]}>
-      {channel.isFrozen && (
+      {!channel.isFrozen && (
         <ChannelFrozenBanner style={styles.frozenBanner} text={STRINGS.LABELS.CHANNEL_MESSAGE_LIST_FROZEN} />
+      )}
+      {renderUnreadMessagesButton && (
+        <View style={[!channel.isFrozen ? styles.unreadMsgButtonWhenFrozen : styles.unreadMsgButton, safeAreaLayout]}>
+          {renderUnreadMessagesButton({
+            visible:unreadMessageCount > 0,
+            onPress: () => onPressUnreadMessagesButton(),
+            unreadMessageCount,
+          })}
+        </View>
       )}
       <ChatFlatList
         flatListComponent={flatListComponent}
@@ -281,6 +302,12 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
     }
   };
 
+  const onMarkAsUnread = async (message: HandleableMessage) => {
+    if (sbOptions.uikitWithAppInfo.groupChannel.channel.enableMarkAsUnread && channel.isGroupChannel()) {
+      await (channel as SendbirdGroupChannel).markAsUnread(message);
+    }
+  };
+
   const openSheetForFailedMessage = (message: HandleableMessage) => {
     openSheet({
       sheetItems: [
@@ -351,6 +378,11 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
         title: STRINGS.LABELS.CHANNEL_MESSAGE_SAVE,
         onPress: () => onDownloadFile(message),
       }),
+      markAsUnread: (message: HandleableMessage) => ({
+        icon: 'mark-as-unread' as const,
+        title: STRINGS.LABELS.CHANNEL_MESSAGE_MARK_AS_UNREAD,
+        onPress: () => onMarkAsUnread(message),
+      }),
     };
 
     if (message.isUserMessage()) {
@@ -365,6 +397,9 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
             sheetItems.push(menu.replyInThread(message));
           } else if (sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
             sheetItems.push(menu.reply(message));
+          }
+          if (sbOptions.uikitWithAppInfo.groupChannel.channel.enableMarkAsUnread) {
+            sheetItems.push(menu.markAsUnread(message));
           }
         }
       }
@@ -383,6 +418,9 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
             sheetItems.push(menu.replyInThread(message));
           } else if (sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
             sheetItems.push(menu.reply(message));
+          }
+          if (sbOptions.uikitWithAppInfo.groupChannel.channel.enableMarkAsUnread) {
+            sheetItems.push(menu.markAsUnread(message));
           }
         }
       }
@@ -445,6 +483,18 @@ const styles = createStyleSheet({
   },
   frozenListPadding: {
     paddingBottom: 32,
+  },
+  unreadMsgButton: {
+    position: 'absolute',
+    zIndex: 999,
+    top: 12,
+    alignSelf: 'center',
+  },
+  unreadMsgButtonWhenFrozen: {
+    position: 'absolute',
+    zIndex: 999,
+    top: 40,
+    alignSelf: 'center',
   },
   newMsgButton: {
     position: 'absolute',

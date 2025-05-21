@@ -1,48 +1,35 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+
+
 import { MessageCollection, MessageFilter } from '@sendbird/chat/groupChannel';
 import { ReplyType } from '@sendbird/chat/message';
 import { Box, useToast } from '@sendbird/uikit-react-native-foundation';
 import { useGroupChannelMessages } from '@sendbird/uikit-tools';
-import {
-  SendbirdFileMessage,
-  SendbirdGroupChannel,
-  SendbirdSendableMessage,
-  SendbirdUserMessage,
-  getReadableFileSize,
-} from '@sendbird/uikit-utils';
-import {
-  NOOP,
-  PASS,
-  confirmAndMarkAsRead,
-  messageComparator,
-  useFreshCallback,
-  useIIFE,
-  useRefTracker,
-} from '@sendbird/uikit-utils';
+import { Logger, SendbirdFileMessage, SendbirdGroupChannel, SendbirdSendableMessage, SendbirdUserMessage, getReadableFileSize } from '@sendbird/uikit-utils';
+import { NOOP, PASS, confirmAndMarkAsRead, messageComparator, useFreshCallback, useIIFE, useRefTracker } from '@sendbird/uikit-utils';
 
-import GroupChannelMessageRenderer, {
-  GroupChannelTypingIndicatorBubble,
-} from '../components/GroupChannelMessageRenderer';
+
+
+import GroupChannelMessageRenderer, { GroupChannelTypingIndicatorBubble } from '../components/GroupChannelMessageRenderer';
 import NewMessagesButton from '../components/NewMessagesButton';
 import ScrollToBottomButton from '../components/ScrollToBottomButton';
 import StatusComposition from '../components/StatusComposition';
+import UnreadMessagesButton from '../components/UnreadMessagesButton';
 import createGroupChannelModule from '../domain/groupChannel/module/createGroupChannelModule';
-import type {
-  GroupChannelFragment,
-  GroupChannelModule,
-  GroupChannelProps,
-  GroupChannelPubSubContextPayload,
-} from '../domain/groupChannel/types';
+import type { GroupChannelFragment, GroupChannelModule, GroupChannelProps, GroupChannelPubSubContextPayload } from '../domain/groupChannel/types';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../hooks/useContext';
 import { FileType } from '../platform/types';
 import pubsub from '../utils/pubsub';
+import { LogLevel } from '@sendbird/chat';
+
 
 const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): GroupChannelFragment => {
   const GroupChannelModule = createGroupChannelModule(initModule);
 
   return ({
     searchItem,
+    renderUnreadMessagesButton = (props) => <UnreadMessagesButton {...props} />,
     renderNewMessagesButton = (props) => <NewMessagesButton {...props} />,
     renderScrollToBottomButton = (props) => <ScrollToBottomButton {...props} />,
     renderMessage,
@@ -77,6 +64,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     const [scrolledAwayFromBottom, setScrolledAwayFromBottom] = useState(false);
     const scrolledAwayFromBottomRef = useRefTracker(scrolledAwayFromBottom);
 
+    sdk.logLevel = LogLevel.VERBOSE;
     const replyType = useIIFE(() => {
       if (sbOptions.uikit.groupChannel.channel.replyType === 'none') {
         return ReplyType.NONE;
@@ -107,6 +95,18 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       },
       onMessagesUpdated(messages) {
         groupChannelPubSub.publish({ type: 'MESSAGES_UPDATED', data: { messages } });
+      },
+      onChannelUpdated(_) {
+        if (sbOptions.uikitWithAppInfo.groupChannel.channel.enableMarkAsUnread) {
+          Logger.log(
+            'onChannelUpdated channel.unreadMessageCount:',
+            channel.unreadMessageCount,
+            'channel.totalUnreadReplyCount:',
+            channel.totalUnreadReplyCount,
+            'channel.myLastRead:',
+            channel.myLastRead,
+          );
+        }
       },
       onChannelDeleted,
       onCurrentUserBanned: onChannelDeleted,
@@ -265,6 +265,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             onScrolledAwayFromBottom={onScrolledAwayFromBottom}
             renderNewMessagesButton={renderNewMessagesButton}
             renderScrollToBottomButton={renderScrollToBottomButton}
+            renderUnreadMessagesButton={renderUnreadMessagesButton}
             onResendFailedMessage={resendMessage}
             onDeleteMessage={deleteMessage}
             onPressMediaMessage={_onPressMediaMessage}

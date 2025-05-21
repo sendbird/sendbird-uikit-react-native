@@ -69,6 +69,7 @@ export type SendbirdChatContextType = {
           readonly enableReactions: boolean;
           readonly enableReactionsSupergroup: boolean;
           readonly enableOgtag: boolean;
+          readonly enableMarkAsUnread: boolean;
         };
         setting: {
           readonly enableMessageSearch: boolean;
@@ -195,7 +196,16 @@ export const SendbirdChatProvider = ({
     sbOptions: {
       appInfo: appFeatures,
       uikit: configs,
-      uikitWithAppInfo: configsWithAppAttr(sdkInstance),
+      uikitWithAppInfo: {
+        ...configsWithAppAttr(sdkInstance),
+        groupChannel: {
+          ...configsWithAppAttr(sdkInstance).groupChannel,
+          channel: {
+            ...configsWithAppAttr(sdkInstance).groupChannel.channel,
+            enableMarkAsUnread: true,
+          },
+        },
+      },
       chat: {
         autoPushTokenRegistrationEnabled: enableAutoPushTokenRegistration,
         useUserIdForNicknameEnabled: enableUseUserIdForNickname,

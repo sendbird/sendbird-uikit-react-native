@@ -118,7 +118,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       HEADER_TITLE: (uid, channel) => getGroupChannelTitle(uid, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       LIST_DATE_SEPARATOR: (date, locale) => getDateSeparatorFormat(date, locale ?? dateLocale),
       LIST_BUTTON_NEW_MSG: (newMessages) => `${newMessages.length} new messages`,
-
+      LIST_BUTTON_UNREAD_MSG: (unreadMessageCount) => unreadMessageCount === 1 ? `${unreadMessageCount} unread message` : `${unreadMessageCount} unread messages`,
       MESSAGE_BUBBLE_TIME: (message, locale) => getMessageTimeFormat(new Date(message.createdAt), locale ?? dateLocale),
       MESSAGE_BUBBLE_FILE_TITLE: (message) => message.name,
       MESSAGE_BUBBLE_EDITED_POSTFIX: ' (edited)',
@@ -303,6 +303,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       CHANNEL_MESSAGE_DELETE: 'Delete',
       CHANNEL_MESSAGE_REPLY: 'Reply',
       CHANNEL_MESSAGE_THREAD: 'Reply in thread',
+      CHANNEL_MESSAGE_MARK_AS_UNREAD: 'Mark as unread',
       CHANNEL_MESSAGE_DELETE_CONFIRM_TITLE: 'Delete message?',
       CHANNEL_MESSAGE_DELETE_CONFIRM_OK: 'Delete',
       CHANNEL_MESSAGE_DELETE_CONFIRM_CANCEL: 'Cancel',

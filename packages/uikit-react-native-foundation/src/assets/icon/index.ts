@@ -35,6 +35,7 @@ const IconAssets = {
   'gif': require('./icon-gif.png'),
   'info': require('./icon-info.png'),
   'leave': require('./icon-leave.png'),
+  'mark-as-unread': require('./icon-mark-as-unread.png'),
   'members': require('./icon-members.png'),
   'message': require('./icon-message.png'),
   'moderation': require('./icon-moderation.png'),

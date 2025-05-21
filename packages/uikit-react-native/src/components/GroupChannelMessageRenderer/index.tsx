@@ -30,6 +30,7 @@ import { TypingIndicatorType } from '../../types';
 import { ReactionAddons } from '../ReactionAddons';
 import GroupChannelMessageDateSeparator from './GroupChannelMessageDateSeparator';
 import GroupChannelMessageFocusAnimation from './GroupChannelMessageFocusAnimation';
+import GroupChannelMessageNewMessagesSeparator from './GroupChannelMessageNewMessagesSeparator';
 import GroupChannelMessageOutgoingStatus from './GroupChannelMessageOutgoingStatus';
 import GroupChannelMessageParentMessage from './GroupChannelMessageParentMessage';
 import GroupChannelMessageReplyInfo from './GroupChannelMessageReplyInfo';
@@ -313,6 +314,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   return (
     <Box paddingHorizontal={16} marginBottom={messageGap}>
       <GroupChannelMessageDateSeparator message={message} prevMessage={prevMessage} />
+      <GroupChannelMessageNewMessagesSeparator isUnreadFirstMessage={true} />
       <GroupChannelMessageFocusAnimation focused={focused}>{renderMessage()}</GroupChannelMessageFocusAnimation>
     </Box>
   );

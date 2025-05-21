@@ -7,7 +7,7 @@ import {
   SendbirdSendableMessage,
   isDifferentChannel,
   useFreshCallback,
-  useIsFirstMount,
+  useIsFirstMount, Logger,
 } from '@sendbird/uikit-utils';
 
 import ChannelMessageList from '../../../components/ChannelMessageList';
@@ -64,6 +64,11 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
     } else {
       lazyScrollToBottom({ animated });
     }
+  });
+
+  const onPressUnreadMessagesCloseButton = useFreshCallback(async () => {
+    await props.channel.markAsRead();
+    Logger.log('onPressUnreadMessagesCloseButton');
   });
 
   useGroupChannelHandler(sdk, {
@@ -162,6 +167,8 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
       onPressParentMessage={onPressParentMessage}
       onPressNewMessagesButton={scrollToBottom}
       onPressScrollToBottomButton={scrollToBottom}
+      onPressUnreadMessagesButton={onPressUnreadMessagesCloseButton}
+      unreadMessageCount={props.channel.unreadMessageCount}
     />
   );
 };
