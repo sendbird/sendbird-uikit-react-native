@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.5](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.9.4...v3.9.5) (2025-05-22)
+
+### Features
+
+- add flatListComponent to GroupChannelFragment to support custom FlatList in message list ([c87edb2](https://github.com/sendbird/sendbird-uikit-react-native/commit/c87edb26311fe41107266f3dafd63d7092d4786d))
+
 ## [3.9.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.9.3...v3.9.4) (2025-05-07)
 
 ### Bug Fixes
