@@ -1,5 +1,5 @@
-## v3.9.4
+## v3.9.5
 
-### Bug Fixes
-- allow string values for borderRadius in StyleSheet
+### Features
+- added flatListComponent to GroupChannelFragment to support custom FlatList in message list
 
