@@ -21,15 +21,27 @@ jobs:
   execute:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-      - name: '[${{ github.event.inputs.platform }}] Deploy trigger'
-        if: ${{github.event.inputs.platform}}
-        uses: promiseofcake/circleci-trigger-action@v1
-        with:
-          user-token: ${{ secrets.CIRCLECI_PERSONAL_API_TOKEN }}
-          project-slug: sendbird/sendbird-uikit-react-native
-          branch: ${{ env.BRANCH_NAME }}
-          payload: '{"platform": "${{ github.event.inputs.platform }}", "version": "${{ github.event.inputs.version }}" }'
+      - name: Set BRANCH_NAME env
+        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+
+      - name: '[${{ github.event.inputs.platform }}] Deploy trigger (CircleCI REST API)'
+        if: ${{ github.event.inputs.platform }}
+        env:
+          CIRCLECI_PERSONAL_API_TOKEN: ${{ secrets.CIRCLECI_PERSONAL_API_TOKEN }}
+          BRANCH_NAME: ${{ env.BRANCH_NAME }}
+          PLATFORM: ${{ github.event.inputs.platform }}
+          VERSION: ${{ github.event.inputs.version }}
+        run: |
+          curl -u ${CIRCLECI_PERSONAL_API_TOKEN}: \
+            -X POST "https://circleci.com/api/v2/project/gh/sendbird/sendbird-uikit-react-native/pipeline" \
+            -H "Content-Type: application/json" \
+            -d '{
+                  "branch": "'"${BRANCH_NAME}"'",
+                  "parameters": {
+                    "platform": "'"${PLATFORM}"'",
+                    "version": "'"${VERSION}"'"
+                  }
+                }'
 
 #env:
 #  CACHE_NODE_MODULES_PATH: |
