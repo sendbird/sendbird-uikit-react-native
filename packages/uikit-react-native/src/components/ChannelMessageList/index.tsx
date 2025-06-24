@@ -393,12 +393,19 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
     if (message.isUserMessage()) {
       sheetItems.push(menu.copy(message));
       if (!channel.isEphemeral) {
-        if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.enableMarkAsUnread) {
-          sheetItems.push(menu.markAsUnread(message));
-        }
-        if (isMyMessage(message, currentUserId) && message.sendingStatus === 'succeeded') {
-          sheetItems.push(menu.edit(message));
-          sheetItems.push(menu.delete(message));
+        if (message.sendingStatus === 'succeeded') {
+          const isMyMsg = isMyMessage(message, currentUserId);
+          if (isMyMsg) {
+            sheetItems.push(menu.edit(message));
+          }
+
+          if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.enableMarkAsUnread) {
+            sheetItems.push(menu.markAsUnread(message));
+          }
+
+          if (isMyMsg) {
+            sheetItems.push(menu.delete(message));
+          }
         }
         if (channel.isGroupChannel()) {
           if (sbOptions.uikit.groupChannel.channel.replyType === 'thread' && onReplyInThreadMessage !== undefined) {
@@ -415,17 +422,21 @@ const useCreateMessagePressActions = <T extends SendbirdGroupChannel | SendbirdO
         sheetItems.push(menu.download(message));
       }
       if (!channel.isEphemeral) {
-        if (isMyMessage(message, currentUserId) && message.sendingStatus === 'succeeded') {
-          sheetItems.push(menu.delete(message));
+        if (message.sendingStatus === 'succeeded') {
+          if (channel.isGroupChannel() && sbOptions.uikit.groupChannel.channel.enableMarkAsUnread) {
+            sheetItems.push(menu.markAsUnread(message));
+          }
+
+          if (isMyMessage(message, currentUserId)) {
+            sheetItems.push(menu.delete(message));
+          }
         }
+
         if (channel.isGroupChannel()) {
           if (sbOptions.uikit.groupChannel.channel.replyType === 'thread' && onReplyInThreadMessage !== undefined) {
             sheetItems.push(menu.replyInThread(message));
           } else if (sbOptions.uikit.groupChannel.channel.replyType === 'quote_reply') {
             sheetItems.push(menu.reply(message));
-          }
-          if (sbOptions.uikit.groupChannel.channel.enableMarkAsUnread) {
-            sheetItems.push(menu.markAsUnread(message));
           }
         }
       }
