@@ -217,6 +217,10 @@ export type GroupChannelPubSubContextPayload =
       data?: undefined;
     }
   | {
+      type: 'ON_MARKED_AS_READ_BY_CURRENT_USER';
+      data?: undefined;
+    }
+  | {
       type: 'ON_MARKED_AS_UNREAD_BY_CURRENT_USER';
       data?: undefined;
     };

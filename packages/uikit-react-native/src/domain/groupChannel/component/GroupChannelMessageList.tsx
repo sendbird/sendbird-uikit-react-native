@@ -1,5 +1,5 @@
 import type { ViewToken } from '@react-native/virtualized-lists';
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 import { useToast } from '@sendbird/uikit-react-native-foundation';
 import { useGroupChannelHandler } from '@sendbird/uikit-tools';
@@ -32,10 +32,19 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
 
   const isFirstMount = useIsFirstMount();
 
-  const { hasSeenNewLineRef, isNewLineInViewportRef, updateHasSeenNewLine, updateIsNewLineInViewport } =
-    useNewLineTracker({
-      onNewLineSeenChange: props.onNewLineSeenChange,
-    });
+  const hasSeenNewLineRef = useRef(false);
+  const isNewLineInViewportRef = useRef(false);
+  const [isVisibleUnreadMessageFloating, setIsVisibleUnreadMessageFloating] = useState(false);
+
+  const updateHasSeenNewLine = useCallback(
+    (hasSeenNewLine: boolean) => {
+      if (hasSeenNewLineRef.current !== hasSeenNewLine) {
+        hasSeenNewLineRef.current = hasSeenNewLine;
+        props.onNewLineSeenChange?.(hasSeenNewLine);
+      }
+    },
+    [props.onNewLineSeenChange],
+  );
 
   const viewableMessages = useRef<SendbirdMessage[]>();
   const hasUserMarkedAsUnreadRef = useRef(false);
@@ -135,11 +144,16 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
     );
 
     if (isNewLineInViewportRef.current !== isNewLineInViewport) {
-      updateIsNewLineInViewport(isNewLineInViewport);
-      if (!isNewLineInViewport || hasSeenNewLineRef.current) return;
+      isNewLineInViewportRef.current = isNewLineInViewport;
+      updateUnreadMessagesFloatingProps();
+      if (!isNewLineInViewport || hasSeenNewLineRef.current) {
+        return;
+      }
 
       updateHasSeenNewLine(true);
-      if (hasUserMarkedAsUnreadRef.current) return;
+      if (hasUserMarkedAsUnreadRef.current) {
+        return;
+      }
 
       if (0 < props.newMessages.length) {
         props.channel.markAsUnread(props.newMessages[0]);
@@ -170,20 +184,25 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
     [sbOptions.uikit.groupChannel.channel.enableMarkAsUnread, updateHasUserMarkedAsUnread],
   );
 
-  const unreadMessagesFloatingProps: UnreadMessagesFloatingProps = useMemo(() => {
-    return {
+  const unreadMessagesFloatingPropsRef = useRef<UnreadMessagesFloatingProps>();
+  const updateUnreadMessagesFloatingProps = useFreshCallback(() => {
+    unreadMessagesFloatingPropsRef.current = {
       visible:
         sbOptions.uikit.groupChannel.channel.enableMarkAsUnread &&
+        !!props.isNewLineExistInChannel &&
         0 < props.channel.unreadMessageCount &&
         !isNewLineInViewportRef.current,
       onPressClose: onPressUnreadMessagesFloatingCloseButton,
       unreadMessageCount: props.channel.unreadMessageCount,
     };
-  }, [
-    isNewLineInViewportRef.current,
-    props.channel.unreadMessageCount,
-    sbOptions.uikit.groupChannel.channel.enableMarkAsUnread,
-  ]);
+    if (isVisibleUnreadMessageFloating !== unreadMessagesFloatingPropsRef.current.visible) {
+      setIsVisibleUnreadMessageFloating(unreadMessagesFloatingPropsRef.current.visible);
+    }
+  });
+
+  useEffect(() => {
+    updateUnreadMessagesFloatingProps();
+  }, [props.isNewLineExistInChannel, sbOptions.uikit.groupChannel.channel.enableMarkAsUnread]);
 
   useGroupChannelHandler(sdk, {
     onReactionUpdated(channel, event) {
@@ -229,6 +248,10 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
         case 'MESSAGE_SENT_SUCCESS':
         case 'MESSAGE_SENT_PENDING': {
           scrollToBottom(false);
+          break;
+        }
+        case 'ON_MARKED_AS_READ_BY_CURRENT_USER': {
+          updateUnreadMessagesFloatingProps();
           break;
         }
         case 'ON_MARKED_AS_UNREAD_BY_CURRENT_USER': {
@@ -293,34 +316,9 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
       onPressScrollToBottomButton={scrollToBottom}
       onPressMarkAsUnreadMessage={onPressMarkAsUnreadMessage}
       unreadFirstMessage={unreadFirstMessage}
-      unreadMessagesFloatingProps={unreadMessagesFloatingProps}
+      unreadMessagesFloatingProps={unreadMessagesFloatingPropsRef.current}
     />
   );
 };
 
-const useNewLineTracker = (params: Pick<GroupChannelProps['MessageList'], 'onNewLineSeenChange'>) => {
-  const hasSeenNewLineRef = useRef(false);
-  const isNewLineInViewportRef = useRef(false);
-
-  const updateHasSeenNewLine = useCallback(
-    (hasSeenNewLine: boolean) => {
-      if (hasSeenNewLineRef.current !== hasSeenNewLine) {
-        hasSeenNewLineRef.current = hasSeenNewLine;
-        params.onNewLineSeenChange?.(hasSeenNewLine);
-      }
-    },
-    [params.onNewLineSeenChange],
-  );
-
-  const updateIsNewLineInViewport = useCallback((isNewLineInViewport: boolean) => {
-    isNewLineInViewportRef.current = isNewLineInViewport;
-  }, []);
-
-  return {
-    hasSeenNewLineRef,
-    isNewLineInViewportRef,
-    updateHasSeenNewLine,
-    updateIsNewLineInViewport,
-  };
-};
 export default React.memo(GroupChannelMessageList);

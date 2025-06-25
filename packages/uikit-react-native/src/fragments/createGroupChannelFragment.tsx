@@ -99,7 +99,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     useEffect(() => {
       isNewLineExistInChannelRef.current =
         channel.myLastRead < (channel.lastMessage?.createdAt ?? Number.MIN_SAFE_INTEGER);
-    }, [channel]);
+    }, [channel.url]);
 
     const onNewLineSeenChange = useFreshCallback((hasSeenNewLine: boolean) => {
       hasSeenNewLineRef.current = hasSeenNewLine;
@@ -148,8 +148,13 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
         groupChannelPubSub.publish({ type: 'MESSAGES_UPDATED', data: { messages } });
       },
       onChannelUpdated(_, ctx) {
-        if (ctx?.source === GroupChannelEventSource.EVENT_CHANNEL_UNREAD) {
+        if (ctx?.source === GroupChannelEventSource.EVENT_CHANNEL_READ) {
           if (ctx.userIds.includes(currentUser?.userId ?? '')) {
+            groupChannelPubSub.publish({ type: 'ON_MARKED_AS_READ_BY_CURRENT_USER' });
+          }
+        } else if (ctx?.source === GroupChannelEventSource.EVENT_CHANNEL_UNREAD) {
+          if (ctx.userIds.includes(currentUser?.userId ?? '')) {
+            isNewLineExistInChannelRef.current = true;
             groupChannelPubSub.publish({ type: 'ON_MARKED_AS_UNREAD_BY_CURRENT_USER' });
           }
         }
