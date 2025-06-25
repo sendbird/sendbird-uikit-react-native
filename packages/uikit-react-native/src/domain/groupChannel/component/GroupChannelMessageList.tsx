@@ -123,7 +123,9 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
         const isMessageUnread = props.channel.myLastRead < msg.createdAt;
         isFirstUnreadAfterReadMessages = (hasNoPreviousAndNoPrevMessage || prevMessageIsRead) && isMessageUnread;
       } else {
-        isFirstUnreadAfterReadMessages = !props.hasPrevious?.();
+        const hasNoPreviousAndNoPrevMessage = !props.hasPrevious?.();
+        const isMessageUnread = props.channel.myLastRead < msg.createdAt;
+        isFirstUnreadAfterReadMessages = hasNoPreviousAndNoPrevMessage && isMessageUnread;
       }
 
       return isFirstUnreadAfterReadMessages;
