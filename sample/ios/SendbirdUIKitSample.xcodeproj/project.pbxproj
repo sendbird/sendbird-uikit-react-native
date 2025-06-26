@@ -601,8 +601,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.sendbird.uikit.reactnative.sample;
 				PRODUCT_NAME = SendbirdUIKitSample;
-				PROVISIONING_PROFILE_SPECIFIER = "match Development com.sendbird.uikit.reactnative.sample";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Dev - uikit.reactnative";
+				PROVISIONING_PROFILE_SPECIFIER = "Dev - uikit.reactnative";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -638,8 +637,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.sendbird.uikit.reactnative.sample;
 				PRODUCT_NAME = SendbirdUIKitSample;
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.sendbird.uikit.reactnative.sample";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Dist - uikit.reactnative";
+				PROVISIONING_PROFILE_SPECIFIER = "Dist - uikit.reactnative";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -832,8 +830,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sendbird.uikit.reactnative.sample.NotificationService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "match Development com.sendbird.uikit.reactnative.sample.NotificationService";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Dev - uikit.reactnative.NotificationService";
+				PROVISIONING_PROFILE_SPECIFIER = "Dev - uikit.reactnative.NotificationService";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -873,8 +870,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sendbird.uikit.reactnative.sample.NotificationService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.sendbird.uikit.reactnative.sample.NotificationService";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Dist - uikit.reactnative.NotificationService";
+				PROVISIONING_PROFILE_SPECIFIER = "Dist - uikit.reactnative.NotificationService";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
