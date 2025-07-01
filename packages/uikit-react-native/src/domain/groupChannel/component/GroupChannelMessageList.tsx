@@ -104,31 +104,46 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
     confirmAndMarkAsRead([props.channel]);
   }, [updateHasSeenNewLine, updateHasUserMarkedAsUnread, props.channel.url, props.resetNewMessages]);
 
+  const getPrevNonSilentMessage = useCallback(
+    (messages: SendbirdMessage[], prevMessageIndex: number): SendbirdMessage | null => {
+      if (messages.length <= prevMessageIndex) {
+        return null;
+      }
+
+      const prevMessage = props.messages[prevMessageIndex];
+      if (prevMessage) {
+        if (prevMessage.silent) {
+          return getPrevNonSilentMessage(messages, prevMessageIndex + 1);
+        } else {
+          return prevMessage;
+        }
+      }
+      return null;
+    },
+    [],
+  );
+
   const findUnreadFirstMessage = useFreshCallback((isNewLineExistInChannel: boolean) => {
     if (!sbOptions.uikit.groupChannel.channel.enableMarkAsUnread || !isNewLineExistInChannel) {
       return;
     }
 
     return props.messages.find((msg, index) => {
+      if (msg.silent) {
+        return false;
+      }
+
       const isMarkedAsUnreadMessage = props.channel.myLastRead === msg.createdAt - 1;
       if (isMarkedAsUnreadMessage) {
         return true;
       }
 
-      let isFirstUnreadAfterReadMessages;
-      if (index < props.messages.length - 1) {
-        const prevMessage = props.messages[index + 1];
-        const hasNoPreviousAndNoPrevMessage = !props.hasPrevious?.() && prevMessage == null;
-        const prevMessageIsRead = prevMessage != null && prevMessage.createdAt <= props.channel.myLastRead;
-        const isMessageUnread = props.channel.myLastRead < msg.createdAt;
-        isFirstUnreadAfterReadMessages = (hasNoPreviousAndNoPrevMessage || prevMessageIsRead) && isMessageUnread;
-      } else {
-        const hasNoPreviousAndNoPrevMessage = !props.hasPrevious?.();
-        const isMessageUnread = props.channel.myLastRead < msg.createdAt;
-        isFirstUnreadAfterReadMessages = hasNoPreviousAndNoPrevMessage && isMessageUnread;
-      }
-
-      return isFirstUnreadAfterReadMessages;
+      const prevNonSilentMessage = getPrevNonSilentMessage(props.messages, index + 1);
+      const hasNoPreviousAndNoPrevMessage = !props.hasPrevious?.() && prevNonSilentMessage == null;
+      const prevMessageIsRead =
+        prevNonSilentMessage != null && prevNonSilentMessage.createdAt <= props.channel.myLastRead;
+      const isMessageUnread = props.channel.myLastRead < msg.createdAt;
+      return (hasNoPreviousAndNoPrevMessage || prevMessageIsRead) && isMessageUnread;
     });
   });
 
