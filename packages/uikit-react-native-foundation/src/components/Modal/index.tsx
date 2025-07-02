@@ -11,6 +11,7 @@ import {
   StyleProp,
   StyleSheet,
   TouchableWithoutFeedback,
+  View,
   ViewStyle,
   useWindowDimensions,
 } from 'react-native';
@@ -66,51 +67,59 @@ const Modal = ({
   useOnDismiss(modalVisible, onDismiss);
 
   return (
-    <RNModal
-      statusBarTranslucent={statusBarTranslucent}
-      transparent
-      hardwareAccelerated
-      visible={modalVisible}
-      onRequestClose={onClose}
-      onShow={() => showTransition()}
-      onDismiss={onDismiss}
-      supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
-      animationType={'none'}
-      {...props}
-    >
-      <TouchableWithoutFeedback onPress={disableBackgroundClose ? undefined : onClose}>
-        <Animated.View
-          style={[StyleSheet.absoluteFill, { opacity: backdrop.opacity, backgroundColor: palette.onBackgroundLight03 }]}
-        />
-      </TouchableWithoutFeedback>
-      <KeyboardAvoidingView
-        // NOTE: This is trick for Android.
-        //  When orientation is changed on Android, the offset that to avoid soft-keyboard is not updated normally.
-        key={Platform.OS === 'android' && enableKeyboardAvoid ? `${width}-${height}` : undefined}
-        enabled={enableKeyboardAvoid}
-        style={styles.background}
-        behavior={Platform.select({ ios: 'padding', default: 'height' })}
-        pointerEvents={'box-none'}
-        keyboardVerticalOffset={enableKeyboardAvoid && statusBarTranslucent ? -topInset : 0}
+    <View>
+      <RNModal
+        statusBarTranslucent={statusBarTranslucent}
+        transparent
+        hardwareAccelerated
+        visible={modalVisible}
+        onRequestClose={onClose}
+        onShow={() => showTransition()}
+        onDismiss={onDismiss}
+        supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
+        animationType={'none'}
+        {...props}
       >
-        <Animated.View
-          style={[
-            styles.background,
-            backgroundStyle,
-            { opacity: content.opacity, transform: [{ translateY: content.translateY }] },
-          ]}
+        <TouchableWithoutFeedback onPress={disableBackgroundClose ? undefined : onClose}>
+          <Animated.View
+            style={[
+              StyleSheet.absoluteFill,
+              {
+                opacity: backdrop.opacity,
+                backgroundColor: palette.onBackgroundLight03,
+              },
+            ]}
+          />
+        </TouchableWithoutFeedback>
+        <KeyboardAvoidingView
+          // NOTE: This is trick for Android.
+          //  When orientation is changed on Android, the offset that to avoid soft-keyboard is not updated normally.
+          key={Platform.OS === 'android' && enableKeyboardAvoid ? `${width}-${height}` : undefined}
+          enabled={enableKeyboardAvoid}
+          style={styles.background}
+          behavior={Platform.select({ ios: 'padding', default: 'height' })}
           pointerEvents={'box-none'}
-          {...panResponder.panHandlers}
+          keyboardVerticalOffset={enableKeyboardAvoid && statusBarTranslucent ? -topInset : 0}
         >
-          <Pressable
-          // NOTE: https://github.com/facebook/react-native/issues/14295
-          //  Due to 'Pressable', the width of the children must be explicitly specified as a number.
+          <Animated.View
+            style={[
+              styles.background,
+              backgroundStyle,
+              { opacity: content.opacity, transform: [{ translateY: content.translateY }] },
+            ]}
+            pointerEvents={'box-none'}
+            {...panResponder.panHandlers}
           >
-            {children}
-          </Pressable>
-        </Animated.View>
-      </KeyboardAvoidingView>
-    </RNModal>
+            <Pressable
+            // NOTE: https://github.com/facebook/react-native/issues/14295
+            //  Due to 'Pressable', the width of the children must be explicitly specified as a number.
+            >
+              {children}
+            </Pressable>
+          </Animated.View>
+        </KeyboardAvoidingView>
+      </RNModal>
+    </View>
   );
 };
 
