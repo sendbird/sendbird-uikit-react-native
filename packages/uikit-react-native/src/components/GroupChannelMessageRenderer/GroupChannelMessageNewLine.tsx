@@ -12,16 +12,16 @@ type Props = {
 const GroupChannelMessageNewLine = ({ shouldRenderNewLine }: Props) => {
   if (!shouldRenderNewLine) return null;
 
-  const { select, palette } = useUIKitTheme();
   const { STRINGS } = useLocalization();
+  const { colors } = useUIKitTheme();
 
   return (
     <View style={styles.container}>
-      <Box backgroundColor={select({ light: palette.primary300, dark: palette.primary200 })} style={styles.line} />
-      <Text caption3 color={select({ light: palette.primary300, dark: palette.primary200 })} style={styles.label}>
+      <Box backgroundColor={colors.primary} style={styles.line} />
+      <Text caption3 numberOfLines={1} color={colors.primary} style={styles.label}>
         {STRINGS.GROUP_CHANNEL.LIST_NEW_LINE}
       </Text>
-      <Box backgroundColor={select({ light: palette.primary300, dark: palette.primary200 })} style={styles.line} />
+      <Box backgroundColor={colors.primary} style={styles.line} />
     </View>
   );
 };

@@ -12,7 +12,7 @@ export type UnreadMessagesFloatingProps = {
 };
 const UnreadMessagesFloating = ({ unreadMessageCount, visible, onPressClose }: UnreadMessagesFloatingProps) => {
   const { STRINGS } = useLocalization();
-  const { select, palette } = useUIKitTheme();
+  const { select, palette, colors } = useUIKitTheme();
   if (unreadMessageCount <= 0 || !visible) return null;
   return (
     <View
@@ -21,7 +21,7 @@ const UnreadMessagesFloating = ({ unreadMessageCount, visible, onPressClose }: U
         { backgroundColor: select({ dark: palette.background400, light: palette.background50 }) },
       ]}
     >
-      <Text body2 color={select({ dark: palette.onBackgroundDark02, light: palette.onBackgroundLight02 })}>
+      <Text body2 color={colors.onBackground02}>
         {STRINGS.GROUP_CHANNEL.LIST_FLOATING_UNREAD_MSG(unreadMessageCount)}
       </Text>
       <TouchableOpacity onPress={onPressClose} style={{ marginLeft: 4 }}>
