@@ -1,5 +1,5 @@
-## v3.9.5
+## v3.9.6
 
-### Features
-- added flatListComponent to GroupChannelFragment to support custom FlatList in message list
+### Bug Fixes
+- fix BottomSheet not appearing when using DrawerNavigator
 

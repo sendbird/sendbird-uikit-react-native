@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.9.6](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.9.5...v3.9.6) (2025-07-07)
+
+### Bug Fixes
+
+- fix BottomSheet not appearing when using DrawerNavigator ([c92a0c2](https://github.com/sendbird/sendbird-uikit-react-native/commit/c92a0c22a1f824b2ce25d3f154722a129b5e062e))
+
 ## [3.9.5](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.9.4...v3.9.5) (2025-05-22)
 
 **Note:** Version bump only for package @sendbird/uikit-react-native-foundation
