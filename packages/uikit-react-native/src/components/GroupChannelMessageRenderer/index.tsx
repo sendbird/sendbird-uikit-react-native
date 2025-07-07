@@ -30,6 +30,7 @@ import { TypingIndicatorType } from '../../types';
 import { ReactionAddons } from '../ReactionAddons';
 import GroupChannelMessageDateSeparator from './GroupChannelMessageDateSeparator';
 import GroupChannelMessageFocusAnimation from './GroupChannelMessageFocusAnimation';
+import GroupChannelMessageNewLine from './GroupChannelMessageNewLine';
 import GroupChannelMessageOutgoingStatus from './GroupChannelMessageOutgoingStatus';
 import GroupChannelMessageParentMessage from './GroupChannelMessageParentMessage';
 import GroupChannelMessageReplyInfo from './GroupChannelMessageReplyInfo';
@@ -46,6 +47,7 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
   focused,
   prevMessage,
   nextMessage,
+  isFirstUnreadMessage,
   hideParentMessage,
 }) => {
   const handlers = useSBUHandlers();
@@ -310,9 +312,12 @@ const GroupChannelMessageRenderer: GroupChannelProps['Fragment']['renderMessage'
     }
   });
 
+  const shouldRenderNewLine = sbOptions.uikit.groupChannel.channel.enableMarkAsUnread && isFirstUnreadMessage;
+
   return (
     <Box paddingHorizontal={16} marginBottom={messageGap}>
       <GroupChannelMessageDateSeparator message={message} prevMessage={prevMessage} />
+      <GroupChannelMessageNewLine shouldRenderNewLine={shouldRenderNewLine} />
       <GroupChannelMessageFocusAnimation focused={focused}>{renderMessage()}</GroupChannelMessageFocusAnimation>
     </Box>
   );
