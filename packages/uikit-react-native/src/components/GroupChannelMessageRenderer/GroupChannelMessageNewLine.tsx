@@ -29,7 +29,6 @@ const GroupChannelMessageNewLine = ({ shouldRenderNewLine }: Props) => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: 12,
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,

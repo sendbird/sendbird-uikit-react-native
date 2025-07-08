@@ -205,10 +205,11 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
 
   const unreadMessagesFloatingPropsRef = useRef<UnreadMessagesFloatingProps>();
   const updateUnreadMessagesFloatingProps = useFreshCallback(() => {
+    const isNewLineExistInChannel = !!props.isNewLineExistInChannel && !!viewableMessages.current;
     unreadMessagesFloatingPropsRef.current = {
       visible:
         sbOptions.uikit.groupChannel.channel.enableMarkAsUnread &&
-        !!props.isNewLineExistInChannel &&
+        isNewLineExistInChannel &&
         0 < props.channel.unreadMessageCount &&
         !isNewLineInViewportRef.current,
       onPressClose: onPressUnreadMessagesFloatingCloseButton,
