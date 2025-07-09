@@ -117,10 +117,15 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
     GROUP_CHANNEL: {
       HEADER_TITLE: (uid, channel) => getGroupChannelTitle(uid, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       LIST_DATE_SEPARATOR: (date, locale) => getDateSeparatorFormat(date, locale ?? dateLocale),
-      LIST_BUTTON_NEW_MSG: (newMessages) =>
-        newMessages.length === 1 ? `${newMessages.length} new message` : `${newMessages.length} new messages`,
-      LIST_FLOATING_UNREAD_MSG: (unreadMessageCount) =>
-        unreadMessageCount === 1 ? `${unreadMessageCount} unread message` : `${unreadMessageCount} unread messages`,
+      LIST_BUTTON_NEW_MSG: (newMessages) => {
+        const count = newMessages.length;
+        const displayCount = count >= 100 ? '99+' : count;
+        return count === 1 ? `${displayCount} new message` : `${displayCount} new messages`;
+      },
+      LIST_FLOATING_UNREAD_MSG: (unreadMessageCount) => {
+        const displayCount = unreadMessageCount >= 100 ? '99+' : unreadMessageCount;
+        return unreadMessageCount === 1 ? `${displayCount} unread message` : `${displayCount} unread messages`;
+      },
       LIST_NEW_LINE: 'New messages',
       MESSAGE_BUBBLE_TIME: (message, locale) => getMessageTimeFormat(new Date(message.createdAt), locale ?? dateLocale),
       MESSAGE_BUBBLE_FILE_TITLE: (message) => message.name,
@@ -135,8 +140,11 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       HEADER_TITLE: 'Thread',
       HEADER_SUBTITLE: (uid, channel) => getGroupChannelTitle(uid, channel, USER_NO_NAME, CHANNEL_NO_MEMBERS),
       LIST_DATE_SEPARATOR: (date, locale) => getDateSeparatorFormat(date, locale ?? dateLocale),
-      LIST_BUTTON_NEW_MSG: (newMessages) => `${newMessages.length} new messages`,
-
+      LIST_BUTTON_NEW_MSG: (newMessages) => {
+        const count = newMessages.length;
+        const displayCount = count >= 100 ? '99+' : count;
+        return `${displayCount} new messages`;
+      },
       MESSAGE_BUBBLE_TIME: (message, locale) => getMessageTimeFormat(new Date(message.createdAt), locale ?? dateLocale),
       MESSAGE_BUBBLE_FILE_TITLE: (message) => message.name,
       MESSAGE_BUBBLE_EDITED_POSTFIX: ' (edited)',
