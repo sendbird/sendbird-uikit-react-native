@@ -209,6 +209,10 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
     [sbOptions.uikit.groupChannel.channel.enableMarkAsUnread, updateHasUserMarkedAsUnread],
   );
 
+  useEffect(() => {
+    isNewLineExistInChannelRef.current = !!props.isNewLineExistInChannel && !!viewableMessages.current;
+  }, [props.isNewLineExistInChannel, viewableMessages.current]);
+
   const unreadMessagesFloatingPropsRef = useRef<UnreadMessagesFloatingProps>();
   const updateUnreadMessagesFloatingProps = useFreshCallback(() => {
     const canAutoMarkAsRead =
@@ -230,10 +234,6 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
       setIsVisibleUnreadMessageFloating(unreadMessagesFloatingPropsRef.current.visible);
     }
   });
-
-  useEffect(() => {
-    isNewLineExistInChannelRef.current = !!props.isNewLineExistInChannel && !!viewableMessages.current;
-  }, [props.isNewLineExistInChannel, viewableMessages.current]);
 
   useEffect(() => {
     updateUnreadMessagesFloatingProps();
