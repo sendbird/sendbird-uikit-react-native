@@ -143,7 +143,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       LIST_BUTTON_NEW_MSG: (newMessages) => {
         const count = newMessages.length;
         const displayCount = count >= 100 ? '99+' : count;
-        return `${displayCount} new messages`;
+        return count === 1 ? `${displayCount} new message` : `${displayCount} new messages`;
       },
       MESSAGE_BUBBLE_TIME: (message, locale) => getMessageTimeFormat(new Date(message.createdAt), locale ?? dateLocale),
       MESSAGE_BUBBLE_FILE_TITLE: (message) => message.name,
