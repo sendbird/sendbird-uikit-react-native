@@ -5,16 +5,18 @@ import type { StringSet } from '@sendbird/uikit-react-native';
  * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/features/reactions}
  * */
 function _stringResource(str: StringSet) {
+  str.GROUP_CHANNEL.LIST_NEW_LINE;
   str.GROUP_CHANNEL.LIST_FLOATING_UNREAD_MSG;
   str.LABELS.CHANNEL_MESSAGE_MARK_AS_UNREAD;
 }
 /** ------------------ **/
 // interface StringSet {
 //   GROUP_CHANNEL: {
+//     LIST_NEW_LINE: string;
 //     LIST_FLOATING_UNREAD_MSG: (unreadMessageCount: number) => string;
 //   };
 // }
-//
+
 // interface StringSet {
 //   LABELS: {
 //     CHANNEL_MESSAGE_MARK_AS_UNREAD: string;
