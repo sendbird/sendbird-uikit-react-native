@@ -53,13 +53,13 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${{ secrets.npm_token }}" >> .npmrc
           git config --global user.email "sha.sdk_deployment@sendbird.com"
           git config --global user.name "sendbird-sdk-deployment"
-      - name: 'publish to npm'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ github.event.inputs.version }}
-        run: |
-          yarn lerna version "$VERSION" --yes
-          yarn lerna publish from-git --yes
+#      - name: 'publish to npm'
+#        env:
+#          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          VERSION: ${{ github.event.inputs.version }}
+#        run: |
+#          yarn lerna version "$VERSION" --yes
+#          yarn lerna publish from-git --yes
       - name: 'approve a pull request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
