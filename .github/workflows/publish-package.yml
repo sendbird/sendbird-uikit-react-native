@@ -33,7 +33,7 @@ jobs:
             }
             const currentBranch = context.ref.replace('refs/heads/', '');
             if (currentBranch !== `release/${version}`) {
-               core.setFailed(`Current branch ${currentBranch} does not match release/${version}`);
+              core.setFailed(`Current branch ${currentBranch} does not match release/${version}`);
             }
             const pullRequests = await github.rest.pulls.list({
               owner: context.repo.owner,
