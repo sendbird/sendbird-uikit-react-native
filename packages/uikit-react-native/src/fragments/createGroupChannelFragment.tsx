@@ -115,7 +115,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
           !hasUserMarkedAsUnreadRef.current &&
           (hasSeenNewLineRef.current || !isNewLineExistInChannel)
         ) {
-          confirmAndMarkAsRead(channels);
+          confirmAndMarkAsRead(channels, true);
         }
       } else {
         confirmAndMarkAsRead(channels);
