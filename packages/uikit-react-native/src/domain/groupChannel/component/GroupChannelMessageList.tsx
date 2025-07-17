@@ -298,6 +298,9 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
           const foundUnreadFirstMessage = findUnreadFirstMessage(true);
           processNewLineVisibility(foundUnreadFirstMessage);
           setUnreadFirstMessage(foundUnreadFirstMessage);
+          if (!props.scrolledAwayFromBottom) {
+            scrollToBottom(true);
+          }
           break;
         }
       }
