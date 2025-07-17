@@ -92,13 +92,12 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       }
     });
 
-    const isNewLineExistInChannelRef = useRef(false);
+    const [isNewLineExistInChannel, setIsNewLineExistInChannel] = useState(false);
     const hasSeenNewLineRef = useRef(false);
     const hasUserMarkedAsUnreadRef = useRef(false);
 
     useEffect(() => {
-      isNewLineExistInChannelRef.current =
-        channel.myLastRead < (channel.lastMessage?.createdAt ?? Number.MIN_SAFE_INTEGER);
+      setIsNewLineExistInChannel(channel.myLastRead < (channel.lastMessage?.createdAt ?? Number.MIN_SAFE_INTEGER));
     }, [channel.url]);
 
     const onNewLineSeenChange = useFreshCallback((hasSeenNewLine: boolean) => {
@@ -114,7 +113,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
         if (
           !scrolledAwayFromBottom &&
           !hasUserMarkedAsUnreadRef.current &&
-          (hasSeenNewLineRef.current || !isNewLineExistInChannelRef.current)
+          (hasSeenNewLineRef.current || !isNewLineExistInChannel)
         ) {
           confirmAndMarkAsRead(channels);
         }
@@ -154,7 +153,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
           }
         } else if (ctx?.source === GroupChannelEventSource.EVENT_CHANNEL_UNREAD) {
           if (ctx.userIds.includes(currentUser?.userId ?? '')) {
-            isNewLineExistInChannelRef.current = true;
+            setIsNewLineExistInChannel(true);
             groupChannelPubSub.publish({ type: 'ON_MARKED_AS_UNREAD_BY_CURRENT_USER' });
           }
         }
@@ -281,7 +280,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       if (!value) {
         resetNewMessages();
         if (sbOptions.uikit.groupChannel.channel.enableMarkAsUnread) {
-          if (!hasUserMarkedAsUnreadRef.current && (hasSeenNewLineRef.current || !isNewLineExistInChannelRef.current)) {
+          if (!hasUserMarkedAsUnreadRef.current && (hasSeenNewLineRef.current || !isNewLineExistInChannel)) {
             confirmAndMarkAsRead([channel]);
           }
         }
@@ -331,7 +330,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             onPressMediaMessage={_onPressMediaMessage}
             flatListComponent={flatListComponent}
             flatListProps={memoizedFlatListProps}
-            isNewLineExistInChannel={isNewLineExistInChannelRef.current}
+            isNewLineExistInChannel={isNewLineExistInChannel}
             onNewLineSeenChange={onNewLineSeenChange}
             onUserMarkedAsUnreadChange={onUserMarkedAsUnreadChange}
           />

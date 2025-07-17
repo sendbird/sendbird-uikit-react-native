@@ -294,6 +294,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
           break;
         }
         case 'ON_MARKED_AS_UNREAD_BY_CURRENT_USER': {
+          isNewLineExistInChannelRef.current = true;
           const foundUnreadFirstMessage = findUnreadFirstMessage(true);
           processNewLineVisibility(foundUnreadFirstMessage);
           setUnreadFirstMessage(foundUnreadFirstMessage);
