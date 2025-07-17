@@ -116,7 +116,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
         return null;
       }
 
-      const prevMessage = props.messages[prevMessageIndex];
+      const prevMessage = messages[prevMessageIndex];
       if (prevMessage) {
         if (prevMessage.silent) {
           return getPrevNonSilentMessage(messages, prevMessageIndex + 1);
