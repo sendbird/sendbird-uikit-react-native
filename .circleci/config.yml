@@ -110,12 +110,6 @@ jobs:
       - save_cache: *save_node_modules_packages
       - run: *create_app_env
       - run:
-          name: Update CA certificates
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y ca-certificates
-            sudo update-ca-certificates
-      - run:
           name: Create service-account.json
           environment:
             - FILE_PATH: sample/android/fastlane/service-account.json
