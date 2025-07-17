@@ -99,7 +99,7 @@ jobs:
           name: Install Ninja
           command: sudo apt-get update && sudo apt-get install -y ninja-build
       - ruby/install:
-          version: '3.1.0'
+          version: '3.0.6'
       - ruby/install-deps:
           key: v{{ .Environment.CACHE_VERSION }}-gems-android
           app-dir: ./sample/android
