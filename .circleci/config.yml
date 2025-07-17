@@ -124,12 +124,6 @@ jobs:
             echo "export GOOGLE_APPLICATION_CREDENTIALS=$CIRCLE_WORKING_DIRECTORY/$FILE_PATH" >> $BASH_ENV
             echo "export FIREBASEAPPDISTRO_APP=$FASTLANE_ANDROID_APP_ID" >> $BASH_ENV
       - run:
-          name: Check certificates
-          command: ruby -ropenssl -e "puts OpenSSL::X509::DEFAULT_CERT_FILE"
-      - run:
-          name: Check certificates2
-          command: ruby -ropen-uri -e "puts URI.open('https://google.com').read"
-      - run:
           name: Run fastlane
           command: yarn deploy:android version:$APP_VERSION
 
