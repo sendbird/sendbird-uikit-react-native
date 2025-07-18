@@ -89,7 +89,7 @@ jobs:
 
   deploy-android:
     docker:
-      - image: cimg/android:2023.10-node
+      - image: cimg/android:2025.04.1-node
     resource_class: xlarge
     environment:
       APP_VERSION: << pipeline.parameters.version >>
@@ -109,6 +109,12 @@ jobs:
       - save_cache: *save_node_modules_base
       - save_cache: *save_node_modules_packages
       - run: *create_app_env
+      - run:
+          name: Set up trusted certificates
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y ca-certificates
+            echo 'export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt' >> $BASH_ENV
       - run:
           name: Create service-account.json
           environment:

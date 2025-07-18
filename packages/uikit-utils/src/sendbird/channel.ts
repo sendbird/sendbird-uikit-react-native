@@ -34,9 +34,12 @@ export const getOpenChannelChatAvailableState = async (channel: SendbirdOpenChan
   return { disabled, frozen, muted };
 };
 
-export const confirmAndMarkAsRead = (channels: SendbirdBaseChannel[]) => {
+export const confirmAndMarkAsRead = (channels: SendbirdBaseChannel[], skipUnreadCountCheck?: boolean) => {
   channels
-    .filter((it): it is SendbirdGroupChannel => it.isGroupChannel() && it.unreadMessageCount > 0)
+    .filter((it): it is SendbirdGroupChannel => {
+      if (!it.isGroupChannel()) return false;
+      return skipUnreadCountCheck ? true : it.unreadMessageCount > 0;
+    })
     .forEach((it) => BufferedRequest.markAsRead.push(() => it.markAsRead(), it.url));
 };
 

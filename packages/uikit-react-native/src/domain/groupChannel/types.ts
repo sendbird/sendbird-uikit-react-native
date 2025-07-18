@@ -41,6 +41,7 @@ export interface GroupChannelProps {
     renderMessage?: GroupChannelProps['MessageList']['renderMessage'];
     renderNewMessagesButton?: GroupChannelProps['MessageList']['renderNewMessagesButton'];
     renderScrollToBottomButton?: GroupChannelProps['MessageList']['renderScrollToBottomButton'];
+    renderUnreadMessagesFloating?: GroupChannelProps['MessageList']['renderUnreadMessagesFloating'];
 
     enableTypingIndicator?: GroupChannelProps['Provider']['enableTypingIndicator'];
     enableMessageGrouping?: GroupChannelProps['MessageList']['enableMessageGrouping'];
@@ -85,6 +86,7 @@ export interface GroupChannelProps {
     | 'renderMessage'
     | 'renderNewMessagesButton'
     | 'renderScrollToBottomButton'
+    | 'renderUnreadMessagesFloating'
     | 'flatListComponent'
     | 'flatListProps'
     | 'hasNext'
@@ -95,6 +97,11 @@ export interface GroupChannelProps {
 
     // Changing the search item will trigger the focus animation on messages.
     onUpdateSearchItem: (searchItem?: GroupChannelProps['MessageList']['searchItem']) => void;
+    hasPrevious?: () => boolean;
+    resetNewMessages?: () => void;
+    isNewLineExistInChannel?: boolean;
+    onNewLineSeenChange?: (hasSeenNewLine: boolean) => void;
+    onUserMarkedAsUnreadChange?: (hasUserMarkedAsUnread: boolean) => void;
   };
   Input: PickPartial<
     ChannelInputProps,
@@ -207,5 +214,13 @@ export type GroupChannelPubSubContextPayload =
     }
   | {
       type: 'TYPING_BUBBLE_RENDERED';
+      data?: undefined;
+    }
+  | {
+      type: 'ON_MARKED_AS_READ_BY_CURRENT_USER';
+      data?: undefined;
+    }
+  | {
+      type: 'ON_MARKED_AS_UNREAD_BY_CURRENT_USER';
       data?: undefined;
     };

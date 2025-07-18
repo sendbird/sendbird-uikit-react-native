@@ -3716,15 +3716,15 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@sendbird/chat@4.16.5", "@sendbird/chat@^4.16.0":
-  version "4.16.5"
-  resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.16.5.tgz#ece60f33fed480028da79a142a75a3a5cef9a91a"
-  integrity sha512-fB3SgfF5mxpqOMD6Ah0anWN7wlgHyWVcGacVcX5K0pEj8K81wHCubmRNH622VDmuTnXWAU97mMZTXsEfO3YqXA==
+"@sendbird/chat@4.19.2", "@sendbird/chat@^4.16.0", "@sendbird/chat@^4.19.2":
+  version "4.19.2"
+  resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.19.2.tgz#a60346e6aaaa0d65697cfc46d619bdebb7c01999"
+  integrity sha512-scytefM8c9Ja+fm3oWkFHAZt7TqV2Q5EDbCJFtFmRvyRa+TYUjtHmSKpvrGZEyjjU/oBTK/JohZ1Zb2AixUANg==
 
-"@sendbird/uikit-tools@0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@sendbird/uikit-tools/-/uikit-tools-0.0.7.tgz#b8dd3c377969f59e39699f836091344b5ba7667b"
-  integrity sha512-MHRB2H88xsrlvgGlL0EbG/dhP2ILego/MNDdQtJqDk14YO/H1GWvqstn6ZuVxm/bQRVUzui+j6OSE1WthqACug==
+"@sendbird/uikit-tools@0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@sendbird/uikit-tools/-/uikit-tools-0.0.10.tgz#b522339426e0a6f859047ac1e4c1bf695f6dbef9"
+  integrity sha512-HRc7vLo2XASpbL0QtUR2r5py1pcy+1xTgIqUWxsJp8/ih+YbnrLMNz6hJgAwBEtpw5+d1fhY+ZzvWdRihQX5ew==
 
 "@sideway/address@^4.1.5":
   version "4.1.5"

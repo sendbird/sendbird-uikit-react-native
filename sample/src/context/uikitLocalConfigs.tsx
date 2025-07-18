@@ -5,8 +5,8 @@ import { uikitLocalConfigStorage } from '../factory/mmkv';
 const KEY = 'uikitOptions';
 const defaultOptions = {
   rtl: false,
-  replyType: 'thread' as 'none' | 'thread' | 'quote_reply',
-  threadReplySelectType: 'thread' as 'thread' | 'parent',
+  replyType: 'quote_reply' as 'none' | 'thread' | 'quote_reply',
+  threadReplySelectType: 'parent' as 'thread' | 'parent',
 };
 
 type ContextValue = typeof defaultOptions;
