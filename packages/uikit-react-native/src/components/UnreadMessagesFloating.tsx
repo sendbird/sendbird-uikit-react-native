@@ -24,7 +24,11 @@ const UnreadMessagesFloating = ({ unreadMessageCount, visible, onPressClose }: U
       <Text body2 color={colors.onBackground02}>
         {STRINGS.GROUP_CHANNEL.LIST_FLOATING_UNREAD_MSG(unreadMessageCount)}
       </Text>
-      <TouchableOpacity onPress={onPressClose} style={{ marginLeft: 4 }}>
+      <TouchableOpacity
+        onPress={onPressClose}
+        style={{ marginLeft: 4 }}
+        hitSlop={{ top: 12, bottom: 12, left: 14, right: 38 }}
+      >
         <Icon icon={'close'} size={14} />
       </TouchableOpacity>
     </View>
