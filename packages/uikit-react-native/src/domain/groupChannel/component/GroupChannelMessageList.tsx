@@ -129,7 +129,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
     [],
   );
 
-  const findUnreadFirstMessage = useFreshCallback((isNewLineExistInChannel: boolean) => {
+  const findFirstUnreadMessage = useFreshCallback((isNewLineExistInChannel: boolean) => {
     if (!sbOptions.uikit.groupChannel.channel.enableMarkAsUnread || !isNewLineExistInChannel) {
       return;
     }
@@ -155,7 +155,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
 
   useEffect(() => {
     if (!unreadFirstMessage) {
-      const foundUnreadFirstMessage = findUnreadFirstMessage(props.isNewLineExistInChannel ?? false);
+      const foundUnreadFirstMessage = findFirstUnreadMessage(props.isNewLineExistInChannel ?? false);
       if (foundUnreadFirstMessage) {
         processNewLineVisibility(foundUnreadFirstMessage);
         setUnreadFirstMessage(foundUnreadFirstMessage);
@@ -295,9 +295,9 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
         }
         case 'ON_MARKED_AS_UNREAD_BY_CURRENT_USER': {
           isNewLineExistInChannelRef.current = true;
-          const foundUnreadFirstMessage = findUnreadFirstMessage(true);
-          processNewLineVisibility(foundUnreadFirstMessage);
-          setUnreadFirstMessage(foundUnreadFirstMessage);
+          const foundFirstUnreadMessage = findFirstUnreadMessage(true);
+          processNewLineVisibility(foundFirstUnreadMessage);
+          setUnreadFirstMessage(foundFirstUnreadMessage);
           if (!props.scrolledAwayFromBottom) {
             scrollToBottom(true);
           }
