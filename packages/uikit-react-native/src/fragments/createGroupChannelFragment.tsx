@@ -1,6 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { MessageCollection, MessageFilter } from '@sendbird/chat/groupChannel';
+import {
+  type GroupChannel,
+  GroupChannelEventSource,
+  MessageCollection,
+  MessageFilter,
+} from '@sendbird/chat/groupChannel';
 import { ReplyType } from '@sendbird/chat/message';
 import { Box, useToast } from '@sendbird/uikit-react-native-foundation';
 import { useGroupChannelMessages } from '@sendbird/uikit-tools';
@@ -27,6 +32,7 @@ import GroupChannelMessageRenderer, {
 import NewMessagesButton from '../components/NewMessagesButton';
 import ScrollToBottomButton from '../components/ScrollToBottomButton';
 import StatusComposition from '../components/StatusComposition';
+import UnreadMessagesFloating from '../components/UnreadMessagesFloating';
 import createGroupChannelModule from '../domain/groupChannel/module/createGroupChannelModule';
 import type {
   GroupChannelFragment,
@@ -43,6 +49,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
 
   return ({
     searchItem,
+    renderUnreadMessagesFloating = (props) => <UnreadMessagesFloating {...props} />,
     renderNewMessagesButton = (props) => <NewMessagesButton {...props} />,
     renderScrollToBottomButton = (props) => <ScrollToBottomButton {...props} />,
     renderMessage,
@@ -85,6 +92,36 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       }
     });
 
+    const [isNewLineExistInChannel, setIsNewLineExistInChannel] = useState(false);
+    const hasSeenNewLineRef = useRef(false);
+    const hasUserMarkedAsUnreadRef = useRef(false);
+
+    useEffect(() => {
+      setIsNewLineExistInChannel(channel.myLastRead < (channel.lastMessage?.createdAt ?? Number.MIN_SAFE_INTEGER));
+    }, [channel.url]);
+
+    const onNewLineSeenChange = useFreshCallback((hasSeenNewLine: boolean) => {
+      hasSeenNewLineRef.current = hasSeenNewLine;
+    });
+
+    const onUserMarkedAsUnreadChange = useFreshCallback((hasUserMarkedAsUnread: boolean) => {
+      hasUserMarkedAsUnreadRef.current = hasUserMarkedAsUnread;
+    });
+
+    const markAsRead = useFreshCallback((channels: GroupChannel[]) => {
+      if (sbOptions.uikit.groupChannel.channel.enableMarkAsUnread) {
+        if (
+          !scrolledAwayFromBottom &&
+          !hasUserMarkedAsUnreadRef.current &&
+          (hasSeenNewLineRef.current || !isNewLineExistInChannel)
+        ) {
+          confirmAndMarkAsRead(channels, true);
+        }
+      } else {
+        confirmAndMarkAsRead(channels);
+      }
+    });
+
     const {
       loading,
       messages,
@@ -93,6 +130,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       loadNext,
       loadPrevious,
       hasNext,
+      hasPrevious,
       sendFileMessage,
       sendUserMessage,
       updateFileMessage,
@@ -108,11 +146,23 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       onMessagesUpdated(messages) {
         groupChannelPubSub.publish({ type: 'MESSAGES_UPDATED', data: { messages } });
       },
+      onChannelUpdated(_, ctx) {
+        if (ctx?.source === GroupChannelEventSource.EVENT_CHANNEL_READ) {
+          if (ctx.userIds.includes(currentUser?.userId ?? '')) {
+            groupChannelPubSub.publish({ type: 'ON_MARKED_AS_READ_BY_CURRENT_USER' });
+          }
+        } else if (ctx?.source === GroupChannelEventSource.EVENT_CHANNEL_UNREAD) {
+          if (ctx.userIds.includes(currentUser?.userId ?? '')) {
+            setIsNewLineExistInChannel(true);
+            groupChannelPubSub.publish({ type: 'ON_MARKED_AS_UNREAD_BY_CURRENT_USER' });
+          }
+        }
+      },
       onChannelDeleted,
       onCurrentUserBanned: onChannelDeleted,
       collectionCreator: getCollectionCreator(channel, messageListQueryParams, collectionCreator),
       sortComparator,
-      markAsRead: confirmAndMarkAsRead,
+      markAsRead: markAsRead,
       replyType,
       startingPoint: internalSearchItem?.startingPoint,
     });
@@ -227,7 +277,14 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
       },
     );
     const onScrolledAwayFromBottom = useFreshCallback((value: boolean) => {
-      if (!value) resetNewMessages();
+      if (!value) {
+        resetNewMessages();
+        if (sbOptions.uikit.groupChannel.channel.enableMarkAsUnread) {
+          if (!hasUserMarkedAsUnreadRef.current && (hasSeenNewLineRef.current || !isNewLineExistInChannel)) {
+            confirmAndMarkAsRead([channel]);
+          }
+        }
+      }
       setScrolledAwayFromBottom(value);
     });
 
@@ -261,15 +318,21 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             onTopReached={loadPrevious}
             onBottomReached={loadNext}
             hasNext={hasNext}
+            hasPrevious={hasPrevious}
+            resetNewMessages={resetNewMessages}
             scrolledAwayFromBottom={scrolledAwayFromBottom}
             onScrolledAwayFromBottom={onScrolledAwayFromBottom}
             renderNewMessagesButton={renderNewMessagesButton}
             renderScrollToBottomButton={renderScrollToBottomButton}
+            renderUnreadMessagesFloating={renderUnreadMessagesFloating}
             onResendFailedMessage={resendMessage}
             onDeleteMessage={deleteMessage}
             onPressMediaMessage={_onPressMediaMessage}
             flatListComponent={flatListComponent}
             flatListProps={memoizedFlatListProps}
+            isNewLineExistInChannel={isNewLineExistInChannel}
+            onNewLineSeenChange={onNewLineSeenChange}
+            onUserMarkedAsUnreadChange={onUserMarkedAsUnreadChange}
           />
           <GroupChannelModule.Input
             SuggestedMentionList={GroupChannelModule.SuggestedMentionList}
