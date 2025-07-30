@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/uikit-react-native",
-  "version": "3.9.6",
+  "version": "3.10.0",
   "description": "Sendbird UIKit for React Native: A feature-rich and customizable chat UI kit with messaging, channel management, and user authentication.",
   "keywords": [
     "sendbird",
@@ -60,10 +60,10 @@
   },
   "dependencies": {
     "@openspacelabs/react-native-zoomable-view": "^2.1.5",
-    "@sendbird/uikit-chat-hooks": "3.9.6",
-    "@sendbird/uikit-react-native-foundation": "3.9.6",
+    "@sendbird/uikit-chat-hooks": "3.10.0",
+    "@sendbird/uikit-react-native-foundation": "3.10.0",
     "@sendbird/uikit-tools": "0.0.10",
-    "@sendbird/uikit-utils": "3.9.6"
+    "@sendbird/uikit-utils": "3.10.0"
   },
   "devDependencies": {
     "@bam.tech/react-native-image-resizer": "^3.0.4",
@@ -112,8 +112,8 @@
     "@react-native-documents/picker": ">=10.0.0",
     "@react-native-firebase/messaging": ">=14.4.0",
     "@sendbird/chat": "^4.19.2",
-    "@sendbird/uikit-tools": ">=0.0.10",
     "@sendbird/react-native-scrollview-enhancer": "*",
+    "@sendbird/uikit-tools": ">=0.0.10",
     "date-fns": ">=2.28.0",
     "expo-av": ">=12.0.4",
     "expo-clipboard": ">=2.1.1",

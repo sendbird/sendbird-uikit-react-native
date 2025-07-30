@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.10.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.9.6...v3.10.0) (2025-07-30)
+
+### Features
+
+- add MarkAsUnread feature to GroupChannel ([2df8c20](https://github.com/sendbird/sendbird-uikit-react-native/commit/2df8c20c14330e517d7f97dcc45099407afe47bb))
+
 ## [3.9.6](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.9.5...v3.9.6) (2025-07-07)
 
 **Note:** Version bump only for package @sendbird/uikit-react-native
