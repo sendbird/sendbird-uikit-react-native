@@ -1,5 +1,5 @@
-## v3.9.6
+## v3.10.0
 
-### Bug Fixes
-- fix BottomSheet not appearing when using DrawerNavigator
+### Features
+- add MarkAsUnread feature to GroupChannel
 
