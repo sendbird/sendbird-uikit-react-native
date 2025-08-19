@@ -103,6 +103,12 @@ const ChannelInput = (props: ChannelInputProps) => {
   const safeArea = useSafeAreaPadding(['top', 'left', 'right', 'bottom']);
 
   // Android API 35+ keyboard avoidance handling
+  /**
+   * Android API 35+ introduced edge-to-edge layouts, which changed how keyboard avoidance should be handled.
+   * For API 35+, the system manages insets automatically, so we use the provided keyboardAvoidOffset directly.
+   * For older Android versions, we manually subtract the safe area bottom padding to avoid overlapping with system UI.
+   * See: https://developer.android.com/develop/ui/views/layout/edge-to-edge
+   */
   const keyboardVerticalOffset = isAndroidApi35 ? keyboardAvoidOffset : -safeArea.paddingBottom + keyboardAvoidOffset;
   const { colors, typography } = useUIKitTheme();
   const { sbOptions, mentionManager } = useSendbirdChat();
