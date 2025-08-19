@@ -82,7 +82,12 @@ export type ChannelInputProps = {
 };
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
-const KEYBOARD_AVOID_VIEW_BEHAVIOR = Platform.select({ ios: 'padding' as const, default: undefined });
+const isAndroidApi35 = Platform.OS === 'android' && Platform.Version >= 35;
+const KEYBOARD_AVOID_VIEW_BEHAVIOR = Platform.select({
+  ios: 'padding' as const,
+  android: isAndroidApi35 ? ('padding' as const) : undefined,
+  default: undefined,
+});
 
 // FIXME(iOS): Dynamic style does not work properly when typing the CJK. (https://github.com/facebook/react-native/issues/26107)
 //  To workaround temporarily, change the key for re-mount the component.
@@ -96,6 +101,9 @@ const ChannelInput = (props: ChannelInputProps) => {
   const { channel, keyboardAvoidOffset, messageToEdit, setMessageToEdit } = props;
 
   const safeArea = useSafeAreaPadding(['top', 'left', 'right', 'bottom']);
+
+  // Android API 35+ keyboard avoidance handling
+  const keyboardVerticalOffset = isAndroidApi35 ? keyboardAvoidOffset : -safeArea.paddingBottom + keyboardAvoidOffset;
   const { colors, typography } = useUIKitTheme();
   const { sbOptions, mentionManager } = useSendbirdChat();
 
@@ -138,10 +146,7 @@ const ChannelInput = (props: ChannelInputProps) => {
 
   return (
     <>
-      <KeyboardAvoidingView
-        keyboardVerticalOffset={-safeArea.paddingBottom + keyboardAvoidOffset}
-        behavior={KEYBOARD_AVOID_VIEW_BEHAVIOR}
-      >
+      <KeyboardAvoidingView keyboardVerticalOffset={keyboardVerticalOffset} behavior={KEYBOARD_AVOID_VIEW_BEHAVIOR}>
         <View
           style={{
             paddingStart: safeArea.paddingStart,
@@ -181,7 +186,7 @@ const ChannelInput = (props: ChannelInputProps) => {
               />
             )}
           </View>
-          <SafeAreaBottom height={safeArea.paddingBottom} />
+          {!isAndroidApi35 && <SafeAreaBottom height={safeArea.paddingBottom} />}
         </View>
       </KeyboardAvoidingView>
       {mentionAvailable && props.SuggestedMentionList && (
