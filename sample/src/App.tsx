@@ -49,11 +49,43 @@ import {
   UIKitConfigsScreen,
 } from './screens';
 import FileViewerScreen from './screens/uikit/FileViewerScreen';
+import { LogLevel } from '@sendbird/chat';
+import { searchMessagesFromBlocks, findMessageById, findChildren } from './mmkvSendbirdMessageSearch';
 
 const App = () => {
   const { localConfigs } = useContext(UIKitLocalConfigsContext);
   const { scheme } = useAppearance();
   const isLightTheme = scheme === 'light';
+
+  const allKeys = mmkv.getAllKeys();
+  //console.log('MMKV Keys:', allKeys);
+
+  // const list = searchMessagesFromBlocks(mmkv, allKeys, {
+  //   fromCreatedAt: 1748999000000,
+  //   toCreatedAt: 1749000599999,
+  //   //channelUrl: 'sendbird_group_channel_190372032_e6381bb65e31f97e21e4a7dfb386cf1625056db8',
+  // });
+  //console.log('list', list);
+
+  // const message = findMessageById(mmkv, allKeys, 8193322113);
+  // console.log('message', message);
+
+// messageId로 단건
+  //const one = findMessageById(mmkv, keys, 1234567890, 'sendbird_group_channel_...');
+
+
+// 키별 값 확인
+//   const key = "sendbird@A41EC43B-87A9-40CF-92C5-E178DD0477B1/star1.db/nest@sendbird@A41EC43B-87A9-40CF-92C5-E178DD0477B1/star1.db/Message/index.messageId.0";
+//   console.log(`${key} = ${mmkv.getString(key)}`);
+//
+//   const key1 = "sendbird@A41EC43B-87A9-40CF-92C5-E178DD0477B1/Star1.db/sendbird:Star1@groupchannel/sendbird_group_channel_190372032_e6381bb65e31f97e21e4a7dfb386cf1625056db8/message/sync.meta.0";
+//   console.log(`${key1} = ${mmkv.getString(key1)}`);
+//
+//   const key2 = "sendbird@A41EC43B-87A9-40CF-92C5-E178DD0477B1/Star1.db/sendbird:Star1@groupchannel/sendbird_group_channel_190372032_e6381bb65e31f97e21e4a7dfb386cf1625056db8/message/changelogs.meta.0";
+//   console.log(`${key2} = ${mmkv.getString(key2)}`);
+
+  //   const key = "sendbird@A41EC43B-87A9-40CF-92C5-E178DD0477B1/star1.db/nest@sendbird@A41EC43B-87A9-40CF-92C5-E178DD0477B1/star1.db/Message/block.2.173.0";
+  // console.log(`${key} = ${mmkv.getString(key)}`);
 
   return (
     <SendbirdUIKitContainer
@@ -77,9 +109,11 @@ const App = () => {
         },
       }}
       chatOptions={{
+        localCacheEnabled: false,
         localCacheStorage: mmkv,
         onInitialized: SetSendbirdSDK,
         enableAutoPushTokenRegistration: true,
+        logLevel: LogLevel.VERBOSE,
       }}
       platformServices={platformServices}
       styles={{
