@@ -62,7 +62,7 @@
     "@openspacelabs/react-native-zoomable-view": "^2.1.5",
     "@sendbird/uikit-chat-hooks": "3.10.0",
     "@sendbird/uikit-react-native-foundation": "3.10.0",
-    "@sendbird/uikit-tools": "0.0.10",
+    "@sendbird/uikit-tools": "0.0.15",
     "@sendbird/uikit-utils": "3.10.0"
   },
   "devDependencies": {
