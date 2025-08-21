@@ -3721,10 +3721,10 @@
   resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.19.2.tgz#a60346e6aaaa0d65697cfc46d619bdebb7c01999"
   integrity sha512-scytefM8c9Ja+fm3oWkFHAZt7TqV2Q5EDbCJFtFmRvyRa+TYUjtHmSKpvrGZEyjjU/oBTK/JohZ1Zb2AixUANg==
 
-"@sendbird/uikit-tools@0.0.10":
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/@sendbird/uikit-tools/-/uikit-tools-0.0.10.tgz#b522339426e0a6f859047ac1e4c1bf695f6dbef9"
-  integrity sha512-HRc7vLo2XASpbL0QtUR2r5py1pcy+1xTgIqUWxsJp8/ih+YbnrLMNz6hJgAwBEtpw5+d1fhY+ZzvWdRihQX5ew==
+"@sendbird/uikit-tools@0.0.15":
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/@sendbird/uikit-tools/-/uikit-tools-0.0.15.tgz#86a1ac41fdf1624b984bd8f875d1091ac5842afa"
+  integrity sha512-VJukrtFwcqk5u4QYk0qva8ntJupvYCyNYjdNUWawjxYd9UbmODIld2TBkDBjiNtlVfK6UlzfKdvCVCJ30hC7pQ==
 
 "@sideway/address@^4.1.5":
   version "4.1.5"
