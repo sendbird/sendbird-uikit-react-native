@@ -1,5 +1,5 @@
-## v3.10.0
+## v3.10.1
 
-### Features
-- add MarkAsUnread feature to GroupChannel
+### Bug Fixes
+- improve keyboard avoidance behavior for Android API 35+
 
