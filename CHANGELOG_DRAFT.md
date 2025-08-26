@@ -1,5 +1,8 @@
-## v3.10.0
+## v3.10.1
 
 ### Features
-- add MarkAsUnread feature to GroupChannel
+- update @sendbird/uikit-tools to version 0.0.15(add react-native entry to package exports)
+
+### Bug Fixes
+- improve keyboard avoidance behavior for Android API 35+
 

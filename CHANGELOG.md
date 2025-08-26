@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.10.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.10.0...v3.10.1) (2025-08-26)
+
+### Bug Fixes
+
+- improve keyboard avoidance behavior for Android API 35+ ([6ed9bab](https://github.com/sendbird/sendbird-uikit-react-native/commit/6ed9baba8bf18a44f82e0eb84bf32752bb66a9a6))
+
 ## [3.10.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.9.6...v3.10.0) (2025-07-30)
 
 ### Features
