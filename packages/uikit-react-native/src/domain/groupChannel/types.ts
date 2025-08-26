@@ -111,7 +111,8 @@ export interface GroupChannelProps {
     | 'onPressUpdateUserMessage'
     | 'onPressUpdateFileMessage'
     | 'SuggestedMentionList'
-    | 'AttachmentsButton',
+    | 'AttachmentsButton'
+    | 'partialTextInputProps',
     'inputDisabled'
   >;
 

@@ -31,6 +31,7 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
     autoFocus,
     mentionedUsers,
     inputDisabled,
+    partialTextInputProps,
   },
   ref,
 ) {
@@ -70,6 +71,7 @@ const EditInput = forwardRef<RNTextInput, EditInputProps>(function EditInput(
     <View style={styles.editInputContainer}>
       <View style={styles.inputWrapper}>
         <TextInput
+          {...partialTextInputProps}
           ref={ref}
           multiline
           disableFullscreenUI

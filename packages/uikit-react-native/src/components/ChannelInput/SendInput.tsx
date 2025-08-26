@@ -54,6 +54,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
     messageToReply,
     setMessageToReply,
     messageForThread,
+    partialTextInputProps,
   },
   ref,
 ) {
@@ -186,6 +187,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
       <View style={styles.sendInputContainer}>
         {AttachmentsButton && <AttachmentsButton onPress={() => openSheet({ sheetItems })} disabled={inputDisabled} />}
         <TextInput
+          {...partialTextInputProps}
           ref={ref}
           multiline
           disableFullscreenUI
