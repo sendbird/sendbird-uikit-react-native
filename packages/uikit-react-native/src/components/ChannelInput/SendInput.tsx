@@ -1,6 +1,7 @@
 import React, { forwardRef } from 'react';
 import {
   NativeSyntheticEvent,
+  Platform,
   TextInput as RNTextInput,
   TextInputSelectionChangeEventData,
   TouchableOpacity,
@@ -116,7 +117,19 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
       ...messageReplyParams,
     }).catch(onFailureToSend);
 
-    onChangeText('');
+    // On iOS with autoCorrect enabled, calling onChangeText('') immediately after sending
+    // can be ignored due to the keyboard's autocorrect not being committed yet.
+    // Delay the clear call slightly to allow the autocorrected text to be applied first.
+    if (Platform.OS === 'ios') {
+      const textInputRef = ref as React.MutableRefObject<RNTextInput | undefined>;
+      if (textInputRef.current) {
+        setTimeout(() => {
+          onChangeText('');
+        }, 10);
+      }
+    } else {
+      onChangeText('');
+    }
     setMessageToReply?.();
   };
 
