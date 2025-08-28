@@ -1,5 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleProp, StyleSheet, TextInput, TextStyle, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  StyleProp,
+  StyleSheet,
+  TextInput,
+  TextInputProps,
+  TextStyle,
+  View,
+} from 'react-native';
 
 import { createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import {
@@ -79,6 +88,9 @@ export type ChannelInputProps = {
   AttachmentsButton?: (props: AttachmentsButtonProps) => React.ReactNode | null;
   MessageToReplyPreview?: (props: MessageToReplyPreviewProps) => React.ReactNode | null;
   VoiceMessageInput?: (props: VoiceMessageInputProps) => React.ReactNode | null;
+
+  // TextInput props - only safe properties that don't interfere with UIKit functionality
+  partialTextInputProps?: Partial<Pick<TextInputProps, 'autoCorrect'>>;
 };
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
