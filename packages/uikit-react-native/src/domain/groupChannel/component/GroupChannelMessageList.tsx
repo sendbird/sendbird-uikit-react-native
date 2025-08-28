@@ -26,7 +26,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   const { sdk, sbOptions, groupChannelFragmentOptions } = useSendbirdChat();
   const { setMessageToEdit, setMessageToReply } = useContext(GroupChannelContexts.Fragment);
   const groupChannelPubSub = useContext(GroupChannelContexts.PubSub);
-  const { flatListRef, lazyScrollToBottom, lazyScrollToIndex, onPressReplyMessageInThread } = useContext(
+  const { flatListRef, lazyScrollToBottom, lazyScrollToMessageId, onPressReplyMessageInThread } = useContext(
     GroupChannelContexts.MessageList,
   );
 
@@ -40,6 +40,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   const viewableMessages = useRef<SendbirdMessage[]>();
   const hasUserMarkedAsUnreadRef = useRef(false);
   const [unreadFirstMessage, setUnreadFirstMessage] = useState<SendbirdMessage | undefined>(undefined);
+  const pendingBottomReachedRef = useRef<{ timeout: number; timestamp: number } | null>(null);
 
   const updateHasSeenNewLine = useCallback(
     (hasSeenNewLine: boolean) => {
@@ -63,14 +64,16 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
 
   const scrollToMessageWithCreatedAt = useFreshCallback(
     (createdAt: number, focusAnimated: boolean, timeout: number): boolean => {
-      const foundMessageIndex = props.messages.findIndex((it) => it.createdAt === createdAt);
-      const isIncludedInList = foundMessageIndex > -1;
+      const foundMessage = props.messages.find((it) => it.createdAt === createdAt);
+      const isIncludedInList = !!foundMessage;
+      pendingBottomReachedRef.current = null;
 
       if (isIncludedInList) {
         if (focusAnimated) {
           setTimeout(() => props.onUpdateSearchItem({ startingPoint: createdAt }), MESSAGE_FOCUS_ANIMATION_DELAY);
         }
-        lazyScrollToIndex({ index: foundMessageIndex, animated: true, timeout });
+        pendingBottomReachedRef.current = { timeout, timestamp: Date.now() };
+        lazyScrollToMessageId({ messageId: foundMessage.messageId, animated: true, timeout });
       } else {
         if (props.channel.messageOffsetTimestamp <= createdAt) {
           if (focusAnimated) {
@@ -346,6 +349,23 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
     },
   );
 
+  const onBottomReached = useFreshCallback(() => {
+    if (props.hasNext()) {
+      if (pendingBottomReachedRef.current) {
+        const currentTime = Date.now();
+        const elapsedTime = currentTime - pendingBottomReachedRef.current.timestamp;
+
+        const timeoutThreshold = 500;
+        if (elapsedTime >= pendingBottomReachedRef.current.timeout + timeoutThreshold) {
+          props.onBottomReached?.();
+          pendingBottomReachedRef.current = null;
+        }
+      } else {
+        props.onBottomReached?.();
+      }
+    }
+  });
+
   return (
     <ChannelMessageList
       {...props}
@@ -359,6 +379,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
       onPressNewMessagesButton={scrollToBottom}
       onPressScrollToBottomButton={scrollToBottom}
       onPressMarkAsUnreadMessage={onPressMarkAsUnreadMessage}
+      onBottomReached={onBottomReached}
       unreadFirstMessage={unreadFirstMessage}
       unreadMessagesFloatingProps={unreadMessagesFloatingPropsRef.current}
     />
