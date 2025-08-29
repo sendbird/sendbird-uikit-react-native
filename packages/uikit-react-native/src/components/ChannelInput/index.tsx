@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   StyleProp,
@@ -94,10 +95,10 @@ export type ChannelInputProps = {
 };
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
-const isAndroidApi35 = Platform.OS === 'android' && Platform.Version >= 35;
+const isAndroidApi35Plus = Platform.OS === 'android' && Platform.Version >= 35;
 const KEYBOARD_AVOID_VIEW_BEHAVIOR = Platform.select({
   ios: 'padding' as const,
-  android: isAndroidApi35 ? ('padding' as const) : undefined,
+  android: isAndroidApi35Plus ? ('padding' as const) : undefined,
   default: undefined,
 });
 
@@ -121,7 +122,9 @@ const ChannelInput = (props: ChannelInputProps) => {
    * For older Android versions, we manually subtract the safe area bottom padding to avoid overlapping with system UI.
    * See: https://developer.android.com/develop/ui/views/layout/edge-to-edge
    */
-  const keyboardVerticalOffset = isAndroidApi35 ? keyboardAvoidOffset : -safeArea.paddingBottom + keyboardAvoidOffset;
+  const keyboardVerticalOffset = isAndroidApi35Plus
+    ? keyboardAvoidOffset
+    : -safeArea.paddingBottom + keyboardAvoidOffset;
   const { colors, typography } = useUIKitTheme();
   const { sbOptions, mentionManager } = useSendbirdChat();
 
@@ -157,6 +160,23 @@ const ChannelInput = (props: ChannelInputProps) => {
 
     onChangeText(replace(text, searchStringRange.start, searchStringRange.end, mentionedMessageText), { user, range });
   };
+
+  const [keyboardShown, setKeyboardShown] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShow = () => setKeyboardShown(true);
+    const keyboardDidHide = () => setKeyboardShown(false);
+
+    const showSubscription = Keyboard.addListener('keyboardDidShow', keyboardDidShow);
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', keyboardDidHide);
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
+  const shouldShowSafeAreaBottom = !isAndroidApi35Plus || (isAndroidApi35Plus && !keyboardShown);
 
   if (!props.shouldRenderInput) {
     return <SafeAreaBottom height={safeArea.paddingBottom} />;
@@ -204,7 +224,7 @@ const ChannelInput = (props: ChannelInputProps) => {
               />
             )}
           </View>
-          {!isAndroidApi35 && <SafeAreaBottom height={safeArea.paddingBottom} />}
+          {shouldShowSafeAreaBottom && <SafeAreaBottom height={safeArea.paddingBottom} />}
         </View>
       </KeyboardAvoidingView>
       {mentionAvailable && props.SuggestedMentionList && (
