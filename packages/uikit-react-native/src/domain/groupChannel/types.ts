@@ -186,6 +186,16 @@ export interface GroupChannelContextsType {
       timeout?: number;
       viewPosition?: number;
     }) => void;
+    /**
+     * Call the FlatList function asynchronously to scroll to a message by messageId lazily.
+     * to avoid scrolling before data rendering has been committed.
+     * */
+    lazyScrollToMessageId: (params?: {
+      messageId?: number;
+      animated?: boolean;
+      timeout?: number;
+      viewPosition?: number;
+    }) => void;
 
     onPressReplyMessageInThread?: (parentMessage: SendbirdSendableMessage, startingPoint?: number) => void;
   }>;

@@ -46,6 +46,9 @@ export const GroupChannelContexts: GroupChannelContextsType = {
     lazyScrollToIndex: () => {
       // noop
     },
+    lazyScrollToMessageId: () => {
+      // noop
+    },
   } as MessageListContextValue),
 };
 
@@ -68,10 +71,11 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
   const [messageToEdit, setMessageToEdit] = useState<SendbirdUserMessage | SendbirdFileMessage>();
   const [messageToReply, setMessageToReply] = useState<SendbirdUserMessage | SendbirdFileMessage>();
 
-  const { flatListRef, lazyScrollToIndex, lazyScrollToBottom, scrollToMessage } = useScrollActions({
-    messages,
-    onUpdateSearchItem,
-  });
+  const { flatListRef, lazyScrollToIndex, lazyScrollToBottom, scrollToMessage, lazyScrollToMessageId } =
+    useScrollActions({
+      messages,
+      onUpdateSearchItem,
+    });
 
   const updateInputMode = (mode: 'send' | 'edit' | 'reply', message?: SendbirdUserMessage | SendbirdFileMessage) => {
     if (mode === 'send' || !message) {
@@ -143,6 +147,7 @@ export const GroupChannelContextsProvider: GroupChannelModule['Provider'] = ({
                 scrollToMessage,
                 lazyScrollToIndex,
                 lazyScrollToBottom,
+                lazyScrollToMessageId,
                 onPressReplyMessageInThread,
               }}
             >
@@ -159,9 +164,11 @@ type MessageListContextValue = ContextValue<GroupChannelContextsType['MessageLis
 const useScrollActions = (params: Pick<GroupChannelProps['Provider'], 'messages' | 'onUpdateSearchItem'>) => {
   const { messages, onUpdateSearchItem } = params;
   const flatListRef = useRef<FlatList<SendbirdMessage>>(null);
+  const messagesRef = useRef(messages);
+  messagesRef.current = messages;
 
   // FIXME: Workaround, should run after data has been applied to UI.
-  const lazyScrollToBottom = useFreshCallback<MessageListContextValue['lazyScrollToIndex']>((params) => {
+  const lazyScrollToBottom = useFreshCallback<MessageListContextValue['lazyScrollToBottom']>((params) => {
     if (!flatListRef.current) {
       logFlatListRefWarning();
       return;
@@ -182,6 +189,33 @@ const useScrollActions = (params: Pick<GroupChannelProps['Provider'], 'messages'
     setTimeout(() => {
       flatListRef.current?.scrollToIndex({
         index: params?.index ?? 0,
+        animated: params?.animated ?? false,
+        viewPosition: params?.viewPosition ?? 0.5,
+      });
+    }, params?.timeout ?? 0);
+  });
+
+  // FIXME: Workaround, should run after data has been applied to UI.
+  const lazyScrollToMessageId = useFreshCallback<MessageListContextValue['lazyScrollToMessageId']>((params) => {
+    if (!flatListRef.current) {
+      logFlatListRefWarning();
+      return;
+    }
+
+    setTimeout(() => {
+      let messageIndex = 0;
+      if (params?.messageId) {
+        const foundMessageIndex = messagesRef.current.findIndex((it) => it.messageId === params.messageId);
+        if (foundMessageIndex > -1) {
+          messageIndex = foundMessageIndex;
+        } else {
+          Logger.warn('Message with messageId not found:', params.messageId);
+          return;
+        }
+      }
+
+      flatListRef.current?.scrollToIndex({
+        index: messageIndex,
         animated: params?.animated ?? false,
         viewPosition: params?.viewPosition ?? 0.5,
       });
@@ -221,6 +255,7 @@ const useScrollActions = (params: Pick<GroupChannelProps['Provider'], 'messages'
     lazyScrollToIndex,
     lazyScrollToBottom,
     scrollToMessage,
+    lazyScrollToMessageId,
   };
 };
 
