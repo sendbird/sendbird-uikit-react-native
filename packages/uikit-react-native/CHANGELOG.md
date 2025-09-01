@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.10.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.10.1...v3.10.2) (2025-09-01)
+
+### Features
+
+- add textInputProps to support custom TextInput behavior in GroupChannel (e.g. autoCorrect) ([68d5be2](https://github.com/sendbird/sendbird-uikit-react-native/commit/68d5be2b4c8723a134c13b53cbec4e0abc011f8d))
+
+### Bug Fixes
+
+- improve handling of autocorrect when sending input on iOS ([6e659ef](https://github.com/sendbird/sendbird-uikit-react-native/commit/6e659efaf77403dd9a539ecba498ebd6d60c89a2))
+- improve keyboard handling when using button navigation on API 35 ([837606c](https://github.com/sendbird/sendbird-uikit-react-native/commit/837606c420680e8418ef7b4d34a4c5dd522d1047))
+- resolve search item scroll issue ([8ea23d0](https://github.com/sendbird/sendbird-uikit-react-native/commit/8ea23d01b0f752e53fc0704d1d27597e6748b82c))
+
 ## [3.10.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.10.0...v3.10.1) (2025-08-26)
 
 ### Bug Fixes
