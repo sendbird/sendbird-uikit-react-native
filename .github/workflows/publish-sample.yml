@@ -17,130 +17,149 @@ on:
         type: string
         default: ''
 
+env:
+  CACHE_NODE_MODULES_PATH: |
+    node_modules
+    packages/*/node_modules
+    sample/node_modules
+
 jobs:
-  execute:
+  deploy-ios:
+    name: '[iOS] Deploy'
+    if: ${{ github.event.inputs.platform == 'iOS' || github.event.inputs.platform == 'All' }}
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        env:
+          BUNDLE_GEMFILE: ${{ github.workspace }}/sample/ios/Gemfile
+        with:
+          ruby-version: '3.1'
+          bundler-cache: true
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Install CocoaPods
+        working-directory: sample/ios
+        run: bundle exec pod install
+
+      - name: Create env.ts
+        env:
+          APP_ID: ${{ secrets.SENDBIRD_APP_ID }}
+        run: echo "export const APP_ID = '$APP_ID';" >> sample/src/env.ts
+
+      - name: Setup SSH for match
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.FASTLANE_IOS_MATCH_GIT_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/match_key
+          chmod 600 ~/.ssh/match_key
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          cat >> ~/.ssh/config << EOF
+          Host github.com
+            User git
+            IdentityFile ~/.ssh/match_key
+            IdentitiesOnly yes
+          EOF
+          chmod 600 ~/.ssh/config
+
+      - name: Run fastlane iOS
+        env:
+          APP_VERSION: ${{ github.event.inputs.version }}
+          MATCH_PASSWORD: ${{ secrets.FASTLANE_IOS_MATCH_PASSWORD }}
+          MATCH_GIT_URL: ${{ secrets.FASTLANE_IOS_MATCH_GIT_URL }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+        run: |
+          if [ -n "$APP_VERSION" ]; then
+            yarn deploy:ios version:$APP_VERSION
+          else
+            yarn deploy:ios
+          fi
+
+  deploy-android:
+    name: '[Android] Deploy'
+    if: ${{ github.event.inputs.platform == 'Android' || github.event.inputs.platform == 'All' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Set BRANCH_NAME env
-        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+      - uses: actions/checkout@v4
 
-      - name: '[${{ github.event.inputs.platform }}] Deploy trigger (CircleCI REST API)'
-        if: ${{ github.event.inputs.platform }}
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install Ninja
+        run: sudo apt-get update && sudo apt-get install -y ninja-build
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
         env:
-          CIRCLECI_PERSONAL_API_TOKEN: ${{ secrets.CIRCLECI_PERSONAL_API_TOKEN }}
-          BRANCH_NAME: ${{ env.BRANCH_NAME }}
-          PLATFORM: ${{ github.event.inputs.platform }}
-          VERSION: ${{ github.event.inputs.version }}
-        run: |
-          curl -u ${CIRCLECI_PERSONAL_API_TOKEN}: \
-            -X POST "https://circleci.com/api/v2/project/gh/sendbird/sendbird-uikit-react-native/pipeline" \
-            -H "Content-Type: application/json" \
-            -d '{
-                  "branch": "'"${BRANCH_NAME}"'",
-                  "parameters": {
-                    "platform": "'"${PLATFORM}"'",
-                    "version": "'"${VERSION}"'"
-                  }
-                }'
+          BUNDLE_GEMFILE: ${{ github.workspace }}/sample/android/Gemfile
+        with:
+          ruby-version: '2.7.6'
+          bundler-cache: true
 
-#env:
-#  CACHE_NODE_MODULES_PATH: |
-#    node_modules
-#    packages/*/node_modules
-#    sample/node_modules
-#
-#jobs:
-#  deploy-android:
-#    name: '[Android] Deploy'
-#    if: ${{ github.event.inputs.platform == 'Android' || github.event.inputs.platform == 'All' }}
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: actions/setup-node@v1
-#        with:
-#          node-version: 16.x
-#      - uses: ruby/setup-ruby@v1
-#        env:
-#          BUNDLE_GEMFILE: ${{ github.workspace }}/sample/android/Gemfile
-#        with:
-#          ruby-version: 2.7
-#          bundler-cache: true
-#      - name: Get lockfile hash
-#        id: lockfile_hash
-#        run: echo "::set-output name=hash::${{ hashFiles('**/yarn.lock') }}"
-#      - name: Check cached node_modules
-#        id: check_cache
-#        uses: actions/cache@v2
-#        with:
-#          path: ${{ env.CACHE_NODE_MODULES_PATH }}
-#          key: ${{ steps.lockfile_hash.outputs.hash }}
-#      - name: Install dependencies
-#        if: steps.check_cache.outputs.cache-hit == ''
-#        run: yarn install --frozen-lockfile
-#      - name: Create env.ts
-#        run:
-#          echo "export const APP_ID = '${{ secrets.sendbird_app_id }}';" >> sample/src/env.ts
-#
-#      - name: Create service-account.json
-#        uses: /bang9/create-env-json@v3
-#        id: service-account
-#        with:
-#          file-name: './sample/android/fastlane/service-account.json'
-#          type: 'service_account'
-#          auth_uri: 'https://accounts.google.com/o/oauth2/auth'
-#          token_uri: 'https://oauth2.googleapis.com/token'
-#          auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs'
-#          project_id: ${{ secrets.fastlane_android_account_project_id }}
-#          private_key_id: ${{ secrets.fastlane_android_account_private_key_id }}
-#          private_key: '${{ secrets.fastlane_android_account_private_key }}'
-#          client_email: ${{ secrets.fastlane_android_account_client_email }}
-#          client_id: ${{ secrets.fastlane_android_account_client_id }}
-#          client_x509_cert_url: ${{ secrets.fastlane_android_account_client_x509_cert_url }}
-#      - name: Run fastlane
-#        env:
-#          FIREBASEAPPDISTRO_APP: ${{ secrets.fastlane_android_app_id }}
-#          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.service-account.outputs.full-path }}
-#        run: yarn deploy:android
-#
-#  deploy-ios:
-#    name: '[iOS] Deploy'
-#    if: ${{ github.event.inputs.platform != 'Android' }}
-#    runs-on: macos-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: actions/setup-node@v1
-#        with:
-#          node-version: 16.x
-#      - uses: ruby/setup-ruby@v1
-#        env:
-#          BUNDLE_GEMFILE: ${{ github.workspace }}/sample/ios/Gemfile
-#        with:
-#          ruby-version: 2.7
-#          bundler-cache: true
-#      - name: Get lockfile hash
-#        id: lockfile_hash
-#        run: echo "::set-output name=hash::${{ hashFiles('**/yarn.lock') }}"
-#      - name: Check cached node_modules
-#        id: check_cache
-#        uses: actions/cache@v2
-#        with:
-#          path: ${{ env.CACHE_NODE_MODULES_PATH }}
-#          key: ${{ steps.lockfile_hash.outputs.hash }}
-#      - name: Install dependencies
-#        if: steps.check_cache.outputs.cache-hit == ''
-#        run:
-#          yarn install --frozen-lockfile
-#      - name: Install pods
-#        run: cd sample/ios && pod install
-#      - name: Create env.ts
-#        run:
-#          echo "export const APP_ID = '${{ secrets.sendbird_app_id }}';" >> sample/src/env.ts
-#      - name: Run fastlane
-#        env:
-#          TEAM_ID: ${{ secrets.fastlane_ios_team_id }}
-#          MATCH_PASSWORD: ${{ secrets.fastlane_ios_match_password }}
-#          MATCH_GIT_URL: ${{ secrets.fastlane_ios_match_git_url }}
-#          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.fastlane_ios_match_git_basic_authorization }}
-#          APPLE_ID: ${{ secrets.fastlane_ios_apple_id }}
-#          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.fastlane_ios_apple_application_specific_password }}
-#        run: yarn deploy:ios
+      - name: Get yarn lockfile hash
+        id: yarn-lock-hash
+        run: echo "hash=${{ hashFiles('**/yarn.lock') }}" >> $GITHUB_OUTPUT
+
+      - name: Cache node_modules
+        id: yarn-cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CACHE_NODE_MODULES_PATH }}
+          key: ${{ runner.os }}-yarn-${{ steps.yarn-lock-hash.outputs.hash }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+
+      - name: Create env.ts
+        run: echo "export const APP_ID = '${{ secrets.SENDBIRD_APP_ID }}';" >> sample/src/env.ts
+
+      - name: Set up trusted certificates
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ca-certificates
+          echo 'SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt' >> $GITHUB_ENV
+
+      - name: Create service-account.json
+        env:
+          FASTLANE_ANDROID_SERVICE_ACCOUNT: ${{ secrets.FASTLANE_ANDROID_SERVICE_ACCOUNT }}
+          FASTLANE_ANDROID_APP_ID: ${{ secrets.FASTLANE_ANDROID_APP_ID }}
+        run: |
+          FILE_PATH="sample/android/fastlane/service-account.json"
+          echo "$FASTLANE_ANDROID_SERVICE_ACCOUNT" | base64 --decode > $FILE_PATH
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$GITHUB_WORKSPACE/$FILE_PATH" >> $GITHUB_ENV
+          echo "FIREBASEAPPDISTRO_APP=$FASTLANE_ANDROID_APP_ID" >> $GITHUB_ENV
+
+      - name: Run fastlane Android
+        env:
+          APP_VERSION: ${{ github.event.inputs.version }}
+        run: |
+          if [ -n "$APP_VERSION" ]; then
+            yarn deploy:android version:$APP_VERSION
+          else
+            yarn deploy:android
+          fi
