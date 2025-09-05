@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  Keyboard,
   KeyboardAvoidingView,
   Platform,
   StyleProp,
@@ -95,12 +94,7 @@ export type ChannelInputProps = {
 };
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
-const isAndroidApi35Plus = Platform.OS === 'android' && Platform.Version >= 35;
-const KEYBOARD_AVOID_VIEW_BEHAVIOR = Platform.select({
-  ios: 'padding' as const,
-  android: isAndroidApi35Plus ? ('padding' as const) : undefined,
-  default: undefined,
-});
+const KEYBOARD_AVOID_VIEW_BEHAVIOR = Platform.select({ ios: 'padding' as const, default: undefined });
 
 // FIXME(iOS): Dynamic style does not work properly when typing the CJK. (https://github.com/facebook/react-native/issues/26107)
 //  To workaround temporarily, change the key for re-mount the component.
@@ -115,16 +109,6 @@ const ChannelInput = (props: ChannelInputProps) => {
 
   const safeArea = useSafeAreaPadding(['top', 'left', 'right', 'bottom']);
 
-  // Android API 35+ keyboard avoidance handling
-  /**
-   * Android API 35+ introduced edge-to-edge layouts, which changed how keyboard avoidance should be handled.
-   * For API 35+, the system manages insets automatically, so we use the provided keyboardAvoidOffset directly.
-   * For older Android versions, we manually subtract the safe area bottom padding to avoid overlapping with system UI.
-   * See: https://developer.android.com/develop/ui/views/layout/edge-to-edge
-   */
-  const keyboardVerticalOffset = isAndroidApi35Plus
-    ? keyboardAvoidOffset
-    : -safeArea.paddingBottom + keyboardAvoidOffset;
   const { colors, typography } = useUIKitTheme();
   const { sbOptions, mentionManager } = useSendbirdChat();
 
@@ -161,30 +145,16 @@ const ChannelInput = (props: ChannelInputProps) => {
     onChangeText(replace(text, searchStringRange.start, searchStringRange.end, mentionedMessageText), { user, range });
   };
 
-  const [keyboardShown, setKeyboardShown] = useState(false);
-
-  useEffect(() => {
-    const keyboardDidShow = () => setKeyboardShown(true);
-    const keyboardDidHide = () => setKeyboardShown(false);
-
-    const showSubscription = Keyboard.addListener('keyboardDidShow', keyboardDidShow);
-    const hideSubscription = Keyboard.addListener('keyboardDidHide', keyboardDidHide);
-
-    return () => {
-      showSubscription.remove();
-      hideSubscription.remove();
-    };
-  }, []);
-
-  const shouldShowSafeAreaBottom = !isAndroidApi35Plus || (isAndroidApi35Plus && !keyboardShown);
-
   if (!props.shouldRenderInput) {
     return <SafeAreaBottom height={safeArea.paddingBottom} />;
   }
 
   return (
     <>
-      <KeyboardAvoidingView keyboardVerticalOffset={keyboardVerticalOffset} behavior={KEYBOARD_AVOID_VIEW_BEHAVIOR}>
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={-safeArea.paddingBottom + keyboardAvoidOffset}
+        behavior={KEYBOARD_AVOID_VIEW_BEHAVIOR}
+      >
         <View
           style={{
             paddingStart: safeArea.paddingStart,
@@ -224,7 +194,7 @@ const ChannelInput = (props: ChannelInputProps) => {
               />
             )}
           </View>
-          {shouldShowSafeAreaBottom && <SafeAreaBottom height={safeArea.paddingBottom} />}
+          <SafeAreaBottom height={safeArea.paddingBottom} />
         </View>
       </KeyboardAvoidingView>
       {mentionAvailable && props.SuggestedMentionList && (
