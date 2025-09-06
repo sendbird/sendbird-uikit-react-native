@@ -10,8 +10,8 @@ jobs:
       - uses: sendbird/release-automation-action@latest
         with:
           gh_token: ${{ secrets.GITHUB_TOKEN }}
-          circleci_token: ${{ secrets.CIRCLECI_BOT_TOKEN }}
           product: 'uikit'
           platform: 'rn'
           product_jira_project_key: 'UIKIT'
           product_jira_version_prefix: 'rn_uikit'
+          ci: 'github'
