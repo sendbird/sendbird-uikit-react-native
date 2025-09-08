@@ -166,8 +166,6 @@ jobs:
       - name: Run fastlane Android
         env:
           APP_VERSION: ${{ github.event.inputs.version }}
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GOOGLE_APPLICATION_CREDENTIALS }}
-          FIREBASEAPPDISTRO_APP: ${{ env.FIREBASEAPPDISTRO_APP }}
         run: |
           if [ -n "$APP_VERSION" ]; then
             yarn deploy:android version:$APP_VERSION
