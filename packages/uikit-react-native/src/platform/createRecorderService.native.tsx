@@ -36,7 +36,6 @@ class AudioRecorderPlayerAdapter implements RecorderModuleAdapter {
   private readonly audioOptions;
 
   constructor(audioRecorderModule: typeof AudioRecorderPlayerModule) {
-    console.log('AudioRecorderPlayerAdapter');
     this.module = new audioRecorderModule.default();
 
     this.audioOptions = Platform.select({
@@ -82,7 +81,6 @@ class NitroSoundAdapter implements RecorderModuleAdapter {
   private readonly audioOptions;
 
   constructor(audioRecorderModule: typeof NitroSoundModule) {
-    console.log('NitroSoundAdapter');
     this.module = audioRecorderModule.createSound();
     this.audioOptions = Platform.select({
       android: {
