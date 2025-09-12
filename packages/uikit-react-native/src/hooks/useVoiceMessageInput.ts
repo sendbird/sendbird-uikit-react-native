@@ -225,6 +225,9 @@ const useVoiceMessageInput = ({ onSend, onClose }: Props): VoiceMessageInputResu
           matchesOneOf(status, ['recording', 'recording_completed', 'playing', 'playing_paused']) &&
           recordingPath.current
         ) {
+          if (status === 'recording') {
+            await recorderService.stop();
+          }
           const voiceFile = getVoiceMessageFileObject(recordingPath.current.uri, recorderService.options.extension);
           onSend(voiceFile, Math.floor(recordingTime.currentTime));
           await clear();

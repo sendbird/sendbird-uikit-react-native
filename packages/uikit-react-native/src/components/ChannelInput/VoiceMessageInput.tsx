@@ -75,7 +75,7 @@ const VoiceMessageInput = ({ onClose, onSend }: VoiceMessageInputProps) => {
           break;
       }
     } catch (error) {
-      Logger.warn('Failed to run voice message action.', state);
+      Logger.warn('Failed to run voice message action.', state, error);
     }
   };
   const renderActionIcon = () => {
