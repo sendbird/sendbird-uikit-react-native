@@ -152,6 +152,10 @@ const createExpoRecorderService = ({ avModule }: Modules): RecorderServiceInterf
       this._recorder = new avModule.Audio.Recording();
       this.setState('idle');
     };
+
+    public convertRecordPath = (uri: string): string => {
+      return uri;
+    };
   }
 
   return new VoiceRecorder();

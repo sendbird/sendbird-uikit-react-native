@@ -27,7 +27,7 @@ import * as ImagePicker from 'react-native-image-picker';
 import * as Permissions from 'react-native-permissions';
 import * as CreateThumbnail from 'react-native-create-thumbnail';
 import * as ImageResizer from '@bam.tech/react-native-image-resizer';
-import * as AudioRecorderPlayer from 'react-native-audio-recorder-player';
+import * as AudioRecorderPlayer from 'react-native-nitro-sound';
 
 const nativePlatformServices = {
   clipboard: createNativeClipboardService(Clipboard),
