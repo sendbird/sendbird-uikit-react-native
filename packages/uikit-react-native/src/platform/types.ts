@@ -215,4 +215,9 @@ export interface RecorderServiceInterface {
    *   [*] to [idle]
    * */
   reset(): Promise<void>;
+
+  /**
+   * Get the record path processed for the specific platform and adapter.
+   * */
+  convertRecordPath(uri: string): string;
 }

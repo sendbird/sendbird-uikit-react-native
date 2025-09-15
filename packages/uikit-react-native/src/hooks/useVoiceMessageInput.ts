@@ -161,8 +161,10 @@ const useVoiceMessageInput = ({ onSend, onClose }: Props): VoiceMessageInputResu
               setVoiceMessageRecordingPath({ recordFilePath: recorderService.uri, uri: recorderService.uri });
             }
           } else {
-            setVoiceMessageRecordingPath(fileService.createRecordFilePath(recorderService.options.extension));
-            await recorderService.record(getVoiceMessageRecordingPath().recordFilePath);
+            const recordFilePath = fileService.createRecordFilePath(recorderService.options.extension);
+            const convertedRecordPath = recorderService.convertRecordPath(recordFilePath.recordFilePath);
+            setVoiceMessageRecordingPath({ ...recordFilePath, recordFilePath: convertedRecordPath });
+            await recorderService.record(convertedRecordPath);
           }
         }
       },
@@ -225,6 +227,9 @@ const useVoiceMessageInput = ({ onSend, onClose }: Props): VoiceMessageInputResu
           matchesOneOf(status, ['recording', 'recording_completed', 'playing', 'playing_paused']) &&
           recordingPath.current
         ) {
+          if (status === 'recording') {
+            await recorderService.stop();
+          }
           const voiceFile = getVoiceMessageFileObject(recordingPath.current.uri, recorderService.options.extension);
           onSend(voiceFile, Math.floor(recordingTime.currentTime));
           await clear();

@@ -3293,6 +3293,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-4.5.5.tgz#d70fc5870477760033769bbd6625d57e7d7678b2"
   integrity sha512-x2N415pg4ZxIltArOKczPwn7JEYh+1OxQ4+hTnafomnMsqs65HZuEWcX+Ch8c5r8V83DiunuQUf5hWGWlw8hQQ==
 
+"@react-native-community/slider@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-5.0.1.tgz#478789e526af31e0660c6f49fa5c5429d8d4287b"
+  integrity sha512-K3JRWkIW4wQ79YJ6+BPZzp1SamoikxfPRw7Yw4B4PElEQmqZFrmH9M5LxvIo460/3QSrZF/wCgi3qizJt7g/iw==
+
 "@react-native-documents/picker@^10.0.0", "@react-native-documents/picker@^10.1.0":
   version "10.1.2"
   resolved "https://registry.yarnpkg.com/@react-native-documents/picker/-/picker-10.1.2.tgz#2ebbf1eccc7e9efa3690e35ab5f0a811411a57b8"
@@ -13722,9 +13727,9 @@ react-is@^17.0.1:
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
 react-native-audio-recorder-player@^3.6.10:
-  version "3.6.12"
-  resolved "https://registry.yarnpkg.com/react-native-audio-recorder-player/-/react-native-audio-recorder-player-3.6.12.tgz#edc3aa271534a4ce6bc4b32ff2b0ece555b35498"
-  integrity sha512-/pnZxPA2jvQ9K7oDtrjcAjc/hn124swi451Q/i1Z6yesDVqupE38moNm12HgY1IVupdUCjeiZVqPoShcE0N8mw==
+  version "3.6.14"
+  resolved "https://registry.yarnpkg.com/react-native-audio-recorder-player/-/react-native-audio-recorder-player-3.6.14.tgz#1f45fed2f6f516372d0268a72e04e7e129699f79"
+  integrity sha512-F6SvHbuLvsbhBytR4+vaGIL6LFqC1cnB+SX3v191aHNvGDt63BX56w/Y19nIzxaLnG0b0vbxx/UZ1nzIvDyqWA==
   dependencies:
     hyochan-welcome "^1.0.0"
 
@@ -13808,6 +13813,18 @@ react-native-monorepo-tools@^1.1.4:
   dependencies:
     find-root "^1.1.0"
     glob "^7.1.7"
+
+react-native-nitro-modules@^0.29.4:
+  version "0.29.4"
+  resolved "https://registry.yarnpkg.com/react-native-nitro-modules/-/react-native-nitro-modules-0.29.4.tgz#e82a243996f4a85b9194a2e2a89970487638e1c2"
+  integrity sha512-AfUMcwFtj9FuEDwDLN5eIVo0lBYTQqDaV7meiFzuoZyRmc8ywykFTKfyZwRN2t8Z/WtTlfCj9Y9yaET33IImsg==
+
+react-native-nitro-sound@^0.2.0:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-nitro-sound/-/react-native-nitro-sound-0.2.2.tgz#4373a283386eb74229d28343821319a4251b0962"
+  integrity sha512-IBzbHjqgArWuUHM+jobpt1wlIu/77KShuZu8fgqwNkYKNXGJKDcuKyoO63ytO5GTle5sAwBJq3qm8xIRjPNzEA==
+  dependencies:
+    "@react-native-community/slider" "^5.0.1"
 
 react-native-permissions@^3.10.1:
   version "3.10.1"

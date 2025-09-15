@@ -242,7 +242,7 @@ const createNativeFileService = ({
       return Platform.select({
         ios: {
           uri: path,
-          recordFilePath: filename,
+          recordFilePath: path,
         },
         android: {
           uri: path.startsWith('file://') ? path : 'file://' + path,
