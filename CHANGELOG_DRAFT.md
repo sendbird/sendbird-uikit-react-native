@@ -1,5 +1,5 @@
-## v3.10.3
+## v3.11.0
 
-### Bug Fixes
-- revert: improve keyboard avoidance behavior for Android API 35+
+### Features
+- add react-native-nitro-sound for React Native 0.81 support
 
