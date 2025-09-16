@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/uikit-react-native",
-  "version": "3.10.3",
+  "version": "3.11.0",
   "description": "Sendbird UIKit for React Native: A feature-rich and customizable chat UI kit with messaging, channel management, and user authentication.",
   "keywords": [
     "sendbird",
@@ -60,10 +60,10 @@
   },
   "dependencies": {
     "@openspacelabs/react-native-zoomable-view": "^2.1.5",
-    "@sendbird/uikit-chat-hooks": "3.10.3",
-    "@sendbird/uikit-react-native-foundation": "3.10.3",
+    "@sendbird/uikit-chat-hooks": "3.11.0",
+    "@sendbird/uikit-react-native-foundation": "3.11.0",
     "@sendbird/uikit-tools": "0.0.15",
-    "@sendbird/uikit-utils": "3.10.3"
+    "@sendbird/uikit-utils": "3.11.0"
   },
   "devDependencies": {
     "@bam.tech/react-native-image-resizer": "^3.0.4",
@@ -92,14 +92,14 @@
     "react": "18.2.0",
     "react-native": "0.74.3",
     "react-native-audio-recorder-player": "^3.6.10",
-    "react-native-nitro-modules": "^0.29.4",
-    "react-native-nitro-sound": "^0.2.0",
     "react-native-builder-bob": "^0.18.0",
     "react-native-create-thumbnail": "^2.0.0",
     "react-native-document-picker": "^9.3.0",
     "react-native-file-access": "^3.1.0",
     "react-native-image-picker": "^7.1.2",
     "react-native-mmkv": "^2.12.2",
+    "react-native-nitro-modules": "^0.29.4",
+    "react-native-nitro-sound": "^0.2.0",
     "react-native-permissions": "^3.10.1",
     "react-native-safe-area-context": "^4.10.8",
     "react-native-video": "^6.3.0",
@@ -129,13 +129,13 @@
     "react": ">=17.0.2",
     "react-native": ">=0.65.0",
     "react-native-audio-recorder-player": ">=3.6.0",
-    "react-native-nitro-modules": "*",
-    "react-native-nitro-sound": ">=0.2.0",
     "react-native-create-thumbnail": ">=1.5.1",
     "react-native-document-picker": ">=8.0.0",
     "react-native-file-access": ">=2.4.3",
     "react-native-image-picker": ">=4.7.1",
     "react-native-mmkv": ">=2.0.0",
+    "react-native-nitro-modules": "*",
+    "react-native-nitro-sound": ">=0.2.0",
     "react-native-permissions": ">=3.6.0",
     "react-native-safe-area-context": ">=3.3.2",
     "react-native-video": ">=5.2.0"
