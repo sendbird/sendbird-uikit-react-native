@@ -23,11 +23,6 @@ platform :ios do
       key: ENV["APP_STORE_CONNECT_API_KEY"]
     }
 
-    # Check if all API key values are present
-    if api_key_info[:key_id].nil? || api_key_info[:issuer_id].nil? || ENV["APP_STORE_CONNECT_API_KEY"].nil?
-      UI.user_error!("Missing App Store Connect API key values. Please check your environment variables.")
-    end
-
     ios_set_version(xcodeproj: "SendbirdUIKitSample.xcodeproj", version: VERSION)
     ios_set_build_number(xcodeproj: "SendbirdUIKitSample.xcodeproj", build_number: DATE)
     match(type: "appstore", readonly: true, app_identifier: ["com.sendbird.uikit.reactnative.sample", "com.sendbird.uikit.reactnative.sample.NotificationService"], api_key: api_key_info)
