@@ -3,7 +3,7 @@ VERSION=PACKAGE_JSON[:version]
 DATE=Time.new.strftime("%Y.%m%d.%H%M")
 
 before_all do |lane, options|
-  if options[:version] != ""
+  if options[:version] && options[:version] != ""
     VERSION=options[:version]
   end
 end
@@ -11,15 +11,26 @@ end
 default_platform(:ios)
 platform :ios do
   before_all do
-    setup_circle_ci
+    setup_ci if is_ci
   end
 
   desc "Deploy a new build to TestFlight"
   lane :deploy do
+    # Use App Store Connect API key for authentication
+    api_key_info = {
+      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
+      key: ENV["APP_STORE_CONNECT_API_KEY"]
+    }
+
     ios_set_version(xcodeproj: "SendbirdUIKitSample.xcodeproj", version: VERSION)
     ios_set_build_number(xcodeproj: "SendbirdUIKitSample.xcodeproj", build_number: DATE)
-    match(type: "appstore", readonly: true, app_identifier: ["com.sendbird.uikit.reactnative.sample", "com.sendbird.uikit.reactnative.sample.NotificationService"])
+    match(type: "appstore", readonly: true, app_identifier: ["com.sendbird.uikit.reactnative.sample", "com.sendbird.uikit.reactnative.sample.NotificationService"], api_key: api_key_info)
     build_app(workspace: "SendbirdUIKitSample.xcworkspace", scheme: "SendbirdUIKitSample")
-    upload_to_testflight(skip_waiting_for_build_processing: true)
+
+    upload_to_testflight(
+      api_key: api_key_info,
+      skip_waiting_for_build_processing: true
+    )
   end
 end
