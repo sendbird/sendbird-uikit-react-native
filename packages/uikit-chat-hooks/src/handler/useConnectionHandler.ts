@@ -14,7 +14,7 @@ export const useConnectionHandler = (
   });
 
   useEffect(() => {
-    Logger.info('[useConnectionHandler]', handlerId);
+    Logger.info('[useConnectionHandler] add', handlerId);
 
     const handler = new ConnectionHandler();
     const handlerKeys = Object.keys(handler) as (keyof typeof handler)[];
@@ -26,6 +26,9 @@ export const useConnectionHandler = (
     });
 
     sdk.addConnectionHandler(handlerId, handler);
-    return () => sdk.removeConnectionHandler(handlerId);
+    return () => {
+      Logger.info('[useConnectionHandler] remove', handlerId);
+      sdk.removeConnectionHandler(handlerId);
+    };
   }, [sdk, handlerId]);
 };

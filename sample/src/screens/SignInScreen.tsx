@@ -9,14 +9,16 @@ import Versions from '../components/Versions';
 import { SendbirdAPI } from '../factory';
 import { useAppAuth } from '../libs/authentication';
 
+
 const SignInScreen = () => {
   const [userId, setUserId] = useState('');
   const [nickname, setNickname] = useState('');
+  const [accessToken, setAccessToken] = useState('');
 
   const { sdk } = useSendbirdChat();
   const { connect } = useConnection();
 
-  const connectWith = async (userId: string, nickname?: string, useSessionToken = false) => {
+  const connectWith = async (userId: string, nickname?: string, accessToken?: string, useSessionToken = false) => {
     if (useSessionToken) {
       const sessionHandler = new SessionHandler();
       sessionHandler.onSessionTokenRequired = (onSuccess, onFail) => {
@@ -29,11 +31,11 @@ const SignInScreen = () => {
       const data = await SendbirdAPI.getSessionToken(userId);
       await connect(userId, { nickname, accessToken: data.token });
     } else {
-      await connect(userId, { nickname });
+      await connect(userId, { nickname, accessToken });
     }
   };
 
-  const { loading, signIn } = useAppAuth((user) => connectWith(user.userId, user.nickname));
+  const { loading, signIn } = useAppAuth((user) => connectWith(user.userId, user.nickname, accessToken));
   const { colors } = useUIKitTheme();
 
   if (loading) return null;
@@ -49,9 +51,15 @@ const SignInScreen = () => {
         style={[styles.input, { backgroundColor: colors.onBackground04, marginBottom: 12 }]}
       />
       <TextInput
-        placeholder={'Nickname'}
+        placeholder={'Nickname(Optional)'}
         value={nickname}
         onChangeText={setNickname}
+        style={[styles.input, { backgroundColor: colors.onBackground04 }]}
+      />
+      <TextInput
+        placeholder={'Access Token(Optional)'}
+        value={accessToken}
+        onChangeText={setAccessToken}
         style={[styles.input, { backgroundColor: colors.onBackground04 }]}
       />
       <Button
@@ -60,7 +68,7 @@ const SignInScreen = () => {
         onPress={async () => {
           if (userId) {
             await signIn({ userId, nickname });
-            await connectWith(userId, nickname);
+            await connectWith(userId, nickname, accessToken);
           }
         }}
       >

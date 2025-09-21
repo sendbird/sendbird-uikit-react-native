@@ -49,11 +49,14 @@ import {
   UIKitConfigsScreen,
 } from './screens';
 import FileViewerScreen from './screens/uikit/FileViewerScreen';
+import { LogLevel } from '@sendbird/chat';
+import { Logger } from '@sendbird/uikit-utils';
 
 const App = () => {
   const { localConfigs } = useContext(UIKitLocalConfigsContext);
   const { scheme } = useAppearance();
   const isLightTheme = scheme === 'light';
+  Logger.setLogLevel('debug');
 
   return (
     <SendbirdUIKitContainer
@@ -80,6 +83,7 @@ const App = () => {
         localCacheStorage: mmkv,
         onInitialized: SetSendbirdSDK,
         enableAutoPushTokenRegistration: true,
+        logLevel: LogLevel.DEBUG,
       }}
       platformServices={platformServices}
       styles={{

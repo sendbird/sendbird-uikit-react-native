@@ -1,48 +1,28 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import {
-  type GroupChannel,
-  GroupChannelEventSource,
-  MessageCollection,
-  MessageFilter,
-} from '@sendbird/chat/groupChannel';
+
+
+import { type GroupChannel, GroupChannelEventSource, MessageCollection, MessageFilter } from '@sendbird/chat/groupChannel';
 import { ReplyType } from '@sendbird/chat/message';
+import { useConnectionHandler } from '@sendbird/uikit-chat-hooks';
 import { Box, useToast } from '@sendbird/uikit-react-native-foundation';
 import { useGroupChannelMessages } from '@sendbird/uikit-tools';
-import {
-  SendbirdFileMessage,
-  SendbirdGroupChannel,
-  SendbirdSendableMessage,
-  SendbirdUserMessage,
-  getReadableFileSize,
-} from '@sendbird/uikit-utils';
-import {
-  NOOP,
-  PASS,
-  confirmAndMarkAsRead,
-  messageComparator,
-  useFreshCallback,
-  useIIFE,
-  useRefTracker,
-} from '@sendbird/uikit-utils';
+import { Logger, SendbirdFileMessage, SendbirdGroupChannel, SendbirdSendableMessage, SendbirdUserMessage, getReadableFileSize } from '@sendbird/uikit-utils';
+import { NOOP, PASS, confirmAndMarkAsRead, messageComparator, useFreshCallback, useIIFE, useRefTracker } from '@sendbird/uikit-utils';
 
-import GroupChannelMessageRenderer, {
-  GroupChannelTypingIndicatorBubble,
-} from '../components/GroupChannelMessageRenderer';
+
+
+import GroupChannelMessageRenderer, { GroupChannelTypingIndicatorBubble } from '../components/GroupChannelMessageRenderer';
 import NewMessagesButton from '../components/NewMessagesButton';
 import ScrollToBottomButton from '../components/ScrollToBottomButton';
 import StatusComposition from '../components/StatusComposition';
 import UnreadMessagesFloating from '../components/UnreadMessagesFloating';
 import createGroupChannelModule from '../domain/groupChannel/module/createGroupChannelModule';
-import type {
-  GroupChannelFragment,
-  GroupChannelModule,
-  GroupChannelProps,
-  GroupChannelPubSubContextPayload,
-} from '../domain/groupChannel/types';
+import type { GroupChannelFragment, GroupChannelModule, GroupChannelProps, GroupChannelPubSubContextPayload } from '../domain/groupChannel/types';
 import { useLocalization, usePlatformService, useSendbirdChat } from '../hooks/useContext';
 import { FileType } from '../platform/types';
 import pubsub from '../utils/pubsub';
+
 
 const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): GroupChannelFragment => {
   const GroupChannelModule = createGroupChannelModule(initModule);
@@ -199,6 +179,27 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
         onBlurFragment();
       };
     }, []);
+
+    useConnectionHandler(sdk, `CONNECTION_HANDLER_${channel.url}`, {
+      onConnected: (userId: string) => {
+        Logger.log('[GroupChannelFragment] onConnected userId:', userId);
+      },
+      onReconnectStarted: () => {
+        Logger.log('[GroupChannelFragment] onReconnectStarted');
+      },
+      onReconnectSucceeded: () => {
+        Logger.log('[GroupChannelFragment] onReconnectSucceeded');
+      },
+      onReconnectFailed: () => {
+        Logger.log('[GroupChannelFragment] onReconnectFailed');
+      },
+      onDisconnected: (userId: string) => {
+        Logger.log('[GroupChannelFragment] onDisconnected userId:', userId);
+      },
+      onConnectionDelayed: (retryAfterTime: number, reason: string) => {
+        Logger.log('[GroupChannelFragment] onConnectionDelayed retryAfterTime: ', retryAfterTime, 'reason:', reason);
+      },
+    });
 
     const renderItem: GroupChannelProps['MessageList']['renderMessage'] = useFreshCallback((props) => {
       const content = renderMessage ? renderMessage(props) : <GroupChannelMessageRenderer {...props} />;
