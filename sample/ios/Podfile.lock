@@ -31,6 +31,30 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 7.7)
     - nanopb (~> 2.30908.0)
   - fmt (9.1.0)
+  - Giphy (2.2.16):
+    - libwebp
+  - giphy-react-native-sdk (5.0.0):
+    - DoubleConversion
+    - Giphy (= 2.2.16)
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - glog (0.3.5)
   - GoogleDataTransport (9.4.1):
     - GoogleUtilities/Environment (~> 7.7)
@@ -1476,6 +1500,7 @@ DEPENDENCIES:
   - DoubleConversion (from `../../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../../node_modules/react-native/Libraries/FBLazyVector`)
   - fmt (from `../../node_modules/react-native/third-party-podspecs/fmt.podspec`)
+  - "giphy-react-native-sdk (from `../../node_modules/@giphy/react-native-sdk`)"
   - glog (from `../../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - Permission-Camera (from `../../node_modules/react-native-permissions/ios/Camera`)
@@ -1563,6 +1588,7 @@ SPEC REPOS:
     - FirebaseCoreDiagnostics
     - FirebaseInstallations
     - FirebaseMessaging
+    - Giphy
     - GoogleDataTransport
     - GoogleUtilities
     - libwebp
@@ -1584,6 +1610,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/Libraries/FBLazyVector"
   fmt:
     :podspec: "../../node_modules/react-native/third-party-podspecs/fmt.podspec"
+  giphy-react-native-sdk:
+    :path: "../../node_modules/@giphy/react-native-sdk"
   glog:
     :podspec: "../../node_modules/react-native/third-party-podspecs/glog.podspec"
   hermes-engine:
@@ -1750,6 +1778,8 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 40bd9054049b2eae9a2c38ef1c3dd213df3605cd
   FirebaseMessaging: 5e5118a2383b3531e730d974680954c679ca0a13
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
+  Giphy: 55914215541027873875757f350530e6d8986fba
+  giphy-react-native-sdk: f316e058a77cddb976d8ad3298db73625527e995
   glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15

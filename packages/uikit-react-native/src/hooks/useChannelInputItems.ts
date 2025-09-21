@@ -1,13 +1,16 @@
 import { BottomSheetItem, useAlert, useToast } from '@sendbird/uikit-react-native-foundation';
 import { SendbirdChannel, isImage, shouldCompressImage, useIIFE } from '@sendbird/uikit-utils';
 
+
+
 import SBUError from '../libs/SBUError';
 import SBUUtils from '../libs/SBUUtils';
 import { FileType } from '../platform/types';
 import { useLocalization, usePlatformService, useSendbirdChat } from './useContext';
 
+
 export const useChannelInputItems = (channel: SendbirdChannel, sendFileMessage: (file: FileType) => void) => {
-  const { sbOptions, imageCompressionConfig } = useSendbirdChat();
+  const { sbOptions, imageCompressionConfig, giphyService } = useSendbirdChat();
   const { STRINGS } = useLocalization();
   const { fileService, mediaService } = usePlatformService();
   const { alert } = useAlert();
@@ -210,6 +213,19 @@ export const useChannelInputItems = (channel: SendbirdChannel, sendFileMessage: 
       },
     });
   }
+
+  sheetItems.push({
+    title: STRINGS.LABELS.CHANNEL_INPUT_ATTACHMENT_GIPHY,
+    icon: 'gif',
+    onPress: async () => {
+      try {
+        const mediaFile = await giphyService.openDialog();
+        sendFileMessage(mediaFile);
+      } catch {
+        toast.show(STRINGS.TOAST.UNKNOWN_ERROR, 'error');
+      }
+    },
+  });
 
   return sheetItems;
 };

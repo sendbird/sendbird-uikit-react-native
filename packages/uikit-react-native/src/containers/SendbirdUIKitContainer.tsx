@@ -1,5 +1,5 @@
 import type { AsyncStorageStatic } from '@react-native-async-storage/async-storage';
-import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 import type { MMKV } from 'react-native-mmkv';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -38,6 +38,7 @@ import type { ChatRelatedFeaturesInUIKit } from '../contexts/SendbirdChatCtx';
 import { SendbirdChatProvider } from '../contexts/SendbirdChatCtx';
 import { UserProfileProvider } from '../contexts/UserProfileCtx';
 import EmojiManager from '../libs/EmojiManager';
+import type { GiphyServiceInterface } from '../libs/GiphyService';
 import type { ImageCompressionConfigInterface } from '../libs/ImageCompressionConfig';
 import ImageCompressionConfig from '../libs/ImageCompressionConfig';
 import InternalLocalCacheStorage from '../libs/InternalLocalCacheStorage';
@@ -132,6 +133,7 @@ export type SendbirdUIKitContainerProps = React.PropsWithChildren<{
   };
   userMention?: Pick<Partial<MentionConfigInterface>, 'mentionLimit' | 'suggestionLimit' | 'debounceMills'>;
   imageCompression?: Partial<ImageCompressionConfigInterface>;
+  giphyService: GiphyServiceInterface;
   voiceMessage?: PartialDeep<VoiceMessageConfigInterface>;
 }>;
 
@@ -149,6 +151,7 @@ const SendbirdUIKitContainer = (props: SendbirdUIKitContainerProps) => {
     toast,
     userProfile,
     reaction,
+    giphyService,
   } = props;
 
   if (!chatOptions.localCacheStorage) {
@@ -175,6 +178,12 @@ const SendbirdUIKitContainer = (props: SendbirdUIKitContainerProps) => {
   const emojiManager = useMemo(() => new EmojiManager(internalStorage), [internalStorage]);
   const mentionManager = useMemo(() => new MentionManager(mentionConfig), [mentionConfig]);
   const voiceMessageStatusManager = useMemo(() => new VoiceMessageStatusManager(), []);
+
+  useEffect(() => {
+    if (giphyService) {
+      giphyService.updateDialogConfig({ theme: styles?.theme?.colorScheme ?? 'light' });
+    }
+  }, [giphyService, styles?.theme?.colorScheme]);
 
   useLayoutEffect(() => {
     if (!isFirstMount) {
@@ -229,6 +238,7 @@ const SendbirdUIKitContainer = (props: SendbirdUIKitContainerProps) => {
             imageCompressionConfig={imageCompressionConfig}
             voiceMessageConfig={voiceMessageConfig}
             voiceMessageStatusManager={voiceMessageStatusManager}
+            giphyService={giphyService}
             enableAutoPushTokenRegistration={
               chatOptions.enableAutoPushTokenRegistration ?? SendbirdUIKit.DEFAULT.AUTO_PUSH_TOKEN_REGISTRATION
             }

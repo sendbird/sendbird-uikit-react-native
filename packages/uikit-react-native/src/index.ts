@@ -138,6 +138,7 @@ export { default as SendbirdUIKitContainer, SendbirdUIKit } from './containers/S
 export type { SendbirdUIKitContainerProps } from './containers/SendbirdUIKitContainer';
 export { default as SBUError } from './libs/SBUError';
 export { default as SBUUtils } from './libs/SBUUtils';
+export { GiphyService } from './libs/GiphyService';
 export * from './types';
 
 Logger.setLogLevel(__DEV__ ? 'warn' : 'none');

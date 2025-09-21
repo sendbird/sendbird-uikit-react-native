@@ -306,6 +306,7 @@ export interface StringSet {
     CHANNEL_INPUT_ATTACHMENT_FILES: string;
     CHANNEL_INPUT_REPLY_PREVIEW_TITLE: (user: SendbirdUser) => string;
     CHANNEL_INPUT_REPLY_PREVIEW_BODY: (message: SendbirdUserMessage | SendbirdFileMessage) => string;
+    CHANNEL_INPUT_ATTACHMENT_GIPHY: string;
 
     /** Channel > Message **/
     CHANNEL_MESSAGE_COPY: string;

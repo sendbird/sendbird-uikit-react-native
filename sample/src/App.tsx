@@ -8,12 +8,13 @@ import { DarkUIKitTheme, LightUIKitTheme } from '@sendbird/uikit-react-native-fo
 
 import { UIKitLocalConfigsContext } from './context/uikitLocalConfigs';
 // import LogView from './components/LogView';
-import { APP_ID } from './env';
+import { APP_ID, GIPHY_KEY } from './env';
 import { GetTranslucent, RootStack, SetSendbirdSDK, platformServices } from './factory';
 import { mmkv } from './factory/mmkv';
 import useAppearance from './hooks/useAppearance';
 import { Routes, navigationActions, navigationRef } from './libs/navigation';
 import { notificationHandler } from './libs/notification';
+import { GiphyService } from '@sendbird/uikit-react-native';
 import {
   ErrorInfoScreen,
   GroupChannelBannedUsersScreen,
@@ -58,6 +59,7 @@ const App = () => {
   return (
     <SendbirdUIKitContainer
       appId={APP_ID}
+      giphyService={new GiphyService(GIPHY_KEY)}
       uikitOptions={{
         common: {
           enableUsingDefaultUserProfile: true,

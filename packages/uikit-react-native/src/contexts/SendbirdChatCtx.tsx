@@ -11,6 +11,7 @@ import type {
 import { confirmAndMarkAsDelivered, useAppState, useForceUpdate } from '@sendbird/uikit-utils';
 
 import type EmojiManager from '../libs/EmojiManager';
+import type { GiphyServiceInterface } from '../libs/GiphyService';
 import type ImageCompressionConfig from '../libs/ImageCompressionConfig';
 import type MentionManager from '../libs/MentionManager';
 import type VoiceMessageConfig from '../libs/VoiceMessageConfig';
@@ -29,6 +30,7 @@ interface Props extends ChatRelatedFeaturesInUIKit, React.PropsWithChildren {
 
   emojiManager: EmojiManager;
   mentionManager: MentionManager;
+  giphyService: GiphyServiceInterface;
   voiceMessageStatusManager: VoiceMessageStatusManager;
   imageCompressionConfig: ImageCompressionConfig;
   voiceMessageConfig: VoiceMessageConfig;
@@ -49,6 +51,7 @@ export type SendbirdChatContextType = {
   // feature related instances
   emojiManager: EmojiManager;
   mentionManager: MentionManager;
+  giphyService: GiphyServiceInterface;
   voiceMessageStatusManager: VoiceMessageStatusManager;
   imageCompressionConfig: ImageCompressionConfig;
   voiceMessageConfig: VoiceMessageConfig;
@@ -105,6 +108,7 @@ export const SendbirdChatProvider = ({
   sdkInstance,
   emojiManager,
   mentionManager,
+  giphyService,
   voiceMessageStatusManager,
   imageCompressionConfig,
   voiceMessageConfig,
@@ -178,6 +182,7 @@ export const SendbirdChatProvider = ({
     sdk: sdkInstance,
     emojiManager,
     mentionManager,
+    giphyService,
     imageCompressionConfig,
     voiceMessageConfig,
     voiceMessageStatusManager,
