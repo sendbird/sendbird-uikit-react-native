@@ -55,7 +55,10 @@ jobs:
       - name: Create env.ts
         env:
           APP_ID: ${{ secrets.SENDBIRD_APP_ID }}
-        run: echo "export const APP_ID = '$APP_ID';" >> sample/src/env.ts
+          GIPHY_KEY: ${{ secrets.GIPHY_KEY }}
+        run: |
+          echo "export const APP_ID = '$APP_ID';" >> sample/src/env.ts
+          echo "export const GIPHY_KEY = '$GIPHY_KEY';" >> sample/src/env.ts
 
       - name: Setup SSH for match
         env:
@@ -136,7 +139,12 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Create env.ts
-        run: echo "export const APP_ID = '${{ secrets.SENDBIRD_APP_ID }}';" >> sample/src/env.ts
+        env:
+          APP_ID: ${{ secrets.SENDBIRD_APP_ID }}
+          GIPHY_KEY: ${{ secrets.GIPHY_KEY }}
+        run: |
+          echo "export const APP_ID = '$APP_ID';" >> sample/src/env.ts
+          echo "export const GIPHY_KEY = '$GIPHY_KEY';" >> sample/src/env.ts
 
       - name: Set up trusted certificates
         run: |
