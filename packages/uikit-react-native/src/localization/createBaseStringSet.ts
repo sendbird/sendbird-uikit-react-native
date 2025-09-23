@@ -324,7 +324,7 @@ export const createBaseStringSet = ({ dateLocale, overrides }: StringSetCreateOp
       CHANNEL_INPUT_ATTACHMENT_CAMERA_VIDEO: 'Take a video',
       CHANNEL_INPUT_ATTACHMENT_PHOTO_LIBRARY: 'Photo library',
       CHANNEL_INPUT_ATTACHMENT_FILES: 'Files',
-      CHANNEL_INPUT_ATTACHMENT_GIPHY: 'GIPHY',
+      CHANNEL_INPUT_ATTACHMENT_GIPHY: 'Add a GIF',
       CHANNEL_INPUT_PLACEHOLDER_ACTIVE: 'Enter message',
       CHANNEL_INPUT_PLACEHOLDER_DISABLED: 'Chat not available in this channel.',
       CHANNEL_INPUT_PLACEHOLDER_MUTED: "You're muted by the operator.",
