@@ -1,6 +1,9 @@
+import type * as ExpoAudio from 'expo-audio';
+import type * as ExpoAV from 'expo-av';
 import type * as ExpoDocumentPicker from 'expo-document-picker';
 import type * as ExpoFs from 'expo-file-system';
 import type * as ExpoImagePicker from 'expo-image-picker';
+import type * as ExpoVideo from 'expo-video';
 
 import type { FilePickerResponse } from '../platform/types';
 import normalizeFile from './normalizeFile';
@@ -55,6 +58,29 @@ const expoBackwardUtils = {
       }
     },
   },
+  expoAV: {
+    isLegacyAVModule(module: ExpoAudioModule | ExpoVideoModule): module is typeof ExpoAV {
+      try {
+        return 'Video' in module && 'Audio' in module && typeof module.Video === 'function';
+      } catch {
+        return false;
+      }
+    },
+    isAudioModule(module: ExpoAudioModule): module is typeof ExpoAudio {
+      try {
+        return 'useAudioRecorder' in module && typeof module.useAudioRecorder === 'function';
+      } catch {
+        return false;
+      }
+    },
+    isVideoModule(module: ExpoVideoModule): module is typeof ExpoVideo {
+      try {
+        return 'VideoView' in module && 'useVideoPlayer' in module && typeof module.useVideoPlayer === 'function';
+      } catch {
+        return false;
+      }
+    },
+  },
   toFileSize(info: ExpoFs.FileInfo) {
     if ('size' in info) {
       return info.size;
@@ -63,5 +89,8 @@ const expoBackwardUtils = {
     }
   },
 };
+
+export type ExpoAudioModule = typeof ExpoAV | typeof ExpoAudio;
+export type ExpoVideoModule = typeof ExpoAV | typeof ExpoVideo;
 
 export default expoBackwardUtils;

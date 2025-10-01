@@ -9,7 +9,9 @@ export interface ExpoPermissionResponse {
 export interface ExpoMediaLibraryPermissionResponse extends ExpoPermissionResponse {
   accessPrivileges?: 'all' | 'limited' | 'none';
 }
-export interface ExpoPushPermissionResponse extends ExpoPermissionResponse, NotificationPermissionsStatus {}
+export interface ExpoPushPermissionResponse
+  extends Omit<ExpoPermissionResponse, 'status'>,
+    NotificationPermissionsStatus {}
 
 const expoPermissionGranted = (
   stats: Array<ExpoMediaLibraryPermissionResponse | ExpoPushPermissionResponse | ExpoPermissionResponse>,
