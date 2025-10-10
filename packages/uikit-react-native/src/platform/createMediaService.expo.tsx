@@ -103,7 +103,7 @@ const createExpoMediaService = ({
 
   const videoAdapter = expoBackwardUtils.expoAV.isVideoModule(avModule)
     ? new ExpoVideoAdapter(avModule)
-    : new LegacyExpoAVVideoAdapter(avModule as typeof ExpoAV);
+    : new LegacyExpoAVVideoAdapter(avModule);
 
   return {
     VideoComponent: videoAdapter.VideoComponent,
