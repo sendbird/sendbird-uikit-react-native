@@ -68,7 +68,8 @@ import * as ExpoFS from 'expo-file-system';
 import * as ExpoImagePicker from 'expo-image-picker';
 import * as ExpoMediaLibrary from 'expo-media-library';
 import * as ExpoNotifications from 'expo-notifications';
-import * as ExpoAV from 'expo-av';
+import * as ExpoAudio from 'expo-audio';
+import * as ExpoVideo from 'expo-video';
 import * as ExpoVideoThumbnail from 'expo-video-thumbnails';
 import * as ExpoImageManipulator from 'expo-image-manipulator';
 
@@ -82,16 +83,16 @@ const expoPlatformServices = {
     documentPickerModule: ExpoDocumentPicker,
   }),
   media: createExpoMediaService({
-    avModule: ExpoAV,
+    avModule: ExpoVideo,
     thumbnailModule: ExpoVideoThumbnail,
     imageManipulator: ExpoImageManipulator,
     fsModule: ExpoFS,
   }),
   player: createExpoPlayerService({
-    avModule: ExpoAV,
+    avModule: ExpoAudio,
   }),
   recorder: createExpoRecorderService({
-    avModule: ExpoAV,
+    avModule: ExpoAudio,
   }),
 };
 /** ------------------ **/
