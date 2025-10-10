@@ -273,26 +273,9 @@ const createExpoPlayerService = ({ avModule }: Modules): PlayerServiceInterface 
     );
   }
 
-  const audioAdapter = expoBackwardUtils.expoAV.isAudioModule(avModule)
+  return expoBackwardUtils.expoAV.isAudioModule(avModule)
     ? new ExpoAudioPlayerAdapter(avModule)
-    : new LegacyExpoAVPlayerAdapter(avModule as typeof ExpoAV);
-
-  return {
-    get uri() {
-      return audioAdapter.uri;
-    },
-    get state() {
-      return audioAdapter.state;
-    },
-    requestPermission: audioAdapter.requestPermission.bind(audioAdapter),
-    addPlaybackListener: audioAdapter.addPlaybackListener.bind(audioAdapter),
-    addStateListener: audioAdapter.addStateListener.bind(audioAdapter),
-    play: audioAdapter.play.bind(audioAdapter),
-    pause: audioAdapter.pause.bind(audioAdapter),
-    stop: audioAdapter.stop.bind(audioAdapter),
-    reset: audioAdapter.reset.bind(audioAdapter),
-    seek: audioAdapter.seek.bind(audioAdapter),
-  };
+    : new LegacyExpoAVPlayerAdapter(avModule);
 };
 
 export default createExpoPlayerService;

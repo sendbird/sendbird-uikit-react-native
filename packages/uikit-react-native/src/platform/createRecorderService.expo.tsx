@@ -313,28 +313,9 @@ const createExpoRecorderService = ({ avModule }: Modules): RecorderServiceInterf
     );
   }
 
-  const audioAdapter = expoBackwardUtils.expoAV.isAudioModule(avModule)
+  return expoBackwardUtils.expoAV.isAudioModule(avModule)
     ? new ExpoAudioRecorderAdapter(avModule)
-    : new LegacyExpoAVRecorderAdapter(avModule as typeof ExpoAV);
-
-  return {
-    get uri() {
-      return audioAdapter.uri;
-    },
-    get state() {
-      return audioAdapter.state;
-    },
-    get options() {
-      return audioAdapter.options;
-    },
-    requestPermission: audioAdapter.requestPermission.bind(audioAdapter),
-    addRecordingListener: audioAdapter.addRecordingListener.bind(audioAdapter),
-    addStateListener: audioAdapter.addStateListener.bind(audioAdapter),
-    record: audioAdapter.record.bind(audioAdapter),
-    stop: audioAdapter.stop.bind(audioAdapter),
-    reset: audioAdapter.reset.bind(audioAdapter),
-    convertRecordPath: audioAdapter.convertRecordPath.bind(audioAdapter),
-  };
+    : new LegacyExpoAVRecorderAdapter(avModule);
 };
 
 export default createExpoRecorderService;

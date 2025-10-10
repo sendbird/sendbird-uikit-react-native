@@ -109,7 +109,7 @@ const createExpoMediaService = ({
     VideoComponent: videoAdapter.VideoComponent,
     async getVideoThumbnail({ url, quality, timeMills }) {
       try {
-        const { uri } = await thumbnailModule.getThumbnailAsync(url, { quality: quality, time: timeMills });
+        const { uri } = await thumbnailModule.getThumbnailAsync(url, { quality, time: timeMills });
         return { path: uri };
       } catch {
         return null;
