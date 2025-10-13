@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.11.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.11.0...v3.11.1) (2025-10-13)
+
+**Note:** Version bump only for package @sendbird/uikit-utils
+
 ## [3.11.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.10.3...v3.11.0) (2025-09-16)
 
 **Note:** Version bump only for package @sendbird/uikit-utils

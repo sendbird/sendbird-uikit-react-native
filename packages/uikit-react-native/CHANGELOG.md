@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.11.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.11.0...v3.11.1) (2025-10-13)
+
+### Features
+
+- add support for expo-video and expo-audio for Expo SDK 54 ([39c07ca](https://github.com/sendbird/sendbird-uikit-react-native/commit/39c07ca1410ec064c703ca73646217db98b82556))
+
 ## [3.11.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.10.3...v3.11.0) (2025-09-16)
 
 ### Features
