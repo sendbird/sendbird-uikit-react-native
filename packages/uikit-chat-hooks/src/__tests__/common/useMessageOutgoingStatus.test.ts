@@ -183,11 +183,19 @@ describe('useMessageOutgoingStatus', () => {
     });
 
     act(() => {
-      sdk.__emit('channel', 'group_onUnreadMemberStatusUpdated', channel);
+      sdk.__emit('channel', 'group_onUserMarkedRead', channel);
     });
 
     await waitFor(() => {
       expect(forceUpdate).toHaveBeenCalledTimes(2);
+    });
+
+    act(() => {
+      sdk.__emit('channel', 'group_onUserMarkedUnread', channel);
+    });
+
+    await waitFor(() => {
+      expect(forceUpdate).toHaveBeenCalledTimes(3);
     });
   });
 
@@ -220,7 +228,8 @@ describe('useMessageOutgoingStatus', () => {
 
     act(() => {
       sdk.__emit('channel', 'group_onUndeliveredMemberStatusUpdated', channel);
-      sdk.__emit('channel', 'group_onUnreadMemberStatusUpdated', channel);
+      sdk.__emit('channel', 'group_onUserMarkedRead', channel);
+      sdk.__emit('channel', 'group_onUserMarkedUnread', channel);
     });
 
     await waitFor(() => {

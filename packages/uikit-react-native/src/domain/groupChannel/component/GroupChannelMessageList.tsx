@@ -256,9 +256,6 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
         lazyScrollToBottom({ animated: true, timeout: 250 });
       }
     },
-    onChannelChanged(channel) {
-      if (isDifferentChannel(channel, props.channel)) return;
-    },
   });
 
   useEffect(() => {

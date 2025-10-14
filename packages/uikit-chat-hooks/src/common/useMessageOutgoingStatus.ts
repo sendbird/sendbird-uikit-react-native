@@ -23,7 +23,13 @@ export const useMessageOutgoingStatus = (
 
       forceUpdate();
     },
-    onUnreadMemberStatusUpdated(eventChannel) {
+    onUserMarkedRead(eventChannel) {
+      if (isDifferentChannel(channel, eventChannel)) return;
+      if (!isMyMessage(message, currentUser?.userId)) return;
+
+      forceUpdate();
+    },
+    onUserMarkedUnread(eventChannel) {
       if (isDifferentChannel(channel, eventChannel)) return;
       if (!isMyMessage(message, currentUser?.userId)) return;
 
