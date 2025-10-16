@@ -40,7 +40,8 @@ const createNativeNotificationService = ({
   permissionModule: typeof Permissions;
 }): NotificationServiceInterface => {
   const isModular = isModularAPI(messagingModule);
-  const messaging = isModular ? messagingModule.getMessaging() : (messagingModule as typeof RNFBMessaging)();
+  const modularMessaging = isModular ? (messagingModule as ModularMessagingType) : null;
+  const messaging = isModular ? modularMessaging!.getMessaging() : (messagingModule as typeof RNFBMessaging)();
 
   const authorizedStatus = [
     messagingModule.AuthorizationStatus.AUTHORIZED,
@@ -48,14 +49,14 @@ const createNativeNotificationService = ({
   ];
   return {
     getAPNSToken(): Promise<string | null> {
-      if (isModular) {
-        return (messagingModule as ModularMessagingType).getAPNSToken(messaging);
+      if (modularMessaging) {
+        return modularMessaging.getAPNSToken(messaging);
       }
       return messaging.getAPNSToken();
     },
     getFCMToken(): Promise<string | null> {
-      if (isModular) {
-        return (messagingModule as ModularMessagingType).getToken(messaging);
+      if (modularMessaging) {
+        return modularMessaging.getToken(messaging);
       }
       return messaging.getToken();
     },
@@ -66,8 +67,8 @@ const createNativeNotificationService = ({
       }
 
       if (Platform.OS === 'ios') {
-        const status = isModular
-          ? await (messagingModule as ModularMessagingType).hasPermission(messaging)
+        const status = modularMessaging
+          ? await modularMessaging.hasPermission(messaging)
           : await messaging.hasPermission();
         return authorizedStatus.includes(status);
       }
@@ -81,8 +82,8 @@ const createNativeNotificationService = ({
       }
 
       if (Platform.OS === 'ios') {
-        const status = isModular
-          ? await (messagingModule as ModularMessagingType).requestPermission(messaging)
+        const status = modularMessaging
+          ? await modularMessaging.requestPermission(messaging)
           : await messaging.requestPermission();
         return authorizedStatus.includes(status);
       }
@@ -90,8 +91,8 @@ const createNativeNotificationService = ({
       return false;
     },
     onTokenRefresh(handler: (token: string) => void): () => void | undefined {
-      if (isModular) {
-        return (messagingModule as ModularMessagingType).onTokenRefresh(messaging, (token: string) => {
+      if (modularMessaging) {
+        return modularMessaging.onTokenRefresh(messaging, (token: string) => {
           if (Platform.OS === 'android') handler(token);
         });
       }
