@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/uikit-utils",
-  "version": "3.11.1",
+  "version": "3.11.2",
   "description": "A collection of utility functions and constants for building chat UI components with Sendbird UIKit.",
   "keywords": [
     "sendbird",
