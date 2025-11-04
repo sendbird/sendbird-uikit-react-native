@@ -1,5 +1,7 @@
-## v3.11.1
+## v3.11.2
 
 ### Features
-- add support for expo-video and expo-audio for Expo SDK 54
+- enhance Firebase messaging module support for v22+
 
+### Bug Fixes
+- read receipts not updating in real-time

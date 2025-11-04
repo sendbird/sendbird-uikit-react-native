@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.11.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.11.1...v3.11.2) (2025-10-16)
+
+### Bug Fixes
+
+- read receipts not updating in real-time ([ad8eae1](https://github.com/sendbird/sendbird-uikit-react-native/commit/ad8eae1d029476342b41f4bcf9c2503e98a2917f))
+
 ## [3.11.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.11.0...v3.11.1) (2025-10-13)
 
 **Note:** Version bump only for package @sendbird/uikit-chat-hooks
