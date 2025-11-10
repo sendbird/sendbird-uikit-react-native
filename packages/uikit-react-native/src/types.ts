@@ -18,7 +18,11 @@ export interface AsyncLocalCacheStorage {
   multiRemove?(keys: string[]): Promise<void>;
 }
 
-export type MMKVLocalCacheStorage = Pick<MMKV, 'getString' | 'set' | 'delete' | 'getAllKeys'>;
+export type MMKVLocalCacheStorage = Pick<MMKV, 'getString' | 'set' | 'getAllKeys'> & {
+  // Support both v3.x (delete) and v4.x (remove) APIs for backward compatibility
+  delete?: (key: string) => void;
+  remove?: (key: string) => void;
+};
 
 export type ErrorBoundaryProps = { error: Error; errorInfo: ErrorInfo; reset: () => void };
 
