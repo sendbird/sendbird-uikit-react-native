@@ -42,7 +42,12 @@ export default class InternalLocalCacheStorage implements AsyncLocalCacheStorage
 
   async removeItem(key: string) {
     if (this._mmkv) {
-      this._mmkv.delete(key);
+      // Support both v3.x (delete) and v4.x (remove) APIs for backward compatibility
+      if (this._mmkv.delete) {
+        this._mmkv.delete(key);
+      } else if (this._mmkv.remove) {
+        this._mmkv.remove(key);
+      }
     } else if (this._async) {
       return this._async.removeItem(key);
     }
