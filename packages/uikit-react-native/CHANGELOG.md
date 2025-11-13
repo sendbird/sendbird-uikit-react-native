@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.11.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.11.2...v3.11.3) (2025-11-13)
+
+### Features
+
+- support expo-file-system in expo 54 or higher ([1338aa7](https://github.com/sendbird/sendbird-uikit-react-native/commit/1338aa78f6b95fd217f60e73abb6ae4cf6b6bd82))
+- support MMKV version 4.0 or higher ([7240834](https://github.com/sendbird/sendbird-uikit-react-native/commit/7240834ad73a3a8fe5eed4fb810fa6f7cc305cfe))
+
 ## [3.11.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.11.1...v3.11.2) (2025-10-16)
 
 ### Features
