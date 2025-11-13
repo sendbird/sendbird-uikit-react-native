@@ -1,7 +1,6 @@
-## v3.11.2
+## v3.11.3
 
 ### Features
-- enhance Firebase messaging module support for v22+
-
-### Bug Fixes
-- read receipts not updating in real-time
+- support expo-file-system in expo 54 or higher
+- support MMKV version 4.0 or higher
+- add exports field in package.json for module resolution

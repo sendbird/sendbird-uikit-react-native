@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/uikit-chat-hooks",
-  "version": "3.11.2",
+  "version": "3.11.3",
   "description": "A set of React hooks for integrating Sendbird chat functionality into your React app.",
   "keywords": [
     "sendbird",
@@ -54,10 +54,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@sendbird/uikit-utils": "3.11.2"
+    "@sendbird/uikit-utils": "3.11.3"
   },
   "devDependencies": {
-    "@sendbird/uikit-testing-tools": "3.11.2",
+    "@sendbird/uikit-testing-tools": "3.11.3",
     "@types/react": "*",
     "react": "18.2.0",
     "react-native-builder-bob": "^0.18.0",
