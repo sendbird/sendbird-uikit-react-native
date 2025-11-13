@@ -145,12 +145,14 @@ const createExpoFileService = ({
         if (!granted) throw new Error('Permission not granted');
       }
 
-      const basePath = fsModule.documentDirectory || fsModule.cacheDirectory;
+      const basePath =
+        expoBackwardUtils.fileSystem.getDocumentDirectory(fsModule) ||
+        expoBackwardUtils.fileSystem.getCacheDirectory(fsModule);
       if (!basePath) throw new Error('Cannot determine directory');
 
       const downloadPath = `${basePath}/${options.fileName}`;
 
-      const response = await fsModule.downloadAsync(options.fileUrl, downloadPath);
+      const response = await expoBackwardUtils.fileSystem.downloadFile(fsModule, options.fileUrl, downloadPath);
       if (getFileType(options.fileType || '').match(/video|image/)) {
         await mediaLibraryModule.saveToLibraryAsync(response.uri);
       }
@@ -158,7 +160,7 @@ const createExpoFileService = ({
     }
 
     createRecordFilePath(customExtension = 'm4a'): { recordFilePath: string; uri: string } {
-      const basePath = fsModule.cacheDirectory;
+      const basePath = expoBackwardUtils.fileSystem.getCacheDirectory(fsModule);
       if (!basePath) throw new Error('Cannot determine directory');
 
       const filename = `record-${Date.now()}.${customExtension}`;

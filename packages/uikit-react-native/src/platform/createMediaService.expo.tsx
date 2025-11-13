@@ -122,7 +122,7 @@ const createExpoMediaService = ({
       const { uri: compressedURI } = await imageManipulator.manipulateAsync(uri, [{ resize: resizingSize }], {
         compress: Math.min(Math.max(0, compressionRate), 1),
       });
-      const fileInfo = await fsModule.getInfoAsync(uri);
+      const fileInfo = await expoBackwardUtils.fileSystem.getFileInfo(fsModule, uri);
 
       return { uri: compressedURI, size: expoBackwardUtils.toFileSize(fileInfo) };
     },

@@ -8,6 +8,36 @@ import type * as ExpoVideo from 'expo-video';
 import type { FilePickerResponse } from '../platform/types';
 import normalizeFile from './normalizeFile';
 
+// Legacy expo-file-system API types (before SDK 54)
+interface ExpoFileSystemLegacy {
+  documentDirectory: string | null;
+  cacheDirectory: string | null;
+  getInfoAsync(fileUri: string, options?: unknown): Promise<ExpoFs.FileInfo>;
+  downloadAsync(uri: string, fileUri: string, options?: unknown): Promise<{ uri: string }>;
+}
+
+// New expo-file-system API types (SDK 54+)
+interface ExpoDirectory {
+  uri: string;
+}
+
+interface ExpoFileSystemNew {
+  File: {
+    new (...uris: (string | unknown)[]): {
+      info(options?: unknown): ExpoFs.FileInfo;
+    };
+    downloadFileAsync(url: string, destination: unknown, options?: unknown): Promise<{ uri: string }>;
+  };
+  Directory: new (...uris: (string | unknown)[]) => ExpoDirectory;
+  Paths: {
+    document: ExpoDirectory;
+    cache: ExpoDirectory;
+  };
+}
+
+// Union type for both legacy and new expo-file-system
+type ExpoFileSystemModule = ExpoFileSystemLegacy | ExpoFileSystemNew | typeof ExpoFs;
+
 const expoBackwardUtils = {
   imagePicker: {
     isCanceled(result: ExpoImagePicker.ImagePickerResult) {
@@ -82,11 +112,51 @@ const expoBackwardUtils = {
     },
   },
   toFileSize(info: ExpoFs.FileInfo) {
-    if ('size' in info) {
+    if ('size' in info && info.size !== undefined) {
       return info.size;
     } else {
       return 0;
     }
+  },
+  fileSystem: {
+    isLegacyModule(fsModule: ExpoFileSystemModule): fsModule is ExpoFileSystemLegacy {
+      try {
+        return 'documentDirectory' in fsModule || 'cacheDirectory' in fsModule;
+      } catch {
+        return false;
+      }
+    },
+    async getFileInfo(fsModule: ExpoFileSystemModule, uri: string): Promise<ExpoFs.FileInfo> {
+      if (expoBackwardUtils.fileSystem.isLegacyModule(fsModule)) {
+        return await fsModule.getInfoAsync(uri);
+      } else {
+        const file = new fsModule.File(uri);
+        return file.info();
+      }
+    },
+    getDocumentDirectory(fsModule: ExpoFileSystemModule): string | null {
+      if (expoBackwardUtils.fileSystem.isLegacyModule(fsModule)) {
+        return fsModule.documentDirectory || null;
+      } else {
+        return fsModule.Paths?.document?.uri || null;
+      }
+    },
+    getCacheDirectory(fsModule: ExpoFileSystemModule): string | null {
+      if (expoBackwardUtils.fileSystem.isLegacyModule(fsModule)) {
+        return fsModule.cacheDirectory || null;
+      } else {
+        return fsModule.Paths?.cache?.uri || null;
+      }
+    },
+    async downloadFile(fsModule: ExpoFileSystemModule, url: string, localUri: string): Promise<{ uri: string }> {
+      if (expoBackwardUtils.fileSystem.isLegacyModule(fsModule)) {
+        return await fsModule.downloadAsync(url, localUri);
+      } else {
+        const destination = new fsModule.File(localUri);
+        const result = await fsModule.File.downloadFileAsync(url, destination as never);
+        return { uri: result.uri };
+      }
+    },
   },
 };
 
