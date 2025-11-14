@@ -101,7 +101,7 @@ class NotificationOpenHandler {
             id: String(sendbird.message_id),
             title: `[RN]${sendbird.channel.name || sendbird.sender?.name || 'Message received'}`,
             body: sendbird.message,
-            data: message.data,
+            data: message.data as { [key: string]: string },
             android: {
               channelId: ANDROID_NOTIFICATION_CHANNEL_ID,
               importance: 4,
