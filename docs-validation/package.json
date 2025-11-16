@@ -22,7 +22,7 @@
     "react-native-create-thumbnail": "^2.0.0",
     "react-native-file-access": "^3.1.0",
     "react-native-image-picker": "^7.1.2",
-    "react-native-mmkv": "^2.12.2",
+    "react-native-mmkv": "^4.0.0",
     "react-native-nitro-modules": "^0.29.4",
     "react-native-nitro-sound": "^0.2.0",
     "react-native-permissions": "^5.3.0",

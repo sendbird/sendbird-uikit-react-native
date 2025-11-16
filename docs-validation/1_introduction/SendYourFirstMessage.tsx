@@ -61,9 +61,9 @@ export const platformServices: SendbirdUIKitContainerProps['platformServices'] =
  * {@link https://sendbird.com/docs/chat/uikit/v3/react-native/introduction/send-first-message#2-get-started-3-step-5-wrap-your-app-in-sendbirduikitcontainer}
  * */
 import { SendbirdUIKitContainer } from '@sendbird/uikit-react-native';
-import { MMKV } from 'react-native-mmkv';
+import { createMMKV } from 'react-native-mmkv';
 
-const mmkv = new MMKV();
+const mmkv = createMMKV();
 
 const App = () => {
   return (
