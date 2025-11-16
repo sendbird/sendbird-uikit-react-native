@@ -11,7 +11,7 @@ import {
   useToast,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import Icon from '@sendbird/uikit-react-native-foundation/src/components/Icon';
+import { Icon } from '@sendbird/uikit-react-native-foundation';
 import { ifThenOr, useSafeAreaPadding } from '@sendbird/uikit-utils';
 
 import { useLocalization, usePlatformService } from '../../../hooks/useContext';

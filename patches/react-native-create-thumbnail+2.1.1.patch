@@ -1,0 +1,64 @@
+--- a/node_modules/react-native-create-thumbnail/android/build.gradle
++++ b/node_modules/react-native-create-thumbnail/android/build.gradle
+@@ -38,9 +38,6 @@
+     }
+ }
+ 
+-apply plugin: 'com.android.library'
+-apply plugin: 'maven-publish'
+-
+ android {
+     def agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION
+     if (agpVersion.tokenize('.')[0].toInteger() >= 7) {
+@@ -58,6 +55,11 @@
+     lintOptions {
+         abortOnError false
+     }
++
++    // Add for Gradle 9.0 compatibility
++    buildFeatures {
++        buildConfig true
++    }
+ }
+ 
+ repositories {
+@@ -114,9 +116,8 @@
+     // https://www.oreilly.com/library/view/gradle-beyond-the/9781449373801/ch03.html
+     task androidJavadoc(type: Javadoc) {
+         source = android.sourceSets.main.java.srcDirs
+-        classpath += files(android.bootClasspath)
+-        project.getConfigurations().implementation.setCanBeResolved(true)
+-        classpath += files(project.getConfigurations().getByName('implementation').asList())
++        // Removed deprecated classpath configuration for Gradle 9.0
++        // These methods are not compatible with newer Gradle versions
+         include '**/*.java'
+     }
+ 
+@@ -134,7 +135,7 @@
+     android.libraryVariants.all { variant ->
+         def name = variant.name.capitalize()
+         task "jar${name}"(type: Jar, dependsOn: variant.javaCompileProvider) {
+-            from variant.javaCompileProvider.get().destinationDir
++            from variant.javaCompileProvider.get().destinationDirectory
+         }
+     }
+ 
+@@ -151,18 +152,3 @@
+         }
+     }
+ }
+-
+-def myAttribute = Attribute.of("com.android.build.api.attributes.BuildTypeAttr", String)
+-
+-dependencies.attributesSchema {
+-    // registers this attribute to the attributes schema
+-    attribute(myAttribute)
+-}
+-
+-configurations {
+-    implementation {
+-        attributes {
+-            attribute(myAttribute, "release")
+-        }
+-    }
+-}

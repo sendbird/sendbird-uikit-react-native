@@ -34,7 +34,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'yarn'
 
       - name: Setup Ruby
@@ -98,7 +98,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'yarn'
 
       - name: Setup Java
@@ -115,7 +115,7 @@ jobs:
         env:
           BUNDLE_GEMFILE: ${{ github.workspace }}/sample/android/Gemfile
         with:
-          ruby-version: '2.7.6'
+          ruby-version: '3.1'
           bundler-cache: true
 
       - name: Get yarn lockfile hash

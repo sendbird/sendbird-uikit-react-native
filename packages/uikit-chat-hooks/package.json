@@ -59,12 +59,12 @@
   "devDependencies": {
     "@sendbird/uikit-testing-tools": "3.11.3",
     "@types/react": "*",
-    "react": "18.2.0",
+    "react": "19.1.1",
     "react-native-builder-bob": "^0.18.0",
-    "typescript": "5.2.2"
+    "typescript": "5.8.3"
   },
   "peerDependencies": {
-    "@sendbird/chat": "^4.19.2",
+    "@sendbird/chat": "^4.20.2",
     "react": ">=16.13.1"
   },
   "react-native-builder-bob": {

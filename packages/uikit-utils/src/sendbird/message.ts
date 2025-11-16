@@ -119,7 +119,7 @@ export function getAvailableUriFromFileMessage(message: SendbirdFileMessage) {
   return message.url;
 }
 
-type RawSendbirdDataPayload = { sendbird: string | object };
+type RawSendbirdDataPayload = { sendbird: string | SendbirdDataPayload };
 export function isSendbirdNotification(dataPayload?: {
   [key: string]: string | object;
 }): dataPayload is RawSendbirdDataPayload {
@@ -128,7 +128,9 @@ export function isSendbirdNotification(dataPayload?: {
 }
 
 export function parseSendbirdNotification(dataPayload: RawSendbirdDataPayload): SendbirdDataPayload {
-  return typeof dataPayload.sendbird === 'string' ? JSON.parse(dataPayload.sendbird) : dataPayload.sendbird;
+  return typeof dataPayload.sendbird === 'string'
+    ? JSON.parse(dataPayload.sendbird)
+    : (dataPayload.sendbird as SendbirdDataPayload);
 }
 
 export function shouldRenderParentMessage(

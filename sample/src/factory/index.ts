@@ -5,10 +5,10 @@ import * as DocumentPicker from '@react-native-documents/picker';
 import RNFBMessaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Platform, StatusBar } from 'react-native';
-import * as AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import * as CreateThumbnail from 'react-native-create-thumbnail';
 import * as FileAccess from 'react-native-file-access';
 import * as ImagePicker from 'react-native-image-picker';
+import * as AudioRecorderPlayer from 'react-native-nitro-sound';
 import * as Permissions from 'react-native-permissions';
 import Video from 'react-native-video';
 
@@ -92,13 +92,11 @@ export const SendbirdAPI = createSendbirdAPI(APP_ID, 'API_TOKEN');
 if (__DEV__) {
   const PromiseLogger = Logger.create('debug');
   PromiseLogger.setTitle('[UIKit/promiseUnhandled]');
-  const opts = require('react-native/Libraries/promiseRejectionTrackingOptions').default;
-
-  // const originHandler = opts.onUnhandled;
-  opts.onUnhandled = (_: number, rejection = { code: undefined }) => {
-    PromiseLogger.log(rejection, rejection.code ?? '');
-    // originHandler(_, rejection);
-  };
-
-  require('promise/setimmediate/rejection-tracking').enable(opts);
+  const rejectionTracking = require('promise/setimmediate/rejection-tracking');
+  rejectionTracking.enable({
+    allRejections: true,
+    onUnhandled: (_: number, rejection = { code: undefined }) => {
+      PromiseLogger.log(rejection, rejection.code ?? '');
+    },
+  });
 }

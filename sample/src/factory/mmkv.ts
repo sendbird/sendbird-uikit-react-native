@@ -1,5 +1,5 @@
-import { MMKV } from 'react-native-mmkv';
+import { createMMKV } from 'react-native-mmkv';
 
-export const mmkv = new MMKV();
+export const mmkv = createMMKV();
 
-export const uikitLocalConfigStorage = new MMKV({ id: 'uikit.local.config' });
+export const uikitLocalConfigStorage = createMMKV({ id: 'uikit.local.config' });
