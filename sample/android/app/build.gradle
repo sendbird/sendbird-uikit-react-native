@@ -47,7 +47,7 @@ react {
     /* Hermes Commands */
     //   The hermes compiler command to run. By default it is 'hermesc'
     // 2024.07.11 NOTE: update path to hoisted node_modules
-    hermesCommand = "../../../node_modules/react-native/sdks/hermesc/%OS-BIN%/hermesc"
+     hermesCommand = "../node_modules/react-native/sdks/hermesc/%OS-BIN%/hermesc"
     //
     //   The list of flags to pass to the Hermes compiler. By default is "-O", "-output-source-map"
     // hermesFlags = ["-O", "-output-source-map"]
