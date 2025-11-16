@@ -1,18 +1,16 @@
-diff --git a/node_modules/react-native-create-thumbnail/android/build.gradle b/node_modules/react-native-create-thumbnail/android/build.gradle
-index 1234567..abcdefg 100644
 --- a/node_modules/react-native-create-thumbnail/android/build.gradle
 +++ b/node_modules/react-native-create-thumbnail/android/build.gradle
-@@ -38,9 +38,6 @@ buildscript {
+@@ -38,9 +38,6 @@
      }
  }
-
+ 
 -apply plugin: 'com.android.library'
 -apply plugin: 'maven-publish'
 -
  android {
      def agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION
      if (agpVersion.tokenize('.')[0].toInteger() >= 7) {
-@@ -58,6 +55,11 @@ android {
+@@ -58,6 +55,11 @@
      lintOptions {
          abortOnError false
      }
@@ -22,9 +20,9 @@ index 1234567..abcdefg 100644
 +        buildConfig true
 +    }
  }
-
+ 
  repositories {
-@@ -115,9 +117,8 @@ afterEvaluate { project ->
+@@ -114,9 +116,8 @@
      // https://www.oreilly.com/library/view/gradle-beyond-the/9781449373801/ch03.html
      task androidJavadoc(type: Javadoc) {
          source = android.sourceSets.main.java.srcDirs
@@ -35,8 +33,8 @@ index 1234567..abcdefg 100644
 +        // These methods are not compatible with newer Gradle versions
          include '**/*.java'
      }
-
-@@ -135,7 +136,7 @@ afterEvaluate { project ->
+ 
+@@ -134,7 +135,7 @@
      android.libraryVariants.all { variant ->
          def name = variant.name.capitalize()
          task "jar${name}"(type: Jar, dependsOn: variant.javaCompileProvider) {
@@ -44,8 +42,8 @@ index 1234567..abcdefg 100644
 +            from variant.javaCompileProvider.get().destinationDirectory
          }
      }
-
-@@ -152,18 +153,5 @@ afterEvaluate { project ->
+ 
+@@ -151,18 +152,3 @@
          }
      }
  }

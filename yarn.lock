@@ -3678,7 +3678,7 @@
   dependencies:
     nanoid "^3.1.23"
 
-"@sendbird/chat@4.20.2", "@sendbird/chat@^4.20.2":
+"@sendbird/chat@^4.20.2":
   version "4.20.2"
   resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.20.2.tgz#7d2f693054e43f699260d466e9342890741d15d9"
   integrity sha512-yvwYPbiYytmYifFGyFnNO8dX3ceON+HTVLBslsS2wzx/rF8ZJNs8l+gLbRg4KsxhV9AvLmpU9IoJEDipl3rJYg==
@@ -4344,7 +4344,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@>=16.0.0", "@types/react@^18":
+"@types/react@*", "@types/react@>=16.0.0":
   version "18.3.26"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.3.26.tgz#4c5970878d30db3d2a0bca1e4eb5f258e391bbeb"
   integrity sha512-RFA/bURkcKzx/X9oumPG9Vp3D3JUgus/d0b67KB0t5S/raciymilkOa66olh78MUI92QLbEJevO7rvqU/kjwKA==
