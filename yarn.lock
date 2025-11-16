@@ -3678,7 +3678,7 @@
   dependencies:
     nanoid "^3.1.23"
 
-"@sendbird/chat@^4.20.2":
+"@sendbird/chat@4.20.2", "@sendbird/chat@^4.20.2":
   version "4.20.2"
   resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.20.2.tgz#7d2f693054e43f699260d466e9342890741d15d9"
   integrity sha512-yvwYPbiYytmYifFGyFnNO8dX3ceON+HTVLBslsS2wzx/rF8ZJNs8l+gLbRg4KsxhV9AvLmpU9IoJEDipl3rJYg==
@@ -4344,7 +4344,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@>=16.0.0":
+"@types/react@*", "@types/react@>=16.0.0", "@types/react@^18":
   version "18.3.26"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.3.26.tgz#4c5970878d30db3d2a0bca1e4eb5f258e391bbeb"
   integrity sha512-RFA/bURkcKzx/X9oumPG9Vp3D3JUgus/d0b67KB0t5S/raciymilkOa66olh78MUI92QLbEJevO7rvqU/kjwKA==
@@ -8244,11 +8244,6 @@ find-cache-dir@^3.3.1:
     commondir "^1.0.1"
     make-dir "^3.0.2"
     pkg-dir "^4.1.0"
-
-find-root@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/find-root/-/find-root-1.1.0.tgz#abcfc8ba76f708c42a97b3d685b7e9450bfb9ce4"
-  integrity sha512-NKfW6bec6GfKc0SGx1e07QZY9PE99u0Bft/0rzSD5k3sO/vwkVUpDUKVm5Gpp5Ue3YfShPFTX2070tDs5kB9Ng==
 
 find-up@^2.0.0:
   version "2.1.0"
@@ -13269,14 +13264,6 @@ react-native-modal-selector@^2.1.1:
   integrity sha512-+Cvoz/yNUFmfIkJ7xkmlLR2nhJOUhx00S6BPqp2Ruy8LkmaiNr7WMZ4BzsgzylyEgZ84Q+42HQ0v0QzJYobviA==
   dependencies:
     prop-types "^15.5.10"
-
-react-native-monorepo-tools@^1.1.4:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/react-native-monorepo-tools/-/react-native-monorepo-tools-1.2.1.tgz#e96ea910d6e13d9f1df89e96682209ed203929e6"
-  integrity sha512-WW0cEP+/lTTQLKU268PXZISXFgL1wlaftMcxn4Z4QGXMls7WS+BMhwIZcEy0zudTeXaM+ft4yeVqMcUWM8ofXg==
-  dependencies:
-    find-root "^1.1.0"
-    glob "^7.1.7"
 
 react-native-nitro-modules@^0.31.5:
   version "0.31.6"
