@@ -1,5 +1,7 @@
 {
   "extends": "../tsconfig.json",
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["**/node_modules", "**/Pods"],
   "references": [
     {
       "path": "../packages/uikit-chat-hooks"
