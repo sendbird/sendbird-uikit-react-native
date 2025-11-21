@@ -45,7 +45,7 @@ const FileViewerContent = ({ type, src, topInset = 0, bottomInset = 0, maxZoom =
             zoomProps={{
               minZoom,
               maxZoom,
-              onTouchEnd: onPress,
+              onSingleTap: onPress,
             }}
           />
         );
@@ -85,12 +85,15 @@ const ZoomableImageView = ({
   style: StyleProp<ImageStyle>;
   resizeMode: ImageProps['resizeMode'];
   onLoadEnd: () => void;
-  zoomProps?: ReactNativeZoomableViewProps;
+  zoomProps?: Partial<ReactNativeZoomableViewProps>;
 }) => {
   const { width, height } = useWindowDimensions();
 
   const imageSize = useRef<{ width: number; height: number }>();
-  const [contentSizeProps, setContentSizeProps] = useState<ReactNativeZoomableViewProps>({
+  const [contentSizeProps, setContentSizeProps] = useState<{
+    contentWidth: number;
+    contentHeight: number;
+  }>({
     contentWidth: width,
     contentHeight: height,
   });
