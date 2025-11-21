@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/uikit-testing-tools",
-  "version": "3.11.3",
+  "version": "3.11.4",
   "private": true,
   "description": "UIKit testing tools",
   "keywords": [
@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "@sendbird/chat": "^4.20.2",
-    "@sendbird/uikit-utils": "3.11.3",
+    "@sendbird/uikit-utils": "3.11.4",
     "@types/jest": "^29.4.0",
     "@types/react": "*",
     "@types/react-native": "*",

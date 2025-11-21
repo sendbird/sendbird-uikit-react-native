@@ -1,6 +1,4 @@
-## v3.11.3
+## v3.11.4
 
-### Features
-- support expo-file-system in expo 54 or higher
-- support MMKV version 4.0 or higher
-- add exports field in package.json for module resolution
+### Improvements
+- update zoomable view dependency and refactor zoomProps handling
