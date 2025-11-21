@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.11.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.11.3...v3.11.4) (2025-11-21)
+
+### Features
+
+- update zoomable view dependency and refactor zoomProps handling ([167cee2](https://github.com/sendbird/sendbird-uikit-react-native/commit/167cee218ce49d8d36b9270daebe6d31835ad34e))
+
 ## [3.11.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.11.2...v3.11.3) (2025-11-13)
 
 ### Features
