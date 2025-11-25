@@ -5,13 +5,13 @@ import * as DocumentPicker from '@react-native-documents/picker';
 import RNFBMessaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Platform, StatusBar } from 'react-native';
-import * as CreateThumbnail from 'react-native-create-thumbnail';
 import * as FileAccess from 'react-native-file-access';
 import * as ImagePicker from 'react-native-image-picker';
 import * as AudioRecorderPlayer from 'react-native-nitro-sound';
 import * as Permissions from 'react-native-permissions';
 import Video from 'react-native-video';
 
+import * as CreateThumbnail from '@sendbird/react-native-create-thumbnail';
 import {
   SendbirdUIKitContainerProps,
   createNativeClipboardService,

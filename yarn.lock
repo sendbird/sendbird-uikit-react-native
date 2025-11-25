@@ -3683,6 +3683,11 @@
   resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.20.2.tgz#7d2f693054e43f699260d466e9342890741d15d9"
   integrity sha512-yvwYPbiYytmYifFGyFnNO8dX3ceON+HTVLBslsS2wzx/rF8ZJNs8l+gLbRg4KsxhV9AvLmpU9IoJEDipl3rJYg==
 
+"@sendbird/react-native-create-thumbnail@^1.0.1":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@sendbird/react-native-create-thumbnail/-/react-native-create-thumbnail-1.0.2.tgz#e5e7de86ebe05d5b40d5ad26a21b631b5043a51e"
+  integrity sha512-v13kjlRmSpjmGHwHzpk1eFGP5pOr+paxiOfvu01C7fvrmAAAreBL6mG3VW20wr8GxnVtbCLs1nJXBpabGnstog==
+
 "@sendbird/uikit-tools@0.0.15":
   version "0.0.15"
   resolved "https://registry.yarnpkg.com/@sendbird/uikit-tools/-/uikit-tools-0.0.15.tgz#86a1ac41fdf1624b984bd8f875d1091ac5842afa"
@@ -13219,7 +13224,7 @@ react-native-builder-bob@^0.18.0:
   optionalDependencies:
     jetifier "^2.0.0"
 
-react-native-create-thumbnail@^2.0.0, react-native-create-thumbnail@^2.1.1:
+react-native-create-thumbnail@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/react-native-create-thumbnail/-/react-native-create-thumbnail-2.1.1.tgz#633fa52ac17fdf78d19c2c5201382d449f296094"
   integrity sha512-3rawLi0mZiKfPh53C3mbrI9EVVzLWLYiDynUdpAe/I36XbSSFupxP9+g10/rrhhTNX8NSg/4zAC8Z7P9epnt+g==

@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "@sendbird/react-native-create-thumbnail": {
+      "signature": "1d16a7c126a37e3e3730650bcfd5ffde",
+      "file": true
+    }
+  }
+}
