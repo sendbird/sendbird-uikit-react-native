@@ -1995,8 +1995,6 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-create-thumbnail (2.1.1):
-    - React-Core
   - react-native-document-picker (10.1.7):
     - boost
     - DoubleConversion
@@ -3053,6 +3051,8 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
+  - sendbird-react-native-create-thumbnail (1.0.2):
+    - React-Core
   - SocketRocket (0.7.1)
   - Yoga (0.0.0)
   - ZIPFoundation (0.9.20)
@@ -3109,7 +3109,6 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - "react-native-cameraroll (from `../../node_modules/@react-native-camera-roll/camera-roll`)"
-  - react-native-create-thumbnail (from `../../node_modules/react-native-create-thumbnail`)
   - "react-native-document-picker (from `../../node_modules/@react-native-documents/picker`)"
   - react-native-image-picker (from `../../node_modules/react-native-image-picker`)
   - "react-native-image-resizer (from `../../node_modules/@bam.tech/react-native-image-resizer`)"
@@ -3161,6 +3160,7 @@ DEPENDENCIES:
   - "RNNotifeeCore (from `../../node_modules/@notifee/react-native/RNNotifeeCore.podspec`)"
   - RNPermissions (from `../../node_modules/react-native-permissions`)
   - RNScreens (from `../../node_modules/react-native-screens`)
+  - "sendbird-react-native-create-thumbnail (from `../../node_modules/@sendbird/react-native-create-thumbnail`)"
   - SocketRocket (~> 0.7.1)
   - Yoga (from `../../node_modules/react-native/ReactCommon/yoga`)
 
@@ -3274,8 +3274,6 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
   react-native-cameraroll:
     :path: "../../node_modules/@react-native-camera-roll/camera-roll"
-  react-native-create-thumbnail:
-    :path: "../../node_modules/react-native-create-thumbnail"
   react-native-document-picker:
     :path: "../../node_modules/@react-native-documents/picker"
   react-native-image-picker:
@@ -3378,6 +3376,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native-permissions"
   RNScreens:
     :path: "../../node_modules/react-native-screens"
+  sendbird-react-native-create-thumbnail:
+    :path: "../../node_modules/@sendbird/react-native-create-thumbnail"
   Yoga:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
@@ -3439,7 +3439,6 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 06d59c448da7e34eb05b3fb2189e12f6a30fec57
   React-microtasksnativemodule: d1ee999dc9052e23f6488b730fa2d383a4ea40e5
   react-native-cameraroll: bb98380ee21115d5fe1ae0f8b80c86e044613746
-  react-native-create-thumbnail: 733160dca9a548262e1030e7fcdae90a93d203ca
   react-native-document-picker: 1734eb0aa3dbd1cd7bf1b105936f9b55031ae616
   react-native-image-picker: 0314366753615115fa55c3cc937ac44cb7e75702
   react-native-image-resizer: 290b045c34c69db7574e4d08aadfc4abe1ff5a99
@@ -3493,6 +3492,7 @@ SPEC CHECKSUMS:
   RNScreens: d821082c6dd1cb397cc0c98b026eeafaa68be479
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
+  sendbird-react-native-create-thumbnail: 60f24fb637306b6914307e678435909172fb9143
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 689c8e04277f3ad631e60fe2a08e41d411daf8eb
   ZIPFoundation: dfd3d681c4053ff7e2f7350bc4e53b5dba3f5351

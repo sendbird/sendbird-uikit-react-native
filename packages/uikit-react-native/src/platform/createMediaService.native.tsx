@@ -3,14 +3,17 @@ import React from 'react';
 import type * as RNCreateThumbnail from 'react-native-create-thumbnail';
 import type RNVideo from 'react-native-video';
 
+import type * as SBCreateThumbnail from '@sendbird/react-native-create-thumbnail';
 import { getDownscaleSize, getFileExtension, hash } from '@sendbird/uikit-utils';
 
 import SBUUtils from '../libs/SBUUtils';
 import type { MediaServiceInterface } from './types';
 
+export type ThumbnailModule = typeof SBCreateThumbnail | typeof RNCreateThumbnail;
+
 type Modules = {
   VideoComponent: typeof RNVideo;
-  thumbnailModule: typeof RNCreateThumbnail;
+  thumbnailModule: ThumbnailModule;
   imageResizerModule: typeof RNImageResizer;
 };
 

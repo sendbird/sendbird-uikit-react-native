@@ -25,7 +25,7 @@ import * as DocumentPicker from '@react-native-documents/picker';
 import * as FileAccess from 'react-native-file-access';
 import * as ImagePicker from 'react-native-image-picker';
 import * as Permissions from 'react-native-permissions';
-import * as CreateThumbnail from 'react-native-create-thumbnail';
+import * as CreateThumbnail from '@sendbird/react-native-create-thumbnail';
 import * as ImageResizer from '@bam.tech/react-native-image-resizer';
 import * as AudioRecorderPlayer from 'react-native-nitro-sound';
 
