@@ -30,7 +30,7 @@
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.10.0",
     "@sendbird/chat": "^4.20.2",
-    "@sendbird/react-native-create-thumbnail": "^1.0.1",
+    "@sendbird/react-native-create-thumbnail": "^1.0.2",
     "@storybook/addon-actions": "^6.4.19",
     "@storybook/addon-controls": "^6.4.19",
     "@storybook/addon-ondevice-actions": "^6.0.1-alpha.7",

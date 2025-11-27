@@ -3683,7 +3683,7 @@
   resolved "https://registry.yarnpkg.com/@sendbird/chat/-/chat-4.20.2.tgz#7d2f693054e43f699260d466e9342890741d15d9"
   integrity sha512-yvwYPbiYytmYifFGyFnNO8dX3ceON+HTVLBslsS2wzx/rF8ZJNs8l+gLbRg4KsxhV9AvLmpU9IoJEDipl3rJYg==
 
-"@sendbird/react-native-create-thumbnail@^1.0.1":
+"@sendbird/react-native-create-thumbnail@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@sendbird/react-native-create-thumbnail/-/react-native-create-thumbnail-1.0.2.tgz#e5e7de86ebe05d5b40d5ad26a21b631b5043a51e"
   integrity sha512-v13kjlRmSpjmGHwHzpk1eFGP5pOr+paxiOfvu01C7fvrmAAAreBL6mG3VW20wr8GxnVtbCLs1nJXBpabGnstog==
