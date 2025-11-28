@@ -3,12 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [3.12.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.11.4...v3.12.0) (2025-11-28)
-
-### Features
-
-- migrate to @sendbird/react-native-create-thumbnail for thumbnail creation ([5fb6094](https://github.com/sendbird/sendbird-uikit-react-native/commit/5fb60947c4656c6641a8440b040c2872f4e5bdce))
-
 ## [3.11.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.11.3...v3.11.4) (2025-11-21)
 
 **Note:** Version bump only for package @sendbird/docs-validation
