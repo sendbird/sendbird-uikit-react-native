@@ -57,7 +57,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ github.event.inputs.version }}
-          DEBUG: '*'
         run: |
           yarn lerna version "$VERSION" --yes
           yarn lerna publish from-git --yes
