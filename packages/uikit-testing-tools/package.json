@@ -63,20 +63,8 @@
     "source": "src",
     "output": "lib",
     "targets": [
-      [
-        "commonjs",
-        {
-          "copyFlow": false,
-          "exclude": "**/*.d.ts"
-        }
-      ],
-      [
-        "module",
-        {
-          "copyFlow": false,
-          "exclude": "**/*.d.ts"
-        }
-      ],
+      "commonjs",
+      "module",
       [
         "typescript",
         {
