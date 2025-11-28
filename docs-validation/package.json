@@ -1,6 +1,6 @@
 {
   "name": "@sendbird/docs-validation",
-  "version": "3.12.0",
+  "version": "3.11.4",
   "private": true,
   "scripts": {
     "test": "tsc --project tsconfig.build.json",
@@ -16,10 +16,10 @@
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.10.0",
     "@sendbird/chat": "^4.20.2",
-    "@sendbird/react-native-create-thumbnail": "^1.0.2",
     "date-fns": "^4.1.0",
     "react": "19.1.1",
     "react-native": "0.82.1",
+    "@sendbird/react-native-create-thumbnail": "^1.0.2",
     "react-native-file-access": "^3.1.0",
     "react-native-image-picker": "^8.2.0",
     "react-native-mmkv": "^4.0.0",
