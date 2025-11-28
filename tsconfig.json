@@ -22,7 +22,8 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "esnext"
+    "target": "esnext",
+    "noEmit": true
   },
   "exclude": ["packages/*/lib", "packages/flipper-plugin-sendbird-chat"]
 }
