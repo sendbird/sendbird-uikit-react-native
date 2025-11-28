@@ -53,6 +53,8 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${{ secrets.npm_token }}" >> .npmrc
           git config --global user.email "sha.sdk_deployment@sendbird.com"
           git config --global user.name "sendbird-sdk-deployment"
+      - name: 'build packages'
+        run: yarn build
       - name: 'publish to npm'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
