@@ -1,4 +1,5 @@
-## v3.11.4
+## v3.12.0
 
-### Improvements
-- update zoomable view dependency and refactor zoomProps handling
+### Features
+
+- migrate to @sendbird/react-native-create-thumbnail for thumbnail
