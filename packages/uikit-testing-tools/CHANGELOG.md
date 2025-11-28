@@ -7,6 +7,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @sendbird/uikit-testing-tools
 
+## [3.12.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.11.4...v3.12.0) (2025-11-28)
+
+**Note:** Version bump only for package @sendbird/uikit-testing-tools
+
 ## [3.11.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.11.3...v3.11.4) (2025-11-21)
 
 **Note:** Version bump only for package @sendbird/uikit-testing-tools
