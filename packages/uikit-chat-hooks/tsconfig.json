@@ -9,6 +9,7 @@
     }
   ],
   "compilerOptions": {
-    "outDir": "./lib/typescript"
+    "outDir": "./lib/typescript",
+    "noEmit": false
   }
 }
