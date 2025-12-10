@@ -6,6 +6,8 @@ const EXTENSION_MIME_MAP = {
   'gif': 'image/gif',
   'webp': 'image/webp',
   'svg': 'image/svg+xml',
+  'heic': 'image/heic',
+  'heif': 'image/heif',
 
   // Video
   '3gp': 'video/3gpp',

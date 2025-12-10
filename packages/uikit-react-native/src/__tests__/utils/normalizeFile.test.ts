@@ -49,6 +49,12 @@ describe('normalizeFile', () => {
 
     const invalidResult = await normalizeFile({ uri: 'uri', size: null, name: 'fromName.pdf', type: 'invalid' });
     expect(invalidResult).toStrictEqual({ uri: 'uri', size: 0, name: 'fromName.pdf', type: 'application/pdf' });
+
+    const heicResult = await normalizeFile({ uri: 'uri', size: null, name: 'fromName.heic', type: null });
+    expect(heicResult).toStrictEqual({ uri: 'uri', size: 0, name: 'fromName.heic', type: 'image/heic' });
+
+    const heifResult = await normalizeFile({ uri: 'uri', size: null, name: 'fromName.heif', type: null });
+    expect(heifResult).toStrictEqual({ uri: 'uri', size: 0, name: 'fromName.heif', type: 'image/heif' });
   });
 
   it('should get type from uri if name and type are invalid', async () => {
