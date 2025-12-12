@@ -1,5 +1,6 @@
-## v3.12.0
+## v3.12.1
 
-### Features
+### Bug Fixes
 
-- migrate to @sendbird/react-native-create-thumbnail for thumbnail
+- add HEIC/HEIF MIME type support in normalizeFile
+- use mimeType for the expo image picker response
