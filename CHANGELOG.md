@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.0...v3.12.1) (2025-12-12)
+
+### Bug Fixes
+
+- add HEIC/HEIF MIME type support in normalizeFile ([cf1c3a4](https://github.com/sendbird/sendbird-uikit-react-native/commit/cf1c3a4aca8239e3b1fec40497db4438ccffa3be))
+- use mimeType for the expo image picker response ([7430393](https://github.com/sendbird/sendbird-uikit-react-native/commit/74303935085438edb9b7521a0e07276cbfb58990))
+
 ## [3.12.0](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.11.4...v3.12.0) (2025-11-28)
 
 ### Features
