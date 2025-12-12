@@ -50,8 +50,8 @@ const expoBackwardUtils = {
     ): Promise<FilePickerResponse[]> {
       if (result.assets) {
         const assets = result.assets || [];
-        const promises = assets.map(({ fileName: name, fileSize: size, type, uri }) =>
-          normalizeFile({ uri, size, name, type }),
+        const promises = assets.map(({ fileName: name, fileSize: size, mimeType, uri }) =>
+          normalizeFile({ uri, size, name, type: mimeType }),
         );
 
         return Promise.all(promises);
