@@ -27,6 +27,7 @@ import {
 } from '@sendbird/chat/groupChannel';
 import {
   BaseListQueryParams,
+  Conversation,
   DeliveryStatus,
   MultipleFilesMessageCreateParams,
   MultipleFilesMessageRequestHandler,
@@ -135,6 +136,58 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
   pinnedMessageListInfo = null;
   broadcastInfo = null;
   isChannelIntegrated = false;
+  isDesk = false;
+  isAIAgent = false;
+  messageDeletionTimestamp = 0;
+  isOnline = false;
+  lastSeenAt = 0;
+  inviterUserId = '';
+  membershipExpiresAt = 0;
+  scheduledMessageCount = 0;
+
+  markAsUnread(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  getMessageDeletionTimestamp(): Promise<number> {
+    return Promise.resolve(this.messageDeletionTimestamp);
+  }
+
+  submitCSAT(): Promise<Conversation> {
+    return Promise.resolve(this.conversation as Conversation);
+  }
+
+  markConversationAsHandoff(): Promise<Conversation> {
+    return Promise.resolve(this.conversation as Conversation);
+  }
+
+  closeConversation(): Promise<Conversation> {
+    return Promise.resolve(this.conversation as Conversation);
+  }
+
+  startConversation(): Promise<Conversation> {
+    return Promise.resolve(this.conversation as Conversation);
+  }
+
+  resumeConversation(): Promise<Conversation> {
+    return Promise.resolve(this.conversation as Conversation);
+  }
+
+  endConversation(): Promise<Conversation> {
+    return Promise.resolve(this.conversation as Conversation);
+  }
+
+  getContextObject<T = object>(_aiAgentId: string): Promise<T> {
+    return Promise.resolve({} as T);
+  }
+
+  updateContext<T = object>(_aiAgentId: string, _context: Record<string, string>): Promise<T> {
+    return Promise.resolve({} as T);
+  }
+
+  patchContext<T = object>(_aiAgentId: string, _context: Record<string, string>): Promise<T> {
+    return Promise.resolve({} as T);
+  }
 
   serialize(): object {
     throw new Error('Method not implemented.');
