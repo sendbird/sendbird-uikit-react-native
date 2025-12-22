@@ -39,8 +39,9 @@ const AvatarGroup = ({ children, containerStyle, size = 56 }: Props) => {
         if (index + 1 > MAX) return child;
         if (!React.isValidElement(child)) return child;
 
-        if (childAmount === 1)
+        if (childAmount === 1) {
           return React.cloneElement(child as React.ReactElement<AvatarChildProps>, { size, containerStyle });
+        }
 
         const top = getTopPoint(index, childAmount) * size;
         const start = getStartPoint(index) * size;

@@ -240,30 +240,32 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
       ...query,
     };
   });
-  createPreviousMessageListQuery = jest.fn((params?: PreviousMessageListQueryParams | undefined): PreviousMessageListQuery => {
-    const query = createMockQuery<SendbirdBaseMessage>({
-      type: 'message',
-      dataLength: 300,
-      limit: params?.limit,
-      sdk: this.params.sdk,
-    });
-    return {
-      reverse: false,
-      channelType: ChannelType.BASE,
-      channelUrl: 'channel_url_' + tc.getHash(),
-      customTypesFilter: [],
-      includeMetaArray: false,
-      includeParentMessageInfo: false,
-      includeReactions: false,
-      includeThreadInfo: false,
-      messageTypeFilter: MessageTypeFilter.ALL,
-      replyType: ReplyType.NONE,
-      senderUserIdsFilter: [],
-      showSubchannelMessagesOnly: false,
-      load: query.next,
-      ...query,
-    };
-  });
+  createPreviousMessageListQuery = jest.fn(
+    (params?: PreviousMessageListQueryParams | undefined): PreviousMessageListQuery => {
+      const query = createMockQuery<SendbirdBaseMessage>({
+        type: 'message',
+        dataLength: 300,
+        limit: params?.limit,
+        sdk: this.params.sdk,
+      });
+      return {
+        reverse: false,
+        channelType: ChannelType.BASE,
+        channelUrl: 'channel_url_' + tc.getHash(),
+        customTypesFilter: [],
+        includeMetaArray: false,
+        includeParentMessageInfo: false,
+        includeReactions: false,
+        includeThreadInfo: false,
+        messageTypeFilter: MessageTypeFilter.ALL,
+        replyType: ReplyType.NONE,
+        senderUserIdsFilter: [],
+        showSubchannelMessagesOnly: false,
+        load: query.next,
+        ...query,
+      };
+    },
+  );
   createMessageCollection = jest.fn((params?: MessageCollectionParams | undefined): SendbirdMessageCollection => {
     return createMockMessageCollection({
       ...params,
