@@ -1,7 +1,13 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 
 const MAX = 4;
+
+type AvatarChildProps = {
+  size?: number;
+  square?: boolean;
+  containerStyle?: StyleProp<ViewStyle>;
+};
 
 type Props = React.PropsWithChildren<{
   size?: number;
@@ -33,7 +39,8 @@ const AvatarGroup = ({ children, containerStyle, size = 56 }: Props) => {
         if (index + 1 > MAX) return child;
         if (!React.isValidElement(child)) return child;
 
-        if (childAmount === 1) return React.cloneElement(child as ReactElement, { size, containerStyle });
+        if (childAmount === 1)
+          return React.cloneElement(child as React.ReactElement<AvatarChildProps>, { size, containerStyle });
 
         const top = getTopPoint(index, childAmount) * size;
         const start = getStartPoint(index) * size;
@@ -44,7 +51,7 @@ const AvatarGroup = ({ children, containerStyle, size = 56 }: Props) => {
 
         return (
           <View style={{ overflow: 'hidden', position: 'absolute', top, start, width, height }}>
-            {React.cloneElement(child as ReactElement, {
+            {React.cloneElement(child as React.ReactElement<AvatarChildProps>, {
               size,
               square: true,
               containerStyle: { start: innerStart, top: innerTop },

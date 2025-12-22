@@ -79,7 +79,7 @@ export const useFreshCallback = <T extends Function>(callback: T): T => {
 };
 
 export const useDebounceEffect = (action: () => void, delay: number, deps: DependencyList = []) => {
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   useEffect(() => {
     timeoutRef.current = setTimeout(async () => {

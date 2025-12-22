@@ -76,7 +76,7 @@ const useVoiceMessageInput = ({ onSend, onClose }: Props): VoiceMessageInputResu
     duration: 0,
   });
 
-  const recordingPath = useRef<{ recordFilePath: string; uri: string }>();
+  const recordingPath = useRef<{ recordFilePath: string; uri: string } | undefined>(undefined);
   const getVoiceMessageRecordingPath = () => {
     if (!recordingPath.current) throw new Error('No recording path');
     return recordingPath.current;

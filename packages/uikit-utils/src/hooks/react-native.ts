@@ -69,7 +69,7 @@ export const useAppState = (type: AppStateEvent, listener: AppStateListener) => 
  * To achieve this, you can use a deferred onClose that can be awaited until the onDismiss is called.
  * */
 export const useDeferredModalState = () => {
-  const resolveRef = useRef<(value: void) => void>();
+  const resolveRef = useRef<((value: void) => void) | undefined>(undefined);
   const [visible, setVisible] = useState(false);
 
   return {

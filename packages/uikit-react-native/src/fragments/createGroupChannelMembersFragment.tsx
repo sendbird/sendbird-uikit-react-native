@@ -29,7 +29,7 @@ const createGroupChannelMembersFragment = (
     sortComparator,
     queryCreator = () => channel.createMemberListQuery({ limit: 20 }),
   }) => {
-    const refreshSchedule = useRef<NodeJS.Timeout>();
+    const refreshSchedule = useRef<NodeJS.Timeout | undefined>(undefined);
     const { STRINGS } = useLocalization();
     const { sdk, currentUser } = useSendbirdChat();
     const { openMenu } = useActionMenu();

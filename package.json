@@ -99,6 +99,6 @@
   },
   "resolutions": {
     "@sendbird/chat": "4.20.2",
-    "@types/react": "^18"
+    "@types/react": "^19.1.1"
   }
 }

@@ -32,7 +32,7 @@ const createMessageQuery = (channel: SendbirdOpenChannel, creator?: UseOpenChann
 };
 
 export const useOpenChannelMessagesWithQuery: UseOpenChannelMessages = (sdk, channel, userId, options) => {
-  const queryRef = useRef<SendbirdPreviousMessageListQuery>();
+  const queryRef = useRef<SendbirdPreviousMessageListQuery | undefined>(undefined);
   const forceUpdate = useForceUpdate();
   const handlerId = useUniqHandlerId('useOpenChannelMessagesWithQuery');
 

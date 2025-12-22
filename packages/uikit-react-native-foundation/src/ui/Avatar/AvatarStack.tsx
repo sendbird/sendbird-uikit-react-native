@@ -1,8 +1,13 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 
 import Text from '../../components/Text';
 import useUIKitTheme from '../../theme/useUIKitTheme';
+
+type AvatarChildProps = {
+  size?: number;
+  containerStyle?: StyleProp<ViewStyle>;
+};
 
 const DEFAULT_MAX = 3;
 const DEFAULT_BORDER_WIDTH = 2;
@@ -49,7 +54,7 @@ const AvatarStack = ({
 
   const renderAvatars = () => {
     return childrenArray.slice(0, maxAvatar).map((child, index) =>
-      React.cloneElement(child as ReactElement, {
+      React.cloneElement(child as React.ReactElement<AvatarChildProps>, {
         size: actualSize,
         containerStyle: {
           start: actualGap * index,

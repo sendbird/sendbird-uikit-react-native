@@ -15,7 +15,7 @@ const useRetry = (hasError: boolean, retryCount = 5) => {
 
   const forceUpdate = useForceUpdate();
   const retryCountRef = useRef(1);
-  const retryTimeoutRef = useRef<NodeJS.Timeout>();
+  const retryTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   useEffect(() => {
     if (hasError) {

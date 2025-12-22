@@ -37,7 +37,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
   const isNewLineExistInChannelRef = useRef(false);
   const scrolledAwayFromBottomRef = useRef(false);
   const [isVisibleUnreadMessageFloating, setIsVisibleUnreadMessageFloating] = useState(false);
-  const viewableMessages = useRef<SendbirdMessage[]>();
+  const viewableMessages = useRef<SendbirdMessage[] | undefined>(undefined);
   const hasUserMarkedAsUnreadRef = useRef(false);
   const [unreadFirstMessage, setUnreadFirstMessage] = useState<SendbirdMessage | undefined>(undefined);
   const pendingBottomReachedRef = useRef<{ timeout: number; timestamp: number } | null>(null);
@@ -216,7 +216,7 @@ const GroupChannelMessageList = (props: GroupChannelProps['MessageList']) => {
     isNewLineExistInChannelRef.current = !!props.isNewLineExistInChannel && !!viewableMessages.current;
   }, [props.isNewLineExistInChannel, viewableMessages.current]);
 
-  const unreadMessagesFloatingPropsRef = useRef<UnreadMessagesFloatingProps>();
+  const unreadMessagesFloatingPropsRef = useRef<UnreadMessagesFloatingProps | undefined>(undefined);
   const updateUnreadMessagesFloatingProps = useFreshCallback(() => {
     const canAutoMarkAsRead =
       !scrolledAwayFromBottomRef.current &&

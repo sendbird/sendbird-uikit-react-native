@@ -29,7 +29,7 @@ const createOpenChannelParticipantsFragment = (
   }) => {
     const handlerId = useUniqHandlerId('OpenChannelParticipantsFragment');
 
-    const refreshSchedule = useRef<NodeJS.Timeout>();
+    const refreshSchedule = useRef<NodeJS.Timeout | undefined>(undefined);
     const { STRINGS } = useLocalization();
     const { sdk, currentUser } = useSendbirdChat();
     const { openMenu } = useActionMenu();

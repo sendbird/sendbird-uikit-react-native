@@ -9,7 +9,7 @@ const usePushTokenRegistration = () => {
   const { sdk } = useSendbirdChat();
   const { notificationService } = usePlatformService();
 
-  const refreshListener = useRef<() => void>();
+  const refreshListener = useRef<(() => void) | undefined>(undefined);
   const [registerToken, unregisterToken, getToken] = useIIFE(() => {
     return [
       Platform.select({

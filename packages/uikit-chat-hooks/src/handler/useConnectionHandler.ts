@@ -8,7 +8,7 @@ export const useConnectionHandler = (
   handlerId: string,
   hookHandler: Partial<ConnectionHandler>,
 ) => {
-  const handlerRef = useRef<Partial<ConnectionHandler>>();
+  const handlerRef = useRef<Partial<ConnectionHandler> | undefined>(undefined);
   useLayoutEffect(() => {
     handlerRef.current = hookHandler;
   });

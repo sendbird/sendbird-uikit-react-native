@@ -526,5 +526,7 @@ const styles = createStyleSheet({
   },
 });
 
-// NOTE: Due to Generic inference is not working on forwardRef, we need to cast it as typeof ChannelMessageList and implicit `ref` prop
-export default React.forwardRef(ChannelMessageList) as typeof ChannelMessageList;
+// NOTE: Due to Generic inference is not working on forwardRef, we need to cast it properly for React 19 compatibility
+export default React.forwardRef(ChannelMessageList) as <T extends SendbirdGroupChannel | SendbirdOpenChannel>(
+  props: ChannelMessageListProps<T>,
+) => React.ReactElement | null;
