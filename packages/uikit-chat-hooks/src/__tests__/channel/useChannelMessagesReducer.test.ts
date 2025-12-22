@@ -285,7 +285,7 @@ describe('useChannelMessagesReducer', () => {
     const updatedMessages = [
       createMockMessage({
         ...sentMessages[0],
-        reactions: [{ key: 'string', userIds: [], updatedAt: Date.now(), isEmpty: false, applyEvent: jest.fn() }],
+        reactions: [{ key: 'string', userIds: [], updatedAt: Date.now(), isEmpty: false, applyEvent: jest.fn(), sampledUserIds: [], sampledUserInfoList: [], count: 0, hasCurrentUserReacted: false }],
       }),
     ];
 

@@ -122,6 +122,19 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
   unreadMentionCount = 0;
   unreadMessageCount = 0;
   totalUnreadReplyCount = 0;
+  conversation = null;
+  helpdeskInfo = null;
+  hasBot = false;
+  hasAiBot = false;
+  aiAgentInfo = null;
+  hasOnboarding = false;
+  onboardingData = null;
+  channel = null;
+  notificationData = null;
+  aiAttributes = null;
+  pinnedMessageListInfo = null;
+  broadcastInfo = null;
+  isChannelIntegrated = false;
 
   serialize(): object {
     throw new Error('Method not implemented.');
@@ -227,9 +240,7 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
       ...query,
     };
   });
-  createPreviousMessageListQuery = jest.fn(function (
-    params?: PreviousMessageListQueryParams | undefined,
-  ): PreviousMessageListQuery {
+  createPreviousMessageListQuery = jest.fn((params?: PreviousMessageListQueryParams | undefined): PreviousMessageListQuery => {
     const query = createMockQuery<SendbirdBaseMessage>({
       type: 'message',
       dataLength: 300,
