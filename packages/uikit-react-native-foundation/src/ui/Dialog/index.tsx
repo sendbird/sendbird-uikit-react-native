@@ -53,8 +53,8 @@ type Props = React.PropsWithChildren<{
 }>;
 const DISMISS_TIMEOUT = 3000;
 export const DialogProvider = ({ defaultLabels, children }: Props) => {
-  const waitDismissTimeout = useRef<NodeJS.Timeout>();
-  const waitDismissPromise = useRef<() => void>();
+  const waitDismissTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
+  const waitDismissPromise = useRef<(() => void) | undefined>(undefined);
   const waitDismiss = useCallback((resolver: () => void) => {
     waitDismissPromise.current = resolver;
     waitDismissTimeout.current = setTimeout(completeDismiss, DISMISS_TIMEOUT);
@@ -68,7 +68,7 @@ export const DialogProvider = ({ defaultLabels, children }: Props) => {
 
   const render = useForceUpdate();
   const dialogQueue = useRef<DialogJob[]>([]);
-  const workingDialogJob = useRef<DialogJob>();
+  const workingDialogJob = useRef<DialogJob | undefined>(undefined);
   const visibleState = useRef(false);
 
   const isProcessing = () => Boolean(workingDialogJob.current);

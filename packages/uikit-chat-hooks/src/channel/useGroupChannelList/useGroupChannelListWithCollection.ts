@@ -33,7 +33,7 @@ export const useGroupChannelListWithCollection: UseGroupChannelList = (sdk, user
   const handlerId = useUniqHandlerId('useGroupChannelListWithCollection');
   const { deliveryReceiptEnabled } = useAppFeatures(sdk);
 
-  const collectionRef = useRef<SendbirdGroupChannelCollection>();
+  const collectionRef = useRef<SendbirdGroupChannelCollection | undefined>(undefined);
 
   const { loading, groupChannels, refreshing, appendChannels, deleteChannels, updateRefreshing, updateLoading } =
     useGroupChannelListReducer();

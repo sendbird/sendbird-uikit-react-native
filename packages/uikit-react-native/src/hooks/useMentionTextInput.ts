@@ -12,7 +12,7 @@ const useMentionTextInput = (params: { messageToEdit?: SendbirdUserMessage | Sen
   const { mentionManager, sbOptions } = useSendbirdChat();
 
   const mentionedUsersRef = useRef<MentionedUser[]>([]);
-  const textInputRef = useRef<TextInput>();
+  const textInputRef = useRef<TextInput | undefined>(undefined);
 
   const [text, setText] = useState('');
   const [selection, setSelection] = useState({ start: 0, end: 0 });

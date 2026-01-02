@@ -28,7 +28,7 @@ const createGroupChannelListQuery = (
  * */
 export const useGroupChannelListWithQuery: UseGroupChannelList = (sdk, userId, options) => {
   const { deliveryReceiptEnabled } = useAppFeatures(sdk);
-  const queryRef = useRef<SendbirdGroupChannelListQuery>();
+  const queryRef = useRef<SendbirdGroupChannelListQuery | undefined>(undefined);
   const handlerId = useUniqHandlerId('useGroupChannelListWithQuery');
 
   const {

@@ -27,6 +27,7 @@ import {
 } from '@sendbird/chat/groupChannel';
 import {
   BaseListQueryParams,
+  Conversation,
   DeliveryStatus,
   MultipleFilesMessageCreateParams,
   MultipleFilesMessageRequestHandler,
@@ -122,6 +123,71 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
   unreadMentionCount = 0;
   unreadMessageCount = 0;
   totalUnreadReplyCount = 0;
+  conversation = null;
+  helpdeskInfo = null;
+  hasBot = false;
+  hasAiBot = false;
+  aiAgentInfo = null;
+  hasOnboarding = false;
+  onboardingData = null;
+  channel = null;
+  notificationData = null;
+  aiAttributes = null;
+  pinnedMessageListInfo = null;
+  broadcastInfo = null;
+  isChannelIntegrated = false;
+  isDesk = false;
+  isAIAgent = false;
+  messageDeletionTimestamp = 0;
+  isOnline = false;
+  lastSeenAt = 0;
+  inviterUserId = '';
+  membershipExpiresAt = 0;
+  scheduledMessageCount = 0;
+
+  markAsUnread(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  getMessageDeletionTimestamp(): Promise<number> {
+    return Promise.resolve(this.messageDeletionTimestamp);
+  }
+
+  submitCSAT(): Promise<Conversation> {
+    return Promise.resolve(this.conversation as Conversation);
+  }
+
+  markConversationAsHandoff(): Promise<Conversation> {
+    return Promise.resolve(this.conversation as Conversation);
+  }
+
+  closeConversation(): Promise<Conversation> {
+    return Promise.resolve(this.conversation as Conversation);
+  }
+
+  startConversation(): Promise<Conversation> {
+    return Promise.resolve(this.conversation as Conversation);
+  }
+
+  resumeConversation(): Promise<Conversation> {
+    return Promise.resolve(this.conversation as Conversation);
+  }
+
+  endConversation(): Promise<Conversation> {
+    return Promise.resolve(this.conversation as Conversation);
+  }
+
+  getContextObject<T = object>(_aiAgentId: string): Promise<T> {
+    return Promise.resolve({} as T);
+  }
+
+  updateContext<T = object>(_aiAgentId: string, _context: Record<string, string>): Promise<T> {
+    return Promise.resolve({} as T);
+  }
+
+  patchContext<T = object>(_aiAgentId: string, _context: Record<string, string>): Promise<T> {
+    return Promise.resolve({} as T);
+  }
 
   serialize(): object {
     throw new Error('Method not implemented.');
@@ -227,32 +293,32 @@ class MockChannel implements GetMockProps<Params, SendbirdBaseChannel & Sendbird
       ...query,
     };
   });
-  createPreviousMessageListQuery = jest.fn(function (
-    params?: PreviousMessageListQueryParams | undefined,
-  ): PreviousMessageListQuery {
-    const query = createMockQuery<SendbirdBaseMessage>({
-      type: 'message',
-      dataLength: 300,
-      limit: params?.limit,
-      sdk: this.params.sdk,
-    });
-    return {
-      reverse: false,
-      channelType: ChannelType.BASE,
-      channelUrl: 'channel_url_' + tc.getHash(),
-      customTypesFilter: [],
-      includeMetaArray: false,
-      includeParentMessageInfo: false,
-      includeReactions: false,
-      includeThreadInfo: false,
-      messageTypeFilter: MessageTypeFilter.ALL,
-      replyType: ReplyType.NONE,
-      senderUserIdsFilter: [],
-      showSubchannelMessagesOnly: false,
-      load: query.next,
-      ...query,
-    };
-  });
+  createPreviousMessageListQuery = jest.fn(
+    (params?: PreviousMessageListQueryParams | undefined): PreviousMessageListQuery => {
+      const query = createMockQuery<SendbirdBaseMessage>({
+        type: 'message',
+        dataLength: 300,
+        limit: params?.limit,
+        sdk: this.params.sdk,
+      });
+      return {
+        reverse: false,
+        channelType: ChannelType.BASE,
+        channelUrl: 'channel_url_' + tc.getHash(),
+        customTypesFilter: [],
+        includeMetaArray: false,
+        includeParentMessageInfo: false,
+        includeReactions: false,
+        includeThreadInfo: false,
+        messageTypeFilter: MessageTypeFilter.ALL,
+        replyType: ReplyType.NONE,
+        senderUserIdsFilter: [],
+        showSubchannelMessagesOnly: false,
+        load: query.next,
+        ...query,
+      };
+    },
+  );
   createMessageCollection = jest.fn((params?: MessageCollectionParams | undefined): SendbirdMessageCollection => {
     return createMockMessageCollection({
       ...params,

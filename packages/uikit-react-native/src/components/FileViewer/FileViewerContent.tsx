@@ -89,7 +89,7 @@ const ZoomableImageView = ({
 }) => {
   const { width, height } = useWindowDimensions();
 
-  const imageSize = useRef<{ width: number; height: number }>();
+  const imageSize = useRef<{ width: number; height: number } | undefined>(undefined);
   const [contentSizeProps, setContentSizeProps] = useState<{
     contentWidth: number;
     contentHeight: number;

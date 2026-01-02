@@ -73,6 +73,17 @@ class MockMessage implements GetMockProps<Params, SendbirdBaseMessage> {
   myFeedback: Feedback | null = null;
   myFeedbackStatus: FeedbackStatus = 'NO_FEEDBACK';
   suggestedReplies: string[] | null = null;
+  messageForm = null;
+  message = '';
+  poll = null;
+
+  applyPoll(): boolean {
+    return false;
+  }
+
+  submitMessageForm(): Promise<void> {
+    return Promise.resolve();
+  }
 
   isFileMessage(): this is SendbirdFileMessage {
     return this.messageType === MessageType.FILE && !Object.prototype.hasOwnProperty.call(this, 'fileInfoList');

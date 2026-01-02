@@ -54,7 +54,7 @@ export const useGroupChannelMessagesWithCollection: UseGroupChannelMessages = (s
   const initialLimit = shouldUseSearchLimit(initialStartingPoint) ? MESSAGE_LIMIT.SEARCH : MESSAGE_LIMIT.DEFAULT;
 
   const forceUpdate = useForceUpdate();
-  const collectionRef = useRef<SendbirdMessageCollection>();
+  const collectionRef = useRef<SendbirdMessageCollection | undefined>(undefined);
   const collectionInitializedRef = useRef(false);
   const handlerId = useUniqHandlerId('useGroupChannelMessagesWithCollection');
 

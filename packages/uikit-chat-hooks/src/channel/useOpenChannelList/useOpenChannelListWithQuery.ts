@@ -14,7 +14,7 @@ const createOpenChannelListQuery = (sdk: SendbirdChatSDK, queryCreator: UseOpenC
 };
 
 export const useOpenChannelListWithQuery: UseOpenChannelList = (sdk, userId, options) => {
-  const queryRef = useRef<SendbirdOpenChannelListQuery>();
+  const queryRef = useRef<SendbirdOpenChannelListQuery | undefined>(undefined);
   const handlerId = useUniqHandlerId('useOpenChannelListWithQuery');
 
   const {

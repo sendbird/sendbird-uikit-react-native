@@ -34,7 +34,7 @@ const ReactionUserListBottomSheet = ({
   const { colors } = useUIKitTheme();
 
   const [tabIndex, setTabIndex] = useState(0);
-  const scrollRef = useRef<ScrollView>();
+  const scrollRef = useRef<ScrollView | undefined>(undefined);
   const tabIndicatorValue = useRef<Array<{ x: number; width: number }>>([]);
   const tabIndicatorAnimated = useRef({ x: new Animated.Value(0), width: new Animated.Value(0) }).current;
   const focusedWithLayoutCalculated = useRef(false);

@@ -46,7 +46,7 @@ export const useUserList = <
   sdk: SendbirdChatSDK,
   options?: UseUserListOptions<QueriedUser>,
 ): UseUserListReturn<QueriedUser> => {
-  const query = useRef<CustomQueryInterface<QueriedUser>>();
+  const query = useRef<CustomQueryInterface<QueriedUser> | undefined>(undefined);
 
   const [error, setError] = useState<unknown>(null);
   const [loading, setLoading] = useState(false);

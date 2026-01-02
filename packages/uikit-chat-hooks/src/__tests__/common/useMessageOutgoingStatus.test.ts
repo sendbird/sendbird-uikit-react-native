@@ -1,4 +1,4 @@
-import { act, renderHook, waitFor } from '@testing-library/react-native';
+import { renderHook, waitFor } from '@testing-library/react-native';
 
 import { ChannelType } from '@sendbird/chat';
 import { SendingStatus } from '@sendbird/chat/message';
@@ -174,26 +174,17 @@ describe('useMessageOutgoingStatus', () => {
 
     renderHook(() => useMessageOutgoingStatus(sdk, channel, message));
 
-    act(() => {
-      sdk.__emit('channel', 'group_onUndeliveredMemberStatusUpdated', channel);
-    });
-
+    sdk.__emit('channel', 'group_onUndeliveredMemberStatusUpdated', channel);
     await waitFor(() => {
       expect(forceUpdate).toHaveBeenCalledTimes(1);
     });
 
-    act(() => {
-      sdk.__emit('channel', 'group_onUserMarkedRead', channel);
-    });
-
+    sdk.__emit('channel', 'group_onUserMarkedRead', channel);
     await waitFor(() => {
       expect(forceUpdate).toHaveBeenCalledTimes(2);
     });
 
-    act(() => {
-      sdk.__emit('channel', 'group_onUserMarkedUnread', channel);
-    });
-
+    sdk.__emit('channel', 'group_onUserMarkedUnread', channel);
     await waitFor(() => {
       expect(forceUpdate).toHaveBeenCalledTimes(3);
     });
@@ -226,11 +217,9 @@ describe('useMessageOutgoingStatus', () => {
     const { unmount } = renderHook(() => useMessageOutgoingStatus(sdk, channel, message));
     unmount();
 
-    act(() => {
-      sdk.__emit('channel', 'group_onUndeliveredMemberStatusUpdated', channel);
-      sdk.__emit('channel', 'group_onUserMarkedRead', channel);
-      sdk.__emit('channel', 'group_onUserMarkedUnread', channel);
-    });
+    sdk.__emit('channel', 'group_onUndeliveredMemberStatusUpdated', channel);
+    sdk.__emit('channel', 'group_onUserMarkedRead', channel);
+    sdk.__emit('channel', 'group_onUserMarkedUnread', channel);
 
     await waitFor(() => {
       expect(forceUpdate).not.toHaveBeenCalled();
