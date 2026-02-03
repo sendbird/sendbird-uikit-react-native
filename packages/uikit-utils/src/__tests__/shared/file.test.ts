@@ -25,6 +25,9 @@ describe('getFileType', function () {
     expect(getFileType('application/zip')).toBe('file');
     expect(getFileType('application/x-gzip')).toBe('file');
     expect(getFileType('text/plain')).toBe('file');
+    // HEIC/HEIF should be treated as file (not universally supported for inline display)
+    expect(getFileType('image/heic')).toBe('file');
+    expect(getFileType('image/heif')).toBe('file');
   });
 
   it('should return the proper file type with file extension', () => {

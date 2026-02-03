@@ -44,15 +44,21 @@ const EXTENSION_MIME_MAP = {
 export const imageExtRegex = /jpeg|jpg|png|webp|gif/i;
 export const audioExtRegex = /3gp|aac|aax|act|aiff|flac|gsm|m4a|m4b|m4p|tta|wma|mp3|webm|wav|ogg/i;
 export const videoExtRegex = /mov|vod|mp4|avi|mpeg|ogv/i;
+// HEIC/HEIF should be treated as file, not image (not universally supported for inline display)
+export const nonImageMimeSubtypes = /heic|heif/i;
 export const getFileType = (extensionOrType: string) => {
   const lowerCased = extensionOrType.toLowerCase();
 
   // mime type
   if (lowerCased.indexOf('/') > -1) {
-    const type = lowerCased.split('/')[0];
+    const [type, subtype] = lowerCased.split('/');
     if (type === 'video') return 'video';
     if (type === 'audio') return 'audio';
-    if (type === 'image') return 'image';
+    if (type === 'image') {
+      // HEIC/HEIF are not universally supported, treat as file
+      if (subtype?.match(nonImageMimeSubtypes)) return 'file';
+      return 'image';
+    }
     return 'file';
   }
 
