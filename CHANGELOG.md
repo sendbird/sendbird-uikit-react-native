@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.1...v3.12.2) (2026-02-05)
+
+### Features
+
+- add preferredAssetRepresentationMode option to createExpoFileService ([cdfacf0](https://github.com/sendbird/sendbird-uikit-react-native/commit/cdfacf0f4b0a79a4c2f20a4b7e1a2dd4cf1105c9))
+
+### Bug Fixes
+
+- treat HEIC/HEIF as file type instead of image ([3b754a5](https://github.com/sendbird/sendbird-uikit-react-native/commit/3b754a5c8347d9172a8dee9f1043718ec0a10a35))
+
+### Improvements
+
+- update useRef types for React 19 compatibility ([674ebf0](https://github.com/sendbird/sendbird-uikit-react-native/commit/674ebf01e0f121f101297f4dfc56fb764959d2ab))
+
 ## [3.12.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.0...v3.12.1) (2025-12-12)
 
 ### Bug Fixes

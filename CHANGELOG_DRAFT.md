@@ -1,6 +1,7 @@
-## v3.12.1
+## [3.12.2]
+
+### Features
+- feat: add preferredAssetRepresentationMode option to createExpoFileService
 
 ### Bug Fixes
-
-- add HEIC/HEIF MIME type support in normalizeFile
-- use mimeType for the expo image picker response
+- fix: treat HEIC/HEIF as file type instead of image

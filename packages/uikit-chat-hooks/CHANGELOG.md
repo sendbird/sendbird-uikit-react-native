@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.1...v3.12.2) (2026-02-05)
+
+### Improvements
+
+- update useRef types for React 19 compatibility ([674ebf0](https://github.com/sendbird/sendbird-uikit-react-native/commit/674ebf01e0f121f101297f4dfc56fb764959d2ab))
+
 ## [3.12.1](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.0...v3.12.1) (2025-12-12)
 
 **Note:** Version bump only for package @sendbird/uikit-chat-hooks
