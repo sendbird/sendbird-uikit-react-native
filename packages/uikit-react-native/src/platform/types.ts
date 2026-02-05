@@ -31,24 +31,6 @@ export interface ClipboardServiceInterface {
 // ---------- FileService ---------- //
 export interface FileServiceInterface extends FilePickerServiceInterface, FileSystemServiceInterface {}
 
-export type ImagePickerAssetRepresentationMode = 'automatic' | 'compatible' | 'current';
-
-export interface ExpoFileServiceOptions {
-  /**
-   * Options for expo-image-picker module
-   */
-  imagePicker?: {
-    /**
-     * iOS only. Determines how to handle HEIC/HEVC media formats when picking images or videos.
-     * - 'automatic': Let the system decide based on the context (default)
-     * - 'compatible': Convert to JPEG/H.264 for cross-platform compatibility
-     * - 'current': Keep original format (HEIC/HEVC)
-     * @default 'automatic'
-     */
-    preferredAssetRepresentationMode?: ImagePickerAssetRepresentationMode;
-  };
-}
-
 export interface OpenResultListener {
   onOpenFailure?: (error: SBUError, originError?: unknown) => void;
 }

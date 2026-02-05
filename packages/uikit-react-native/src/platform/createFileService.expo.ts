@@ -10,7 +10,6 @@ import expoBackwardUtils from '../utils/expoBackwardUtils';
 import type { ExpoMediaLibraryPermissionResponse, ExpoPermissionResponse } from '../utils/expoPermissionGranted';
 import expoPermissionGranted from '../utils/expoPermissionGranted';
 import type {
-  ExpoFileServiceOptions,
   FilePickerResponse,
   FileServiceInterface,
   OpenCameraOptions,
@@ -24,25 +23,13 @@ const createExpoFileService = ({
   documentPickerModule,
   mediaLibraryModule,
   fsModule,
-  options,
 }: {
   imagePickerModule: typeof ExpoImagePicker;
   documentPickerModule: typeof ExpoDocumentPicker;
   mediaLibraryModule: typeof ExpoMediaLibrary;
   fsModule: typeof ExpoFs;
-  options?: ExpoFileServiceOptions;
 }): FileServiceInterface => {
-  const getAssetRepresentationMode = () => {
-    switch (options?.imagePicker?.preferredAssetRepresentationMode) {
-      case 'compatible':
-        return imagePickerModule.UIImagePickerPreferredAssetRepresentationMode.Compatible;
-      case 'current':
-        return imagePickerModule.UIImagePickerPreferredAssetRepresentationMode.Current;
-      case 'automatic':
-      default:
-        return imagePickerModule.UIImagePickerPreferredAssetRepresentationMode.Automatic;
-    }
-  };
+  const preferredAssetRepresentationMode = imagePickerModule.UIImagePickerPreferredAssetRepresentationMode?.Compatible;
 
   class ExpoFileServiceInterface implements FileServiceInterface {
     async hasCameraPermission(): Promise<boolean> {
@@ -90,7 +77,7 @@ const createExpoFileService = ({
       }
 
       const response = await imagePickerModule.launchCameraAsync({
-        preferredAssetRepresentationMode: getAssetRepresentationMode(),
+        preferredAssetRepresentationMode,
         mediaTypes: (() => {
           switch (options?.mediaType) {
             case 'photo':
@@ -124,7 +111,7 @@ const createExpoFileService = ({
       const selectionLimit = options?.selectionLimit || 1;
       const response = await imagePickerModule.launchImageLibraryAsync({
         selectionLimit,
-        preferredAssetRepresentationMode: getAssetRepresentationMode(),
+        preferredAssetRepresentationMode,
         mediaTypes: (() => {
           switch (options?.mediaType) {
             case 'photo':
