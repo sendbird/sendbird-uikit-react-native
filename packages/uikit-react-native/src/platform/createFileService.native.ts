@@ -110,6 +110,7 @@ const createNativeFileService = ({
       const response = await imagePickerModule.launchCamera({
         presentationStyle: 'fullScreen',
         cameraType: options?.cameraType ?? 'back',
+        assetRepresentationMode: 'compatible',
         mediaType: (() => {
           switch (options?.mediaType) {
             case 'photo':
@@ -151,6 +152,7 @@ const createNativeFileService = ({
       const response = await imagePickerModule.launchImageLibrary({
         presentationStyle: 'fullScreen',
         selectionLimit,
+        assetRepresentationMode: 'compatible',
         mediaType: (() => {
           switch (options?.mediaType) {
             case 'photo':

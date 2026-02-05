@@ -29,6 +29,8 @@ const createExpoFileService = ({
   mediaLibraryModule: typeof ExpoMediaLibrary;
   fsModule: typeof ExpoFs;
 }): FileServiceInterface => {
+  const preferredAssetRepresentationMode = imagePickerModule.UIImagePickerPreferredAssetRepresentationMode?.Compatible;
+
   class ExpoFileServiceInterface implements FileServiceInterface {
     async hasCameraPermission(): Promise<boolean> {
       const res = (await imagePickerModule.getCameraPermissionsAsync()) as ExpoPermissionResponse;
@@ -75,6 +77,7 @@ const createExpoFileService = ({
       }
 
       const response = await imagePickerModule.launchCameraAsync({
+        preferredAssetRepresentationMode,
         mediaTypes: (() => {
           switch (options?.mediaType) {
             case 'photo':
@@ -108,6 +111,7 @@ const createExpoFileService = ({
       const selectionLimit = options?.selectionLimit || 1;
       const response = await imagePickerModule.launchImageLibraryAsync({
         selectionLimit,
+        preferredAssetRepresentationMode,
         mediaTypes: (() => {
           switch (options?.mediaType) {
             case 'photo':
