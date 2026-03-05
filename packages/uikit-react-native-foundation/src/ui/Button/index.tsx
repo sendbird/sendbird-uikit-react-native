@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Pressable, StyleProp, ViewStyle } from 'react-native';
 
 import Icon from '../../components/Icon';
@@ -26,6 +26,7 @@ const Button = ({
   children,
 }: Props) => {
   const { colors } = useUIKitTheme();
+  const [pressed, setPressed] = useState(false);
 
   const getStateColor = (pressed: boolean, disabled?: boolean) => {
     const stateColors = colors.ui.button[variant];
@@ -34,29 +35,20 @@ const Button = ({
     return stateColors.enabled;
   };
 
+  const stateColor = getStateColor(pressed, disabled);
+
   return (
     <Pressable
       disabled={disabled}
       onPress={onPress}
-      style={({ pressed }) => {
-        const stateColor = getStateColor(pressed, disabled);
-        return [{ backgroundColor: buttonColor ?? stateColor.background }, styles.container, style];
-      }}
+      onPressIn={() => setPressed(true)}
+      onPressOut={() => setPressed(false)}
+      style={[{ backgroundColor: buttonColor ?? stateColor.background }, styles.container, style]}
     >
-      {({ pressed }) => {
-        const stateColor = getStateColor(pressed, disabled);
-
-        return (
-          <>
-            {icon && (
-              <Icon size={24} icon={icon} color={contentColor ?? stateColor.content} containerStyle={styles.icon} />
-            )}
-            <Text button color={contentColor ?? stateColor.content} style={styles.text}>
-              {children}
-            </Text>
-          </>
-        );
-      }}
+      {icon && <Icon size={24} icon={icon} color={contentColor ?? stateColor.content} containerStyle={styles.icon} />}
+      <Text button color={contentColor ?? stateColor.content} style={styles.text}>
+        {children}
+      </Text>
     </Pressable>
   );
 };

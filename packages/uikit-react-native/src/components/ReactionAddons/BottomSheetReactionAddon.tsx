@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Pressable, View } from 'react-native';
 
 import type { BaseMessage } from '@sendbird/chat/message';
@@ -14,6 +14,57 @@ type Props = {
   channel: SendbirdBaseChannel;
   message: SendbirdBaseMessage;
 };
+
+const EmojiReactionPressable = ({
+  url,
+  reacted,
+  selectedBackground,
+  enabledBackground,
+  onPress,
+}: {
+  url: string;
+  reacted: boolean;
+  selectedBackground: string;
+  enabledBackground: string;
+  onPress: () => void;
+}) => {
+  const [pressed, setPressed] = useState(false);
+  return (
+    <Pressable
+      onPress={onPress}
+      onPressIn={() => setPressed(true)}
+      onPressOut={() => setPressed(false)}
+      style={[styles.button, { backgroundColor: reacted || pressed ? selectedBackground : enabledBackground }]}
+    >
+      <Image source={{ uri: url }} style={styles.emoji} />
+    </Pressable>
+  );
+};
+
+const EmojiMorePressable = ({
+  selectedBackground,
+  enabledBackground,
+  iconColor,
+  onPress,
+}: {
+  selectedBackground: string;
+  enabledBackground: string;
+  iconColor: string;
+  onPress: () => void;
+}) => {
+  const [pressed, setPressed] = useState(false);
+  return (
+    <Pressable
+      onPress={onPress}
+      onPressIn={() => setPressed(true)}
+      onPressOut={() => setPressed(false)}
+      style={[styles.button, { backgroundColor: pressed ? selectedBackground : enabledBackground }]}
+    >
+      <Icon icon={'emoji-more'} style={styles.emoji} color={iconColor} />
+    </Pressable>
+  );
+};
+
 const BottomSheetReactionAddon = ({ onClose, message, channel }: Props) => {
   const { emojiManager, currentUser, sdk } = useSendbirdChat();
   const { updateReactionFocusedItem, openReactionList } = useReaction();
@@ -59,31 +110,26 @@ const BottomSheetReactionAddon = ({ onClose, message, channel }: Props) => {
         };
 
         return (
-          <Pressable
+          <EmojiReactionPressable
             key={key}
+            url={url}
+            reacted={reacted}
+            selectedBackground={color.selected.background}
+            enabledBackground={color.enabled.background}
             onPress={onPress}
-            style={({ pressed }) => [
-              styles.button,
-              { backgroundColor: reacted || pressed ? color.selected.background : color.enabled.background },
-            ]}
-          >
-            <Image source={{ uri: url }} style={styles.emoji} />
-          </Pressable>
+          />
         );
       })}
 
-      <Pressable
+      <EmojiMorePressable
+        selectedBackground={color.selected.background}
+        enabledBackground={color.enabled.background}
+        iconColor={colors.onBackground03}
         onPress={async () => {
           await onClose();
           openReactionList({ channel, message });
         }}
-        style={({ pressed }) => [
-          styles.button,
-          { backgroundColor: pressed ? color.selected.background : color.enabled.background },
-        ]}
-      >
-        <Icon icon={'emoji-more'} style={styles.emoji} color={colors.onBackground03} />
-      </Pressable>
+      />
     </View>
   );
 };
