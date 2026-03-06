@@ -43,7 +43,8 @@ const ReactionEmojiPressable = ({
           };
 
           action(message, emojiKey).catch((error) => {
-            Logger.warn('Failed to reaction', error);
+            const operation = reacted ? 'remove' : 'add';
+            Logger.warn(`Failed to ${operation} reaction (emojiKey=${emojiKey})`, error);
           });
         }
         await onClose();
