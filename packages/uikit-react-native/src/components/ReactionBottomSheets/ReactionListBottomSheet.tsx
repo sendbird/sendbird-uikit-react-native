@@ -3,7 +3,8 @@ import { FlatList, Pressable, View, useWindowDimensions } from 'react-native';
 
 import type { BaseMessage } from '@sendbird/chat/message';
 import { Image, Modal, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
-import { Logger, SendbirdBaseChannel, SendbirdBaseMessage, useSafeAreaPadding } from '@sendbird/uikit-utils';
+import { Logger, useSafeAreaPadding } from '@sendbird/uikit-utils';
+import type { SendbirdBaseChannel, SendbirdBaseMessage } from '@sendbird/uikit-utils';
 
 import { UNKNOWN_USER_ID } from '../../constants';
 import type { ReactionBottomSheetProps } from './index';

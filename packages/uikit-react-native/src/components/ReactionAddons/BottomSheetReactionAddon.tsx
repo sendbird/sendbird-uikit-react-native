@@ -4,7 +4,8 @@ import { Pressable, View } from 'react-native';
 import type { BaseMessage } from '@sendbird/chat/message';
 import { Icon, Image, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { useGroupChannelHandler } from '@sendbird/uikit-tools';
-import { Logger, SendbirdBaseChannel, SendbirdBaseMessage, useSafeAreaPadding } from '@sendbird/uikit-utils';
+import { Logger, useSafeAreaPadding } from '@sendbird/uikit-utils';
+import type { SendbirdBaseChannel, SendbirdBaseMessage } from '@sendbird/uikit-utils';
 
 import { UNKNOWN_USER_ID } from '../../constants';
 import { useReaction, useSendbirdChat } from '../../hooks/useContext';
