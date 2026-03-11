@@ -1,9 +1,9 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
+import type { Meta, StoryObj } from '@storybook/react-native';
 import React from 'react';
 
 import { Icon as IconComponent, Palette } from '@sendbird/uikit-react-native-foundation';
 
-const IconMeta: ComponentMeta<typeof IconComponent> = {
+const meta = {
   title: 'Icon',
   component: IconComponent,
   argTypes: {
@@ -26,9 +26,12 @@ const IconMeta: ComponentMeta<typeof IconComponent> = {
     size: 24,
     color: Palette.primary300,
   },
+} satisfies Meta<typeof IconComponent>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  render: (args) => <IconComponent {...args} />,
 };
-
-export default IconMeta;
-
-type IconStory = ComponentStory<typeof IconComponent>;
-export const Default: IconStory = (args) => <IconComponent {...args} />;

@@ -1,9 +1,9 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
+import type { Meta, StoryObj } from '@storybook/react-native';
 import React, { useState } from 'react';
 
 import { Switch as SwitchComponent } from '@sendbird/uikit-react-native-foundation';
 
-const SwitchMeta: ComponentMeta<typeof SwitchComponent> = {
+const meta = {
   title: 'Switch',
   component: SwitchComponent,
   argTypes: {
@@ -27,12 +27,15 @@ const SwitchMeta: ComponentMeta<typeof SwitchComponent> = {
   args: {
     children: 'Switch',
   },
+} satisfies Meta<typeof SwitchComponent>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  render: (args) => <WrappedSwitch {...args} />,
 };
-
-export default SwitchMeta;
-
-type SwitchStory = ComponentStory<typeof SwitchComponent>;
-export const Default: SwitchStory = (args) => <WrappedSwitch {...args} />;
 
 const WrappedSwitch = (props: object) => {
   const [value, setValue] = useState(false);

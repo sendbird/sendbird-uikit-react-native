@@ -1,9 +1,9 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
+import type { Meta, StoryObj } from '@storybook/react-native';
 import React from 'react';
 
 import { OutlinedButton, ProfileCard as ProfileCardComponent } from '@sendbird/uikit-react-native-foundation';
 
-const ProfileCardMeta: ComponentMeta<typeof ProfileCardComponent> = {
+const meta = {
   title: 'ProfileCard',
   component: ProfileCardComponent,
   argTypes: {
@@ -34,12 +34,15 @@ const ProfileCardMeta: ComponentMeta<typeof ProfileCardComponent> = {
     bodyLabel: 'User ID',
     body: 'User1',
   },
+} satisfies Meta<typeof ProfileCardComponent>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  render: (args) => <ProfileCardComponent {...args} />,
 };
-
-export default ProfileCardMeta;
-
-type ProfileCardStory = ComponentStory<typeof ProfileCardComponent>;
-export const Default: ProfileCardStory = (args) => <ProfileCardComponent {...args} />;
-export const WithButton: ProfileCardStory = (args) => (
-  <ProfileCardComponent {...args} button={<OutlinedButton>{'Message'}</OutlinedButton>} />
-);
+export const WithButton: Story = {
+  render: (args) => <ProfileCardComponent {...args} button={<OutlinedButton>{'Message'}</OutlinedButton>} />,
+};

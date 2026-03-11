@@ -6,6 +6,7 @@
  */
 
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+const { withStorybook } = require('@storybook/react-native/metro/withStorybook');
 const path = require('path');
 const sampleRoot = __dirname;
 const workspaceRoot = path.resolve(sampleRoot, '..');
@@ -15,4 +16,9 @@ const customConfig = {
   watchFolders: [workspaceRoot],
 };
 
-module.exports = mergeConfig(getDefaultConfig(sampleRoot), customConfig);
+const mergedConfig = mergeConfig(getDefaultConfig(sampleRoot), customConfig);
+
+module.exports = withStorybook(mergedConfig, {
+  enabled: true,
+  configPath: path.resolve(__dirname, './.rnstorybook'),
+});

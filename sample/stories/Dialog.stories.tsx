@@ -1,4 +1,4 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
+import type { Meta, StoryObj } from '@storybook/react-native';
 import React from 'react';
 import { Button } from 'react-native';
 
@@ -12,35 +12,45 @@ import {
 
 import { loremIpsum } from './constant';
 
-const DialogMeta: ComponentMeta<typeof DialogProvider> = {
+const meta = {
   title: 'Dialog',
   component: DialogProvider,
   argTypes: {},
   args: {},
-};
-export default DialogMeta;
+} satisfies Meta<typeof DialogProvider>;
 
-type DialogStory = ComponentStory<typeof DialogProvider>;
-export const ActionMenu: DialogStory = () => (
-  <DialogProvider>
-    <WrappedActionMenu />
-  </DialogProvider>
-);
-export const Alert: DialogStory = () => (
-  <DialogProvider>
-    <WrappedAlert />
-  </DialogProvider>
-);
-export const Prompt: DialogStory = () => (
-  <DialogProvider>
-    <WrappedPrompt />
-  </DialogProvider>
-);
-export const BottomSheet: DialogStory = () => (
-  <DialogProvider>
-    <WrappedBottomSheet />
-  </DialogProvider>
-);
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const ActionMenu: Story = {
+  render: () => (
+    <DialogProvider>
+      <WrappedActionMenu />
+    </DialogProvider>
+  ),
+};
+export const Alert: Story = {
+  render: () => (
+    <DialogProvider>
+      <WrappedAlert />
+    </DialogProvider>
+  ),
+};
+export const Prompt: Story = {
+  render: () => (
+    <DialogProvider>
+      <WrappedPrompt />
+    </DialogProvider>
+  ),
+};
+export const BottomSheet: Story = {
+  render: () => (
+    <DialogProvider>
+      <WrappedBottomSheet />
+    </DialogProvider>
+  ),
+};
 
 const WrappedActionMenu = () => {
   const { openMenu } = useActionMenu();
@@ -75,7 +85,7 @@ const WrappedActionMenu = () => {
               {
                 title: 'Open menu 2 times after 2 sec',
                 onPress: () => {
-                  return new Promise((resolve) => {
+                  return new Promise<void>((resolve) => {
                     setTimeout(() => {
                       resolve();
                       openMenu({ title: 'Menu1', menuItems: [{ title: 'Hello' }] });

@@ -1,10 +1,10 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
+import type { Meta, StoryObj } from '@storybook/react-native';
 import React from 'react';
 
 import { GroupChannelPreview as GroupChannelPreviewComponent } from '@sendbird/uikit-react-native-foundation';
 import { Icon } from '@sendbird/uikit-react-native-foundation';
 
-const GroupChannelPreviewMeta: ComponentMeta<typeof GroupChannelPreviewComponent> = {
+const meta = {
   title: 'GroupChannelPreview',
   component: GroupChannelPreviewComponent,
   argTypes: {
@@ -57,9 +57,12 @@ const GroupChannelPreviewMeta: ComponentMeta<typeof GroupChannelPreviewComponent
     frozen: true,
     notificationOff: true,
   },
+} satisfies Meta<typeof GroupChannelPreviewComponent>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  render: (args) => <GroupChannelPreviewComponent {...args} />,
 };
-
-export default GroupChannelPreviewMeta;
-
-type GroupChannelPreviewStory = ComponentStory<typeof GroupChannelPreviewComponent>;
-export const Default: GroupChannelPreviewStory = (args) => <GroupChannelPreviewComponent {...args} />;

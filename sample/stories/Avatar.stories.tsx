@@ -1,4 +1,4 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react-native';
+import type { Meta, StoryObj } from '@storybook/react-native';
 import React, { useMemo } from 'react';
 
 import { Avatar as AvatarComponent, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
@@ -7,19 +7,26 @@ import { getMockImage } from './constant';
 
 const margin = { marginBottom: 12 };
 
-type AvatarStory = ComponentStory<typeof AvatarComponent>;
-const AvatarMeta: ComponentMeta<typeof AvatarComponent> = {
+const meta = {
   title: 'Avatar',
   component: AvatarComponent,
   argTypes: {},
   args: {},
+} satisfies Meta<typeof AvatarComponent>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Avatar: Story = {
+  render: () => <DefaultAvatar />,
 };
-
-export default AvatarMeta;
-
-export const Avatar: AvatarStory = () => <DefaultAvatar />;
-export const AvatarGroup: AvatarStory = () => <GroupedAvatar />;
-export const AvatarStack: AvatarStory = () => <StackedAvatar />;
+export const AvatarGroup: Story = {
+  render: () => <GroupedAvatar />,
+};
+export const AvatarStack: Story = {
+  render: () => <StackedAvatar />,
+};
 
 const DefaultAvatar = () => {
   const { colors } = useUIKitTheme();
