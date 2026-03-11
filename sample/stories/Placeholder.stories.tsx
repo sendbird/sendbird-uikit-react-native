@@ -19,7 +19,7 @@ type Story = StoryObj<typeof meta>;
 export const Placeholder: Story = {
   render: () => (
     <View style={{ flex: 1, height: '100%', justifyContent: 'space-evenly', alignItems: 'center' }}>
-      <PlaceholderComponent icon={'document'} message={'Default place holder'} />
+      <PlaceholderComponent icon={'document'} message={'Default placeholder'} />
     </View>
   ),
 };

@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-import StorybookUI from '../../.rnstorybook';
-
-const StorybookScreen = () => <StorybookUI />;
+const StorybookScreen = () => {
+  const [screen, setScreen] = useState<React.ReactNode | null>(null);
+  useEffect(() => {
+    const StorybookUI = require('../../.rnstorybook').default;
+    setScreen(<StorybookUI />);
+  }, []);
+  return <>{screen}</>;
+};
 
 export default StorybookScreen;
