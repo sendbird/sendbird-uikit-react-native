@@ -1,5 +1,5 @@
-import React from 'react';
-import { ImageProps, Pressable } from 'react-native';
+import React, { useState } from 'react';
+import { ImageProps, Pressable, StyleProp, ViewStyle } from 'react-native';
 
 import { createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { useForceUpdate, useGroupChannelHandler } from '@sendbird/uikit-tools';
@@ -29,6 +29,51 @@ const createOnPressReaction = (
   };
 };
 
+const ReactionPressable = ({
+  reaction,
+  channel,
+  message,
+  source,
+  onOpenReactionUserList,
+  index,
+  style,
+}: {
+  reaction: SendbirdReaction;
+  channel: SendbirdBaseChannel;
+  message: SendbirdBaseMessage;
+  source: ImageProps['source'];
+  onOpenReactionUserList: (focusIndex: number) => void;
+  index: number;
+  style: StyleProp<ViewStyle>;
+}) => {
+  const [pressed, setPressed] = useState(false);
+  return (
+    <Pressable
+      onPress={createOnPressReaction(reaction, channel, message, reaction.hasCurrentUserReacted)}
+      onLongPress={() => onOpenReactionUserList(index)}
+      delayLongPress={DEFAULT_LONG_PRESS_DELAY}
+      onPressIn={() => setPressed(true)}
+      onPressOut={() => setPressed(false)}
+    >
+      <ReactionRoundedButton
+        source={source}
+        count={getReactionCount(reaction)}
+        reacted={pressed || reaction.hasCurrentUserReacted}
+        style={style}
+      />
+    </Pressable>
+  );
+};
+
+const ReactionMorePressable = ({ onPress }: { onPress: () => void }) => {
+  const [pressed, setPressed] = useState(false);
+  return (
+    <Pressable onPress={onPress} onPressIn={() => setPressed(true)} onPressOut={() => setPressed(false)}>
+      <ReactionRoundedButton.More pressed={pressed} />
+    </Pressable>
+  );
+};
+
 const createReactionButtons = (
   channel: SendbirdBaseChannel,
   message: SendbirdBaseMessage,
@@ -43,33 +88,24 @@ const createReactionButtons = (
     const isNotLastOfRow = index % NUM_COL !== NUM_COL - 1;
     const isNotLastOfCol = index < NUM_COL && reactions.length >= NUM_COL;
     return (
-      <Pressable
+      <ReactionPressable
         key={reaction.key}
-        onPress={createOnPressReaction(reaction, channel, message, reaction.hasCurrentUserReacted)}
-        onLongPress={() => onOpenReactionUserList(index)}
-        delayLongPress={DEFAULT_LONG_PRESS_DELAY}
-      >
-        {({ pressed }) => (
-          <ReactionRoundedButton
-            source={getIconSource(reaction.key)}
-            count={getReactionCount(reaction)}
-            reacted={pressed || reaction.hasCurrentUserReacted}
-            style={
-              reactionAddonType === 'default'
-                ? [isNotLastOfRow && styles.marginEnd, isNotLastOfCol && styles.marginBottom]
-                : [styles.marginEnd, styles.marginBottom]
-            }
-          />
-        )}
-      </Pressable>
+        reaction={reaction}
+        channel={channel}
+        message={message}
+        source={getIconSource(reaction.key)}
+        onOpenReactionUserList={onOpenReactionUserList}
+        index={index}
+        style={
+          reactionAddonType === 'default'
+            ? [isNotLastOfRow && styles.marginEnd, isNotLastOfCol && styles.marginBottom]
+            : [styles.marginEnd, styles.marginBottom]
+        }
+      />
     );
   });
   if (buttons.length < emojiLimit) {
-    buttons.push(
-      <Pressable key={REACTION_MORE_KEY} onPress={onOpenReactionList}>
-        {({ pressed }) => <ReactionRoundedButton.More pressed={pressed} />}
-      </Pressable>,
-    );
+    buttons.push(<ReactionMorePressable key={REACTION_MORE_KEY} onPress={onOpenReactionList} />);
   }
 
   return buttons;

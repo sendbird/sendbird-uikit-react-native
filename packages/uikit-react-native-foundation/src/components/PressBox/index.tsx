@@ -27,10 +27,19 @@ const PressBox = (props: Props) => {
   return <PressBoxWithPressable {...props} />;
 };
 
-const PressBoxWithPressable = ({ children, ...props }: Props) => {
+const PressBoxWithPressable = ({ children, style, ...props }: Props) => {
+  const [pressed, setPressed] = useState(false);
+  const state: PressBoxStateParams = { pressed };
   return (
-    <Pressable disabled={!props.onPress && !props.onLongPress} delayLongPress={DEFAULT_LONG_PRESS_DELAY} {...props}>
-      {(state) => (isFunction(children) ? children(state) : children)}
+    <Pressable
+      disabled={!props.onPress && !props.onLongPress}
+      delayLongPress={DEFAULT_LONG_PRESS_DELAY}
+      onPressIn={() => setPressed(true)}
+      onPressOut={() => setPressed(false)}
+      style={isFunction(style) ? style(state) : style}
+      {...props}
+    >
+      {isFunction(children) ? children(state) : children}
     </Pressable>
   );
 };

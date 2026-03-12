@@ -1,12 +1,62 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FlatList, Pressable, View, useWindowDimensions } from 'react-native';
 
 import type { BaseMessage } from '@sendbird/chat/message';
 import { Image, Modal, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
 import { Logger, useSafeAreaPadding } from '@sendbird/uikit-utils';
+import type { SendbirdBaseChannel, SendbirdBaseMessage } from '@sendbird/uikit-utils';
 
 import { UNKNOWN_USER_ID } from '../../constants';
 import type { ReactionBottomSheetProps } from './index';
+
+const ReactionEmojiPressable = ({
+  emojiKey,
+  url,
+  message,
+  channel,
+  currentUserId,
+  selectedBackground,
+  enabledBackground,
+  onClose,
+}: {
+  emojiKey: string;
+  url: string;
+  message: SendbirdBaseMessage | undefined;
+  channel: SendbirdBaseChannel | undefined;
+  currentUserId: string | undefined;
+  selectedBackground: string;
+  enabledBackground: string;
+  onClose: () => Promise<void>;
+}) => {
+  const [pressed, setPressed] = useState(false);
+
+  const reactedUserIds = message?.reactions?.find((it) => it.key === emojiKey)?.userIds ?? [];
+  const idx = reactedUserIds.indexOf(currentUserId ?? UNKNOWN_USER_ID);
+  const reacted = idx > -1;
+
+  return (
+    <Pressable
+      onPress={async () => {
+        if (message && channel) {
+          const action = (msg: BaseMessage, key: string) => {
+            return reacted ? channel.deleteReaction(msg, key) : channel.addReaction(msg, key);
+          };
+
+          action(message, emojiKey).catch((error) => {
+            const operation = reacted ? 'remove' : 'add';
+            Logger.warn(`Failed to ${operation} reaction (emojiKey=${emojiKey})`, error);
+          });
+        }
+        await onClose();
+      }}
+      onPressIn={() => setPressed(true)}
+      onPressOut={() => setPressed(false)}
+      style={[styles.button, { backgroundColor: reacted || pressed ? selectedBackground : enabledBackground }]}
+    >
+      <Image source={{ uri: url }} style={styles.emoji} />
+    </Pressable>
+  );
+};
 
 const NUM_COLUMN = 6;
 const ReactionListBottomSheet = ({ visible, onClose, onDismiss, reactionCtx, chatCtx }: ReactionBottomSheetProps) => {
@@ -45,34 +95,18 @@ const ReactionListBottomSheet = ({ visible, onClose, onDismiss, reactionCtx, cha
           contentContainerStyle={styles.flatlist}
           ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
           renderItem={({ item: { key, url } }) => {
-            const reactedUserIds = message?.reactions?.find((it) => it.key === key)?.userIds ?? [];
-
-            const idx = reactedUserIds.indexOf(currentUser?.userId ?? UNKNOWN_USER_ID);
-            const reacted = idx > -1;
-
             return (
               <View style={styles.emojiItem}>
-                <Pressable
-                  key={key}
-                  onPress={async () => {
-                    if (message && channel) {
-                      const action = (message: BaseMessage, key: string) => {
-                        return reacted ? channel.deleteReaction(message, key) : channel.addReaction(message, key);
-                      };
-
-                      action(message, key).catch((error) => {
-                        Logger.warn('Failed to reaction', error);
-                      });
-                    }
-                    await onClose();
-                  }}
-                  style={({ pressed }) => [
-                    styles.button,
-                    { backgroundColor: reacted || pressed ? color.selected.background : color.enabled.background },
-                  ]}
-                >
-                  <Image source={{ uri: url }} style={styles.emoji} />
-                </Pressable>
+                <ReactionEmojiPressable
+                  emojiKey={key}
+                  url={url}
+                  message={message}
+                  channel={channel}
+                  currentUserId={currentUser?.userId}
+                  selectedBackground={color.selected.background}
+                  enabledBackground={color.enabled.background}
+                  onClose={onClose}
+                />
               </View>
             );
           }}
