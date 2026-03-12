@@ -44,7 +44,6 @@ import {
   OpenChannelTabs,
   PaletteScreen,
   SignInScreen,
-  StorybookScreen,
   ThemeColorsScreen,
   UIKitConfigsScreen,
 } from './screens';
@@ -191,7 +190,6 @@ const Navigations = () => {
               <RootStack.Screen name={Routes.UIKitConfigs} component={UIKitConfigsScreen} />
               <RootStack.Screen name={Routes.ThemeColors} component={ThemeColorsScreen} />
               <RootStack.Screen name={Routes.Palette} component={PaletteScreen} />
-              <RootStack.Screen name={Routes.Storybook} component={StorybookScreen} />
             </RootStack.Group>
           </>
         )}

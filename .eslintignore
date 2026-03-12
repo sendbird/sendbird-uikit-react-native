@@ -6,4 +6,3 @@ ios
 **/*.config.js
 **/scripts/*.js
 docs-validation/*
-**/.rnstorybook/storybook.requires.*
