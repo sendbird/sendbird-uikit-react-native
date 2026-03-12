@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.2...v3.12.3) (2026-03-12)
+
+### Bug Fixes
+
+- address PR review feedback ([b26a9b0](https://github.com/sendbird/sendbird-uikit-react-native/commit/b26a9b00ad361e177bc7040a924fd5bd2838ae0d))
+- remove Storybook integration and related configurations ([c78599e](https://github.com/sendbird/sendbird-uikit-react-native/commit/c78599e138c7fb861c20fc2406592593aa81b372))
+- upgrade Storybook v6 to v10 to resolve babel-traverse vulnerability ([7ac034b](https://github.com/sendbird/sendbird-uikit-react-native/commit/7ac034b23a4127d5157761e4204fb84b9ad2e8bc))
+
 ## [3.12.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.1...v3.12.2) (2026-02-05)
 
 **Note:** Version bump only for package @sendbird/uikit-sample-cli
