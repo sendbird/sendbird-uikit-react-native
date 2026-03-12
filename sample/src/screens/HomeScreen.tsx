@@ -30,7 +30,7 @@ const HomeItems = [
     desc: '',
     route: Routes.UIKitConfigs,
   },
-{
+  {
     image: undefined,
     title: 'Palette',
     desc: '',
