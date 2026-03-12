@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.3](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.2...v3.12.3) (2026-03-12)
+
+### Bug Fixes
+
+- remove Storybook integration and related configurations ([c78599e](https://github.com/sendbird/sendbird-uikit-react-native/commit/c78599e138c7fb861c20fc2406592593aa81b372))
+- replace Pressable style/children callbacks with useState for NativeWind compatibility ([466b467](https://github.com/sendbird/sendbird-uikit-react-native/commit/466b467697d48490f4a27bcb23d772221cc85f65))
+- update fast-xml-parser to 4.5.4 ([1892c9c](https://github.com/sendbird/sendbird-uikit-react-native/commit/1892c9cf35823a0ac9fd07c5172395f7b3e38ea4))
+
 ## [3.12.2](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.1...v3.12.2) (2026-02-05)
 
 ### Features

@@ -1,7 +1,4 @@
-## [3.12.2]
-
-### Features
-- feat: add preferredAssetRepresentationMode option to createExpoFileService
+## [3.12.3]
 
 ### Bug Fixes
-- fix: treat HEIC/HEIF as file type instead of image
+- fix: replace Pressable style/children callbacks with useState for NativeWind compatibility
