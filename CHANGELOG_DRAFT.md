@@ -1,4 +1,4 @@
-## [3.12.3]
+## [3.12.4]
 
-### Bug Fixes
-- fix: replace Pressable style/children callbacks with useState for NativeWind compatibility
+### Features
+- feat: add frozen icon color to dark and light themes
