@@ -88,7 +88,12 @@ const GroupChannelPreview = ({
               </Text>
             )}
             {frozen && (
-              <Icon size={16} icon={'freeze'} color={colors.primary} containerStyle={styles.channelInfoFrozen} />
+              <Icon
+                size={16}
+                icon={'freeze'}
+                color={color.default.none.frozenIcon}
+                containerStyle={styles.channelInfoFrozen}
+              />
             )}
             {notificationOff && <Icon size={16} icon={'notifications-off-filled'} color={colors.onBackground03} />}
           </Box>

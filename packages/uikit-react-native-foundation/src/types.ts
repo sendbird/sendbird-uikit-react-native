@@ -121,7 +121,8 @@ export type ComponentColorTree = GetColorTree<{
       | 'background'
       | 'coverBackground'
       | 'bodyIconBackground'
-      | 'separator';
+      | 'separator'
+      | 'frozenIcon';
     ProfileCard: 'textUsername' | 'textBodyLabel' | 'textBody' | 'background';
     Reaction: 'background' | 'highlight';
     OpenChannelMessage:
