@@ -91,7 +91,7 @@ const GroupChannelPreview = ({
               <Icon
                 size={16}
                 icon={'freeze'}
-                color={color.default.none.frozenIcon}
+                color={color.default.none.frozenIcon ?? colors.primary}
                 containerStyle={styles.channelInfoFrozen}
               />
             )}
