@@ -188,6 +188,7 @@ const DarkUIKitTheme = createTheme({
               coverBackground: palette.onBackgroundDark04,
               bodyIconBackground: palette.background500,
               separator: palette.onBackgroundDark04,
+              frozenIcon: palette.primary200,
             },
           },
         },
