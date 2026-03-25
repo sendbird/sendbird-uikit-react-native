@@ -98,7 +98,13 @@ const VoiceMessageInput = ({ onClose, onSend }: VoiceMessageInputProps) => {
   const remainingTime = state.playingTime.duration - state.playingTime.currentTime;
 
   return (
-    <Box backgroundColor={uiColors.background} paddingTop={24} paddingBottom={24 + safeArea.paddingBottom} paddingHorizontal={16} style={styles.container}>
+    <Box
+      backgroundColor={uiColors.background}
+      paddingTop={24}
+      paddingBottom={24 + safeArea.paddingBottom}
+      paddingHorizontal={16}
+      style={styles.container}
+    >
       {/** Progress bar **/}
       <ProgressBar
         style={styles.progressBar}
