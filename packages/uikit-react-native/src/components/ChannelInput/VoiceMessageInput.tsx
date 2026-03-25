@@ -10,7 +10,7 @@ import {
   createStyleSheet,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import { Logger, conditionChaining, millsToMMSS } from '@sendbird/uikit-utils';
+import { Logger, conditionChaining, millsToMMSS, useSafeAreaPadding } from '@sendbird/uikit-utils';
 
 import { useLocalization } from '../../hooks/useContext';
 import useVoiceMessageInput from '../../hooks/useVoiceMessageInput';
@@ -24,6 +24,7 @@ export type VoiceMessageInputProps = {
 const VoiceMessageInput = ({ onClose, onSend }: VoiceMessageInputProps) => {
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
+  const safeArea = useSafeAreaPadding(['bottom']);
   const { actions, state } = useVoiceMessageInput({
     onSend: (file, duration) => onSend({ file, duration }),
     onClose,
@@ -97,7 +98,7 @@ const VoiceMessageInput = ({ onClose, onSend }: VoiceMessageInputProps) => {
   const remainingTime = state.playingTime.duration - state.playingTime.currentTime;
 
   return (
-    <Box backgroundColor={uiColors.background} paddingVertical={24} paddingHorizontal={16} style={styles.container}>
+    <Box backgroundColor={uiColors.background} paddingTop={24} paddingBottom={24 + safeArea.paddingBottom} paddingHorizontal={16} style={styles.container}>
       {/** Progress bar **/}
       <ProgressBar
         style={styles.progressBar}
