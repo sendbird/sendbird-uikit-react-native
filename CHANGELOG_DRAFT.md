@@ -1,4 +1,4 @@
-## [3.12.4]
+## [3.12.5]
 
-### Features
-- feat: add frozen icon color to dark and light themes
+### Bug Fixes
+- fix: apply safe area padding to voice message input for Android navigation button overlap

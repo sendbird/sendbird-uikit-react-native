@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.5](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.4...v3.12.5) (2026-03-26)
+
+### Bug Fixes
+
+- apply safe area padding to the bottom of the VoiceMessageInput container. ([f72bb5f](https://github.com/sendbird/sendbird-uikit-react-native/commit/f72bb5fa74cc977658bfa20e3f00971d2bb9986c))
+
 ## [3.12.4](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.3...v3.12.4) (2026-03-16)
 
 **Note:** Version bump only for package @sendbird/uikit-react-native
