@@ -6,6 +6,8 @@ import { PromisePolyfill } from './utils/promise';
 
 /** Components **/
 export { default as ChannelInput } from './components/ChannelInput';
+export type { ChannelInputProps } from './components/ChannelInput';
+export { default as EditInput } from './components/ChannelInput/EditInput';
 export { default as ChannelMessageList } from './components/ChannelMessageList';
 export { default as GroupChannelMessageRenderer } from './components/GroupChannelMessageRenderer';
 export { default as OpenChannelMessageRenderer } from './components/OpenChannelMessageRenderer';
@@ -61,6 +63,8 @@ export { LocalizationContext, LocalizationProvider } from './contexts/Localizati
 export { default as useConnection } from './hooks/useConnection';
 export { default as usePushTokenRegistration } from './hooks/usePushTokenRegistration';
 export * from './hooks/useContext';
+export { default as useMentionTextInput } from './hooks/useMentionTextInput';
+export type { UseMentionTextInputParams, UseMentionTextInputReturn } from './hooks/useMentionTextInput';
 
 /** Localization **/
 export { createBaseStringSet } from './localization/createBaseStringSet';

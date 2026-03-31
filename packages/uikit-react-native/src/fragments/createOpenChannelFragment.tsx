@@ -52,6 +52,7 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
     flatListProps,
     queryCreator,
     sortComparator = messageComparator,
+    placeholder,
   }) => {
     const { sdk, currentUser } = useSendbirdChat();
 
@@ -182,6 +183,7 @@ const createOpenChannelFragment = (initModule?: Partial<OpenChannelModule>): Ope
             onPressSendFileMessage={onPressSendFileMessage}
             onPressUpdateUserMessage={onPressUpdateUserMessage}
             onPressUpdateFileMessage={onPressUpdateFileMessage}
+            placeholder={placeholder}
           />
         </StatusComposition>
       </OpenChannelModule.Provider>

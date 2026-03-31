@@ -71,6 +71,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     flatListProps,
     messageListQueryParams,
     partialTextInputProps,
+    placeholder,
     collectionCreator,
   }) => {
     const { playerService, recorderService } = usePlatformService();
@@ -343,6 +344,7 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
             onPressUpdateUserMessage={onPressUpdateUserMessage}
             onPressUpdateFileMessage={onPressUpdateFileMessage}
             partialTextInputProps={partialTextInputProps}
+            placeholder={placeholder}
           />
         </StatusComposition>
       </GroupChannelModule.Provider>
