@@ -92,7 +92,9 @@ export type ChannelInputProps = {
   // TextInput props - only safe properties that don't interfere with UIKit functionality
   partialTextInputProps?: Partial<Pick<TextInputProps, 'autoCorrect'>>;
 
-  /** Custom placeholder text that overrides all default localization strings including muted/frozen/disabled states. */
+  /** Custom placeholder text for the send input.
+   *  Overrides all default localization strings (including muted/frozen/disabled states) for send mode only.
+   *  Edit mode continues to use the default localized placeholder. */
   placeholder?: string;
 };
 

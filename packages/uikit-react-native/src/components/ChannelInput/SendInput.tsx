@@ -175,7 +175,7 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
   const sheetItems = useChannelInputItems(channel, sendFileMessage);
 
   const getPlaceholder = () => {
-    if (placeholder) return placeholder;
+    if (placeholder != null) return placeholder;
 
     if (inputMuted) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_MUTED;
     if (inputFrozen) return STRINGS.LABELS.CHANNEL_INPUT_PLACEHOLDER_DISABLED;

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { type RefObject, useEffect, useRef, useState } from 'react';
 import type { NativeSyntheticEvent, TextInput, TextInputSelectionChangeEventData } from 'react-native';
 import { Platform } from 'react-native';
 
@@ -12,7 +12,7 @@ export interface UseMentionTextInputParams {
 }
 
 export interface UseMentionTextInputReturn {
-  textInputRef: React.RefObject<TextInput | undefined>;
+  textInputRef: RefObject<TextInput | undefined>;
   selection: { start: number; end: number };
   onSelectionChange: (e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => void;
   text: string;
