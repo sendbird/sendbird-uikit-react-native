@@ -43,6 +43,7 @@ export interface GroupChannelThreadProps {
     keyboardAvoidOffset?: GroupChannelThreadProps['Provider']['keyboardAvoidOffset'];
     flatListProps?: GroupChannelThreadProps['MessageList']['flatListProps'];
     sortComparator?: UseGroupChannelMessagesOptions['sortComparator'];
+    placeholder?: GroupChannelThreadProps['Input']['placeholder'];
   };
   Header: {
     onPressLeft: () => void;
@@ -85,7 +86,8 @@ export interface GroupChannelThreadProps {
     | 'onPressUpdateUserMessage'
     | 'onPressUpdateFileMessage'
     | 'SuggestedMentionList'
-    | 'AttachmentsButton',
+    | 'AttachmentsButton'
+    | 'placeholder',
     'inputDisabled'
   >;
 

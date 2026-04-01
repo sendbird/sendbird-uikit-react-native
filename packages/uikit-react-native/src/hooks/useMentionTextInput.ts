@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { type RefObject, useEffect, useRef, useState } from 'react';
 import type { NativeSyntheticEvent, TextInput, TextInputSelectionChangeEventData } from 'react-native';
 import { Platform } from 'react-native';
 
@@ -7,12 +7,25 @@ import { SendbirdFileMessage, SendbirdUserMessage, replace, useFreshCallback } f
 import type { MentionedUser } from '../types';
 import { useSendbirdChat } from './useContext';
 
+export interface UseMentionTextInputParams {
+  messageToEdit?: SendbirdUserMessage | SendbirdFileMessage;
+}
+
+export interface UseMentionTextInputReturn {
+  textInputRef: RefObject<TextInput | null>;
+  selection: { start: number; end: number };
+  onSelectionChange: (e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => void;
+  text: string;
+  onChangeText: (text: string, addedMentionedUser?: MentionedUser) => void;
+  mentionedUsers: MentionedUser[];
+}
+
 // Note: The selection change with the keyboard cursor might not work properly with RTL languages
-const useMentionTextInput = (params: { messageToEdit?: SendbirdUserMessage | SendbirdFileMessage }) => {
+const useMentionTextInput = (params: UseMentionTextInputParams): UseMentionTextInputReturn => {
   const { mentionManager, sbOptions } = useSendbirdChat();
 
   const mentionedUsersRef = useRef<MentionedUser[]>([]);
-  const textInputRef = useRef<TextInput | undefined>(undefined);
+  const textInputRef = useRef<TextInput | null>(null);
 
   const [text, setText] = useState('');
   const [selection, setSelection] = useState({ start: 0, end: 0 });

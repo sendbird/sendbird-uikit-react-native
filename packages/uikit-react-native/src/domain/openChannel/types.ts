@@ -44,6 +44,7 @@ export type OpenChannelProps = {
     flatListProps?: OpenChannelProps['MessageList']['flatListProps'];
     sortComparator?: UseOpenChannelMessagesOptions['sortComparator'];
     queryCreator?: UseOpenChannelMessagesOptions['queryCreator'];
+    placeholder?: OpenChannelProps['Input']['placeholder'];
   };
   Header: {
     rightIconName: keyof typeof Icon.Assets;
@@ -78,7 +79,8 @@ export type OpenChannelProps = {
     | 'onPressSendFileMessage'
     | 'onPressUpdateUserMessage'
     | 'onPressUpdateFileMessage'
-    | 'AttachmentsButton',
+    | 'AttachmentsButton'
+    | 'placeholder',
     'inputDisabled'
   >;
 

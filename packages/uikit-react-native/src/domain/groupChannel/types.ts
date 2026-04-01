@@ -54,6 +54,7 @@ export interface GroupChannelProps {
     searchItem?: GroupChannelProps['MessageList']['searchItem'];
 
     partialTextInputProps?: GroupChannelProps['Input']['partialTextInputProps'];
+    placeholder?: GroupChannelProps['Input']['placeholder'];
 
     /**
      * @description You can specify the query parameters for the message list.
@@ -114,7 +115,8 @@ export interface GroupChannelProps {
     | 'onPressUpdateFileMessage'
     | 'SuggestedMentionList'
     | 'AttachmentsButton'
-    | 'partialTextInputProps',
+    | 'partialTextInputProps'
+    | 'placeholder',
     'inputDisabled'
   >;
 

@@ -91,6 +91,11 @@ export type ChannelInputProps = {
 
   // TextInput props - only safe properties that don't interfere with UIKit functionality
   partialTextInputProps?: Partial<Pick<TextInputProps, 'autoCorrect'>>;
+
+  /** Custom placeholder text for the send input.
+   *  Overrides all default localization strings (including muted/frozen/disabled states) for send mode only.
+   *  Edit mode continues to use the default localized placeholder. */
+  placeholder?: string;
 };
 
 const AUTO_FOCUS = Platform.select({ ios: false, android: true, default: false });
@@ -167,7 +172,7 @@ const ChannelInput = (props: ChannelInputProps) => {
               <SendInput
                 {...props}
                 key={inputKeyToRemount}
-                ref={textInputRef as never}
+                ref={textInputRef}
                 text={text}
                 onChangeText={onChangeText}
                 onSelectionChange={onSelectionChange}
@@ -182,7 +187,7 @@ const ChannelInput = (props: ChannelInputProps) => {
               <EditInput
                 {...props}
                 key={inputKeyToRemount}
-                ref={textInputRef as never}
+                ref={textInputRef}
                 text={text}
                 onChangeText={onChangeText}
                 autoFocus={AUTO_FOCUS}
@@ -237,7 +242,7 @@ const useTextClearOnDisabled = (setText: (val: string) => void, chatDisabled: bo
 };
 
 const useAutoFocusOnEditMode = (
-  textInputRef: React.MutableRefObject<TextInput | undefined>,
+  textInputRef: React.RefObject<TextInput | null>,
   messageToEdit?: SendbirdBaseMessage,
 ) => {
   useEffect(() => {

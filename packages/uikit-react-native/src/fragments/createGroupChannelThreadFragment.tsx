@@ -53,6 +53,7 @@ const createGroupChannelThreadFragment = (
     keyboardAvoidOffset,
     sortComparator = threadMessageComparator,
     flatListProps,
+    placeholder,
   }) => {
     const { playerService, recorderService } = usePlatformService();
     const { sdk, currentUser, sbOptions, voiceMessageStatusManager, groupChannelFragmentOptions } = useSendbirdChat();
@@ -259,6 +260,7 @@ const createGroupChannelThreadFragment = (
             onPressSendFileMessage={onPressSendFileMessage}
             onPressUpdateUserMessage={onPressUpdateUserMessage}
             onPressUpdateFileMessage={onPressUpdateFileMessage}
+            placeholder={placeholder}
           />
         </StatusComposition>
       </GroupChannelThreadModule.Provider>
