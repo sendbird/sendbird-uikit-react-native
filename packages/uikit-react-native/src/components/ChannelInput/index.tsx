@@ -172,7 +172,7 @@ const ChannelInput = (props: ChannelInputProps) => {
               <SendInput
                 {...props}
                 key={inputKeyToRemount}
-                ref={textInputRef as never}
+                ref={textInputRef}
                 text={text}
                 onChangeText={onChangeText}
                 onSelectionChange={onSelectionChange}
@@ -187,7 +187,7 @@ const ChannelInput = (props: ChannelInputProps) => {
               <EditInput
                 {...props}
                 key={inputKeyToRemount}
-                ref={textInputRef as never}
+                ref={textInputRef}
                 text={text}
                 onChangeText={onChangeText}
                 autoFocus={AUTO_FOCUS}
@@ -242,7 +242,7 @@ const useTextClearOnDisabled = (setText: (val: string) => void, chatDisabled: bo
 };
 
 const useAutoFocusOnEditMode = (
-  textInputRef: React.MutableRefObject<TextInput | undefined>,
+  textInputRef: React.RefObject<TextInput | null>,
   messageToEdit?: SendbirdBaseMessage,
 ) => {
   useEffect(() => {

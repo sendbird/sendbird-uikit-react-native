@@ -12,7 +12,7 @@ export interface UseMentionTextInputParams {
 }
 
 export interface UseMentionTextInputReturn {
-  textInputRef: RefObject<TextInput | undefined>;
+  textInputRef: RefObject<TextInput | null>;
   selection: { start: number; end: number };
   onSelectionChange: (e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => void;
   text: string;
@@ -25,7 +25,7 @@ const useMentionTextInput = (params: UseMentionTextInputParams): UseMentionTextI
   const { mentionManager, sbOptions } = useSendbirdChat();
 
   const mentionedUsersRef = useRef<MentionedUser[]>([]);
-  const textInputRef = useRef<TextInput | undefined>(undefined);
+  const textInputRef = useRef<TextInput | null>(null);
 
   const [text, setText] = useState('');
   const [selection, setSelection] = useState({ start: 0, end: 0 });
