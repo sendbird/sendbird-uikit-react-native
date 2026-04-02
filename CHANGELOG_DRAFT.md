@@ -1,4 +1,7 @@
-## [3.12.5]
+## [3.12.6]
 
-### Bug Fixes
-- fix: apply safe area padding to voice message input for Android navigation button overlap
+### Features
+
+- feat: add customizable placeholder text for ChannelInput component
+- chore: enhance placeholder functionality in SendInput component
+- chore: fix textInputRef type to use RefObject<TextInput | null> for React compatibility
