@@ -1,7 +1,6 @@
 {
   "packages": ["packages/*", "sample", "docs-validation"],
   "npmClient": "yarn",
-  "useWorkspaces": true,
   "version": "3.12.6",
   "command": {
     "publish": {
