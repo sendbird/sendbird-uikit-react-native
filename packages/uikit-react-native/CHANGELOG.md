@@ -1,7 +1,19 @@
-# Changelog
+# Change Log
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [3.12.6](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.5...v3.12.6) (2026-04-02)
+
+### Features
+
+- add customizable placeholder text for ChannelInput component ([18d53eb](https://github.com/sendbird/sendbird-uikit-react-native/commit/18d53ebc67012fac4b4c889655bd32029080861e))
+
+## [3.12.6](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.5...v3.12.6) (2026-04-02)
+
+### Features
+
+- add customizable placeholder text for ChannelInput component ([18d53eb](https://github.com/sendbird/sendbird-uikit-react-native/commit/18d53ebc67012fac4b4c889655bd32029080861e))
 
 ## [3.12.5](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.4...v3.12.5) (2026-03-26)
 
