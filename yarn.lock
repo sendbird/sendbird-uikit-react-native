@@ -8190,7 +8190,7 @@ launch-editor@^2.9.1:
     picocolors "^1.1.1"
     shell-quote "^1.8.3"
 
-lerna@9.0.7:
+lerna@^9.0.7:
   version "9.0.7"
   resolved "https://registry.yarnpkg.com/lerna/-/lerna-9.0.7.tgz#805686a68471a4f8f918b125e661350efad70fc5"
   integrity sha512-PMjbSWYfwL1yZ5c1D2PZuFyzmtYhLdn0f76uG8L25g6eYy34j+2jPb4Q6USx1UJvxVtxkdVEeAAWS/WxgJ8VZA==
