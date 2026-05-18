@@ -36,6 +36,7 @@ export enum PremiumFeatures {
   auto_thumbnail = 'auto_thumbnail',
   image_moderation = 'image_moderation',
   super_group_channel = 'super_group_channel',
+  broadcast_channel = 'broadcast_channel',
   announcement = 'announcement',
   moderation_open = 'moderation_open',
   desk = 'desk',
