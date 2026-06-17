@@ -8,12 +8,8 @@ describe('useAppFeatures', () => {
   it('should return app features', () => {
     const sdk = createMockSendbirdChat({
       appInfo: {
-        premiumFeatureList: [PremiumFeatures.delivery_receipt],
-        applicationAttributes: [
-          ApplicationAttributes.allow_broadcast_channel,
-          ApplicationAttributes.allow_super_group_channel,
-          ApplicationAttributes.reactions,
-        ],
+        premiumFeatureList: [PremiumFeatures.delivery_receipt, PremiumFeatures.super_group_channel],
+        applicationAttributes: [ApplicationAttributes.allow_broadcast_channel, ApplicationAttributes.reactions],
       },
     });
     const { result } = renderHook(() => useAppFeatures(sdk));

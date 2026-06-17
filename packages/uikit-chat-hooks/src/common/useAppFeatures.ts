@@ -5,7 +5,7 @@ export const useAppFeatures = (sdk: SendbirdChatSDK) => {
   return {
     deliveryReceiptEnabled: premiumFeatureList.includes(PremiumFeatures.delivery_receipt),
     broadcastChannelEnabled: applicationAttributes.includes(ApplicationAttributes.allow_broadcast_channel),
-    superGroupChannelEnabled: applicationAttributes.includes(ApplicationAttributes.allow_super_group_channel),
+    superGroupChannelEnabled: premiumFeatureList.includes(PremiumFeatures.super_group_channel),
     reactionEnabled: applicationAttributes.includes(ApplicationAttributes.reactions),
     uploadSizeLimit: uploadSizeLimit,
   };
