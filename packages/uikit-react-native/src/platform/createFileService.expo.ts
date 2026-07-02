@@ -18,6 +18,13 @@ import type {
   SaveOptions,
 } from './types';
 
+type ExpoMediaLibraryModule = typeof ExpoMediaLibrary & {
+  Asset?: {
+    create?: (localUri: string) => Promise<unknown>;
+  };
+  saveToLibraryAsync?: (localUri: string) => Promise<void>;
+};
+
 const createExpoFileService = ({
   imagePickerModule,
   documentPickerModule,
@@ -30,6 +37,7 @@ const createExpoFileService = ({
   fsModule: typeof ExpoFs;
 }): FileServiceInterface => {
   const preferredAssetRepresentationMode = imagePickerModule.UIImagePickerPreferredAssetRepresentationMode?.Compatible;
+  const expoMediaLibraryModule = mediaLibraryModule as ExpoMediaLibraryModule;
 
   class ExpoFileServiceInterface implements FileServiceInterface {
     async hasCameraPermission(): Promise<boolean> {
@@ -158,7 +166,13 @@ const createExpoFileService = ({
 
       const response = await expoBackwardUtils.fileSystem.downloadFile(fsModule, options.fileUrl, downloadPath);
       if (getFileType(options.fileType || '').match(/video|image/)) {
-        await mediaLibraryModule.saveToLibraryAsync(response.uri);
+        if (typeof expoMediaLibraryModule.Asset?.create === 'function') {
+          await expoMediaLibraryModule.Asset.create(response.uri);
+        } else if (typeof expoMediaLibraryModule.saveToLibraryAsync === 'function') {
+          await expoMediaLibraryModule.saveToLibraryAsync(response.uri);
+        } else {
+          throw new Error('Cannot save file to media library');
+        }
       }
       return response.uri;
     }
