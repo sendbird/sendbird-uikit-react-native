@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.7](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.6...v3.12.7) (2026-07-06)
+
+### Bug Fixes
+
+- revert broadcast channel flag to applicationAttributes ([2cd2bf1](https://github.com/sendbird/sendbird-uikit-react-native/commit/2cd2bf1688f5619b1f3e74b6af1bc2eb40bb8bdd))
+- use premiumFeatureList for super group and broadcast channel features ([bd81e37](https://github.com/sendbird/sendbird-uikit-react-native/commit/bd81e37050c293bd197c0efcee24b785e8e636ed))
+
 ## [3.12.6](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.5...v3.12.6) (2026-04-02)
 
 **Note:** Version bump only for package @sendbird/uikit-chat-hooks
