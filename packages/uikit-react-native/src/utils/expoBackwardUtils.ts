@@ -153,7 +153,7 @@ const expoBackwardUtils = {
         return await fsModule.downloadAsync(url, localUri);
       } else {
         const destination = new fsModule.File(localUri);
-        const result = await fsModule.File.downloadFileAsync(url, destination as never);
+        const result = await fsModule.File.downloadFileAsync(url, destination as never, { idempotent: true });
         return { uri: result.uri };
       }
     },
