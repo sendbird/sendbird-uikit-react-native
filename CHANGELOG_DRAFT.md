@@ -12,8 +12,3 @@
 - fix: upgrade axios to ^1.16.0 (SECURE-3734)
 - fix: upgrade vulnerable transitive deps (SECURE-2965, SECURE-3009, SECURE-3438)
 - fix: upgrade nx transitive dep axios 1.12.0 → 1.15.0 (SECURE-3216)
-
-### Chores
-
-- chore: merge docs workflows into single release-triggered pipeline
-- chore: add tsbuildinfo to gitignore
