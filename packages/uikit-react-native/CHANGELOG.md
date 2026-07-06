@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.7](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.6...v3.12.7) (2026-07-06)
+
+### Bug Fixes
+
+- support Expo 56 media library saves ([d265e4e](https://github.com/sendbird/sendbird-uikit-react-native/commit/d265e4e6075745832c659da6acd0c318330b5edf))
+- support Expo clipboard async setter ([b6cb8b5](https://github.com/sendbird/sendbird-uikit-react-native/commit/b6cb8b50901916ff99097d8bf605ce217b63ae96))
+
 ## [3.12.6](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.5...v3.12.6) (2026-04-02)
 
 ### Features
