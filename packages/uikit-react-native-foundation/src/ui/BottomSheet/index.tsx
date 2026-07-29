@@ -42,13 +42,7 @@ const BottomSheet = ({ onDismiss, onHide, visible, sheetItems, HeaderComponent }
   );
 };
 
-/**
- * NOTE: The safe area insets are read here, inside the modal, on purpose.
- *  A modal is presented in its own native window, so the insets of the app level provider describe the
- *  view that hosts the app instead of this window. Reading them from a component above the modal makes
- *  the sheet lose its bottom inset whenever the app has already consumed it, which renders the last
- *  sheet item under the Android system navigation bar.
- * */
+// NOTE: Reads the safe area inside the modal on purpose, see `ModalSafeAreaBottom`.
 const BottomSheetContent = ({ onHide, sheetItems, HeaderComponent }: Pick<Props, 'onHide'> & BottomSheetItem) => {
   const { width } = useWindowDimensions();
   const safeArea = useSafeAreaPadding(['bottom', 'left', 'right']);

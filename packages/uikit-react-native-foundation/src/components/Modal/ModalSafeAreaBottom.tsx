@@ -8,12 +8,10 @@ type Props = React.PropsWithChildren<{
 }>;
 
 /**
- * A View that reserves the bottom safe area of the window that hosts it.
+ * A View that reserves the bottom safe area of the window that hosts it. Render it as a child of Modal.
  *
- * Render it as a child of {@link Modal} to keep the bottom of the modal content clear of the Android
- * system navigation bar. A modal is presented in its own native window, so the insets of the app level
- * provider describe the view that hosts the app instead of the modal window, and a component rendered
- * above the modal reads a bottom inset of `0` whenever the app has already consumed it.
+ * A modal is presented in its own native window, so a component rendered above the modal reads the
+ * insets of the view that hosts the app, which is `bottom: 0` once the app has consumed that inset.
  * */
 const ModalSafeAreaBottom = ({ style, children }: Props) => {
   const { paddingBottom } = useSafeAreaPadding(['bottom']);

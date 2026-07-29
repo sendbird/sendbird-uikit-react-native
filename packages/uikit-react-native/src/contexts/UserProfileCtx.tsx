@@ -142,10 +142,7 @@ export const UserProfileProvider = ({
   );
 };
 
-/**
- * NOTE: The safe area insets are read here, inside the modal, on purpose.
- *  See `ModalSafeAreaBottom` for the reason why a component rendered above the modal cannot read them.
- * */
+// NOTE: Reads the safe area inside the modal on purpose, see `ModalSafeAreaBottom`.
 const UserProfileCard = (props: Omit<React.ComponentProps<typeof ProfileCard>, 'containerStyle'>) => {
   const safeArea = useSafeAreaPadding(['bottom', 'left', 'right']);
   return <ProfileCard containerStyle={[styles.profileCardContainer, safeArea]} {...props} />;

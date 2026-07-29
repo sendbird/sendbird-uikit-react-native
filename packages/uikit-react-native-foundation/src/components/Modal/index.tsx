@@ -21,14 +21,9 @@ import createStyleSheet from '../../styles/createStyleSheet';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 
-/**
- * NOTE: A modal is presented in its own native window on Android.
- *  When the app window is edge-to-edge, the modal window must be edge-to-edge as well, otherwise the
- *  window decor insets the modal content view while the JS layout still spans the whole window, and
- *  the content overflows behind the system navigation bar.
- *  The root window reports a non-zero bottom inset only when the app window is edge-to-edge, so it can
- *  be used to detect it. The window mode does not change while the app is running.
- * */
+// NOTE: The root window reports a bottom inset only when the app window is edge-to-edge, and the modal
+//  window has to match it, or the window decor insets the modal content view while the JS layout keeps
+//  spanning the whole window and the content overflows behind the system navigation bar.
 const IS_EDGE_TO_EDGE_WINDOW = Platform.OS === 'android' && (initialWindowMetrics?.insets.bottom ?? 0) > 0;
 
 type ModalAnimationType = 'slide' | 'slide-no-gesture' | 'fade';
@@ -92,12 +87,7 @@ const Modal = ({
         animationType={'none'}
         {...props}
       >
-        {/**
-         * NOTE: The insets of the app level provider describe the view that hosts the app, not this
-         *  modal window. When the app has already consumed the bottom inset above SendbirdUIKitContainer,
-         *  that provider reports `bottom: 0` and the modal content is laid out under the navigation bar.
-         *  Nesting a provider makes the modal content measure the insets of its own window instead.
-         * */}
+        {/* NOTE: Lets the modal content measure the insets of its own window, see `ModalSafeAreaBottom`. */}
         <SafeAreaProvider style={styles.background}>
           <TouchableWithoutFeedback onPress={disableBackgroundClose ? undefined : onClose}>
             <Animated.View
