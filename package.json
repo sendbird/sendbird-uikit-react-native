@@ -102,6 +102,7 @@
     "@types/react": "^19.1.1",
     "fast-xml-parser": "^4.5.6",
     "@babel/plugin-transform-modules-systemjs": "^7.29.4",
-    "axios": "^1.16.0"
+    "axios": "^1.16.0",
+    "lerna/js-yaml": "^4.3.0"
   }
 }
