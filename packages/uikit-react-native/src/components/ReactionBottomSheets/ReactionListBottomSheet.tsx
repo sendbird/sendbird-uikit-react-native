@@ -2,14 +2,8 @@ import React, { useState } from 'react';
 import { FlatList, Pressable, View, useWindowDimensions } from 'react-native';
 
 import type { BaseMessage } from '@sendbird/chat/message';
-import {
-  Image,
-  Modal,
-  ModalSafeAreaBottom,
-  createStyleSheet,
-  useUIKitTheme,
-} from '@sendbird/uikit-react-native-foundation';
-import { Logger, useSafeAreaPadding } from '@sendbird/uikit-utils';
+import { Image, Modal, ModalSafeArea, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import { Logger } from '@sendbird/uikit-utils';
 import type { SendbirdBaseChannel, SendbirdBaseMessage } from '@sendbird/uikit-utils';
 
 import { UNKNOWN_USER_ID } from '../../constants';
@@ -67,7 +61,6 @@ const ReactionEmojiPressable = ({
 const NUM_COLUMN = 6;
 const ReactionListBottomSheet = ({ visible, onClose, onDismiss, reactionCtx, chatCtx }: ReactionBottomSheetProps) => {
   const { width } = useWindowDimensions();
-  const safeArea = useSafeAreaPadding(['left', 'right']);
   const { colors } = useUIKitTheme();
 
   const { currentUser, emojiManager } = chatCtx;
@@ -82,41 +75,46 @@ const ReactionListBottomSheet = ({ visible, onClose, onDismiss, reactionCtx, cha
       onDismiss={onDismiss}
       backgroundStyle={styles.modal}
     >
-      <ModalSafeAreaBottom
-        style={[
-          styles.container,
-          {
-            width,
-            backgroundColor: colors.ui.dialog.default.none.background,
-            paddingStart: safeArea.paddingStart + styles.container.paddingHorizontal,
-            paddingEnd: safeArea.paddingEnd + styles.container.paddingHorizontal,
-          },
-        ]}
-      >
-        <FlatList
-          data={emojiManager.allEmoji}
-          numColumns={NUM_COLUMN}
-          keyExtractor={(item) => item.key}
-          contentContainerStyle={styles.flatlist}
-          ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
-          renderItem={({ item: { key, url } }) => {
-            return (
-              <View style={styles.emojiItem}>
-                <ReactionEmojiPressable
-                  emojiKey={key}
-                  url={url}
-                  message={message}
-                  channel={channel}
-                  currentUserId={currentUser?.userId}
-                  selectedBackground={color.selected.background}
-                  enabledBackground={color.enabled.background}
-                  onClose={onClose}
-                />
-              </View>
-            );
-          }}
-        />
-      </ModalSafeAreaBottom>
+      <ModalSafeArea>
+        {(safeArea) => (
+          <View
+            style={[
+              styles.container,
+              {
+                width,
+                paddingBottom: safeArea.paddingBottom,
+                backgroundColor: colors.ui.dialog.default.none.background,
+                paddingStart: safeArea.paddingStart + styles.container.paddingHorizontal,
+                paddingEnd: safeArea.paddingEnd + styles.container.paddingHorizontal,
+              },
+            ]}
+          >
+            <FlatList
+              data={emojiManager.allEmoji}
+              numColumns={NUM_COLUMN}
+              keyExtractor={(item) => item.key}
+              contentContainerStyle={styles.flatlist}
+              ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
+              renderItem={({ item: { key, url } }) => {
+                return (
+                  <View style={styles.emojiItem}>
+                    <ReactionEmojiPressable
+                      emojiKey={key}
+                      url={url}
+                      message={message}
+                      channel={channel}
+                      currentUserId={currentUser?.userId}
+                      selectedBackground={color.selected.background}
+                      enabledBackground={color.enabled.background}
+                      onClose={onClose}
+                    />
+                  </View>
+                );
+              }}
+            />
+          </View>
+        )}
+      </ModalSafeArea>
     </Modal>
   );
 };

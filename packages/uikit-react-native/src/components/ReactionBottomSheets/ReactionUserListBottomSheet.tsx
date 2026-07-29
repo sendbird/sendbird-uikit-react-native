@@ -6,18 +6,12 @@ import {
   Divider,
   Image,
   Modal,
-  ModalSafeAreaBottom,
+  ModalSafeArea,
   Text,
   createStyleSheet,
   useUIKitTheme,
 } from '@sendbird/uikit-react-native-foundation';
-import {
-  SendbirdEmoji,
-  SendbirdReaction,
-  getReactionCount,
-  truncatedCount,
-  useSafeAreaPadding,
-} from '@sendbird/uikit-utils';
+import { SendbirdEmoji, SendbirdReaction, getReactionCount, truncatedCount } from '@sendbird/uikit-utils';
 
 import type { ReactionBottomSheetProps } from './index';
 
@@ -31,7 +25,6 @@ const ReactionUserListBottomSheet = ({
   onPressUserProfile,
 }: ReactionBottomSheetProps) => {
   const { width } = useWindowDimensions();
-  const safeArea = useSafeAreaPadding(['left', 'right']);
   const { colors } = useUIKitTheme();
 
   const [tabIndex, setTabIndex] = useState(0);
@@ -47,10 +40,6 @@ const ReactionUserListBottomSheet = ({
   const color = colors.ui.reaction.default;
   const reactions = message?.reactions ?? [];
   const focusedReaction = reactions[tabIndex] as SendbirdReaction | undefined;
-  const containerSafeArea = {
-    paddingStart: safeArea.paddingStart + styles.layout.paddingHorizontal,
-    paddingEnd: safeArea.paddingEnd + styles.layout.paddingHorizontal,
-  };
 
   const focusTab = (index: number, animated = true) => {
     const indicatorValue = tabIndicatorValue.current[index];
@@ -174,28 +163,45 @@ const ReactionUserListBottomSheet = ({
       onDismiss={onDismiss}
       backgroundStyle={styles.modal}
     >
-      <ModalSafeAreaBottom
-        style={[styles.container, { width, backgroundColor: colors.ui.dialog.default.none.background }]}
-      >
-        <ScrollView
-          ref={scrollRef as never}
-          horizontal
-          bounces={false}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={[containerSafeArea, styles.tabsContainer]}
-        >
-          {renderTabs()}
-        </ScrollView>
-        <Divider style={{ top: -1 }} />
-        <ScrollView
-          bounces={false}
-          showsVerticalScrollIndicator={false}
-          style={styles.pageContainer}
-          contentContainerStyle={containerSafeArea}
-        >
-          {renderPage()}
-        </ScrollView>
-      </ModalSafeAreaBottom>
+      <ModalSafeArea>
+        {(safeArea) => {
+          const containerSafeArea = {
+            paddingStart: safeArea.paddingStart + styles.layout.paddingHorizontal,
+            paddingEnd: safeArea.paddingEnd + styles.layout.paddingHorizontal,
+          };
+          return (
+            <View
+              style={[
+                styles.container,
+                {
+                  width,
+                  paddingBottom: safeArea.paddingBottom,
+                  backgroundColor: colors.ui.dialog.default.none.background,
+                },
+              ]}
+            >
+              <ScrollView
+                ref={scrollRef as never}
+                horizontal
+                bounces={false}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={[containerSafeArea, styles.tabsContainer]}
+              >
+                {renderTabs()}
+              </ScrollView>
+              <Divider style={{ top: -1 }} />
+              <ScrollView
+                bounces={false}
+                showsVerticalScrollIndicator={false}
+                style={styles.pageContainer}
+                contentContainerStyle={containerSafeArea}
+              >
+                {renderPage()}
+              </ScrollView>
+            </View>
+          );
+        }}
+      </ModalSafeArea>
     </Modal>
   );
 };

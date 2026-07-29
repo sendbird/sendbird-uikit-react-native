@@ -1,10 +1,9 @@
 import React, { ReactNode } from 'react';
 import { TouchableOpacity, useWindowDimensions } from 'react-native';
 
-import { useSafeAreaPadding } from '@sendbird/uikit-utils';
-
 import type Icon from '../../components/Icon';
 import Modal from '../../components/Modal';
+import ModalSafeArea from '../../components/Modal/ModalSafeArea';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import DialogSheet from '../Dialog/DialogSheet';
 
@@ -28,6 +27,7 @@ type Props = {
 } & BottomSheetItem;
 const BottomSheet = ({ onDismiss, onHide, visible, sheetItems, HeaderComponent }: Props) => {
   const { statusBarTranslucent } = useHeaderStyle();
+  const { width } = useWindowDimensions();
   return (
     <Modal
       type={'slide'}
@@ -37,34 +37,30 @@ const BottomSheet = ({ onDismiss, onHide, visible, sheetItems, HeaderComponent }
       visible={visible}
       backgroundStyle={{ alignItems: 'center', justifyContent: 'flex-end' }}
     >
-      <BottomSheetContent onHide={onHide} sheetItems={sheetItems} HeaderComponent={HeaderComponent} />
+      <ModalSafeArea>
+        {(safeArea) => (
+          <DialogSheet style={{ width, paddingBottom: safeArea.paddingBottom }}>
+            {HeaderComponent && <HeaderComponent onClose={onHide} />}
+            {sheetItems.map(({ onPress, ...props }, idx) => (
+              <TouchableOpacity
+                activeOpacity={0.75}
+                key={props.title + idx}
+                style={{ paddingStart: safeArea.paddingStart, paddingEnd: safeArea.paddingEnd }}
+                disabled={props.disabled}
+                onPress={async () => {
+                  await onHide();
+                  try {
+                    onPress();
+                  } catch {}
+                }}
+              >
+                <DialogSheet.Item {...props} />
+              </TouchableOpacity>
+            ))}
+          </DialogSheet>
+        )}
+      </ModalSafeArea>
     </Modal>
-  );
-};
-
-const BottomSheetContent = ({ onHide, sheetItems, HeaderComponent }: Pick<Props, 'onHide'> & BottomSheetItem) => {
-  const { width } = useWindowDimensions();
-  const safeArea = useSafeAreaPadding(['bottom', 'left', 'right']);
-  return (
-    <DialogSheet style={{ width, paddingBottom: safeArea.paddingBottom }}>
-      {HeaderComponent && <HeaderComponent onClose={onHide} />}
-      {sheetItems.map(({ onPress, ...props }, idx) => (
-        <TouchableOpacity
-          activeOpacity={0.75}
-          key={props.title + idx}
-          style={{ paddingStart: safeArea.paddingStart, paddingEnd: safeArea.paddingEnd }}
-          disabled={props.disabled}
-          onPress={async () => {
-            await onHide();
-            try {
-              onPress();
-            } catch {}
-          }}
-        >
-          <DialogSheet.Item {...props} />
-        </TouchableOpacity>
-      ))}
-    </DialogSheet>
   );
 };
 

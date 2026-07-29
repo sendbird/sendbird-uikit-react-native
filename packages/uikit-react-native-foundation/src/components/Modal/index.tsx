@@ -21,7 +21,10 @@ import createStyleSheet from '../../styles/createStyleSheet';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 
-const IS_EDGE_TO_EDGE_WINDOW = Platform.OS === 'android' && (initialWindowMetrics?.insets.bottom ?? 0) > 0;
+const initialInsets = initialWindowMetrics?.insets;
+const IS_EDGE_TO_EDGE_WINDOW =
+  Platform.OS === 'android' &&
+  Math.max(initialInsets?.bottom ?? 0, initialInsets?.left ?? 0, initialInsets?.right ?? 0) > 0;
 
 type ModalAnimationType = 'slide' | 'slide-no-gesture' | 'fade';
 type Props = {
@@ -84,7 +87,7 @@ const Modal = ({
         animationType={'none'}
         {...props}
       >
-        <SafeAreaProvider style={styles.background}>
+        <SafeAreaProvider initialMetrics={initialWindowMetrics} style={styles.background}>
           <TouchableWithoutFeedback onPress={disableBackgroundClose ? undefined : onClose}>
             <Animated.View
               style={[
