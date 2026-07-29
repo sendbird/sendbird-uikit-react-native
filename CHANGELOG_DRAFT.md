@@ -2,7 +2,6 @@
 
 ### Bug Fixes
 
-- keep modal content clear of the Android navigation bar under edge-to-edge enforcement
 - support Expo 56 media library saves
 - support Expo clipboard async setter
 - use premiumFeatureList for super group and broadcast channel features
