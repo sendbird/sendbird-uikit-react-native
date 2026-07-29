@@ -60,8 +60,6 @@ export const UserProfileProvider = ({
     WARN_onCreateChannel = true;
   }
 
-  const safeArea = useSafeAreaPadding(['bottom', 'left', 'right']);
-
   const [user, setUser] = useState<SendbirdUser | SendbirdMember | SendbirdReactedUserInfo>();
   const [visible, setVisible] = useState(false);
   const [hideMessageButton, setHideMessageButton] = useState(false);
@@ -131,8 +129,7 @@ export const UserProfileProvider = ({
         statusBarTranslucent={statusBarTranslucent}
       >
         {user && (
-          <ProfileCard
-            containerStyle={[styles.profileCardContainer, safeArea]}
+          <UserProfileCard
             uri={user.profileUrl}
             username={user.nickname || localizationContext.STRINGS.LABELS.USER_NO_NAME}
             bodyLabel={localizationContext.STRINGS.PROFILE_CARD.BODY_LABEL}
@@ -143,6 +140,15 @@ export const UserProfileProvider = ({
       </Modal>
     </UserProfileContext.Provider>
   );
+};
+
+/**
+ * NOTE: The safe area insets are read here, inside the modal, on purpose.
+ *  See `ModalSafeAreaBottom` for the reason why a component rendered above the modal cannot read them.
+ * */
+const UserProfileCard = (props: Omit<React.ComponentProps<typeof ProfileCard>, 'containerStyle'>) => {
+  const safeArea = useSafeAreaPadding(['bottom', 'left', 'right']);
+  return <ProfileCard containerStyle={[styles.profileCardContainer, safeArea]} {...props} />;
 };
 
 const styles = createStyleSheet({

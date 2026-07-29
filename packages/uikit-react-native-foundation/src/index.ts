@@ -8,6 +8,7 @@ export { default as Icon } from './components/Icon';
 export { default as Image } from './components/Image';
 export { default as ImageWithPlaceholder } from './components/ImageWithPlaceholder';
 export { default as Modal } from './components/Modal';
+export { default as ModalSafeAreaBottom } from './components/Modal/ModalSafeAreaBottom';
 export { default as PressBox } from './components/PressBox';
 export { default as ProgressBar } from './components/ProgressBar';
 export { default as RegexText } from './components/RegexText';

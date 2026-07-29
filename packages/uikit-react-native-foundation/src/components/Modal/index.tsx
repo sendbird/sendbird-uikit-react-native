@@ -15,10 +15,21 @@ import {
   ViewStyle,
   useWindowDimensions,
 } from 'react-native';
+import { SafeAreaProvider, initialWindowMetrics } from 'react-native-safe-area-context';
 
 import createStyleSheet from '../../styles/createStyleSheet';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import useUIKitTheme from '../../theme/useUIKitTheme';
+
+/**
+ * NOTE: A modal is presented in its own native window on Android.
+ *  When the app window is edge-to-edge, the modal window must be edge-to-edge as well, otherwise the
+ *  window decor insets the modal content view while the JS layout still spans the whole window, and
+ *  the content overflows behind the system navigation bar.
+ *  The root window reports a non-zero bottom inset only when the app window is edge-to-edge, so it can
+ *  be used to detect it. The window mode does not change while the app is running.
+ * */
+const IS_EDGE_TO_EDGE_WINDOW = Platform.OS === 'android' && (initialWindowMetrics?.insets.bottom ?? 0) > 0;
 
 type ModalAnimationType = 'slide' | 'slide-no-gesture' | 'fade';
 type Props = {
@@ -70,6 +81,7 @@ const Modal = ({
     <View>
       <RNModal
         statusBarTranslucent={statusBarTranslucent}
+        navigationBarTranslucent={Boolean(statusBarTranslucent) && IS_EDGE_TO_EDGE_WINDOW}
         transparent
         hardwareAccelerated
         visible={modalVisible}
@@ -80,44 +92,52 @@ const Modal = ({
         animationType={'none'}
         {...props}
       >
-        <TouchableWithoutFeedback onPress={disableBackgroundClose ? undefined : onClose}>
-          <Animated.View
-            style={[
-              StyleSheet.absoluteFill,
-              {
-                opacity: backdrop.opacity,
-                backgroundColor: palette.onBackgroundLight03,
-              },
-            ]}
-          />
-        </TouchableWithoutFeedback>
-        <KeyboardAvoidingView
-          // NOTE: This is trick for Android.
-          //  When orientation is changed on Android, the offset that to avoid soft-keyboard is not updated normally.
-          key={Platform.OS === 'android' && enableKeyboardAvoid ? `${width}-${height}` : undefined}
-          enabled={enableKeyboardAvoid}
-          style={styles.background}
-          behavior={Platform.select({ ios: 'padding', default: 'height' })}
-          pointerEvents={'box-none'}
-          keyboardVerticalOffset={enableKeyboardAvoid && statusBarTranslucent ? -topInset : 0}
-        >
-          <Animated.View
-            style={[
-              styles.background,
-              backgroundStyle,
-              { opacity: content.opacity, transform: [{ translateY: content.translateY }] },
-            ]}
+        {/**
+         * NOTE: The insets of the app level provider describe the view that hosts the app, not this
+         *  modal window. When the app has already consumed the bottom inset above SendbirdUIKitContainer,
+         *  that provider reports `bottom: 0` and the modal content is laid out under the navigation bar.
+         *  Nesting a provider makes the modal content measure the insets of its own window instead.
+         * */}
+        <SafeAreaProvider style={styles.background}>
+          <TouchableWithoutFeedback onPress={disableBackgroundClose ? undefined : onClose}>
+            <Animated.View
+              style={[
+                StyleSheet.absoluteFill,
+                {
+                  opacity: backdrop.opacity,
+                  backgroundColor: palette.onBackgroundLight03,
+                },
+              ]}
+            />
+          </TouchableWithoutFeedback>
+          <KeyboardAvoidingView
+            // NOTE: This is trick for Android.
+            //  When orientation is changed on Android, the offset that to avoid soft-keyboard is not updated normally.
+            key={Platform.OS === 'android' && enableKeyboardAvoid ? `${width}-${height}` : undefined}
+            enabled={enableKeyboardAvoid}
+            style={styles.background}
+            behavior={Platform.select({ ios: 'padding', default: 'height' })}
             pointerEvents={'box-none'}
-            {...panResponder.panHandlers}
+            keyboardVerticalOffset={enableKeyboardAvoid && statusBarTranslucent ? -topInset : 0}
           >
-            <Pressable
-            // NOTE: https://github.com/facebook/react-native/issues/14295
-            //  Due to 'Pressable', the width of the children must be explicitly specified as a number.
+            <Animated.View
+              style={[
+                styles.background,
+                backgroundStyle,
+                { opacity: content.opacity, transform: [{ translateY: content.translateY }] },
+              ]}
+              pointerEvents={'box-none'}
+              {...panResponder.panHandlers}
             >
-              {children}
-            </Pressable>
-          </Animated.View>
-        </KeyboardAvoidingView>
+              <Pressable
+              // NOTE: https://github.com/facebook/react-native/issues/14295
+              //  Due to 'Pressable', the width of the children must be explicitly specified as a number.
+              >
+                {children}
+              </Pressable>
+            </Animated.View>
+          </KeyboardAvoidingView>
+        </SafeAreaProvider>
       </RNModal>
     </View>
   );

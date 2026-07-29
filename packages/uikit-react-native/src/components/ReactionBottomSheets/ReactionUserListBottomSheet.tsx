@@ -6,6 +6,7 @@ import {
   Divider,
   Image,
   Modal,
+  ModalSafeAreaBottom,
   Text,
   createStyleSheet,
   useUIKitTheme,
@@ -30,7 +31,7 @@ const ReactionUserListBottomSheet = ({
   onPressUserProfile,
 }: ReactionBottomSheetProps) => {
   const { width } = useWindowDimensions();
-  const safeArea = useSafeAreaPadding(['left', 'right', 'bottom']);
+  const safeArea = useSafeAreaPadding(['left', 'right']);
   const { colors } = useUIKitTheme();
 
   const [tabIndex, setTabIndex] = useState(0);
@@ -173,11 +174,8 @@ const ReactionUserListBottomSheet = ({
       onDismiss={onDismiss}
       backgroundStyle={styles.modal}
     >
-      <View
-        style={[
-          styles.container,
-          { width, paddingBottom: safeArea.paddingBottom, backgroundColor: colors.ui.dialog.default.none.background },
-        ]}
+      <ModalSafeAreaBottom
+        style={[styles.container, { width, backgroundColor: colors.ui.dialog.default.none.background }]}
       >
         <ScrollView
           ref={scrollRef as never}
@@ -197,7 +195,7 @@ const ReactionUserListBottomSheet = ({
         >
           {renderPage()}
         </ScrollView>
-      </View>
+      </ModalSafeAreaBottom>
     </Modal>
   );
 };

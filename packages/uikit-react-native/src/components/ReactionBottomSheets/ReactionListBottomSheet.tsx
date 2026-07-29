@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import { FlatList, Pressable, View, useWindowDimensions } from 'react-native';
 
 import type { BaseMessage } from '@sendbird/chat/message';
-import { Image, Modal, createStyleSheet, useUIKitTheme } from '@sendbird/uikit-react-native-foundation';
+import {
+  Image,
+  Modal,
+  ModalSafeAreaBottom,
+  createStyleSheet,
+  useUIKitTheme,
+} from '@sendbird/uikit-react-native-foundation';
 import { Logger, useSafeAreaPadding } from '@sendbird/uikit-utils';
 import type { SendbirdBaseChannel, SendbirdBaseMessage } from '@sendbird/uikit-utils';
 
@@ -61,7 +67,7 @@ const ReactionEmojiPressable = ({
 const NUM_COLUMN = 6;
 const ReactionListBottomSheet = ({ visible, onClose, onDismiss, reactionCtx, chatCtx }: ReactionBottomSheetProps) => {
   const { width } = useWindowDimensions();
-  const safeArea = useSafeAreaPadding(['bottom', 'left', 'right']);
+  const safeArea = useSafeAreaPadding(['left', 'right']);
   const { colors } = useUIKitTheme();
 
   const { currentUser, emojiManager } = chatCtx;
@@ -76,12 +82,11 @@ const ReactionListBottomSheet = ({ visible, onClose, onDismiss, reactionCtx, cha
       onDismiss={onDismiss}
       backgroundStyle={styles.modal}
     >
-      <View
+      <ModalSafeAreaBottom
         style={[
           styles.container,
           {
             width,
-            paddingBottom: safeArea.paddingBottom,
             backgroundColor: colors.ui.dialog.default.none.background,
             paddingStart: safeArea.paddingStart + styles.container.paddingHorizontal,
             paddingEnd: safeArea.paddingEnd + styles.container.paddingHorizontal,
@@ -111,7 +116,7 @@ const ReactionListBottomSheet = ({ visible, onClose, onDismiss, reactionCtx, cha
             );
           }}
         />
-      </View>
+      </ModalSafeAreaBottom>
     </Modal>
   );
 };

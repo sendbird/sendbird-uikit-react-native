@@ -28,8 +28,6 @@ type Props = {
 } & BottomSheetItem;
 const BottomSheet = ({ onDismiss, onHide, visible, sheetItems, HeaderComponent }: Props) => {
   const { statusBarTranslucent } = useHeaderStyle();
-  const { width } = useWindowDimensions();
-  const safeArea = useSafeAreaPadding(['bottom', 'left', 'right']);
   return (
     <Modal
       type={'slide'}
@@ -39,26 +37,41 @@ const BottomSheet = ({ onDismiss, onHide, visible, sheetItems, HeaderComponent }
       visible={visible}
       backgroundStyle={{ alignItems: 'center', justifyContent: 'flex-end' }}
     >
-      <DialogSheet style={{ width, paddingBottom: safeArea.paddingBottom }}>
-        {HeaderComponent && <HeaderComponent onClose={onHide} />}
-        {sheetItems.map(({ onPress, ...props }, idx) => (
-          <TouchableOpacity
-            activeOpacity={0.75}
-            key={props.title + idx}
-            style={{ paddingStart: safeArea.paddingStart, paddingEnd: safeArea.paddingEnd }}
-            disabled={props.disabled}
-            onPress={async () => {
-              await onHide();
-              try {
-                onPress();
-              } catch {}
-            }}
-          >
-            <DialogSheet.Item {...props} />
-          </TouchableOpacity>
-        ))}
-      </DialogSheet>
+      <BottomSheetContent onHide={onHide} sheetItems={sheetItems} HeaderComponent={HeaderComponent} />
     </Modal>
+  );
+};
+
+/**
+ * NOTE: The safe area insets are read here, inside the modal, on purpose.
+ *  A modal is presented in its own native window, so the insets of the app level provider describe the
+ *  view that hosts the app instead of this window. Reading them from a component above the modal makes
+ *  the sheet lose its bottom inset whenever the app has already consumed it, which renders the last
+ *  sheet item under the Android system navigation bar.
+ * */
+const BottomSheetContent = ({ onHide, sheetItems, HeaderComponent }: Pick<Props, 'onHide'> & BottomSheetItem) => {
+  const { width } = useWindowDimensions();
+  const safeArea = useSafeAreaPadding(['bottom', 'left', 'right']);
+  return (
+    <DialogSheet style={{ width, paddingBottom: safeArea.paddingBottom }}>
+      {HeaderComponent && <HeaderComponent onClose={onHide} />}
+      {sheetItems.map(({ onPress, ...props }, idx) => (
+        <TouchableOpacity
+          activeOpacity={0.75}
+          key={props.title + idx}
+          style={{ paddingStart: safeArea.paddingStart, paddingEnd: safeArea.paddingEnd }}
+          disabled={props.disabled}
+          onPress={async () => {
+            await onHide();
+            try {
+              onPress();
+            } catch {}
+          }}
+        >
+          <DialogSheet.Item {...props} />
+        </TouchableOpacity>
+      ))}
+    </DialogSheet>
   );
 };
 
