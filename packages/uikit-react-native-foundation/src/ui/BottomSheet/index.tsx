@@ -42,7 +42,6 @@ const BottomSheet = ({ onDismiss, onHide, visible, sheetItems, HeaderComponent }
   );
 };
 
-// NOTE: Reads the safe area inside the modal on purpose, see `ModalSafeAreaBottom`.
 const BottomSheetContent = ({ onHide, sheetItems, HeaderComponent }: Pick<Props, 'onHide'> & BottomSheetItem) => {
   const { width } = useWindowDimensions();
   const safeArea = useSafeAreaPadding(['bottom', 'left', 'right']);

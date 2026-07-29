@@ -142,7 +142,6 @@ export const UserProfileProvider = ({
   );
 };
 
-// NOTE: Reads the safe area inside the modal on purpose, see `ModalSafeAreaBottom`.
 const UserProfileCard = (props: Omit<React.ComponentProps<typeof ProfileCard>, 'containerStyle'>) => {
   const safeArea = useSafeAreaPadding(['bottom', 'left', 'right']);
   return <ProfileCard containerStyle={[styles.profileCardContainer, safeArea]} {...props} />;

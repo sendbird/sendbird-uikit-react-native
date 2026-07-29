@@ -21,9 +21,6 @@ import createStyleSheet from '../../styles/createStyleSheet';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 
-// NOTE: The root window reports a bottom inset only when the app window is edge-to-edge, and the modal
-//  window has to match it, or the window decor insets the modal content view while the JS layout keeps
-//  spanning the whole window and the content overflows behind the system navigation bar.
 const IS_EDGE_TO_EDGE_WINDOW = Platform.OS === 'android' && (initialWindowMetrics?.insets.bottom ?? 0) > 0;
 
 type ModalAnimationType = 'slide' | 'slide-no-gesture' | 'fade';
@@ -87,7 +84,6 @@ const Modal = ({
         animationType={'none'}
         {...props}
       >
-        {/* NOTE: Lets the modal content measure the insets of its own window, see `ModalSafeAreaBottom`. */}
         <SafeAreaProvider style={styles.background}>
           <TouchableWithoutFeedback onPress={disableBackgroundClose ? undefined : onClose}>
             <Animated.View
