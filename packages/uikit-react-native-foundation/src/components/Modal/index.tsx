@@ -21,10 +21,12 @@ import createStyleSheet from '../../styles/createStyleSheet';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import useUIKitTheme from '../../theme/useUIKitTheme';
 
-const initialInsets = initialWindowMetrics?.insets;
-const IS_EDGE_TO_EDGE_WINDOW =
-  Platform.OS === 'android' &&
-  Math.max(initialInsets?.bottom ?? 0, initialInsets?.left ?? 0, initialInsets?.right ?? 0) > 0;
+const isEdgeToEdgeWindow = () => {
+  if (Platform.OS !== 'android') return false;
+  const metrics = initialWindowMetrics;
+  if (!metrics) return false;
+  return metrics.frame.y + metrics.frame.height >= Dimensions.get('screen').height;
+};
 
 type ModalAnimationType = 'slide' | 'slide-no-gesture' | 'fade';
 type Props = {
@@ -64,6 +66,7 @@ const Modal = ({
   const hideAction = () => hideTransition(() => setModalVisible(false));
 
   const { width, height } = useWindowDimensions();
+  const edgeToEdgeWindow = isEdgeToEdgeWindow();
 
   useEffect(() => {
     if (visible) showAction();
@@ -76,7 +79,7 @@ const Modal = ({
     <View>
       <RNModal
         statusBarTranslucent={statusBarTranslucent}
-        navigationBarTranslucent={Boolean(statusBarTranslucent) && IS_EDGE_TO_EDGE_WINDOW}
+        navigationBarTranslucent={Boolean(statusBarTranslucent) && edgeToEdgeWindow}
         transparent
         hardwareAccelerated
         visible={modalVisible}
