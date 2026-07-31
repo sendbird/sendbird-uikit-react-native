@@ -1,6 +1,12 @@
 import React, { useCallback, useContext, useState } from 'react';
 
-import { Modal, OutlinedButton, ProfileCard, createStyleSheet } from '@sendbird/uikit-react-native-foundation';
+import {
+  Modal,
+  ModalSafeArea,
+  OutlinedButton,
+  ProfileCard,
+  createStyleSheet,
+} from '@sendbird/uikit-react-native-foundation';
 import {
   Logger,
   PASS,
@@ -11,7 +17,6 @@ import {
   SendbirdUser,
   getDefaultGroupChannelCreateParams,
   useIIFE,
-  useSafeAreaPadding,
 } from '@sendbird/uikit-utils';
 
 import { LocalizationContext } from '../contexts/LocalizationCtx';
@@ -59,8 +64,6 @@ export const UserProfileProvider = ({
     );
     WARN_onCreateChannel = true;
   }
-
-  const safeArea = useSafeAreaPadding(['bottom', 'left', 'right']);
 
   const [user, setUser] = useState<SendbirdUser | SendbirdMember | SendbirdReactedUserInfo>();
   const [visible, setVisible] = useState(false);
@@ -131,14 +134,18 @@ export const UserProfileProvider = ({
         statusBarTranslucent={statusBarTranslucent}
       >
         {user && (
-          <ProfileCard
-            containerStyle={[styles.profileCardContainer, safeArea]}
-            uri={user.profileUrl}
-            username={user.nickname || localizationContext.STRINGS.LABELS.USER_NO_NAME}
-            bodyLabel={localizationContext.STRINGS.PROFILE_CARD.BODY_LABEL}
-            body={localizationContext.STRINGS.PROFILE_CARD.BODY(user)}
-            button={userProfileButton}
-          />
+          <ModalSafeArea>
+            {(safeArea) => (
+              <ProfileCard
+                containerStyle={[styles.profileCardContainer, safeArea]}
+                uri={user.profileUrl}
+                username={user.nickname || localizationContext.STRINGS.LABELS.USER_NO_NAME}
+                bodyLabel={localizationContext.STRINGS.PROFILE_CARD.BODY_LABEL}
+                body={localizationContext.STRINGS.PROFILE_CARD.BODY(user)}
+                button={userProfileButton}
+              />
+            )}
+          </ModalSafeArea>
         )}
       </Modal>
     </UserProfileContext.Provider>

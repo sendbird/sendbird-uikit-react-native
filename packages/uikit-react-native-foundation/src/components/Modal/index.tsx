@@ -15,10 +15,18 @@ import {
   ViewStyle,
   useWindowDimensions,
 } from 'react-native';
+import { SafeAreaProvider, initialWindowMetrics } from 'react-native-safe-area-context';
 
 import createStyleSheet from '../../styles/createStyleSheet';
 import useHeaderStyle from '../../styles/useHeaderStyle';
 import useUIKitTheme from '../../theme/useUIKitTheme';
+
+const isEdgeToEdgeWindow = () => {
+  if (Platform.OS !== 'android') return false;
+  const metrics = initialWindowMetrics;
+  if (!metrics) return false;
+  return metrics.frame.y + metrics.frame.height >= Dimensions.get('screen').height;
+};
 
 type ModalAnimationType = 'slide' | 'slide-no-gesture' | 'fade';
 type Props = {
@@ -58,6 +66,7 @@ const Modal = ({
   const hideAction = () => hideTransition(() => setModalVisible(false));
 
   const { width, height } = useWindowDimensions();
+  const edgeToEdgeWindow = isEdgeToEdgeWindow();
 
   useEffect(() => {
     if (visible) showAction();
@@ -70,6 +79,7 @@ const Modal = ({
     <View>
       <RNModal
         statusBarTranslucent={statusBarTranslucent}
+        navigationBarTranslucent={Boolean(statusBarTranslucent) && edgeToEdgeWindow}
         transparent
         hardwareAccelerated
         visible={modalVisible}
@@ -80,44 +90,46 @@ const Modal = ({
         animationType={'none'}
         {...props}
       >
-        <TouchableWithoutFeedback onPress={disableBackgroundClose ? undefined : onClose}>
-          <Animated.View
-            style={[
-              StyleSheet.absoluteFill,
-              {
-                opacity: backdrop.opacity,
-                backgroundColor: palette.onBackgroundLight03,
-              },
-            ]}
-          />
-        </TouchableWithoutFeedback>
-        <KeyboardAvoidingView
-          // NOTE: This is trick for Android.
-          //  When orientation is changed on Android, the offset that to avoid soft-keyboard is not updated normally.
-          key={Platform.OS === 'android' && enableKeyboardAvoid ? `${width}-${height}` : undefined}
-          enabled={enableKeyboardAvoid}
-          style={styles.background}
-          behavior={Platform.select({ ios: 'padding', default: 'height' })}
-          pointerEvents={'box-none'}
-          keyboardVerticalOffset={enableKeyboardAvoid && statusBarTranslucent ? -topInset : 0}
-        >
-          <Animated.View
-            style={[
-              styles.background,
-              backgroundStyle,
-              { opacity: content.opacity, transform: [{ translateY: content.translateY }] },
-            ]}
+        <SafeAreaProvider initialMetrics={initialWindowMetrics} style={styles.background}>
+          <TouchableWithoutFeedback onPress={disableBackgroundClose ? undefined : onClose}>
+            <Animated.View
+              style={[
+                StyleSheet.absoluteFill,
+                {
+                  opacity: backdrop.opacity,
+                  backgroundColor: palette.onBackgroundLight03,
+                },
+              ]}
+            />
+          </TouchableWithoutFeedback>
+          <KeyboardAvoidingView
+            // NOTE: This is trick for Android.
+            //  When orientation is changed on Android, the offset that to avoid soft-keyboard is not updated normally.
+            key={Platform.OS === 'android' && enableKeyboardAvoid ? `${width}-${height}` : undefined}
+            enabled={enableKeyboardAvoid}
+            style={styles.background}
+            behavior={Platform.select({ ios: 'padding', default: 'height' })}
             pointerEvents={'box-none'}
-            {...panResponder.panHandlers}
+            keyboardVerticalOffset={enableKeyboardAvoid && statusBarTranslucent ? -topInset : 0}
           >
-            <Pressable
-            // NOTE: https://github.com/facebook/react-native/issues/14295
-            //  Due to 'Pressable', the width of the children must be explicitly specified as a number.
+            <Animated.View
+              style={[
+                styles.background,
+                backgroundStyle,
+                { opacity: content.opacity, transform: [{ translateY: content.translateY }] },
+              ]}
+              pointerEvents={'box-none'}
+              {...panResponder.panHandlers}
             >
-              {children}
-            </Pressable>
-          </Animated.View>
-        </KeyboardAvoidingView>
+              <Pressable
+              // NOTE: https://github.com/facebook/react-native/issues/14295
+              //  Due to 'Pressable', the width of the children must be explicitly specified as a number.
+              >
+                {children}
+              </Pressable>
+            </Animated.View>
+          </KeyboardAvoidingView>
+        </SafeAreaProvider>
       </RNModal>
     </View>
   );
