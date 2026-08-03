@@ -3281,10 +3281,10 @@
   resolved "https://registry.yarnpkg.com/@sendbird/react-native-create-thumbnail/-/react-native-create-thumbnail-1.0.2.tgz#e5e7de86ebe05d5b40d5ad26a21b631b5043a51e"
   integrity sha512-v13kjlRmSpjmGHwHzpk1eFGP5pOr+paxiOfvu01C7fvrmAAAreBL6mG3VW20wr8GxnVtbCLs1nJXBpabGnstog==
 
-"@sendbird/uikit-tools@0.0.15":
-  version "0.0.15"
-  resolved "https://registry.yarnpkg.com/@sendbird/uikit-tools/-/uikit-tools-0.0.15.tgz#86a1ac41fdf1624b984bd8f875d1091ac5842afa"
-  integrity sha512-VJukrtFwcqk5u4QYk0qva8ntJupvYCyNYjdNUWawjxYd9UbmODIld2TBkDBjiNtlVfK6UlzfKdvCVCJ30hC7pQ==
+"@sendbird/uikit-tools@0.1.5":
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@sendbird/uikit-tools/-/uikit-tools-0.1.5.tgz#8e74eed665084374dc4dc5b449c05e01a64e9062"
+  integrity sha512-ZpiqUUL9hcCb/9uc27G9PKUmv4MnRiRekjGD+OKhGPZfyLGTk0UcJnGEB74Et3dQjWQR21rh2pjLjo6yvMvT0Q==
 
 "@sideway/address@^4.1.5":
   version "4.1.5"
