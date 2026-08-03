@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.8](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.7...v3.12.8) (2026-08-03)
+
+### Bug Fixes
+
+- apply modal window insets on every edge (SBISSUE-21901 review) ([3fc04cd](https://github.com/sendbird/sendbird-uikit-react-native/commit/3fc04cd3d3bd72babdfccd882f34e2eb3538c794))
+- detect the edge-to-edge window from the content frame (SBISSUE-21901 review) ([f0e4514](https://github.com/sendbird/sendbird-uikit-react-native/commit/f0e4514ec9436cb88a878d23e25873d27275e446))
+- keep modal content clear of the Android navigation bar (SBISSUE-21901) ([254e0c0](https://github.com/sendbird/sendbird-uikit-react-native/commit/254e0c0b2a853c4b1a57e27cdae4fb1e814a4cf6))
+- upgrade @sendbird/uikit-tools to 0.1.5 for thread message fixes ([5f9f1dd](https://github.com/sendbird/sendbird-uikit-react-native/commit/5f9f1dd0f410279fc81c6cf6d67bb05307a85d40))
+- upgrade js-yaml to 3.15.0 / 4.3.0 (SECURE-4156) ([9d70536](https://github.com/sendbird/sendbird-uikit-react-native/commit/9d70536bc20d8056801fd872c61f71da65ee093f))
+
 ## [3.12.7](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.6...v3.12.7) (2026-07-06)
 
 ### Bug Fixes

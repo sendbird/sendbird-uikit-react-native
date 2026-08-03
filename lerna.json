@@ -1,7 +1,7 @@
 {
   "packages": ["packages/*", "sample", "docs-validation"],
   "npmClient": "yarn",
-  "version": "3.12.7",
+  "version": "3.12.8",
   "command": {
     "publish": {
       "conventionalCommits": true,
