@@ -21,6 +21,8 @@ export const ASYNC_NOOP = async () => void 0;
 export const PASS = <T>(val: T) => val;
 export const toMegabyte = (byte: number) => byte / 1024 / 1024;
 export const isFunction = (param?: unknown): param is Function => typeof param === 'function';
+export const isPromise = <T = unknown>(param?: unknown): param is Promise<T> =>
+  !!param && isFunction((param as Promise<T>).then) && isFunction((param as Promise<T>).catch);
 
 export function ifThenOr<T>(cond: boolean, then: T): T | undefined;
 export function ifThenOr<T, V>(cond: boolean, then: T, or: V): T | V;

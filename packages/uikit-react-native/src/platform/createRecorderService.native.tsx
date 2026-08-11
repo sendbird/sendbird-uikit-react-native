@@ -4,7 +4,7 @@ import type * as NitroSoundOrLegacyV4Module from 'react-native-nitro-sound';
 import * as Permissions from 'react-native-permissions';
 import { Permission } from 'react-native-permissions/src/types';
 
-import { Logger, matchesOneOf, sleep } from '@sendbird/uikit-utils';
+import { Logger, isPromise, matchesOneOf, sleep } from '@sendbird/uikit-utils';
 
 import VoiceMessageConfig from '../libs/VoiceMessageConfig';
 import nativePermissionGranted from '../utils/nativePermissionGranted';
@@ -151,7 +151,7 @@ class VoiceRecorder implements RecorderServiceInterface {
 
   private initialize(): void {
     const setDurationResult = this.adapter.setSubscriptionDuration(0.1);
-    if (setDurationResult instanceof Promise) {
+    if (isPromise(setDurationResult)) {
       setDurationResult.catch((error) => {
         Logger.warn('[RecorderService.Native] Failed to set subscription duration', error);
       });
