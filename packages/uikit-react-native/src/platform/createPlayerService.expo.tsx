@@ -13,6 +13,11 @@ type Modules = {
 type PlaybackListener = Parameters<PlayerServiceInterface['addPlaybackListener']>[number];
 type StateListener = Parameters<PlayerServiceInterface['addStateListener']>[number];
 
+/**
+ * `expo-audio` reports and accepts time in seconds, while the PlayerService contract uses milliseconds.
+ * */
+const SECONDS_TO_MILLIS = 1000;
+
 interface AudioPlayerAdapter {
   requestPermission(): Promise<boolean>;
   play(uri: string): Promise<void>;
@@ -167,6 +172,7 @@ class LegacyExpoAVPlayerAdapter extends BaseAudioPlayerAdapter {
 class ExpoAudioPlayerAdapter extends BaseAudioPlayerAdapter {
   private readonly audioModule: typeof ExpoAudio;
   private player: ExpoAudio.AudioPlayer | null = null;
+  private subscription: ReturnType<ExpoAudio.AudioPlayer['addListener']> | null = null;
 
   constructor(audioModule: typeof ExpoAudio) {
     super();
@@ -176,7 +182,8 @@ class ExpoAudioPlayerAdapter extends BaseAudioPlayerAdapter {
   private setListener = () => {
     if (!this.player) return;
 
-    this.player.addListener('playbackStatusUpdate', (status) => {
+    this.removeListener();
+    this.subscription = this.player.addListener('playbackStatusUpdate', (status) => {
       if (status.isLoaded) {
         if (status.didJustFinish) {
           this.stop().catch((error) => {
@@ -186,8 +193,8 @@ class ExpoAudioPlayerAdapter extends BaseAudioPlayerAdapter {
         if (status.playing) {
           this.playbackSubscribers.forEach((callback) => {
             callback({
-              currentTime: status.currentTime,
-              duration: status.duration ?? 0,
+              currentTime: status.currentTime * SECONDS_TO_MILLIS,
+              duration: (status.duration ?? 0) * SECONDS_TO_MILLIS,
               stopped: status.didJustFinish,
             });
           });
@@ -197,13 +204,23 @@ class ExpoAudioPlayerAdapter extends BaseAudioPlayerAdapter {
   };
 
   private removeListener = () => {
-    if (this.player) {
-      this.player.remove();
-    }
+    this.subscription?.remove();
+    this.subscription = null;
+  };
+
+  /**
+   * `AudioPlayer.remove()` releases the player itself, so it should only be called when the player
+   * is no longer used. Detaching the status listener is done through its own subscription.
+   * */
+  private releasePlayer = () => {
+    this.removeListener();
+    this.player?.remove();
+    this.player = null;
   };
 
   private prepare = async (uri: string) => {
     this.setState('preparing');
+    this.releasePlayer();
     this.player = this.audioModule.createAudioPlayer(uri, { updateInterval: 100 });
     this.uri = uri;
   };
@@ -251,8 +268,7 @@ class ExpoAudioPlayerAdapter extends BaseAudioPlayerAdapter {
 
   public reset = async (): Promise<void> => {
     await this.stop();
-    this.player?.remove();
-    this.player = null;
+    this.releasePlayer();
     this.setState('idle');
     this.uri = undefined;
     this.playbackSubscribers.clear();
@@ -261,7 +277,7 @@ class ExpoAudioPlayerAdapter extends BaseAudioPlayerAdapter {
 
   public seek = async (time: number): Promise<void> => {
     if (matchesOneOf(this.state, ['playing', 'paused']) && this.player) {
-      this.player.currentTime = time;
+      await this.player.seekTo(time / SECONDS_TO_MILLIS);
     }
   };
 }
