@@ -13,9 +13,6 @@ type Modules = {
 type PlaybackListener = Parameters<PlayerServiceInterface['addPlaybackListener']>[number];
 type StateListener = Parameters<PlayerServiceInterface['addStateListener']>[number];
 
-/**
- * `expo-audio` reports and accepts time in seconds, while the PlayerService contract uses milliseconds.
- * */
 const SECONDS_TO_MILLIS = 1000;
 
 interface AudioPlayerAdapter {
@@ -208,10 +205,7 @@ class ExpoAudioPlayerAdapter extends BaseAudioPlayerAdapter {
     this.subscription = null;
   };
 
-  /**
-   * `AudioPlayer.remove()` releases the player itself, so it should only be called when the player
-   * is no longer used. Detaching the status listener is done through its own subscription.
-   * */
+  // `AudioPlayer.remove()` releases the player itself, it does not detach the status listener.
   private releasePlayer = () => {
     this.removeListener();
     this.player?.remove();

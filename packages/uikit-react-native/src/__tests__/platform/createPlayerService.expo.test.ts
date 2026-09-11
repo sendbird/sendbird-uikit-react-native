@@ -1,8 +1,8 @@
 import createExpoPlayerService from '../../platform/createPlayerService.expo';
 import type { PlayerServiceInterface } from '../../platform/types';
 
-const URI_A = 'https://example.com/voice-a.m4a';
-const URI_B = 'https://example.com/voice-b.m4a';
+const URI_A = 'voice-a.m4a';
+const URI_B = 'voice-b.m4a';
 
 type FakePlaybackStatus = {
   isLoaded: boolean;
@@ -24,13 +24,6 @@ const createStatus = (status: Partial<FakePlaybackStatus> = {}): FakePlaybackSta
   ...status,
 });
 
-/**
- * Mimics `expo-audio`'s AudioPlayer:
- * - `currentTime` is a getter-only property (native declares it as a read-only Property),
- *   so assigning to it throws a TypeError.
- * - `addListener` returns an EventSubscription; `remove()` on the player releases
- *   the player itself, it does not detach listeners.
- */
 class FakeAudioPlayer {
   public position = 0;
   public readonly play = jest.fn();
@@ -49,7 +42,6 @@ class FakeAudioPlayer {
       configurable: false,
       get: () => this.position,
       set: () => {
-        // Reproduces the Hermes error raised by expo-audio's read-only `currentTime` Property.
         throw new TypeError("Cannot assign to property 'currentTime' which has only a getter");
       },
     });
