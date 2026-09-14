@@ -3,7 +3,7 @@ import type * as LegacyModule from 'react-native-audio-recorder-player';
 import type * as NitroSoundOrLegacyV4Module from 'react-native-nitro-sound';
 import * as Permissions from 'react-native-permissions';
 
-import { Logger, matchesOneOf, sleep } from '@sendbird/uikit-utils';
+import { Logger, isPromise, matchesOneOf, sleep } from '@sendbird/uikit-utils';
 
 import { AudioRecorderModule } from './createRecorderService.native';
 import type { PlayerServiceInterface, Unsubscribe } from './types';
@@ -130,7 +130,7 @@ class VoicePlayer implements PlayerServiceInterface {
 
   private initialize(): void {
     const setDurationResult = this.adapter.setSubscriptionDuration(0.1);
-    if (setDurationResult instanceof Promise) {
+    if (isPromise(setDurationResult)) {
       setDurationResult.catch((error) => {
         Logger.warn('[PlayerService.Native] Failed to set subscription duration', error);
       });

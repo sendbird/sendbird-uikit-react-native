@@ -38,13 +38,13 @@ const createAsyncEffectCallback = (asyncEffect: AsyncEffectCallback) => () => {
   return () => {
     if (!destructor) return;
 
-    if (destructor instanceof Promise) {
+    if (typeof destructor === 'function') {
+      iife(destructor);
+    } else {
       iife(async () => {
         const awaitedDestructor = await destructor;
-        if (awaitedDestructor) awaitedDestructor();
+        if (typeof awaitedDestructor === 'function') awaitedDestructor();
       });
-    } else {
-      iife(destructor);
     }
   };
 };
