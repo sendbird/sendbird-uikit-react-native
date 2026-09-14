@@ -38,13 +38,14 @@ const createAsyncEffectCallback = (asyncEffect: AsyncEffectCallback) => () => {
   return () => {
     if (!destructor) return;
 
-    if (destructor instanceof Promise) {
+    // Not `instanceof Promise`: it fails when `global.Promise` is replaced at startup, by an APM agent or a polyfill.
+    if (typeof destructor === 'function') {
+      iife(destructor);
+    } else {
       iife(async () => {
         const awaitedDestructor = await destructor;
-        if (awaitedDestructor) awaitedDestructor();
+        if (typeof awaitedDestructor === 'function') awaitedDestructor();
       });
-    } else {
-      iife(destructor);
     }
   };
 };

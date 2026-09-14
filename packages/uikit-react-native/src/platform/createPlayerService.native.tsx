@@ -129,12 +129,9 @@ class VoicePlayer implements PlayerServiceInterface {
   }
 
   private initialize(): void {
-    const setDurationResult = this.adapter.setSubscriptionDuration(0.1);
-    if (setDurationResult instanceof Promise) {
-      setDurationResult.catch((error) => {
-        Logger.warn('[PlayerService.Native] Failed to set subscription duration', error);
-      });
-    }
+    Promise.resolve(this.adapter.setSubscriptionDuration(0.1)).catch((error) => {
+      Logger.warn('[PlayerService.Native] Failed to set subscription duration', error);
+    });
   }
 
   private setState = (state: PlayerServiceInterface['state']) => {
