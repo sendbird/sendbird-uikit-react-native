@@ -150,12 +150,9 @@ class VoiceRecorder implements RecorderServiceInterface {
   }
 
   private initialize(): void {
-    const setDurationResult = this.adapter.setSubscriptionDuration(0.1);
-    if (setDurationResult instanceof Promise) {
-      setDurationResult.catch((error) => {
-        Logger.warn('[RecorderService.Native] Failed to set subscription duration', error);
-      });
-    }
+    Promise.resolve(this.adapter.setSubscriptionDuration(0.1)).catch((error) => {
+      Logger.warn('[RecorderService.Native] Failed to set subscription duration', error);
+    });
 
     this.adapter.addRecordBackListener((data) => {
       const completed = data.currentPosition >= this.options.maxDuration;
