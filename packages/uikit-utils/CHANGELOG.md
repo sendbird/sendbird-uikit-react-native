@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.9](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.8...v3.12.9) (2026-09-16)
+
+### Bug Fixes
+
+- stop relying on instanceof Promise for async effect and voice service results ([c2e27ee](https://github.com/sendbird/sendbird-uikit-react-native/commit/c2e27ee6b331dc11fee30d9977e20ebae36c59db)), closes [#315](https://github.com/sendbird/sendbird-uikit-react-native/issues/315)
+
 ## [3.12.8](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.7...v3.12.8) (2026-08-03)
 
 **Note:** Version bump only for package @sendbird/uikit-utils
