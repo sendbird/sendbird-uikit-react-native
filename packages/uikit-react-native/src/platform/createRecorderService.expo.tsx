@@ -245,8 +245,8 @@ class ExpoAudioRecorderAdapter extends BaseAudioRecorderAdapter {
           audioEncoder: 'aac',
         },
         ios: {
-          outputFormat: this.audioModule.IOSOutputFormat.MPEG4AAC,
-          audioQuality: this.audioModule.AudioQuality.HIGH,
+          outputFormat: 'aac ',
+          audioQuality: 96,
         },
       }),
     };
