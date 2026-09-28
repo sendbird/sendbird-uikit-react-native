@@ -39,6 +39,7 @@
     "make:feat": "yarn workspace @sendbird/uikit-react-native create-domain"
   },
   "devDependencies": {
+    "@react-native/jest-preset": "0.87.1",
     "@testing-library/react-native": "12.5.1",
     "@trivago/prettier-plugin-sort-imports": "^4.2.1",
     "@types/jest": "^29.4.0",
@@ -57,18 +58,18 @@
     "patch-package": "^6.4.7",
     "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.8.8",
-    "react": "19.1.1",
-    "react-native": "0.82.1",
+    "react": "19.2.3",
+    "react-native": "0.87.1",
     "react-native-builder-bob": "^0.18.0",
     "react-native-fast-image": "^8.6.3",
-    "react-native-safe-area-context": "^5.5.2",
-    "react-test-renderer": "19.1.1",
+    "react-native-safe-area-context": "^5.10.0",
+    "react-test-renderer": "19.2.3",
     "typedoc": "^0.25.3",
     "typescript": "5.8.3",
     "yalc": "^1.0.0-pre.53"
   },
   "jest": {
-    "preset": "react-native",
+    "preset": "@react-native/jest-preset",
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -77,7 +78,7 @@
       "json"
     ],
     "setupFiles": [
-      "<rootDir>/node_modules/react-native/jest/setup.js",
+      "<rootDir>/node_modules/@react-native/jest-preset/jest/setup.js",
       "<rootDir>/jest.setup.js"
     ],
     "testRegex": "/__tests__/.*\\.(test|spec)\\.(js|tsx?)$",
@@ -99,7 +100,7 @@
   },
   "resolutions": {
     "@sendbird/chat": "4.20.2",
-    "@types/react": "^19.1.1",
+    "@types/react": "^19.2.0",
     "fast-xml-parser": "^4.5.6",
     "@babel/plugin-transform-modules-systemjs": "^7.29.4",
     "axios": "^1.16.0",

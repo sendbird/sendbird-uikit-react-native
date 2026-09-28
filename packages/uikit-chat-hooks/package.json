@@ -59,7 +59,7 @@
   "devDependencies": {
     "@sendbird/uikit-testing-tools": "3.12.10",
     "@types/react": "*",
-    "react": "19.1.1",
+    "react": "19.2.3",
     "react-native-builder-bob": "^0.18.0",
     "typescript": "5.8.3"
   },
