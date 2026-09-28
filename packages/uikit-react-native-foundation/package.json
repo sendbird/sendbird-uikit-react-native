@@ -61,12 +61,11 @@
   },
   "devDependencies": {
     "@types/react": "*",
-    "@types/react-native": "*",
-    "react": "19.1.1",
-    "react-native": "0.82.1",
+    "react": "19.2.3",
+    "react-native": "0.87.1",
     "react-native-builder-bob": "^0.18.0",
     "react-native-fast-image": "^8.6.3",
-    "react-native-safe-area-context": "^5.5.2",
+    "react-native-safe-area-context": "^5.10.0",
     "typescript": "5.8.3"
   },
   "peerDependencies": {
