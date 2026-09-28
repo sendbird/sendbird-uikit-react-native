@@ -236,8 +236,6 @@ class ExpoAudioRecorderAdapter extends BaseAudioRecorderAdapter {
       });
     }
 
-    // NOTE: AudioRecorder reads platform options from the top level (expo-audio flattens them in useAudioRecorder).
-    //  Without an explicit format, Android falls back to MediaRecorder DEFAULT (3GP/AMR-NB), which iOS cannot play.
     const recordingOptions = {
       ...this._audioSettings,
       extension: `.${this.options.extension}`,
