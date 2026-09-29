@@ -239,6 +239,16 @@ class ExpoAudioRecorderAdapter extends BaseAudioRecorderAdapter {
     const recordingOptions = {
       ...this._audioSettings,
       extension: `.${this.options.extension}`,
+      ...Platform.select({
+        android: {
+          outputFormat: 'mpeg4',
+          audioEncoder: 'aac',
+        },
+        ios: {
+          outputFormat: 'aac ',
+          audioQuality: 96,
+        },
+      }),
     };
 
     this.recorder = new this.audioModule.AudioModule.AudioRecorder(recordingOptions);
