@@ -1,0 +1,277 @@
+# Triggered by Jira automation when a release ticket (created with `/bot create ticket`) is approved.
+# Jira dispatches this workflow on the release branch (release/X.Y.Z) with the ticket key.
+#
+# Flow: preflight -> version bump -> npm publish -> push version commit and tag -> GitHub release
+#       -> approve and merge the release PR -> Jira ticket RELEASED -> Slack announcement
+#
+# Every stage skips work that an earlier attempt already finished, so a failed release can be
+# retried (approve the ticket again in Jira, or re-run this workflow) without republishing.
+#
+# Secrets:   SDK_GH_BOT1_TOKEN (org), JIRA_AUTH_USER, JIRA_AUTH_API_TOKEN, SLACK_BOT_TOKEN
+# Variables: SLACK_RELEASE_SUCCESS_CHANNEL_ID, SLACK_RELEASE_FAILURE_CHANNEL_ID
+# npm:       each public package must register this file (release-workflow.yml) as its Trusted Publisher.
+name: Release
+run-name: Release ${{ github.ref_name }} (${{ inputs.release_ticket_key }})
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_ticket_key:
+        description: 'Jira release ticket key (e.g., SDKRLSD-0000)'
+        required: true
+        type: string
+      is_test:
+        description: 'Test mode: build and bump the version locally, but do not publish, push or merge'
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
+    env:
+      RELEASE_TICKET_KEY: ${{ inputs.release_ticket_key }}
+      IS_TEST: ${{ inputs.is_test }}
+      BRANCH: ${{ github.ref_name }}
+      REPO_NAME: ${{ github.event.repository.name }}
+      REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      JIRA_AUTH_USER: ${{ secrets.JIRA_AUTH_USER }}
+      JIRA_AUTH_API_TOKEN: ${{ secrets.JIRA_AUTH_API_TOKEN }}
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_SUCCESS_CHANNEL: ${{ vars.SLACK_RELEASE_SUCCESS_CHANNEL_ID }}
+      SLACK_FAILURE_CHANNEL: ${{ vars.SLACK_RELEASE_FAILURE_CHANNEL_ID }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Prepare release tooling
+        id: tooling
+        env:
+          BOT_GH_TOKEN: ${{ secrets.SDK_GH_BOT1_TOKEN }}
+        run: |
+          echo "SDK_DEPLOYMENT_DIR=$RUNNER_TEMP/sdk-deployment" >> "$GITHUB_ENV"
+          git clone --depth 1 --branch main "https://${BOT_GH_TOKEN}@github.com/sendbird/sdk-deployment.git" "$RUNNER_TEMP/sdk-deployment"
+          git config --global user.email "sha.sdk_deployment@sendbird.com"
+          git config --global user.name "sendbird-sdk-deployment"
+
+      - name: Preflight
+        id: preflight
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [[ ! "$RELEASE_TICKET_KEY" =~ ^[A-Z][A-Z0-9]*-[0-9]+$ ]]; then
+            echo "::error::Invalid release ticket key: $RELEASE_TICKET_KEY"
+            exit 1
+          fi
+
+          if [[ ! "$BRANCH" =~ ^release/([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+            echo "::error::Release must run on a release/X.Y.Z branch (current: $BRANCH)"
+            exit 1
+          fi
+          VERSION="${BASH_REMATCH[1]}"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+
+          PR_NUMBER=$(gh pr list --head "$BRANCH" --base main --state open --json number --jq '.[0].number // empty')
+          if [ -z "$PR_NUMBER" ]; then
+            echo "::error::No open pull request found from $BRANCH to main"
+            exit 1
+          fi
+          echo "PR_NUMBER=$PR_NUMBER" >> "$GITHUB_ENV"
+          echo "PR_URL=$REPO_URL/pull/$PR_NUMBER" >> "$GITHUB_ENV"
+
+          # Catch merge conflicts before anything irreversible happens.
+          for _ in 1 2 3 4 5 6; do
+            MERGEABLE=$(gh pr view "$PR_NUMBER" --json mergeable --jq .mergeable)
+            [ "$MERGEABLE" != "UNKNOWN" ] && break
+            sleep 5
+          done
+          if [ "$MERGEABLE" = "CONFLICTING" ]; then
+            echo "::error::Release PR #$PR_NUMBER conflicts with main. Resolve the conflict and approve the ticket again."
+            exit 1
+          fi
+          if [ "$MERGEABLE" = "UNKNOWN" ]; then
+            echo "::warning::Could not determine whether PR #$PR_NUMBER is mergeable. Continuing."
+          fi
+
+          # A previous attempt may have already committed and pushed the version bump.
+          CURRENT_VERSION=$(node -p "require('./lerna.json').version")
+          if [ "$CURRENT_VERSION" = "$VERSION" ]; then
+            TAG_SHA=$(git rev-list -n 1 "v$VERSION" 2>/dev/null || true)
+            if [ "$TAG_SHA" != "$(git rev-parse HEAD)" ]; then
+              echo "::error::lerna.json is already $VERSION, but tag v$VERSION does not point at HEAD. The version was bumped outside this workflow, or commits were added after the bump."
+              exit 1
+            fi
+            echo "NEEDS_VERSION_BUMP=false" >> "$GITHUB_ENV"
+          else
+            if git rev-parse -q --verify "refs/tags/v$VERSION" > /dev/null; then
+              echo "::error::Tag v$VERSION already exists, but lerna.json is $CURRENT_VERSION."
+              exit 1
+            fi
+            echo "NEEDS_VERSION_BUMP=true" >> "$GITHUB_ENV"
+          fi
+
+          echo "Ticket: $RELEASE_TICKET_KEY"
+          echo "Version: $CURRENT_VERSION -> $VERSION"
+          echo "PR: #$PR_NUMBER"
+          echo "Test mode: $IS_TEST"
+
+      - name: Install dependencies
+        id: install
+        run: yarn install --frozen-lockfile
+
+      # The commit and tag stay local until npm publish succeeds, so a failed publish leaves the branch untouched.
+      - name: Bump version
+        id: version
+        run: |
+          if [ "$NEEDS_VERSION_BUMP" = "true" ]; then
+            yarn lerna version "$VERSION" --yes --no-push
+          else
+            echo "Version $VERSION is already committed and tagged. Skipping."
+          fi
+
+      - name: Build (test mode)
+        id: build
+        if: env.IS_TEST == 'true'
+        run: yarn build
+
+      # from-package publishes only the versions that are missing on npm, so a partial publish can be resumed.
+      - name: Publish to npm
+        id: publish
+        if: env.IS_TEST != 'true'
+        run: |
+          yarn lerna publish from-package --yes
+          echo "PUBLISHED=true" >> "$GITHUB_ENV"
+
+      - name: Push version commit and tag
+        id: push
+        if: env.IS_TEST != 'true'
+        run: git push --atomic origin "HEAD:refs/heads/$BRANCH" "refs/tags/v$VERSION"
+
+      - name: Create GitHub release
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NOTES_FILE="$RUNNER_TEMP/release-notes.md"
+          awk -v v="$VERSION" '
+            index($0, "## [" v "]") == 1 || index($0, "# [" v "]") == 1 { found = 1; print; next }
+            found && /^##? \[/ { exit }
+            found { print }
+          ' CHANGELOG.md > "$NOTES_FILE"
+          if [ ! -s "$NOTES_FILE" ]; then
+            echo "See [CHANGELOG.md]($REPO_URL/blob/main/CHANGELOG.md)." > "$NOTES_FILE"
+          fi
+
+          if [ "$IS_TEST" = "true" ]; then
+            echo "Test mode: would create release v$VERSION with notes:"
+            cat "$NOTES_FILE"
+            exit 0
+          fi
+
+          if gh release view "v$VERSION" > /dev/null 2>&1; then
+            echo "Release v$VERSION already exists. Skipping."
+          else
+            gh release create "v$VERSION" --title "v$VERSION" --notes-file "$NOTES_FILE" --verify-tag
+          fi
+
+      # A merge failure does not fail the release: npm already has the packages, so it is reported for a manual merge instead.
+      - name: Approve and merge release PR
+        id: merge
+        if: env.IS_TEST != 'true'
+        continue-on-error: true
+        env:
+          ACTIONS_TOKEN: ${{ github.token }}
+          BOT_GH_TOKEN: ${{ secrets.SDK_GH_BOT1_TOKEN }}
+        run: |
+          GH_TOKEN="$ACTIONS_TOKEN" gh pr review "$PR_NUMBER" --approve --body "Approved by release automation ($RELEASE_TICKET_KEY)"
+          GH_TOKEN="$BOT_GH_TOKEN" gh pr merge "$PR_NUMBER" --merge --admin
+
+      - name: Report manual merge needed
+        if: steps.merge.outcome == 'failure'
+        continue-on-error: true
+        run: |
+          bash .github/scripts/post-slack-message.sh "$SLACK_FAILURE_CHANNEL" \
+            ":warning: $REPO_NAME $VERSION was released, but the release PR could not be merged automatically. Please merge <$PR_URL|#$PR_NUMBER> manually."$'\n'"<https://sendbird.atlassian.net/browse/$RELEASE_TICKET_KEY|$RELEASE_TICKET_KEY> · <$RUN_URL|Workflow run>"
+
+      - name: Jira - Transit release ticket to RELEASED
+        id: jira_released
+        run: |
+          if ! bash .github/scripts/transit-release-ticket.sh RELEASING RELEASED; then
+            # A manual re-run after a failed attempt finds the ticket in Conditional Release Approved.
+            echo "::warning::Ticket is not in Releasing. Retrying from Conditional Release Approved."
+            bash .github/scripts/transit-release-ticket.sh CONDITIONAL_RELEASE_APPROVED RELEASING
+            bash .github/scripts/transit-release-ticket.sh RELEASING RELEASED
+          fi
+
+      - name: Slack - Announce release
+        continue-on-error: true
+        run: |
+          TEXT=":tada: <$REPO_URL/releases/tag/v$VERSION|$REPO_NAME $VERSION> has been released! :sendbird:"
+          if [ "$IS_TEST" = "true" ]; then
+            bash .github/scripts/post-slack-message.sh "$SLACK_FAILURE_CHANNEL" "[TEST] $TEXT"
+          else
+            bash .github/scripts/post-slack-message.sh "$SLACK_SUCCESS_CHANNEL" "$TEXT"
+          fi
+
+      - name: Report failure
+        if: failure()
+        env:
+          STEPS_JSON: ${{ toJSON(steps) }}
+        run: |
+          FAILED_STEP=$(echo "$STEPS_JSON" | jq -r '
+            . as $s
+            | ["tooling", "preflight", "install", "version", "build", "publish", "push", "release", "jira_released"]
+            | map(select($s[.].outcome == "failure"))
+            | first // "unknown"')
+          case "$FAILED_STEP" in
+            tooling) STAGE="release tooling setup" ;;
+            preflight) STAGE="preflight checks" ;;
+            install) STAGE="dependency install" ;;
+            version) STAGE="version bump" ;;
+            build) STAGE="build" ;;
+            publish) STAGE="npm publish" ;;
+            push) STAGE="pushing the version commit and tag" ;;
+            release) STAGE="GitHub release creation" ;;
+            jira_released) STAGE="Jira ticket transition" ;;
+            *) STAGE="an unknown step" ;;
+          esac
+
+          LINKS="<https://sendbird.atlassian.net/browse/$RELEASE_TICKET_KEY|$RELEASE_TICKET_KEY>"
+          if [ -n "${PR_URL:-}" ]; then
+            LINKS="$LINKS · <$PR_URL|#$PR_NUMBER>"
+          fi
+          LINKS="$LINKS · <$RUN_URL|Workflow run>"
+
+          if [ "${PUBLISHED:-}" = "true" ]; then
+            TEXT=":x: $REPO_NAME ${VERSION:-} was published to npm, but $STAGE failed."$'\n'"The Jira ticket was left in Releasing. Fix the cause and re-run the workflow."
+          else
+            if bash .github/scripts/transit-release-ticket.sh RELEASING CONDITIONAL_RELEASE_APPROVED; then
+              TICKET_NOTE="the Jira ticket was moved back to Conditional Release Approved"
+            else
+              echo "::warning::Could not move the ticket to Conditional Release Approved."
+              TICKET_NOTE="the Jira ticket state could not be updated"
+            fi
+            TEXT=":x: $REPO_NAME ${VERSION:-} release failed at $STAGE."$'\n'"Nothing was pushed to the release branch, and $TICKET_NOTE. Fix the cause and approve the ticket again."
+            if [ "$FAILED_STEP" = "publish" ]; then
+              TEXT="$TEXT"$'\n'"Some packages may already be on npm. Retrying publishes only the missing ones."
+            fi
+          fi
+
+          if [ "$IS_TEST" = "true" ]; then
+            TEXT="[TEST] $TEXT"
+          fi
+          bash .github/scripts/post-slack-message.sh "$SLACK_FAILURE_CHANNEL" "$TEXT"$'\n'"$LINKS"

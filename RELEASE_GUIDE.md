@@ -29,10 +29,14 @@ git push origin release/X.Y.Z
 Create a Pull Request for the newly pushed branch. The PR should be requested to the `main` branch.
 And add a `/bot create ticket` comment to create a ticket in the project management tool.
 
-## Step 5: Run the publish-package workflow
+## Step 5: Get the ticket approved
 
-Execute the `publish-package` workflow in GitHub Actions. This workflow is defined in the `.github/workflows/publish-package.yml` file.
+When the assignee approves the release ticket in Jira, Jira automation runs the `Release` workflow (`.github/workflows/release-workflow.yml`) on the release branch.
 
-1. workflow uses `lerna` to update the `changelog.md` file based on the commit history and creates a GitHub release.
-2. The workflow also publishes the package to NPM.
-3. If all the steps are completed successfully, the PR is approved by the bot.
+1. The workflow uses `lerna` to bump the version and update the `CHANGELOG.md` files based on the commit history.
+2. It publishes the packages to NPM, then pushes the version commit and tag and creates a GitHub release.
+3. It approves and merges the release PR.
+4. It moves the Jira ticket to `Released` and announces the release in Slack.
+
+If a step fails before publishing, the ticket goes back to `Conditional Release Approved` and a failure message is posted to the release failure channel. Fix the cause and approve the ticket again; steps that already finished are skipped.
+If the release PR cannot be merged automatically, the release still completes and the failure channel asks for a manual merge.
