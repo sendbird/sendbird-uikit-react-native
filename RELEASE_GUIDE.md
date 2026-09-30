@@ -39,4 +39,5 @@ When the assignee approves the release ticket in Jira, Jira automation runs the 
 4. It moves the Jira ticket to `Released` and announces the release in Slack.
 
 If a step fails before publishing, the ticket goes back to `Conditional Release Approved` and a failure message is posted to the release failure channel. Fix the cause and approve the ticket again; steps that already finished are skipped.
-If the release PR cannot be merged automatically, the release still completes and the failure channel asks for a manual merge.
+If a step fails after publishing, the ticket stays in `Releasing`. Fix the cause and re-run the workflow.
+If the release PR cannot be merged or the Jira ticket cannot be moved to `Released`, the release still completes and the failure channel asks you to merge the PR or update the ticket manually.

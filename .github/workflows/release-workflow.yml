@@ -6,6 +6,7 @@
 #
 # Every stage skips work that an earlier attempt already finished, so a failed release can be
 # retried (approve the ticket again in Jira, or re-run this workflow) without republishing.
+# A failed PR merge or Jira update does not fail the release; it is reported for a manual fix.
 #
 # Secrets:   SDK_GH_BOT1_TOKEN (org), JIRA_AUTH_USER, JIRA_AUTH_API_TOKEN, SLACK_BOT_TOKEN
 # Variables: SLACK_RELEASE_SUCCESS_CHANNEL_ID, SLACK_RELEASE_FAILURE_CHANNEL_ID
@@ -50,8 +51,11 @@ jobs:
       SLACK_SUCCESS_CHANNEL: ${{ vars.SLACK_RELEASE_SUCCESS_CHANNEL_ID }}
       SLACK_FAILURE_CHANNEL: ${{ vars.SLACK_RELEASE_FAILURE_CHANNEL_ID }}
     steps:
+      # Check out the branch tip rather than the dispatched commit: a re-run keeps the original
+      # commit, which no longer includes a version bump that an earlier attempt already pushed.
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.ref }}
           fetch-depth: 0
 
       - uses: actions/setup-node@v4
@@ -124,9 +128,27 @@ jobs:
             echo "NEEDS_VERSION_BUMP=true" >> "$GITHUB_ENV"
           fi
 
+          # On a re-run, npm may already have this version. Record it so a later failure
+          # does not move the ticket back as if nothing had been published.
+          PUBLISHED=true
+          for pkg in $(node -e "
+            const fs = require('fs');
+            for (const dir of fs.readdirSync('packages')) {
+              const file = 'packages/' + dir + '/package.json';
+              if (fs.existsSync(file) && !require('./' + file).private) console.log(require('./' + file).name);
+            }"); do
+            if [ "$(npm view "$pkg@$VERSION" version 2> /dev/null)" != "$VERSION" ]; then
+              PUBLISHED=false
+            fi
+          done
+          if [ "$PUBLISHED" = "true" ]; then
+            echo "PUBLISHED=true" >> "$GITHUB_ENV"
+          fi
+
           echo "Ticket: $RELEASE_TICKET_KEY"
           echo "Version: $CURRENT_VERSION -> $VERSION"
           echo "PR: #$PR_NUMBER"
+          echo "Already on npm: $PUBLISHED"
           echo "Test mode: $IS_TEST"
 
       - name: Install dependencies
@@ -207,8 +229,10 @@ jobs:
           bash .github/scripts/post-slack-message.sh "$SLACK_FAILURE_CHANNEL" \
             ":warning: $REPO_NAME $VERSION was released, but the release PR could not be merged automatically. Please merge <$PR_URL|#$PR_NUMBER> manually."$'\n'"<https://sendbird.atlassian.net/browse/$RELEASE_TICKET_KEY|$RELEASE_TICKET_KEY> · <$RUN_URL|Workflow run>"
 
+      # A Jira failure does not fail the release either: the ticket can be moved to Released by hand.
       - name: Jira - Transit release ticket to RELEASED
         id: jira_released
+        continue-on-error: true
         run: |
           if ! bash .github/scripts/transit-release-ticket.sh RELEASING RELEASED; then
             # A manual re-run after a failed attempt finds the ticket in Conditional Release Approved.
@@ -216,6 +240,16 @@ jobs:
             bash .github/scripts/transit-release-ticket.sh CONDITIONAL_RELEASE_APPROVED RELEASING
             bash .github/scripts/transit-release-ticket.sh RELEASING RELEASED
           fi
+
+      - name: Report manual Jira update needed
+        if: steps.jira_released.outcome == 'failure'
+        continue-on-error: true
+        run: |
+          TEXT=":warning: $REPO_NAME $VERSION was released, but the Jira ticket could not be moved to Released. Please update <https://sendbird.atlassian.net/browse/$RELEASE_TICKET_KEY|$RELEASE_TICKET_KEY> manually."$'\n'"<$RUN_URL|Workflow run>"
+          if [ "$IS_TEST" = "true" ]; then
+            TEXT="[TEST] $TEXT"
+          fi
+          bash .github/scripts/post-slack-message.sh "$SLACK_FAILURE_CHANNEL" "$TEXT"
 
       - name: Slack - Announce release
         continue-on-error: true
@@ -234,7 +268,7 @@ jobs:
         run: |
           FAILED_STEP=$(echo "$STEPS_JSON" | jq -r '
             . as $s
-            | ["tooling", "preflight", "install", "version", "build", "publish", "push", "release", "jira_released"]
+            | ["tooling", "preflight", "install", "version", "build", "publish", "push", "release"]
             | map(select($s[.].outcome == "failure"))
             | first // "unknown"')
           case "$FAILED_STEP" in
@@ -246,7 +280,6 @@ jobs:
             publish) STAGE="npm publish" ;;
             push) STAGE="pushing the version commit and tag" ;;
             release) STAGE="GitHub release creation" ;;
-            jira_released) STAGE="Jira ticket transition" ;;
             *) STAGE="an unknown step" ;;
           esac
 
