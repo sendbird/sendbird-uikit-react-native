@@ -8,21 +8,30 @@
 # retried (approve the ticket again in Jira, or re-run this workflow) without republishing.
 # A failed PR merge or Jira update does not fail the release; it is reported for a manual fix.
 #
+# When Jira is unavailable, a repository admin or maintainer can run this workflow from the
+# Actions tab with `skip_jira`. Jira is then neither checked nor updated, and the bypass is
+# reported to the failure channel.
+#
 # Secrets:   SDK_GH_BOT1_TOKEN (org), JIRA_AUTH_USER, JIRA_AUTH_API_TOKEN, SLACK_BOT_TOKEN
 # Variables: SLACK_RELEASE_SUCCESS_CHANNEL_ID, SLACK_RELEASE_FAILURE_CHANNEL_ID
 # npm:       each public package must register this file (release-workflow.yml) as its Trusted Publisher.
 name: Release
-run-name: Release ${{ github.ref_name }} (${{ inputs.release_ticket_key }})
+run-name: Release ${{ github.ref_name }} (${{ inputs.skip_jira && 'without Jira' || inputs.release_ticket_key }})
 
 on:
   workflow_dispatch:
     inputs:
       release_ticket_key:
-        description: 'Jira release ticket key (e.g., SDKRLSD-0000)'
-        required: true
+        description: 'Jira release ticket key (e.g., SDKRLSD-0000). Optional with skip_jira.'
+        required: false
         type: string
       is_test:
         description: 'Test mode: build and bump the version locally, but do not publish, push or merge'
+        required: false
+        type: boolean
+        default: false
+      skip_jira:
+        description: 'Release without Jira, for when Jira is unavailable (repository admins and maintainers only)'
         required: false
         type: boolean
         default: false
@@ -38,16 +47,17 @@ jobs:
       id-token: write
       contents: write
       pull-requests: write
+    # Secrets are passed only to the steps that use them, so dependency install scripts cannot read them.
     env:
       RELEASE_TICKET_KEY: ${{ inputs.release_ticket_key }}
       IS_TEST: ${{ inputs.is_test }}
+      SKIP_JIRA: ${{ inputs.skip_jira }}
+      ACTOR: ${{ github.triggering_actor }}
       BRANCH: ${{ github.ref_name }}
       REPO_NAME: ${{ github.event.repository.name }}
       REPO_URL: ${{ github.server_url }}/${{ github.repository }}
       RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-      JIRA_AUTH_USER: ${{ secrets.JIRA_AUTH_USER }}
-      JIRA_AUTH_API_TOKEN: ${{ secrets.JIRA_AUTH_API_TOKEN }}
-      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SDK_DEPLOYMENT_DIR: ${{ github.workspace }}/.release-tooling/sdk-deployment
       SLACK_SUCCESS_CHANNEL: ${{ vars.SLACK_RELEASE_SUCCESS_CHANNEL_ID }}
       SLACK_FAILURE_CHANNEL: ${{ vars.SLACK_RELEASE_FAILURE_CHANNEL_ID }}
     steps:
@@ -58,17 +68,24 @@ jobs:
           ref: ${{ github.ref }}
           fetch-depth: 0
 
+      # Provides transit_ticket.py. The bot token is not persisted in the cloned repository.
+      - name: Check out release tooling
+        id: tooling
+        if: env.SKIP_JIRA != 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: sendbird/sdk-deployment
+          ref: main
+          token: ${{ secrets.SDK_GH_BOT1_TOKEN }}
+          path: .release-tooling/sdk-deployment
+          persist-credentials: false
+
       - uses: actions/setup-node@v4
         with:
           node-version: 24
 
-      - name: Prepare release tooling
-        id: tooling
-        env:
-          BOT_GH_TOKEN: ${{ secrets.SDK_GH_BOT1_TOKEN }}
+      - name: Configure git
         run: |
-          echo "SDK_DEPLOYMENT_DIR=$RUNNER_TEMP/sdk-deployment" >> "$GITHUB_ENV"
-          git clone --depth 1 --branch main "https://${BOT_GH_TOKEN}@github.com/sendbird/sdk-deployment.git" "$RUNNER_TEMP/sdk-deployment"
           git config --global user.email "sha.sdk_deployment@sendbird.com"
           git config --global user.name "sendbird-sdk-deployment"
 
@@ -76,12 +93,9 @@ jobs:
         id: preflight
         env:
           GH_TOKEN: ${{ github.token }}
+          JIRA_AUTH_USER: ${{ secrets.JIRA_AUTH_USER }}
+          JIRA_AUTH_API_TOKEN: ${{ secrets.JIRA_AUTH_API_TOKEN }}
         run: |
-          if [[ ! "$RELEASE_TICKET_KEY" =~ ^[A-Z][A-Z0-9]*-[0-9]+$ ]]; then
-            echo "::error::Invalid release ticket key: $RELEASE_TICKET_KEY"
-            exit 1
-          fi
-
           if [[ ! "$BRANCH" =~ ^release/([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
             echo "::error::Release must run on a release/X.Y.Z branch (current: $BRANCH)"
             exit 1
@@ -89,11 +103,54 @@ jobs:
           VERSION="${BASH_REMATCH[1]}"
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
 
-          PR_NUMBER=$(gh pr list --head "$BRANCH" --base main --state open --json number --jq '.[0].number // empty')
-          if [ -z "$PR_NUMBER" ]; then
-            echo "::error::No open pull request found from $BRANCH to main"
+          if [ -n "$RELEASE_TICKET_KEY" ]; then
+            if [[ ! "$RELEASE_TICKET_KEY" =~ ^[A-Z][A-Z0-9]*-[0-9]+$ ]]; then
+              echo "::error::Invalid release ticket key: $RELEASE_TICKET_KEY"
+              exit 1
+            fi
+            echo "TICKET_LINK=<https://sendbird.atlassian.net/browse/$RELEASE_TICKET_KEY|$RELEASE_TICKET_KEY>" >> "$GITHUB_ENV"
+          fi
+
+          if [ "$SKIP_JIRA" = "true" ]; then
+            ROLE=$(gh api "repos/$GITHUB_REPOSITORY/collaborators/$ACTOR/permission" --jq .role_name)
+            if [ "$ROLE" != "admin" ] && [ "$ROLE" != "maintain" ]; then
+              echo "::error::Releasing without Jira requires the admin or maintain role ($ACTOR has '$ROLE')."
+              exit 1
+            fi
+            echo "::warning::Releasing without Jira, started by $ACTOR."
+          else
+            if [ -z "$RELEASE_TICKET_KEY" ]; then
+              echo "::error::release_ticket_key is required unless skip_jira is set."
+              exit 1
+            fi
+            # Only release a ticket that was approved in Jira and created for this branch.
+            if ! ISSUE=$(curl -sS --fail -u "$JIRA_AUTH_USER:$JIRA_AUTH_API_TOKEN" -H "Accept: application/json" \
+              "https://sendbird.atlassian.net/rest/api/3/issue/$RELEASE_TICKET_KEY?fields=status,customfield_11335,customfield_11336"); then
+              echo "::error::Could not read $RELEASE_TICKET_KEY from Jira. If Jira is unavailable, an admin or maintainer can run this workflow with skip_jira."
+              exit 1
+            fi
+            TICKET_STATUS=$(echo "$ISSUE" | jq -r '.fields.status.name')
+            TICKET_REPO=$(echo "$ISSUE" | jq -r '.fields.customfield_11335 // empty')
+            TICKET_BRANCH=$(echo "$ISSUE" | jq -r '.fields.customfield_11336 // empty')
+            if [ "$TICKET_REPO" != "$REPO_NAME" ] || [ "$TICKET_BRANCH" != "$BRANCH" ]; then
+              echo "::error::$RELEASE_TICKET_KEY is for $TICKET_REPO $TICKET_BRANCH, not $REPO_NAME $BRANCH."
+              exit 1
+            fi
+            if [ "$TICKET_STATUS" != "Releasing" ]; then
+              echo "::error::$RELEASE_TICKET_KEY is in '$TICKET_STATUS', not 'Releasing'. Approve the ticket in Jira to start the release."
+              exit 1
+            fi
+            echo "TICKET_VERIFIED=true" >> "$GITHUB_ENV"
+          fi
+
+          # Only a PR from this repository can be the release PR: a fork can open a PR from a branch with the same name.
+          PRS=$(gh pr list --head "$BRANCH" --base main --state open --json number,isCrossRepository \
+            --jq '[.[] | select(.isCrossRepository == false) | .number]')
+          if [ "$(echo "$PRS" | jq length)" != "1" ]; then
+            echo "::error::Expected exactly one open pull request from $BRANCH to main in this repository, found: $PRS"
             exit 1
           fi
+          PR_NUMBER=$(echo "$PRS" | jq -r '.[0]')
           echo "PR_NUMBER=$PR_NUMBER" >> "$GITHUB_ENV"
           echo "PR_URL=$REPO_URL/pull/$PR_NUMBER" >> "$GITHUB_ENV"
 
@@ -114,10 +171,19 @@ jobs:
           # A previous attempt may have already committed and pushed the version bump.
           CURRENT_VERSION=$(node -p "require('./lerna.json').version")
           if [ "$CURRENT_VERSION" = "$VERSION" ]; then
-            TAG_SHA=$(git rev-list -n 1 "v$VERSION" 2>/dev/null || true)
-            if [ "$TAG_SHA" != "$(git rev-parse HEAD)" ]; then
-              echo "::error::lerna.json is already $VERSION, but tag v$VERSION does not point at HEAD. The version was bumped outside this workflow, or commits were added after the bump."
+            TAG_SHA=$(git rev-list -n 1 "v$VERSION" 2> /dev/null || true)
+            if [ -z "$TAG_SHA" ]; then
+              echo "::error::lerna.json is already $VERSION, but tag v$VERSION does not exist. The version was bumped outside this workflow."
               exit 1
+            fi
+            if [ "$TAG_SHA" != "$(git rev-parse HEAD)" ]; then
+              # A fix to this workflow pushed after the bump changes only .github/, so the packages are unchanged.
+              if git merge-base --is-ancestor "$TAG_SHA" HEAD && [ -z "$(git diff --name-only "$TAG_SHA" HEAD -- . ':(exclude).github')" ]; then
+                echo "::notice::Commits after v$VERSION change only .github/. Continuing with the tagged packages."
+              else
+                echo "::error::Tag v$VERSION does not point at HEAD, and commits after it change files outside .github/."
+                exit 1
+              fi
             fi
             echo "NEEDS_VERSION_BUMP=false" >> "$GITHUB_ENV"
           else
@@ -145,7 +211,7 @@ jobs:
             echo "PUBLISHED=true" >> "$GITHUB_ENV"
           fi
 
-          echo "Ticket: $RELEASE_TICKET_KEY"
+          echo "Ticket: ${RELEASE_TICKET_KEY:-none} (skip Jira: $SKIP_JIRA)"
           echo "Version: $CURRENT_VERSION -> $VERSION"
           echo "PR: #$PR_NUMBER"
           echo "Already on npm: $PUBLISHED"
@@ -211,6 +277,7 @@ jobs:
           fi
 
       # A merge failure does not fail the release: npm already has the packages, so it is reported for a manual merge instead.
+      # --match-head-commit merges only the commit that was released, even if someone pushed to the branch meanwhile.
       - name: Approve and merge release PR
         id: merge
         if: env.IS_TEST != 'true'
@@ -219,40 +286,48 @@ jobs:
           ACTIONS_TOKEN: ${{ github.token }}
           BOT_GH_TOKEN: ${{ secrets.SDK_GH_BOT1_TOKEN }}
         run: |
-          GH_TOKEN="$ACTIONS_TOKEN" gh pr review "$PR_NUMBER" --approve --body "Approved by release automation ($RELEASE_TICKET_KEY)"
-          GH_TOKEN="$BOT_GH_TOKEN" gh pr merge "$PR_NUMBER" --merge --admin
+          GH_TOKEN="$ACTIONS_TOKEN" gh pr review "$PR_NUMBER" --approve --body "Approved by release automation (${RELEASE_TICKET_KEY:-released without Jira})"
+          GH_TOKEN="$BOT_GH_TOKEN" gh pr merge "$PR_NUMBER" --merge --admin --match-head-commit "$(git rev-parse HEAD)"
 
       - name: Report manual merge needed
         if: steps.merge.outcome == 'failure'
         continue-on-error: true
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         run: |
           bash .github/scripts/post-slack-message.sh "$SLACK_FAILURE_CHANNEL" \
-            ":warning: $REPO_NAME $VERSION was released, but the release PR could not be merged automatically. Please merge <$PR_URL|#$PR_NUMBER> manually."$'\n'"<https://sendbird.atlassian.net/browse/$RELEASE_TICKET_KEY|$RELEASE_TICKET_KEY> · <$RUN_URL|Workflow run>"
+            ":warning: $REPO_NAME $VERSION was released, but the release PR could not be merged automatically. Please merge <$PR_URL|#$PR_NUMBER> manually."$'\n'"${TICKET_LINK:+$TICKET_LINK · }<$RUN_URL|Workflow run>"
 
       # A Jira failure does not fail the release either: the ticket can be moved to Released by hand.
       - name: Jira - Transit release ticket to RELEASED
         id: jira_released
+        if: env.TICKET_VERIFIED == 'true'
         continue-on-error: true
-        run: |
-          if ! bash .github/scripts/transit-release-ticket.sh RELEASING RELEASED; then
-            # A manual re-run after a failed attempt finds the ticket in Conditional Release Approved.
-            echo "::warning::Ticket is not in Releasing. Retrying from Conditional Release Approved."
-            bash .github/scripts/transit-release-ticket.sh CONDITIONAL_RELEASE_APPROVED RELEASING
-            bash .github/scripts/transit-release-ticket.sh RELEASING RELEASED
-          fi
+        env:
+          JIRA_AUTH_USER: ${{ secrets.JIRA_AUTH_USER }}
+          JIRA_AUTH_API_TOKEN: ${{ secrets.JIRA_AUTH_API_TOKEN }}
+        run: bash .github/scripts/transit-release-ticket.sh RELEASING RELEASED
 
       - name: Report manual Jira update needed
-        if: steps.jira_released.outcome == 'failure'
+        if: steps.jira_released.outcome == 'failure' || env.SKIP_JIRA == 'true'
         continue-on-error: true
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         run: |
-          TEXT=":warning: $REPO_NAME $VERSION was released, but the Jira ticket could not be moved to Released. Please update <https://sendbird.atlassian.net/browse/$RELEASE_TICKET_KEY|$RELEASE_TICKET_KEY> manually."$'\n'"<$RUN_URL|Workflow run>"
+          if [ "$SKIP_JIRA" = "true" ]; then
+            TEXT=":warning: $REPO_NAME $VERSION was released without Jira (skip_jira, started by $ACTOR). Please update the release ticket manually."
+          else
+            TEXT=":warning: $REPO_NAME $VERSION was released, but the Jira ticket could not be moved to Released. Please update $TICKET_LINK manually."
+          fi
           if [ "$IS_TEST" = "true" ]; then
             TEXT="[TEST] $TEXT"
           fi
-          bash .github/scripts/post-slack-message.sh "$SLACK_FAILURE_CHANNEL" "$TEXT"
+          bash .github/scripts/post-slack-message.sh "$SLACK_FAILURE_CHANNEL" "$TEXT"$'\n'"<$RUN_URL|Workflow run>"
 
       - name: Slack - Announce release
         continue-on-error: true
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         run: |
           TEXT=":tada: <$REPO_URL/releases/tag/v$VERSION|$REPO_NAME $VERSION> has been released! :sendbird:"
           if [ "$IS_TEST" = "true" ]; then
@@ -265,6 +340,9 @@ jobs:
         if: failure()
         env:
           STEPS_JSON: ${{ toJSON(steps) }}
+          JIRA_AUTH_USER: ${{ secrets.JIRA_AUTH_USER }}
+          JIRA_AUTH_API_TOKEN: ${{ secrets.JIRA_AUTH_API_TOKEN }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         run: |
           FAILED_STEP=$(echo "$STEPS_JSON" | jq -r '
             . as $s
@@ -283,22 +361,29 @@ jobs:
             *) STAGE="an unknown step" ;;
           esac
 
-          LINKS="<https://sendbird.atlassian.net/browse/$RELEASE_TICKET_KEY|$RELEASE_TICKET_KEY>"
-          if [ -n "${PR_URL:-}" ]; then
-            LINKS="$LINKS · <$PR_URL|#$PR_NUMBER>"
-          fi
-          LINKS="$LINKS · <$RUN_URL|Workflow run>"
+          LINKS="${TICKET_LINK:+$TICKET_LINK · }${PR_URL:+<$PR_URL|#$PR_NUMBER> · }<$RUN_URL|Workflow run>"
 
           if [ "${PUBLISHED:-}" = "true" ]; then
-            TEXT=":x: $REPO_NAME ${VERSION:-} was published to npm, but $STAGE failed."$'\n'"The Jira ticket was left in Releasing. Fix the cause and re-run the workflow."
-          else
-            if bash .github/scripts/transit-release-ticket.sh RELEASING CONDITIONAL_RELEASE_APPROVED; then
-              TICKET_NOTE="the Jira ticket was moved back to Conditional Release Approved"
-            else
-              echo "::warning::Could not move the ticket to Conditional Release Approved."
-              TICKET_NOTE="the Jira ticket state could not be updated"
+            TEXT=":x: $REPO_NAME ${VERSION:-} was published to npm, but $STAGE failed."
+            if [ "${TICKET_VERIFIED:-}" = "true" ]; then
+              TEXT="$TEXT The Jira ticket was left in Releasing."
             fi
-            TEXT=":x: $REPO_NAME ${VERSION:-} release failed at $STAGE."$'\n'"Nothing was pushed to the release branch, and $TICKET_NOTE. Fix the cause and approve the ticket again."
+            TEXT="$TEXT"$'\n'"Fix the cause and re-run the workflow. If the fix is a commit to the release branch, start a new run from the Actions tab (Run workflow) instead: a re-run uses the original workflow file."
+          else
+            TEXT=":x: $REPO_NAME ${VERSION:-} release failed at $STAGE."$'\n'"Nothing was pushed to the release branch."
+            if [ "${TICKET_VERIFIED:-}" = "true" ]; then
+              if bash .github/scripts/transit-release-ticket.sh RELEASING CONDITIONAL_RELEASE_APPROVED; then
+                TEXT="$TEXT The Jira ticket was moved back to Conditional Release Approved. Fix the cause and approve the ticket again."
+              else
+                echo "::warning::Could not move the ticket to Conditional Release Approved."
+                TEXT="$TEXT The Jira ticket could not be moved back. Move it to Conditional Release Approved in Jira, then approve it again."
+              fi
+            elif [ "$SKIP_JIRA" = "true" ]; then
+              TEXT="$TEXT Fix the cause and run the workflow again."
+            else
+              # The ticket was not verified (e.g. tooling or Jira was unreachable), so leave it alone.
+              TEXT="$TEXT The Jira ticket was not changed. If it is in Releasing, move it to Conditional Release Approved in Jira, then approve it again."
+            fi
             if [ "$FAILED_STEP" = "publish" ]; then
               TEXT="$TEXT"$'\n'"Some packages may already be on npm. Retrying publishes only the missing ones."
             fi

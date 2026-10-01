@@ -33,11 +33,26 @@ And add a `/bot create ticket` comment to create a ticket in the project managem
 
 When the assignee approves the release ticket in Jira, Jira automation runs the `Release` workflow (`.github/workflows/release-workflow.yml`) on the release branch.
 
-1. The workflow uses `lerna` to bump the version and update the `CHANGELOG.md` files based on the commit history.
-2. It publishes the packages to NPM, then pushes the version commit and tag and creates a GitHub release.
-3. It approves and merges the release PR.
-4. It moves the Jira ticket to `Released` and announces the release in Slack.
+1. The workflow checks that the ticket is in `Releasing` and was created for this branch.
+2. It uses `lerna` to bump the version and update the `CHANGELOG.md` files based on the commit history.
+3. It publishes the packages to NPM, then pushes the version commit and tag and creates a GitHub release.
+4. It approves and merges the release PR.
+5. It moves the Jira ticket to `Released` and announces the release in Slack.
 
-If a step fails before publishing, the ticket goes back to `Conditional Release Approved` and a failure message is posted to the release failure channel. Fix the cause and approve the ticket again; steps that already finished are skipped.
-If a step fails after publishing, the ticket stays in `Releasing`. Fix the cause and re-run the workflow.
-If the release PR cannot be merged or the Jira ticket cannot be moved to `Released`, the release still completes and the failure channel asks you to merge the PR or update the ticket manually.
+### If the release fails
+
+Failures are posted to the release failure channel. Steps that already finished are skipped when the release runs again.
+
+- **Before publishing**: the ticket goes back to `Conditional Release Approved`. Fix the cause and approve the ticket again.
+- **After publishing**: the ticket stays in `Releasing`. Fix the cause and re-run the workflow.
+  If the fix is a commit to the release branch (for example, a fix to the workflow itself), start a new run from the Actions tab with **Run workflow** instead, because a re-run uses the original workflow file. Commits after the version bump may change only `.github/`.
+- **Merging the PR or updating the ticket**: the release still completes, and the failure channel asks you to merge the PR or move the ticket to `Released` manually.
+
+### Releasing without Jira
+
+If Jira is unavailable, a repository admin or maintainer can release from GitHub alone:
+
+1. Open the Actions tab, select the `Release` workflow, and click **Run workflow**.
+2. Select the release branch, check `skip_jira`, and enter the ticket key if there is one.
+
+The workflow then neither checks nor updates the ticket, and the failure channel records who released without Jira. Update the ticket manually once Jira is back.
