@@ -43,10 +43,16 @@ When the assignee approves the release ticket in Jira, Jira automation runs the 
 
 Failures are posted to the release failure channel. Steps that already finished are skipped when the release runs again.
 
-- **Before publishing**: the ticket goes back to `Conditional Release Approved`. Fix the cause and approve the ticket again.
-- **After publishing**: the ticket stays in `Releasing`. Fix the cause and re-run the workflow.
-  If the fix is a commit to the release branch (for example, a fix to the workflow itself), start a new run from the Actions tab with **Run workflow** instead, because a re-run uses the original workflow file. Commits after the version bump may change only `.github/`.
+- **Before publishing**: the ticket goes back to `Conditional Release Approved`. To retry:
+  1. Fix the cause.
+  2. In Jira, move the ticket from `Conditional Release Approved` to `Releasing`. Moving it does not start the workflow by itself; it only allows the workflow to run again.
+  3. Run the workflow again (see below).
+- **After publishing**: the ticket stays in `Releasing`. Fix the cause and run the workflow again.
 - **Merging the PR or updating the ticket**: the release still completes, and the failure channel asks you to merge the PR or move the ticket to `Released` manually.
+
+To run the workflow again, click **Re-run jobs** on the failed run. If the fix is a commit to the release branch (for example, a fix to the workflow itself), start a new run from the Actions tab with **Run workflow**, selecting the release branch and entering the ticket key, because a re-run uses the original workflow file. Commits after the version bump may change only `.github/`.
+
+If the approver chose `Conditional Release Approved` instead of `Release Approved`, the workflow does not start automatically. Move the ticket to `Releasing` and start a run with **Run workflow** in the same way.
 
 ### Releasing without Jira
 

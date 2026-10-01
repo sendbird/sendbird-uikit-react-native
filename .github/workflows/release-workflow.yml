@@ -5,7 +5,9 @@
 #       -> approve and merge the release PR -> Jira ticket RELEASED -> Slack announcement
 #
 # Every stage skips work that an earlier attempt already finished, so a failed release can be
-# retried (approve the ticket again in Jira, or re-run this workflow) without republishing.
+# retried without republishing: move the ticket back to Releasing in Jira if it was moved to
+# Conditional Release Approved, then re-run this workflow (or start a new run from the Actions
+# tab when the fix is a commit to the release branch).
 # A failed PR merge or Jira update does not fail the release; it is reported for a manual fix.
 #
 # When Jira is unavailable, a repository admin or maintainer can run this workflow from the
@@ -137,7 +139,7 @@ jobs:
               exit 1
             fi
             if [ "$TICKET_STATUS" != "Releasing" ]; then
-              echo "::error::$RELEASE_TICKET_KEY is in '$TICKET_STATUS', not 'Releasing'. Approve the ticket in Jira to start the release."
+              echo "::error::$RELEASE_TICKET_KEY is in '$TICKET_STATUS', not 'Releasing'. The ticket must be approved in Jira. If it is in Conditional Release Approved, move it to Releasing, then run the workflow again."
               exit 1
             fi
             echo "TICKET_VERIFIED=true" >> "$GITHUB_ENV"
@@ -161,7 +163,7 @@ jobs:
             sleep 5
           done
           if [ "$MERGEABLE" = "CONFLICTING" ]; then
-            echo "::error::Release PR #$PR_NUMBER conflicts with main. Resolve the conflict and approve the ticket again."
+            echo "::error::Release PR #$PR_NUMBER conflicts with main. Resolve the conflict, move the ticket to Releasing in Jira, then run the workflow again."
             exit 1
           fi
           if [ "$MERGEABLE" = "UNKNOWN" ]; then
@@ -362,27 +364,28 @@ jobs:
           esac
 
           LINKS="${TICKET_LINK:+$TICKET_LINK · }${PR_URL:+<$PR_URL|#$PR_NUMBER> · }<$RUN_URL|Workflow run>"
+          RERUN="re-run the workflow. If the fix is a commit to the release branch, start a new run from the Actions tab (Run workflow) instead: a re-run uses the original workflow file."
 
           if [ "${PUBLISHED:-}" = "true" ]; then
             TEXT=":x: $REPO_NAME ${VERSION:-} was published to npm, but $STAGE failed."
             if [ "${TICKET_VERIFIED:-}" = "true" ]; then
               TEXT="$TEXT The Jira ticket was left in Releasing."
             fi
-            TEXT="$TEXT"$'\n'"Fix the cause and re-run the workflow. If the fix is a commit to the release branch, start a new run from the Actions tab (Run workflow) instead: a re-run uses the original workflow file."
+            TEXT="$TEXT"$'\n'"Fix the cause, then $RERUN"
           else
             TEXT=":x: $REPO_NAME ${VERSION:-} release failed at $STAGE."$'\n'"Nothing was pushed to the release branch."
             if [ "${TICKET_VERIFIED:-}" = "true" ]; then
               if bash .github/scripts/transit-release-ticket.sh RELEASING CONDITIONAL_RELEASE_APPROVED; then
-                TEXT="$TEXT The Jira ticket was moved back to Conditional Release Approved. Fix the cause and approve the ticket again."
+                TEXT="$TEXT The Jira ticket was moved back to Conditional Release Approved."$'\n'"Fix the cause, move the ticket to Releasing in Jira, then $RERUN"
               else
                 echo "::warning::Could not move the ticket to Conditional Release Approved."
-                TEXT="$TEXT The Jira ticket could not be moved back. Move it to Conditional Release Approved in Jira, then approve it again."
+                TEXT="$TEXT The Jira ticket could not be moved back and is probably still in Releasing."$'\n'"Fix the cause, make sure the ticket is in Releasing in Jira, then $RERUN"
               fi
             elif [ "$SKIP_JIRA" = "true" ]; then
-              TEXT="$TEXT Fix the cause and run the workflow again."
+              TEXT="$TEXT"$'\n'"Fix the cause, then $RERUN"
             else
               # The ticket was not verified (e.g. tooling or Jira was unreachable), so leave it alone.
-              TEXT="$TEXT The Jira ticket was not changed. If it is in Releasing, move it to Conditional Release Approved in Jira, then approve it again."
+              TEXT="$TEXT The Jira ticket was not changed."$'\n'"Fix the cause, make sure the ticket is in Releasing in Jira, then $RERUN"
             fi
             if [ "$FAILED_STEP" = "publish" ]; then
               TEXT="$TEXT"$'\n'"Some packages may already be on npm. Retrying publishes only the missing ones."
