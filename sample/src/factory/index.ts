@@ -4,7 +4,6 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import * as DocumentPicker from '@react-native-documents/picker';
 import RNFBMessaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Platform, StatusBar } from 'react-native';
 import * as FileAccess from 'react-native-file-access';
 import * as ImagePicker from 'react-native-image-picker';
 import * as AudioRecorderPlayer from 'react-native-nitro-sound';
@@ -58,10 +57,9 @@ export const platformServices: SendbirdUIKitContainerProps['platformServices'] =
   }),
 };
 
-export const GetTranslucent = (state = true) => {
-  Platform.OS === 'android' && StatusBar.setTranslucent(state);
-  return Platform.select({ ios: state, android: state });
-};
+// StatusBar.setTranslucent was removed in RN 0.87; Android runs edge-to-edge (edgeToEdgeEnabled=true),
+// so the status bar is always translucent.
+export const GetTranslucent = (state = true) => state;
 
 const createSendbirdAPI = (appId: string, apiToken: string) => {
   const MIN = 60 * 1000;
