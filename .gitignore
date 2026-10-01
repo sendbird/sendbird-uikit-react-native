@@ -24,3 +24,6 @@ version.ts
 lerna-debug.log
 
 /docs
+
+# Release workflow tooling checkout
+.release-tooling/
