@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.10](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.9...v3.12.10) (2026-10-01)
+
+**Note:** Version bump only for package @sendbird/uikit-testing-tools
+
 ## [3.12.9](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.8...v3.12.9) (2026-09-16)
 
 **Note:** Version bump only for package @sendbird/uikit-testing-tools

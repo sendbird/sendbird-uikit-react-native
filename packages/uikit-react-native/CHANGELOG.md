@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.10](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.9...v3.12.10) (2026-10-01)
+
+### Bug Fixes
+
+- record voice messages as MPEG-4/AAC in the expo-audio recorder adapter (SBISSUE-22132) ([6f1fb2f](https://github.com/sendbird/sendbird-uikit-react-native/commit/6f1fb2f245628c19ef7d996e83bbe642a7493ffa))
+- use literal iOS recording option values for expo-audio < 1.0.5 ([1373c3b](https://github.com/sendbird/sendbird-uikit-react-native/commit/1373c3b648c973acbf6e861c7db1d44ca0d41528))
+
 ## [3.12.9](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.8...v3.12.9) (2026-09-16)
 
 ### Bug Fixes
