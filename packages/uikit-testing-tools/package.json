@@ -52,10 +52,9 @@
     "@sendbird/uikit-utils": "3.12.10",
     "@types/jest": "^29.4.0",
     "@types/react": "*",
-    "@types/react-native": "*",
     "jest": "^29.4.3",
-    "react": "19.1.1",
-    "react-native": "0.82.1",
+    "react": "19.2.3",
+    "react-native": "0.87.1",
     "react-native-builder-bob": "^0.18.0",
     "typescript": "5.8.3"
   },

@@ -25,7 +25,7 @@ class CredentialStorage implements CredentialStorageInterface {
     return mmkv.set(this.STORAGE_KEY, JSON.stringify(cred));
   }
   async delete(): Promise<void> {
-    return mmkv.delete(this.STORAGE_KEY);
+    mmkv.remove(this.STORAGE_KEY);
   }
 }
 
