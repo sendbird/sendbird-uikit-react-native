@@ -34,7 +34,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: '>=24.22.1 <25'
           cache: 'yarn'
 
       - name: Setup Ruby
@@ -98,7 +98,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: '>=24.22.1 <25'
           cache: 'yarn'
 
       - name: Setup Java
@@ -106,6 +106,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+          check-latest: true
 
       - name: Install Ninja
         run: sudo apt-get update && sudo apt-get install -y ninja-build
