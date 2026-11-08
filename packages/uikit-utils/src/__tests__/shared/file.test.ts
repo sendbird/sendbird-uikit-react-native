@@ -194,6 +194,7 @@ describe('getFileExtensionFromMime', () => {
   it('should return correct extension for known mime type', () => {
     expect(getFileExtensionFromMime('image/jpeg')).toMatch(/\.jpg|\.jpeg/);
     expect(getFileExtensionFromMime('video/mp4')).toBe('.mp4');
+    expect(getFileExtensionFromMime('video/quicktime')).toBe('.mov');
     expect(getFileExtensionFromMime('audio/mpeg')).toBe('.mp3');
     expect(getFileExtensionFromMime('text/plain')).toBe('.txt');
     expect(getFileExtensionFromMime('application/pdf')).toBe('.pdf');
@@ -209,6 +210,7 @@ describe('getMimeFromFileExtension', () => {
   it('should return the correct MIME type for a given file extension', () => {
     expect(getMimeFromFileExtension('pdf')).toEqual('application/pdf');
     expect(getMimeFromFileExtension('jpg')).toEqual('image/jpeg');
+    expect(getMimeFromFileExtension('mov')).toEqual('video/quicktime');
     expect(getMimeFromFileExtension('docx')).toEqual(
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     );

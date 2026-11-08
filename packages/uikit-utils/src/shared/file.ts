@@ -14,7 +14,7 @@ const EXTENSION_MIME_MAP = {
   'mp4': 'video/mp4',
   'mpeg': 'video/mpeg',
   'ogv': 'video/ogg',
-  'video/quicktime': 'mov',
+  'mov': 'video/quicktime',
   'webm': 'video/webm',
   'avi': 'video/x-msvideo',
 
