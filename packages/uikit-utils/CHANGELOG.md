@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.11](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.10...v3.12.11) (2026-11-10)
+
+### Bug Fixes
+
+- map mov to video/quicktime so iOS camera videos keep their extension ([3e5cf8a](https://github.com/sendbird/sendbird-uikit-react-native/commit/3e5cf8aead56ec7a75ffecca4bfffc8717df9b72))
+
 ## [3.12.10](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.9...v3.12.10) (2026-10-01)
 
 **Note:** Version bump only for package @sendbird/uikit-utils
