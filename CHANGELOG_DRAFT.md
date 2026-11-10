@@ -1,5 +1,5 @@
-## [3.12.10]
+## [3.12.11]
 
 ### Bug Fixes
 
-- play voice messages recorded on Android when they are opened on iOS, when using expo-audio
+- keep the `.mov` extension on videos recorded with the iOS camera through expo-image-picker, so they can be saved and played on other clients
