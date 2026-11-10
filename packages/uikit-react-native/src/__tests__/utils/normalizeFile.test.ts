@@ -27,6 +27,16 @@ describe('normalizeFile', () => {
     expect(result).toStrictEqual({ uri: 'uri', size: 0, name: `${dateNow}.png`, type: 'image/png' });
   });
 
+  it('should add .mov extension to a QuickTime video that has no name', async () => {
+    const result = await normalizeFile({ uri: 'uri', size: null, name: null, type: 'video/quicktime' });
+    expect(result).toStrictEqual({ uri: 'uri', size: 0, name: `${dateNow}.mov`, type: 'video/quicktime' });
+  });
+
+  it('should get QuickTime type from .mov extension of name if type is invalid', async () => {
+    const result = await normalizeFile({ uri: 'uri', size: null, name: 'IMG_0001.MOV', type: null });
+    expect(result).toStrictEqual({ uri: 'uri', size: 0, name: 'IMG_0001.MOV', type: 'video/quicktime' });
+  });
+
   it('should file name contain extension if type is provided', async () => {
     const result = await normalizeFile({ uri: 'uri', size: null, name: 'filename', type: 'image/png' });
     expect(result).toStrictEqual({ uri: 'uri', size: 0, name: 'filename.png', type: 'image/png' });
