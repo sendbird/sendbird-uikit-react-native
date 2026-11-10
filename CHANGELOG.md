@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.11](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.10...v3.12.11) (2026-11-10)
+
+### Bug Fixes
+
+- align docs-validation with the React Native 0.87 upgrade ([75a990d](https://github.com/sendbird/sendbird-uikit-react-native/commit/75a990d8bc139613970bec79b618d686b7e83ffd))
+- **ci:** require patched Node and Java CA runtimes ([a800711](https://github.com/sendbird/sendbird-uikit-react-native/commit/a8007117bccd59150e71766480011db430d87c4b))
+- map mov to video/quicktime so iOS camera videos keep their extension ([3e5cf8a](https://github.com/sendbird/sendbird-uikit-react-native/commit/3e5cf8aead56ec7a75ffecca4bfffc8717df9b72))
+- pin local Node to patched 24.22.1 ([826e259](https://github.com/sendbird/sendbird-uikit-react-native/commit/826e259ab97628401bd7f296079a2a7563abf461))
+- upgrade nx to 22.7.9+ (SECURE-5016) ([0c94188](https://github.com/sendbird/sendbird-uikit-react-native/commit/0c941887f27a19eab3be16d7e86a9aaa03b0da18))
+
 ## [3.12.10](https://github.com/sendbird/sendbird-uikit-react-native/compare/v3.12.9...v3.12.10) (2026-10-01)
 
 ### Bug Fixes
