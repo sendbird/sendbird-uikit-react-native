@@ -56,10 +56,10 @@ The GitHub Actions workflow handles automated deployment of both iOS and Android
   - Format: `git@github.com:organization/certificates-repo.git`
   - Must use SSH format for authentication
 
-- **FASTLANE_IOS_MATCH_GIT_PRIVATE_KEY**
+- **FASTLANE_IOS_MATCH_DEPLOY_KEY**
   - SSH private key for accessing the match repository
   - Generate with: `ssh-keygen -t rsa -b 4096 -C "github-actions@sendbird.com"`
-  - Add the public key to the certificates repository as a deploy key
+  - Add the public key to the certificates repository as a read-only deploy key
   - Save the private key content to GitHub Secrets
 
 - **FASTLANE_IOS_MATCH_PASSWORD**

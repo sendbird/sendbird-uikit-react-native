@@ -63,7 +63,7 @@ jobs:
 
       - name: Setup SSH for match
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.FASTLANE_IOS_MATCH_GIT_PRIVATE_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.FASTLANE_IOS_MATCH_DEPLOY_KEY }}
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/match_key
