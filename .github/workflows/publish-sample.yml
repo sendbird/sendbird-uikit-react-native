@@ -40,7 +40,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         env:
-          BUNDLE_GEMFILE: ${{ github.workspace }}/sample/ios/Gemfile
+          BUNDLE_GEMFILE: ${{ github.workspace }}/sample/ios/fastlane/Gemfile
         with:
           ruby-version: '3.1'
           bundler-cache: true
@@ -50,7 +50,11 @@ jobs:
 
       - name: Install CocoaPods
         working-directory: sample/ios
-        run: bundle exec pod install
+        env:
+          COCOAPODS_VERSION: '1.15.2'
+        run: |
+          gem install cocoapods --version "$COCOAPODS_VERSION" --no-document
+          pod "_${COCOAPODS_VERSION}_" install
 
       - name: Create env.ts
         env:
