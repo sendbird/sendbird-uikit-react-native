@@ -29,7 +29,7 @@
     "sample:pod-install": "cd sample; npx pod-install",
     "sample:ios": "cd sample; yarn ios",
     "sample:android": "cd sample; yarn android",
-    "deploy:ios": "cd sample/ios && bundle exec fastlane deploy",
+    "deploy:ios": "cd sample/ios && BUNDLE_GEMFILE=fastlane/Gemfile bundle exec fastlane deploy",
     "deploy:android": "cd sample/android && bundle exec fastlane deploy",
     "bump:major": "lerna version major --no-git-tag-version",
     "bump:minor": "lerna version minor --no-git-tag-version",

@@ -1,0 +1,15 @@
+source "https://rubygems.org"
+
+ruby ">= 2.6.10"
+
+gem "fastlane"
+gem "xcodeproj", "< 1.26.0"
+
+# Ruby 3.4 has removed some libraries from the standard library.
+gem "bigdecimal"
+gem "logger"
+gem "benchmark"
+gem "mutex_m"
+gem "nkf"
+
+eval_gemfile(File.join(__dir__, "Pluginfile"))

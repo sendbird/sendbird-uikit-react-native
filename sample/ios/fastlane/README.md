@@ -17,8 +17,11 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ### ios deploy
 
+From the repository root:
+
 ```sh
-[bundle exec] fastlane ios deploy
+BUNDLE_GEMFILE=sample/ios/fastlane/Gemfile bundle install
+yarn deploy:ios
 ```
 
 Deploy a new build to TestFlight
